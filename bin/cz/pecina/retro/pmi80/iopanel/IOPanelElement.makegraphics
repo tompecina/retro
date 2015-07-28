@@ -1,0 +1,16 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+pg="-repage 200x200+0+0"
+for s in $seq; do
+    w=$(($s*20))
+    h=$(($s*20))
+    o=0
+    for b in {0..11}; do
+    	convert $opts -crop 200x200+$o+0 $pg $filter -resize ${w}x$h $src/elements.png $dst/element-$s-$b-u.png
+    	convert $opts -crop 200x200+$o+200 $pg $filter -resize ${w}x$h $src/elements.png $dst/element-$s-$b-d.png
+    	convert $opts -crop 200x200+$o+400 $pg $filter -resize ${w}x$h $src/elements.png $dst/element-$s-$b-l.png
+    	o=$(($o+200))
+    done
+done

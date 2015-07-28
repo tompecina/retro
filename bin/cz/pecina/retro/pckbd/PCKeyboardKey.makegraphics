@@ -1,0 +1,114 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+function pckey {
+    x=$(($2*150))
+    y=$(($3*150))
+    w=$(($4*150))
+    h=$(($5*150))
+    pg="-repage ${w}x$h+0+0"
+    convert $opts -crop ${w}x$h+$x+$y $pg $src/keys.png $dst/tmp.png
+    for s in $seq; do
+	ww=$(($4*9*$s))
+	hh=$(($5*9*$s))
+     	convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/$1-$s-u.png
+    done
+    y=$(($y+$h))
+    convert $opts -crop ${w}x$h+$x+$y $pg $src/keys.png $dst/tmp.png
+    for s in $seq; do
+	ww=$(($4*9*$s))
+	hh=$(($5*9*$s))
+     	convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/$1-$s-d.png
+    done
+    y=$(($y+$h))
+    convert $opts -crop ${w}x$h+$x+$y $pg $src/keys.png $dst/tmp.png
+    for s in $seq; do
+	ww=$(($4*9*$s))
+	hh=$(($5*9*$s))
+     	convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/$1-$s-l.png
+    done
+}
+pckey 1 0 0 2 2
+pckey 2 2 0 2 2
+pckey 3 4 0 2 2
+pckey 4 6 0 2 2
+pckey 5 8 0 2 2
+pckey 6 10 0 2 2
+pckey 7 12 0 2 2
+pckey 8 14 0 2 2
+pckey 9 16 0 2 2
+pckey 0 18 0 2 2
+pckey minus 20 0 2 2
+pckey equals 22 0 2 2
+pckey openbracket 24 0 2 2
+pckey semicolon 26 0 2 2
+pckey quote 28 0 2 2
+pckey backquote 30 0 2 2
+pckey backslash 32 0 2 2
+pckey comma 34 0 2 2
+pckey period 36 0 2 2
+pckey slash 38 0 2 2
+pckey numpad1 40 0 2 2
+pckey numpad2 42 0 2 2
+pckey numpad3 44 0 2 2
+pckey numpad4 46 0 2 2
+pckey numpad5 48 0 2 2
+pckey numpad6 50 0 2 2
+pckey numpad7 52 0 2 2
+pckey numpad8 54 0 2 2
+pckey numpad9 56 0 2 2
+pckey q 58 0 2 2
+pckey w 60 0 2 2
+pckey e 62 0 2 2
+pckey r 64 0 2 2
+pckey t 66 0 2 2
+pckey y 68 0 2 2
+pckey u 70 0 2 2
+pckey i 72 0 2 2
+pckey o 74 0 2 2
+pckey p 76 0 2 2
+pckey a 78 0 2 2
+pckey s 80 0 2 2
+pckey d 82 0 2 2
+pckey f 84 0 2 2
+pckey g 86 0 2 2
+pckey h 88 0 2 2
+pckey j 90 0 2 2
+pckey k 92 0 2 2
+pckey l 94 0 2 2
+pckey z 96 0 2 2
+pckey x 98 0 2 2
+pckey c 100 0 2 2
+pckey v 102 0 2 2
+pckey b 104 0 2 2
+pckey n 106 0 2 2
+pckey m 108 0 2 2
+pckey f1 110 0 2 2
+pckey f2 112 0 2 2
+pckey f3 114 0 2 2
+pckey f4 116 0 2 2
+pckey f5 118 0 2 2
+pckey f6 120 0 2 2
+pckey f7 122 0 2 2
+pckey f8 124 0 2 2
+pckey f9 126 0 2 2
+pckey f10 128 0 2 2
+pckey esc 130 0 2 2
+pckey numpadasterisk 132 0 2 2
+pckey numpadminus 134 0 2 2
+pckey closebracket 0 6 3 2
+pckey tab 3 6 3 2
+pckey shift 6 6 3 2
+pckey numpad0 9 6 4 2
+pckey numpadperiod 13 6 4 2
+pckey backspace 17 6 4 2
+pckey ctrl 21 6 4 2
+pckey alt 25 6 4 2
+pckey capslock 29 6 4 2
+pckey numlock 33 6 4 2
+pckey scrlock 37 6 4 2
+pckey space 41 6 20 2
+pckey enter 0 12 2 4
+pckey numpadplus 2 12 2 6
+rm $dst/tmp*.png

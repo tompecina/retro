@@ -1,0 +1,18 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+pg="-repage 260x260+0+0"
+for t in "round"; do
+    for c in "gray"; do
+	for s in $seq; do
+	    w=$(($s*32))
+	    h=$(($s*32))
+	    o=0
+	    for b in {0..11}; do
+    		convert $opts -crop 260x260+$o+0 $pg $filter -resize ${w}x$h $src/knob-$t-$c.png $dst/$t-$c-$s-$b.png
+    		o=$(($o+260))
+	    done
+	done
+    done
+done

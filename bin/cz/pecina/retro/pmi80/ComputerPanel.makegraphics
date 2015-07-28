@@ -1,0 +1,15 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+for s in $seq; do
+    w=$(($s*290))
+    h=$(($s*370))
+    convert $opts $src/metal.png -crop $((2600*$s/4))x$((3100*$s/4))+0+0 $dst/tmp1.png
+    convert $opts $dst/tmp1.png $filter -resize 2600x3100 $dst/tmp2.png
+    convert $opts $dst/tmp2.png $src/mask.png -composite $dst/tmp3.png
+    convert $opts $dst/tmp3.png $filter -resize $(($s*260))x$(($s*310)) $dst/tmp4.png
+    convert $opts -size ${w}x$h xc:transparent $dst/tmp5.png
+    convert $opts $dst/tmp5.png $dst/tmp4.png -geometry +$(($s*15))+$(($s*15)) -repage ${w}x$h+0+0 -composite $dst/mask-$s.png
+done
+rm $dst/tmp*.png

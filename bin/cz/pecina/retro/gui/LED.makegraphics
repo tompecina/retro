@@ -1,0 +1,13 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+for s in $seq; do
+    for c in "red" "green" "yellow" "lime"; do
+	w=$(($s*8))
+	h=$(($s*8))
+	for d in 0 1; do
+	    convert $opts $filter $src/led-$c-$d.png -resize ${w}x$h $dst/small-$c-$s-$d.png
+	done
+    done
+done

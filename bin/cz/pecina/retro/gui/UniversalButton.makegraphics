@@ -1,0 +1,31 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+pg="-repage 200x200+0+0"
+for t in "small"; do
+    for c in "black"; do
+	for s in $seq; do
+	    w=$(($s*6))
+	    h=$(($s*6))
+	    o=0
+	    for b in "blank" "plus" "minus" "up" "down" "left" "right" "dot" "square" "0" "1"; do
+    		convert $opts -crop 200x200+$o+0 $pg $filter -resize ${w}x$h $src/buttons-$t-$c.png $dst/$t-$c-$b-$s-u.png
+    		convert $opts -crop 200x200+$o+200 $pg $filter -resize ${w}x$h $src/buttons-$t-$c.png $dst/$t-$c-$b-$s-d.png
+    		o=$(($o+200))
+	    done
+	done
+    done
+done
+
+pg="-repage 150x150+0+0"
+for t in "round"; do
+    for c in "gray" "black"; do
+	for s in $seq; do
+	    w=$(($s*19))
+	    h=$(($s*19))
+    	    convert $opts -crop 150x150+0+0 $pg $filter -resize ${w}x$h $src/button-$t-$c.png $dst/$t-$c-$s-u.png
+    	    convert $opts -crop 150x150+150+0 $pg $filter -resize ${w}x$h $src/button-$t-$c.png $dst/$t-$c-$s-d.png
+	done
+    done
+done

@@ -1,0 +1,5 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+convert $opts $filter $src/gpl.png -resize 120x60 $dst/gpl.png

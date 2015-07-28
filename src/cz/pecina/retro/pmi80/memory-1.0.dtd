@@ -1,0 +1,12 @@
+<!-- DTD for Memory V1.0 -->
+
+<!ELEMENT memory (bytes)*>
+<!ATTLIST memory
+  version CDATA #FIXED "1.0"
+  start CDATA #REQUIRED
+>
+
+<!ELEMENT bytes (#PCDATA)>
+<!ATTLIST bytes
+  count CDATA "1"
+>

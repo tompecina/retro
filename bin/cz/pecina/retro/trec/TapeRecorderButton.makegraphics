@@ -1,0 +1,15 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+pg="-repage 400x300+0+0"
+for s in $seq; do
+    w=$(($s*40))
+    h=$(($s*30))
+    o=0
+    for b in "record" "play" "rewind" "ff" "stop" "pause" "eject"; do
+    	convert $opts -crop 400x300+$o+0 $pg $filter -resize ${w}x$h $src/buttons.png $dst/$b-$s-u.png
+    	convert $opts -crop 400x300+$o+300 $pg $filter -resize ${w}x$h $src/buttons.png $dst/$b-$s-d.png
+    	o=$(($o+400))
+    done
+done

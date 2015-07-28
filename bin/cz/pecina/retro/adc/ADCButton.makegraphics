@@ -1,0 +1,10 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+pg="-repage 140x200+0+0"
+for s in $seq; do
+    w=$(($s*14))
+    h=$(($s*20))
+    convert $opts -crop 140x200+0+0 $pg $filter -resize ${w}x$h $src/button.png $dst/button-$s.png
+done

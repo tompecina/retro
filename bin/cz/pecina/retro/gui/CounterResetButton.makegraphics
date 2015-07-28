@@ -1,0 +1,10 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+for s in $seq; do
+    w=$(($s*8))
+    h=$(($s*15))
+    convert $opts $filter -resize ${w}x$h $src/counterreset-up.png $dst//basic-gray-$s-u.png
+    convert $opts $filter -resize ${w}x$h $src/counterreset-down.png $dst//basic-gray-$s-d.png    
+done

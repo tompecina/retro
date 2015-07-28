@@ -1,0 +1,12 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+for s in $seq; do
+    w=$(($s*24))
+    h=$(($s*36))
+    convert $opts $filter -resize ${w}x$h $src/ssd-b.png $dst/big-red-$s-b.png
+    for seg in {0..6}; do
+	convert $opts $filter -resize ${w}x$h $src/ssd-$seg.png $dst/big-red-$s-$seg.png
+    done
+done

@@ -1,0 +1,6 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+cp $src/plastic-gray.png $dst
+cp $src/plastic-darkgray.png $dst

@@ -1,0 +1,26 @@
+<!-- DTD for Snapshot V1.0 -->
+
+<!ELEMENT snapshot (device|memory)*>
+<!ATTLIST snapshot
+  version CDATA #FIXED "1.0"
+  name CDATA #REQUIRED
+>
+
+<!ELEMENT device (register)*>
+<!ATTLIST device
+  name CDATA #REQUIRED
+>
+
+<!ELEMENT register (#PCDATA)>
+<!ATTLIST register
+  name CDATA #REQUIRED
+>
+
+<!ELEMENT memory (bytes)*>
+<!ATTLIST memory
+>
+
+<!ELEMENT bytes (#PCDATA)>
+<!ATTLIST bytes
+  count CDATA "1"
+>

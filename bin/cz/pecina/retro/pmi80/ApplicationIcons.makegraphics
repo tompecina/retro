@@ -1,0 +1,7 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+for s in 16 24 32 48 64 96 128 192 256 384 512; do
+    convert $opts $filter $src/appicon.png -resize ${s}x$s $dst/icon-$s.png
+done

@@ -1,0 +1,14 @@
+<!-- DTD for Tape V1.0 -->
+
+<!ELEMENT tape (pulse)*>
+<!ATTLIST tape
+  version CDATA #FIXED "1.0"
+  rate CDATA #REQUIRED
+  unit CDATA #FIXED "per sec"
+>
+
+<!ELEMENT pulse EMPTY>
+<!ATTLIST pulse
+  start CDATA #REQUIRED
+  duration CDATA #REQUIRED
+>

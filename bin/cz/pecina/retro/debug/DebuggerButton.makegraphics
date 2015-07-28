@@ -1,0 +1,16 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+pg="-repage 600x300+0+0"
+for s in $seq; do
+    w=$(($s*36))
+    h=$(($s*18))
+    o=0
+    for b in "stepin" "stepover" "runstop"; do
+    	convert $opts -crop 600x300+$o+0 $pg $filter -resize ${w}x$h $src/buttons.png $dst/$b-$s-u.png
+    	convert $opts -crop 600x300+$o+300 $pg $filter -resize ${w}x$h $src/buttons.png $dst/$b-$s-d.png
+    	convert $opts -crop 600x300+$o+600 $pg $filter -resize ${w}x$h $src/buttons.png $dst/$b-$s-l.png
+    	o=$(($o+600))
+    done
+done

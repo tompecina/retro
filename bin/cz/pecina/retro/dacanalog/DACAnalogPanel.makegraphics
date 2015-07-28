@@ -1,0 +1,9 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+for s in $seq; do
+    w=$(($s*135))
+    h=$(($s*111))
+    convert $opts $src/mask.png $filter -resize ${w}x$h $dst/mask-$s.png
+done

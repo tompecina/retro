@@ -1,0 +1,11 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+for s in $seq; do
+    w=$(($s*180))
+    h=$(($s*16))
+    for d in {0..10}; do
+	convert $opts $filter $src/vumeter-$d.png -resize ${w}x$h $dst/vumeter-$s-$d.png
+    done
+done

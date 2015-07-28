@@ -1,0 +1,16 @@
+# include file for *.makegraphic scripts
+
+opts='-define png:color-type=6'
+filter='-filter Lanczos2Sharp'
+filtertrans='-filter point'
+trans=0.8
+seq=$(seq 4)
+pkg=${0%/*}
+pkg=${pkg##*/retro/}
+src=$(pwd)/bin/graphics/$pkg
+dst=resources${0#bin}
+dst=${dst%.makegraphics}
+rm -rf $dst
+mkdir $dst
+
+echo "Executing $0"
