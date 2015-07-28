@@ -1,30 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="Tesla PMI-80 Emulator" default="compile" basedir="..">
+<project name="Tesla PMI-80 Emulator"
+	 default="help"
+	 basedir="..">
 
   <!-- defs -->
-  <property name="package" value="pmi80"/>
-  <property name="author" value="Tom\u00e1\u0161 Pecina"/>
-  <property name="version" value="0.9.1"/>
-  <property name="license" value="GNU General Public License Version 3"/>
-  <property name="prefix" value="cz/pecina/retro"/>
-  <property name="src.dir" value="src"/>
-  <property name="resources.dir" value="resources"/>
-  <property name="lib.dir" value="lib"/>
-  <property name="bin.dir" value="bin"/>
-  <property name="bin.misc.dir" value="bin/misc"/>
-  <property name="graphics.dir" value="${bin.dir}/graphics"/>
-  <property name="build.dir" value="${package}/build"/>
-  <property name="build.lib.dir" value="${build.dir}/lib"/>
-  <property name="build.classes.dir" value="${build.dir}/classes"/>
-  <property name="build.licenses.dir" value="${build.dir}/licenses"/>
-  <property name="build.src.dir" value="${package}/build-src"/>
-  <property name="build.src.filtered.dir" value="${build.dir}/src" />
-  <property name="build.src.doc.dir" value="${build.src.dir}/doc"/>
-  <property name="javac.source.version" value="1.8"/>
-  <property name="javac.target.version" value="1.8"/>
-  <fileset dir="${bin.dir}" includes="common.makegraphics" id="common.makegraphics"/>
+  <property name="package"
+	    value="pmi80"/>
+  <property name="author"
+	    value="Tomáš Pecina"/>
+  <property name="version"
+	    value="0.9.1"/>
+  <property name="license"
+	    value="GNU General Public License Version 3"/>
+  <property name="prefix"
+	    value="cz/pecina/retro"/>
+  <property name="src.dir"
+	    value="src"/>
+  <property name="resources.dir"
+	    value="res"/>
+  <property name="lib.dir"
+	    value="lib"/>
+  <property name="bin.dir"
+	    value="bin"/>
+  <property name="bin.misc.dir"
+	    value="bin/misc"/>
+  <property name="graphics.dir"
+	    value="${bin.dir}/graphics"/>
+  <property name="build.dir"
+	    value="${package}/build"/>
+  <property name="build.lib.dir"
+	    value="${build.dir}/lib"/>
+  <property name="build.classes.dir"
+	    value="${build.dir}/classes"/>
+  <property name="build.licenses.dir"
+	    value="${build.dir}/licenses"/>
+  <property name="build.src.dir"
+	    value="${package}/build-src"/>
+  <property name="build.src.filtered.dir"
+	    value="${build.dir}/src" />
+  <property name="build.src.doc.dir"
+	    value="${build.src.dir}/doc"/>
+  <property name="javac.source.version"
+	    value="1.8"/>
+  <property name="javac.target.version"
+	    value="1.8"/>
+  <property name="args"
+	    value=""/>
+  <fileset dir="${bin.dir}"
+	   includes="common.makegraphics"
+	   id="common.makegraphics"/>
 
+  <!-- help -->
+  <target name="help"
+	  description="Display list of available targets">
+    <java classname="org.apache.tools.ant.Main">
+      <arg value="-projecthelp" />
+      <arg value="-buildfile" />
+      <arg value="${ant.file}" />
+      <arg value="-verbose" />
+    </java>
+  </target>
+  
   <!-- classpath -->
   <path id="base.path">
     <pathelement location="${build.classes.dir}"/>
@@ -34,168 +71,239 @@
 
   <!-- tokens -->
   <filterset id="filterset">
-    <filter token="AUTHOR" value="${author}"/>
-    <filter token="VERSION" value="${version}"/>
-    <filter token="LICENSE" value="${license}"/>
+    <filter token="AUTHOR"
+	    value="${author}"/>
+    <filter token="VERSION"
+	    value="${version}"/>
+    <filter token="LICENSE"
+	    value="${license}"/>
   </filterset>
 
   <!-- prepare -->
-  <target name="prepare" description="Set up directory structure">
+  <target name="prepare"
+	  description="Set up directory structure">
     <echo message="Preparing the directory structure"/>
     <mkdir dir="${build.classes.dir}"/>
     <mkdir dir="${build.src.doc.dir}"/>
     <mkdir dir="${build.src.filtered.dir}"/>
     <copy todir="${build.src.filtered.dir}">
-      <fileset dir="${src.dir}" includes="**"/>
+      <fileset dir="${src.dir}"
+	       includes="**"/>
       <filterset refid="filterset"/>
     </copy>
   </target>
   
   <!-- clean -->
-  <target name="clean" description="Remove all generated files">
+  <target name="clean"
+	  description="Remove all generated files">
     <echo message="Cleaning up"/>
     <delete dir="${build.dir}"/>
     <delete dir="${build.src.dir}"/>
   </target>
 
   <!-- properties -->
-  <property name="properties.files" value="TextResources.properties,TextResources_cs.properties,TextResources_sk.properties"/>
+  <property name="properties.files"
+	    value="TextResources.properties,TextResources_cs.properties,TextResources_sk.properties"/>
   <dependset>
-    <srcfileset dir="${src.dir}/${prefix}/${package}" includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/gui" includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/memory" includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/trec" includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/debug" includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/peripherals" includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/counter" includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/sisdmatrix" includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/ledmatrix" includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/pckbd" includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/adc" includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/dacanalog" includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/dacdigital" includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/dboutput" includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/${package}/iopanel" includes="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/${package}" files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/gui" files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/memory" files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/trec" files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/debug" files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/peripherals" files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/counter" files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/sisdmatrix" files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/ledmatrix" files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/pckbd" files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/adc" files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/dacanalog" files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/dacdigital" files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/dboutput" files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/${package}/iopanel" files="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/${package}"
+		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/gui"
+		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/memory"
+		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/trec"
+		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/debug"
+		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/peripherals"
+		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/counter"
+		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/sisdmatrix"
+		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/ledmatrix"
+		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/pckbd"
+		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/adc"
+		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/dacanalog"
+		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/dacdigital"
+		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/dboutput"
+		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/${package}/iopanel"
+		includes="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/gui"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/memory"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/trec"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/debug"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/peripherals"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/counter"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/sisdmatrix"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/ledmatrix"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/pckbd"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/adc"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/dacanalog"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/dacdigital"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/dboutput"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/iopanel"
+		    files="${properties.files}"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/TextResources.properties" property="avail.TextResources"/>
-  <target name="properties" description="Create property files" depends="prepare" unless="avail.TextResources">
+  <available file="${resources.dir}/${prefix}/${package}/TextResources.properties"
+	     property="avail.TextResources"/>
+  <target name="properties"
+	  description="Create property files"
+	  depends="prepare"
+	  unless="avail.TextResources">
     <echo message="Creating property files"/>
     <mkdir dir="${resources.dir}/${prefix}/${package}"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/${package}">
-      <fileset dir="${src.dir}/${prefix}/${package}" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/${package}">
+      <fileset dir="${src.dir}/${prefix}/${package}"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
     </apply>
     <mkdir dir="${resources.dir}/${prefix}/gui"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/gui">
-      <fileset dir="${src.dir}/${prefix}/gui" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/gui">
+      <fileset dir="${src.dir}/${prefix}/gui"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
     </apply>
     <mkdir dir="${resources.dir}/${prefix}/memory"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/memory">
-      <fileset dir="${src.dir}/${prefix}/memory" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/memory">
+      <fileset dir="${src.dir}/${prefix}/memory"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
     </apply>
     <mkdir dir="${resources.dir}/${prefix}/trec"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/trec">
-      <fileset dir="${src.dir}/${prefix}/trec" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/trec">
+      <fileset dir="${src.dir}/${prefix}/trec"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
     </apply>
     <mkdir dir="${resources.dir}/${prefix}/debug"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/debug">
-      <fileset dir="${src.dir}/${prefix}/debug" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/debug">
+      <fileset dir="${src.dir}/${prefix}/debug"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
     </apply>
     <mkdir dir="${resources.dir}/${prefix}/peripherals"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/peripherals">
-      <fileset dir="${src.dir}/${prefix}/peripherals" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/peripherals">
+      <fileset dir="${src.dir}/${prefix}/peripherals"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
     </apply>
     <mkdir dir="${resources.dir}/${prefix}/counter"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/counter">
-      <fileset dir="${src.dir}/${prefix}/counter" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/counter">
+      <fileset dir="${src.dir}/${prefix}/counter"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
     </apply>
     <mkdir dir="${resources.dir}/${prefix}/sisdmatrix"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/sisdmatrix">
-      <fileset dir="${src.dir}/${prefix}/sisdmatrix" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/sisdmatrix">
+      <fileset dir="${src.dir}/${prefix}/sisdmatrix"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
     </apply>
     <mkdir dir="${resources.dir}/${prefix}/ledmatrix"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/ledmatrix">
-      <fileset dir="${src.dir}/${prefix}/ledmatrix" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/ledmatrix">
+      <fileset dir="${src.dir}/${prefix}/ledmatrix"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
     </apply>
     <mkdir dir="${resources.dir}/${prefix}/pckbd"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/pckbd">
-      <fileset dir="${src.dir}/${prefix}/pckbd" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/pckbd">
+      <fileset dir="${src.dir}/${prefix}/pckbd"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
     </apply>
     <mkdir dir="${resources.dir}/${prefix}/adc"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/adc">
-      <fileset dir="${src.dir}/${prefix}/adc" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/adc">
+      <fileset dir="${src.dir}/${prefix}/adc"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
     </apply>
     <mkdir dir="${resources.dir}/${prefix}/dacanalog"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/dacanalog">
-      <fileset dir="${src.dir}/${prefix}/dacanalog" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/dacanalog">
+      <fileset dir="${src.dir}/${prefix}/dacanalog"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
     </apply>
     <mkdir dir="${resources.dir}/${prefix}/dacdigital"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/dacdigital">
-      <fileset dir="${src.dir}/${prefix}/dacdigital" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/dacdigital">
+      <fileset dir="${src.dir}/${prefix}/dacdigital"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
     </apply>
     <mkdir dir="${resources.dir}/${prefix}/dboutput"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/dboutput">
-      <fileset dir="${src.dir}/${prefix}/dboutput" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/dboutput">
+      <fileset dir="${src.dir}/${prefix}/dboutput"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
     </apply>
     <mkdir dir="${resources.dir}/${prefix}/${package}/iopanel"/>
-    <apply executable="native2ascii" dest="${resources.dir}/${prefix}/${package}/iopanel">
-      <fileset dir="${src.dir}/${prefix}/${package}/iopanel" includes="${properties.files}"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/${package}/iopanel">
+      <fileset dir="${src.dir}/${prefix}/${package}/iopanel"
+	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
       <identitymapper/>
@@ -204,445 +312,637 @@
 
   <!-- rom -->
   <dependset>
-    <srcfileset dir="${bin.misc.dir}/${package}" includes="monitor.bin"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/${package}/ROM" files="monitor.bin"/>
+    <srcfileset dir="${bin.misc.dir}/${package}"
+		includes="monitor.bin"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/ROM"
+		    files="monitor.bin"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/ROM/monitor.bin" property="avail.${package}.ROM"/>
-  <target name="rom" unless="avail.${package}.ROM">
+  <available file="${resources.dir}/${prefix}/${package}/ROM/monitor.bin"
+	     property="avail.${package}.ROM"/>
+  <target name="rom"
+	  unless="avail.${package}.ROM">
     <echo message="Copying ROM images"/>
     <copy todir="${resources.dir}/${prefix}/${package}/ROM">
-      <fileset dir="${bin.misc.dir}/${package}" includes="monitor.bin"/>
+      <fileset dir="${bin.misc.dir}/${package}"
+	       includes="monitor.bin"/>
     </copy>
   </target>
 
   <!-- licenses -->
   <dependset>
-    <srcfileset dir="${bin.misc.dir}/${package}" includes="gpl.txt"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/${package}/License" files="gpl.txt"/>
+    <srcfileset dir="${bin.misc.dir}/${package}"
+		includes="gpl.txt"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/License"
+		    files="gpl.txt"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/License/gpl.txt" property="avail.${package}.licenses"/>
-  <target name="licenses" unless="avail.${package}.licenses">
+  <available file="${resources.dir}/${prefix}/${package}/License/gpl.txt"
+	     property="avail.${package}.licenses"/>
+  <target name="licenses"
+	  unless="avail.${package}.licenses">
     <echo message="Copying licenses"/>
     <copy todir="${resources.dir}/${prefix}/${package}/License">
-      <fileset dir="${bin.misc.dir}/${package}" includes="gpl.txt"/>
+      <fileset dir="${bin.misc.dir}/${package}"
+	       includes="gpl.txt"/>
     </copy>
   </target>
 
   <!-- gui.LED -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/gui" includes="LED.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/gui" includes="led-*.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/gui/LED" files="small-red-1-0.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/gui"
+		includes="LED.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/gui"
+		includes="led-*.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/gui/LED"
+		    files="small-red-1-0.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/gui/LED/small-red-1-0.png" property="avail.gui.LED"/>
-  <target name="gui.LED" unless="avail.gui.LED">
+  <available file="${resources.dir}/${prefix}/gui/LED/small-red-1-0.png"
+	     property="avail.gui.LED"/>
+  <target name="gui.LED"
+	  unless="avail.gui.LED">
     <exec executable="${bin.dir}/${prefix}/gui/LED.makegraphics"/>
   </target>
 
   <!-- gui.SSD -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/gui" includes="SSD.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/gui" includes="ssd-*.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/gui/SSD" files="big-red-1-b.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/gui"
+		includes="SSD.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/gui"
+		includes="ssd-*.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/gui/SSD"
+		    files="big-red-1-b.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/gui/SSD/big-red-1-b.png" property="avail.gui.SSD"/>
-  <target name="gui.SSD" unless="avail.gui.SSD">
+  <available file="${resources.dir}/${prefix}/gui/SSD/big-red-1-b.png"
+	     property="avail.gui.SSD"/>
+  <target name="gui.SSD"
+	  unless="avail.gui.SSD">
     <exec executable="${bin.dir}/${prefix}/gui/SSD.makegraphics"/>
   </target>
 
   <!-- gui.SiSD -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/gui" includes="SiSD.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/gui" includes="sisd-*.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/gui/SiSD" files="small-red-1-b.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/gui"
+		includes="SiSD.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/gui"
+		includes="sisd-*.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/gui/SiSD"
+		    files="small-red-1-b.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/gui/SiSD/small-red-1-b.png" property="avail.gui.SiSD"/>
-  <target name="gui.SiSD" unless="avail.gui.SiSD">
+  <available file="${resources.dir}/${prefix}/gui/SiSD/small-red-1-b.png"
+	     property="avail.gui.SiSD"/>
+  <target name="gui.SiSD"
+	  unless="avail.gui.SiSD">
     <exec executable="${bin.dir}/${prefix}/gui/SiSD.makegraphics"/>
   </target>
 
   <!-- gui.ESD -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/gui" includes="ESD.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/gui" includes="esd-*.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/gui/ESD" files="big-lime-1-0.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/gui"
+		includes="ESD.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/gui"
+		includes="esd-*.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/gui/ESD"
+		    files="big-lime-1-0.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/gui/ESD/big-lime-1-0.png" property="avail.gui.ESD"/>
-  <target name="gui.ESD" unless="avail.gui.ESD">
+  <available file="${resources.dir}/${prefix}/gui/ESD/big-lime-1-0.png"
+	     property="avail.gui.ESD"/>
+  <target name="gui.ESD"
+	  unless="avail.gui.ESD">
     <exec executable="${bin.dir}/${prefix}/gui/ESD.makegraphics"/>
   </target>
 
   <!-- gui.SignESD -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/gui" includes="SignESD.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/gui" includes="signesd-*.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/gui/SignESD" files="big-lime-1-0.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/gui"
+		includes="SignESD.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/gui"
+		includes="signesd-*.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/gui/SignESD"
+		    files="big-lime-1-0.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/gui/SignESD/big-lime-1-0.png" property="avail.gui.SignESD"/>
-  <target name="gui.SignESD" unless="avail.gui.SignESD">
+  <available file="${resources.dir}/${prefix}/gui/SignESD/big-lime-1-0.png"
+	     property="avail.gui.SignESD"/>
+  <target name="gui.SignESD"
+	  unless="avail.gui.SignESD">
     <exec executable="${bin.dir}/${prefix}/gui/SignESD.makegraphics"/>
   </target>
 
   <!-- gui.Digit -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/gui" includes="Digit.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/gui" includes="digits.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/gui/Digit" files="basic-white-1.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/gui"
+		includes="Digit.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/gui"
+		includes="digits.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/gui/Digit"
+		    files="basic-white-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/gui/Digit/basic-white-1.png" property="avail.gui.Digit"/>
-  <target name="gui.Digit" unless="avail.gui.Digit">
+  <available file="${resources.dir}/${prefix}/gui/Digit/basic-white-1.png"
+	     property="avail.gui.Digit"/>
+  <target name="gui.Digit"
+	  unless="avail.gui.Digit">
     <exec executable="${bin.dir}/${prefix}/gui/Digit.makegraphics"/>
   </target>
 
   <!-- gui.CounterResetButton -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/gui" includes="CounterResetButton.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/gui" includes="counterreset-*.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/gui/CounterResetButton" files="basic-gray-1-u.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/gui"
+		includes="CounterResetButton.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/gui"
+		includes="counterreset-*.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/gui/CounterResetButton"
+		    files="basic-gray-1-u.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/gui/CounterResetButton/basic-gray-1-u.png" property="avail.gui.CounterResetButton"/>
-  <target name="gui.CounterResetButton" unless="avail.gui.CounterResetButton">
+  <available file="${resources.dir}/${prefix}/gui/CounterResetButton/basic-gray-1-u.png"
+	     property="avail.gui.CounterResetButton"/>
+  <target name="gui.CounterResetButton"
+	  unless="avail.gui.CounterResetButton">
     <exec executable="${bin.dir}/${prefix}/gui/CounterResetButton.makegraphics"/>
   </target>
 
   <!-- gui.UniversalButton -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/gui" includes="UniversalButton.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/gui" includes="buttons-small-*.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/gui/UniversalButton" files="small-black-blank-1-u.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/gui"
+		includes="UniversalButton.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/gui"
+		includes="buttons-small-*.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/gui/UniversalButton"
+		    files="small-black-blank-1-u.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/gui/UniversalButton/small-black-blank-1-u.png" property="avail.gui.UniversalButton"/>
-  <target name="gui.UniversalButton" unless="avail.gui.UniversalButton">
+  <available file="${resources.dir}/${prefix}/gui/UniversalButton/small-black-blank-1-u.png"
+	     property="avail.gui.UniversalButton"/>
+  <target name="gui.UniversalButton"
+	  unless="avail.gui.UniversalButton">
     <exec executable="${bin.dir}/${prefix}/gui/UniversalButton.makegraphics"/>
   </target>
 
   <!-- gui.Knob -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/gui" includes="Knob.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/gui" includes="knob-round-gray.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/gui/Knob" files="round-gray-1-0.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/gui"
+		includes="Knob.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/gui"
+		includes="knob-round-gray.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/gui/Knob"
+		    files="round-gray-1-0.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/gui/Knob/round-gray-1-0.png" property="avail.gui.Knob"/>
-  <target name="gui.Knob" unless="avail.gui.Knob">
+  <available file="${resources.dir}/${prefix}/gui/Knob/round-gray-1-0.png"
+	     property="avail.gui.Knob"/>
+  <target name="gui.Knob"
+	  unless="avail.gui.Knob">
     <exec executable="${bin.dir}/${prefix}/gui/Knob.makegraphics"/>
   </target>
 
   <!-- gui.Background -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/gui" includes="Background.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/gui" includes="plastic-gray.png"/>
-    <srcfileset dir="${graphics.dir}/gui" includes="plastic-darkgray.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/gui/Background" files="plastic-gray.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/gui"
+		includes="Background.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/gui"
+		includes="plastic-gray.png"/>
+    <srcfileset dir="${graphics.dir}/gui"
+		includes="plastic-darkgray.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/gui/Background"
+		    files="plastic-gray.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/gui/Background/plastic-gray.png" property="avail.gui.Background"/>
-  <target name="gui.Background" unless="avail.gui.Background">
+  <available file="${resources.dir}/${prefix}/gui/Background/plastic-gray.png"
+	     property="avail.gui.Background"/>
+  <target name="gui.Background"
+	  unless="avail.gui.Background">
     <exec executable="${bin.dir}/${prefix}/gui/Background.makegraphics"/>
   </target>
 
   <!-- pmi80.ComputerPanel -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/${package}" includes="ComputerPanel.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/${package}" includes="mask.png"/>
-    <srcfileset dir="${graphics.dir}/${package}" includes="metal.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/${package}/ComputerPanel" files="mask-1.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/${package}"
+		includes="ComputerPanel.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/${package}"
+		includes="mask.png"/>
+    <srcfileset dir="${graphics.dir}/${package}"
+		includes="metal.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/ComputerPanel"
+		    files="mask-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/ComputerPanel/mask-1.png" property="avail.pmi80.ComputerPanel"/>
-  <target name="pmi80.ComputerPanel" unless="avail.pmi80.ComputerPanel">
+  <available file="${resources.dir}/${prefix}/${package}/ComputerPanel/mask-1.png"
+	     property="avail.pmi80.ComputerPanel"/>
+  <target name="pmi80.ComputerPanel"
+	  unless="avail.pmi80.ComputerPanel">
     <exec executable="${bin.dir}/${prefix}/${package}/ComputerPanel.makegraphics"/>
   </target>
 
   <!-- pmi80.Marking -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/${package}" includes="Marking.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/${package}" includes="marking.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/${package}/Marking" files="basic-1.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/${package}"
+		includes="Marking.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/${package}"
+		includes="marking.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/Marking"
+		    files="basic-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/Marking/basic-1.png" property="avail.pmi80.Marking"/>
-  <target name="pmi80.Marking" unless="avail.pmi80.Marking">
+  <available file="${resources.dir}/${prefix}/${package}/Marking/basic-1.png"
+	     property="avail.pmi80.Marking"/>
+  <target name="pmi80.Marking"
+	  unless="avail.pmi80.Marking">
     <exec executable="${bin.dir}/${prefix}/${package}/Marking.makegraphics"/>
   </target>
 
   <!-- pmi80.KeyboardButton -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/${package}" includes="KeyboardButton.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/${package}" includes="buttons.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/${package}/KeyboardButton" files="RE-1-u.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/${package}"
+		includes="KeyboardButton.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/${package}"
+		includes="buttons.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/KeyboardButton"
+		    files="RE-1-u.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/KeyboardButton/RE-1-u.png" property="avail.pmi80.KeyboardButton"/>
-  <target name="pmi80.KeyboardButton" unless="avail.pmi80.KeyboardButton">
+  <available file="${resources.dir}/${prefix}/${package}/KeyboardButton/RE-1-u.png"
+	     property="avail.pmi80.KeyboardButton"/>
+  <target name="pmi80.KeyboardButton"
+	  unless="avail.pmi80.KeyboardButton">
     <exec executable="${bin.dir}/${prefix}/${package}/KeyboardButton.makegraphics"/>
   </target>
 
   <!-- pmi80.IconButton -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/${package}" includes="IconButton.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/${package}" includes="icons.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/${package}/IconButton" files="wheel-1-d.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/${package}"
+		includes="IconButton.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/${package}"
+		includes="icons.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/IconButton"
+		    files="wheel-1-d.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/IconButton/wheel-1-d.png" property="avail.pmi80.IconButton"/>
-  <target name="pmi80.IconButton" unless="avail.pmi80.IconButton">
+  <available file="${resources.dir}/${prefix}/${package}/IconButton/wheel-1-d.png"
+	     property="avail.pmi80.IconButton"/>
+  <target name="pmi80.IconButton"
+	  unless="avail.pmi80.IconButton">
     <exec executable="${bin.dir}/${prefix}/${package}/IconButton.makegraphics"/>
   </target>
 
   <!-- pmi80.AboutLogo -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/${package}" includes="AboutLogo.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/${package}" includes="tesla.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/${package}/AboutLogo" files="tesla.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/${package}"
+		includes="AboutLogo.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/${package}"
+		includes="tesla.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/AboutLogo"
+		    files="tesla.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/AboutLogo/tesla.png" property="avail.pmi80.AboutLogo"/>
-  <target name="pmi80.AboutLogo" unless="avail.pmi80.AboutLogo">
+  <available file="${resources.dir}/${prefix}/${package}/AboutLogo/tesla.png"
+	     property="avail.pmi80.AboutLogo"/>
+  <target name="pmi80.AboutLogo"
+	  unless="avail.pmi80.AboutLogo">
     <exec executable="${bin.dir}/${prefix}/${package}/AboutLogo.makegraphics"/>
   </target>
 
   <!-- pmi80.AboutPhoto -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/${package}" includes="AboutPhoto.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/${package}" includes="pmi.jpg"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/${package}/AboutPhoto" files="pmi.jpg"/>
+    <srcfileset dir="${bin.dir}/${prefix}/${package}"
+		includes="AboutPhoto.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/${package}"
+		includes="pmi.jpg"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/AboutPhoto"
+		    files="pmi.jpg"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/AboutPhoto/pmi.jpg" property="avail.pmi80.AboutPhoto"/>
-  <target name="pmi80.AboutPhoto" unless="avail.pmi80.AboutPhoto">
+  <available file="${resources.dir}/${prefix}/${package}/AboutPhoto/pmi.jpg"
+	     property="avail.pmi80.AboutPhoto"/>
+  <target name="pmi80.AboutPhoto"
+	  unless="avail.pmi80.AboutPhoto">
     <exec executable="${bin.dir}/${prefix}/${package}/AboutPhoto.makegraphics"/>
   </target>
 
   <!-- pmi80.AboutLicense -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/${package}" includes="AboutLicense.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/${package}" includes="gpl.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/${package}/AboutLicense" files="gpl.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/${package}"
+		includes="AboutLicense.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/${package}"
+		includes="gpl.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/AboutLicense"
+		    files="gpl.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/AboutLicense/gpl.png" property="avail.pmi80.AboutLicense"/>
-  <target name="pmi80.AboutLicense" unless="avail.pmi80.AboutLicense">
+  <available file="${resources.dir}/${prefix}/${package}/AboutLicense/gpl.png"
+	     property="avail.pmi80.AboutLicense"/>
+  <target name="pmi80.AboutLicense"
+	  unless="avail.pmi80.AboutLicense">
     <exec executable="${bin.dir}/${prefix}/${package}/AboutLicense.makegraphics"/>
   </target>
 
   <!-- pmi80.ApplicationIcons -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/${package}" includes="ApplicationIcons.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/${package}" includes="appicon.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/${package}/ApplicationIcons" files="icon-64.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/${package}"
+		includes="ApplicationIcons.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/${package}"
+		includes="appicon.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/ApplicationIcons"
+		    files="icon-64.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/ApplicationIcons/icon-64.png" property="avail.pmi80.ApplicationIcons"/>
-  <target name="pmi80.ApplicationIcons" unless="avail.pmi80.ApplicationIcons">
+  <available file="${resources.dir}/${prefix}/${package}/ApplicationIcons/icon-64.png"
+	     property="avail.pmi80.ApplicationIcons"/>
+  <target name="pmi80.ApplicationIcons"
+	  unless="avail.pmi80.ApplicationIcons">
     <exec executable="${bin.dir}/${prefix}/${package}/ApplicationIcons.makegraphics"/>
   </target>
 
   <!-- trec.TapeRecorderPanel -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/trec" includes="TapeRecorderPanel.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/trec" includes="mask.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/trec/TapeRecorderPanel" files="mask-1.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/trec"
+		includes="TapeRecorderPanel.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/trec"
+		includes="mask.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/trec/TapeRecorderPanel"
+		    files="mask-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/trec/TapeRecorderPanel/mask-1.png" property="avail.trec.TapeRecorderPanel"/>
-  <target name="trec.TapeRecorderPanel" unless="avail.trec.TapeRecorderPanel">
+  <available file="${resources.dir}/${prefix}/trec/TapeRecorderPanel/mask-1.png"
+	     property="avail.trec.TapeRecorderPanel"/>
+  <target name="trec.TapeRecorderPanel"
+	  unless="avail.trec.TapeRecorderPanel">
     <exec executable="${bin.dir}/${prefix}/trec/TapeRecorderPanel.makegraphics"/>
   </target>
 
   <!-- trec.TapeRecorderButton -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/trec" includes="TapeRecorderButton.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/trec" includes="buttons.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/trec/TapeRecorderButton" files="record-1-u.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/trec"
+		includes="TapeRecorderButton.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/trec"
+		includes="buttons.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/trec/TapeRecorderButton"
+		    files="record-1-u.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/trec/TapeRecorderButton/record-1-u.png" property="avail.trec.TapeRecorderButton"/>
-  <target name="trec.TapeRecorderButton" unless="avail.trec.TapeRecorderButton">
+  <available file="${resources.dir}/${prefix}/trec/TapeRecorderButton/record-1-u.png"
+	     property="avail.trec.TapeRecorderButton"/>
+  <target name="trec.TapeRecorderButton"
+	  unless="avail.trec.TapeRecorderButton">
     <exec executable="${bin.dir}/${prefix}/trec/TapeRecorderButton.makegraphics"/>
   </target>
 
   <!-- trec.VUMeter -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/trec" includes="VUMeter.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/trec" includes="vumeter-*.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/trec/VUMeter" files="vumeter-1-0.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/trec"
+		includes="VUMeter.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/trec"
+		includes="vumeter-*.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/trec/VUMeter"
+		    files="vumeter-1-0.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/trec/VUMeter/vumeter-1-0.png" property="avail.trec.VUMeter"/>
-  <target name="trec.VUMeter" unless="avail.trec.VUMeter">
+  <available file="${resources.dir}/${prefix}/trec/VUMeter/vumeter-1-0.png"
+	     property="avail.trec.VUMeter"/>
+  <target name="trec.VUMeter"
+	  unless="avail.trec.VUMeter">
     <exec executable="${bin.dir}/${prefix}/trec/VUMeter.makegraphics"/>
   </target>
 
   <!-- debug.DebuggerPanel -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/debug" includes="DebuggerPanel.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/debug" includes="debugger.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/debug/DebuggerPanel" files="mask-1.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/debug"
+		includes="DebuggerPanel.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/debug"
+		includes="debugger.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/debug/DebuggerPanel"
+		    files="mask-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/debug/DebuggerPanel/mask-1.png" property="avail.debug.DebuggerPanel"/>
-  <target name="debug.DebuggerPanel" unless="avail.debug.DebuggerPanel">
+  <available file="${resources.dir}/${prefix}/debug/DebuggerPanel/mask-1.png"
+	     property="avail.debug.DebuggerPanel"/>
+  <target name="debug.DebuggerPanel"
+	  unless="avail.debug.DebuggerPanel">
     <exec executable="${bin.dir}/${prefix}/debug/DebuggerPanel.makegraphics"/>
   </target>
 
   <!-- debug.DebuggerButton -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/debug" includes="DebuggerButton.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/debug" includes="buttons.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/debug/DebuggerButton" files="stepin-1-u.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/debug"
+		includes="DebuggerButton.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/debug"
+		includes="buttons.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/debug/DebuggerButton"
+		    files="stepin-1-u.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/debug/DebuggerButton/stepin-1-u.png" property="avail.debug.DebuggerButton"/>
-  <target name="debug.DebuggerButton" unless="avail.debug.DebuggerButton">
+  <available file="${resources.dir}/${prefix}/debug/DebuggerButton/stepin-1-u.png"
+	     property="avail.debug.DebuggerButton"/>
+  <target name="debug.DebuggerButton"
+	  unless="avail.debug.DebuggerButton">
     <exec executable="${bin.dir}/${prefix}/debug/DebuggerButton.makegraphics"/>
   </target>
 
   <!-- counter.CounterPanel -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/counter" includes="CounterPanel.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/counter" includes="mask.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/counter/CounterPanel" files="mask-1.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/counter"
+		includes="CounterPanel.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/counter"
+		includes="mask.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/counter/CounterPanel"
+		    files="mask-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/counter/CounterPanel/mask-1.png" property="avail.counter.CounterPanel"/>
-  <target name="counter.CounterPanel" unless="avail.counter.CounterPanel">
+  <available file="${resources.dir}/${prefix}/counter/CounterPanel/mask-1.png"
+	     property="avail.counter.CounterPanel"/>
+  <target name="counter.CounterPanel"
+	  unless="avail.counter.CounterPanel">
     <exec executable="${bin.dir}/${prefix}/counter/CounterPanel.makegraphics"/>
   </target>
 
   <!-- sisdmatrix.SiSDMatrixPanel -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/sisdmatrix" includes="SiSDMatrixPanel.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/sisdmatrix" includes="mask.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/sisdmatrix/SiSDMatrixPanel" files="mask-1.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/sisdmatrix"
+		includes="SiSDMatrixPanel.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/sisdmatrix"
+		includes="mask.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/sisdmatrix/SiSDMatrixPanel"
+		    files="mask-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/sisdmatrix/SiSDMatrixPanel/mask-1.png" property="avail.sisdmatrix.SiSDMatrixPanel"/>
-  <target name="sisdmatrix.SiSDMatrixPanel" unless="avail.sisdmatrix.SiSDMatrixPanel">
+  <available file="${resources.dir}/${prefix}/sisdmatrix/SiSDMatrixPanel/mask-1.png"
+	     property="avail.sisdmatrix.SiSDMatrixPanel"/>
+  <target name="sisdmatrix.SiSDMatrixPanel"
+	  unless="avail.sisdmatrix.SiSDMatrixPanel">
     <exec executable="${bin.dir}/${prefix}/sisdmatrix/SiSDMatrixPanel.makegraphics"/>
   </target>
 
   <!-- ledmatrix.LEDMatrixPanel -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/ledmatrix" includes="LEDMatrixPanel.makegraphics"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/ledmatrix/LEDMatrixPanel" files="mask-1.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/ledmatrix"
+		includes="LEDMatrixPanel.makegraphics"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/ledmatrix/LEDMatrixPanel"
+		    files="mask-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/ledmatrix/LEDMatrixPanel/mask-1.png" property="avail.ledmatrix.LEDMatrixPanel"/>
-  <target name="ledmatrix.LEDMatrixPanel" unless="avail.ledmatrix.LEDMatrixPanel">
+  <available file="${resources.dir}/${prefix}/ledmatrix/LEDMatrixPanel/mask-1.png"
+	     property="avail.ledmatrix.LEDMatrixPanel"/>
+  <target name="ledmatrix.LEDMatrixPanel"
+	  unless="avail.ledmatrix.LEDMatrixPanel">
     <exec executable="${bin.dir}/${prefix}/ledmatrix/LEDMatrixPanel.makegraphics"/>
   </target>
 
   <!-- pckbd.PCKeyboardKey -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/pckbd" includes="PCKeyboardKey.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/pckbd" includes="keys.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/pckbd/PCKeyboardKey" files="1-1-u.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/pckbd"
+		includes="PCKeyboardKey.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/pckbd"
+		includes="keys.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/pckbd/PCKeyboardKey"
+		    files="1-1-u.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/pckbd/PCKeyboardKey/1-1-u.png" property="avail.pckbd.PCKeyboardKey"/>
-  <target name="pckbd.PCKeyboardKey" unless="avail.pckbd.PCKeyboardKey">
+  <available file="${resources.dir}/${prefix}/pckbd/PCKeyboardKey/1-1-u.png"
+	     property="avail.pckbd.PCKeyboardKey"/>
+  <target name="pckbd.PCKeyboardKey"
+	  unless="avail.pckbd.PCKeyboardKey">
     <exec executable="${bin.dir}/${prefix}/pckbd/PCKeyboardKey.makegraphics"/>
   </target>
 
   <!-- pckbd.PCKeyboardPanel -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/pckbd" includes="PCKeyboardPanel.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/pckbd" includes="mask.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/pckbd/PCKeyboardPanel" files="mask-1.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/pckbd"
+		includes="PCKeyboardPanel.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/pckbd"
+		includes="mask.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/pckbd/PCKeyboardPanel"
+		    files="mask-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/pckbd/PCKeyboardPanel/mask-1.png" property="avail.pckbd.PCKeyboardPanel"/>
-  <target name="pckbd.PCKeyboardPanel" unless="avail.pckbd.PCKeyboardPanel">
+  <available file="${resources.dir}/${prefix}/pckbd/PCKeyboardPanel/mask-1.png"
+	     property="avail.pckbd.PCKeyboardPanel"/>
+  <target name="pckbd.PCKeyboardPanel"
+	  unless="avail.pckbd.PCKeyboardPanel">
     <exec executable="${bin.dir}/${prefix}/pckbd/PCKeyboardPanel.makegraphics"/>
   </target>
 
   <!-- adc.ADCButton -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/adc" includes="ADCButton.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/adc" includes="button.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/adc/ADCButton" files="button-1.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/adc"
+		includes="ADCButton.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/adc"
+		includes="button.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/adc/ADCButton"
+		    files="button-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/adc/ADCButton/button-1.png" property="avail.adc.ADCButton"/>
-  <target name="adc.ADCButton" unless="avail.adc.ADCButton">
+  <available file="${resources.dir}/${prefix}/adc/ADCButton/button-1.png"
+	     property="avail.adc.ADCButton"/>
+  <target name="adc.ADCButton"
+	  unless="avail.adc.ADCButton">
     <exec executable="${bin.dir}/${prefix}/adc/ADCButton.makegraphics"/>
   </target>
 
   <!-- adc.ADCPanel -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/adc" includes="ADCPanel.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/adc" includes="mask.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/adc/ADCPanel" files="mask-1.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/adc"
+		includes="ADCPanel.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/adc"
+		includes="mask.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/adc/ADCPanel"
+		    files="mask-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/adc/ADCPanel/mask-1.png" property="avail.adc.ADCPanel"/>
-  <target name="adc.ADCPanel" unless="avail.adc.ADCPanel">
+  <available file="${resources.dir}/${prefix}/adc/ADCPanel/mask-1.png"
+	     property="avail.adc.ADCPanel"/>
+  <target name="adc.ADCPanel"
+	  unless="avail.adc.ADCPanel">
     <exec executable="${bin.dir}/${prefix}/adc/ADCPanel.makegraphics"/>
   </target>
 
   <!-- dacanalog.DACAnalogPanel -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/dacanalog" includes="DACAnalogPanel.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/dacanalog" includes="mask.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/dacanalog/DACAnalogPanel" files="mask-1.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/dacanalog"
+		includes="DACAnalogPanel.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/dacanalog"
+		includes="mask.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/dacanalog/DACAnalogPanel"
+		    files="mask-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/dacanalog/DACAnalogPanel/mask-1.png" property="avail.dacanalog.DACAnalogPanel"/>
-  <target name="dacanalog.DACAnalogPanel" unless="avail.dacanalog.DACAnalogPanel">
+  <available file="${resources.dir}/${prefix}/dacanalog/DACAnalogPanel/mask-1.png"
+	     property="avail.dacanalog.DACAnalogPanel"/>
+  <target name="dacanalog.DACAnalogPanel"
+	  unless="avail.dacanalog.DACAnalogPanel">
     <exec executable="${bin.dir}/${prefix}/dacanalog/DACAnalogPanel.makegraphics"/>
   </target>
 
   <!-- dacdigital.DACDigitalPanel -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/dacdigital" includes="DACDigitalPanel.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/dacdigital" includes="mask.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/dacdigital/DACDigitalPanel" files="mask-1.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/dacdigital"
+		includes="DACDigitalPanel.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/dacdigital"
+		includes="mask.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/dacdigital/DACDigitalPanel"
+		    files="mask-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/dacdigital/DACDigitalPanel/mask-1.png" property="avail.dacdigital.DACDigitalPanel"/>
-  <target name="dacdigital.DACDigitalPanel" unless="avail.dacdigital.DACDigitalPanel">
+  <available file="${resources.dir}/${prefix}/dacdigital/DACDigitalPanel/mask-1.png"
+	     property="avail.dacdigital.DACDigitalPanel"/>
+  <target name="dacdigital.DACDigitalPanel"
+	  unless="avail.dacdigital.DACDigitalPanel">
     <exec executable="${bin.dir}/${prefix}/dacdigital/DACDigitalPanel.makegraphics"/>
   </target>
 
   <!-- pmi80.iopanel.IOPanelElement -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/${package}/iopanel" includes="IOPanelElement.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/${package}/iopanel" includes="elements.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/${package}/iopanel/IOPanelElement" files="element-1-0-u.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/${package}/iopanel"
+		includes="IOPanelElement.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/${package}/iopanel"
+		includes="elements.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/iopanel/IOPanelElement"
+		    files="element-1-0-u.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/iopanel/IOPanelElement/element-1-0-u.png" property="avail.pmi80.iopanel.IOPanelElement"/>
-  <target name="pmi80.iopanel.IOPanelElement" unless="avail.pmi80.iopanel.IOPanelElement">
+  <available file="${resources.dir}/${prefix}/${package}/iopanel/IOPanelElement/element-1-0-u.png"
+	     property="avail.pmi80.iopanel.IOPanelElement"/>
+  <target name="pmi80.iopanel.IOPanelElement"
+	  unless="avail.pmi80.iopanel.IOPanelElement">
     <exec executable="${bin.dir}/${prefix}/${package}/iopanel/IOPanelElement.makegraphics"/>
   </target>
 
   <!-- pmi80.iopanel.IOPanelPanel -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/${package}/iopanel" includes="IOPanelPanel.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/${package}/iopanel" includes="mask.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/${package}/iopanel/IOPanelPanel" files="mask-1.png"/>
+    <srcfileset dir="${bin.dir}/${prefix}/${package}/iopanel"
+		includes="IOPanelPanel.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/${package}/iopanel"
+		includes="mask.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/iopanel/IOPanelPanel"
+		    files="mask-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/iopanel/IOPanelPanel/mask-1.png" property="avail.pmi80.iopanel.IOPanelPanel"/>
-  <target name="pmi80.iopanel.IOPanelPanel" unless="avail.pmi80.iopanel.IOPanelPanel">
+  <available file="${resources.dir}/${prefix}/${package}/iopanel/IOPanelPanel/mask-1.png"
+	     property="avail.pmi80.iopanel.IOPanelPanel"/>
+  <target name="pmi80.iopanel.IOPanelPanel"
+	  unless="avail.pmi80.iopanel.IOPanelPanel">
     <exec executable="${bin.dir}/${prefix}/${package}/iopanel/IOPanelPanel.makegraphics"/>
   </target>
 
   <!-- graphics -->
-  <target name="graphics" depends="prepare,gui.LED,gui.SSD,gui.SiSD,gui.ESD,gui.SignESD,gui.Digit,gui.CounterResetButton,gui.UniversalButton,gui.Knob,gui.Background,pmi80.ComputerPanel,pmi80.Marking,pmi80.KeyboardButton,pmi80.IconButton,pmi80.AboutLogo,pmi80.AboutPhoto,pmi80.AboutLicense,pmi80.ApplicationIcons,trec.TapeRecorderPanel,trec.TapeRecorderButton,trec.VUMeter,debug.DebuggerPanel,debug.DebuggerButton,counter.CounterPanel,sisdmatrix.SiSDMatrixPanel,ledmatrix.LEDMatrixPanel,pckbd.PCKeyboardKey,pckbd.PCKeyboardPanel,adc.ADCButton,adc.ADCPanel,dacanalog.DACAnalogPanel,dacdigital.DACDigitalPanel,pmi80.iopanel.IOPanelElement,pmi80.iopanel.IOPanelPanel" description="Create bitmaps" unless="nographics"/>
+  <target name="graphics"
+	  depends="prepare,gui.LED,gui.SSD,gui.SiSD,gui.ESD,gui.SignESD,gui.Digit,gui.CounterResetButton,gui.UniversalButton,gui.Knob,gui.Background,pmi80.ComputerPanel,pmi80.Marking,pmi80.KeyboardButton,pmi80.IconButton,pmi80.AboutLogo,pmi80.AboutPhoto,pmi80.AboutLicense,pmi80.ApplicationIcons,trec.TapeRecorderPanel,trec.TapeRecorderButton,trec.VUMeter,debug.DebuggerPanel,debug.DebuggerButton,counter.CounterPanel,sisdmatrix.SiSDMatrixPanel,ledmatrix.LEDMatrixPanel,pckbd.PCKeyboardKey,pckbd.PCKeyboardPanel,adc.ADCButton,adc.ADCPanel,dacanalog.DACAnalogPanel,dacdigital.DACDigitalPanel,pmi80.iopanel.IOPanelElement,pmi80.iopanel.IOPanelPanel"
+	  description="Create bitmaps"
+	  unless="nographics"/>
 
   <!-- compile -->
-  <target name="compile" depends="prepare,properties,rom,licenses,graphics" description="Compile source code">
-    <javac srcdir="${build.src.filtered.dir}" destdir="${build.classes.dir}" classpathref="base.path" includeAntRuntime="false" debug="true" source="${javac.source.version}" target="${javac.target.version}"/>
+  <target name="compile"
+	  depends="prepare,properties,rom,licenses,graphics"
+	  description="Compile source code">
+    <javac srcdir="${build.src.filtered.dir}"
+	   destdir="${build.classes.dir}"
+	   classpathref="base.path"
+	   includeAntRuntime="false"
+	   debug="true"
+	   source="${javac.source.version}"
+	   target="${javac.target.version}"/>
     <copy todir="${build.classes.dir}/${prefix}/${package}">
       <fileset dir="${resources.dir}/${prefix}/${package}"/>
     </copy>
@@ -686,38 +986,59 @@
       <fileset dir="${resources.dir}/${prefix}/dboutput"/>
     </copy>
     <copy todir="${build.licenses.dir}">
-      <fileset dir="${resources.dir}/${prefix}/${package}/License" includes="*gpl.txt"/>
+      <fileset dir="${resources.dir}/${prefix}/${package}/License"
+	       includes="*gpl.txt"/>
     </copy>
     <copy todir="${build.classes.dir}/${prefix}/memory">
-      <fileset dir="${src.dir}/${prefix}/memory" includes="*.xsd"/>
+      <fileset dir="${src.dir}/${prefix}/memory"
+	       includes="*.xsd"/>
     </copy>
     <copy todir="${build.classes.dir}/${prefix}/trec">
-      <fileset dir="${src.dir}/${prefix}/trec" includes="*.xsd"/>
+      <fileset dir="${src.dir}/${prefix}/trec"
+	       includes="*.xsd"/>
     </copy>
   </target>
 
   <!-- javadoc -->
-  <target name="javadoc" depends="clean,prepare" description="Generate Javadoc">
-    <javadoc sourcepath="${build.src.filtered.dir}" destdir="${build.src.doc.dir}" classpathref="base.path"/>
+  <target name="javadoc"
+	  depends="clean,prepare"
+	  description="Generate Javadoc">
+    <javadoc sourcepath="${build.src.filtered.dir}"
+	     destdir="${build.src.doc.dir}"
+	     classpathref="base.path"/>
   </target>
 
   <!-- jar -->
-  <target name="jar" depends="clean,compile" description="Generate application JAR">
-    <jar jarfile="${build.lib.dir}/${package}.jar" basedir="${build.classes.dir}">
-      <zipfileset src="${lib.dir}/jdom2.jar" includes="org/"/>
-      <zipfileset src="${lib.dir}/commons-cli.jar" includes="org/"/>
+  <target name="jar"
+	  depends="clean,compile"
+	  description="Generate application JAR">
+    <jar jarfile="${build.lib.dir}/${package}.jar"
+	 basedir="${build.classes.dir}">
+      <zipfileset src="${lib.dir}/jdom2.jar"
+		  includes="org/"/>
+      <zipfileset src="${lib.dir}/commons-cli.jar"
+		  includes="org/"/>
       <manifest>
-        <attribute name="Main-Class" value="cz.pecina.retro.pmi80.Emulator"/>
-	<attribute name="Implementation-Vendor" value="Tomáš Pecina"/>
-	<attribute name="Implementation-Title" value="Tesla PMI-80 Emulator"/>
-	<attribute name="Implementation-Version" value="${version}"/>
+        <attribute name="Main-Class"
+		   value="cz.pecina.retro.pmi80.Emulator"/>
+	<attribute name="Implementation-Vendor"
+		   value="Tomáš Pecina"/>
+	<attribute name="Implementation-Title"
+		   value="Tesla PMI-80 Emulator"/>
+	<attribute name="Implementation-Version"
+		   value="${version}"/>
       </manifest>
     </jar>
   </target>
   
   <!-- run -->
-  <target name="run" depends="compile" description="Run application">
-    <java classname="cz.pecina.retro.${package}.Emulator" classpathref="base.path" fork="true">
+  <target name="run"
+	  depends="compile"
+	  description="Run application">
+    <java classname="cz.pecina.retro.${package}.Emulator"
+	  classpathref="base.path"
+	  fork="true">
+      <arg line="${args}"/>
       <assertions>
 	<enable/>
       </assertions>
@@ -725,9 +1046,14 @@
   </target>
   
   <!-- debug -->
-  <target name="debug" depends="compile" description="Run application with debug">
-    <java classname="cz.pecina.retro.${package}.Emulator" classpathref="base.path" fork="true">
+  <target name="debug"
+	  depends="compile"
+	  description="Run application with debug">
+    <java classname="cz.pecina.retro.${package}.Emulator"
+	  classpathref="base.path"
+	  fork="true">
       <jvmarg value="-Djava.util.logging.config.file=${package}/debug.properties"/>
+      <arg line="${args}"/>
       <assertions>
 	<enable/>
       </assertions>
