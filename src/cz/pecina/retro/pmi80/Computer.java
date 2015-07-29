@@ -127,7 +127,7 @@ public class Computer {
     // find reset and interrupt buttons
     final KeyboardLayout layout =
       computerHardware.getKeyboardHardware().getKeyboardLayout();
-    for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++)
+    for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++) {
       for (int column = 0;
 	   column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
 	   column++) {
@@ -139,6 +139,7 @@ public class Computer {
 	  interruptButton = button;
 	}
       }
+    }
 
     // reset tape recorder counter (not needed unless the cycle counter
     // is initially set to a non-zero value)
