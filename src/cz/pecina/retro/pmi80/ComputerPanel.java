@@ -77,25 +77,25 @@ public class ComputerPanel extends BackgroundFixedPane {
     // set up buttons
     for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++)
       for (int column = 0;
-	   column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
-	   column++) {
-	final KeyboardButton button =
-	  keyboardHardware.getKeyboardLayout().getButton(row, column);
-	final int shortcut = button.getShortcut();
-	if (shortcut != -1) {
-	  getInputMap().put(KeyStroke.getKeyStroke(shortcut, 0, false),
-			    "KeyPressedAction_" + shortcut);
-	  getActionMap().put("KeyPressedAction_" + shortcut,
-			     button.keyPressedAction());
-	  getInputMap().put(KeyStroke.getKeyStroke(shortcut, 0, true),
-			    "KeyReleasedAction_" + shortcut);
-	  getActionMap().put("KeyReleasedAction_" + shortcut,
-			     button.keyReleasedAction());
-	}
-	button.place(this,
-		     (column * BUTTON_GRID_X) + BUTTON_OFFSET_X,
-		     (row * BUTTON_GRID_Y) + BUTTON_OFFSET_Y);
-	log.finest("Button '" + button + "' added");
+    	   column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
+    	   column++) {
+    	final KeyboardButton button =
+    	  keyboardHardware.getKeyboardLayout().getButton(row, column);
+    	final int shortcut = button.getShortcut();
+    	if (shortcut != -1) {
+    	  getInputMap().put(KeyStroke.getKeyStroke(shortcut, 0, false),
+    			    "KeyPressedAction_" + shortcut);
+    	  getActionMap().put("KeyPressedAction_" + shortcut,
+    			     button.keyPressedAction());
+    	  getInputMap().put(KeyStroke.getKeyStroke(shortcut, 0, true),
+    			    "KeyReleasedAction_" + shortcut);
+    	  getActionMap().put("KeyReleasedAction_" + shortcut,
+    			     button.keyReleasedAction());
+    	}
+    	button.place(this,
+    		     (column * BUTTON_GRID_X) + BUTTON_OFFSET_X,
+    		     (row * BUTTON_GRID_Y) + BUTTON_OFFSET_Y);
+    	log.finest("Button '" + button + "' added");
       }
     log.finer("Buttons set up");
 	

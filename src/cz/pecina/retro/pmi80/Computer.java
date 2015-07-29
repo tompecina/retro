@@ -111,8 +111,8 @@ public class Computer {
     // set up the frames
     computerFrame =
       new ComputerFrame(this,
-			computerHardware.getDisplayHardware(),
-			computerHardware.getKeyboardHardware());
+    			computerHardware.getDisplayHardware(),
+    			computerHardware.getKeyboardHardware());
     memoryFrame = new MemoryFrame(this, computerHardware.getHardware());
     tapeRecorderFrame = new TapeRecorderFrame(
       this,
@@ -204,133 +204,133 @@ public class Computer {
 
     switch (debuggerState) {
       case HIDDEN:
-	computerHardware.getDebuggerHardware().removeTemporaryBreakpoints();
-	computerHardware.getDisplayHardware().reset();
-	stepInButtonCounter = stepOverButtonCounter = 0;
-	runStopButtonPressed = false;
-	if (resetButton.isPressed()) {
-	  computerHardware.getCPU().requestReset();
-	  computerHardware.getSystemPPI().reset();
-	  computerHardware.getPeripheralPPI().reset();
-	  computerHardware.getDisplayHardware().display();
-	  break;
-	}
-	if (interruptButton.isPressed()) {
-	  if (!interruptButtonPressed) {
-	    computerHardware.getCPU().requestInterrupt(7);
-	    interruptButtonPressed = true;
-	    break;
-	  }
-	} else
-	  interruptButtonPressed = false;
-	computerHardware.getCPU().exec(Parameters.timerCycles,
-				       0,
-				       noBreakpoints);
-	computerHardware.getDisplayHardware().display();
-	break;
+    	computerHardware.getDebuggerHardware().removeTemporaryBreakpoints();
+    	computerHardware.getDisplayHardware().reset();
+    	stepInButtonCounter = stepOverButtonCounter = 0;
+    	runStopButtonPressed = false;
+    	if (resetButton.isPressed()) {
+    	  computerHardware.getCPU().requestReset();
+    	  computerHardware.getSystemPPI().reset();
+    	  computerHardware.getPeripheralPPI().reset();
+    	  computerHardware.getDisplayHardware().display();
+    	  break;
+    	}
+    	if (interruptButton.isPressed()) {
+    	  if (!interruptButtonPressed) {
+    	    computerHardware.getCPU().requestInterrupt(7);
+    	    interruptButtonPressed = true;
+    	    break;
+    	  }
+    	} else
+    	  interruptButtonPressed = false;
+    	computerHardware.getCPU().exec(Parameters.timerCycles,
+    				       0,
+    				       noBreakpoints);
+    	computerHardware.getDisplayHardware().display();
+    	break;
       case STOPPED:
-	computerHardware.getDebuggerHardware().removeTemporaryBreakpoints();
-	computerHardware.getDisplayHardware().displayImmediate();
-	computerHardware.getDebuggerHardware().update();
-	if (resetButton.isPressed()) {
-	  computerHardware.getCPU().reset();
-	  computerHardware.getSystemPPI().reset();
-	  computerHardware.getPeripheralPPI().reset();
-	  computerHardware.getDebuggerHardware().activate();
-	  break;
-	}
-	if (interruptButton.isPressed()) {
-	  if (!interruptButtonPressed) {
-	    computerHardware.getCPU().interrupt(7);
-	    interruptButtonPressed = true;
-	    computerHardware.getDebuggerHardware().activate();
-	    break;
-	  }
-	} else {
-	  interruptButtonPressed = false;
-	}
-	if (computerHardware.getDebuggerHardware().stepInButton.isPressed()) {
-	  if (stepInButtonCounter == 0) {
-	    computerHardware.getCPU().exec(1, 0, noBreakpoints);
-	    computerHardware.getDebuggerHardware().activate();
-	    stepInButtonCounter = AUTOREPEAT;
-	    break;
-	  } else {
-	    stepInButtonCounter--;
-	  }
-	} else {
-	  stepInButtonCounter = 0;
-	}
-	if (computerHardware.getDebuggerHardware().stepOverButton.isPressed()) {
-	  if (stepOverButtonCounter == 0) {
-	    final int pc = computerHardware.getCPU().getPC();
-	    final Opcode opcode = computerHardware.getCPU()
-	      .getOpcode(computerHardware.getMemory().getByte(pc));
-	    if ((opcode.getType() & Processor.INS_CALL) == 0) {
-	      computerHardware.getCPU().exec(1, 0, noBreakpoints);
-	      computerHardware.getDebuggerHardware().activate();
-	    } else {
-	      computerHardware.getDebuggerHardware().getBreakpointValues()
-		.add((pc + opcode.getLength()) & 0xffff);
-	      computerHardware.getDebuggerHardware().deactivate();
-	      debuggerState = DebuggerState.RUNNING;
-	    }
-	    stepOverButtonCounter = AUTOREPEAT;
-	    break;
-	  } else {
-	    stepOverButtonCounter--;
-	  }
-	} else {
-	  stepOverButtonCounter = 0;
-	}
-	if (computerHardware.getDebuggerHardware().runStopButton.isPressed()) {
-	  if (!runStopButtonPressed) {
-	    computerHardware.getDebuggerHardware().deactivate();
-	    debuggerState = DebuggerState.RUNNING;
-	    runStopButtonPressed = true;
-	    break;
-	  }
-	} else {
-	  runStopButtonPressed = false;
-	}
-	break;
+    	computerHardware.getDebuggerHardware().removeTemporaryBreakpoints();
+    	computerHardware.getDisplayHardware().displayImmediate();
+    	computerHardware.getDebuggerHardware().update();
+    	if (resetButton.isPressed()) {
+    	  computerHardware.getCPU().reset();
+    	  computerHardware.getSystemPPI().reset();
+    	  computerHardware.getPeripheralPPI().reset();
+    	  computerHardware.getDebuggerHardware().activate();
+    	  break;
+    	}
+    	if (interruptButton.isPressed()) {
+    	  if (!interruptButtonPressed) {
+    	    computerHardware.getCPU().interrupt(7);
+    	    interruptButtonPressed = true;
+    	    computerHardware.getDebuggerHardware().activate();
+    	    break;
+    	  }
+    	} else {
+    	  interruptButtonPressed = false;
+    	}
+    	if (computerHardware.getDebuggerHardware().stepInButton.isPressed()) {
+    	  if (stepInButtonCounter == 0) {
+    	    computerHardware.getCPU().exec(1, 0, noBreakpoints);
+    	    computerHardware.getDebuggerHardware().activate();
+    	    stepInButtonCounter = AUTOREPEAT;
+    	    break;
+    	  } else {
+    	    stepInButtonCounter--;
+    	  }
+    	} else {
+    	  stepInButtonCounter = 0;
+    	}
+    	if (computerHardware.getDebuggerHardware().stepOverButton.isPressed()) {
+    	  if (stepOverButtonCounter == 0) {
+    	    final int pc = computerHardware.getCPU().getPC();
+    	    final Opcode opcode = computerHardware.getCPU()
+    	      .getOpcode(computerHardware.getMemory().getByte(pc));
+    	    if ((opcode.getType() & Processor.INS_CALL) == 0) {
+    	      computerHardware.getCPU().exec(1, 0, noBreakpoints);
+    	      computerHardware.getDebuggerHardware().activate();
+    	    } else {
+    	      computerHardware.getDebuggerHardware().getBreakpointValues()
+    		.add((pc + opcode.getLength()) & 0xffff);
+    	      computerHardware.getDebuggerHardware().deactivate();
+    	      debuggerState = DebuggerState.RUNNING;
+    	    }
+    	    stepOverButtonCounter = AUTOREPEAT;
+    	    break;
+    	  } else {
+    	    stepOverButtonCounter--;
+    	  }
+    	} else {
+    	  stepOverButtonCounter = 0;
+    	}
+    	if (computerHardware.getDebuggerHardware().runStopButton.isPressed()) {
+    	  if (!runStopButtonPressed) {
+    	    computerHardware.getDebuggerHardware().deactivate();
+    	    debuggerState = DebuggerState.RUNNING;
+    	    runStopButtonPressed = true;
+    	    break;
+    	  }
+    	} else {
+    	  runStopButtonPressed = false;
+    	}
+    	break;
       case RUNNING:
-	computerHardware.getDisplayHardware().reset();
-	if (resetButton.isPressed()) {
-	  computerHardware.getCPU().requestReset();
-	  computerHardware.getSystemPPI().reset();
-	  computerHardware.getPeripheralPPI().reset();
-	  computerHardware.getDisplayHardware().display();
-	  break;
-	}
-	if (interruptButton.isPressed()) {
-	  if (!interruptButtonPressed) {
-	    computerHardware.getCPU().requestInterrupt(7);
-	    interruptButtonPressed = true;
-	    break;
-	  }
-	} else {
-	  interruptButtonPressed = false;
-	}
-	if (computerHardware.getDebuggerHardware().runStopButton.isPressed()) {
-	  if (!runStopButtonPressed) {
-	    computerHardware.getDebuggerHardware().activate();
-	    debuggerState = DebuggerState.STOPPED;
-	    runStopButtonPressed = true;
-	    break;
-	  }
-	} else {
-	  runStopButtonPressed = false;
-	}
-	computerHardware.getCPU().exec(Parameters.timerCycles, 0,
-	  computerHardware.getDebuggerHardware().getBreakpointValues());
-	computerHardware.getDisplayHardware().display();
-	if (computerHardware.getDebuggerHardware().getBreakpointValues()
-	    .contains(computerHardware.getCPU().getPC())) {
-	  computerHardware.getDebuggerHardware().activate();
-	  debuggerState = DebuggerState.STOPPED;
-	}
-	break;
+    	computerHardware.getDisplayHardware().reset();
+    	if (resetButton.isPressed()) {
+    	  computerHardware.getCPU().requestReset();
+    	  computerHardware.getSystemPPI().reset();
+    	  computerHardware.getPeripheralPPI().reset();
+    	  computerHardware.getDisplayHardware().display();
+    	  break;
+    	}
+    	if (interruptButton.isPressed()) {
+    	  if (!interruptButtonPressed) {
+    	    computerHardware.getCPU().requestInterrupt(7);
+    	    interruptButtonPressed = true;
+    	    break;
+    	  }
+    	} else {
+    	  interruptButtonPressed = false;
+    	}
+    	if (computerHardware.getDebuggerHardware().runStopButton.isPressed()) {
+    	  if (!runStopButtonPressed) {
+    	    computerHardware.getDebuggerHardware().activate();
+    	    debuggerState = DebuggerState.STOPPED;
+    	    runStopButtonPressed = true;
+    	    break;
+    	  }
+    	} else {
+    	  runStopButtonPressed = false;
+    	}
+    	computerHardware.getCPU().exec(Parameters.timerCycles, 0,
+    	  computerHardware.getDebuggerHardware().getBreakpointValues());
+    	computerHardware.getDisplayHardware().display();
+    	if (computerHardware.getDebuggerHardware().getBreakpointValues()
+    	    .contains(computerHardware.getCPU().getPC())) {
+    	  computerHardware.getDebuggerHardware().activate();
+    	  debuggerState = DebuggerState.STOPPED;
+    	}
+    	break;
     }
     computerHardware.getTapeRecorderHardware().process();
     computerHardware.getKeyboardHardware().resetBuffer();
