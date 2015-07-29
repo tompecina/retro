@@ -1,6 +1,6 @@
 /* DebugOutput.java
  *
- * Copyright (C) 2014-2015, Tomáš Pecina <tomas@pecina.cz>
+ * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
  * This file is part of cz.pecina.retro, retro 8-bit computer emulators.
  *
