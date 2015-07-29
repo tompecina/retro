@@ -22,7 +22,10 @@ hs_err_pid*
 *.p
 
 # Working directories
-/aux
 */build
 */build-src
 /res
+
+# Misc
+/pmi80.xml
+/aux
