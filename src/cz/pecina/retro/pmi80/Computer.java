@@ -146,6 +146,7 @@ public class Computer {
       Parameters.systemClockSource.getSystemClock());
 
     new Timer(Constants.TIMER_PERIOD, new TimerListener()).start();
+
     log.fine("New Computer created");
   }
 
