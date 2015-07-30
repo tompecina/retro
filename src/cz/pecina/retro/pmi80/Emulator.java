@@ -49,8 +49,10 @@ public class Emulator {
    * Creates an instance of the emulator.
    */
   public Emulator() {
-
     log.fine("New Emulator creation started");
+
+    // set OpenGL for Linux environment
+    System.setProperty("sun.java2d.opengl", "true");
 
     // set general parameters
     Parameters.CPUFrequency = Constants.CPU_FREQUENCY;

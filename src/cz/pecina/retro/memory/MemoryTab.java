@@ -21,6 +21,7 @@
 package cz.pecina.retro.memory;
 
 import java.util.logging.Logger;
+import java.io.File;
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import javax.swing.JFileChooser;
@@ -55,7 +56,8 @@ public abstract class MemoryTab extends JPanel {
   /**
    * File chooser used by Save and Load panels.
    */
-  protected static final JFileChooser fileChooser = new JFileChooser();
+  protected static final JFileChooser fileChooser =
+    new JFileChooser(new File("."));
 
   /**
    * Raw extension filter used by Save and Load panels.

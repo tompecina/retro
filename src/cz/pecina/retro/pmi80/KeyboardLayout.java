@@ -213,13 +213,13 @@ public class KeyboardLayout {
 	
     log.fine("New keyboard layout created and populated");
   }
-
+  
   /**
    * Gets the button.
    *
    * @param  row    the row
    * @param  column the column
-   * @return the button
+   * @return        the button
    */
   public KeyboardButton getButton(final int row, final int column) {
     assert (row >= 0) && (row < NUMBER_BUTTON_ROWS);

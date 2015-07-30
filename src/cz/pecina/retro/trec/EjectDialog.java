@@ -63,7 +63,8 @@ public class EjectDialog extends JDialog {
   private TapeRecorderHardware tapeRecorderHardware;
 
   // common file chooser
-  private static final JFileChooser fileChooser = new JFileChooser();
+  private static final JFileChooser fileChooser =
+    new JFileChooser(new File("."));
 
   // file name extension filters
   private static final FileNameExtensionFilter XMLFilter =

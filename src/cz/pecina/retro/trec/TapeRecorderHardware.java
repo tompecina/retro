@@ -23,6 +23,7 @@ package cz.pecina.retro.trec;
 import java.util.logging.Logger;
 import java.util.Iterator;
 import cz.pecina.retro.common.Parameters;
+import cz.pecina.retro.pmi80.Constants;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.gui.Counter;
 import cz.pecina.retro.gui.BlinkLED;
@@ -49,8 +50,8 @@ public class TapeRecorderHardware {
   private static final int BLINK_OFF = 750;
 
   // divisor determining the speed of tape recorder counter
-  private static final double COUNTER_DIVISOR = 10000000.0 / 9.0;
-
+  private static final double COUNTER_DIVISOR = 1e7 / 9.0;
+  
   // multiplier for FF/REWIND operation
   private static final int FAST_MULTIPLIER = 8;
 
@@ -641,7 +642,7 @@ public class TapeRecorderHardware {
     if (tapeRecorderState == TapeRecorderState.RECORD) {
       int i;
       for (i = 0; i < VUMeter.VUMETER_MAX; i++) {
-	if (pulseCount < (75 * i)) {
+	if ((9 * pulseCount) < (75 * Constants.TIMER_PERIOD * i)) {
 	  break;
 	}
       }
@@ -653,7 +654,7 @@ public class TapeRecorderHardware {
       }
       int i;
       for (i = 0; i < VUMeter.VUMETER_MAX; i++) {
-	if (pulseCount < (8000 * i)) {
+	if ((9 * pulseCount) < (8000 * Constants.TIMER_PERIOD * i)) {
 	  break;
 	}
       }

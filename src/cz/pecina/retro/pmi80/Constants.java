@@ -44,7 +44,7 @@ public final class Constants {
   public static final int DEFAULT_START_RAM = 1;
 
   public static final double CPU_FREQUENCY = 1e7/9;
-  public static final int TIMER_PERIOD = 9;  // in msec
+  public static final int TIMER_PERIOD = 20;  // in msec
   public static final long TIMER_CYCLES = (TIMER_PERIOD * 10000) / 9;
 
   public static final String RES_PREFIX = "cz/pecina/retro/pmi80/";
