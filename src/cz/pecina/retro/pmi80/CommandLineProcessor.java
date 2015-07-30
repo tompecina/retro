@@ -24,10 +24,9 @@ import java.util.logging.Logger;
 import java.util.Arrays;
 import java.io.File;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import cz.pecina.retro.common.Parameters;
@@ -86,91 +85,93 @@ public class CommandLineProcessor {
     this.hardware = hardware;
 
     // build options
+    log.fine("Building options");
     options.addOption(
-      OptionBuilder
-      .withLongOpt("usage")
-      .withDescription(Application.getString(this, "option.usage"))
-      .create("?"));
+      Option.builder("?")
+      .longOpt("help")
+      .desc(Application.getString(this, "option.help"))
+      .build());
     options.addOption(
-      OptionBuilder
-      .withLongOpt("version")
-      .withDescription(Application.getString(this, "option.version"))
-      .create("V"));
+      Option.builder("V")
+      .longOpt("version")
+      .desc(Application.getString(this, "option.version"))
+      .build());
     options.addOption(
-      OptionBuilder
-      .withLongOpt("language")
+      Option.builder("l")
+      .longOpt("language")
       .hasArg()
-      .withArgName("code")
-      .withDescription(Application.getString(this, "option.language"))
-      .create("l"));
+      .argName("CODE")
+      .desc(Application.getString(this, "option.language"))
+      .build());
     options.addOption(
-      OptionBuilder
-      .withLongOpt("pixel-size")
+      Option.builder("p")
+      .longOpt("pixel-size")
       .hasArg()
-      .withArgName("size")
-      .withDescription(Application.getString(this, "option.pixelSize"))
-      .create("p"));
+      .argName("SIZE")
+      .desc(Application.getString(this, "option.pixelSize"))
+      .build());
     options.addOption(
-      OptionBuilder
-      .withLongOpt("address")
+      Option.builder("a")
+      .longOpt("address")
       .hasArg()
-      .withArgName("addr")
-      .withDescription(Application.getString(this, "option.address"))
-      .create("a"));
+      .argName("ADDR")
+      .desc(Application.getString(this, "option.address"))
+      .build());
     options.addOption(
-      OptionBuilder
-      .withLongOpt("start-rom")
+      Option.builder("O")
+      .longOpt("start-rom")
       .hasArg()
-      .withArgName("addr")
-      .withDescription(Application.getString(this, "option.startRom"))
-      .create("O"));
+      .argName("ADDR")
+      .desc(Application.getString(this, "option.startRom"))
+      .build());
     options.addOption(
-      OptionBuilder
-      .withLongOpt("start-ram")
+      Option.builder("A")
+      .longOpt("start-ram")
       .hasArg()
-      .withArgName("addr")
-      .withDescription(Application.getString(this, "option.startRam"))
-      .create("A"));
+      .argName("ADDR")
+      .desc(Application.getString(this, "option.startRam"))
+      .build());
     options.addOption(
-      OptionBuilder
-      .withLongOpt("binary")
-      .hasArgs(2)
-      .withArgName("file>,<addr")
-      .withValueSeparator(',')
-      .withDescription(Application.getString(this, "option.binary"))
-      .create("b"));
+      Option.builder("b")
+      .longOpt("binary")
+      .hasArgs()
+      .numberOfArgs(2)
+      .argName("FILE>,<ADDR")
+      .valueSeparator(',')
+      .desc(Application.getString(this, "option.binary"))
+      .build());
     options.addOption(
-      OptionBuilder
-      .withLongOpt("intel-hex")
+      Option.builder("h")
+      .longOpt("intel-hex")
       .hasArg()
-      .withArgName("file")
-      .withDescription(Application.getString(this, "option.intelHex"))
-      .create("h"));
+      .argName("FILE")
+      .desc(Application.getString(this, "option.intelHex"))
+      .build());
     options.addOption(
-      OptionBuilder
-      .withLongOpt("xml")
+      Option.builder("x")
+      .longOpt("xml")
       .hasArg()
-      .withArgName("file")
-      .withDescription(Application.getString(this, "option.xml"))
-      .create("x"));
+      .argName("FILE")
+      .desc(Application.getString(this, "option.xml"))
+      .build());
     options.addOption(
-      OptionBuilder
-      .withLongOpt("snapshot")
+      Option.builder("s")
+      .longOpt("snapshot")
       .hasArg()
-      .withArgName("file")
-      .withDescription(Application.getString(this, "option.snapshot"))
-      .create("s"));
+      .argName("FILE")
+      .desc(Application.getString(this, "option.snapshot"))
+      .build());
     options.addOption(
-      OptionBuilder
-      .withLongOpt("write-snapshot")
+      Option.builder("w")
+      .longOpt("write-snapshot")
       .hasArg()
-      .withArgName("file")
-      .withDescription(Application.getString(this, "option.writeSnapshot"))
-      .create("w"));
+      .argName("FILE")
+      .desc(Application.getString(this, "option.writeSnapshot"))
+      .build());
     log.finer("Options set up");
 	
     // parse the command line
-    final CommandLineParser parser = new BasicParser();
+    final CommandLineParser parser = new DefaultParser();
     CommandLine line = null;
     try {
       line = parser.parse(options, Parameters.arguments);

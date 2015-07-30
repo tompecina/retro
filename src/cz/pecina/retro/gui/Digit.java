@@ -85,7 +85,7 @@ public class Digit extends JComponent implements Resizeable {
    */
   public void setState(double state) {
     state = Util.limit(state, 0.0, 10.0);
-    if (state != this.state) {
+    if (Math.abs(state - this.state) > (5.5 / digitsIcon.getIconHeight())) {
       this.state = state;
       repaint();
       log.finer("Digit state changed to: " + state);
