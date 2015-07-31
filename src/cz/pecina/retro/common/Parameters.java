@@ -92,6 +92,11 @@ public final class Parameters {
    */
   public static Preferences preferences;
 
+  /**
+   * The processor speed-up factor.
+   */
+  public static int speedUp = 1;
+
   // default constructor disabled
   private Parameters() { }
 }

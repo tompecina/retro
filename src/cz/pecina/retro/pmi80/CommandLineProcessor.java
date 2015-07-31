@@ -168,6 +168,13 @@ public class CommandLineProcessor {
       .argName("FILE")
       .desc(Application.getString(this, "option.writeSnapshot"))
       .build());
+    options.addOption(
+      Option.builder("S")
+      .longOpt("speed-up")
+      .hasArg()
+      .argName("FACTOR")
+      .desc(Application.getString(this, "option.speedUp"))
+      .build());
     log.finer("Options set up");
 	
     // parse the command line
@@ -320,6 +327,15 @@ public class CommandLineProcessor {
 	    file = new File(option.getValue());
 	    new Snapshot(hardware).write(file);
 	    System.exit(0);
+	    break;
+	  case "S":
+	    log.finer("Processing -S");
+	    Parameters.speedUp = Integer.parseInt(option.getValue());
+	    if (Parameters.speedUp < 1) {
+	      System.out.println(Application.getString(
+	        this, "error.nonPositiveSpeedUp"));
+	      error();
+	    }
 	    break;
 	}
       }

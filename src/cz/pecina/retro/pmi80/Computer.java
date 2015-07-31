@@ -223,9 +223,10 @@ public class Computer {
     	  }
     	} else
     	  interruptButtonPressed = false;
-    	computerHardware.getCPU().exec(Parameters.timerCycles,
-    				       0,
-    				       noBreakpoints);
+    	computerHardware.getCPU().exec(
+          Parameters.timerCycles * Parameters.speedUp,
+	  0,
+	  noBreakpoints);
     	computerHardware.getDisplayHardware().display();
     	break;
       case STOPPED:
