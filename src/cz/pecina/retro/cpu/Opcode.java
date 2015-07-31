@@ -54,7 +54,7 @@ public class Opcode {
    * Creates a new CPU instruction.
    *
    * @param mnemo      the string representation of the instruction code
-   * @param parameters the template for the instruction parameters
+   * @param parameters the template for the instruction's parameters
    * @param length     the number of bytes the instruction takes up in memory
    * @param type       the type of the instruction as defined
    *                   in {@link Processor}
@@ -120,7 +120,7 @@ public class Opcode {
     final int duration = exec.exec();
     if (log.isLoggable(Level.FINEST))
       log.finest("Instruction executed, mnemo: " + mnemo +
-		 ", parameers: " + parameters + ", duration: " + duration);
+		 ", parameters: " + parameters + ", duration: " + duration);
     return duration;
   }
 }

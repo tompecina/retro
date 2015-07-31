@@ -77,6 +77,8 @@
 	    value="${version}"/>
     <filter token="LICENSE"
 	    value="${license}"/>
+    <filter token="PACKAGE"
+	    value="${package}"/>
   </filterset>
 
   <!-- prepare -->

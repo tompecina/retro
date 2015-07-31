@@ -23,7 +23,7 @@ package cz.pecina.retro.trec;
 import java.util.logging.Logger;
 import java.util.Iterator;
 import cz.pecina.retro.common.Parameters;
-import cz.pecina.retro.pmi80.Constants;
+import cz.pecina.retro.@PACKAGE@.Constants;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.gui.Counter;
 import cz.pecina.retro.gui.BlinkLED;
