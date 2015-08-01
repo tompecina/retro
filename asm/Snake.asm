@@ -23,21 +23,95 @@
 	
 	org	2000h
 
+; initialization
 	lxi	sp, 0
 	call	init8255
 
-l99:	mvi	a, 1
+; create splash screen
+	xra	a
 	call	setall
-	mvi	a, 0
-	call	setall
-	jmp	l99
-	
-	lxi	h, presseq
+	lxi	h, l6
+	mvi	d, 18
+	call	l7
+	lxi	h, l9
+	mvi	d, 0
+	call	l7
+	mvi	c, COLS - 1
+l3:	mvi	b, 4
+	mvi	a, 1
+	call	setled
+	push	b
+	mvi	a, COLS - 1
+	sub	c
+	mov	c, a
+	mvi	b, 26
+	mvi	a, 1
+	call	setled
+	pop	b
+	lxi	d, 1000
+l4:	dcx	d
+	mov	a, d
+	ora	e
+	jnz	l4
+	dcr	c
+	jp	l3
+	jmp	l5
+l7:	mov	e, d
+l11:	dcr	e
+	jm	l8
+	xra	a
+l10:	dcr	a
+	jnz	l10
+	jmp	l11
+l8:	mov	a, m
+	cpi	0ffh
+	rz
+	mov	b, m
+	inx	h
+	mov	c, m
+	inx	h
+	mvi	a, 1
+	call	setled
+	jmp	l7
+
+l6:	; S
+	db	7, 6, 7, 5, 7, 4, 7, 3, 8, 2, 9, 2, 10, 3, 10, 4
+	db	10, 5, 11, 6, 12, 6, 13, 5, 13, 4, 13, 3, 13, 2
+	; n
+	db	13, 8, 12, 8, 11, 8, 10, 8, 9, 8, 10, 9, 9, 10, 9, 11
+	db	10, 12, 11, 12, 12, 12, 13, 12
+	; a
+	db	9, 15, 9, 16, 9, 17, 10, 18, 11, 18, 12, 18, 13, 18, 13, 17
+	db	13, 16, 13, 15, 12, 14, 11, 15, 11, 16, 11, 17
+	; k
+	db	13, 20, 12, 20, 11, 20, 10, 20, 9, 20, 8, 20, 7, 20, 13, 23
+	db	12, 23, 11, 22, 11, 21, 10, 23, 9, 23
+	; e
+	db	13, 29, 13, 28, 13, 27, 13, 26, 12, 25, 11, 25, 10, 25, 9, 26
+	db	9, 27, 9, 28, 10, 29, 11, 29, 11, 28, 11, 27, 11, 26
+	db	0ffh
+
+l9:	; 1
+	db	17, 11, 17, 12, 18, 12, 19, 12, 20, 12, 21, 12, 22, 12, 23, 11
+	db	23, 12, 23, 13
+	; .
+	db	23, 15
+	; 0
+	db	22, 17, 21, 17, 20, 17, 19, 17, 18, 17, 17, 18, 17, 19, 17, 20
+	db	18, 21, 19, 21, 20, 21, 21, 21, 22, 21, 23, 20, 23, 19, 23, 18
+	db	21, 18, 20, 19, 19, 20
+	db	0ffh
+;;------------------------------------------------------------------------------
+
+; gather entropy from user input
+l5:	lxi	h, presseq
 	call	asc2buf
 	call	wfk
-
-	lxi	h, 55aah
-	shld	seed + 2
+	lxi	h, seed
+	mov	a, m
+	ori	1
+	mov	m, a		; seed may not be 0
+	
 l2:	call	lcg
 	lxi	h, seed
 	mov	a, m
@@ -60,6 +134,7 @@ l2:	call	lcg
 	mov	a, b
 	cmp	d
 	jz	l2
+	
 l1:	
 	
 	
@@ -68,169 +143,169 @@ presseq:
 	db	' ', 'P', 'r', 'E', 'S', 'S', ' ', '=', ' '
 
 	
-; generate pseudo-random board
-	mvi	a, 4h
-	lxi	h, seed
-	mvi	c, 4
-	call	fill8
-	lxi	h, board
-	lxi	b, (ROWS * COLS) / 4
-;; l1:	push	b
-	push	h
-	call	lcg
-	pop	h
-	pop	b
-	lda	seed
-	call	setcell
-	lda	seed + 1
-	call	setcell
-	lda	seed + 2
-	call	setcell
-	lda	seed + 3
-	call	setcell
-	dcx	b
-	mov	a, b
-	ora	c
-	jnz	l1
+;; ; generate pseudo-random board
+;; 	mvi	a, 4h
+;; 	lxi	h, seed
+;; 	mvi	c, 4
+;; 	call	fill8
+;; 	lxi	h, board
+;; 	lxi	b, (ROWS * COLS) / 4
+;; ;; l1:	push	b
+;; 	push	h
+;; 	call	lcg
+;; 	pop	h
+;; 	pop	b
+;; 	lda	seed
+;; 	call	setcell
+;; 	lda	seed + 1
+;; 	call	setcell
+;; 	lda	seed + 2
+;; 	call	setcell
+;; 	lda	seed + 3
+;; 	call	setcell
+;; 	dcx	b
+;; 	mov	a, b
+;; 	ora	c
+;; 	jnz	l1
 
-	call	board2temp1
-back:	call	nextgen
+;; 	call	board2temp1
+;; back:	call	nextgen
 
-;; ROWPORT	port	0ch
-;; COLPORT	port	0dh
-;; LEDPORT	port	0eh
+;; ;; ROWPORT	port	0ch
+;; ;; COLPORT	port	0dh
+;; ;; LEDPORT	port	0eh
 	
-	lxi	h, temp1 + COLS + 3
-	mvi	b, 0
-l9:	mov	a, b
-	out	ROWPORT
-	mvi	c, 0
-l10:	mov	a, c
-	out	COLPORT
-	mov	a, m
-	out	LEDPORT
-	inx	h
-	inr	c
-	mov	a, c
-	cpi	COLS
-	jnz	l10
-	inx	h
-	inx	h
-	inr	b
-	mov	a, b
-	cpi	ROWS
-	jnz	l9
+;; 	lxi	h, temp1 + COLS + 3
+;; 	mvi	b, 0
+;; l9:	mov	a, b
+;; 	out	ROWPORT
+;; 	mvi	c, 0
+;; l10:	mov	a, c
+;; 	out	COLPORT
+;; 	mov	a, m
+;; 	out	LEDPORT
+;; 	inx	h
+;; 	inr	c
+;; 	mov	a, c
+;; 	cpi	COLS
+;; 	jnz	l10
+;; 	inx	h
+;; 	inx	h
+;; 	inr	b
+;; 	mov	a, b
+;; 	cpi	ROWS
+;; 	jnz	l9
 
-	;; lxi	h, test
-	;; call	asc2buf
-	;; call	wfk
+;; 	;; lxi	h, test
+;; 	;; call	asc2buf
+;; 	;; call	wfk
 
-	jmp	back
+;; 	jmp	back
 
-setcell:
-	cpi	50		; threshhold
-	mvi	a, 0
-	ral
-	mov	m, a
-	inx	h
-	ret
+;; setcell:
+;; 	cpi	50		; threshhold
+;; 	mvi	a, 0
+;; 	ral
+;; 	mov	m, a
+;; 	inx	h
+;; 	ret
 
-board2temp1:
-	lxi	h, temp1
-	lxi	b, AREA
-	call	zero16
-	lxi	h, board
-	lxi	d, temp1 + COLS + 3
-	mvi	b, ROWS
-;; l2:	mvi	c, COLS
-	call	copy8
-	inx	d
-	inx	d
-	dcr	b
-	jnz	l2
-	ret
+;; board2temp1:
+;; 	lxi	h, temp1
+;; 	lxi	b, AREA
+;; 	call	zero16
+;; 	lxi	h, board
+;; 	lxi	d, temp1 + COLS + 3
+;; 	mvi	b, ROWS
+;; ;; l2:	mvi	c, COLS
+;; 	call	copy8
+;; 	inx	d
+;; 	inx	d
+;; 	dcr	b
+;; 	jnz	l2
+;; 	ret
 
-nextgen:
-	lxi	h, temp1
-	lxi	d, temp2
-	lxi	b, AREA
-	call	copy16
-	lxi	d, temp1 + COLS + 3
-	lxi	h, temp2
-	mvi	b, ROWS
-l4:	mvi	c, COLS
-l3:	push	d
-	mov	a, m
-	inx	h
-	add	m
-	inx	h
-	add	m
-	lxi	d, ROWS
-	dad	d
-	add	m
-	inx	h
-	inx	h
-	add	m
-	dad	d
-	add	m
-	inx	h
-	add	m
-	inx	h
-	add	m
-	lxi	d, -(ROWS * 2 + 5)
-	dad	d
-	pop	d
-	stax	d
-	inx	d
-	dcr	c
-	jnz	l3
-	inx	d
-	inx	d
-	inx	h
-	inx	h
-	dcr	b
-	jnz	l4
-	lxi	h, temp1
-	lxi	d, temp2
-	lxi	b, AREA
-l5:	mov	a, m
-	cpi	3
-	jnz	l6
-	mvi	a, 1
-	jmp	l8	
-l6:	cpi	2
-	ldax	d
-	jz	l8
-	xra	a
-l8:	mov	m, a
-l7:	inx	h
-	inx	d
-	dcx	b
-	mov	a, b
-	ora	c
-	jnz	l5
-	ret
+;; nextgen:
+;; 	lxi	h, temp1
+;; 	lxi	d, temp2
+;; 	lxi	b, AREA
+;; 	call	copy16
+;; 	lxi	d, temp1 + COLS + 3
+;; 	lxi	h, temp2
+;; 	mvi	b, ROWS
+;; ;; l4:	mvi	c, COLS
+;; ;; l3:	push	d
+;; 	mov	a, m
+;; 	inx	h
+;; 	add	m
+;; 	inx	h
+;; 	add	m
+;; 	lxi	d, ROWS
+;; 	dad	d
+;; 	add	m
+;; 	inx	h
+;; 	inx	h
+;; 	add	m
+;; 	dad	d
+;; 	add	m
+;; 	inx	h
+;; 	add	m
+;; 	inx	h
+;; 	add	m
+;; 	lxi	d, -(ROWS * 2 + 5)
+;; 	dad	d
+;; 	pop	d
+;; 	stax	d
+;; 	inx	d
+;; 	dcr	c
+;; 	jnz	l3
+;; 	inx	d
+;; 	inx	d
+;; 	inx	h
+;; 	inx	h
+;; 	dcr	b
+;; 	jnz	l4
+;; 	lxi	h, temp1
+;; 	lxi	d, temp2
+;; 	lxi	b, AREA
+;; ;; l5:	mov	a, m
+;; 	cpi	3
+;; 	jnz	l6
+;; 	mvi	a, 1
+;; 	jmp	l8	
+;; ;; l6:	cpi	2
+;; 	ldax	d
+;; 	jz	l8
+;; 	xra	a
+;; ;; l8:	mov	m, a
+;; ;; l7:	inx	h
+;; 	inx	d
+;; 	dcx	b
+;; 	mov	a, b
+;; 	ora	c
+;; 	jnz	l5
+;; 	ret
 	
 	
 
-again:	
-	lxi	h, ASCBUF
-	call	dwv
-	db	'r'
-	dw	0
-	db	'C'
-	dw	loop
-	db	0
-	dw	again
+;; again:	
+;; 	lxi	h, ASCBUF
+;; 	call	dwv
+;; 	db	'r'
+;; 	dw	0
+;; 	db	'C'
+;; 	dw	loop
+;; 	db	0
+;; 	dw	again
 
 	
-loop:	lxi	h, ASCBUF
-	call	asc2buf
-	call	wfk
-	sta	ASCBUF + 3
-	lxi	h, ASCBUF
-	call	byte2hex
-	jmp	loop
+;; loop:	lxi	h, ASCBUF
+;; 	call	asc2buf
+;; 	call	wfk
+;; 	sta	ASCBUF + 3
+;; 	lxi	h, ASCBUF
+;; 	call	byte2hex
+;; 	jmp	loop
 	
 ;; 	mvi	d, 0
 ;; loop:	mov	a, d
@@ -659,8 +734,12 @@ l1:	xra	a
 	mov	a, c
 	cma
 	out	PORTC
+	push	h
+	lhld	seed
+	inx	h
+	shld	seed
+	pop	h
 	in	PORTC
-	call	incseed
 	cma
 	ani	70h
 	jnz	l2
@@ -683,7 +762,11 @@ l5:	xra	a
 	cmp	c
 	jnz	l4
 	in	PORTC
-	call	incseed
+	push	h
+	lhld	seed + 2
+	inx	h
+	shld	seed + 2
+	pop	h
 	cma
 	ani	70h
 	jz	l6
@@ -709,13 +792,6 @@ l7:	inx	h
 	cmp	c
 	jnz	l7
 	mov	a, m
-	ret
-incseed:
-	push	h
-	lhld	seed
-	inx	h
-	shld	seed
-	pop	h
 	ret
 	
 SCANCODES:
