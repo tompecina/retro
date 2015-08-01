@@ -111,7 +111,6 @@ l5:	lxi	h, presseq
 	lxi	h, seed
 	mov	a, m
 	ori	1
-	call	fixseed		; seed may not be 0
 
 ; clear display
 	xra	a
@@ -142,6 +141,7 @@ l5:	lxi	h, presseq
 ; pause before displaying mouse
 	mvi	a, 40
 l12:	push	psw
+	call	fixseed
 	call	lcg
 	pop	psw
 	dcr	a
@@ -223,6 +223,7 @@ lendisp:
 ph:	db	' ', ' ', ' ', ' ', ' '
 
 getpos:	
+	call	fixseed
 	call	lcg
 	lxi	h, seed
 	mov	a, m
