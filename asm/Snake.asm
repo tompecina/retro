@@ -590,8 +590,8 @@ setled:
 	public setall
 setall:
 	ani	1
-	mvi	b, ROWS
-l2:	mvi	c, COLS
+	mvi	b, ROWS - 1
+l2:	mvi	c, COLS - 1
 l1:	push	psw
 	mov	a, b
 	out	ROWPORT

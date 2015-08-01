@@ -161,10 +161,10 @@ public class Needle extends JComponent implements Resizeable {
 
   // for description see JComponent
   @Override
-  protected void paintComponent(final Graphics g) {
+  protected void paintComponent(final Graphics graphics) {
     log.finest("Repainting Needle");
-    final Graphics2D g2 = (Graphics2D)g;
-    g2.setRenderingHints(new RenderingHints(
+    final Graphics2D g2d = (Graphics2D)graphics;
+    g2d.setRenderingHints(new RenderingHints(
       RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
 
     // preliminary calculations
@@ -182,21 +182,21 @@ public class Needle extends JComponent implements Resizeable {
     // paint outer segment
     if (ratio != 1.0) {
       final Line2D outerSegment = new Line2D.Double(sx, sy, ex, ey);
-      g2.setPaint(outerColor);
-      g2.setStroke(new BasicStroke(t,
-				   BasicStroke.CAP_ROUND,
-				   BasicStroke.JOIN_MITER));
-      g2.draw(outerSegment);
+      g2d.setPaint(outerColor);
+      g2d.setStroke(new BasicStroke(t,
+				    BasicStroke.CAP_ROUND,
+				    BasicStroke.JOIN_MITER));
+      g2d.draw(outerSegment);
     }
 
     // paint inner segment
     if (ratio != 0.0) {
       final Line2D innerSegment = new Line2D.Double(cx, cy, sx, sy);
-      g2.setPaint(innerColor);
-      g2.setStroke(new BasicStroke(t,
-				   BasicStroke.CAP_BUTT,
-				   BasicStroke.JOIN_MITER));
-      g2.draw(innerSegment);
+      g2d.setPaint(innerColor);
+      g2d.setStroke(new BasicStroke(t,
+				    BasicStroke.CAP_BUTT,
+				    BasicStroke.JOIN_MITER));
+      g2d.draw(innerSegment);
     }
 
     log.finest("Needle repainted");

@@ -6,9 +6,9 @@ for s in $seq; do
     for c in "red" "green" "yellow" "lime"; do
 	w=$(($s*8))
 	h=$(($s*8))
-	convert $opts $filter $src/led-$c-b.png -resize ${w}x$h $dst/small-$c-$s-b.png
 	for d in 0 1; do
 	    convert $opts $filter $src/led-$c-$d.png -resize ${w}x$h $dst/small-$c-$s-$d.png
+	    convert $opts $filter $src/led-$c-b-$d.png -resize ${w}x$h $dst/small-$c-b-$s-$d.png
 	done
     done
 done

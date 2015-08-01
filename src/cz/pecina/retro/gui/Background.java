@@ -120,12 +120,12 @@ public class Background extends JComponent {
 
   // for description see JComponent
   @Override
-  protected void paintComponent(final Graphics g) {
+  protected void paintComponent(final Graphics graphics) {
     log.finest("Repainting background");
-    final Graphics2D g2 = (Graphics2D)g;
-    g2.setPaint(paint);
-    g2.fill(new Rectangle(width * GUI.getPixelSize(),
-			  height * GUI.getPixelSize()));
+    final Graphics2D g2d = (Graphics2D)graphics;
+    g2d.setPaint(paint);
+    g2d.fill(new Rectangle(width * GUI.getPixelSize(),
+			   height * GUI.getPixelSize()));
     log.finest("Background repainted");
   }
 }

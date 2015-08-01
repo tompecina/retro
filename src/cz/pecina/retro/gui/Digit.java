@@ -114,11 +114,11 @@ public class Digit extends JComponent implements Resizeable {
 
   // for description see JComponent
   @Override
-  protected void paintComponent(final Graphics g) {
+  protected void paintComponent(final Graphics graphics) {
     log.finest("Repainting digit");
     digitsIcon.paintIcon(
       this,
-      g,
+      graphics,
       0,
       -(int)Math.round(state * digitsIcon.getIconHeight() / 11));
     log.finest("Digit repainted");

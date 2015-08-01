@@ -162,14 +162,14 @@ public class SiSD extends JComponent implements Resizeable {
 
   // for description see JComponent
   @Override
-  protected void paintComponent(final Graphics g) {
+  protected void paintComponent(final Graphics graphics) {
     log.finest("Repainting SiSD");
-    backgroundIcon.paintIcon(this, g, 0, 0);
+    backgroundIcon.paintIcon(this, graphics, 0, 0);
     for (int i = 0, r = segments[state - MIN_VALUE];
 	 i < NUMBER_SEGMENTS;
 	 i++, r >>= 1) {
       if ((r & 1) != 0) {
-	segmentIcon[i].paintIcon(this, g, 0, 0);
+	segmentIcon[i].paintIcon(this, graphics, 0, 0);
       }
     }
     log.finest("SiSD repainted");

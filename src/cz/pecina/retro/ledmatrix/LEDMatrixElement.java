@@ -67,7 +67,6 @@ public class LEDMatrixElement extends JComponent implements Resizeable {
   private String color;
 
   // icons
-  private Icon backgroundIcon;
   private Icon[] icons = new Icon[2];
 
   /**
@@ -123,7 +122,7 @@ public class LEDMatrixElement extends JComponent implements Resizeable {
     assert (n >= 0) && (n <= 1);
     if (n != state[row][column]) {
       state[row][column] = n;
-      repaint(row, column);
+      repaint();
       log.finer("State of LED at (" + row + "," + column +
 		") changed to: " + n);
     }
@@ -160,47 +159,37 @@ public class LEDMatrixElement extends JComponent implements Resizeable {
     log.finer("LED matrix element placed");
   }
 
-  // paint LED
-  private void repaint(final int row, final int column) {
-    backgroundIcon.paintIcon(this,
-			     getGraphics(),
-			     column * gridX * GUI.getPixelSize(),
-			     row * gridY * GUI.getPixelSize());
-    icons[state[row][column]].paintIcon(this,
-					getGraphics(),
-					column * gridX * GUI.getPixelSize(),
-					row * gridY * GUI.getPixelSize());
-    if (log.isLoggable(Level.FINEST)) {
-      log.finest("LED at (" + row + "," + column + ") repainted");
-    }
-  }
-  
   // for description see JComponent
   @Override
-  protected void paintComponent(final Graphics g) {
+  protected void paintComponent(final Graphics graphics) {
     log.finest("Repainting LED matrix");
     for (int row = 0; row < NUMBER_ROWS; row++) {
       for (int column = 0; column < NUMBER_COLUMNS; column++) {
-	repaint(row, column);
+	icons[state[row][column]].paintIcon(
+	  this,
+	  graphics,
+	  column * gridX * GUI.getPixelSize(),
+	  row * gridY * GUI.getPixelSize());
+	if (log.isLoggable(Level.FINEST)) {
+	  log.finest("LED at (" + row + "," + column + ") repainted");
+	}
       }
     }
-    log.finest("LED matrix repainted");
+    log.finer("LED matrix repainted");
   }
 
   // for description see Resizeable
   @Override
   public void redrawOnPixelResize() {
     log.finest("LED matrix redraw started");
-    final String template = "gui/LED/%s-%s-%d-%s.png";
+    final String template = "gui/LED/%s-%s-b-%d-%d.png";
     final int pixelSize = GUI.getPixelSize();
-    backgroundIcon =
-      IconCache.get(String.format(template, type, color, pixelSize, "b"));
     for (int i = 0; i < 2; i++) {
       icons[i] = IconCache.get(String.format(template,
 					     type,
 					     color,
 					     pixelSize,
-					     String.valueOf(i)));
+					     i));
     }
     final Dimension dim = new Dimension(gridX * pixelSize, gridY * pixelSize);
     setMinimumSize(dim);
