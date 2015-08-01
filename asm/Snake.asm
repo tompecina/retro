@@ -31,24 +31,28 @@
 	xra	a
 	call	setall
 	lxi	h, l6
-	mvi	d, 18
+	mvi	d, 16
 	call	l7
 	lxi	h, l9
 	mvi	d, 0
 	call	l7
 	mvi	c, COLS - 1
-l3:	mvi	b, 4
-	mvi	a, 1
+l3:	mvi	a, 1
+	mvi	b, 4
+	call	setled
+	mvi	b, 28
 	call	setled
 	push	b
 	mvi	a, COLS - 1
 	sub	c
 	mov	c, a
-	mvi	b, 26
 	mvi	a, 1
+	mvi	b, 2
+	call	setled
+	mvi	b, 26
 	call	setled
 	pop	b
-	lxi	d, 1000
+	lxi	d, 300
 l4:	dcx	d
 	mov	a, d
 	ora	e
