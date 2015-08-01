@@ -154,8 +154,10 @@ l13:	call	wfk
 	call	setdir
 	jnz	l13
 
-	mvi	a, 1
-	call	setall
+l99:	call	refk
+	ora	a
+	jz	l99
+	jmp	l99
 	
 	hlt
 presseq:
@@ -666,15 +668,16 @@ l1:	xchg
 
 ; ==============================================================================
 ; wfk - display buffer & wait for key (returns on release)
+; refk - refresh buffer & check if key pressed
 ; 
 ;   input:  (DISPBUF) - display buffer
 ;           (seed) - pseudo-random value
-;   output: A - ASCII code of key
+;   output: A - ASCII code of key or 0 if none pressed (only refk)
 ;           (seed) - updated pseudo-random value
-;   uses:   B, C, H, L
+;   uses:   B, C, D (only refk), H, L
 ;
 	section wfk
-	public wfk
+	public wfk, refk
 wfk:
 	mvi	c, DISPLEN - 1
 	lxi	h, DISPBUF + DISPLEN - 1
@@ -728,7 +731,7 @@ l4:	dcx	h
 l6:	xra	a
 	out	PORTC
 	pop	psw	
-	mov	b, a
+l10:	mov	b, a
 	dcr	a
 	ana	b
 	sub	b
@@ -744,6 +747,39 @@ l7:	inx	h
 	jnz	l7
 	mov	a, m
 	ret
+refk:
+	mvi	c, DISPLEN - 1
+	mvi	b, 0ffh
+	lxi	h, DISPBUF + DISPLEN - 1
+l9:	xra	a
+	out	PORTC
+	mov	a, m
+	out	PORTA
+	mov	a, c
+	cma
+	out	PORTC
+	push	h
+	lhld	seed
+	inx	h
+	shld	seed
+	pop	h
+	in	PORTC
+	cma
+	ani	70h
+	jz	l8
+	mov	b, c
+	mov	d, a
+l8:	dcx	h
+	dcr	c
+	jp	l9
+	xra	a
+	out	PORTC
+	inr	b
+	rz
+	dcr	b
+	mov	c, b
+	mov	a, d
+	jmp	l10
 	
 SCANCODES:
 	db	20h, '2'
