@@ -2207,7 +2207,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 67 MOVHA	  
-    new Opcode("MOV", "L,A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "H,A", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  H = A;

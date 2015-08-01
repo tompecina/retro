@@ -154,9 +154,56 @@ l13:	call	refk
 	call	setdir
 	jnz	l13
 
+l16:	lhld	head
+	mov	d, m
+	inx	h
+	mov	e, m
+	inx	h
+	mov	a, h
+	ani	MASK
+	mov	h, a
+	shld	head
+	lda	dir
+	add	d
+	cpi	-1
+	jz	l14
+	cpi	ROWS
+	jz	l14
+	mov	m, a
+	mov	b, a
+	inx	h
+	lda	dir + 1
+	add	e
+	cpi	-1
+	jz	l14
+	cpi	COLS
+	jz	l14
+	mov	m, a
+	mov	c, a
 	mvi	a, 1
-	call	setall
+	call	setled
+	lhld	tail
+	mov	b, m
+	inx	h
+	mov	c, m
+	inx	h
+	mov	a, h
+	ani	MASK
+	mov	h, a
+	shld	tail
+	xra	a
+	call	setled
+	mvi	e, 100
+l15:	call	refk
+	call	setdir
+	dcr	e
+	jnz	l15
+	jmp	l16
 	
+
+l14:	mvi	a, 1
+	call	setall
+		
 	hlt
 presseq:
 	db	' ', 'P', 'r', 'E', 'S', 'S', ' ', '=', ' '
@@ -287,8 +334,8 @@ DISPLEN	equ	9		; display length (equal to number of keyboard columns)
 ROWS	equ	32
 COLS	equ	32
 AREA	equ	ROWS * COLS
-MASK	equ	((2 * AREA) >> 8) - 1
-	
+MASK	equ	0f7h
+
 PORTA	port	0f8h		; port A
 PORTB	port	0f9h		; port B
 PORTC	port	0fah		; port C
