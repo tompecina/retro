@@ -150,14 +150,12 @@ l12:	push	psw
 ; display mouse, display length and wait for initial direction
 	call	addmouse
 	call	dlen
-l13:	call	wfk
+l13:	call	refk
 	call	setdir
 	jnz	l13
 
-l99:	call	refk
-	ora	a
-	jz	l99
-	jmp	l99
+	mvi	a, 1
+	call	setall
 	
 	hlt
 presseq:
@@ -681,21 +679,7 @@ l1:	xchg
 wfk:
 	mvi	c, DISPLEN - 1
 	lxi	h, DISPBUF + DISPLEN - 1
-l1:	xra	a
-	out	PORTC
-	mov	a, m
-	out	PORTA
-	mov	a, c
-	cma
-	out	PORTC
-	push	h
-	lhld	seed
-	inx	h
-	shld	seed
-	pop	h
-	in	PORTC
-	cma
-	ani	70h
+l1:	call	l11
 	jnz	l2
 	dcx	h
 	dcr	c
@@ -705,13 +689,7 @@ l2:	mov	b, c
 	push	psw
 l3:	mvi	c, DISPLEN - 1
 	lxi	h, DISPBUF + DISPLEN - 1
-l5:	xra	a
-	out	PORTC
-	mov	a, m
-	out	PORTA
-	mov	a, c
-	cma
-	out	PORTC
+l5:	call	l12
 	mov	a, b
 	cmp	c
 	jnz	l4
@@ -747,17 +725,7 @@ l7:	inx	h
 	jnz	l7
 	mov	a, m
 	ret
-refk:
-	mvi	c, DISPLEN - 1
-	mvi	b, 0ffh
-	lxi	h, DISPBUF + DISPLEN - 1
-l9:	xra	a
-	out	PORTC
-	mov	a, m
-	out	PORTA
-	mov	a, c
-	cma
-	out	PORTC
+l11:	call	l12
 	push	h
 	lhld	seed
 	inx	h
@@ -766,6 +734,20 @@ l9:	xra	a
 	in	PORTC
 	cma
 	ani	70h
+	ret
+l12:	xra	a
+	out	PORTC
+	mov	a, m
+	out	PORTA
+	mov	a, c
+	cma
+	out	PORTC
+	ret
+refk:
+	mvi	c, DISPLEN - 1
+	mvi	b, 0ffh
+	lxi	h, DISPBUF + DISPLEN - 1
+l9:	call	l11
 	jz	l8
 	mov	b, c
 	mov	d, a
@@ -939,7 +921,6 @@ A2BTBL:	db	00h ! 7fh	; space
 
 DISPBUF:
 	ds	DISPLEN		; display buffer
-;; seed:	ds	4
 mul1:	ds	4
 mul2:	ds	4
 
@@ -961,263 +942,3 @@ dir:	ds	2
 snake:	ds	2 * AREA
 	
 	end
-	
-	;; lxi	h, 1
-	;; shld	seed
-	;; lxi	h, ffffh
-	;; shld	seed + 2
-	;; call	lcg
-	;; rst	1
-
-;; again:	
-;; 	call	getent
-
-;; loop:
-;; 	lda	seed + 3
-;; 	mov	l, a
-;; 	lda	seed + 2
-;; 	mov	h, a
-;; 	shld	IN_ADDR
-;; 	lxi	b, VIDEORAM
-;; 	call	00beh
-;; 	lda	seed + 1
-;; 	mov	l, a
-;; 	lda	seed
-;; 	mov	h, a
-;; 	shld	IN_ADDR
-;; 	lxi	b, VIDEORAM + 4
-;; 	call	00beh
-;; 	mvi	a, 19h
-;; 	sta	VIDEORAM + 8
-;; 	lxi	h, VIDEORAM
-;; 	shld	VIDEO_POINTER
-;; 	call	OUTKE
-;; 	call	lcg
-;; 	jmp	loop
-	
-;; 	rst	1
-	
-;; ;; Gather some entropy and put it to seed
-;; getent:	
-;; 	push    psw
-;; 	mov	a, h
-;; 	add	b
-;; 	mov	h, a
-;; 	mov	a, l
-;; 	add	c
-;; 	mov	l, a
-;; 	pop	b
-;; 	mov	a, h
-;; 	add	b
-;; 	mov	h, a
-;; 	mov	a, l
-;; 	add	c
-;; 	mov	l, a
-;; 	mov	a, h
-;; 	add	d
-;; 	mov	h, a
-;; 	mov	a, l
-;; 	add	e
-;; 	mov	l, a
-;; 	xchg
-;; 	lxi	h, 0
-;; 	dad	sp
-;; 	mov	a, h
-;; 	add	d
-;; 	mov	h, d
-;; 	mov	a, l
-;; 	add	e
-;; 	mov	l, a
-;; 	lxi	d, 0000h
-;; 	lxi	b, 0400h
-;; 	call	g1
-;; 	lxi	d, 1c00h
-;; 	lxi	b, 0400h
-;; 	call	g1
-;; 	push	h
-;; 	lxi	h, press_eq
-;; 	shld	VIDEO_POINTER
-;; 	call	OUTKE
-;; 	pop	h
-;; 	mov	a, h
-;; 	add	b
-;; 	add	e
-;; 	mov	h, a
-;; 	mov	a, l
-;; 	add	c
-;; 	add	d
-;; 	mov	l, a
-;; 	shld	seed
-;; 	shld	seed + 2
-;; 	call	lcg
-;; 	ret
-;; g1:	xchg
-;; 	mov	a, e
-;; 	add	m
-;; 	mov	e, a
-;; 	inx	h
-;; 	dcx	b
-;; 	mov	a, d
-;; 	add	m
-;; 	mov	d, a
-;; 	inx	d
-;; 	dcx	b
-;; 	xchg
-;; 	mov	a, b
-;; 	ora	c
-;; 	jnz	g1
-;; 	ret
-;; press_eq:
-;; 	db	13h, 12h, 0eh, 05h, 05h, 19h, 18h, 19h, 19h
-
-
-;; ;; LCG iteration
-;; lcg:	lxi	h, consta
-;; 	lxi	d, mul1
-;; 	call	l5
-;; 	lxi	h, seed
-;; 	lxi	d, mul2
-;; 	call	l5
-;; 	lxi	h, constc
-;; 	lxi	d, seed
-;; 	call	l5
-;; 	mvi	b, 32
-;; l7:	mvi	c, 4
-;; 	lxi	h, mul2 + 3
-;; 	ora	a
-;; l1:	mov	a, m
-;; 	rar
-;; 	mov	m, a
-;; 	dcx	h
-;; 	dcr	c
-;; 	jnz	l1
-;; 	jnc	l2
-;; 	lxi	h, seed
-;; 	lxi	d, mul1
-;; 	mvi	c, 4
-;; 	ora	a
-;; l3:	ldax	d
-;; 	adc	m
-;; 	mov	m, a
-;; 	inx	h
-;; 	inx	d
-;; 	dcr	c
-;; 	jnz	l3
-;; l2:	lxi	h, mul1
-;; 	mvi	c, 4
-;; 	ora	a
-;; l4:	mov	a, m
-;; 	ral
-;; 	mov	m, a
-;; 	inx	h
-;; 	dcr	c
-;; 	jnz	l4
-;; 	dcr	b
-;; 	jnz	l7
-;; 	ret
-;; l5:	mvi	c, 4
-;; l6:	mov	a, m
-;; 	stax	d
-;; 	inx	h
-;; 	inx	d
-;; 	dcr	c
-;; 	jnz	l6
-;; 	ret
-;; consta:	db	0dh, 66h, 19h, 00h 		; 1664525
-;; constc:	db	5fh, 0f3h, 6eh, 3ch		; 1013904223
-
-;; STACK     	equ     1fe9h
-;; INT_VECTOR 	equ    	1fe6h
-;; VIDEO_POINTER	equ	1ffch
-;; VIDEORAM  	equ     1fefh
-;; IN_DATA   	equ     1ffah
-;; IN_ADDR    	equ     1ff8h
-;; STATUS		equ	1ffeh
-;; PORTA		equ	0f8h
-;; PORTC		equ	0fah
-
-;; ;; Modified OUTKE
-;; OUTKE:
-;; 	lxi	b, 0
-;; 	mov	d, b
-;; 	mov	e, c
-;; o2:	call    DISP
-;; 	inx	b
-;; 	jnc     o2
-;; 	rrc
-;; 	mov     h, a
-;; o1:     call    DISP
-;; 	inx	d
-;; 	jc      o1
-;; 	mov	a, h
-;; 	ret
-	
-;; ;; Modified DISP
-;; DISP:
-;; 	push    h
-;; 	push    b
-;; 	push    d
-;; 	lxi     d, 0
-;; 	mov	b, d
-;; 	mov     a, d
-;; 	sta     STATUS
-;; d1:     mvi     a,7fh
-;; 	out     PORTA
-;; 	mov     a, e
-;; 	cma
-;; 	out     PORTC
-;; 	lhld    VIDEO_POINTER
-;; 	dad     d
-;;         mov     c, m
-;; 	lxi     h, TPREV
-;; 	dad     b
-;; 	mov     a, m
-;; 	out     PORTA	
-;; 	lda	STATUS
-;; 	ora     a
-;;         jnz     d2
-;;         mvi     c, 09h
-;;         lxi	h, TABKEY - 9
-;; 	in      PORTC
-;; 	ani     70h
-;; 	rlc
-;; 	rlc
-;; 	jnc     d3
-;; 	rlc
-;; 	jnc     d4
-;; 	rlc
-;; 	jc      d2
-;; 	dad     b
-;; d4:	dad     b
-;; d3:	dad     b
-;; 	dad     d
-;; 	mov     a, m
-;; 	sta     STATUS
-;; d2:	inr     e
-;; 	mvi     a, 0ah
-;; 	cmp     e
-;; 	jnz     d1
-;; 	lda     STATUS
-;; 	rlc
-;; 	pop     d
-;; 	pop     b
-;; 	pop     h
-;; 	ret
-;; TABKEY:
-;;         db	80h, 84h, 88h, 91h, 8dh, 8ch, 89h, 85h, 81h
-;; 	db      82h, 86h, 8ah, 9ah, 8fh, 8eh, 8bh, 87h, 83h
-;; 	db      0ffh, 94h, 93h, 0ffh, 97h, 92h, 0ffh, 0ffh, 90h
-;; TPREV:
-;; 	db      40h, 79h
-;; 	db      24h, 30h, 19h, 12h, 02h, 78h, 00h, 10h, 08h, 03h, 46h, 21h
-;; 	db      06h, 0eh, 07h, 23h, 2fh, 0ch, 47h, 63h, 48h, 71h, 37h, 7fh
-;; 	db      09h, 2bh, 0bh, 2ch, 5dh, 3fh, 42h, 61h
-;; 	db      7bh, 11
-
-;; 	org	3000h
-;; seed:	ds	4
-;; mul1:	ds	4
-;; mul2:	ds	4
-
-	end
-	
