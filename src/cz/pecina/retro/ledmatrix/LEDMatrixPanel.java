@@ -36,8 +36,6 @@ public class LEDMatrixPanel extends BackgroundFixedPane {
     Logger.getLogger(LEDMatrixPanel.class.getName());
 
   // matrix geometry
-  private static final int LED_GRID_X = 8;
-  private static final int LED_GRID_Y = 8;
   private static final int LED_OFFSET_X = 4;
   private static final int LED_OFFSET_Y = 4;
 
@@ -51,15 +49,7 @@ public class LEDMatrixPanel extends BackgroundFixedPane {
     assert hardware != null;
 
     // set up the LED matrix
-    for (int row = 0; row < LEDMatrixHardware.NUMBER_ROWS; row++) {
-      for (int column = 0;
-	   column < LEDMatrixHardware.NUMBER_COLUMNS;
-	   column++) {
-	hardware.getLED(row, column).place(this,
-					   (column * LED_GRID_X) + LED_OFFSET_X,
-					   (row * LED_GRID_Y) + LED_OFFSET_Y);
-      }
-    }
+    hardware.getLEDMatrixElement().place(this, LED_OFFSET_X, LED_OFFSET_Y);
 
     log.fine("LED matrix panel set up");
   }

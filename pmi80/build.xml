@@ -356,9 +356,9 @@
     <srcfileset dir="${graphics.dir}/gui"
 		includes="led-*.png"/>
     <targetfilelist dir="${resources.dir}/${prefix}/gui/LED"
-		    files="small-red-1-0.png"/>
+		    files="small-red-1-b.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/gui/LED/small-red-1-0.png"
+  <available file="${resources.dir}/${prefix}/gui/LED/small-red-1-b.png"
 	     property="avail.gui.LED"/>
   <target name="gui.LED"
 	  unless="avail.gui.LED">

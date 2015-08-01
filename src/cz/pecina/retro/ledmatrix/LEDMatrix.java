@@ -52,7 +52,7 @@ public class LEDMatrix extends BasePortPeripheral {
    */
   public LEDMatrix() {
     super("ledmatrix", DEFAULT_BASE_PORT);
-    log.fine("New LED panel control object created");
+    log.finer("New LED panel control object created");
   }
 
   // for description see Peripheral

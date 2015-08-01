@@ -42,21 +42,15 @@ public class LEDMatrixHardware implements IOElement {
   // base port
   private int basePort;
 
-  /**
-   * Number of rows.
-   */
-  public static final int NUMBER_ROWS = 32;
-
-  /**
-   * Number of columns.
-   */
-  public static final int NUMBER_COLUMNS = 32;
-
   // selected LED
   private int row, column;
 
+  // matrix geometry
+  private static final int LED_GRID_X = 8;
+  private static final int LED_GRID_Y = 8;
+
   // LEDs
-  private final LED[][] leds = new LED[NUMBER_ROWS][NUMBER_COLUMNS];
+  private LEDMatrixElement element;
 
   /**
    * Creates the LED matrix panel hardware object.
@@ -65,14 +59,11 @@ public class LEDMatrixHardware implements IOElement {
    */
   public LEDMatrixHardware(final int basePort) {
     assert (basePort >= 0) && (basePort < 0x100);
+    log.fine("New LED matrix hardware creation started");
     this.basePort = basePort;
-    for (int row = 0; row < NUMBER_ROWS; row++) {
-      for (int column = 0; column < NUMBER_COLUMNS; column++) {
-	leds[row][column] = new LED("small", "red");
-      }
-    }
+    element = new LEDMatrixElement("small", "red", LED_GRID_X, LED_GRID_Y);
     connect();
-    log.fine("New LED matrix hardware created");
+    log.finer("New LED matrix hardware created");
   }
 
   /**
@@ -80,24 +71,16 @@ public class LEDMatrixHardware implements IOElement {
    */
   public void deactivate() {
     disconnect();
-    for (int row = 0; row < NUMBER_ROWS; row++) {
-      for (int column = 0; column < NUMBER_COLUMNS; column++) {
-	GUI.removeResizeable(leds[row][column]);
-      }
-    }
+    GUI.removeResizeable(element);
   }
 
   /**
-   * Gets a LED.
+   * Gets the LED matrix element.
    *
-   * @param  row    row of the LED
-   * @param  column column of the LED
-   * @return the LED object
+   * @return the LED matrix element object
    */
-  public LED getLED(final int row, final int column) {
-    assert (row >= 0) && (row < NUMBER_ROWS);
-    assert (column >= 0) && (column < NUMBER_COLUMNS);
-    return leds[row][column];
+  public LEDMatrixElement getLEDMatrixElement() {
+    return element;
   }    
 
   // connect to ports
@@ -140,17 +123,17 @@ public class LEDMatrixHardware implements IOElement {
     log.finer(String.format("Port output: %02x -> (%02x)", data, port));
     switch ((port - basePort) & 0xff) {
       case 0:
-	if ((data >= 0) && (data < NUMBER_ROWS)) {
+	if ((data >= 0) && (data < LEDMatrixElement.NUMBER_ROWS)) {
 	  row = data;
 	}
 	break;
       case 1:
-	if ((data >= 0) && (data < NUMBER_COLUMNS)) {
+	if ((data >= 0) && (data < LEDMatrixElement.NUMBER_COLUMNS)) {
 	  column = data;
 	}
 	break;
       case 2:
-	leds[row][column].setState(data & 1);
+	element.setState(row, column, data & 1);
 	break;
     }
   }
