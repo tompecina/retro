@@ -57,6 +57,9 @@ public class LEDMatrixElement extends JComponent implements Resizeable {
    */
   protected int state[][] = new int[NUMBER_ROWS][NUMBER_COLUMNS];
 
+  // graphics
+  private Graphics graphics;
+
   // grid geometry
   private int gridX, gridY;
 
@@ -159,20 +162,27 @@ public class LEDMatrixElement extends JComponent implements Resizeable {
     log.finer("LED matrix element placed");
   }
 
+
+  // repaint one LED
+  private void repaint(final int row, final int column) {
+    icons[state[row][column]].paintIcon(
+	this,
+	graphics,
+	column * gridX * GUI.getPixelSize(),
+	row * gridY * GUI.getPixelSize());
+    if (log.isLoggable(Level.FINEST)) {
+      log.finest("LED at (" + row + "," + column + ") repainted");
+    }
+  }
+
   // for description see JComponent
   @Override
   protected void paintComponent(final Graphics graphics) {
     log.finest("Repainting LED matrix");
+    this.graphics = graphics;
     for (int row = 0; row < NUMBER_ROWS; row++) {
       for (int column = 0; column < NUMBER_COLUMNS; column++) {
-	icons[state[row][column]].paintIcon(
-	  this,
-	  graphics,
-	  column * gridX * GUI.getPixelSize(),
-	  row * gridY * GUI.getPixelSize());
-	if (log.isLoggable(Level.FINEST)) {
-	  log.finest("LED at (" + row + "," + column + ") repainted");
-	}
+	repaint(row, column);
       }
     }
     log.finer("LED matrix repainted");
