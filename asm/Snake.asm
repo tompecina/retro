@@ -18,6 +18,12 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+; This is the old game of snake chasing mice and growing on eating one,
+; adapted for PMI-80 with a 32x32 LED matrix.  The snake's movement is
+; controlled by the "cursor" keys '9', '6', '4' and '1', a new game is
+; started by pressing '='.  The graphics of the game is truly amazing ;-)
+; Enjoy!
+
 	page	0
 	cpu	8080
 	
@@ -564,7 +570,7 @@ constc:	db	5fh, 0f3h, 6eh, 3ch		; 1013904223
 
 	endsection lcg
 
-; ============================================================
+; ==============================================================================
 ; copy8 - copy block of memory (max. 256 bytes)
 ; 
 ;   input:  HL - pointer to source
@@ -826,7 +832,8 @@ l1:	mov	e, m
 	jnz	l1
 	ret
 	
-UNDEF	equ	00h ! 7fh	; characters that cannot be represented on SSD are shown as blank
+UNDEF	equ	00h ! 7fh	; characters that cannot be represented on SSD
+				; are shown as blanks
 a2btbl:	db	00h ! 7fh	; space
 	db	UNDEF		; !
 	db	22h ! 7fh	; "
@@ -984,19 +991,25 @@ oopsseq:
 	db	0ffh
 
 ; ==============================================================================
-; Data
+; Variable data
 
 dispbuf:
 	ds	DISPLEN		; display buffer
-mul1:	ds	4
+
+seed:	ds	4		; LCG seed
+mul1:	ds	4		; LCG aux registers
 mul2:	ds	4
-seed:	ds	4
-head:	ds	2
-tail:	ds	2
-len:	ds	2
-lenbcd:	ds	2
-mouse:	ds	2
-dir:	ds	2
+	
+head:	ds	2		; position of snake's head
+tail:	ds	2		; position of snake's tail
+len:	ds	2		; length of snake
+lenbcd:	ds	2		; the same in BCD
+	
+dir:	ds	2		; direction of snake's movement
+
+mouse:	ds	2		; mouse position
+
+; snake - must start at X000h
 	org	3000h
 snake:	ds	2 * AREA
 	
