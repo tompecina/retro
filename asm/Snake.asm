@@ -107,11 +107,10 @@ l9:	; 1
 ; gather entropy from user input
 l5:	lxi	h, presseq
 	call	asc2buf
-	call	wfk
-	lxi	h, seed
-	mov	a, m
-	ori	1
-
+l14:	call	wfk
+	cpi	'='
+	jnz	l14
+	
 ; clear display
 	xra	a
 	call	setall
@@ -128,7 +127,6 @@ l5:	lxi	h, presseq
 	mov	m, c
 	lxi	h, 1
 	shld	len
-	shld	lenbcd
 
 ; display snake
 	lxi	h, snake
@@ -147,6 +145,10 @@ l12:	push	psw
 	dcr	a
 	jnz	l12
 
+; reset direction
+	lxi	h, 0
+	shld	dir
+
 ; display mouse, display length and wait for initial direction
 	call	addmouse
 	call	dlen
@@ -154,33 +156,67 @@ l13:	call	refk
 	call	setdir
 	jnz	l13
 
-l16:	lhld	head
-	mov	d, m
+; main loop
+l16:
+	
+; get head
+	lhld	head
+	mov	b, m
 	inx	h
-	mov	e, m
+	mov	c, m
 	inx	h
+	
+; calculate new position
+	lda	dir
+	add	b
+	cpi	-1
+	jz	oops
+	cpi	ROWS
+	jz	oops
+	mov	b, a
+	lda	dir + 1
+	add	c
+	cpi	-1
+	jz	oops
+	cpi	COLS
+	jz	oops
+	mov	c, a
+
+; check collision with snake
+	push	h
+	push	b
+	call	checksnake
+	pop	b
+	pop	h
+	jc	oops
+	
+; update head
 	mov	a, h
 	ani	MASK
 	mov	h, a
 	shld	head
-	lda	dir
-	add	d
-	cpi	-1
-	jz	l14
-	cpi	ROWS
-	jz	l14
-	mov	m, a
-	mov	b, a
+	mov	m, b
 	inx	h
-	lda	dir + 1
-	add	e
-	cpi	-1
-	jz	l14
-	cpi	COLS
-	jz	l14
-	mov	m, a
-	mov	c, a
-	mvi	a, 1
+	mov	m, c
+
+; check collision with mouse
+	lda	mouse
+	cmp	b
+	jnz	l17
+	lda	mouse + 1
+	cmp	c
+	jnz	l17
+
+; mouse eaten, create new mouse and nudge counter
+	call	addmouse
+	lxi	h, len
+	mvi	c, 2
+	call	incbcd
+	call	dlen
+	jmp	l18
+
+; no mouse eaten, turn on new head, turn off and remove tail
+l17:	mvi	a, 1
 	call	setled
 	lhld	tail
 	mov	b, m
@@ -193,23 +229,48 @@ l16:	lhld	head
 	shld	tail
 	xra	a
 	call	setled
-	mvi	e, 100
+
+; pause while waiting for new direction
+l18:	mvi	e, 100
 l15:	call	refk
 	call	setdir
 	dcr	e
 	jnz	l15
 	jmp	l16
-	
 
-l14:	mvi	a, 1
+; create oops screen
+oops:	mvi	a, 1
 	call	setall
-		
-	hlt
-presseq:
-	db	' ', 'P', 'r', 'E', 'S', 'S', ' ', '=', ' '
-
+	lxi	h, l20
+l21:	mov	a, m
+	cpi	0ffh
+	jz	l14
+	mov	b, m
+	inx	h
+	mov	c, m
+	inx	h
+	xra	a
+	call	setled
+	jmp	l21
+l20:	; O
+	db	12, 5, 12, 6, 12, 7, 13, 8, 14, 8, 15, 8, 16, 8, 17, 8
+	db	18, 7, 18, 6, 18, 5, 17, 4, 16, 4, 15, 4, 14, 4, 13, 4
+	; O
+	db	12, 11, 12, 12, 12, 13, 13, 14, 14, 14, 15, 14, 16, 14, 17, 14
+	db	18, 13, 18, 12, 18, 11, 17, 10, 16, 10, 15, 10, 14, 10, 13, 10
+	; P
+	db	18, 16, 17, 16, 16, 16, 15, 16, 14, 16, 13, 16, 12, 16, 12, 17
+	db	12, 18, 12, 19, 13, 20, 14, 20, 15, 19, 15, 18, 15, 17
+	; S
+	db	18, 22, 18, 23, 18, 24, 18, 25, 17, 26, 16, 26, 15, 25, 15, 24
+	db	15, 23, 14, 22, 13, 22, 12, 23, 12, 24, 12, 25, 12, 26
+	; !
+	db	18, 28, 16, 28, 15, 28, 14, 28, 13, 28, 12, 28
+	db	0ffh
+	
+; put length to display buffer
 dlen:
-	lxi	h, lenbcd
+	lxi	h, len
 	mov	c, m
 	inx	h
 	mov	b, m
@@ -218,10 +279,7 @@ dlen:
 	lxi	h, lendisp
 	jmp	asc2buf
 	
-lendisp:
-	db	'L', 'E', 'M', '='
-ph:	db	' ', ' ', ' ', ' ', ' '
-
+; get pseudo-random position
 getpos:	
 	call	fixseed
 	call	lcg
@@ -235,6 +293,8 @@ getpos:
 	mov	c, a
 	ret
 
+	
+; create mouse
 addmouse:
 	call	getpos
 	call	checksnake
@@ -246,14 +306,41 @@ addmouse:
 	mvi	a, 1
 	jmp	setled
 
-	hlt
+; ==============================================================================
+; Display strings
+presseq:
+	db	' ', 'P', 'r', 'E', 'S', 'S', ' ', '=', ' '
+lendisp:
+	db	'L', 'E', 'M', '='
+ph:	db	' ', ' ', ' ', ' ', ' '
+
+
+; ==============================================================================
+; Constants
+	
+DISPLEN	equ	9		; display length (equal to number of keyboard columns)
+
+ROWS	equ	32
+COLS	equ	32
+AREA	equ	ROWS * COLS
+MASK	equ	0f7h
+
+PORTA	port	0f8h		; port A
+PORTB	port	0f9h		; port B
+PORTC	port	0fah		; port C
+CPORT	port	0fbh		; control port
+	
+ROWPORT	port	0ch
+COLPORT	port	0dh
+LEDPORT	port	0eh
 
 ; ==============================================================================
 ; setdir - set direction
 ; 
 ;   input:  A - ASCII code of key
 ;   output: (dir) - new direction
-;           Z - match found
+;           Z - match found (command possibly ignored
+;           NZ - no match found
 ;   uses:   A, B, H, L
 ;
 	section setdir
@@ -272,11 +359,20 @@ l1:	cmp	b
 	inx	h
 	inx	h
 	jmp	l2
-l3:	mov	a, m
+l3:	lda	dir
+	xra	m
+	cpi	0feh
+	rz
+	mov	a, m
 	sta	dir
 	inx	h
+	lda	dir + 1
+	xra	m
+	cpi	0feh
+	rz
 	mov	a, m
 	sta	dir + 1
+	xra	a
 	ret
 	
 tbl:	db	'9', -1, 0
@@ -327,25 +423,6 @@ l1:	dcx	d
 	
 	endsection checksnake
 	
-; ==============================================================================
-; Constants
-	
-DISPLEN	equ	9		; display length (equal to number of keyboard columns)
-
-ROWS	equ	32
-COLS	equ	32
-AREA	equ	ROWS * COLS
-MASK	equ	0f7h
-
-PORTA	port	0f8h		; port A
-PORTB	port	0f9h		; port B
-PORTC	port	0fah		; port C
-CPORT	port	0fbh		; control port
-	
-ROWPORT	port	0ch
-COLPORT	port	0dh
-LEDPORT	port	0eh
-
 ; ==============================================================================
 ; lcg - carry out one LCG iteration
 ; 
@@ -408,7 +485,7 @@ constc:	db	5fh, 0f3h, 6eh, 3ch		; 1013904223
 	endsection lcg
 
 ; ==============================================================================
-; fixseed - make sure seed is not 0
+; fixseed - make sure the seed is not 0
 ; 
 ;   input:  seed - current seed
 ;   output: seed - new seed
@@ -444,30 +521,7 @@ init8255:
 
 	endsection init8255
 
-; ==============================================================================
-; fill8 - fill block of memory with byte (max. 256 bytes)
-; zero8 - zero block of memory (max. 256 bytes)
-; 
-;   input:  HL - pointer to memory
-;	    A - byte to fill
-;	    C - number of bytes (00 = 256 bytes)
-;   output: (HL) - filled memory
-;   uses:   A, C, H, L
-;
-	section fill8
-	public fill8, zero8
-zero8:
-	xra	a
-fill8:
-	mov	m, a
-	inx	h
-	dcr	c
-	jnz	fill8
-	ret
-	
-	endsection fill8
-
-; ==============================================================================
+; ============================================================
 ; copy8 - copy block of memory (max. 256 bytes)
 ; 
 ;   input:  HL - pointer to source
@@ -489,57 +543,6 @@ copy8:
 	ret
 	
 	endsection copy8
-
-; ==============================================================================
-; fill16 - fill block of memory with byte
-; zero16 - zero block of memory
-; 
-;   input:  HL - pointer to memory
-;	    A - byte to fill
-;	    BC - number of bytes
-;   output: (HL) - filled memory
-;   uses:   A, B, C, D, H, L
-;
-	section fill16
-	public fill16, zero16
-zero16:
-	xra	a
-fill16:
-	mov	d, a
-l1:	mov	m, d
-	inx	h
-	dcx	b
-	mov	a, b
-	ora	c
-	jnz	l1
-	ret
-
-	endsection fill16
-
-; ==============================================================================
-; copy16 - copy block of memory
-; 
-;   input:  HL - pointer to source
-;	    DE - pointer to destination
-;	    BC - number of bytes
-;   output: (DE) - copied data
-;	    HL, DE incremented 
-;   uses:   A, B, C
-;
-	section copy16
-	public copy16
-copy16:
-	mov	a, m
-	stax	d
-	inx	h
-	inx	d
-	dcx	b
-	mov	a, b
-	ora	c
-	jnz	copy16
-	ret
-	
-	endsection copy16
 
 ; ==============================================================================
 ; word2hex - convert word to hex representation
@@ -679,44 +682,10 @@ l1:	push	psw
 	endsection setall
 
 ; ==============================================================================
-; dwv - display buffer, wait for key & follow vector table
-; 
-;   input:  (HL) - pointer to ASCII data
-;           (seed) - pseudo-random value
-;           stack - pointer to vector table:
-;                     1 byte keycode, 2 bytes vector
-;                     keycode 0 = default vector
-;   output: jump to vector
-;           (seed) - updated pseudo-random value
-;   uses:   A, B, C, D, E, H, L
-;
-	section dwv
-	public dwv
-dwv:
-	call	asc2buf
-	call	wfk
-	mov	b, a
-	pop	h
-l2:	mov	a, m
-	inx	h
-	mov	e, m
-	inx	h
-	mov	d, m
-	inx	h
-	ora	a
-	jz	l1
-	cmp	b
-	jnz	l2
-l1:	xchg
-	pchl
-	
-	endsection dwv
-
-; ==============================================================================
 ; wfk - display buffer & wait for key (returns on release)
 ; refk - refresh buffer & check if key pressed
 ; 
-;   input:  (DISPBUF) - display buffer
+;   input:  (dispbuf) - display buffer
 ;           (seed) - pseudo-random value
 ;   output: A - ASCII code of key or 0 if none pressed (only refk)
 ;           (seed) - updated pseudo-random value
@@ -726,7 +695,7 @@ l1:	xchg
 	public wfk, refk
 wfk:
 	mvi	c, DISPLEN - 1
-	lxi	h, DISPBUF + DISPLEN - 1
+	lxi	h, dispbuf + DISPLEN - 1
 l1:	call	l11
 	jnz	l2
 	dcx	h
@@ -736,7 +705,7 @@ l1:	call	l11
 l2:	mov	b, c
 	push	psw
 l3:	mvi	c, DISPLEN - 1
-	lxi	h, DISPBUF + DISPLEN - 1
+	lxi	h, dispbuf + DISPLEN - 1
 l5:	call	l12
 	mov	a, b
 	cmp	c
@@ -794,7 +763,7 @@ l12:	xra	a
 refk:
 	mvi	c, DISPLEN - 1
 	mvi	b, 0ffh
-	lxi	h, DISPBUF + DISPLEN - 1
+	lxi	h, dispbuf + displen - 1
 l9:	call	l11
 	jz	l8
 	mov	b, c
@@ -803,7 +772,7 @@ l8:	dcx	h
 	dcr	c
 	jp	l9
 	xra	a
-	out	PORTC
+	out	portc
 	inr	b
 	rz
 	dcr	b
@@ -811,24 +780,24 @@ l8:	dcx	h
 	mov	a, d
 	jmp	l10
 	
-SCANCODES:
+scancodes:
 	db	20h, '2'
 	db	40h, '0'
-	db	11h, 's'	; S
+	db	11h, 's'	; s
 	db	21h, '6'
 	db	41h, '4'
-	db	12h, 'l'	; L
-	db	22h, 'A'
+	db	12h, 'l'	; l
+	db	22h, 'a'
 	db	42h, '8'
-	db	23h, 'r'	; R
-	db	43h, 'e'	; EX
-	db	14h, 'b'	; BR
-	db	24h, 'F'
-	db	44h, 'D'
-	db	15h, 'm'	; M
-	db	25h, 'E'
-	db	45h, 'C'
-	db	26h, 'B'
+	db	23h, 'r'	; r
+	db	43h, 'e'	; ex
+	db	14h, 'b'	; br
+	db	24h, 'f'
+	db	44h, 'd'
+	db	15h, 'm'	; m
+	db	25h, 'e'
+	db	45h, 'c'
+	db	26h, 'b'
 	db	46h, '9'
 	db	27h, '7'
 	db	47h, '5'
@@ -839,20 +808,20 @@ SCANCODES:
 	endsection wfk
 
 ; ==============================================================================
-; asc2buf - convert ASCII data to display buffer
+; asc2buf - convert ascii data to display buffer
 ; 
-;   input:  HL - pointer to ASCII data
-;   output: (DISPBUF) - display buffer
+;   input:  hl - pointer to ascii data
+;   output: (dispbuf) - display buffer
 ;   uses:   A, B, C, D, E, H, L
 ;
 	section asc2buf
 	public asc2buf
 asc2buf:
 	mvi	d, 0
-	lxi	b, DISPBUF
+	lxi	b, dispbuf
 l1:	mov	e, m
 	push	h
-	lxi	h, A2BTBL - 20h
+	lxi	h, a2btbl - 20h
 	dad	d
 	mov	a, m
 	pop	h
@@ -860,12 +829,12 @@ l1:	mov	e, m
 	inx	b
 	inx	h
 	mov	a, c
-	cpi	(DISPBUF + DISPLEN) & 0ffh
+	cpi	(dispbuf + DISPLEN) & 0ffh
 	jnz	l1
 	ret
 	
 UNDEF	equ	00h ! 7fh	; characters that cannot be represented on SSD are shown as blank
-A2BTBL:	db	00h ! 7fh	; space
+a2btbl:	db	00h ! 7fh	; space
 	db	UNDEF		; !
 	db	22h ! 7fh	; "
 	db	UNDEF		; #
@@ -967,26 +936,17 @@ A2BTBL:	db	00h ! 7fh	; space
 ; ==============================================================================
 ; Data
 
-DISPBUF:
+dispbuf:
 	ds	DISPLEN		; display buffer
 mul1:	ds	4
 mul2:	ds	4
-
-	org	3000h
-board:	ds	ROWS * COLS
-	org	4000h
-temp1:	ds	AREA
-	org	5000h
-temp2:	ds	AREA
-	org	6000h
 seed:	ds	4
 head:	ds	2
 tail:	ds	2
 len:	ds	2
 mouse:	ds	2
-lenbcd:	ds	2
 dir:	ds	2
-	org	7000h
+	org	3000h
 snake:	ds	2 * AREA
 	
 	end
