@@ -62,7 +62,7 @@ l4:	dcx	d
 	jp	l3
 	jmp	l5
 
-; gather entropy from user input
+; wait for '=' while gathering entropy
 l5:	lxi	h, presseq
 	call	asc2buf
 l14:	call	wfk
@@ -73,7 +73,7 @@ l14:	call	wfk
 	xra	a
 	call	setall
 	
-; get initial data for snake
+; get initial position for snake
 	call	getpos
 
 ; initialize snake
@@ -215,21 +215,6 @@ dlen:
 	lxi	h, lendisp
 	jmp	asc2buf
 	
-; get pseudo-random position
-getpos:	
-	call	fixseed
-	call	lcg
-	lxi	h, seed
-	mov	a, m
-	ani	ROWS - 1
-	mov	b, a
-	inx	h
-	mov	a, m
-	ani	COLS - 1
-	mov	c, a
-	ret
-
-	
 ; create mouse
 addmouse:
 	call	getpos
@@ -262,10 +247,133 @@ COLPORT	port	0dh
 LEDPORT	port	0eh
 
 ; ==============================================================================
+; init8255 - initialize PPI1
+; 
+;   uses:   A
+;
+	section init8255
+	public init8255
+init8255:
+	mvi	a, 8ah
+	out	CPORT
+	ret
+
+	endsection init8255
+
+; ==============================================================================
+; setled - turn LED on/off
+; 
+;   input:  B - row
+;           C - column
+;           A - status (bit 0 = off/on)
+;   uses:   A
+;
+	section setled
+	public setled
+setled:
+	push	psw
+	mov	a, b
+	out	ROWPORT
+	mov	a, c
+	out	COLPORT
+	pop	psw
+	ani	1
+	out	LEDPORT
+	ret
+	
+	endsection setled
+
+; ==============================================================================
+; setall - turn all LEDs on/off
+; 
+;   input:  A - status (bit 0 = off/on)
+;   uses:   A, B, C
+;
+	section setall
+	public setall
+setall:
+	ani	1
+	mvi	b, ROWS - 1
+l2:	mvi	c, COLS - 1
+l1:	push	psw
+	mov	a, b
+	out	ROWPORT
+	mov	a, c
+	out	COLPORT
+	pop	psw
+	out	LEDPORT
+	dcr	c
+	jp	l1
+	dcr	b
+	jp	l2
+	ret
+	
+	endsection setall
+
+; ==============================================================================
+; setseq - turn set of LEDs on/off
+; 
+;   input:  (HL) - sequence to be procesed, (row,col), 0ffh-terminated
+;           D - delay (0 = none)
+;           E - =0 off
+;               =1 on
+;   uses:   A, B, C, H, L
+;
+	section setseq
+	public setseq
+setseq:
+	push	d
+l2:	dcr	d
+	jm	l3
+	xra	a
+l4:	dcr	a
+	jnz	l4
+	jmp	l2
+l3:	pop	d
+	mov	a, m
+	cpi	0ffh
+	rz
+	mov	b, m
+	inx	h
+	mov	c, m
+	inx	h
+	mov	a, e
+	call	setled
+	jmp	setseq
+
+	endsection setseq
+	
+; ==============================================================================
+; getpos - get pseudo-random position
+; 
+;   input:  seed - seed for LCG (may be 0)
+;   output: seed - new seed
+;           B - row
+;           C - column
+;   uses:   A, D, E, H, L
+;
+	section getpos
+	public getpos
+getpos:	
+	call	fixseed
+	call	lcg
+	lxi	h, seed
+	mov	a, m
+	ani	ROWS - 1
+	mov	b, a
+	inx	h
+	mov	a, m
+	ani	COLS - 1
+	mov	c, a
+	ret
+
+	endsection getpos
+	
+; ==============================================================================
 ; setdir - set direction
 ; 
 ;   input:  A - ASCII code of key
-;   output: (dir) - new direction
+;   output: dir - new direction
 ;           Z - match found (command possibly ignored
 ;           NZ - no match found
 ;   uses:   A, B, H, L
@@ -353,7 +461,7 @@ l1:	dcx	d
 ; ==============================================================================
 ; lcg - carry out one LCG iteration
 ; 
-;   input:  seed - current seed
+;   input:  seed - current seed (may not be 0)
 ;   output: seed - new seed
 ;   uses:   A, B, C, D, E, H, L
 ;
@@ -433,20 +541,6 @@ fixseed:
 	ret
 
 	endsection fixseed
-
-; ==============================================================================
-; init8255 - initialize PPI1
-; 
-;   uses:   A
-;
-	section init8255
-	public init8255
-init8255:
-	mvi	a, 8ah
-	out	CPORT
-	ret
-
-	endsection init8255
 
 ; ============================================================
 ; copy8 - copy block of memory (max. 256 bytes)
@@ -559,96 +653,13 @@ l1:	adc	m
 	endsection incbcd
 
 ; ==============================================================================
-; setled - turn LED on/off
-; 
-;   input:  B - row
-;           C - column
-;           A - status (bit 0 = off/on)
-;   uses:   A
-;
-	section setled
-	public setled
-setled:
-	push	psw
-	mov	a, b
-	out	ROWPORT
-	mov	a, c
-	out	COLPORT
-	pop	psw
-	ani	1
-	out	LEDPORT
-	ret
-	
-	endsection setled
-
-; ==============================================================================
-; setall - turn all LEDs on/off
-; 
-;   input:  A - status (bit 0 = off/on)
-;   uses:   A, B, C
-;
-	section setall
-	public setall
-setall:
-	ani	1
-	mvi	b, ROWS - 1
-l2:	mvi	c, COLS - 1
-l1:	push	psw
-	mov	a, b
-	out	ROWPORT
-	mov	a, c
-	out	COLPORT
-	pop	psw
-	out	LEDPORT
-	dcr	c
-	jp	l1
-	dcr	b
-	jp	l2
-	ret
-	
-	endsection setall
-
-; ==============================================================================
-; setseq - turn set of LEDs on/off
-; 
-;   input:  (HL) - sequence to be procesed, (row,col), 0ffh-terminated
-;           D - delay (0 = none)
-;           E - =0 off
-;               =1 on
-;   uses:   A, B, C, H, L
-;
-	section setseq
-	public setseq
-setseq:
-	push	d
-l2:	dcr	d
-	jm	l3
-	xra	a
-l4:	dcr	a
-	jnz	l4
-	jmp	l2
-l3:	pop	d
-	mov	a, m
-	cpi	0ffh
-	rz
-	mov	b, m
-	inx	h
-	mov	c, m
-	inx	h
-	mov	a, e
-	call	setled
-	jmp	setseq
-
-	endsection setseq
-	
-; ==============================================================================
 ; wfk - display buffer & wait for key (returns on release)
 ; refk - refresh buffer & check if key pressed
 ; 
-;   input:  (dispbuf) - display buffer
-;           (seed) - pseudo-random value
+;   input:  dispbuf - display buffer
+;           seed - seed for LCG
 ;   output: A - ASCII code of key or 0 if none pressed (only refk)
-;           (seed) - updated pseudo-random value
+;           seed - new seed
 ;   uses:   B, C, D (only refk), H, L
 ;
 	section wfk
@@ -920,6 +931,7 @@ snakeseq:
 	db	13, 29, 13, 28, 13, 27, 13, 26, 12, 25, 11, 25, 10, 25, 9, 26
 	db	9, 27, 9, 28, 10, 29, 11, 29, 11, 28, 11, 27, 11, 26
 	db	0ffh
+
 versionseq:
 	; 1
 	db	17, 11, 17, 12, 18, 12, 19, 12, 20, 12, 21, 12, 22, 12, 23, 11
