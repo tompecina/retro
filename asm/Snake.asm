@@ -60,10 +60,9 @@ l4:	dcx	d
 	jnz	l4
 	dcr	c
 	jp	l3
-	jmp	l5
 
 ; wait for '=' while gathering entropy
-l5:	lxi	h, presseq
+	lxi	h, presseq
 	call	asc2buf
 l14:	call	wfk
 	cpi	'='
@@ -73,10 +72,8 @@ l14:	call	wfk
 	xra	a
 	call	setall
 	
-; get initial position for snake
-	call	getpos
-
 ; initialize snake
+	call	getpos
 	lxi	h, snake
 	shld	head
 	shld	tail
@@ -85,6 +82,7 @@ l14:	call	wfk
 	mov	m, c
 	lxi	h, 1
 	shld	len
+	shld	lenbcd
 
 ; display snake
 	lxi	h, snake
@@ -93,6 +91,10 @@ l14:	call	wfk
 	mov	c, m
 	mvi	a, 1
 	call	setled
+
+; reset direction
+	lxi	h, 0
+	shld	dir
 
 ; pause before displaying mouse
 	mvi	a, 40
@@ -103,19 +105,15 @@ l12:	push	psw
 	dcr	a
 	jnz	l12
 
-; reset direction
-	lxi	h, 0
-	shld	dir
-
 ; display mouse, display length and wait for initial direction
-	call	addmouse
+	call	newmouse
 	call	dlen
 l13:	call	refk
 	call	setdir
 	jnz	l13
 
 ; main loop
-l16:
+loop:
 	
 ; get head
 	lhld	head
@@ -123,7 +121,7 @@ l16:
 	inx	h
 	mov	c, m
 	inx	h
-	
+
 ; calculate new position
 	lda	dir
 	add	b
@@ -166,10 +164,13 @@ l16:
 	jnz	l17
 
 ; mouse eaten, create new mouse and nudge counter
-	call	addmouse
-	lxi	h, len
+	call	newmouse
+	lxi	h, lenbcd
 	mvi	c, 2
 	call	incbcd
+	lhld	len
+	inx	h
+	shld	len
 	call	dlen
 	jmp	l18
 
@@ -194,9 +195,9 @@ l15:	call	refk
 	call	setdir
 	dcr	e
 	jnz	l15
-	jmp	l16
+	jmp	loop
 
-; create oops screen
+; create oops screen and wait for '=' before the main loop
 oops:	mvi	a, 1
 	call	setall
 	lxi	h, oopsseq
@@ -204,29 +205,6 @@ oops:	mvi	a, 1
 	call	setseq
 	jmp	l14
 	
-; put length to display buffer
-dlen:
-	lxi	h, len
-	mov	c, m
-	inx	h
-	mov	b, m
-	lxi	h, ph
-	call	word2hex
-	lxi	h, lendisp
-	jmp	asc2buf
-	
-; create mouse
-addmouse:
-	call	getpos
-	call	checksnake
-	jc	addmouse
-	lxi	h, mouse
-	mov	m, b
-	inx	h
-	mov	m, c
-	mvi	a, 1
-	jmp	setled
-
 ; ==============================================================================
 ; Constants
 	
@@ -370,6 +348,50 @@ getpos:
 	endsection getpos
 	
 ; ==============================================================================
+; newmouse - create and display a new mouse not colliding with the snake
+; 
+;   input:  seed - seed for LCG (may be 0)
+;   output: seed - new seed
+;           mouse - mouse position
+;   uses:   A, B, C, D, E, H, L
+;
+	section newmouse
+	public newmouse
+newmouse:
+	call	getpos
+	call	checksnake
+	jc	newmouse
+	lxi	h, mouse
+	mov	m, b
+	inx	h
+	mov	m, c
+	mvi	a, 1
+	jmp	setled
+
+	endsection newmouse
+	
+; ==============================================================================
+; dlen - put length to display buffer
+; 
+;   input:  lenbcd - length in BCD
+;   output: buffer - display buffer
+;   uses:   A, B, C, D, E, H, L
+;
+	section dlen
+	public dlen
+dlen:
+	lxi	h, lenbcd
+	mov	c, m
+	inx	h
+	mov	b, m
+	lxi	h, ph
+	call	word2hex
+	lxi	h, lendisp
+	jmp	asc2buf
+
+	endsection dlen
+	
+; ==============================================================================
 ; setdir - set direction
 ; 
 ;   input:  A - ASCII code of key
@@ -459,6 +481,29 @@ l1:	dcx	d
 	endsection checksnake
 	
 ; ==============================================================================
+; fixseed - make sure the seed is not 0
+; 
+;   input:  seed - current seed
+;   output: seed - new seed
+;   uses:   A, H, L
+;
+	section fixseed
+	public fixseed
+fixseed:
+	lhld	seed
+	mov	a, h
+	ora	l
+	lhld	seed + 2
+	ora	h
+	ora	l
+	rnz
+	mvi	a, 1
+	sta	seed
+	ret
+
+	endsection fixseed
+
+; ==============================================================================
 ; lcg - carry out one LCG iteration
 ; 
 ;   input:  seed - current seed (may not be 0)
@@ -518,29 +563,6 @@ consta:	db	0dh, 66h, 19h, 00h 		; 1664525
 constc:	db	5fh, 0f3h, 6eh, 3ch		; 1013904223
 
 	endsection lcg
-
-; ==============================================================================
-; fixseed - make sure the seed is not 0
-; 
-;   input:  seed - current seed
-;   output: seed - new seed
-;   uses:   A, H, L
-;
-	section fixseed
-	public fixseed
-fixseed:
-	lhld	seed
-	mov	a, h
-	ora	l
-	lhld	seed + 2
-	ora	h
-	ora	l
-	rnz
-	mvi	a, 1
-	sta	seed
-	ret
-
-	endsection fixseed
 
 ; ============================================================
 ; copy8 - copy block of memory (max. 256 bytes)
@@ -734,7 +756,7 @@ l12:	xra	a
 refk:
 	mvi	c, DISPLEN - 1
 	mvi	b, 0ffh
-	lxi	h, dispbuf + displen - 1
+	lxi	h, dispbuf + DISPLEN - 1
 l9:	call	l11
 	jz	l8
 	mov	b, c
@@ -782,7 +804,7 @@ scancodes:
 ; asc2buf - convert ascii data to display buffer
 ; 
 ;   input:  hl - pointer to ascii data
-;   output: (dispbuf) - display buffer
+;   output: dispbuf - display buffer
 ;   uses:   A, B, C, D, E, H, L
 ;
 	section asc2buf
@@ -972,6 +994,7 @@ seed:	ds	4
 head:	ds	2
 tail:	ds	2
 len:	ds	2
+lenbcd:	ds	2
 mouse:	ds	2
 dir:	ds	2
 	org	3000h
