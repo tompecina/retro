@@ -90,7 +90,7 @@ l14:	call	wfk
 	shld	len
 	shld	lenbcd
 
-; display snake
+; display snake's initial position (head==tail)
 	lxi	h, snake
 	mov	b, m
 	inx	h
@@ -153,9 +153,7 @@ loop:
 	jc	oops
 	
 ; update head
-	mov	a, h
-	ani	MASK
-	mov	h, a
+	call	wraphl
 	shld	head
 	mov	m, b
 	inx	h
@@ -188,9 +186,7 @@ l17:	mvi	a, 1
 	inx	h
 	mov	c, m
 	inx	h
-	mov	a, h
-	ani	MASK
-	mov	h, a
+	call	wraphl
 	shld	tail
 	xra	a
 	call	setled
@@ -216,6 +212,7 @@ oops:	mvi	a, 1
 	
 DISPLEN	equ	9		; display length (equal to number of keyboard columns)
 
+; board size
 ROWS	equ	32
 COLS	equ	32
 AREA	equ	ROWS * COLS
@@ -457,15 +454,9 @@ tbl:	db	'9', -1, 0
 	section checksnake
 	public checksnake
 checksnake:
-	lxi	h, len
-	mov	e, m
-	inx	h
-	mov	d, m
-	lxi	h, tail
-	mov	a, m
-	inx	h
-	mov	h, m
-	mov	l, a
+	lhld	len
+	xchg			; length -> DE
+	lhld	tail		; tail -> HL
 l2:	mov	a, m
 	inx	h
 	cmp	b
@@ -476,15 +467,35 @@ l2:	mov	a, m
 	rz
 l1:	dcx	d
 	mov	a, d
-	ora	e
+	ora	e		; always resets CY
 	rz
 	inx	h
-	mov	a, h
-	ani	MASK
-	mov	h, a
+	call	wraphl
 	jmp	l2
 	
 	endsection checksnake
+	
+; ==============================================================================
+; wraphl - wrap HL if past snake buffer
+; 
+;   input:  HL - pointer to snake buffer
+;   output: HL - fixed
+;   uses:   A
+;
+	section wraphl
+	public wraphl
+wraphl:
+	push	h
+	push	d
+	lxi	d, -(snake + (AREA * 2) - 1)
+	dad	d
+	pop	d
+	pop	h
+	rnc
+	lxi	h, snake
+	ret
+
+	endsection wraphl
 	
 ; ==============================================================================
 ; fixseed - make sure the seed is not 0
@@ -733,7 +744,7 @@ l10:	mov	b, a
 	inr	a
 	ora	c
 	mov	c, a
-	lxi	h, SCANCODES - 1
+	lxi	h, scancodes - 1
 l7:	inx	h
 	mov	a, m
 	inx	h
@@ -771,7 +782,7 @@ l8:	dcx	h
 	dcr	c
 	jp	l9
 	xra	a
-	out	portc
+	out	PORTC
 	inr	b
 	rz
 	dcr	b
@@ -1009,8 +1020,6 @@ dir:	ds	2		; direction of snake's movement
 
 mouse:	ds	2		; mouse position
 
-; snake - must start at X000h
-	org	3000h
-snake:	ds	2 * AREA
+snake:	ds	2 * AREA	; snake data
 	
 	end
