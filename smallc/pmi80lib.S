@@ -25,13 +25,20 @@
 ; ==============================================================================
 ; Constants
 	
-DISPLEN	equ	9	; display length (equal to number of keyboard columns)
-
 ; 8255 ports
 PORTA	equ	0f8h	; port A
 PORTB	equ	0f9h	; port B
 PORTC	equ	0fah	; port C
 CPORT	equ	0fbh	; control port
+	
+; ==============================================================================
+; init8255 - initialize 8255
+;
+	.global init8255
+init8255:
+	ld	a, 0x8a
+	out    	(CPORT), a
+	ret
 	
 ; ==============================================================================
 ; setssd - display one character on SSD
@@ -52,7 +59,81 @@ setssd:
 	ld	a, b
 	out	(PORTA), a
 	ld	a, c
+	cpl
 	out	(PORTC), a
+	
+; ==============================================================================
+; getsc - get scancode from the current column
+; 
+;   output: scan code
+;
+	.global getsc
+getsc:
+	in	a, (PORTC)
+	cpl
+	and	0x70
+	ld	l, a
+	ld	h, 0
 	ret
+
+; ==============================================================================
+; outp - output to port (without self-modification)
+; 
+;   input:  $1 - port
+;           $2 - data
+;
+	.global outp
+outp:
+	ld	hl, 0xc9
+	push	hl
+	ld	hl, 4
+	add	hl, sp
+	ld	a, (hl)
+	inc	hl
+	inc	hl
+	ld	b, (hl)
+	ld	c, 0xd3
+	push	bc
+	ld	hl, 0
+	add	hl, sp
+	ld	bc, outp1
+	push	bc
+	jp	(hl)
+outp1:	pop	hl
+	pop	hl
+	ret
+	
+; ==============================================================================
+; inp - input from port (without self-modification)
+; 
+;   input:  $1 - port
+;   output: data
+;
+	.global inp
+inp:
+	ld	hl, 0xc9
+	push	hl
+	ld	hl, 4
+	add	hl, sp
+	ld	b, (hl)
+	ld	c, 0xdb
+	push	bc
+	ld	hl, 0
+	add	hl, sp
+	ld	bc, inp1
+	push	bc
+	jp	(hl)
+inp1:	pop	hl
+	pop	hl
+	ld	l, a
+	ld	h, 0
+	ret
+	
+; ==============================================================================
+; exit - exit to monitor via RST 7
+;
+	.global exit
+exit:
+	rst	0x38
 	
 	.end

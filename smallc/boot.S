@@ -23,6 +23,7 @@
 	.section .text
 
 	ld	sp, 0
-	jp	main
+	call	main
+	rst	0x38
 	
 	.end

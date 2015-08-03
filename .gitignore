@@ -20,6 +20,9 @@ hs_err_pid*
 *.hex
 *.lst
 *.p
+*.o
+*.out
+*.s
 
 # Working directories
 */build
