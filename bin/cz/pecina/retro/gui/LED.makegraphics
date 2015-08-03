@@ -3,7 +3,7 @@
 source bin/common.makegraphics
 
 for s in $seq; do
-    for c in "red" "green" "yellow" "lime"; do
+    for c in "red" "green" "yellow" "lime" "white"; do
 	w=$(($s*8))
 	h=$(($s*8))
 	for d in 0 1; do

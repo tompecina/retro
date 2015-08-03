@@ -210,7 +210,7 @@ oops:	mvi	a, 1
 ; ==============================================================================
 ; Constants
 	
-DISPLEN	equ	9		; display length (equal to number of keyboard columns)
+DISPLEN	equ	9	; display length (equal to number of keyboard columns)
 
 ; board size
 ROWS	equ	32
@@ -218,10 +218,10 @@ COLS	equ	32
 AREA	equ	ROWS * COLS
 MASK	equ	0f7h
 
-PORTA	port	0f8h		; port A
-PORTB	port	0f9h		; port B
-PORTC	port	0fah		; port C
-CPORT	port	0fbh		; control port
+PORTA	port	0f8h	; port A
+PORTB	port	0f9h	; port B
+PORTC	port	0fah	; port C
+CPORT	port	0fbh	; control port
 	
 ROWPORT	port	0ch
 COLPORT	port	0dh
