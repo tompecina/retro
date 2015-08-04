@@ -1,4 +1,4 @@
-/* LEDMatrixHardware.java
+/* ColorLEDMatrixHardware.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.pecina.retro.ledmatrix;
+package cz.pecina.retro.colorledmatrix;
 
 import java.util.logging.Logger;
 import cz.pecina.retro.peripherals.Peripheral;
@@ -28,16 +28,16 @@ import cz.pecina.retro.gui.LED;
 import cz.pecina.retro.gui.GUI;
 
 /**
- * 32x32 LED matrix panel hardware.
+ * 32x32 color LED matrix panel hardware.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class LEDMatrixHardware implements IOElement {
+public class ColorLEDMatrixHardware implements IOElement {
 
   // static logger
   private static final Logger log =
-    Logger.getLogger(LEDMatrixHardware.class.getName());
+    Logger.getLogger(ColorLEDMatrixHardware.class.getName());
 
   // base port
   private int basePort;
@@ -50,20 +50,20 @@ public class LEDMatrixHardware implements IOElement {
   private static final int LED_GRID_Y = 8;
 
   // LEDs
-  private LEDMatrixElement element;
+  private ColorLEDMatrixElement element;
 
   /**
-   * Creates the LED matrix panel hardware object.
+   * Creates the color LED matrix panel hardware object.
    *
    * @param basePort the base port
    */
-  public LEDMatrixHardware(final int basePort) {
+  public ColorLEDMatrixHardware(final int basePort) {
     assert (basePort >= 0) && (basePort < 0x100);
-    log.fine("New LED matrix hardware creation started");
+    log.fine("New color LED matrix hardware creation started");
     this.basePort = basePort;
-    element = new LEDMatrixElement("small", "red", LED_GRID_X, LED_GRID_Y);
+    element = new ColorLEDMatrixElement("small", LED_GRID_X, LED_GRID_Y);
     connect();
-    log.finer("New LED matrix hardware created");
+    log.finer("New color LED matrix hardware created");
   }
 
   /**
@@ -75,11 +75,11 @@ public class LEDMatrixHardware implements IOElement {
   }
 
   /**
-   * Gets the LED matrix element.
+   * Gets the color LED matrix element.
    *
-   * @return the LED matrix element object
+   * @return the color LED matrix element object
    */
-  public LEDMatrixElement getLEDMatrixElement() {
+  public ColorLEDMatrixElement getColorLEDMatrixElement() {
     return element;
   }    
 
@@ -100,7 +100,7 @@ public class LEDMatrixHardware implements IOElement {
   }
 
   /**
-   * Reconnects LED matrix panel hardware to a new base port.
+   * Reconnects color LED matrix panel hardware to a new base port.
    *
    * @param basePort the new base port
    */
@@ -111,10 +111,11 @@ public class LEDMatrixHardware implements IOElement {
       this.basePort = basePort;
       connect();
       log.fine(String.format(
-        "LED matrix panel hardware reconnected to new base port: %02x",
+        "Color LED matrix panel hardware reconnected to new base port: %02x",
 	basePort));
     } else
-      log.finer("LED matrix panel hardware port reconnection not required");
+      log.finer("Color LED matrix panel hardware port reconnection" +
+		" not required");
   }
 
   // for description see IOElement
@@ -123,17 +124,19 @@ public class LEDMatrixHardware implements IOElement {
     log.finer(String.format("Port output: %02x -> (%02x)", data, port));
     switch ((port - basePort) & 0xff) {
       case 0:
-	if ((data >= 0) && (data < LEDMatrixElement.NUMBER_ROWS)) {
+	if ((data >= 0) && (data < ColorLEDMatrixElement.NUMBER_ROWS)) {
 	  row = data;
 	}
 	break;
       case 1:
-	if ((data >= 0) && (data < LEDMatrixElement.NUMBER_COLUMNS)) {
+	if ((data >= 0) && (data < ColorLEDMatrixElement.NUMBER_COLUMNS)) {
 	  column = data;
 	}
 	break;
       case 2:
-	element.setState(row, column, data & 1);
+	if ((data >= 0) && (data <= ColorLEDMatrixElement.NUMBER_COLORS)) {
+	  element.setState(row, column, data);
+	}
 	break;
     }
   }

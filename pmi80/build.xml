@@ -125,6 +125,8 @@
 		includes="${properties.files}"/>
     <srcfileset dir="${src.dir}/${prefix}/ledmatrix"
 		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/colorledmatrix"
+		includes="${properties.files}"/>
     <srcfileset dir="${src.dir}/${prefix}/pckbd"
 		includes="${properties.files}"/>
     <srcfileset dir="${src.dir}/${prefix}/adc"
@@ -154,6 +156,8 @@
     <targetfilelist dir="${resources.dir}/${prefix}/sisdmatrix"
 		    files="${properties.files}"/>
     <targetfilelist dir="${resources.dir}/${prefix}/ledmatrix"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/colorledmatrix"
 		    files="${properties.files}"/>
     <targetfilelist dir="${resources.dir}/${prefix}/pckbd"
 		    files="${properties.files}"/>
@@ -251,6 +255,15 @@
     <apply executable="native2ascii"
 	   dest="${resources.dir}/${prefix}/ledmatrix">
       <fileset dir="${src.dir}/${prefix}/ledmatrix"
+	       includes="${properties.files}"/>
+      <srcfile/>
+      <targetfile/>
+      <identitymapper/>
+    </apply>
+    <mkdir dir="${resources.dir}/${prefix}/colorledmatrix"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/colorledmatrix">
+      <fileset dir="${src.dir}/${prefix}/colorledmatrix"
 	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
@@ -971,6 +984,9 @@
     </copy>
     <copy todir="${build.classes.dir}/${prefix}/ledmatrix">
       <fileset dir="${resources.dir}/${prefix}/ledmatrix"/>
+    </copy>
+    <copy todir="${build.classes.dir}/${prefix}/colorledmatrix">
+      <fileset dir="${resources.dir}/${prefix}/colorledmatrix"/>
     </copy>
     <copy todir="${build.classes.dir}/${prefix}/pckbd">
       <fileset dir="${resources.dir}/${prefix}/pckbd"/>

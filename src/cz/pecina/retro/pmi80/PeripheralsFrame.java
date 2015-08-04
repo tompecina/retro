@@ -25,6 +25,7 @@ import cz.pecina.retro.common.Application;
 import cz.pecina.retro.peripherals.Peripheral;
 import cz.pecina.retro.peripherals.PeripheralsPanel;
 import cz.pecina.retro.ledmatrix.LEDMatrix;
+import cz.pecina.retro.colorledmatrix.ColorLEDMatrix;
 import cz.pecina.retro.sisdmatrix.SiSDMatrix;
 import cz.pecina.retro.pckbd.PCKeyboard;
 import cz.pecina.retro.adc.ADC;
@@ -68,6 +69,7 @@ public class PeripheralsFrame extends HidingFrame {
     peripherals = new Peripheral[] {
       new IOPanel(computerHardware),
       new LEDMatrix(),
+      new ColorLEDMatrix(),
       new SiSDMatrix(),
       new PCKeyboard(),
       new ADC(),
