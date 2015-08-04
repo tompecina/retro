@@ -3890,6 +3890,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("RST", "0", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
+	  incPC();
 	  decSP();
 	  memory.setByte(SP, PC >> 8);
 	  decSP();
@@ -4032,6 +4033,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("RST", "1", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
+	  incPC();
 	  decSP();
 	  memory.setByte(SP, PC >> 8);
 	  decSP();
@@ -4172,6 +4174,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("RST", "2", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
+	  incPC();
 	  decSP();
 	  memory.setByte(SP, PC >> 8);
 	  decSP();
@@ -4319,6 +4322,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("RST", "3", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
+	  incPC();
 	  decSP();
 	  memory.setByte(SP, PC >> 8);
 	  decSP();
@@ -4456,6 +4460,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("RST", "4", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
+	  incPC();
 	  decSP();
 	  memory.setByte(SP, PC >> 8);
 	  decSP();
@@ -4589,6 +4594,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("RST", "5", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
+	  incPC();
 	  decSP();
 	  memory.setByte(SP, PC >> 8);
 	  decSP();
@@ -4715,6 +4721,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("RST", "6", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
+	  incPC();
 	  decSP();
 	  memory.setByte(SP, PC >> 8);
 	  decSP();
@@ -4853,6 +4860,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("RST", "7", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
+	  incPC();
 	  decSP();
 	  memory.setByte(SP, PC >> 8);
 	  decSP();

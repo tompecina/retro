@@ -51,7 +51,7 @@ public class ColorLEDMatrix extends BasePortPeripheral {
    * Creates a new color LED matrix panel.
    */
   public ColorLEDMatrix() {
-    super("ledmatrix", DEFAULT_BASE_PORT);
+    super("colorledmatrix", DEFAULT_BASE_PORT);
     log.finer("New color LED panel control object created");
   }
 

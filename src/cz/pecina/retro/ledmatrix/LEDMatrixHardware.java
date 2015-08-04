@@ -87,6 +87,7 @@ public class LEDMatrixHardware implements IOElement {
   private void connect() {
     for (int i = 0; i < 3; i++) {
       Parameters.cpu.addIOOutput((basePort + i) & 0xff, this);
+      Parameters.cpu.addIOInput((basePort + i) & 0xff, this);
     }
     log.fine("Ports connected");
   }
@@ -95,6 +96,7 @@ public class LEDMatrixHardware implements IOElement {
   private void disconnect() {
     for (int i = 0; i < 3; i++) {
       Parameters.cpu.removeIOOutput((basePort + i) & 0xff, this);
+      Parameters.cpu.removeIOInput((basePort + i) & 0xff, this);
     }
     log.fine("Ports disconnected");
   }
@@ -141,6 +143,19 @@ public class LEDMatrixHardware implements IOElement {
   // for description see IOElement
   @Override
   public int portInput(int port) {
-    return element.getState(row, column);
+    int r = 0xff;
+    switch ((port - basePort) & 0xff) {
+      case 0:
+	r = row;
+	break;
+      case 1:
+	r = column;
+	break;
+      case 2:
+	r = element.getState(row, column);
+	break;
+    }
+    log.finer(String.format("Port input: (%02x) -> %02x", port, r));
+    return r;
   }
 }

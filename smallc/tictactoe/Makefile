@@ -1,7 +1,7 @@
-APPL = t
+APPL = tictactoe
 MCU = z80
-OBJ = boot.o $(APPL).o pmi80lib.o pmi80clib.o crun8080lib.o
-DEP = Makefile
+LIB = ../
+OBJ = $(LIB)boot.o main.o $(LIB)pmi80lib.o $(LIB)pmi80clib.o $(LIB)crun8080lib.o
 CC = scc8080
 AS = as-z80
 LD = ld-z80
