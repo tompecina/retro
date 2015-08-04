@@ -63,8 +63,7 @@ setssd:
 	inc	hl
 	inc	hl
 	ld	c, (hl)
-	xor	a
-	out	(PORTC), a
+	call	cld
 	ld	a, b
 	out	(PORTA), a
 	ld	a, c
