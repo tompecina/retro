@@ -16,46 +16,49 @@
 ;        cseg
 	.section .text
 ;
-        .global ccgchar, ccgint, ccpchar, ccpint
-        .global ccsxt
-        .global ccor, ccand, ccxor
-        .global cceq, ccne, ccgt, ccle, ccge, cclt, ccuge, ccult, ccugt, ccule
-        .global cclsr, ccasr, ccasl
-        .global ccsub, ccneg, cccom, cclneg, ccbool, ccmul, ccdiv
-        .global cccase
-	.global brkend, Xstktop
-        .global	cguchar, ccudiv
-        .global crun8080_end
-	.global etext, edata
+        .global _ccgchar, _ccgint, _ccpchar, _ccpint
+        .global _ccsxt
+        .global _ccor, _ccand, _ccxor
+        .global _cceq, _ccne, _ccgt, _ccle, _ccge, _cclt, _ccuge, _ccult, _ccugt, _ccule
+        .global _cclsr, _ccasr, _ccasl
+        .global _ccsub, _ccneg, _cccom, _cclneg, _ccbool, _ccmul, _ccdiv
+        .global _cccase
+	.global _brkend, _Xstktop
+        .global	_cguchar, _ccudiv
+        .global _crun8080_end
+	.global _etext, _edata
 
 ; fetch char from (HL) and sign extend into HL
-ccgchar:
+_ccgchar:
 	ld	a, (hl)
-ccsxt:  ld	l, a
+_ccsxt:
+	ld	l, a
         rlca
         sbc	a, a
         ld      h, a
         ret
 ; fetch int from (HL)
-ccgint: ld      a, (hl)
+_ccgint:
+	ld      a, (hl)
         inc     hl
         ld      h, (hl)
         ld      l, a
         ret
 ; store char from HL into (DE)
-ccpchar:
+_ccpchar:
 	ld      a, l
         ld      (de), a
         ret
 ; store int from HL into (DE)
-ccpint: ld      a, l
+_ccpint:
+	ld      a, l
         ld      (de), a
         inc     de
         ld      a, h
         ld      (de), a
         ret
 ; "or" HL and DE into HL
-ccor:   ld      a, l
+_ccor:  ld      a, l
         or      e
         ld      l, a
         ld      a, h
@@ -63,7 +66,8 @@ ccor:   ld      a, l
         ld      h, a
         ret
 ; "xor" HL and DE into HL
-ccxor:  ld      a, l
+_ccxor:
+	ld      a, l
         xor     e
         ld      l, a
         ld      a, h
@@ -71,7 +75,8 @@ ccxor:  ld      a, l
         ld      h, a
         ret
 ; "and" HL and DE into HL
-ccand:  ld      a, l
+_ccand:
+	ld      a, l
         and     e
         ld      l, a
         ld      a, h
@@ -82,55 +87,56 @@ ccand:  ld      a, l
 ;......logical operations: HL set to 0 (false) or 1 (true)
 ;
 ; DE == HL
-cceq:   call    cccmp
+_cceq:
+	call    _cccmp
         ret	z
         dec     hl
         ret
 ; DE != HL
-ccne:   call    cccmp
+_ccne:  call    _cccmp
         ret	nz
         dec     hl
         ret
 ; DE > HL [signed]
-ccgt:   ex	de, hl
-        call    cccmp
+_ccgt:  ex	de, hl
+        call    _cccmp
         ret	c
         dec     hl
         ret
 ; DE <= HL [signed]
-ccle:   call    cccmp
+_ccle:  call    _cccmp
         ret	z
         ret	c
         dec     hl
         ret
 ; DE >= HL [signed]
-ccge:   call    cccmp
+_ccge:  call    _cccmp
         ret	nc
         dec     hl
         ret
 ; DE < HL [signed]
-cclt:   call    cccmp
+_cclt:  call    _cccmp
         ret	c
         dec     hl
         ret
 ; DE >= HL [unsigned]
-ccuge:  call    ccucmp
+_ccuge: call    _ccucmp
         ret	nc
         dec     hl
         ret
 ; DE < HL [unsigned]
-ccult:  call    ccucmp
+_ccult: call    _ccucmp
         ret	c
         dec     hl
         ret
 ; DE > HL [unsigned]
-ccugt:  ex	de, hl
-        call    ccucmp
+_ccugt: ex	de, hl
+        call    _ccucmp
         ret	c
         dec     hl
         ret
 ; DE <= HL [unsigned]
-ccule:  call    ccucmp
+_ccule: call    _ccucmp
         ret	z
         ret	c
         dec     hl
@@ -138,32 +144,35 @@ ccule:  call    ccucmp
 ; signed compare of DE and HL
 ;   carry is sign of difference [set => DE < HL]
 ;   zero is zero/non-zero
-cccmp:  ld      a, e
+_cccmp: ld      a, e
         sub     l
         ld      e, a
         ld      a, d
         sbc     a, h
         ld      hl, 1		;preset true
-        jp	m, cccmp1
+        jp	m, _cccmp1
         or      e               ;resets carry
         ret
-cccmp1: or      e
+_cccmp1:
+	or      e
         scf
         ret
 ; unsigned compare of DE and HL
 ;   carry is sign of difference [set => DE < HL]
 ;   zero is zero/non-zero
-ccucmp: ld      a, d
+_ccucmp:
+	ld      a, d
         cp      h
-        jp	nz, ccucmp1
+        jp	nz, _ccucmp1
         ld      a, e
         cp      l
-ccucmp1:
+_ccucmp1:
 	ld      hl, 1		;preset true
         ret
 ; shift DE right logically by HL, move to HL
-cclsr:  ex	de, hl
-cclsr1: dec     e
+_cclsr: ex	de, hl
+_cclsr1:
+	dec     e
         ret	m
         scf
         ccf
@@ -175,10 +184,11 @@ cclsr1: dec     e
         ld      l, a
         scf
         ccf
-        jp      cclsr1
+        jp      _cclsr1
 ; shift DE right arithmetically by HL, move to HL
-ccasr:  ex	de, hl
-ccasr1: dec     e
+_ccasr: ex	de, hl
+_ccasr1:
+	dec     e
         ret	m
         ld      a, h
         rla
@@ -188,15 +198,16 @@ ccasr1: dec     e
         ld      a, l
         rra
         ld      l, a
-        jp      ccasr1
+        jp      _ccasr1
 ; shift DE left arithmetically by HL, move to HL
-ccasl:  ex	de, hl
-ccasl1: dec     e
+_ccasl:	ex	de, hl
+_ccasl1:
+	dec     e
         ret	m
         add     hl, hl
-        jp      ccasl1
+        jp      _ccasl1
 ; HL = DE - HL
-ccsub:  ld      a, e
+_ccsub: ld      a, e
         sub     l
         ld      l, a
         ld      a, d
@@ -204,11 +215,11 @@ ccsub:  ld      a, e
         ld      h, a
         ret
 ; HL = -HL
-ccneg:  call    cccom
+_ccneg: call    _cccom
         inc     hl
         ret
 ; HL = ~HL
-cccom:  ld      a, h
+_cccom: ld      a, h
         cpl
         ld      h, a
         ld      a, l
@@ -216,27 +227,31 @@ cccom:  ld      a, h
         ld      l, a
         ret
 ; HL = !HL
-cclneg: ld      a, h
+_cclneg:
+	ld      a, h
         or      l
-        jp	z, cclneg1
+        jp	z, _cclneg1
         ld      hl, 0
         ret
-cclneg1:
+_cclneg1:
 	inc     hl
         ret
 ; HL = !!HL
-ccbool: call    cclneg
-        jp      cclneg
+_ccbool:
+	call    _cclneg
+        jp      _cclneg
 ;
 ; HL = DE * HL [signed]
-ccmul:  ld      b, h
+_ccmul: ld      b, h
         ld      c, l
         ld      hl, 0
-ccmul1: ld      a, c
+_ccmul1:
+	ld      a, c
         rrca
-        jp	nc, ccmul2
+        jp	nc, _ccmul2
         add     hl, de
-ccmul2: xor     a
+_ccmul2:
+	xor     a
         ld      a, b
         rra
         ld      b, a
@@ -254,28 +269,29 @@ ccmul2: xor     a
         ld      d, a
         or      e
         ret	z
-        jp      ccmul1
+        jp      _ccmul1
 ; HL = DE / HL, DE = DE % HL
-ccdiv:  ld      b, h
+_ccdiv: ld      b, h
         ld      c, l
         ld      a, d
         xor     b
         push    af
         ld      a, d
         or      a
-        call	m, ccdeneg
+        call	m, _ccdeneg
         ld      a, b
         or      a
-        call	m, ccbcneg
+        call	m, _ccbcneg
         ld      a, 16
         push    af
         ex	de, hl
         ld      de, 0
-ccdiv1: add     hl, hl
-        call    ccrdel
-        jp	z, ccdiv2
-        call    cccmpbd
-        jp	m, ccdiv2
+_ccdiv1:
+	add     hl, hl
+        call    _ccrdel
+        jp	z, _ccdiv2
+        call    _cccmpbd
+        jp	m, _ccdiv2
         ld      a, l
         or      1
         ld      l, a
@@ -285,20 +301,22 @@ ccdiv1: add     hl, hl
         ld      a, d
         sbc     a, b
         ld      d, a
-ccdiv2: pop     af
+_ccdiv2:
+	pop     af
         dec     a
-        jp	z, ccdiv3
+        jp	z, _ccdiv3
         push    af
-        jp      ccdiv1
-ccdiv3: pop     af
+        jp      _ccdiv1
+_ccdiv3:
+	pop     af
         ret	p
-        call    ccdeneg
+        call    _ccdeneg
         ex	de, hl
-        call    ccdeneg
+        call    _ccdeneg
         ex	de, hl
         ret
 ; {DE = -DE}
-ccdeneg:
+_ccdeneg:
         ld      a, d
         cpl
         ld      d, a
@@ -308,7 +326,7 @@ ccdeneg:
         inc     de
         ret
 ; {BC = -BC}
-ccbcneg:
+_ccbcneg:
         ld      a, b
         cpl
         ld      b, a
@@ -318,7 +336,8 @@ ccbcneg:
         inc     bc
         ret
 ; {DE <r<r 1}
-ccrdel: ld      a, e
+_ccrdel:
+	ld      a, e
         rla
         ld      e, a
         ld      a, d
@@ -327,31 +346,32 @@ ccrdel: ld      a, e
         or      e
         ret
 ; {BC : DE}
-cccmpbd:
+_cccmpbd:
         ld      a, e
         sub     c
         ld      a, d
         sbc     a, b
         ret
 ; case jump
-cccase: ex	de, hl		;switch value to DE. exchange HL with DE
+_cccase:
+	ex	de, hl		;switch value to DE. exchange HL with DE
         pop     hl              ;get table address
-cccase1:
-	call    cccase4         ;get case value
+_cccase1:
+	call    _cccase4        ;get case value
         ld      a, e
         cp      c               ;equal to switch value cc
-        jp	nz, cccase2     ;no
+        jp	nz, _cccase2    ;no
         ld      a, d
         cp      b               ;equal to switch value cc
-        jp	nz, cccase2     ;no
-        call    cccase4         ;get case label
-        jp	z, cccase3      ;end of table, go to default
+        jp	nz, _cccase2    ;no
+        call    _cccase4        ;get case label
+        jp	z, _cccase3     ;end of table, go to default
         push    bc
         ret                     ;case jump
-cccase2:
-	call    cccase4         ;get case label
-        jp	nz, cccase1     ;next case
-cccase3:
+_cccase2:
+	call    _cccase4        ;get case label
+        jp	nz, _cccase1    ;next case
+_cccase3:
 	dec     hl
         dec     hl
         dec     hl              ;position HL to the default label
@@ -360,7 +380,7 @@ cccase3:
         ld      e, (hl)
         ex	de, hl          ;exchange HL with DE and vice versa - address is now in HL
         jp	(hl)            ;default jump. loads HL to PC
-cccase4:
+_cccase4:
 	ld      c, (hl)
         inc     hl
         ld      b, (hl)
@@ -371,12 +391,12 @@ cccase4:
 ;
 ;
 ;
-Xstktop:
+_Xstktop:
 	ld     hl, 0 		;return current stack pointer (for sbrk)
         add    hl, sp
         ret
 ;        cseg
-etext:
+_etext:
 ;        dseg
 ;brkend: .blkw      edata           ;current "break"
 ;edata:  .blkw
@@ -386,37 +406,41 @@ etext:
 ;
 
 ; fetch char from (HL) into HL no sign extend
-cguchar:
+_cguchar:
 	ld      l, (hl)
         ld      h, 0
         ret
 ; unsigned divide DE by HL and return quotient in HL, remainder in DE
 ; HL = DE / HL, DE = DE % HL
-ccudiv: ld      b, h            ; store divisor to bc 
+_ccudiv:
+	ld      b, h            ; store divisor to bc 
         ld      c, l
         ld      hl, 0           ; clear remainder
         xor     a               ; clear carry        
         ld      a, 17           ; load loop counter
         push    af
-ccduv1: ld      a, e            ; left shift dividend into carry 
+_ccduv1:
+	ld      a, e            ; left shift dividend into carry 
         rla
         ld      e, a
         ld      a, d
         rla
         ld      d, a
-        jp	c, ccduv2       ; we have to keep carry -> calling else branch
+        jp	c, _ccduv2      ; we have to keep carry -> calling else branch
         pop     af              ; decrement loop counter
         dec     a
-        jp	z, ccduv5
+        jp	z, _ccduv5
         push    af
         xor     a               ; clear carry
-        jp      ccduv3
-ccduv2: pop     af              ; decrement loop counter
+        jp      _ccduv3
+_ccduv2:
+	pop     af              ; decrement loop counter
         dec     a
-        jp	z, ccduv5
+        jp	z, _ccduv5
         push    af
         scf                     ; set carry
-ccduv3: ld      a, l            ; left shift carry into remainder 
+_ccduv3:
+	ld      a, l            ; left shift carry into remainder 
         rla
         ld      l, a
         ld      a, h
@@ -428,7 +452,7 @@ ccduv3: ld      a, l            ; left shift carry into remainder
         ld      a, h
         sbc     a, b
         ld      h, a
-        jp	nc, ccduv4	; if result negative, add back divisor, clear carry
+        jp	nc, _ccduv4	; if result negative, add back divisor, clear carry
         ld      a, l            ; add back divisor
         add     a, c
         ld      l, a
@@ -436,11 +460,12 @@ ccduv3: ld      a, l            ; left shift carry into remainder
         adc     a, b
         ld      h, a     
         xor     a               ; clear carry
-        jp      ccduv1
-ccduv4: scf                     ; set carry
-        jp      ccduv1
-ccduv5: ex	de, hl
+        jp      _ccduv1
+_ccduv4:
+	scf                     ; set carry
+        jp      _ccduv1
+_ccduv5: ex	de, hl
         ret
 ;
-crun8080_end:
+_crun8080_end:
 	.end

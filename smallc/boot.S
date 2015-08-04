@@ -23,7 +23,7 @@
 	.section .text
 
 	ld	sp, 0
-	call	main
+	call	_main
 	rst	0x38
 	
 	.end
