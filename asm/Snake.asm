@@ -793,18 +793,18 @@ l8:	dcx	h
 scancodes:
 	db	20h, '2'
 	db	40h, '0'
-	db	11h, 's'	; s
+	db	11h, 'S'	; S
 	db	21h, '6'
 	db	41h, '4'
-	db	12h, 'l'	; l
+	db	12h, 'L'	; L
 	db	22h, 'a'
 	db	42h, '8'
-	db	23h, 'r'	; r
-	db	43h, 'e'	; ex
-	db	14h, 'b'	; br
+	db	23h, 'R'	; R
+	db	43h, 'X'	; EX
+	db	14h, 'B'	; BR
 	db	24h, 'f'
 	db	44h, 'd'
-	db	15h, 'm'	; m
+	db	15h, 'M'	; M
 	db	25h, 'e'
 	db	45h, 'c'
 	db	26h, 'b'

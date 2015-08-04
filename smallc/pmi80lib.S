@@ -41,6 +41,15 @@ init8255:
 	ret
 	
 ; ==============================================================================
+; cld - clear display
+;
+	.global cld
+cld:
+	xor	a
+	out	(PORTC), a
+	ret
+	
+; ==============================================================================
 ; setssd - display one character on SSD
 ; 
 ;   input:  $1 - position
