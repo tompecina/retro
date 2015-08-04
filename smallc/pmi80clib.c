@@ -23,19 +23,21 @@
 /* Number of display positions */
 #define DISPLEN 9
 
+unsigned int seed[2];
+
 /**
  * Display buffer and wait for key (return on release).
+ * Seed is incremented, generating entropy. 
  *
  * @param  disp pointer to display buffer
- * @param  seed pointer to seed, incremented on every loop turn
  * @return      ASCII code of the key (0 = hw failure)
  */
-wfk(unsigned char *disp, unsigned int *seed) {
+wfk(unsigned char *disp) {
   unsigned char pos, pos2, *p, sc, sc2;
   do {
     for (pos = 0, p = disp; pos < DISPLEN; pos++) {
       setssd(pos, *p++);
-      (*seed)++;
+      seed[0]++;
       sc = getsc();
       if (sc) {
 	break;
@@ -45,7 +47,7 @@ wfk(unsigned char *disp, unsigned int *seed) {
   do {
     for (pos2 = 0, p = disp; pos2 < DISPLEN; pos2++) {
       setssd(pos2, *p++);
-      (*seed)++;
+      seed[1]++;
       if (pos == pos2) {
 	sc2 = getsc();
       }
@@ -61,7 +63,7 @@ unsigned char sc_c[23] = {
   0x23, 0x43, 0x14, 0x24, 0x44, 0x15, 0x25, 0x45,
   0x26, 0x46, 0x27, 0x47, 0x18, 0x28, 0x48
 };
-unsigned char sc_a[23] = {
+char sc_a[23] = {
   '2', '0', 'S', '6', '4', 'L', 'a', '8',
   'R', 'X', 'B', 'f', 'd', 'M', 'e', 'c',
   'b', '9', '7', '5', '=', '3', '1'
@@ -123,7 +125,7 @@ unsigned char a2btbl[0x60] = {
  * @param ascii pointer to ASCII buffer
  * @param disp  pointer to display buffer
  */
-asc2buf(unsigned char *ascii, unsigned char *disp) {
+asc2buf(char *ascii, unsigned char *disp) {
   unsigned char pos;
   for (pos = 0; pos < DISPLEN; pos++) {
     *disp = a2btbl[*ascii - 0x20];

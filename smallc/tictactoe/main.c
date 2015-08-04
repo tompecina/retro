@@ -1,9 +1,25 @@
 
 char board[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
+char presseq[10] = " PrESS = ";
+
+unsigned char disp[9];
+
 main() {  
   unsigned char r, c;
   init8255();
+  splashscreen();
+  asc2buf(presseq, disp);
+  while (wfk(disp) != '=');
+  for (r = 0; r < 3; r++) {
+    for (c = 0; c < 3; c++) {
+      clearsym(r, c);
+    }
+  }
+  while (wfk(disp) != '=');
+}
+
+splashscreen() {
   clearmatrix();
   paintgrid();
   paintsym(0, 0, 3);
@@ -185,11 +201,24 @@ unsigned char symbols[1200] = {
 
 paintsym(unsigned char row, unsigned char col, unsigned char sym) {
   unsigned char r, c;
+  row *= 11;
+  col *= 11;
   for (r = 0; r < 10; r++) {
     for (c = 0; c < 10; c++) {
-      setled((row * 11) + r,
-	     (col * 11) + c,
+      setled(row + r,
+	     col + c,
 	     symbols[(sym * 100) + (r * 10) + c]);
+    }
+  }
+}
+
+clearsym(unsigned char row, unsigned char col) {
+  unsigned char r, c;
+  row *= 11;
+  col *= 11;
+  for (r = 0; r < 10; r++) {
+    for (c = 0; c < 10; c++) {
+      setled(row + r, col + c, 0);
     }
   }
 }
