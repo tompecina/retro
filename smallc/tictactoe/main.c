@@ -1,9 +1,9 @@
 
-char presseq[10] = " PrESS = ",
-     yourturn[10] = "your turn",
-     draw[10] = "  drAu   ",
-     youlost[10] = "you 1oSt ",
-     youwon[10] = " you uon  ";
+char presseq[] =  " PrESS = ",
+     yourturn[] = "your turn",
+     draw[] =     "  drAu   ",
+     youlost[] =  "you 1oSt ",
+     youwon[] =   " you uon ";
 
 unsigned char disp[9];
 
@@ -28,14 +28,14 @@ main() {
     }
     cur_r = 0;
     cur_c = 0;
-    for (turn = 0; (turn < 9) && !win(board); turn++) {
+    for (turn = 0; (turn < 9) && !win(); turn++) {
       if ((turn + playerfirst) % 2) {
 	playermove(board);
       } else {
 	computermove(board);
       }
     }
-    switch (win(board)) {
+    switch (win()) {
       case 0:
 	asc2buf(draw, disp);
 	break;
@@ -67,7 +67,20 @@ win() {
 }
 
 playermove() {
+  unsigned char i, n, *p, m;
   char key;
+  n = 0;
+  for (i = 0, p = board; i < 9; i++, p++) {
+    if (*p == 0) {
+      n++;
+      m = i;
+    }
+  }
+  if (n == 1) {
+    board[m] = -1;
+    paintsym(m / 3, m % 3, 2);
+    return;
+  }
   setcursor(cur_r, cur_c);
   asc2buf(yourturn, disp);
   while (((key = wfk(disp)) != '=') || board[(cur_r * 3) + cur_c]) {
@@ -150,7 +163,8 @@ computermove() {
       n++;
       m = i;
       *p = 1;
-      if (win(board) == 1) {
+      if (win() == 1) {
+	n = 0;
 	break;
       }
       *p = 0;
@@ -166,7 +180,7 @@ computermove() {
       b1 |= (*p & 3) << (i * 2);
     }
     b2 = *p & 3;
-    for (p = bmt;; p += 5) {
+    for (p = bmt; 1; p += 5) {
       if ((*p == b0) && (*(p + 1) == b1) && (*(p + 2) == b2)) {
 	break;
       }
