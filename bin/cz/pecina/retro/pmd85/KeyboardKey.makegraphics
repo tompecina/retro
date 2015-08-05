@@ -1,0 +1,111 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+function key {
+    x=$(($2*150))
+    y=$(($3*150))
+    w=$(($4*150))
+    h=$(($5*150))
+    pg="-repage ${w}x$h+0+0"
+    convert $opts -crop ${w}x$h+$x+$y $pg $src/keys.png $dst/tmp.png
+    for s in $seq; do
+	ww=$(($4*9*$s))
+	hh=$(($5*9*$s))
+     	convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/$1-$s-u.png
+    done
+    y=$(($y+$h))
+    convert $opts -crop ${w}x$h+$x+$y $pg $src/keys.png $dst/tmp.png
+    for s in $seq; do
+	ww=$(($4*9*$s))
+	hh=$(($5*9*$s))
+     	convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/$1-$s-d.png
+    done
+    y=$(($y+$h))
+    convert $opts -crop ${w}x$h+$x+$y $pg $src/keys.png $dst/tmp.png
+    for s in $seq; do
+	ww=$(($4*9*$s))
+	hh=$(($5*9*$s))
+     	convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/$1-$s-l.png
+    done
+}
+key K0 0 0 2 2
+key K1 2 0 2 2
+key K2 4 0 2 2
+key K3 6 0 2 2
+key K4 8 0 2 2
+key K5 10 0 2 2
+key K6 12 0 2 2
+key K7 14 0 2 2
+key K8 16 0 2 2
+key K9 18 0 2 2
+key K10 20 0 2 2
+key K11 22 0 2 2
+key WRK 24 0 2 2
+key CD 26 0 2 2
+key RCL 28 0 2 2
+key RST 30 0 2 2
+key 1 32 0 2 2
+key 2 34 0 2 2
+key 3 36 0 2 2
+key 4 38 0 2 2
+key 5 40 0 2 2
+key 6 42 0 2 2
+key 7 44 0 2 2
+key 8 46 0 2 2
+key 9 48 0 2 2
+key 0 50 0 2 2
+key underline 52 0 2 2
+key brace 54 0 2 2
+key INS 56 0 2 2
+key DEL 58 0 2 2
+key CLR 60 0 2 2
+key q 62 0 2 2
+key w 64 0 2 2
+key e 66 0 2 2
+key r 68 0 2 2
+key t 70 0 2 2
+key z 72 0 2 2
+key u 74 0 2 2
+key i 76 0 2 2
+key o 78 0 2 2
+key p 80 0 2 2
+key at 82 0 2 2
+key backslash 84 0 2 2
+key left 86 0 2 2
+key home 88 0 2 2
+key right 90 0 2 2
+key a 92 0 2 2
+key s 94 0 2 2
+key d 96 0 2 2
+key f 98 0 2 2
+key g 100 0 2 2
+key h 102 0 2 2
+key j 104 0 2 2
+key k 106 0 2 2
+key l 108 0 2 2
+key semicolon 110 0 2 2
+key colon 112 0 2 2
+key bracket 114 0 2 2
+key left2 116 0 2 2
+key end 118 0 2 2
+key right2 120 0 2 2
+key shift 122 0 2 2
+key y 124 0 2 2
+key x 126 0 2 2
+key c 128 0 2 2
+key v 130 0 2 2
+key b 132 0 2 2
+key n 134 0 2 2
+key m 136 0 2 2
+key comma 138 0 2 2
+key period 140 0 2 2
+key slash 142 0 2 2
+key STOP 144 0 2 2
+key EOL 146 0 2 2
+key blank 148 0 2 2
+key bigat 150 0 2 2
+key revbracket 152 0 2 2
+key longspace 154 0 12 2
+key shortspace 166 0 8 2
+rm $dst/tmp*.png

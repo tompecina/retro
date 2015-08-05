@@ -1,0 +1,5 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+cp -f $src/pmd.jpg $dst/

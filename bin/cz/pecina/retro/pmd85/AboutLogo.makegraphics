@@ -1,0 +1,5 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+convert $opts $filter $src/tesla.png -resize 288x360 $dst/tesla.png
