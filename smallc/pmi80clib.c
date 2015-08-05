@@ -23,6 +23,9 @@
 /* Number of display positions */
 #define DISPLEN 9
 
+/**
+ * Seed for LCG or other randomizer.
+ */
 unsigned int seed[2];
 
 /**
