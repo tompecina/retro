@@ -1,22 +1,185 @@
 
-char board[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-char presseq[10] = " PrESS = ";
+char presseq[10] = " PrESS = ",
+     yourturn[10] = "your turn",
+     draw[10] = "  drAu   ",
+     youlost[10] = "you 1oSt ",
+     youwon[10] = " you uon  ";
 
 unsigned char disp[9];
 
+unsigned char cur_r, cur_c;
+
+char board[9];
+
 main() {  
-  unsigned char r, c;
+  unsigned char i, r, c, playerfirst, turn;
   init8255();
   splashscreen();
   asc2buf(presseq, disp);
   while (wfk(disp) != '=');
-  for (r = 0; r < 3; r++) {
-    for (c = 0; c < 3; c++) {
-      clearsym(r, c);
+  for (playerfirst = 0; 1; playerfirst ^= 1) {
+    for (r = 0; r < 3; r++) {
+      for (c = 0; c < 3; c++) {
+	clearsym(r, c);
+      }
+    }
+    for (i = 0; i < 9; i++) {
+      board[i] = 0;
+    }
+    cur_r = 0;
+    cur_c = 0;
+    for (turn = 0; (turn < 9) && !win(board); turn++) {
+      if ((turn + playerfirst) % 2) {
+	playermove(board);
+      } else {
+	computermove(board);
+      }
+    }
+    switch (win(board)) {
+      case 0:
+	asc2buf(draw, disp);
+	break;
+      case 1:
+	asc2buf(youlost, disp);
+	break;
+      case 2:
+	asc2buf(youwon, disp);
+	break;
+    }
+    wfk(disp);
+  }
+}
+
+unsigned char wins[24] = {
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 3, 6, 1, 4, 7, 2, 5, 8, 0, 4, 8, 2, 4, 6};
+
+win() {
+  unsigned char i, i3;
+  for (i = 0; i < 8; i++) {
+    i3 = i * 3;
+    if ((board[wins[i3]] != 0) &&
+	(board[wins[i3]] == board[wins[i3 + 1]]) &&
+	(board[wins[i3]] == board[wins[i3 + 2]])) {
+      return board[wins[i3]];
     }
   }
-  while (wfk(disp) != '=');
+  return 0;
+}
+
+playermove() {
+  char key;
+  setcursor(cur_r, cur_c);
+  asc2buf(yourturn, disp);
+  while (((key = wfk(disp)) != '=') || board[(cur_r * 3) + cur_c]) {
+    switch (key) {
+      case '9':
+	if (cur_r) {
+	  clearcursor(cur_r, cur_c);
+	  cur_r--;
+	  setcursor(cur_r, cur_c);
+	}
+	break;
+      case 'a':
+	if (cur_r && (cur_c != 2)) {
+	  clearcursor(cur_r, cur_c);
+	  cur_r--;
+	  cur_c++;
+	  setcursor(cur_r, cur_c);
+	}
+	break;
+      case '6':
+	if (cur_c != 2) {
+	  clearcursor(cur_r, cur_c);
+	  cur_c++;
+	  setcursor(cur_r, cur_c);
+	}
+	break;
+      case '2':
+	if ((cur_r != 2) && (cur_c != 2)) {
+	  clearcursor(cur_r, cur_c);
+	  cur_r++;
+	  cur_c++;
+	  setcursor(cur_r, cur_c);
+	}
+	break;
+      case '1':
+	if (cur_r != 2) {
+	  clearcursor(cur_r, cur_c);
+	  cur_r++;
+	  setcursor(cur_r, cur_c);
+	}
+	break;
+      case '0':
+	if ((cur_r != 2) && cur_c) {
+	  clearcursor(cur_r, cur_c);
+	  cur_r++;
+	  cur_c--;
+	  setcursor(cur_r, cur_c);
+	}
+	break;
+      case '4':
+	if (cur_c) {
+	  clearcursor(cur_r, cur_c);
+	  cur_c--;
+	  setcursor(cur_r, cur_c);
+	}
+	break;
+      case '8':
+	if (cur_r && cur_c) {
+	  clearcursor(cur_r, cur_c);
+	  cur_r--;
+	  cur_c--;
+	  setcursor(cur_r, cur_c);
+	}
+	break;
+    }
+  }
+  board[(cur_r * 3) + cur_c] = -1;
+  paintsym(cur_r, cur_c, 2);
+  clearcursor(cur_r, cur_c);
+}
+
+extern unsigned char bmt[];
+
+computermove() {
+  unsigned char i, n, *p, m, b0, b1, b2;
+  unsigned int q;
+  n = 0;
+  for (i = 0, p = board; i < 9; i++, p++) {
+    if (*p == 0) {
+      n++;
+      m = i;
+      *p = 1;
+      if (win(board) == 1) {
+	break;
+      }
+      *p = 0;
+    }
+  }
+  if (n > 1) {
+    b0 = 0;
+    for (i = 0, p = board; i < 4; i++, p++) {
+      b0 |= (*p & 3) << (i * 2);
+    }
+    b1 = 0;
+    for (i = 0; i < 4; i++, p++) {
+      b1 |= (*p & 3) << (i * 2);
+    }
+    b2 = *p & 3;
+    for (p = bmt;; p += 5) {
+      if ((*p == b0) && (*(p + 1) == b1) && (*(p + 2) == b2)) {
+	break;
+      }
+    }
+    q = *(p + 3) + (*(p + 4) << 8);
+    m = 0;
+    while (!(q & 1)) {
+      q >>= 1;
+      m++;
+    }
+  }
+  board[m] = 1;
+  paintsym(m / 3, m % 3, 1);
 }
 
 splashscreen() {
@@ -55,13 +218,15 @@ clearmatrix() {
   }
 }
 
+#define GRIDCOLOR WHITE
+
 paintgrid() {
   unsigned char i;
   for (i = 0; i < 32; i++) {
-    setled(i, 10, WHITE);
-    setled(i, 21, WHITE);
-    setled(10, i, WHITE);
-    setled(21, i, WHITE);
+    setled(i, 10, GRIDCOLOR);
+    setled(i, 21, GRIDCOLOR);
+    setled(10, i, GRIDCOLOR);
+    setled(21, i, GRIDCOLOR);
   }
 }
 

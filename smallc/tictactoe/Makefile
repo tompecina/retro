@@ -1,7 +1,7 @@
 APPL = tictactoe
 MCU = z80
 LIB = ../
-OBJ = $(LIB)boot.o main.o $(LIB)pmi80lib.o $(LIB)pmi80clib.o $(LIB)crun8080lib.o
+OBJ = $(LIB)boot.o main.o bmt.o $(LIB)pmi80lib.o $(LIB)pmi80clib.o $(LIB)crun8080lib.o
 CC = scc8080
 AS = as-z80
 LD = ld-z80
