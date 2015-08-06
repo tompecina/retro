@@ -1,4 +1,4 @@
-/* AbstractMemory.java
+/* Marking.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -16,39 +16,35 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **/
+ */
 
-package cz.pecina.retro.cpu;
+package cz.pecina.retro.pmd85;
+
+import java.util.logging.Logger;
+import javax.swing.Icon;
+import cz.pecina.retro.gui.GUI;
+import cz.pecina.retro.gui.GenericBitmap;
+import cz.pecina.retro.gui.IconCache;
 
 /**
- * Memory space to be accessed by CPUs, memory-mapped peripherals and
- * memory-management methods.
+ * Brand marking.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public interface AbstractMemory {
+public class Marking extends GenericBitmap {
+
+  // static logger
+  private static final Logger log =
+    Logger.getLogger(Marking.class.getName());
 
   /**
-   * Gets memory as a byte array.
-   *
-   * @return 64K memory block
+   * Creates an instance of the brand marking bitmap with
+   * the correct pixel size.
    */
-  public abstract byte[] getMemory();
-
-  /**
-   * Reads byte from memory.
-   *
-   * @param  address address in memory
-   * @return         byte in memory
-   */
-  public abstract int getByte(final int address);
-
-  /**
-   * Writes byte to memory.
-   *
-   * @param address address in memory
-   * @param data    byte to be written
-   */
-  public abstract void setByte(final int address, final int data);
+  public Marking() {
+    super(IconCache.get("pmd85/Marking/basic-3-" +
+			GUI.getPixelSize() + ".png"));
+    log.fine("New Marking created");
+  }
 }

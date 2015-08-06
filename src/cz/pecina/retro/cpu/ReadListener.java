@@ -1,4 +1,4 @@
-/* AbstractMemory.java
+/* ReadListener.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -21,34 +21,19 @@
 package cz.pecina.retro.cpu;
 
 /**
- * Memory space to be accessed by CPUs, memory-mapped peripherals and
- * memory-management methods.
+ * Read listener for memory-mapped devices.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public interface AbstractMemory {
-
-  /**
-   * Gets memory as a byte array.
-   *
-   * @return 64K memory block
-   */
-  public abstract byte[] getMemory();
+public interface ReadListener {
 
   /**
    * Reads byte from memory.
    *
    * @param  address address in memory
+   * @param  data    byte in physical memory (possibly discarded)
    * @return         byte in memory
    */
-  public abstract int getByte(final int address);
-
-  /**
-   * Writes byte to memory.
-   *
-   * @param address address in memory
-   * @param data    byte to be written
-   */
-  public abstract void setByte(final int address, final int data);
+  public abstract int getByte(final int address, final int data);
 }

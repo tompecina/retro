@@ -33,7 +33,7 @@ public final class Constants {
   public static final long TIMER_CYCLES =
     Math.round(TIMER_PERIOD * CPU_FREQUENCY / 1e3);
 
-  public static final String RES_PREFIX = "cz/pecina/retro/pmd80/";
+  public static final String RES_PREFIX = "cz/pecina/retro/pmd85/";
 
   public static final int TAPE_SAMPLE_RATE = 1111111;  // will definitely be different
 

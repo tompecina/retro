@@ -224,18 +224,18 @@
   <!-- rom -->
   <dependset>
     <srcfileset dir="${bin.misc.dir}/${package}"
-		includes="monitor3.bin"/>
+		includes="monitor-3.bin"/>
     <targetfilelist dir="${resources.dir}/${prefix}/${package}/ROM"
-		    files="monitor3.bin"/>
+		    files="monitor-3.bin"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/ROM/monitor3.bin"
+  <available file="${resources.dir}/${prefix}/${package}/ROM/monitor-3.bin"
 	     property="avail.${package}.ROM"/>
   <target name="rom"
 	  unless="avail.${package}.ROM">
     <echo message="Copying ROM images"/>
     <copy todir="${resources.dir}/${prefix}/${package}/ROM">
       <fileset dir="${bin.misc.dir}/${package}"
-	       includes="monitor3.bin"/>
+	       includes="monitor-3.bin"/>
     </copy>
   </target>
 

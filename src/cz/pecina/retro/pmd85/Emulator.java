@@ -22,7 +22,6 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 import java.util.Locale;
-import java.util.Arrays;
 import javax.swing.ToolTipManager;
 import cz.pecina.retro.common.GeneralConstants;
 import cz.pecina.retro.common.GeneralUserPreferences;
@@ -86,8 +85,8 @@ public class Emulator {
     					   size + ".png").getImage());
     }
 
-    // // create new computer control object
-    // new Computer();
+    // create new computer control object
+    new Computer();
 
     log.fine("New Emulator creation completed");
   }

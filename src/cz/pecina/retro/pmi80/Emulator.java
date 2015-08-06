@@ -22,7 +22,6 @@ package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
 import java.util.Locale;
-import java.util.Arrays;
 import javax.swing.ToolTipManager;
 import cz.pecina.retro.common.GeneralConstants;
 import cz.pecina.retro.common.GeneralUserPreferences;

@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.pecina.retro.pmi80;
+package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 import java.util.Arrays;
@@ -56,7 +56,7 @@ public class CommandLineProcessor {
 
   // default snapshot file name
   private static final String[] DEFAULT_SNAPSHOT_NAMES =
-    {"pmi80.xml", ".pmi80.xml"};
+    {"pmd85.xml", ".pmd85.xml"};
 
   // options
   private final Options options = new Options();
@@ -68,7 +68,7 @@ public class CommandLineProcessor {
   private void usage() {
     final HelpFormatter usage = new HelpFormatter();
     usage.setSyntaxPrefix(Application.getString(this, "help.usage"));
-    usage.printHelp("java -jar pmi80.jar [OPTION] ...", options);
+    usage.printHelp("java -jar pmd85.jar [OPTION] ...", options);
   }
 
   // exit with an error exit code
@@ -117,20 +117,6 @@ public class CommandLineProcessor {
       .hasArg()
       .argName("ADDR")
       .desc(Application.getString(this, "option.address"))
-      .build());
-    options.addOption(
-      Option.builder("O")
-      .longOpt("start-rom")
-      .hasArg()
-      .argName("ADDR")
-      .desc(Application.getString(this, "option.startRom"))
-      .build());
-    options.addOption(
-      Option.builder("A")
-      .longOpt("start-ram")
-      .hasArg()
-      .argName("ADDR")
-      .desc(Application.getString(this, "option.startRam"))
       .build());
     options.addOption(
       Option.builder("b")
@@ -206,7 +192,7 @@ public class CommandLineProcessor {
       if (defaultSnapshot.canRead()) {
 	try {
 	  new Snapshot(hardware).read(defaultSnapshot);
-	} catch (Exception exception) {
+	} catch (RuntimeException exception) {
 	  log.fine("Error reading default snapshot");
 	  System.out.println(
 	    Application.getString(this, "error.errorDefaultShapshot"));
@@ -224,7 +210,7 @@ public class CommandLineProcessor {
 	if (defaultSnapshot.canRead()) {
 	  try {
 	    new Snapshot(hardware).read(defaultSnapshot);
-	  } catch (RuntimeException exception) {
+	  } catch (Exception exception) {
 	    log.fine("Error reading default snapshot");
 	    System.out.println(
 	      Application.getString(this, "error.errorDefaultShapshot"));
@@ -287,26 +273,6 @@ public class CommandLineProcessor {
 	      error();
 	    }
 	    Parameters.cpu.setPC(address);
-	    break;
-	  case "O":
-	    log.finer("Processing -O");
-	    final int startROM = Integer.parseInt(option.getValue());
-	    if ((startROM < 0) || (startROM > 64)) {
-	      System.out.println(Application.getString(
-	        this, "error.unsupportedMemoryStart"));
-	      error();
-	    }
-	    UserPreferences.setStartROM(startROM);
-	    break;
-	  case "A":
-	    log.finer("Processing -A");
-	    final int startRAM = Integer.parseInt(option.getValue());
-	    if ((startRAM < 0) || (startRAM > 64)) {
-	      System.out.println(Application.getString(
-	        this, "error.unsupportedMemoryStart"));
-	      error();
-	    }
-	    UserPreferences.setStartRAM(startRAM);
 	    break;
 	  case "b":
 	    log.finer("Processing -b");

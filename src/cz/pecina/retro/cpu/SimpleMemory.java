@@ -37,11 +37,20 @@ public class SimpleMemory extends Device implements AbstractMemory {
   // dynamic logger, per device
   private Logger log;
 
-  // memory as an array of bytes
-  private final byte[] memory = new byte[0x10000];
+  /**
+   * Memory as an array of bytes.
+   */
+  protected final byte[] memory = new byte[0x10000];
 
-  // bounds of non-writeable memory (in KiB)
-  private int startROM, startRAM;
+  /**
+   * The start of non-writeable memory (in KiB).
+   */
+  protected int startROM;
+
+  /**
+   * The start of writeable memory (in KiB).
+   */
+  protected int startRAM;
 
   /**
    * Constructor of zero-filled memory block.  The area between

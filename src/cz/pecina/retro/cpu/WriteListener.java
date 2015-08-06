@@ -1,4 +1,4 @@
-/* AbstractMemory.java
+/* WriteListener.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -21,34 +21,21 @@
 package cz.pecina.retro.cpu;
 
 /**
- * Memory space to be accessed by CPUs, memory-mapped peripherals and
- * memory-management methods.
+ * Write listener for memory-mapped devices.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public interface AbstractMemory {
-
-  /**
-   * Gets memory as a byte array.
-   *
-   * @return 64K memory block
-   */
-  public abstract byte[] getMemory();
-
-  /**
-   * Reads byte from memory.
-   *
-   * @param  address address in memory
-   * @return         byte in memory
-   */
-  public abstract int getByte(final int address);
+public interface WriteListener {
 
   /**
    * Writes byte to memory.
    *
    * @param address address in memory
+   * @param oldData memory contents before the write
    * @param data    byte to be written
    */
-  public abstract void setByte(final int address, final int data);
+  public abstract void setByte(final int address,
+			       final int oldData,
+			       final int data);
 }
