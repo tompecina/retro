@@ -20,6 +20,8 @@
 
 package cz.pecina.retro.trec;
 
+import java.util.List;
+
 /**
  * Tape recorder interface.
  *
@@ -27,9 +29,27 @@ package cz.pecina.retro.trec;
  * @version @VERSION@
  */
 public class TapeRecorderInterface {
+  /**
+   * Tape sampling rate, in samples per second.
+   */
+  public static int tapeSampleRate;
+
+  /**
+   * Supported tape formats.
+   */
+  public static List<String> tapeFormats;
 
   /**
    * Duration of one emulation cycle (used for VU meter).
    */
   public int timerPeriod;
+
+  /**
+   * Get maximum tape length, in samples/CPU cycles.
+   *
+   * @return maximum tape length, in samples/CPU cycles
+   */
+  public long getMaxTapeLength() {
+    return (long)(Tape.MAX_TAPE_LENGTH_IN_SEC) * (long)tapeSampleRate;
+  }
 }

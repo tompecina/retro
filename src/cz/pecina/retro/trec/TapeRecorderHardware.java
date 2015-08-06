@@ -103,6 +103,15 @@ public class TapeRecorderHardware {
   private boolean replay;
     
   /**
+   * Gets the tape recorder interface object.
+   *
+   * @return <code>TapeRecorderInterface</code> object
+   */
+  public TapeRecorderInterface getTapeRecorderInterface() {
+    return tapeRecorderInterface;
+  }
+
+  /**
    * Gets computer-in tape recorder-out pin.
    *
    * @return <code>IOPin</code> object
@@ -417,9 +426,9 @@ public class TapeRecorderHardware {
 	    tapePosition +=
 	      Parameters.systemClockSource.getSystemClock() - lastCycleCounter;
 	  }
-	  if (tapePosition >= TapeRecorder.maxTapeLength) {
+	  if (tapePosition >= tapeRecorderInterface.getMaxTapeLength()) {
 	    log.fine("End of tape");
-	    tapePosition = TapeRecorder.maxTapeLength;
+	    tapePosition = tapeRecorderInterface.getMaxTapeLength();
 	    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 	      .BUTTON_POSITION_RECORD).setPressed(false);
 	    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
@@ -495,9 +504,9 @@ public class TapeRecorderHardware {
 	    tapePosition += Parameters.systemClockSource.getSystemClock() -
 	      lastCycleCounter;
 	  }
-	  if (tapePosition >= TapeRecorder.maxTapeLength) {
+	  if (tapePosition >= tapeRecorderInterface.getMaxTapeLength()) {
 	    log.fine("End of tape");
-	    tapePosition = TapeRecorder.maxTapeLength;
+	    tapePosition = tapeRecorderInterface.getMaxTapeLength();
 	    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 	      .BUTTON_POSITION_RECORD).setPressed(false);
 	    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
@@ -627,9 +636,9 @@ public class TapeRecorderHardware {
 	} else {
 	  tapePosition += (Parameters.systemClockSource.getSystemClock() -
 			   lastCycleCounter) * FAST_MULTIPLIER;
-	  if (tapePosition >= TapeRecorder.maxTapeLength) {
+	  if (tapePosition >= tapeRecorderInterface.getMaxTapeLength()) {
 	    log.fine("End of tape");
-	    tapePosition = TapeRecorder.maxTapeLength;
+	    tapePosition = tapeRecorderInterface.getMaxTapeLength();
 	    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 	      .BUTTON_POSITION_FF).setPressed(false);
 	    tapeRecorderState = TapeRecorderState.STOPPED;

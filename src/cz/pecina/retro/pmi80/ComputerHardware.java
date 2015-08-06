@@ -21,6 +21,7 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+import java.util.Arrays;
 import java.io.InputStream;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
@@ -143,6 +144,9 @@ public class ComputerHardware {
     // set up the tape recorder hardware
     final TapeRecorderInterface tapeRecorderInterface =
       new TapeRecorderInterface();
+    tapeRecorderInterface.tapeSampleRate = Constants.TAPE_SAMPLE_RATE;
+    tapeRecorderInterface.tapeFormats =
+      Arrays.asList(new String[] {"XML", "PMT", "PMITAPE", "SAM"});
     tapeRecorderInterface.timerPeriod = Constants.TIMER_PERIOD;
     tapeRecorderHardware = new TapeRecorderHardware(tapeRecorderInterface);
 

@@ -58,16 +58,6 @@ public final class Parameters {
   public static long timerCycles;
 
   /**
-   * Tape sampling rate, in samples per second.
-   */
-  public static int tapeSampleRate;
-
-  /**
-   * Supported tape formats.
-   */
-  public static List<String> tapeFormats;
-
-  /**
    * The CPU controlling the port system.
    */
   public static Processor cpu;

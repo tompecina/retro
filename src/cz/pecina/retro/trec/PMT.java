@@ -25,7 +25,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.EOFException;
-import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
 
 /**
@@ -45,16 +44,22 @@ public class PMT extends TapeProcessor {
   private static final Logger log =
     Logger.getLogger(PMT.class.getName());
 
+  // the tape recorder interface
+  private TapeRecorderInterface tapeRecorderInterface;
+  
   // PMT format signature
   private static final int PMT_SIGNATURE = 0x504d5401;  // includes Subtype 1
 
   /**
    * Creates an instance of PMT format reader/writer.
    *
-   * @param tape the tape to operate on
+   * @param tape                  the tape to operate on
+   * @param tapeRecorderInterface the tape recorder interface object
    */
-  public PMT(final Tape tape) {
+  public PMT(final Tape tape,
+	     final TapeRecorderInterface tapeRecorderInterface) {
     super(tape);
+    this.tapeRecorderInterface = tapeRecorderInterface;
     log.fine("New PMT created");
   }
 
@@ -69,11 +74,11 @@ public class PMT extends TapeProcessor {
     try (final PMTOutputStream dStream =
 	 new PMTOutputStream(new FileOutputStream(file))) {
       dStream.writeInt(PMT_SIGNATURE);
-      dStream.writeInt(Parameters.tapeSampleRate);
+      dStream.writeInt(tapeRecorderInterface.tapeSampleRate);
       for (long start: tape.navigableKeySet()) {
 	final long duration = tape.get(start);
 	if ((start > currPos) && (duration > 0) &&
-	    ((start + duration) <= TapeRecorder.maxTapeLength)) {
+	    ((start + duration) <= tapeRecorderInterface.getMaxTapeLength())) {
 	  dStream.writeLongCompressed(start);
 	  dStream.writeLongCompressed(duration);
 	  currPos = start + duration;
@@ -101,7 +106,7 @@ public class PMT extends TapeProcessor {
       if (dStream.readInt() != PMT_SIGNATURE) {
 	Application.createError(this, "PMT");
       }
-      if (dStream.readInt() != Parameters.tapeSampleRate) {
+      if (dStream.readInt() != tapeRecorderInterface.tapeSampleRate) {
 	Application.createError(this, "PMTSampleRate");
       }
       try {
@@ -110,7 +115,7 @@ public class PMT extends TapeProcessor {
 	  final long duration = dStream.readLongCompressed();
 	  if ((start <= currPos) ||
 	      (duration <= 0) ||
-	      ((start + duration) > TapeRecorder.maxTapeLength)) {
+	      ((start + duration) > tapeRecorderInterface.getMaxTapeLength())) {
 	    throw Application.createError(this, "PMT");
 	  }
 	  tape.put(start, duration);

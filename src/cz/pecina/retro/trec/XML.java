@@ -33,7 +33,6 @@ import org.jdom2.output.XMLOutputter;
 import org.jdom2.output.Format;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.transform.stream.StreamSource;
-import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
 
 /**
@@ -51,13 +50,19 @@ public class XML extends TapeProcessor {
   // XML file version
   private static final String TAPE_XML_FILE_VERSION = "2.0";
 
+  // the tape recorder interface
+  private TapeRecorderInterface tapeRecorderInterface;
+  
   /**
    * Creates an instance of XML format reader/writer.
    *
-   * @param tape the tape to operate on
+   * @param tape                  the tape to operate on
+   * @param tapeRecorderInterface the tape recorder interface object
    */
-  public XML(final Tape tape) {
+  public XML(final Tape tape,
+	     final TapeRecorderInterface tapeRecorderInterface) {
     super(tape);
+    this.tapeRecorderInterface = tapeRecorderInterface;
     log.fine("New XML created");
   }
 
@@ -76,7 +81,7 @@ public class XML extends TapeProcessor {
     tag.setAttribute("noNamespaceSchemaLocation", Application.XSD_PREFIX +
 		     "tape-" + TAPE_XML_FILE_VERSION + ".xsd", namespace);
     tag.setAttribute("version", TAPE_XML_FILE_VERSION);
-    tag.setAttribute("rate", String.valueOf(Parameters.tapeSampleRate));
+    tag.setAttribute("rate", String.valueOf(tapeRecorderInterface.tapeSampleRate));
     tag.setAttribute("unit", "per sec");
     try {
       long currPos = -1;
@@ -84,7 +89,7 @@ public class XML extends TapeProcessor {
 	final long duration = tape.get(start);
 	if ((start > currPos) &&
 	    (duration > 0) &&
-	    ((start + duration) <= TapeRecorder.maxTapeLength)) {
+	    ((start + duration) <= tapeRecorderInterface.getMaxTapeLength())) {
 	  final Element pulse = new Element("pulse");
 	  pulse.setAttribute("start", String.valueOf(start));
 	  pulse.setAttribute("duration", String.valueOf(duration));
@@ -161,7 +166,7 @@ public class XML extends TapeProcessor {
 	  Long.parseLong(pulse.getAttributeValue("duration"));
 	if ((start <= currPos) ||
 	    (duration <= 0) ||
-	    ((start + duration) > TapeRecorder.maxTapeLength)) {
+	    ((start + duration) > tapeRecorderInterface.getMaxTapeLength())) {
 	  log.fine("Error in XML file");
 	  throw Application.createError(this, "XML");
 	}

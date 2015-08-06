@@ -51,13 +51,19 @@ public class SAM extends TapeProcessor {
   private static final int SAM_INCREMENT = 111;  // 200us
   private static final int SAM_TRAILER_LENGTH = 100000;
 
+  // the tape recorder interface
+  private TapeRecorderInterface tapeRecorderInterface;
+
   /**
    * Creates an instance of SAM format reader/writer.
    *
-   * @param tape the tape to operate on
+   * @param tape                  the tape to operate on
+   * @param tapeRecorderInterface the tape recorder interface object
    */
-  public SAM(final Tape tape) {
+  public SAM(final Tape tape,
+	     final TapeRecorderInterface tapeRecorderInterface) {
     super(tape);
+    this.tapeRecorderInterface = tapeRecorderInterface;
     log.fine("New SAM created");
   }
 
@@ -73,7 +79,7 @@ public class SAM extends TapeProcessor {
       for (long start: tape.navigableKeySet()) {
 	final long duration = tape.get(start) - TapeRecorder.PULSE_HOLDOFF;
 	if ((start > currPos) && (duration > 0) &&
-	    ((start + duration) <= TapeRecorder.maxTapeLength)) {
+	    ((start + duration) <= tapeRecorderInterface.getMaxTapeLength())) {
 	  for (; currPos < start; currPos++) {
 	    if ((currPos % SAM_DIVISOR) == 0) {
 	      oStream.write(0xff);

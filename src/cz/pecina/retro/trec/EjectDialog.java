@@ -35,7 +35,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.gui.ErrorBox;
 import cz.pecina.retro.gui.InfoBox;
@@ -109,19 +108,22 @@ public class EjectDialog extends JDialog {
       formatsPanel.add(formatXML);
       formatXML.setSelected(true);
     }
-    if (Parameters.tapeFormats.contains("PMT")) {
+    if (tapeRecorderHardware.getTapeRecorderInterface()
+	.tapeFormats.contains("PMT")) {
       formatPMT =
 	new JRadioButton(Application.getString(this, "ejectDialog.PMT"));
       group.add(formatPMT);
       formatsPanel.add(formatPMT);
     }
-    if (Parameters.tapeFormats.contains("PMITAPE")) {
+    if (tapeRecorderHardware.getTapeRecorderInterface()
+	.tapeFormats.contains("PMITAPE")) {
       formatPMITAPE =
 	new JRadioButton(Application.getString(this, "ejectDialog.PMITAPE"));
       group.add(formatPMITAPE);
       formatsPanel.add(formatPMITAPE);
     }
-    if (Parameters.tapeFormats.contains("SAM")) {
+    if (tapeRecorderHardware.getTapeRecorderInterface()
+	.tapeFormats.contains("SAM")) {
       formatSAM =
 	new JRadioButton(Application.getString(this, "ejectDialog.SAM"));
       group.add(formatSAM);
@@ -194,14 +196,18 @@ public class EjectDialog extends JDialog {
 	final File file = fileChooser.getSelectedFile();
 	try {
 	  if (formatXML.isSelected()) {
-	    new XML(tapeRecorderHardware.getTape()).write(file);
+	    new XML(tapeRecorderHardware.getTape(),
+	      tapeRecorderHardware.getTapeRecorderInterface()).write(file);
 	  } else if (formatPMT.isSelected()) {
-	    new PMT(tapeRecorderHardware.getTape()).write(file);
+	    new PMT(tapeRecorderHardware.getTape(),
+	      tapeRecorderHardware.getTapeRecorderInterface()).write(file);
 	  } else if (formatPMITAPE.isSelected()) {
-	    new PMITAPE(tapeRecorderHardware.getTape()).write(file);
+	    new PMITAPE(tapeRecorderHardware.getTape(),
+	      tapeRecorderHardware.getTapeRecorderInterface()).write(file);
 	  } else {
 	    assert formatSAM.isSelected();
-	    new SAM(tapeRecorderHardware.getTape()).write(file);
+	    new SAM(tapeRecorderHardware.getTape(),
+	      tapeRecorderHardware.getTapeRecorderInterface()).write(file);
 	  }
 	} catch (RuntimeException exception) {
 	  errorBox(exception);
@@ -229,14 +235,18 @@ public class EjectDialog extends JDialog {
 	  final File file = fileChooser.getSelectedFile();
 	  try {
 	    if (formatXML.isSelected()) {
-	      new XML(tapeRecorderHardware.getTape()).read(file);
+	      new XML(tapeRecorderHardware.getTape(),
+	        tapeRecorderHardware.getTapeRecorderInterface()).read(file);
 	    } else if (formatPMT.isSelected()) {
-	      new PMT(tapeRecorderHardware.getTape()).read(file);
+	      new PMT(tapeRecorderHardware.getTape(),
+	        tapeRecorderHardware.getTapeRecorderInterface()).read(file);
 	    } else if (formatPMITAPE.isSelected()) {
-	      new PMITAPE(tapeRecorderHardware.getTape()).read(file);
+	      new PMITAPE(tapeRecorderHardware.getTape(),
+	        tapeRecorderHardware.getTapeRecorderInterface()).read(file);
 	    } else {
 	      assert formatSAM.isSelected();
-	      new SAM(tapeRecorderHardware.getTape()).read(file);
+	      new SAM(tapeRecorderHardware.getTape(),
+	        tapeRecorderHardware.getTapeRecorderInterface()).read(file);
 	    }
 	  } catch (RuntimeException exception) {
 	    errorBox(exception);

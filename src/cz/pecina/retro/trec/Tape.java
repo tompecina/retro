@@ -30,4 +30,9 @@ import java.util.TreeMap;
  * @version @VERSION@
  */
 public class Tape extends TreeMap<Long, Long> {
+
+  /**
+   * Maximum tape length, in seconds.
+   */
+  public static final int MAX_TAPE_LENGTH_IN_SEC = 5400;  // 90min
 }

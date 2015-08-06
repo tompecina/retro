@@ -58,9 +58,6 @@ public class Emulator {
     Parameters.CPUFrequency = Constants.CPU_FREQUENCY;
     Parameters.timerPeriod = Constants.TIMER_PERIOD;
     Parameters.timerCycles = Constants.TIMER_CYCLES;
-    Parameters.tapeSampleRate = Constants.TAPE_SAMPLE_RATE;
-    Parameters.tapeFormats =
-      Arrays.asList(new String[] {"XML", "PMT", "PMITAPE", "SAM"});
 
     // initialize application
     Application.setLocale(Locale.forLanguageTag(UserPreferences.getLocale()));

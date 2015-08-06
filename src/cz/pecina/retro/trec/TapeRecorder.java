@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.awt.Image;
 import javax.swing.JFrame;
-import cz.pecina.retro.common.Parameters;
 
 /**
  * Main package class.
@@ -40,16 +39,6 @@ public class TapeRecorder {
     Logger.getLogger(TapeRecorder.class.getName());
 
   /**
-   * Maximum tape length, in seconds.
-   */
-  public static final int MAX_TAPE_LENGTH_IN_SEC = 5400;  // 90min
-
-  /**
-   * Maximum tape length, in samples/CPU cycles.
-   */
-  public static long maxTapeLength;
-
-  /**
    * Holdoff time determining the minimum length of a pulse
    * recorded in the tape file.
    */
@@ -59,8 +48,6 @@ public class TapeRecorder {
    * Initializes the package.
    */
   public TapeRecorder() {
-    maxTapeLength =
-      (long)MAX_TAPE_LENGTH_IN_SEC * (long)Parameters.tapeSampleRate;
     log.fine("New TapeRecorder created");
   }
 

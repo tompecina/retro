@@ -44,13 +44,19 @@ public class PMITAPE extends TapeProcessor {
   private static final Logger log =
     Logger.getLogger(PMITAPE.class.getName());
 
+  // the tape recorder interface
+  private TapeRecorderInterface tapeRecorderInterface;
+  
   /**
    * Creates an instance of PMITAPE format reader/writer.
    *
-   * @param tape the tape to operate on
+   * @param tape                  the tape to operate on
+   * @param tapeRecorderInterface the tape recorder interface object
    */
-  public PMITAPE(final Tape tape) {
+  public PMITAPE(final Tape tape,
+		 final TapeRecorderInterface tapeRecorderInterface) {
     super(tape);
+    this.tapeRecorderInterface = tapeRecorderInterface;
     log.fine("New PMITAPE created");
   }
 
@@ -67,7 +73,7 @@ public class PMITAPE extends TapeProcessor {
 	final long duration = tape.get(start);
 	if ((start > currPos) &&
 	    (duration > 0) &&
-	    ((start + duration) <= TapeRecorder.maxTapeLength)) {
+	    ((start + duration) <= tapeRecorderInterface.getMaxTapeLength())) {
 	  writer.write((currPos < 0) ? "[" : ",");
 	  final long gap = start - ((currPos < 0) ? 0 : currPos);
 	  writer.write(gap + "," + duration);
@@ -98,7 +104,8 @@ public class PMITAPE extends TapeProcessor {
 	final long start = scanner.nextLong();
 	final long duration = scanner.nextLong();
 	if ((duration <= 0) ||
-	    ((currPos + start + duration) > TapeRecorder.maxTapeLength)) {
+	    ((currPos + start + duration) >
+	     tapeRecorderInterface.getMaxTapeLength())) {
 	  log.fine("Error, reading failed");
 	  throw Application.createError(this, "PMITAPE");
 	}
