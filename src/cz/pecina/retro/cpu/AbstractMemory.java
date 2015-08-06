@@ -30,11 +30,28 @@ package cz.pecina.retro.cpu;
 public interface AbstractMemory {
 
   /**
-   * Gets memory as a byte array.
+   * Gets an array of memory banks.  The order given will be respected
+   * on the Memory frame.
    *
-   * @return 64K memory block
+   * @return memory block
    */
-  public abstract byte[] getMemory();
+  public abstract String[] getMemoryBanks();
+
+  /**
+   * Gets the size of a memory banks.
+   *
+   * @param  bank bank name
+   * @return      size of memory bank in bytes
+   */
+  public abstract int getMemoryBankSize(final String bank);
+
+  /**
+   * Gets memory bank as a byte array.
+   *
+   * @param  bank bank name
+   * @return      memory block
+   */
+  public abstract byte[] getMemoryBank(final String bank);
 
   /**
    * Reads byte from memory.

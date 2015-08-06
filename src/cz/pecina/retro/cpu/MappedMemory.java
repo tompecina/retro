@@ -23,7 +23,6 @@ package cz.pecina.retro.cpu;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import org.jdom2.Element;
-import cz.pecina.retro.cpu.SimpleMemory;
 import cz.pecina.retro.memory.Snapshot;
 import cz.pecina.retro.memory.Info;
 

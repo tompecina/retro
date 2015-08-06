@@ -1,4 +1,4 @@
-/* SimpleMemory.java
+/* PMDMemory.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -18,152 +18,187 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package cz.pecina.retro.cpu;
+package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import org.jdom2.Element;
+import cz.pecina.retro.cpu.Device;
+import cz.pecina.retro.cpu.AbstractMemory;
 import cz.pecina.retro.memory.Snapshot;
 import cz.pecina.retro.memory.Info;
 
 /**
- * Contiguous block of 64KB RAM with one optional ROM (non-writeable) block.
+ * Tesla PMD 85 memory.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class SimpleMemory extends Device implements AbstractMemory {
+public class PMDMemory extends Device implements AbstractMemory {
 
   // dynamic logger, per device
   private Logger log;
 
   /**
-   * Memory as an array of bytes.
+   * ROM as an array of bytes.
    */
-  protected final byte[] memory = new byte[0x10000];
+  protected final byte[] rom;;
 
   /**
-   * The start of non-writeable memory (in KiB).
+   * RAM as an array of bytes.
    */
-  protected int startROM;
+  protected final byte[] ram;;
 
   /**
-   * The start of writeable memory (in KiB).
+   * The size of ROM (in KiB).
    */
-  protected int startRAM;
+  protected int sizeROM;
 
   /**
-   * Constructor of zero-filled memory block.  The area between
-   * <code>startROM</code> and <code>startRAM - 1</code> is non-writeable
-   * (all writes are ignored).
+   * The size of RAM (in KiB).
+   */
+  protected int sizeRAM;
+
+  /**
+   * Constructor of zero-filled memory areas.
    *
-   * @param name     device name
-   * @param startROM start of non-writeable memory (in KiB)
-   * @param startRAM start of writeable memory (in KiB)
+   * @param name    device name
+   * @param sizeROM size of ROM (in KiB)
+   * @param sizeRAM size of RAM (in KiB)
    */
-  public SimpleMemory(final String name,
-		      final int startROM,
-		      final int startRAM) {
+  public PMDMemory(final String name,
+		   final int sizeROM,
+		   final int sizeRAM) {
     super(name);
     log = Logger.getLogger(getClass().getName() + "." + name);
-    this.startROM = startROM;
-    this.startRAM = startRAM;
+    assert (sizeROM > 0) && (sizeROM <= 8); 
+    assert (sizeRAM > 0) && (sizeRAM <= 64); 
+    this.sizeROM = sizeROM;
+    this.sizeRAM = sizeRAM;
+    rom = new byte[sizeROM * 0x400];
+    ram = new byte[sizeRAM * 0x400];
     add(new Register("ROM") {
 	@Override
 	public String getValue() {
-	  return String.valueOf(SimpleMemory.this.startROM);
+	  return String.valueOf(PMDMemory.this.sizeROM);
 	}
 	@Override
 	public void processValue(final String value) {
-	  SimpleMemory.this.startROM = Integer.parseInt(value);
+	  PMDMemory.this.sizeROM = Integer.parseInt(value);
 	}
       });
     add(new Register("RAM") {
 	@Override
 	public String getValue() {
-	  return String.valueOf(SimpleMemory.this.startRAM);
+	  return String.valueOf(PMDMemory.this.sizeRAM);
 	}
 	@Override
 	public void processValue(final String value) {
-	  SimpleMemory.this.startRAM = Integer.parseInt(value);
+	  PMDMemory.this.sizeRAM = Integer.parseInt(value);
 	}
       });
-    add(new Block("COMBINED") {
+    add(new Block("ROM") {
 	@Override
-	public byte[] getMemoryBank("COMBINED") {
-	  return memory;
+	public byte[] getROM() {
+	  return rom;
 	}
 	@Override
 	public void getContent(final Element block) {
-	  Snapshot.buildBlockElement(memory, block, 0, 0x10000);
+	  Snapshot.buildBlockElement(rom, block, 0, sizeROM * 0x400);
 	}
 	@Override
 	public void processContent(final Element block) {
-	  Snapshot.processBlockElement(memory, block, 0);
+	  Snapshot.processBlockElement(rom, block, 0);
 	}
       });
-    log.fine(String.format("New SimpleMemory created, name: %s", name));
+    add(new Block("RAM") {
+	@Override
+	public byte[] getRAM() {
+	  return ram;
+	}
+	@Override
+	public void getContent(final Element block) {
+	  Snapshot.buildBlockElement(ram, block, 0, sizeRAM * 0x400);
+	}
+	@Override
+	public void processContent(final Element block) {
+	  Snapshot.processBlockElement(ram, block, 0);
+	}
+      });
+    log.fine(String.format("New PMDMemory created, name: %s", name));
   }
 
   /**
-   * Gets start of non-writeable memory.
+   * Gets the size of ROM.
    *
-   * @return start of non-writeable memory (in KiB)
+   * @return the size of ROM (in KiB)
    */
-  public int getStartROM() {
-    return startROM;
+  public int getSizeROM() {
+    return size;
   }
 
   /**
-   * Sets start of non-writeable memory.
+   * Sets the size of ROM.
    *
-   * @param startROM start of non-writeable memory (in KiB)
+   * @param sizeROM the size of ROM (in KiB)
    */
-  public void setStartROM(final int startROM) {
-    assert (startROM >= 0) && (startROM <= 64);
-    this.startROM = startROM;
+  public void setSizeROM(final int sizeROM) {
+    assert (sizeROM > 0) && (sizeROM <= 8);
+    this.sizeROM = sizeROM;
   }
 
   /**
-   * Gets start of writeable memory.
+   * Gets the size of RAM.
    *
-   * @return start of writeable memory (in KiB)
+   * @return the size of RAM (in KiB)
    */
-  public int getStartRAM() {
-    return startRAM;
+  public int getSizeRAM() {
+    return size;
   }
 
   /**
-   * Sets start of writeable memory.
+   * Sets the size of RAM.
    *
-   * @param startRAM start of writeable memory (in KiB)
+   * @param sizeRAM the size of RAM (in KiB)
    */
-  public void setStartRAM(final int startRAM) {
-    assert (startRAM >= 0) && (startRAM <= 64);
-    this.startRAM = startRAM;
+  public void setSizeRAM(final int sizeRAM) {
+    assert (sizeRAM > 0) && (sizeRAM <= 8);
+    this.sizeRAM = sizeRAM;
   }
 
   // for description see AbstractMemory
   @Override
   public String[] getMemoryBanks() {
     log.finer("Providing a list of memory banks");
-    return new String[] {"COMBINED"};
+    return new String[] {"RAM", "ROM"};
   }
 
   // for description see AbstractMemory
   @Override
   public int getMemoryBankSize(final String bank) {
     log.finer("Size of memory bank '" + bank + "' requested");
-    assert bank.equals("COMBINED");
-    return 0x10000;
+    switch (bank) {
+      case "ROM":
+	return sizeROM * 0x400;
+      case "RAM":
+	return sizeRAM * 0x400;
+      default:
+	throw Application.createError(this, "memoryBankDoesNotExist");
     }
   }
 
   // for description see AbstractMemory
   @Override
   public byte[] getMemoryBank(final String bank) {
-    log.finer("Memory bank '" + bank + "' retrieved");
-    return memory;
+    log.finer("Memory bank '" + bank + "' requested");
+    switch (bank) {
+      case "ROM":
+	return rom;
+      case "RAM":
+	return ram;
+      default:
+	throw Application.createError(this, "memoryBankDoesNotExist");
+    }
   }
 
   // for description see AbstractMemory

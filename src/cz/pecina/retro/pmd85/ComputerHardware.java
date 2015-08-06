@@ -29,7 +29,6 @@ import cz.pecina.retro.common.Application;
 import cz.pecina.retro.cpu.IONode;
 import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.Intel8080A;
-import cz.pecina.retro.cpu.MappedMemory;
 import cz.pecina.retro.trec.TapeRecorderInterface;
 import cz.pecina.retro.trec.TapeRecorderHardware;
 import cz.pecina.retro.debug.DebuggerHardware;
@@ -46,7 +45,7 @@ public class ComputerHardware {
   private static final Logger log =
     Logger.getLogger(ComputerHardware.class.getName());
 
-  // the general hardware  private Hardware hardware;
+  // the general hardware
   private Hardware hardware;
 
   // the memory
@@ -77,11 +76,11 @@ public class ComputerHardware {
     hardware = new Hardware("PMD85");
 
     // set up memory
-    memory = new MappedMemory("MEMORY",
-			      0,
-			      0,
-			      null,
-			      null);
+    memory = new PMDMemory("MEMORY",
+			   0,
+			   0,
+			   null,
+			   null);
     hardware.add(memory);
     Parameters.memoryDevice = memory;
     Parameters.memoryObject = memory;
