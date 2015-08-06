@@ -433,6 +433,25 @@
     <exec executable="${bin.dir}/${prefix}/${package}/Marking.makegraphics"/>
   </target>
 
+  <!-- pmd85.ComputerPanel -->
+  <dependset>
+    <srcfileset refid="common.makegraphics"/>
+    <srcfileset dir="${bin.dir}/${prefix}/${package}"
+		includes="ComputerPanel.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/${package}"
+		includes="mask.png"/>
+    <srcfileset dir="${graphics.dir}/${package}"
+		includes="metal.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/ComputerPanel"
+		    files="mask-1.png"/>
+  </dependset>
+  <available file="${resources.dir}/${prefix}/${package}/ComputerPanel/mask-1.png"
+	     property="avail.pmd85.ComputerPanel"/>
+  <target name="pmd85.ComputerPanel"
+	  unless="avail.pmd85.ComputerPanel">
+    <exec executable="${bin.dir}/${prefix}/${package}/ComputerPanel.makegraphics"/>
+  </target>
+
   <!-- pmd85.KeyboardPanel -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
@@ -658,7 +677,7 @@
 
   <!-- graphics -->
   <target name="graphics"
-	  depends="prepare,gui.LED,gui.SSD,gui.SiSD,gui.ESD,gui.SignESD,gui.Digit,gui.CounterResetButton,gui.UniversalButton,gui.Knob,gui.Background,pmd85.Marking,pmd85.KeyboardPanel,pmd85.KeyboardKey,pmd85.IconButton,pmd85.AboutLogo,pmd85.AboutPhoto,pmd85.AboutLicense,pmd85.ApplicationIcons,trec.TapeRecorderPanel,trec.TapeRecorderButton,trec.VUMeter,debug.DebuggerPanel,debug.DebuggerButton"
+	  depends="prepare,gui.LED,gui.SSD,gui.SiSD,gui.ESD,gui.SignESD,gui.Digit,gui.CounterResetButton,gui.UniversalButton,gui.Knob,gui.Background,pmd85.Marking,pmd85.ComputerPanel,pmd85.KeyboardPanel,pmd85.KeyboardKey,pmd85.IconButton,pmd85.AboutLogo,pmd85.AboutPhoto,pmd85.AboutLicense,pmd85.ApplicationIcons,trec.TapeRecorderPanel,trec.TapeRecorderButton,trec.VUMeter,debug.DebuggerPanel,debug.DebuggerButton"
 	  description="Create bitmaps"
 	  unless="nographics"/>
 

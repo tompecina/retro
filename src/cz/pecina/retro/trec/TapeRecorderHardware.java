@@ -23,7 +23,6 @@ package cz.pecina.retro.trec;
 import java.util.logging.Logger;
 import java.util.Iterator;
 import cz.pecina.retro.common.Parameters;
-import cz.pecina.retro.@PACKAGE@.Constants;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.gui.Counter;
 import cz.pecina.retro.gui.BlinkLED;
@@ -55,6 +54,9 @@ public class TapeRecorderHardware {
   // multiplier for FF/REWIND operation
   private static final int FAST_MULTIPLIER = 8;
 
+  // the tape recorder interface
+  private TapeRecorderInterface tapeRecorderInterface;
+  
   // states of the tape recorder
   private enum TapeRecorderState {STOPPED, PLAY, RECORD, REWIND, FF};
 
@@ -120,8 +122,12 @@ public class TapeRecorderHardware {
 
   /**
    * Creates a new tape recorder hardware object.
+   *
+   * @param tapeRecorderInterface the tape recorder interface
    */
-  public TapeRecorderHardware() {
+  public TapeRecorderHardware(final TapeRecorderInterface tapeRecorderInterface) {
+    log.fine("New TapeRecorderHardware creation started");
+    this.tapeRecorderInterface = tapeRecorderInterface;
     log.fine("New TapeRecorderHardware created");
   }
 
@@ -642,7 +648,7 @@ public class TapeRecorderHardware {
     if (tapeRecorderState == TapeRecorderState.RECORD) {
       int i;
       for (i = 0; i < VUMeter.VUMETER_MAX; i++) {
-	if ((9 * pulseCount) < (75 * Constants.TIMER_PERIOD * i)) {
+	if ((9 * pulseCount) < (75 * tapeRecorderInterface.timerPeriod * i)) {
 	  break;
 	}
       }
@@ -654,7 +660,7 @@ public class TapeRecorderHardware {
       }
       int i;
       for (i = 0; i < VUMeter.VUMETER_MAX; i++) {
-	if ((9 * pulseCount) < (8000 * Constants.TIMER_PERIOD * i)) {
+	if ((9 * pulseCount) < (8000 * tapeRecorderInterface.timerPeriod * i)) {
 	  break;
 	}
       }

@@ -30,6 +30,7 @@ import cz.pecina.retro.cpu.Intel8080A;
 import cz.pecina.retro.cpu.Intel8255;
 import cz.pecina.retro.cpu.SimpleMemory;
 import cz.pecina.retro.cpu.NAND;
+import cz.pecina.retro.trec.TapeRecorderInterface;
 import cz.pecina.retro.trec.TapeRecorderHardware;
 import cz.pecina.retro.debug.DebuggerHardware;
 
@@ -138,9 +139,12 @@ public class ComputerHardware {
 
     // set up the keyboard hardware
     keyboardHardware = new KeyboardHardware(displayHardware);
-
+    
     // set up the tape recorder hardware
-    tapeRecorderHardware = new TapeRecorderHardware();
+    final TapeRecorderInterface tapeRecorderInterface =
+      new TapeRecorderInterface();
+    tapeRecorderInterface.timerPeriod = Constants.TIMER_PERIOD;
+    tapeRecorderHardware = new TapeRecorderHardware(tapeRecorderInterface);
 
     // set up the debugger hardware
     debuggerHardware = new DebuggerHardware(cpu);
