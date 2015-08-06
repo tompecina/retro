@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.Arrays;
 import javax.swing.ToolTipManager;
 import cz.pecina.retro.common.GeneralConstants;
+import cz.pecina.retro.common.GeneralUserPreferences;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.gui.GUI;
@@ -61,14 +62,14 @@ public class Emulator {
     Parameters.timerCycles = Constants.TIMER_CYCLES;
 
     // initialize application
+    GeneralUserPreferences.setNodeClass(UserPreferences.class);
     Application.setLocale(Locale.forLanguageTag(UserPreferences.getLocale()));
     Application.addModules(this,
 			   new GUI(),
 			   new Memory(),
 			   new TapeRecorder(),
 			   new Debugger(),
-			   new Peripherals()
-			   );
+			   new Peripherals());
     GUI.setPixelSize(UserPreferences.getPixelSize());
     log.fine("Application set up");
 

@@ -109,6 +109,8 @@
   <dependset>
     <srcfileset dir="${src.dir}/${prefix}/${package}"
 		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/common"
+		includes="${properties.files}"/>
     <srcfileset dir="${src.dir}/${prefix}/gui"
 		includes="${properties.files}"/>
     <srcfileset dir="${src.dir}/${prefix}/memory"
@@ -122,6 +124,8 @@
     <srcfileset dir="${src.dir}/${prefix}/dboutput"
 		includes="${properties.files}"/>
     <targetfilelist dir="${resources.dir}/${prefix}/${package}"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/common"
 		    files="${properties.files}"/>
     <targetfilelist dir="${resources.dir}/${prefix}/gui"
 		    files="${properties.files}"/>
@@ -147,6 +151,15 @@
     <apply executable="native2ascii"
 	   dest="${resources.dir}/${prefix}/${package}">
       <fileset dir="${src.dir}/${prefix}/${package}"
+	       includes="${properties.files}"/>
+      <srcfile/>
+      <targetfile/>
+      <identitymapper/>
+    </apply>
+    <mkdir dir="${resources.dir}/${prefix}/common"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/common">
+      <fileset dir="${src.dir}/${prefix}/common"
 	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
