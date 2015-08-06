@@ -26,6 +26,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import cz.pecina.retro.gui.GenericButton;
+import cz.pecina.retro.common.Localized;
+import cz.pecina.retro.common.Application;
 
 /**
  * Icons displayed on the main panel.
@@ -33,7 +35,7 @@ import cz.pecina.retro.gui.GenericButton;
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class IconButton extends GenericButton {
+public class IconButton extends GenericButton implements Localized {
 
   // static logger
   private static final Logger log =
@@ -51,22 +53,31 @@ public class IconButton extends GenericButton {
   // the computer control object
   private Computer computer;
 
+  // tool-tip resource
+  private String toolTipResource;
+
   /**
    * Creates an instance of an icon controlling the hiding frames.
    *
-   * @param computer  the computer control object
-   * @param id        text identification of the button (used when
-   *                  fetching the icons)
-   * @param positionX position of the icon on the control panel (x-coordinate)
-   * @param positionY position of the icon on the control panel (y-coordinate)
-   * @param toolTip   tool-tip for the icon (<code>null</code> if none)
+   * @param computer        the computer control object
+   * @param id              text identification of the button (used
+   *                        when fetching the icons)
+   * @param positionX       position of the icon on the control panel
+   *                        (x-coordinate)
+   * @param positionY       position of the icon on the control panel
+   *                        (y-coordinate)
+   * @param toolTipResource tool-tip for the button (<code>null</code> if none)
    */
   public IconButton(final Computer computer,
 		    final String id,
 		    final int positionX,
 		    final int positionY,
-		    final String toolTip) {
-    super("pmi80/IconButton/" + id + "-%d-%s.png", -1, toolTip);
+		    final String toolTipResource) {
+    super("pmi80/IconButton/" + id + "-%d-%s.png",
+	  -1,
+	  (toolTipResource == null) ?
+	    null :
+	    Application.getString(IconButton.class, toolTipResource));
     log.fine("New IconButton creation started: " + id);
     assert computer != null;
     assert id != null;
@@ -74,7 +85,8 @@ public class IconButton extends GenericButton {
     this.id = id;
     this.positionX = positionX;
     this.positionY = positionY;
-    log.fine("New IconButton created: " + id);
+    this.toolTipResource = toolTipResource;
+  log.fine("New IconButton created: " + id);
   }
 
   // mouse listener
@@ -132,5 +144,13 @@ public class IconButton extends GenericButton {
    */
   public int getPositionY() {
     return positionY;
+  }
+
+  // for description see Localized
+  @Override
+  public void redrawOnLocaleChange() {
+    if (toolTipResource != null) {
+      setToolTip(Application.getString(this, toolTipResource));
+    }
   }
 }
