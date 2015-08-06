@@ -29,6 +29,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
+import cz.pecina.retro.common.GeneralConstants;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.cpu.Hardware;
@@ -257,7 +258,7 @@ public class CommandLineProcessor {
 	  case "l":
 	    log.finer("Processing -l");
 	    final String language = option.getValue();
-	    if (!Arrays.asList(Constants.SUPPORTED_LOCALES)
+	    if (!Arrays.asList(GeneralConstants.SUPPORTED_LOCALES)
 		.contains(language)) {
 	      System.out.println(Application.getString(
 	        this, "error.unsupportedLanguage"));
@@ -268,7 +269,7 @@ public class CommandLineProcessor {
 	  case "p":
 	    log.finer("Processing -p");
 	    final int pixelSize = Integer.parseInt(option.getValue());
-	    if (!Arrays.asList(Constants.PIXEL_SIZES)
+	    if (!Arrays.asList(GeneralConstants.PIXEL_SIZES)
 		.contains(pixelSize)) {
 	      System.out.println(Application.getString(
 	        this, "error.unsupportedPixelSize"));

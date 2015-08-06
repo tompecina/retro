@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import java.util.Locale;
 import java.util.Arrays;
 import javax.swing.ToolTipManager;
+import cz.pecina.retro.common.GeneralConstants;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.gui.GUI;
@@ -73,9 +74,9 @@ public class Emulator {
 
     // set up tooltip parameters
     final ToolTipManager ttm = ToolTipManager.sharedInstance();
-    ttm.setInitialDelay(Constants.TOOL_TIP_INITIAL_DELAY);
-    ttm.setDismissDelay(Constants.TOOL_TIP_DISMISS_DELAY);
-    ttm.setReshowDelay(Constants.TOOL_TIP_RESHOW_DELAY);
+    ttm.setInitialDelay(GeneralConstants.TOOL_TIP_INITIAL_DELAY);
+    ttm.setDismissDelay(GeneralConstants.TOOL_TIP_DISMISS_DELAY);
+    ttm.setReshowDelay(GeneralConstants.TOOL_TIP_RESHOW_DELAY);
     log.fine("General tooltip options set");
 
     // set up application icons

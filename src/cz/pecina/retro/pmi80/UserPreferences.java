@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Arrays;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import cz.pecina.retro.common.GeneralConstants;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.gui.GUI;
@@ -77,7 +78,7 @@ public final class UserPreferences {
 	final Rectangle r =
 	  GraphicsEnvironment.getLocalGraphicsEnvironment()
 	  .getMaximumWindowBounds();
-	for (int i: Constants.PIXEL_SIZES)
+	for (int i: GeneralConstants.PIXEL_SIZES)
 	  if (((i * TYPICAL_MASK_WIDTH) > (SIZE_COEFFICIENT * r.width)) ||
 	      ((i * TYPICAL_MASK_HEIGHT) > (SIZE_COEFFICIENT * r.height))) {
 	    break;
@@ -93,8 +94,9 @@ public final class UserPreferences {
       locale = Parameters.preferences.get("locale", null);
       if (locale == null) {
 	locale = Locale.getDefault().toLanguageTag();
-	if (!Arrays.asList(Constants.SUPPORTED_LOCALES).contains(locale)) {
-	  locale = Constants.SUPPORTED_LOCALES[0];  // use the default locale
+	if (!Arrays.asList(GeneralConstants.SUPPORTED_LOCALES)
+	    .contains(locale)) {
+	  locale = GeneralConstants.SUPPORTED_LOCALES[0];  // use the default locale
 	}
 	Parameters.preferences.put("locale", locale);
       }
@@ -133,7 +135,7 @@ public final class UserPreferences {
    */
   public static void setPixelSize(final int pixelSize) {
     log.fine("New pixel size requested: " + pixelSize);
-    assert Arrays.asList(Constants.PIXEL_SIZES).contains(pixelSize);
+    assert Arrays.asList(GeneralConstants.PIXEL_SIZES).contains(pixelSize);
     getPreferences();
     if (pixelSize != UserPreferences.pixelSize) {
       UserPreferences.pixelSize = pixelSize;
@@ -165,7 +167,7 @@ public final class UserPreferences {
    */
   public static void setLocale(final String locale) {
     log.fine("New lcaole requested: " + locale);
-    assert Arrays.asList(Constants.SUPPORTED_LOCALES).contains(locale);
+    assert Arrays.asList(GeneralConstants.SUPPORTED_LOCALES).contains(locale);
     getPreferences();
     if (locale != UserPreferences.locale) {
       UserPreferences.locale = locale;

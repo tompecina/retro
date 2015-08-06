@@ -39,6 +39,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import cz.pecina.retro.common.GeneralConstants;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.peripherals.Peripheral;
 import cz.pecina.retro.gui.WheelSlider;
@@ -106,7 +107,7 @@ public class SettingsPanel extends JPanel {
     viewPixelSize =
       new WheelSlider(JSlider.HORIZONTAL,
 		      1,
-		      Constants.PIXEL_SIZES.length,
+		      GeneralConstants.PIXEL_SIZES.length,
 		      UserPreferences.getPixelSize());
     viewPixelSizeLabel.setLabelFor(viewPixelSize);
     viewPixelSize.setMajorTickSpacing(1);
@@ -137,10 +138,10 @@ public class SettingsPanel extends JPanel {
 
     final ButtonGroup viewLocaleGroup = new ButtonGroup();
     final GridBagConstraints[] viewLocaleConstraints =
-      new GridBagConstraints[Constants.SUPPORTED_LOCALES.length];
-    viewLocales = new JRadioButton[Constants.SUPPORTED_LOCALES.length];
-    for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; i++) {
-      final String languageTag = Constants.SUPPORTED_LOCALES[i];
+      new GridBagConstraints[GeneralConstants.SUPPORTED_LOCALES.length];
+    viewLocales = new JRadioButton[GeneralConstants.SUPPORTED_LOCALES.length];
+    for (int i = 0; i < GeneralConstants.SUPPORTED_LOCALES.length; i++) {
+      final String languageTag = GeneralConstants.SUPPORTED_LOCALES[i];
       viewLocales[i] =
 	new JRadioButton(Application.getString(this, "settings.view.locale." +
 					       languageTag));
@@ -303,9 +304,9 @@ public class SettingsPanel extends JPanel {
    * Initialize widgets.
    */
   public void setUp() {
-    for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; i++) {
+    for (int i = 0; i < GeneralConstants.SUPPORTED_LOCALES.length; i++) {
       viewLocales[i].setSelected(UserPreferences.getLocale()
-        .equals(Constants.SUPPORTED_LOCALES[i]));
+        .equals(GeneralConstants.SUPPORTED_LOCALES[i]));
     }
     viewPixelSize.setValue(UserPreferences.getPixelSize());
     memoryStartROM.setValue(UserPreferences.getStartROM());
@@ -363,9 +364,9 @@ public class SettingsPanel extends JPanel {
 	peripheral.implementSettings();
       }
       closeFrame();
-      for (int i = 0; i < Constants.SUPPORTED_LOCALES.length; i++)
+      for (int i = 0; i < GeneralConstants.SUPPORTED_LOCALES.length; i++)
 	if (viewLocales[i].isSelected()) {
-	  UserPreferences.setLocale(Constants.SUPPORTED_LOCALES[i]);
+	  UserPreferences.setLocale(GeneralConstants.SUPPORTED_LOCALES[i]);
 	  break;
 	}
       UserPreferences.setPixelSize(viewPixelSize.getValue());

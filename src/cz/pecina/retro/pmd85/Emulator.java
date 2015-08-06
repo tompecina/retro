@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import java.util.Locale;
 import java.util.Arrays;
 import javax.swing.ToolTipManager;
+import cz.pecina.retro.common.GeneralConstants;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.gui.GUI;
@@ -54,13 +55,10 @@ public class Emulator {
     // set OpenGL for Linux environment
     System.setProperty("sun.java2d.opengl", Parameters.openGL ? "true" : "false");
 
-    // // set general parameters
+    // set general parameters
     // Parameters.CPUFrequency = Constants.CPU_FREQUENCY;
     // Parameters.timerPeriod = Constants.TIMER_PERIOD;
     // Parameters.timerCycles = Constants.TIMER_CYCLES;
-    // Parameters.tapeSampleRate = Constants.TAPE_SAMPLE_RATE;
-    // Parameters.tapeFormats =
-    //   Arrays.asList(new String[] {"XML", "PMT", "PTP"});
 
     // // initialize application
     // Application.setLocale(Locale.forLanguageTag(UserPreferences.getLocale()));
@@ -76,9 +74,9 @@ public class Emulator {
 
     // // set up tooltip parameters
     // final ToolTipManager ttm = ToolTipManager.sharedInstance();
-    // ttm.setInitialDelay(Constants.TOOL_TIP_INITIAL_DELAY);
-    // ttm.setDismissDelay(Constants.TOOL_TIP_DISMISS_DELAY);
-    // ttm.setReshowDelay(Constants.TOOL_TIP_RESHOW_DELAY);
+    // ttm.setInitialDelay(GeneralConstants.TOOL_TIP_INITIAL_DELAY);
+    // ttm.setDismissDelay(GeneralConstants.TOOL_TIP_DISMISS_DELAY);
+    // ttm.setReshowDelay(GeneralConstants.TOOL_TIP_RESHOW_DELAY);
     // log.fine("General tooltip options set");
 
     // // set up application icons

@@ -20,8 +20,6 @@
 
 package cz.pecina.retro.pmi80;
 
-import javax.swing.JLayeredPane;
-
 /**
  * Constants specific to Tesla PMI-80.
  *
@@ -30,16 +28,6 @@ import javax.swing.JLayeredPane;
  */
 public final class Constants {
     
-  /**
-   * Array of pixel sizes for which bitmaps are available.
-   */
-  public static final Integer[] PIXEL_SIZES = {1, 2, 3, 4};
-
-  /**
-   * Array of supported language strings.
-   */
-  public static final String[] SUPPORTED_LOCALES = {"en-US", "cs-CZ", "sk-SK"};
-
   public static final int DEFAULT_START_ROM = 0;
   public static final int DEFAULT_START_RAM = 1;
 
@@ -49,39 +37,8 @@ public final class Constants {
 
   public static final String RES_PREFIX = "cz/pecina/retro/pmi80/";
 
-  public static final int TOOL_TIP_INITIAL_DELAY = 1000;
-  public static final int TOOL_TIP_DISMISS_DELAY = 5000;
-  public static final int TOOL_TIP_RESHOW_DELAY = 0;
-
-  public static final int NUMBER_SSD_SEGMENTS = 7;
-  public static final int NUMBER_SSD_STATES = 1 << NUMBER_SSD_SEGMENTS;
-  public static final int NUMBER_SSD = 9;
-  public static final int SSD_RATIO = 100;
-  public static final int SSD_BASE_WIDTH = 24;
-  public static final int SSD_BASE_HEIGHT = 40;
-  public static final int SSD_BASE_GRID_X = 26;
-  public static final int SSD_BASE_OFFSET_X = 29;
-  public static final int SSD_BASE_OFFSET_Y = 25;
-
   public static final int TAPE_SAMPLE_RATE = 1111111;
-  public static final long MAX_TAPE_LENGTH = 6000000000L;  // 90min
-  public static final int PMT_SIGNATURE = 0x504d5401;  // includes Subtype 1
-  public static final int TAPE_RECORDER_COUNTER_DIVISOR = 100000;
-  public static final int TAPE_RECORDER_FAST_MULTIPLIER = 8;
-  public static final int TAPE_RECORDER_PULSE_HOLDOFF = 333;  // 300us
-  public static final int TAPE_RECORDER_SAM_DIVISOR = 23;
-  public static final int TAPE_RECORDER_SAM_INCREMENT = 111;  // 200us
-  public static final int TAPE_RECORDER_SAM_TRAILER_LENGTH = 100000;
  
-  public static final int NUMBER_TAPE_RECORDER_COUNTER_DIGITS = 4;
-  public static final int NUMBER_STATES_PER_DIGIT = 24;
-  public static final int NUMBER_DIGIT_STATES = NUMBER_STATES_PER_DIGIT * 10;
-  public static final int DIGIT_BASE_WIDTH = 10;
-  public static final int DIGIT_BASE_HEIGHT = 13;
-  public static final int DIGIT_BASE_GRID_X = -13;
-  public static final int DIGIT_BASE_OFFSET_X = 280;
-  public static final int DIGIT_BASE_OFFSET_Y = 17;
-
   public static final int NUMBER_TERMINAL_LINES = 24;
   public static final int NUMBER_TERMINAL_COLUMNS = 80;
   public static final int TERMINAL_CELL_BASE_WIDTH = 10;

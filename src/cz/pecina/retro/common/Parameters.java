@@ -20,7 +20,6 @@
 
 package cz.pecina.retro.common;
 
-import java.util.List;
 import java.util.prefs.Preferences;
 import cz.pecina.retro.cpu.SystemClockSource;
 import cz.pecina.retro.cpu.Processor;
