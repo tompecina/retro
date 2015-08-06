@@ -40,8 +40,8 @@ public class ComputerPanel extends BackgroundFixedPane {
     Logger.getLogger(ComputerPanel.class.getName());
     
   // brand marking position
-  private static final int MARKING_OFFSET_X = 11;
-  private static final int MARKING_OFFSET_Y = 331;
+  private static final int MARKING_OFFSET_X = 12;
+  private static final int MARKING_OFFSET_Y = 278;
 
   // brank marking
   private final Marking marking = new Marking();

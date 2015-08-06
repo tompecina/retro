@@ -37,7 +37,7 @@ public class IconLayout {
   /**
    * Number of icons.
    */
-  public static final int NUMBER_ICONS = 6;
+  public static final int NUMBER_ICONS = 7;
 
   /**
    * Position of the "wheel" icon.
@@ -50,24 +50,29 @@ public class IconLayout {
   public static final int ICON_POSITION_MEM = 1;
 
   /**
+   * Position of the "keyboard" icon.
+   */
+  public static final int ICON_POSITION_KEYBOARD = 2;
+
+  /**
    * Position of the "cassette" icon.
    */
-  public static final int ICON_POSITION_CASSETTE = 2;
+  public static final int ICON_POSITION_CASSETTE = 3;
 
   /**
    * Position of the "cable" icon.
    */
-  public static final int ICON_POSITION_CABLE = 3;
+  public static final int ICON_POSITION_CABLE = 4;
 
   /**
    * Position of the "debugger" icon.
    */
-  public static final int ICON_POSITION_DEBUG = 4;
+  public static final int ICON_POSITION_DEBUG = 5;
 
   /**
    * Position of the "info" icon.
    */
-  public static final int ICON_POSITION_INFO = 5;
+  public static final int ICON_POSITION_INFO = 6;
 
   // the icons
   public IconButton[] icons;
@@ -81,12 +86,13 @@ public class IconLayout {
     log.fine("New IconLayout creation started");
     assert computer != null;
     icons = new IconButton[] {
-      new IconButton(computer, "wheel", 87, 331, "toolTip.settings"),
-      new IconButton(computer, "mem", 121, 331, "toolTip.memory"),
-      new IconButton(computer, "cassette", 157, 331, "toolTip.tapeRecorder"),
-      new IconButton(computer, "cable", 191, 331, "toolTip.peripherals"),
-      new IconButton(computer, "debug", 222, 331, "toolTip.debugger"),
-      new IconButton(computer, "info", 252, 331, "toolTip.about")
+      new IconButton(computer, "wheel", 311, 10, "toolTip.settings"),
+      new IconButton(computer, "mem", 311, 45, "toolTip.memory"),
+      new IconButton(computer, "keyboard", 312, 77, "toolTip.keyboard"),
+      new IconButton(computer, "cassette", 312, 110, "toolTip.tapeRecorder"),
+      new IconButton(computer, "cable", 311, 141, "toolTip.peripherals"),
+      new IconButton(computer, "debug", 311, 174, "toolTip.debugger"),
+      new IconButton(computer, "info", 311, 204, "toolTip.about")
     };
     log.fine("New IconLayout creation completed");
   }

@@ -221,8 +221,9 @@ public class Computer {
     	    interruptButtonPressed = true;
     	    break;
     	  }
-    	} else
+    	} else {
     	  interruptButtonPressed = false;
+	}
     	computerHardware.getCPU().exec(
           Parameters.timerCycles * Parameters.speedUp,
 	  0,

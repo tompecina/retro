@@ -99,12 +99,12 @@ public class ComputerHardware {
     try (final InputStream monitor =
 	 getClass().getResourceAsStream("ROM/monitor-3.bin")) {
       final byte[] buffer = new byte[0x10000];
-      final int n = monitor.read(buffer, 0xd000, 0x2000);
+      final int n = monitor.read(buffer, 0, 0x2000);
       if (n < 1) {
 	throw Application.createError(this, "monitorLoad");
       }
       for (int addr = 0; addr < n; addr++) {
-	memory.getMemory()[addr] = buffer[addr];
+	(memory.getMemory())[addr + 0xe000] = buffer[addr];
       }
     } catch (final NullPointerException |
 	     IOException |

@@ -110,7 +110,7 @@ public class ComputerHardware {
 	throw Application.createError(this, "monitorLoad");
       }
       for (int addr = 0; addr < n; addr++) {
-	memory.getMemory()[addr] = buffer[addr];
+	(memory.getMemory())[addr] = buffer[addr];
       }
     } catch (final NullPointerException |
 	     IOException |
