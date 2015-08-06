@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.pecina.retro.pmi80;
+package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 import java.util.Locale;
@@ -52,45 +52,45 @@ public class Emulator {
     log.fine("New Emulator creation started");
 
     // set OpenGL for Linux environment
-    System.setProperty("sun.java2d.opengl", "true");
+    System.setProperty("sun.java2d.opengl", Parameters.openGL ? "true" : "false");
 
-    // set general parameters
-    Parameters.CPUFrequency = Constants.CPU_FREQUENCY;
-    Parameters.timerPeriod = Constants.TIMER_PERIOD;
-    Parameters.timerCycles = Constants.TIMER_CYCLES;
-    Parameters.tapeSampleRate = Constants.TAPE_SAMPLE_RATE;
-    Parameters.tapeFormats =
-      Arrays.asList(new String[] {"XML", "PMT", "PMITAPE", "SAM"});
+    // // set general parameters
+    // Parameters.CPUFrequency = Constants.CPU_FREQUENCY;
+    // Parameters.timerPeriod = Constants.TIMER_PERIOD;
+    // Parameters.timerCycles = Constants.TIMER_CYCLES;
+    // Parameters.tapeSampleRate = Constants.TAPE_SAMPLE_RATE;
+    // Parameters.tapeFormats =
+    //   Arrays.asList(new String[] {"XML", "PMT", "PTP"});
 
-    // initialize application
-    Application.setLocale(Locale.forLanguageTag(UserPreferences.getLocale()));
-    Application.addModules(this,
-			   new GUI(),
-			   new Memory(),
-			   new TapeRecorder(),
-			   new Debugger(),
-			   new Peripherals()
-			   );
-    GUI.setPixelSize(UserPreferences.getPixelSize());
-    log.fine("Application set up");
+    // // initialize application
+    // Application.setLocale(Locale.forLanguageTag(UserPreferences.getLocale()));
+    // Application.addModules(this,
+    // 			   new GUI(),
+    // 			   new Memory(),
+    // 			   new TapeRecorder(),
+    // 			   new Debugger(),
+    // 			   new Peripherals()
+    // 			   );
+    // GUI.setPixelSize(UserPreferences.getPixelSize());
+    // log.fine("Application set up");
 
-    // set up tooltip parameters
-    final ToolTipManager ttm = ToolTipManager.sharedInstance();
-    ttm.setInitialDelay(Constants.TOOL_TIP_INITIAL_DELAY);
-    ttm.setDismissDelay(Constants.TOOL_TIP_DISMISS_DELAY);
-    ttm.setReshowDelay(Constants.TOOL_TIP_RESHOW_DELAY);
-    log.fine("General tooltip options set");
+    // // set up tooltip parameters
+    // final ToolTipManager ttm = ToolTipManager.sharedInstance();
+    // ttm.setInitialDelay(Constants.TOOL_TIP_INITIAL_DELAY);
+    // ttm.setDismissDelay(Constants.TOOL_TIP_DISMISS_DELAY);
+    // ttm.setReshowDelay(Constants.TOOL_TIP_RESHOW_DELAY);
+    // log.fine("General tooltip options set");
 
-    // set up application icons
-    for (int size: GUI.APPLICATION_ICON_SIZES) {
-      GUI.addApplicationIcon(IconCache.get("pmi80/ApplicationIcons/icon-" +
-					   size + ".png").getImage());
-    }
+    // // set up application icons
+    // for (int size: GUI.APPLICATION_ICON_SIZES) {
+    //   GUI.addApplicationIcon(IconCache.get("pmd85/ApplicationIcons/icon-" +
+    // 					   size + ".png").getImage());
+    // }
 
-    // create new computer control object
-    new Computer();
+    // // create new computer control object
+    // new Computer();
 
-    log.fine("New Emulator creation completed");
+    // log.fine("New Emulator creation completed");
   }
 
   // for description see Object

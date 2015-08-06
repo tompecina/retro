@@ -97,6 +97,11 @@ public final class Parameters {
    */
   public static int speedUp = 1;
 
+  /**
+   * Use of OpenGL.
+   */
+  public static boolean openGL = true;
+
   // default constructor disabled
   private Parameters() { }
 }

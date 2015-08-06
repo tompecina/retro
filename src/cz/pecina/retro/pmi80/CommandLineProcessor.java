@@ -175,6 +175,16 @@ public class CommandLineProcessor {
       .argName("FACTOR")
       .desc(Application.getString(this, "option.speedUp"))
       .build());
+    options.addOption(
+      Option.builder("g")
+      .longOpt("opengl")
+      .desc(Application.getString(this, "option.openGL"))
+      .build());
+    options.addOption(
+      Option.builder("G")
+      .longOpt("no-opengl")
+      .desc(Application.getString(this, "option.noOpenGL"))
+      .build());
     log.finer("Options set up");
 	
     // parse the command line
@@ -336,6 +346,14 @@ public class CommandLineProcessor {
 	        this, "error.nonPositiveSpeedUp"));
 	      error();
 	    }
+	    break;
+	  case "g":
+	    log.finer("Processing --opengl");
+	    Parameters.openGL = true;
+	    break;
+	  case "G":
+	    log.finer("Processing --no-opengl");
+	    Parameters.openGL = false;
 	    break;
 	}
       }
