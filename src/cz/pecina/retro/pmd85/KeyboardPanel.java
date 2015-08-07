@@ -38,6 +38,10 @@ public class KeyboardPanel extends BackgroundFixedPane {
   private static final Logger log =
     Logger.getLogger(KeyboardPanel.class.getName());
 
+  // base key dimensions
+  private static final int BASE_WIDTH = 9;
+  private static final int BASE_HEIGHT = BASE_WIDTH;
+
   // enclosing frame
   private JFrame frame;
 
@@ -59,7 +63,9 @@ public class KeyboardPanel extends BackgroundFixedPane {
 
     // set up keys
     for (KeyboardKey key: keyboardHardware.getKeyboardLayout().getKeys()) {
-      key.place(this, key.getOffsetX(), key.getOffsetY());
+      key.place(this,
+		key.getOffsetX() * BASE_WIDTH,
+		key.getOffsetY() * BASE_HEIGHT);
       log.finest("Key '" + key + "' added");
     }
     log.finer("Keys set up");

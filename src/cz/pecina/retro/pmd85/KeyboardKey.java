@@ -39,10 +39,6 @@ public class KeyboardKey extends LockableButton {
   private static final Logger log =
     Logger.getLogger(KeyboardKey.class.getName());
 
-  // base key dimensions
-  private static final int BASE_WIDTH = 9;
-  private static final int BASE_HEIGHT = BASE_WIDTH;
-
   // the keyboard hardware object to operate on
   private KeyboardHardware keyboardHardware;
 
@@ -94,8 +90,8 @@ public class KeyboardKey extends LockableButton {
     this.keyboardHardware = keyboardHardware;
     this.cap = cap;
     this.contact = contact;
-    this.offsetX = offsetX * BASE_WIDTH;
-    this.offsetY = offsetY * BASE_HEIGHT;
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
     this.matrixRow = matrixRow;
     this.matrixColumn = matrixColumn;
     addChangeListener(new ChangeListener() {
@@ -167,7 +163,7 @@ public class KeyboardKey extends LockableButton {
   /**
    * Sets the x-offset of the key.
    *
-   * @param offsetX x-offset of the key in pixels of the base size
+   * @param offsetX x-offset of the key in 1/2s of the base key width
    */
   public void setOffsetX(final int offsetX) {
     this.offsetX = offsetX;
@@ -176,7 +172,7 @@ public class KeyboardKey extends LockableButton {
   /**
    * Gets the x-offset of the key.
    *
-   * @return x-offset of the key in pixels of the base size
+   * @return x-offset of the key in 1/2s of the base key width
    */
   public int getOffsetX() {
     return offsetX;
@@ -185,7 +181,7 @@ public class KeyboardKey extends LockableButton {
   /**
    * Sets the y-offset of the key.
    *
-   * @param offsetY y-offset of the key in pixels of the base size
+   * @param offsetY y-offset of the key in 1/2s of the base key width
    */
   public void setOffsetY(final int offsetY) {
     this.offsetY = offsetY;
@@ -194,7 +190,7 @@ public class KeyboardKey extends LockableButton {
   /**
    * Gets the y-offset of the key.
    *
-   * @return y-offset of the key in pixels of the base size
+   * @return y-offset of the key in 1/2s of the base key width
    */
   public int getOffsetY() {
     return offsetY;
