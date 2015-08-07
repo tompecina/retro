@@ -109,8 +109,10 @@ public class ComputerHardware {
       if (n < 1) {
 	throw Application.createError(this, "monitorLoad");
       }
+      final byte[] memoryArray =
+	Parameters.memoryDevice.getBlockByName("COMBINED").getMemory();
       for (int addr = 0; addr < n; addr++) {
-	(memory.getMemory())[addr] = buffer[addr];
+	memoryArray[addr] = buffer[addr];
       }
     } catch (final NullPointerException |
 	     IOException |

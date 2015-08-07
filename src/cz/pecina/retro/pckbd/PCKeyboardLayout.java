@@ -45,6 +45,7 @@ public class PCKeyboardLayout {
    * @param hardware hardware object to operate on
    */
   public PCKeyboardLayout(final PCKeyboardHardware hardware) {
+    log.fine("New PC keyboard layout creation started");
     assert hardware != null;
     keys = new PCKeyboardKey[] {
       new PCKeyboardKey(hardware,

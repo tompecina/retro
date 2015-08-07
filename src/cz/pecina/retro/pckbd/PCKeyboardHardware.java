@@ -241,6 +241,13 @@ public class PCKeyboardHardware implements IOElement, CPUEventOwner {
 
     @Override
     public void keyPressed(final KeyEvent event) {
+      System.err.println(event.getKeyCode() + ":" +
+			 event.getKeyChar() + ":" +
+			 (int)event.getKeyChar() + ":" +
+			 event.getKeyLocation() + ":" +
+			 event.isActionKey() + ":" +
+			 event.paramString() + ":" +
+			 event.getExtendedKeyCode() + ":");
       listener(event, false);
     }
 

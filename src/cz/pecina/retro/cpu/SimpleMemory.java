@@ -90,7 +90,7 @@ public class SimpleMemory extends Device implements AbstractMemory {
       });
     add(new Block("COMBINED") {
 	@Override
-	public byte[] getMemoryBank("COMBINED") {
+	public byte[] getMemory() {
 	  return memory;
 	}
 	@Override
@@ -141,29 +141,6 @@ public class SimpleMemory extends Device implements AbstractMemory {
   public void setStartRAM(final int startRAM) {
     assert (startRAM >= 0) && (startRAM <= 64);
     this.startRAM = startRAM;
-  }
-
-  // for description see AbstractMemory
-  @Override
-  public String[] getMemoryBanks() {
-    log.finer("Providing a list of memory banks");
-    return new String[] {"COMBINED"};
-  }
-
-  // for description see AbstractMemory
-  @Override
-  public int getMemoryBankSize(final String bank) {
-    log.finer("Size of memory bank '" + bank + "' requested");
-    assert bank.equals("COMBINED");
-    return 0x10000;
-    }
-  }
-
-  // for description see AbstractMemory
-  @Override
-  public byte[] getMemoryBank(final String bank) {
-    log.finer("Memory bank '" + bank + "' retrieved");
-    return memory;
   }
 
   // for description see AbstractMemory

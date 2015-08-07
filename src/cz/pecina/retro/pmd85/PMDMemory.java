@@ -25,6 +25,8 @@ import java.util.logging.Level;
 import org.jdom2.Element;
 import cz.pecina.retro.cpu.Device;
 import cz.pecina.retro.cpu.AbstractMemory;
+import cz.pecina.retro.cpu.Register;
+import cz.pecina.retro.cpu.Block;
 import cz.pecina.retro.memory.Snapshot;
 import cz.pecina.retro.memory.Info;
 
@@ -50,6 +52,11 @@ public class PMDMemory extends Device implements AbstractMemory {
   protected final byte[] ram;;
 
   /**
+   * ROM module as an array of bytes or <code>null</code> if not present.
+   */
+  protected final byte[] rmm;
+
+  /**
    * The size of ROM (in KiB).
    */
   protected int sizeROM;
@@ -60,23 +67,33 @@ public class PMDMemory extends Device implements AbstractMemory {
   protected int sizeRAM;
 
   /**
-   * Constructor of zero-filled memory areas.
+   * The size of ROM module (in KiB).
+   */
+  protected int sizeRMM;
+
+  /**
+   * Constructor of PMD memory object.
    *
    * @param name    device name
    * @param sizeROM size of ROM (in KiB)
    * @param sizeRAM size of RAM (in KiB)
+   * @param sizeRMM size of ROM module (in KiB)
    */
   public PMDMemory(final String name,
 		   final int sizeROM,
-		   final int sizeRAM) {
+		   final int sizeRAM,
+		   final int sizeRMM) {
     super(name);
     log = Logger.getLogger(getClass().getName() + "." + name);
     assert (sizeROM > 0) && (sizeROM <= 8); 
     assert (sizeRAM > 0) && (sizeRAM <= 64); 
+    assert (sizeRMM >= 0) && (sizeRMM <= 32); 
     this.sizeROM = sizeROM;
     this.sizeRAM = sizeRAM;
+    this.sizeRMM = sizeRMM;
     rom = new byte[sizeROM * 0x400];
     ram = new byte[sizeRAM * 0x400];
+    rmm = (sizeRMM > 0) ? new byte[sizeRMM * 0x400] : null;
     add(new Register("ROM") {
 	@Override
 	public String getValue() {
@@ -97,9 +114,19 @@ public class PMDMemory extends Device implements AbstractMemory {
 	  PMDMemory.this.sizeRAM = Integer.parseInt(value);
 	}
       });
+    add(new Register("RMM") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(PMDMemory.this.sizeRMM);
+	}
+	@Override
+	public void processValue(final String value) {
+	  PMDMemory.this.sizeRMM = Integer.parseInt(value);
+	}
+      });
     add(new Block("ROM") {
 	@Override
-	public byte[] getROM() {
+	public byte[] getMemory() {
 	  return rom;
 	}
 	@Override
@@ -113,7 +140,7 @@ public class PMDMemory extends Device implements AbstractMemory {
       });
     add(new Block("RAM") {
 	@Override
-	public byte[] getRAM() {
+	public byte[] getMemory() {
 	  return ram;
 	}
 	@Override
@@ -125,7 +152,50 @@ public class PMDMemory extends Device implements AbstractMemory {
 	  Snapshot.processBlockElement(ram, block, 0);
 	}
       });
+    if (sizeRMM > 0) {
+      add(new Block("RMM") {
+	  @Override
+	  public byte[] getMemory() {
+	    return rmm;
+	  }
+	  @Override
+	  public void getContent(final Element block) {
+	    Snapshot.buildBlockElement(rmm, block, 0, sizeRMM * 0x400);
+	  }
+	  @Override
+	  public void processContent(final Element block) {
+	    Snapshot.processBlockElement(rmm, block, 0);
+	  }
+	});
+    }
     log.fine(String.format("New PMDMemory created, name: %s", name));
+  }
+
+  /**
+   * Gets the ROM.
+   *
+   * @return the ROM as a byte array
+   */
+  public byte[] getROM() {
+    return rom;
+  }
+
+  /**
+   * Gets the RAM.
+   *
+   * @return the RAM as a byte array
+   */
+  public byte[] getRAM() {
+    return ram;
+  }
+
+  /**
+   * Gets the ROM module.
+   *
+   * @return the ROM module as a byte array or <code>null</code> if not present
+   */
+  public byte[] getRMM() {
+    return rmm;
   }
 
   /**
@@ -134,7 +204,7 @@ public class PMDMemory extends Device implements AbstractMemory {
    * @return the size of ROM (in KiB)
    */
   public int getSizeROM() {
-    return size;
+    return sizeROM;
   }
 
   /**
@@ -148,12 +218,21 @@ public class PMDMemory extends Device implements AbstractMemory {
   }
 
   /**
+   * Gets the size of the ROM module.
+   *
+   * @return the size of the ROM module (in KiB)
+   */
+  public int getSizeRMM() {
+    return sizeRMM;
+  }
+
+  /**
    * Gets the size of RAM.
    *
    * @return the size of RAM (in KiB)
    */
   public int getSizeRAM() {
-    return size;
+    return sizeRAM;
   }
 
   /**
@@ -166,39 +245,14 @@ public class PMDMemory extends Device implements AbstractMemory {
     this.sizeRAM = sizeRAM;
   }
 
-  // for description see AbstractMemory
-  @Override
-  public String[] getMemoryBanks() {
-    log.finer("Providing a list of memory banks");
-    return new String[] {"RAM", "ROM"};
-  }
-
-  // for description see AbstractMemory
-  @Override
-  public int getMemoryBankSize(final String bank) {
-    log.finer("Size of memory bank '" + bank + "' requested");
-    switch (bank) {
-      case "ROM":
-	return sizeROM * 0x400;
-      case "RAM":
-	return sizeRAM * 0x400;
-      default:
-	throw Application.createError(this, "memoryBankDoesNotExist");
-    }
-  }
-
-  // for description see AbstractMemory
-  @Override
-  public byte[] getMemoryBank(final String bank) {
-    log.finer("Memory bank '" + bank + "' requested");
-    switch (bank) {
-      case "ROM":
-	return rom;
-      case "RAM":
-	return ram;
-      default:
-	throw Application.createError(this, "memoryBankDoesNotExist");
-    }
+  /**
+   * Sets the size of the ROM module.
+   *
+   * @param sizeRAM the size of the ROM module (in KiB)
+   */
+  public void setSizeRMM(final int sizeRMM) {
+    assert (sizeRMM >= 0) && (sizeRAM <= 32);
+    this.sizeRMM = sizeRMM;
   }
 
   // for description see AbstractMemory
@@ -209,8 +263,8 @@ public class PMDMemory extends Device implements AbstractMemory {
       log.finest(String.format("Memory '%s' read: (%04x) -> %02x",
 			       name,
 			       address,
-			       memory[address] & 0xff));
-    return memory[address] & 0xff;
+			       rom[address] & 0xff));
+    return rom[address] & 0xff;
   }
 
   // for description see AbstractMemory
@@ -218,19 +272,19 @@ public class PMDMemory extends Device implements AbstractMemory {
   public void setByte(final int address, final int data) {
     assert (address >= 0) && (address < 0x10000);
     assert (data >= 0) && (data < 0x100);
-    if ((address < (startROM * 0x0400)) ||
-	(address >= (startRAM * 0x0400))) {
-      memory[address] = (byte)data;
-      if (log.isLoggable(Level.FINEST)) {
-	log.finest(String.format("Memory '%s' written: %02x -> (%04x)",
-				 name,
-				 (byte)data,
-				 address));
-      }
-    } else if (log.isLoggable(Level.FINER)) {
-      log.finer(String.format("Memory '%s' write denied, address: %04x",
-			      name,
-			      address));
-    }
+    // if ((address < (startROM * 0x0400)) ||
+    // 	(address >= (startRAM * 0x0400))) {
+    //   rom[address] = (byte)data;
+    //   if (log.isLoggable(Level.FINEST)) {
+    // 	log.finest(String.format("Memory '%s' written: %02x -> (%04x)",
+    // 				 name,
+    // 				 (byte)data,
+    // 				 address));
+    //   }
+    // } else if (log.isLoggable(Level.FINER)) {
+    //   log.finer(String.format("Memory '%s' write denied, address: %04x",
+    // 			      name,
+    // 			      address));
+    // }
   }
 }

@@ -28,6 +28,8 @@ package cz.pecina.retro.pmd85;
  */
 public final class Constants {
     
+  public enum Model {PMD_85_1, PMD_85_2, PMD_85_2A, PMD_85_3, PMD_85_3B};
+  
   public static final double CPU_FREQUENCY = 2.048e6;
   public static final int TIMER_PERIOD = 20;  // in msec
   public static final long TIMER_CYCLES =
@@ -35,7 +37,7 @@ public final class Constants {
 
   public static final String RES_PREFIX = "cz/pecina/retro/pmd85/";
 
-  public static final int TAPE_SAMPLE_RATE = 1111111;  // will definitely be different
+  public static final int TAPE_SAMPLE_RATE = 1111111;
 
   // default constructor disabled
   private Constants() {};

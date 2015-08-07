@@ -49,7 +49,7 @@ public class ComputerHardware {
   private Hardware hardware;
 
   // the memory
-  private MappedMemory memory;
+  private PMDMemory memory;
 
   // the CPU
   private Intel8080A cpu;
@@ -76,11 +76,7 @@ public class ComputerHardware {
     hardware = new Hardware("PMD85");
 
     // set up memory
-    memory = new PMDMemory("MEMORY",
-			   0,
-			   0,
-			   null,
-			   null);
+    memory = new PMDMemory("MEMORY", 8, 64, 10);
     hardware.add(memory);
     Parameters.memoryDevice = memory;
     Parameters.memoryObject = memory;
@@ -97,19 +93,41 @@ public class ComputerHardware {
     // load monitor
     try (final InputStream monitor =
 	 getClass().getResourceAsStream("ROM/monitor-3.bin")) {
-      final byte[] buffer = new byte[0x10000];
+      final byte[] buffer = new byte[0x2000];
       final int n = monitor.read(buffer, 0, 0x2000);
       if (n < 1) {
 	throw Application.createError(this, "monitorLoad");
       }
+      final byte[] memoryArray =
+	Parameters.memoryDevice.getBlockByName("ROM").getMemory();
       for (int addr = 0; addr < n; addr++) {
-	(memory.getMemory())[addr + 0xe000] = buffer[addr];
+	memoryArray[addr] = buffer[addr];
       }
     } catch (final NullPointerException |
 	     IOException |
 	     IndexOutOfBoundsException exception) {
       log.fine("Error reading monitor");
       throw Application.createError(this, "monitorLoad");
+    }
+
+    // load Basic
+    try (final InputStream basic =
+	 getClass().getResourceAsStream("ROM/basic-3.bin")) {
+      final byte[] buffer = new byte[0x8000];
+      final int n = basic.read(buffer, 0, 10 * 0x400);
+      if (n < 1) {
+	throw Application.createError(this, "basicLoad");
+      }
+      final byte[] memoryArray =
+	Parameters.memoryDevice.getBlockByName("RMM").getMemory();
+      for (int addr = 0; addr < n; addr++) {
+	memoryArray[addr] = buffer[addr];
+      }
+    } catch (final NullPointerException |
+	     IOException |
+	     IndexOutOfBoundsException exception) {
+      log.fine("Error reading Basic");
+      throw Application.createError(this, "basicLoad");
     }
 
     // set up the display hardware
@@ -144,7 +162,7 @@ public class ComputerHardware {
    *
    * @return the memory
    */
-  public MappedMemory getMemory() {
+  public PMDMemory getMemory() {
     return memory;
   }
 

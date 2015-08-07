@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="Tesla PMD-85 Emulator"
+<project name="Tesla PMD 85 Emulator"
 	 default="help"
 	 basedir="..">
 
@@ -225,6 +225,8 @@
   <dependset>
     <srcfileset dir="${bin.misc.dir}/${package}"
 		includes="monitor-3.bin"/>
+    <srcfileset dir="${bin.misc.dir}/${package}"
+		includes="basic-3.bin"/>
     <targetfilelist dir="${resources.dir}/${prefix}/${package}/ROM"
 		    files="monitor-3.bin"/>
   </dependset>
@@ -235,7 +237,7 @@
     <echo message="Copying ROM images"/>
     <copy todir="${resources.dir}/${prefix}/${package}/ROM">
       <fileset dir="${bin.misc.dir}/${package}"
-	       includes="monitor-3.bin"/>
+	       includes="*.bin"/>
     </copy>
   </target>
 
@@ -435,11 +437,11 @@
     <srcfileset dir="${bin.dir}/${prefix}/${package}"
 		includes="Marking.makegraphics"/>
     <srcfileset dir="${graphics.dir}/${package}"
-		includes="marking-3.png"/>
+		includes="marking.png"/>
     <targetfilelist dir="${resources.dir}/${prefix}/${package}/Marking"
-		    files="basic-3-1.png"/>
+		    files="basic-PMD_85_1-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/Marking/basic-3-1.png"
+  <available file="${resources.dir}/${prefix}/${package}/Marking/basic-PMD_85_1-1.png"
 	     property="avail.pmd85.Marking"/>
   <target name="pmd85.Marking"
 	  unless="avail.pmd85.Marking">
@@ -765,7 +767,7 @@
 	<attribute name="Implementation-Vendor"
 		   value="Tomáš Pecina"/>
 	<attribute name="Implementation-Title"
-		   value="Tesla PMD-85 Emulator"/>
+		   value="Tesla PMD 85 Emulator"/>
 	<attribute name="Implementation-Version"
 		   value="${version}"/>
       </manifest>
