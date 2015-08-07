@@ -37,12 +37,12 @@ public class KeyboardHardware {
     Logger.getLogger(KeyboardHardware.class.getName());
 
   /**
-   * Number of keyboard hardware matrix rows.
+   * Number of keyboard hardware matrix columns.
    */
   public static final int NUMBER_MATRIX_COLUMNS = 9;
 
   /**
-   * Number of keyboard hardware matrix columns.
+   * Number of keyboard hardware matrix rows.
    */
   public static final int NUMBER_MATRIX_ROWS = 3;
 
@@ -81,7 +81,7 @@ public class KeyboardHardware {
 	   column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
 	   column++) {
 	final KeyboardButton button = keyboardLayout.getButton(row, column);
-	if (keyboardLayout.getButton(row, column) .getMatrixColumn() != -1) {
+	if (keyboardLayout.getButton(row, column).getMatrixColumn() != -1) {
 	  buttons[button.getMatrixColumn()][button.getMatrixRow()] = button;
 	}
       }
@@ -172,8 +172,7 @@ public class KeyboardHardware {
     }
   }
 
-
-  // copies matrix of button pressed to buffer
+  // copies matrix of button presses to buffer
   private void copyMatrixToBuffer() {
     for (int column = 0; column < NUMBER_MATRIX_COLUMNS; column++) {
       for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {
@@ -182,7 +181,7 @@ public class KeyboardHardware {
     }
   }
 	
-  // adds matrix of button pressed to buffer
+  // adds matrix of button presses to buffer
   private void addMatrixToBuffer() {
     for (int column = 0; column < NUMBER_MATRIX_COLUMNS; column++) {
       for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {

@@ -28,12 +28,12 @@ import cz.pecina.retro.common.Localized;
 import cz.pecina.retro.common.Application;
 
 /**
- * Button on the control panel.
+ * Key on the PMD 85 keybord.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class KeyboardKey extends LockableButton implements Localized {
+public class KeyboardKey extends LockableButton {
 
   // static logger
   private static final Logger log =
@@ -44,6 +44,15 @@ public class KeyboardKey extends LockableButton implements Localized {
 
   // cap of the key
   private String cap;
+
+  // contact number
+  private int contact;
+
+  // coordiates of the key on the panel
+  private int x, y;
+
+  // dimensions of the key on the panel
+  private int width, height;
 
   // position of the key in the hardware matrix
   private int matrixColumn, matrixRow;
@@ -98,29 +107,29 @@ public class KeyboardKey extends LockableButton implements Localized {
 	  KeyboardKey.this.keyboardHardware.updateBuffer();
 	}
       });
-    log.fine("New keyboard button created: " + id);
+    log.fine("New keyboard key created: " + cap);
   }
     
   /**
-   * Creates an instance of a dummy control-panel button.
-   * Such button exists only as a contact in the matrix with no
-   * physical switch provided.  It should never be displayed or activated.
+   * Creates an instance of a dummy key.  Such key exists only as a contact
+   * in the matrix with no physical switch provided.  It should never be displayed
+   * or activated.
    *
-   * @param matrixColumn position of the key in the hardware matrix (column)
    * @param matrixRow    position of the key in the hardware matrix (row)
+   * @param matrixColumn position of the key in the hardware matrix (column)
    */
-  public KeyboardKey(final int matrixColumn, final int matrixRow) {
+  public KeyboardKey(final int matrixRow, final int matrixColumn) {
     super(null, -1, null);
     log.finer("New dummy KeyboardKey creation started for position: " +
-	      matrixColumn + ", " + matrixRow);
+	      matrixRow + ", " + matrixColumn);
     assert (matrixColumn >= 0) &&
       (matrixColumn < KeyboardHardware.NUMBER_MATRIX_COLUMNS);
     assert (matrixRow >= 0) &&
       (matrixRow < KeyboardHardware.NUMBER_MATRIX_ROWS);
-    this.matrixColumn = matrixColumn;
     this.matrixRow = matrixRow;
+    this.matrixColumn = matrixColumn;
     log.fine("New dummy KeyboardKey created for position: " +
-	     matrixColumn + ", " + matrixRow);
+	     matrixRow + ", " + matrixColumn);
   }
     
   // for description see Object
@@ -130,37 +139,111 @@ public class KeyboardKey extends LockableButton implements Localized {
   }
 
   /**
-   * Indicates whether the button is connected to the RESET signal
-   * of the processor.
+   * Sets the cap of the key.
    *
-   * @return true if the button is connected to the RESET signal
-   *         of the processor
+   * @param cap the cap of the key
    */
-  public boolean isReset() {
-    return reset;
+  public void setCap(final String cap) {
+    this.cap = cap;
   }
 
   /**
-   * Connects the button to the RESET signal of the processor.
-   */
-  public void setReset() {
-    reset = true;
-  }
-
-  /**
-   * Indicates whether the button interrupts the processor.
+   * Gets the cap of the key.
    *
-   * @return true if the button generates interrupt of the processor
+   * @return the cap of the key
    */
-  public boolean isInterrupt() {
-    return interrupt;
+  public String getCap() {
+    return cap;
   }
 
   /**
-   * Sets the button to interrupt the processor.
+   * Gets the contact number of the key.
+   *
+   * @return the contact number
    */
-  public void setInterrupt() {
-    interrupt = true;
+  public int getContact() {
+    return contact;
+  }
+
+  /**
+   * Sets the x-coordinate of the key on the panel.
+   *
+   * @param x the x-coordinate of the key on the panel
+   */
+  public void setX(final int x) {
+    this.x = x;
+  }
+
+  /**
+   * Gets the x-coordinate of the key on the panel.
+   *
+   * @return the x-coordinate of the key on the panel
+   */
+  public int getX() {
+    return x;
+  }
+
+  /**
+   * Sets the y-coordinate of the key on the panel.
+   *
+   * @param y the y-coordinate of the key on the panel
+   */
+  public void setY(final int y) {
+    this.y = y;
+  }
+
+  /**
+   * Gets the y-coordinate of the key on the panel.
+   *
+   * @return the y-coordinate of the key on the panel
+   */
+  public int getY() {
+    return y;
+  }
+
+  /**
+   * Sets the width of the key on the panel.
+   *
+   * @param width the width of the key on the panel
+   */
+  public void setWidth(final int width) {
+    this.width = width;
+  }
+
+  /**
+   * Gets the width of the key on the panel.
+   *
+   * @return the width of the key on the panel
+   */
+  public int getWidth() {
+    return x;
+  }
+
+  /**
+   * Sets the height of the key on the panel.
+   *
+   * @param height the height of the key on the panel
+   */
+  public void setHeight(final int height) {
+    this.height = height;
+  }
+
+  /**
+   * Gets the height of the key on the panel.
+   *
+   * @return the height of the key on the panel
+   */
+  public int getHeight() {
+    return x;
+  }
+
+  /**
+   * Gets the position of the key in the hardware matrix (row).
+   *
+   * @return the position of the key in the hardware matrix (row)
+   */
+  public int getMatrixRow() {
+    return matrixRow;
   }
 
   /**
@@ -173,19 +256,52 @@ public class KeyboardKey extends LockableButton implements Localized {
   }
 
   /**
-   * Gets the position of the key in the hardware matrix (row).
-   *
-   * @return the position of the key in the hardware matrix (row)
+   * Connects the key to the RESET signal of the processor.
    */
-  public int getMatrixRow() {
-    return matrixRow;
+  public void setReset() {
+    reset = true;
   }
 
-  // for description see Localized
-  @Override
-  public void redrawOnLocaleChange() {
-    if (toolTipResource != null) {
-      setToolTip(Application.getString(this, toolTipResource));
-    }
+  /**
+   * Indicates whether the key is connected to the RESET signal
+   * of the processor.
+   *
+   * @return true if the key is connected to the RESET signal
+   *         of the processor
+   */
+  public boolean isReset() {
+    return reset;
+  }
+
+  /**
+   * Makes the key a shift.
+   */
+  public void setShift() {
+    shift = true;
+  }
+
+  /**
+   * Indicates whether the key is a shift.
+   *
+   * @return true if the key is a shilf
+   */
+  public boolean isShift() {
+    return shift;
+  }
+
+  /**
+   * Makes the key STOP.
+   */
+  public void setStop() {
+    stop = true;
+  }
+
+  /**
+   * Indicates whether the key is STOP.
+   *
+   * @return true if the key is STOP
+   */
+  public boolean isStop() {
+    return stop;
   }
 }
