@@ -43,7 +43,7 @@ public class Marking extends GenericBitmap {
    * the correct pixel size.
    */
   public Marking() {
-    super(IconCache.get("pmd85/Marking/basic-3-" +
+    super(IconCache.get("pmd85/Marking/basic-PMD_85_3-" +
 			GUI.getPixelSize() + ".png"));
     log.fine("New Marking created");
   }

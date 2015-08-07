@@ -59,6 +59,9 @@ public class Computer {
   // the memory frame
   // private MemoryFrame memoryFrame;
 
+  // the keyboard frame
+  private KeyboardFrame keyboardFrame;
+
   // the peripherals frame
   // private PeripheralsFrame peripheralsFrame;
 
@@ -109,6 +112,7 @@ public class Computer {
     			// computerHardware.getKeyboardHardware()
 			);
     // memoryFrame = new MemoryFrame(this, computerHardware.getHardware());
+    keyboardFrame = new KeyboardFrame(this, computerHardware.getKeyboardHardware());
     // tapeRecorderFrame = new TapeRecorderFrame(
     //   this,
     //   computerHardware.getTapeRecorderHardware());

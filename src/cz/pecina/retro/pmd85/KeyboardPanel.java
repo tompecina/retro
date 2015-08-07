@@ -38,11 +38,6 @@ public class KeyboardPanel extends BackgroundFixedPane {
   private static final Logger log =
     Logger.getLogger(KeyboardPanel.class.getName());
 
-  // key matrix geometry
-  private static final int KEY_OFFSET_X = 1;
-  private static final int KEY_OFFSET_Y = 1;
-  private static final int KEY_MODULE = 4;
-  
   // enclosing frame
   private JFrame frame;
 
@@ -56,46 +51,22 @@ public class KeyboardPanel extends BackgroundFixedPane {
    * @param keyboardHardware hardware to operate on
    */
   public KeyboardPanel(final JFrame frame,
-		       final keyboardHardware keyboardHardware) {
-    super("pmd85/KeyboardPanel/mask", "plastic", "gray");
+		       final KeyboardHardware keyboardHardware) {
+    super("pmd85/KeyboardPanel/shortmask", "plastic", "gray");
     log.fine("New KeyboardPanel creation started");
     this.frame = frame;
     this.keyboardHardware = keyboardHardware;
 
     // set up keys
     for (KeyboardKey key: keyboardHardware.getKeyboardLayout().getKeys()) {
-      key.place(this,
-		key.get
-		   BUTTON_OFFSET_Y);
-      log.finest("Button '" + button + "' added");
+      key.place(this, key.getOffsetX(), key.getOffsetY());
+      log.finest("Key '" + key + "' added");
     }
-    layout.getButton(TapeRecorderButtonsLayout.BUTTON_POSITION_EJECT)
-      .addMouseListener(new EjectListener());
-    log.finer("Buttons set up");
+    log.finer("Keys set up");
 
-    // set up counter
-    final Counter counter = tapeRecorderHardware.getCounter();
-    for (int i = 0; i < TapeRecorderHardware.NUMBER_COUNTER_DIGITS; i++) {
-      final Digit digit = counter.getDigit(i);
-      digit.place(this, (i * DIGIT_GRID_X) + DIGIT_OFFSET_X, DIGIT_OFFSET_Y);
-      log.finest("Digit " + i + " added");
-    }
-    final TapeRecorderCounterResetButton reset =
-      tapeRecorderHardware.getTapeRecorderCounterResetButton();
-    reset.place(this, RESET_OFFSET_X, RESET_OFFSET_Y);
-    log.finer("Counter set up");
-	
-    // set up VU-meter
-    final VUMeter vumeter = tapeRecorderHardware.getVUMeter();
-    vumeter.place(this, VUMETER_OFFSET_X, VUMETER_OFFSET_Y);
-    log.finer("VU-meter set up");
+    // set up LEDs
 
-    // set up recording LED
-    final BlinkLED recordingLED = tapeRecorderHardware.getRecordingLED();
-    recordingLED.place(this, RECLED_OFFSET_X, RECLED_OFFSET_Y);
-    log.finer("Recording LED set up");
-
-    log.fine("Tape recorder control panel set up");
+    log.fine("Keyboard panel set up");
   }
 
   /**
@@ -108,19 +79,11 @@ public class KeyboardPanel extends BackgroundFixedPane {
   }
 
   /**
-   * Get the tape recorder hardware object.
+   * Get the keyboard hardware object.
    *
-   * @return tape recorder hardware object
+   * @return the keyboard hardware object
    */
-  public TapeRecorderHardware getTapeRecorderHardware() {
-    return tapeRecorderHardware;
-  }
-
-  // eject button listener
-  private class EjectListener extends MouseAdapter {
-    @Override
-    public void mousePressed(final MouseEvent event) {
-      new EjectDialog(KeyboardPanel.this, tapeRecorderHardware);
-    }
+  public KeyboardHardware getKeyboardHardware() {
+    return keyboardHardware;
   }
 }

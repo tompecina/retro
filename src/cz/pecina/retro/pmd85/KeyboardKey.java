@@ -39,6 +39,10 @@ public class KeyboardKey extends LockableButton {
   private static final Logger log =
     Logger.getLogger(KeyboardKey.class.getName());
 
+  // base key dimensions
+  private static final int BASE_WIDTH = 9;
+  private static final int BASE_HEIGHT = BASE_WIDTH;
+
   // the keyboard hardware object to operate on
   private KeyboardHardware keyboardHardware;
 
@@ -48,11 +52,8 @@ public class KeyboardKey extends LockableButton {
   // contact number
   private int contact;
 
-  // coordiates of the key on the panel
-  private int x, y;
-
-  // dimensions of the key on the panel
-  private int width, height;
+  // key position in the matrix
+  private int offsetX, offsetY;
 
   // position of the key in the hardware matrix
   private int matrixColumn, matrixRow;
@@ -66,8 +67,8 @@ public class KeyboardKey extends LockableButton {
    * @param keyboardHardware the keyboard hardware object to operate on
    * @param cap              cap of the key
    * @param contact          contact number
-   * @param x                x-coordinate of the key on the panel
-   * @param y                x-coordinate of the key on the panel
+   * @param offsetx          x-offset of the key in 1/2s of the base key width
+   * @param offsety          y-offset of the key in 1/2s of the base key height
    * @param matrixRow        position of the key in the hardware matrix
    *                         (row) or <code>-1</code> if not connected
    * @param matrixColumn     position of the key in the hardware matrix
@@ -76,17 +77,16 @@ public class KeyboardKey extends LockableButton {
   public KeyboardKey(final KeyboardHardware keyboardHardware,
 		     final String cap,
 		     final int contact,
-		     final int x,
-		     final int y,
+		     final int offsetX,
+		     final int offsetY,
 		     final int matrixRow,
 		     final int matrixColumn) {
-    super("pmd85/KeyboardKey/" + id + "-%d-%s.png", null, null);
-    log.fine("New key creation started: " + id +
+    super("pmd85/KeyboardKey/" + cap + "-%d-%s.png", -1, null);
+    log.fine("New key creation started: " + cap +
 	     ", matrix column: " + matrixColumn + ", matrix row: " + matrixRow);
     assert keyboardHardware != null;
     assert cap != null;
     assert contact > 0;
-    assert (matrixRow >= 0) && (matrixRow < 15);
     assert (matrixRow >= -1) &&
       (matrixRow < KeyboardHardware.NUMBER_MATRIX_ROWS);
     assert (matrixColumn >= -1) &&
@@ -94,13 +94,10 @@ public class KeyboardKey extends LockableButton {
     this.keyboardHardware = keyboardHardware;
     this.cap = cap;
     this.contact = contact;
-    this.x = x;
-    this.y = y;
-    width = 2;
-    height = 2;
+    this.offsetX = offsetX * BASE_WIDTH;
+    this.offsetY = offsetY * BASE_HEIGHT;
     this.matrixRow = matrixRow;
     this.matrixColumn = matrixColumn;
-    Application.addLocalized(this);
     addChangeListener(new ChangeListener() {
 	@Override
 	public void stateChanged(final ChangeEvent event) {
@@ -135,7 +132,7 @@ public class KeyboardKey extends LockableButton {
   // for description see Object
   @Override
   public String toString() {
-    return id;
+    return cap;
   }
 
   /**
@@ -145,6 +142,8 @@ public class KeyboardKey extends LockableButton {
    */
   public void setCap(final String cap) {
     this.cap = cap;
+    super.setTemplate("pmd85/KeyboardKey/" + cap + "-%d-%s.png");
+    log.fine("New cap set: " + cap);
   }
 
   /**
@@ -166,75 +165,39 @@ public class KeyboardKey extends LockableButton {
   }
 
   /**
-   * Sets the x-coordinate of the key on the panel.
+   * Sets the x-offset of the key.
    *
-   * @param x the x-coordinate of the key on the panel
+   * @param offsetX x-offset of the key in pixels of the base size
    */
-  public void setX(final int x) {
-    this.x = x;
+  public void setOffsetX(final int offsetX) {
+    this.offsetX = offsetX;
   }
 
   /**
-   * Gets the x-coordinate of the key on the panel.
+   * Gets the x-offset of the key.
    *
-   * @return the x-coordinate of the key on the panel
+   * @return x-offset of the key in pixels of the base size
    */
-  public int getX() {
-    return x;
+  public int getOffsetX() {
+    return offsetX;
   }
 
   /**
-   * Sets the y-coordinate of the key on the panel.
+   * Sets the y-offset of the key.
    *
-   * @param y the y-coordinate of the key on the panel
+   * @param offsetY y-offset of the key in pixels of the base size
    */
-  public void setY(final int y) {
-    this.y = y;
+  public void setOffsetY(final int offsetY) {
+    this.offsetY = offsetY;
   }
 
   /**
-   * Gets the y-coordinate of the key on the panel.
+   * Gets the y-offset of the key.
    *
-   * @return the y-coordinate of the key on the panel
+   * @return y-offset of the key in pixels of the base size
    */
-  public int getY() {
-    return y;
-  }
-
-  /**
-   * Sets the width of the key on the panel.
-   *
-   * @param width the width of the key on the panel
-   */
-  public void setWidth(final int width) {
-    this.width = width;
-  }
-
-  /**
-   * Gets the width of the key on the panel.
-   *
-   * @return the width of the key on the panel
-   */
-  public int getWidth() {
-    return x;
-  }
-
-  /**
-   * Sets the height of the key on the panel.
-   *
-   * @param height the height of the key on the panel
-   */
-  public void setHeight(final int height) {
-    this.height = height;
-  }
-
-  /**
-   * Gets the height of the key on the panel.
-   *
-   * @return the height of the key on the panel
-   */
-  public int getHeight() {
-    return x;
+  public int getOffsetY() {
+    return offsetY;
   }
 
   /**

@@ -58,7 +58,7 @@ public class ComputerHardware {
   // private DisplayHardware displayHardware;
 
   // the keyboard hardware
-  // private KeyboardHardware keyboardHardware;
+  private KeyboardHardware keyboardHardware;
 
   // the tape recorder hardware
   private TapeRecorderHardware tapeRecorderHardware;
@@ -134,7 +134,7 @@ public class ComputerHardware {
     // displayHardware = new DisplayHardware();
 
     // set up the keyboard hardware
-    // keyboardHardware = new KeyboardHardware(displayHardware);
+    keyboardHardware = new KeyboardHardware();
     
     // set up the tape recorder hardware
     final TapeRecorderInterface tapeRecorderInterface =
@@ -189,9 +189,9 @@ public class ComputerHardware {
    *
    * @return the keyboard hardware object
    */
-  // public KeyboardHardware getKeyboardHardware() {
-  //   return keyboardHardware;
-  // }
+  public KeyboardHardware getKeyboardHardware() {
+    return keyboardHardware;
+  }
 
   /**
    * Gets the display hardware.

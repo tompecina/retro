@@ -127,7 +127,11 @@ public abstract class GenericButton
    */
   public void setTemplate(final String template) {
     this.template = template;
-    log.finer("New template set: " + template);
+    if (template != null) {
+      redraw();
+      setIcon(offIcon);
+    }
+    log.fine("New template set: " + template);
   }
 
   /**

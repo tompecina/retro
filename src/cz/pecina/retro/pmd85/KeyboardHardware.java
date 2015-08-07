@@ -22,6 +22,7 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 import cz.pecina.retro.cpu.IOPin;
+import cz.pecina.retro.cpu.IONode;
 
 /**
  * Keyboard of the Tesla PMD 85 computer.
@@ -61,8 +62,8 @@ public class KeyboardHardware {
     new boolean[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
 
   // matrix of keys
-  private final KeyboardButton[][] keys =
-    new KeyboardButton[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
+  private final KeyboardKey[][] keys =
+    new KeyboardKey[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
 
   // leyout of buttons
   private KeyboardLayout keyboardLayout;
@@ -73,7 +74,7 @@ public class KeyboardHardware {
   public KeyboardHardware() {
     log.fine("New keyboard hardware creation started");
     keyboardLayout = new KeyboardLayout(this);
-    keyboardLayout.modify(Constants.Model.PMD_3);
+    keyboardLayout.modify(Constants.Model.PMD_85_3);
     for (KeyboardKey key: keyboardLayout.getKeys()) {
       if (key.getMatrixRow() != -1) {
 	keys[key.getMatrixRow()][key.getMatrixColumn()] = key;
@@ -81,8 +82,8 @@ public class KeyboardHardware {
     }
     for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {
       for (int column = 0; column < NUMBER_MATRIX_COLUMNS; column++) {
-	if (keys[column][row] == null) {
-	  keys[column][row] = new KeyboardKey(row, column);
+	if (keys[row][column] == null) {
+	  keys[row][column] = new KeyboardKey(row, column);
 	}
       }
     }
@@ -106,7 +107,6 @@ public class KeyboardHardware {
 
     public void notifyChange() {
       if ((select & mask) != (IONode.normalize(queryNode()) << number)) {
-	update();
 	select ^= mask;
       }
     }
@@ -172,7 +172,7 @@ public class KeyboardHardware {
   private void prepareMatrix() {
     for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {
       for (int column = 0; column < NUMBER_MATRIX_COLUMNS; column++) {
-	matrix[row1][column1] = keys[row1][column1].isPressed();
+	matrix[row][column] = keys[row][column].isPressed();
       }
     }
   }

@@ -64,9 +64,10 @@ public class LockableButton extends GenericButton {
 			final int shortcut,
 			final String toolTip) {
     super(template, shortcut, toolTip);
-    if (template != null)
+    if (template != null) {
       lockedIcon =
 	IconCache.get(String.format(template, GUI.getPixelSize(), "l"));
+    }
     addMouseListener(new LockableMouseListener());
     log.fine("New LockableButton created");
   }
@@ -79,6 +80,20 @@ public class LockableButton extends GenericButton {
     super.redraw();
     lockedIcon =
       IconCache.get(String.format(template, GUI.getPixelSize(), "l"));
+  }
+
+  /**
+   * Sets the icon template string.
+   *
+   * @param template the icon template string
+   */
+  @Override
+  public void setTemplate(final String template) {
+    super.setTemplate(template);
+    if (template != null) {
+      redraw();
+    }
+    log.fine("New template set: " + template);
   }
 
   /**

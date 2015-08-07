@@ -69,6 +69,8 @@ public class GenericBitmap extends JLabel {
 		    final int positionX,
 		    final int positionY) {
     assert container != null;
+    log.fine("Placing GenericBitmap, position: (" +
+	      positionX + "," + positionY + ")");
     final Icon icon = getIcon();
     if (icon == null) {
       log.fine("Attempt to place a bitmap with no Icon");
