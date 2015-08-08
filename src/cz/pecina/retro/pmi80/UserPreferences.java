@@ -71,17 +71,6 @@ public final class UserPreferences extends GeneralUserPreferences {
   }
 
   /**
-   * Gets start of non-writeable memory.
-   *
-   * @return start of non-writeable memory (in KiB)
-   */
-  public static int getStartROM() {
-    getPreferences();
-    log.fine("Start ROM retrieved from user preferences: " + startROM);
-    return startROM;
-  }
-
-  /**
    * Sets start of non-writeable memory.
    *
    * @param startROM start of non-writeable memory (in KiB)
@@ -96,14 +85,14 @@ public final class UserPreferences extends GeneralUserPreferences {
   }
 
   /**
-   * Gets start of writeable memory following the non-writeable block.
+   * Gets start of non-writeable memory.
    *
-   * @return start of writeable memory (in KiB)
+   * @return start of non-writeable memory (in KiB)
    */
-  public static int getStartRAM() {
+  public static int getStartROM() {
     getPreferences();
-    log.fine("Start RAM retrieved from user preferences: " + startROM);
-    return startRAM;
+    log.fine("Start ROM retrieved from user preferences: " + startROM);
+    return startROM;
   }
 
   /**
@@ -118,6 +107,17 @@ public final class UserPreferences extends GeneralUserPreferences {
     Parameters.preferences.putInt("startRAM", startRAM);
     ((SimpleMemory)Parameters.memoryObject).setStartRAM(startRAM);
     log.fine("Start RAM in user preferences set to: " + startRAM);
+  }
+
+  /**
+   * Gets start of writeable memory following the non-writeable block.
+   *
+   * @return start of writeable memory (in KiB)
+   */
+  public static int getStartRAM() {
+    getPreferences();
+    log.fine("Start RAM retrieved from user preferences: " + startROM);
+    return startRAM;
   }
 
   // default constructor disabled

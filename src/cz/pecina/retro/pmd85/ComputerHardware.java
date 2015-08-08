@@ -168,31 +168,31 @@ public class ComputerHardware {
     // set up the debugger hardware
     debuggerHardware = new DebuggerHardware(cpu);
 
-    // connect keyboard
-    for (int i = 0; i < 4; i++) {
-      new IONode().add(systemPIO.getPin(i))
-	.add(keyboardHardware.getSelectPin(i));
-    }
-    for (int i = 0; i < 5; i++) {
-      new IONode().add(systemPIO.getPin(8 + i))
-	.add(keyboardHardware.getScanPin(i));
-    }
-    new IONode().add(systemPIO.getPin(8 + 5))
-      .add(keyboardHardware.getShiftPin(i));
-    new IONode().add(systemPIO.getPin(8 + 6))
-      .add(keyboardHardware.getStopPin(i));
-    new IONode().add(systemPIO.getPin(16 + 2))
-      .add(keyboardHardware.getYellowLEDPin(i)).add(yellowLEDPin);
-    new IONode().add(systemPIO.getPin(16 + 3))
-      .add(keyboardHardware.getRedLEDPin(i)).add(redLEDPin);
-    new IONode().add(new LowPin()).add(keyboardHardware.getGreenLEDPin(i))
-      .add(greenLEDPin);
+    // // connect keyboard
+    // for (int i = 0; i < 4; i++) {
+    //   new IONode().add(systemPIO.getPin(i))
+    // 	.add(keyboardHardware.getSelectPin(i));
+    // }
+    // for (int i = 0; i < 5; i++) {
+    //   new IONode().add(systemPIO.getPin(8 + i))
+    // 	.add(keyboardHardware.getScanPin(i));
+    // }
+    // new IONode().add(systemPIO.getPin(8 + 5))
+    //   .add(keyboardHardware.getShiftPin(i));
+    // new IONode().add(systemPIO.getPin(8 + 6))
+    //   .add(keyboardHardware.getStopPin(i));
+    // new IONode().add(systemPIO.getPin(16 + 2))
+    //   .add(keyboardHardware.getYellowLEDPin(i)).add(yellowLEDPin);
+    // new IONode().add(systemPIO.getPin(16 + 3))
+    //   .add(keyboardHardware.getRedLEDPin(i)).add(redLEDPin);
+    // new IONode().add(new LowPin()).add(keyboardHardware.getGreenLEDPin(i))
+    //   .add(greenLEDPin);
 
-    // connect memory controller
-    new IONode().add(systemPIO.getPin(16 + 4))
-      .add(memoryController.getPin(0));
-    new IONode().add(systemPIO.getPin(16 + 5))
-      .add(memoryController.getPin(1));
+    // // connect memory controller
+    // new IONode().add(systemPIO.getPin(16 + 4))
+    //   .add(memoryController.getPin(0));
+    // new IONode().add(systemPIO.getPin(16 + 5))
+    //   .add(memoryController.getPin(1));
     
     // reset all stateful devices
     hardware.reset();
