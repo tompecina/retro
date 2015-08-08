@@ -26,12 +26,16 @@ import java.io.InputStream;
 import java.io.IOException;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
+import cz.pecina.retro.common.Util;
 import cz.pecina.retro.cpu.IONode;
 import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.Intel8080A;
+import cz.pecina.retro.cpu.Intel8255;
+import cz.pecina.retro.cpu.LowPin;
 import cz.pecina.retro.trec.TapeRecorderInterface;
 import cz.pecina.retro.trec.TapeRecorderHardware;
 import cz.pecina.retro.debug.DebuggerHardware;
+import cz.pecina.retro.gui.LED;
 
 /**
  * Tesla PMD 85 hardware object.
@@ -54,6 +58,9 @@ public class ComputerHardware {
   // the CPU
   private Intel8080A cpu;
 
+  // the system 8255 (PIO)
+  private Intel8255 systemPIO;
+
   // the display hardware
   // private DisplayHardware displayHardware;
 
@@ -66,6 +73,11 @@ public class ComputerHardware {
   // the debugger hardware
   private DebuggerHardware debuggerHardware;
 
+  // LEDs
+  private final LED yellowLED = new LED("small", "yellow");
+  private final LED redLED = new LED("small", "red");
+  private final LED greenLED = new LED("small", "green");
+
   /**
    * Creates a new computer hardware object.
    */
@@ -73,7 +85,7 @@ public class ComputerHardware {
     log.fine("New Computer hardware object creation started");
 
     // create new hardware
-    hardware = new Hardware("PMD85");
+    hardware = new Hardware("PMD_85");
 
     // set up memory
     memory = new PMDMemory("MEMORY", 8, 64, 10);
@@ -130,6 +142,14 @@ public class ComputerHardware {
       throw Application.createError(this, "basicLoad");
     }
 
+    // set up the system PIO
+    systemPIO = new Intel8255("SYSTEM_PIO");
+    hardware.add(systemPIO);
+    for (int port: Util.portIterator(0x84, 0x8c)) {
+      cpu.addIOInput(port, systemPIO); 
+      cpu.addIOOutput(port, systemPIO);
+    }
+
     // set up the display hardware
     // displayHardware = new DisplayHardware();
 
@@ -148,6 +168,32 @@ public class ComputerHardware {
     // set up the debugger hardware
     debuggerHardware = new DebuggerHardware(cpu);
 
+    // connect keyboard
+    for (int i = 0; i < 4; i++) {
+      new IONode().add(systemPIO.getPin(i))
+	.add(keyboardHardware.getSelectPin(i));
+    }
+    for (int i = 0; i < 5; i++) {
+      new IONode().add(systemPIO.getPin(8 + i))
+	.add(keyboardHardware.getScanPin(i));
+    }
+    new IONode().add(systemPIO.getPin(8 + 5))
+      .add(keyboardHardware.getShiftPin(i));
+    new IONode().add(systemPIO.getPin(8 + 6))
+      .add(keyboardHardware.getStopPin(i));
+    new IONode().add(systemPIO.getPin(16 + 2))
+      .add(keyboardHardware.getYellowLEDPin(i)).add(yellowLEDPin);
+    new IONode().add(systemPIO.getPin(16 + 3))
+      .add(keyboardHardware.getRedLEDPin(i)).add(redLEDPin);
+    new IONode().add(new LowPin()).add(keyboardHardware.getGreenLEDPin(i))
+      .add(greenLEDPin);
+
+    // connect memory controller
+    new IONode().add(systemPIO.getPin(16 + 4))
+      .add(memoryController.getPin(0));
+    new IONode().add(systemPIO.getPin(16 + 5))
+      .add(memoryController.getPin(1));
+    
     // reset all stateful devices
     hardware.reset();
 
@@ -173,6 +219,15 @@ public class ComputerHardware {
    */
   public Intel8080A getCPU() {
     return cpu;
+  }
+
+  /**
+   * Gets the system PIO.
+   *
+   * @return the system PIO
+   */
+  public Intel8255 getSystemPIO() {
+    return systemPIO;
   }
 
   /**
@@ -218,5 +273,32 @@ public class ComputerHardware {
    */
   public DebuggerHardware getDebuggerHardware() {
     return debuggerHardware;
+  }
+
+  /**
+   * Gets the yellow LED.
+   *
+   * @return the yellow LED
+   */
+  public LED getYellowLED() {
+    return yellowLED;
+  }
+
+  /**
+   * Gets the red LED.
+   *
+   * @return the red LED
+   */
+  public LED getRedLED() {
+    return redLED;
+  }
+
+  /**
+   * Gets the green LED.
+   *
+   * @return the green LED
+   */
+  public LED getGreenLED() {
+    return greenLED;
   }
 }

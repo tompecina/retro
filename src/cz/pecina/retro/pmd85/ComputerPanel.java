@@ -39,6 +39,11 @@ public class ComputerPanel extends BackgroundFixedPane {
   private static final Logger log =
     Logger.getLogger(ComputerPanel.class.getName());
     
+  // LED positions
+  private static final int LED_OFFSET_X = 312;
+  private static final int LED_OFFSET_Y = 282;
+  private static final int LED_GRID_X = 11;
+  
   // brand marking position
   private static final int MARKING_OFFSET_X = 12;
   private static final int MARKING_OFFSET_Y = 278;
@@ -63,6 +68,14 @@ public class ComputerPanel extends BackgroundFixedPane {
     // assert displayHardware != null;
     // assert keyboardHardware != null;
     log.fine("New ComputerPanel creation started");
+
+    // set up LEDs
+    final ComputerHardware computerHardware = computer.getComputerHardware();
+    computerHardware.getYellowLED().place(this, LED_OFFSET_X, LED_OFFSET_Y);
+    computerHardware.getRedLED().place(this, LED_OFFSET_X + LED_GRID_X, LED_OFFSET_Y);
+    computerHardware.getGreenLED().place(this, LED_OFFSET_X + (2 * LED_GRID_X), LED_OFFSET_Y);
+    computerHardware.getGreenLED().setState(1);
+    log.finer("LEDs set up");
 
     // set up brand marking
     marking.place(this, MARKING_OFFSET_X, MARKING_OFFSET_Y);

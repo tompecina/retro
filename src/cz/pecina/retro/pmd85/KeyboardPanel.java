@@ -42,6 +42,14 @@ public class KeyboardPanel extends BackgroundFixedPane {
   private static final int BASE_WIDTH = 9;
   private static final int BASE_HEIGHT = BASE_WIDTH;
 
+  // LED positions
+  private static final int YELLOW_LED_OFFSET_X = 101;
+  private static final int YELLOW_LED_OFFSET_Y = 102;
+  private static final int RED_LED_OFFSET_X = 232;
+  private static final int RED_LED_OFFSET_Y = YELLOW_LED_OFFSET_Y;
+  private static final int GREEN_LED_OFFSET_X = 272;
+  private static final int GREEN_LED_OFFSET_Y = YELLOW_LED_OFFSET_Y;
+  
   // enclosing frame
   private JFrame frame;
 
@@ -64,13 +72,18 @@ public class KeyboardPanel extends BackgroundFixedPane {
     // set up keys
     for (KeyboardKey key: keyboardHardware.getKeyboardLayout().getKeys()) {
       key.place(this,
-		key.getOffsetX() * BASE_WIDTH,
-		key.getOffsetY() * BASE_HEIGHT);
+    		key.getOffsetX() * BASE_WIDTH,
+    		key.getOffsetY() * BASE_HEIGHT);
       log.finest("Key '" + key + "' added");
     }
     log.finer("Keys set up");
 
     // set up LEDs
+    keyboardHardware.getYellowLED().place(this, YELLOW_LED_OFFSET_X, YELLOW_LED_OFFSET_Y);
+    keyboardHardware.getRedLED().place(this, RED_LED_OFFSET_X, RED_LED_OFFSET_Y);
+    keyboardHardware.getGreenLED().place(this, GREEN_LED_OFFSET_X, GREEN_LED_OFFSET_Y);
+    keyboardHardware.getGreenLED().setState(1);
+    log.finer("LEDs set up");
 
     log.fine("Keyboard panel set up");
   }

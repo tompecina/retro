@@ -21,6 +21,7 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+import cz.pecina.retro.gui.LED;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.IONode;
 
@@ -64,6 +65,11 @@ public class KeyboardHardware {
   // matrix of keys
   private final KeyboardKey[][] keys =
     new KeyboardKey[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
+
+  // LEDs
+  private final LED yellowLED = new LED("small", "yellow");
+  private final LED redLED = new LED("small", "red");
+  private final LED greenLED = new LED("small", "green");
 
   // leyout of buttons
   private KeyboardLayout keyboardLayout;
@@ -202,5 +208,32 @@ public class KeyboardHardware {
    */
   public KeyboardLayout getKeyboardLayout() {
     return keyboardLayout;
+  }
+
+  /**
+   * Gets the yellow LED.
+   *
+   * @return the yellow LED
+   */
+  public LED getYellowLED() {
+    return yellowLED;
+  }
+
+  /**
+   * Gets the red LED.
+   *
+   * @return the red LED
+   */
+  public LED getRedLED() {
+    return redLED;
+  }
+
+  /**
+   * Gets the green LED.
+   *
+   * @return the green LED
+   */
+  public LED getGreenLED() {
+    return greenLED;
   }
 }

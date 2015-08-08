@@ -20,6 +20,9 @@
 
 package cz.pecina.retro.common;
 
+import java.util.List;
+import java.util.ArrayList;
+
 /**
  * Miscellaneous static methods.
  *
@@ -158,6 +161,25 @@ public final class Util {
       return max;
     }
     return value;
+  }
+
+  /**
+   * Creates an iterable covering ports addresses according to
+   * a value/mask pair.
+   *
+   * @param value value of the port address
+   * @param mask  mask of the port address
+   * @return      the iterator
+   */
+  public static Iterable<Integer> portIterator(final int value,
+					       final int mask) {
+    final List<Integer> list = new ArrayList<>();
+    for (int port = 0; port < 0x100; port++) {
+      if (((port ^ value) & mask) == 0) {
+	list.add(port);
+      }
+    }
+    return list;
   }
 
   // default constructor disabled

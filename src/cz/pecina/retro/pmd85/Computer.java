@@ -142,6 +142,15 @@ public class Computer {
   };
 
   /**
+   * Gets the computer hardware.
+   *
+   * @return the computer hardware
+   */
+  public ComputerHardware getComputerHardware() {
+    return computerHardware;
+  }
+
+  /**
    * Gets the icon layout.
    *
    * @return the icon layout
