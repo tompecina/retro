@@ -96,6 +96,13 @@ public class ComputerFrame extends JFrame implements Localized, Resizeable {
     log.fine("ComputerFrame redraw completed");
   }
 
+  /**
+   * Gets the computer panel.
+   */
+  public ComputerPanel getComputerPanel() {
+    return computerPanel;
+  }
+
   // for description see Localized
   @Override
   public void redrawOnLocaleChange() {

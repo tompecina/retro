@@ -21,6 +21,8 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+import java.util.List;
+import java.util.ArrayList;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -34,14 +36,13 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.gui.WheelSlider;
 import cz.pecina.retro.gui.IconCache;
+import cz.pecina.retro.gui.ShortcutDialog;
 
 /**
- * The Settings/Memory panel.
+ * The Settings/Keyboard panel.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -52,15 +53,31 @@ public class SettingsKeyboardPanel extends JScrollPane {
   private static final Logger log =
     Logger.getLogger(SettingsKeyboardPanel.class.getName());
     
+  // computer object
+  private Computer computer;
+
+  // tentative map of shortcuts
+  private int[][] shortcuts = new int[KeyboardLayout.NUMBER_BUTTON_ROWS]
+    [KeyboardLayout.NUMBER_BUTTON_COLUMNS];
+  
+  // convert shortcut to text description
+  private String shortcutToText(final int shortcut) {
+    return (shortcut != -1) ?
+           KeyEvent.getKeyText(shortcut) :
+           Application.getString(this, "settings.keyboard.noShortcut");
+  }
+  
   /**
    * Creates the Settings/Keyboard panel.
    *
-   * @param computerHardware the computer hardware object
+   * @param computer the computer object
    */
-  public SettingsKeyboardPanel(final ComputerHardware computerHardware) {
+  public SettingsKeyboardPanel(final Computer computer) {
     super(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 	  ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     log.fine("New Settings/Keyboard panel creation started");
+
+    this.computer = computer;
 
     final JPanel shortcutsPane = new JPanel(new GridBagLayout());
 
@@ -73,8 +90,9 @@ public class SettingsKeyboardPanel extends JScrollPane {
 	
 	final int line =
 	  (row * KeyboardLayout.NUMBER_BUTTON_COLUMNS) + column;
-	final KeyboardButton button = computerHardware.getKeyboardHardware()
-	  .getKeyboardLayout().getButton(row, column);
+	final KeyboardButton button = computer.getComputerHardware()
+	  .getKeyboardHardware().getKeyboardLayout().getButton(row, column);
+	shortcuts[row][column] = button.getShortcut();
 
 	final GridBagConstraints buttonConstraints =
 	  new GridBagConstraints();
@@ -82,7 +100,7 @@ public class SettingsKeyboardPanel extends JScrollPane {
 	  String.format(button.getTemplate(), 1, "u")));
 	buttonConstraints.gridx = 0;
 	buttonConstraints.gridy = line;
-	buttonConstraints.insets = new Insets(0, 0, 0, 0);
+	buttonConstraints.insets = new Insets(8, 0, 8, 0);
 	buttonConstraints.anchor = GridBagConstraints.LINE_END;
 	buttonConstraints.weightx = 0.0;
 	buttonConstraints.weighty = 0.0;
@@ -90,12 +108,11 @@ public class SettingsKeyboardPanel extends JScrollPane {
 	
 	final GridBagConstraints shortcutConstraints =
 	  new GridBagConstraints();
-	final JLabel shortcutLabel =
-	  new JLabel(KeyEvent.getKeyText(button.getShortcut()));
+	final JLabel shortcutLabel = new JLabel(shortcutToText(button.getShortcut()));
 	shortcutConstraints.gridx = 1;
 	shortcutConstraints.gridy = line;
-	shortcutConstraints.insets = new Insets(0, 0, 0, 0);
-	shortcutConstraints.anchor = GridBagConstraints.LINE_END;
+	shortcutConstraints.insets = new Insets(0, 8, 0, 8);
+	shortcutConstraints.anchor = GridBagConstraints.CENTER;
 	shortcutConstraints.weightx = 0.0;
 	shortcutConstraints.weighty = 0.0;
 	shortcutsPane.add(shortcutLabel, shortcutConstraints);
@@ -106,12 +123,13 @@ public class SettingsKeyboardPanel extends JScrollPane {
 	  .getString(this, "settings.keyboard.button.change"));
 	changeButtonConstraints.gridx = 2;
 	changeButtonConstraints.gridy = line;
-	changeButtonConstraints.insets = new Insets(0, 0, 0, 0);
-	changeButtonConstraints.anchor = GridBagConstraints.LINE_END;
+	changeButtonConstraints.insets = new Insets(0, 0, 0, 8);
+	changeButtonConstraints.anchor = GridBagConstraints.LINE_START;
 	changeButtonConstraints.weightx = 0.0;
 	changeButtonConstraints.weighty = 0.0;
 	shortcutsPane.add(changeButton, changeButtonConstraints);
-
+	changeButton.addActionListener(new ChangeListener(row, column,
+							  shortcutLabel));
       	final GridBagConstraints clearButtonConstraints =
 	  new GridBagConstraints();
 	final JButton clearButton = new JButton(Application
@@ -119,10 +137,12 @@ public class SettingsKeyboardPanel extends JScrollPane {
 	clearButtonConstraints.gridx = 3;
 	clearButtonConstraints.gridy = line;
 	clearButtonConstraints.insets = new Insets(0, 0, 0, 0);
-	clearButtonConstraints.anchor = GridBagConstraints.LINE_END;
+	clearButtonConstraints.anchor = GridBagConstraints.LINE_START;
 	clearButtonConstraints.weightx = 0.0;
 	clearButtonConstraints.weighty = 0.0;
 	shortcutsPane.add(clearButton, clearButtonConstraints);
+	clearButton.addActionListener(new ClearListener(row, column,
+							shortcutLabel));
       }
     }
 
@@ -145,6 +165,18 @@ public class SettingsKeyboardPanel extends JScrollPane {
     @Override
     public void actionPerformed(final ActionEvent event) {
       log.finer("Set button event detected");
+      for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++) {
+	for (int column = 0;
+	     column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
+	     column++) {
+	  UserPreferences.setShortcut(
+	    computer.getComputerHardware().getKeyboardHardware()
+	      .getKeyboardLayout(),
+	    row, column,
+	    shortcuts[row][column]);
+	}
+      }
+      computer.getComputerFrame().getComputerPanel().setShortcuts();
       log.fine("Partial changes implemented");
     }
   }
@@ -157,5 +189,62 @@ public class SettingsKeyboardPanel extends JScrollPane {
   public SetListener createSetListener() {
     log.finer("Partial set listener created");
     return new SetListener();
+  }
+
+
+  // change button listener
+  private class ChangeListener implements ActionListener {
+    private int row, column;
+    private JLabel label;
+
+    private ChangeListener(final int row,
+			   final int column,
+			   final JLabel label) {
+      this.row = row;
+      this.column = column;
+      this.label = label;
+    }
+
+    @Override
+    public void actionPerformed(final ActionEvent event) {
+      log.finer("Change button event detected");
+      final List<Integer> list = new ArrayList<>();
+      for (int row2 = 0; row2 < KeyboardLayout.NUMBER_BUTTON_ROWS; row2++) {
+	for (int column2 = 0;
+	     column2 < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
+	     column2++) {
+	  if (((row != row2) || (column != column2)) &&
+	      (shortcuts[row2][column2] != -1)) {
+	    list.add(shortcuts[row2][column2]);
+	  }
+	}
+	final int shortcut = 49; // ShortcutDialog.showDialog(list);
+	if (shortcut != -1) {
+	  shortcuts[row][column] = shortcut;
+	  label.setText(shortcutToText(shortcut));
+	}
+      }
+    }
+  }
+  
+  // clear button listener
+  private class ClearListener implements ActionListener {
+    private int row, column;
+    private JLabel label;
+
+    private ClearListener(final int row,
+			  final int column,
+			  final JLabel label) {
+      this.row = row;
+      this.column = column;
+      this.label = label;
+    }
+
+    @Override
+    public void actionPerformed(final ActionEvent event) {
+      log.finer("Clear button event detected");
+      shortcuts[row][column] = -1;
+      label.setText(shortcutToText(-1));
+    }
   }
 }

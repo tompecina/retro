@@ -58,12 +58,12 @@ public class SettingsPanel extends JPanel {
   /**
    * Creates the Settings panel.
    *
-   * @param frame            enclosing frame
-   * @param computerHardware the computer hardware object
-   * @param peripherals      array of available peripherals
+   * @param frame       enclosing frame
+   * @param computer    the computer object
+   * @param peripherals array of available peripherals
    */
   public SettingsPanel(final HidingFrame frame,
-		       final ComputerHardware computerHardware,
+		       final Computer computer,
 		       final Peripheral[] peripherals) {
     super(new BorderLayout());
     log.fine("New Settings panel creation started");
@@ -85,7 +85,7 @@ public class SettingsPanel extends JPanel {
     tabbedPanel.addTab(Application.getString(this, "settings.memory"),
 		       tempPanel);
 
-    keyboardPanel = new SettingsKeyboardPanel(computerHardware);
+    keyboardPanel = new SettingsKeyboardPanel(computer);
     tempPanel = new JPanel(new BorderLayout());
     tempPanel.add(keyboardPanel, BorderLayout.PAGE_START);
     tabbedPanel.addTab(Application.getString(this, "settings.keyboard"),
