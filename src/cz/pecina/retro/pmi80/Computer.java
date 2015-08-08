@@ -121,7 +121,7 @@ public class Computer {
       this,
       computerHardware.getDebuggerHardware());
     peripheralsFrame = new PeripheralsFrame(this, computerHardware);
-    settingsFrame = new SettingsFrame(this, peripheralsFrame.getPeripherals());
+    settingsFrame = new SettingsFrame(this, computerHardware, peripheralsFrame.getPeripherals());
     aboutFrame = new AboutFrame(this);
 
     // find reset and interrupt buttons

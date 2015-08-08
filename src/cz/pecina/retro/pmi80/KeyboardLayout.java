@@ -50,7 +50,6 @@ public class KeyboardLayout {
   private final KeyboardButton[][] buttons =
     new KeyboardButton[NUMBER_BUTTON_ROWS][NUMBER_BUTTON_COLUMNS];
 
-
   /**
    * Default keyboard shortcuts.
    */
@@ -81,7 +80,7 @@ public class KeyboardLayout {
      KeyEvent.VK_NUMPAD3,
      KeyEvent.VK_ENTER}
   };
-  
+
   /**
    * Creates the keyboard layout.
    *
@@ -150,7 +149,6 @@ public class KeyboardLayout {
 	  UserPreferences.getShortcut(row, column));
       }
     }
-	
     log.fine("New keyboard layout created and populated");
   }
   

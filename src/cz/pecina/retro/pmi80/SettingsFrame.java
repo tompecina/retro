@@ -39,22 +39,28 @@ public class SettingsFrame extends HidingFrame {
   // Settings panel
   private SettingsPanel settingsPanel;
 
+  // computer hardware object
+  private ComputerHardware computerHardware;
+  
   // array of available peripherals
   private Peripheral[] peripherals;
 
   /**
    * Creates the Settings frame.
    *
-   * @param computer    the computer control object
-   * @param peripherals array of available peripherals
+   * @param computer         the computer control object
+   * @param computerHardware the computer hardware object
+   * @param peripherals      array of available peripherals
    */
   public SettingsFrame(final Computer computer,
+		       final ComputerHardware computerHardware,
 		       final Peripheral[] peripherals) {
     super(Application.getString(SettingsFrame.class, "settings.frameTitle"),
 	  computer.getIconLayout().getIcon(IconLayout.ICON_POSITION_WHEEL));
     log.fine("New SettingsFrame creation started");
+    this.computerHardware = computerHardware;
     this.peripherals = peripherals;
-    settingsPanel = new SettingsPanel(this, peripherals);
+    settingsPanel = new SettingsPanel(this, computerHardware, peripherals);
     add(settingsPanel);
     pack();
     log.fine("SettingsFrame set up");
@@ -71,7 +77,7 @@ public class SettingsFrame extends HidingFrame {
     log.fine("SettingsFrame redraw started");
     super.setTitle(Application.getString(this, "settings.frameTitle"));
     remove(settingsPanel);
-    settingsPanel = new SettingsPanel(this, peripherals);
+    settingsPanel = new SettingsPanel(this, computerHardware, peripherals);
     add(settingsPanel);
     pack();
     log.fine("SettingsFrame redraw completed");
