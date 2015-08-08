@@ -206,7 +206,7 @@ public class ComputerHardware {
   }
 
   /**
-   * Gets the system PPI (PPI1)-
+   * Gets the system PPI (PPI1).
    *
    * @return the system PPI (PPI1)
    */
@@ -215,7 +215,7 @@ public class ComputerHardware {
   }
 
   /**
-   * Gets the peripheral PPI (PPI2)-
+   * Gets the peripheral PPI (PPI2).
    *
    * @return the system PPI (PPI2)
    */
