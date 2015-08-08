@@ -54,7 +54,10 @@ public class ComputerPanel extends BackgroundFixedPane {
   private static final int MARKING_OFFSET_X = 11;
   private static final int MARKING_OFFSET_Y = 331;
 
-  // brank marking
+  // keyboard hardware
+  private KeyboardHardware keyboardHardware;
+  
+  // brand marking
   private final Marking marking = new Marking();
 
   /**
@@ -74,29 +77,24 @@ public class ComputerPanel extends BackgroundFixedPane {
     assert keyboardHardware != null;
     log.fine("New ComputerPanel creation started");
 
+    this.keyboardHardware = keyboardHardware;
+    
     // set up buttons
-    for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++)
+    getInputMap().clear();
+    getActionMap().clear();
+    for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++) {
       for (int column = 0;
     	   column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
     	   column++) {
     	final KeyboardButton button =
     	  keyboardHardware.getKeyboardLayout().getButton(row, column);
-    	final int shortcut = button.getShortcut();
-    	if (shortcut != -1) {
-    	  getInputMap().put(KeyStroke.getKeyStroke(shortcut, 0, false),
-    			    "KeyPressedAction_" + shortcut);
-    	  getActionMap().put("KeyPressedAction_" + shortcut,
-    			     button.keyPressedAction());
-    	  getInputMap().put(KeyStroke.getKeyStroke(shortcut, 0, true),
-    			    "KeyReleasedAction_" + shortcut);
-    	  getActionMap().put("KeyReleasedAction_" + shortcut,
-    			     button.keyReleasedAction());
-    	}
     	button.place(this,
     		     (column * BUTTON_GRID_X) + BUTTON_OFFSET_X,
     		     (row * BUTTON_GRID_Y) + BUTTON_OFFSET_Y);
     	log.finest("Button '" + button + "' added");
       }
+    }
+    setShortcuts();
     log.finer("Buttons set up");
 	
     // set up display
@@ -118,5 +116,35 @@ public class ComputerPanel extends BackgroundFixedPane {
     log.finer("Icons set up");
 
     log.fine("Computer control panel set up");
+  }
+
+  /**
+   * Sets up keyboard shortcuts.
+   */
+  public void setShortcuts() {
+    log.finer("Setting up keyboard shortcuts");
+    getInputMap().clear();
+    getActionMap().clear();
+    for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++) {
+      for (int column = 0;
+    	   column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
+    	   column++) {
+    	final KeyboardButton button =
+    	  keyboardHardware.getKeyboardLayout().getButton(row, column);
+    	final int shortcut = button.getShortcut();
+    	if (shortcut != -1) {
+    	  getInputMap().put(KeyStroke.getKeyStroke(shortcut, 0, false),
+    			    "KeyPressedAction_" + shortcut);
+    	  getActionMap().put("KeyPressedAction_" + shortcut,
+    			     button.keyPressedAction());
+    	  getInputMap().put(KeyStroke.getKeyStroke(shortcut, 0, true),
+    			    "KeyReleasedAction_" + shortcut);
+    	  getActionMap().put("KeyReleasedAction_" + shortcut,
+    			     button.keyReleasedAction());
+    	}
+    	log.finest("Shortcut for button '" + button + "' set to: " + shortcut);
+      }
+    }
+    log.finer("Buttons set up");
   }
 }

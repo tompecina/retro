@@ -46,26 +46,58 @@ public final class UserPreferences extends GeneralUserPreferences {
   private static final Logger log =
     Logger.getLogger(UserPreferences.class.getName());
 
+  // true if preferences already retrieved
+  private static boolean retrieved;
+  
   // memory parameters
   private static int startROM, startRAM;
 
+  // keyboard shortcuts
+  private static int[][] shortcuts;
+
   // gets preferences from the backing store
   private static void getPreferences() {
-    final boolean noPreferences = (Parameters.preferences == null);
-    GeneralUserPreferences.getGeneralPreferences();
-    if (noPreferences) {
+    if (!retrieved) {
+      GeneralUserPreferences.getGeneralPreferences();
 
+      shortcuts = new int[KeyboardLayout.NUMBER_BUTTON_ROWS]
+	[KeyboardLayout.NUMBER_BUTTON_COLUMNS];
+      for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++) {
+	for (int column = 0;
+	     column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
+	     column++) {
+	  shortcuts[row][column] = -1;
+	}
+      }
+      
       startROM = Parameters.preferences.getInt("startROM", -1);
       if (startROM == -1) {
 	startROM = Constants.DEFAULT_START_ROM;
 	Parameters.preferences.putInt("startROM", startROM);
       }
-
+      
       startRAM = Parameters.preferences.getInt("startRAM", -1);
       if (startRAM == -1) {
 	startRAM = Constants.DEFAULT_START_RAM;
 	Parameters.preferences.putInt("startRAM", startRAM);
       }
+      
+      for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++) {
+	for (int column = 0;
+	     column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
+	     column++) {
+	  int shortcut =
+	    Parameters.preferences.getInt("shortcut." + row + "." + column, -2);
+	  if (shortcut == -2) {
+	    shortcut = KeyboardLayout.DEFAULT_SHORTCUTS[row][column];
+	  }
+	  shortcuts[row][column] = shortcut;
+	  Parameters.preferences.putInt("shortcut." + row + "." + column,
+					shortcut);
+	}
+      }
+      
+      retrieved = true;
     }
     log.finer("User preferences retrieved");
   }
@@ -118,6 +150,46 @@ public final class UserPreferences extends GeneralUserPreferences {
     getPreferences();
     log.fine("Start RAM retrieved from user preferences: " + startROM);
     return startRAM;
+  }
+
+  /**
+   * Sets keyboard shortcut.
+   *
+   * @param keyboardLayout the keyboard layout
+   * @param row            the row
+   * @param column         the column
+   * @param shortcut       the new keyboard shortcut or <code>-1</code> if none
+   */
+  public static void setShortcut(final KeyboardLayout keyboardLayout,
+				 final int row,
+				 final int column,
+				 final int shortcut) {
+    assert (row >= 0) && (row < KeyboardLayout.NUMBER_BUTTON_ROWS);
+    assert (column >= 0) && (column < KeyboardLayout.NUMBER_BUTTON_COLUMNS);
+    getPreferences();
+    shortcuts[row][column] = shortcut;
+    Parameters.preferences.putInt("shortcut." + row + "." + column, shortcut);
+    keyboardLayout.getButton(row, column).setShortcut(shortcut);
+    log.fine("Shortcut for button (" + row + "," + column +
+	     ") in user preferences set to: " + shortcut);
+  }
+
+  /**
+   * Gets keyboard shortcut.
+   *
+   * @param  row      the row
+   * @param  column   the column
+   * @return shortcut the keyboard shortcut or <code>-1</code> if none
+   */
+  public static int getShortcut(final int row,
+				final int column) {
+    assert (row >= 0) && (row < KeyboardLayout.NUMBER_BUTTON_ROWS);
+    assert (column >= 0) && (column < KeyboardLayout.NUMBER_BUTTON_COLUMNS);
+    getPreferences();
+    final int shortcut = shortcuts[row][column];
+    log.fine("Shortcut for button (" + row + "," + column +
+	     ") retrieved from user preferences: " + shortcut);
+    return shortcut;
   }
 
   // default constructor disabled

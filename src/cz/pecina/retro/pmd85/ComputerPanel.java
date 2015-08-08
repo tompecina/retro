@@ -48,7 +48,7 @@ public class ComputerPanel extends BackgroundFixedPane {
   private static final int MARKING_OFFSET_X = 12;
   private static final int MARKING_OFFSET_Y = 278;
 
-  // brank marking
+  // brand marking
   private final Marking marking = new Marking();
 
   /**

@@ -111,16 +111,6 @@ public abstract class GenericButton
   }
 
   /**
-   * Gets the icon template string.
-   *
-   * @return the icon template string
-   */
-  public String getTemplate() {
-    log.finer("Template retrieved: " + template);
-    return template;
-  }
-
-  /**
    * Sets the icon template string.
    *
    * @param template the icon template string
@@ -135,14 +125,13 @@ public abstract class GenericButton
   }
 
   /**
-   * The state of the button.  <code>true</code> if the button is pressed
-   * (down), <code>false</code> otherwise.
+   * Gets the icon template string.
    *
-   * @return state of the button, <code>true</code> if pressed (down),
-   *         <code>false</code> otherwise
+   * @return the icon template string
    */
-  public boolean isPressed() {
-    return pressed;
+  public String getTemplate() {
+    log.finer("Template retrieved: " + template);
+    return template;
   }
 
   /**
@@ -161,21 +150,35 @@ public abstract class GenericButton
   }
 
   /**
-   * Gets the keyboard shortcut associated with the button.
+   * The state of the button.  <code>true</code> if the button is pressed
+   * (down), <code>false</code> otherwise.
    *
-   * @return keyboard shortcut associated with the button
+   * @return state of the button, <code>true</code> if pressed (down),
+   *         <code>false</code> otherwise
    */
-  public int getShortcut() {
-    return shortcut;
+  public boolean isPressed() {
+    return pressed;
   }
 
   /**
-   * Gets the tool-tip associated with the button.
+   * Sets the keyboard shortcut associated with the button.
    *
-   * @return tool-tip associated with the button
+   * @param shortcut the keyboard shortcut associated with the button
+   *                 or <code>-1</code> if none
+
    */
-  public String getToolTip() {
-    return toolTip;
+  public void setShortcut(final int shortcut) {
+    this.shortcut = shortcut;
+  }
+
+  /**
+   * Gets the keyboard shortcut associated with the button.
+   *
+   * @return the keyboard shortcut associated with the button
+   *         or <code>-1</code> if none
+   */
+  public int getShortcut() {
+    return shortcut;
   }
 
   /**
@@ -188,6 +191,15 @@ public abstract class GenericButton
     if (toolTip != null) {
       setToolTipText(toolTip);
     }
+  }
+
+  /**
+   * Gets the tool-tip associated with the button.
+   *
+   * @return tool-tip associated with the button
+   */
+  public String getToolTip() {
+    return toolTip;
   }
 
   // for description see Resizeable

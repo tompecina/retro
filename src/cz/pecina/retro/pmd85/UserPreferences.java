@@ -46,9 +46,16 @@ public final class UserPreferences extends GeneralUserPreferences {
   private static final Logger log =
     Logger.getLogger(UserPreferences.class.getName());
 
+  // true if preferences already retrieved
+  private static boolean retrieved;
+  
   // gets preferences from the backing store
   private static void getPreferences() {
-    GeneralUserPreferences.getGeneralPreferences();
+    if (!retrieved) {
+      GeneralUserPreferences.getGeneralPreferences();
+      
+      retrieved = true;
+    }
     log.finer("User preferences retrieved");
   }
 

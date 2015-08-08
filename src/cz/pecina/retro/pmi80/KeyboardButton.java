@@ -64,18 +64,15 @@ public class KeyboardButton extends LockableButton implements Localized {
    *                         (column) or <code>-1</code> if not connected
    * @param matrixRow        position of the key in the hardware matrix
    *                         (row) or <code>-1</code> if not connected
-   * @param shortcut         keyboard shortcut for the button
-   *                         (<code>-1</code> if none)
    * @param toolTipResource  tool-tip for the button (<code>null</code> if none)
    */
   public KeyboardButton(final KeyboardHardware keyboardHardware,
 			final String id,
 			final int matrixColumn,
 			final int matrixRow,
-			final int shortcut,
 			final String toolTipResource) {
     super("pmi80/KeyboardButton/" + id + "-%d-%s.png",
-	  shortcut,
+	  -1,
 	  (toolTipResource == null) ?
 	    null :
 	    Application.getString(KeyboardButton.class, toolTipResource));

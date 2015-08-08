@@ -50,6 +50,38 @@ public class KeyboardLayout {
   private final KeyboardButton[][] buttons =
     new KeyboardButton[NUMBER_BUTTON_ROWS][NUMBER_BUTTON_COLUMNS];
 
+
+  /**
+   * Default keyboard shortcuts.
+   */
+  public static final int[][] DEFAULT_SHORTCUTS = {
+    {KeyEvent.VK_Z,
+     KeyEvent.VK_I,
+     KeyEvent.VK_X,
+     KeyEvent.VK_R,
+     KeyEvent.VK_Q},
+    {KeyEvent.VK_C,
+     KeyEvent.VK_D,
+     KeyEvent.VK_E,
+     KeyEvent.VK_F,
+     KeyEvent.VK_M},
+    {KeyEvent.VK_NUMPAD8,
+     KeyEvent.VK_NUMPAD9,
+     KeyEvent.VK_A,
+     KeyEvent.VK_B,
+     KeyEvent.VK_L},
+    {KeyEvent.VK_NUMPAD4,
+     KeyEvent.VK_NUMPAD5,
+     KeyEvent.VK_NUMPAD6,
+     KeyEvent.VK_NUMPAD7,
+     KeyEvent.VK_S},
+    {KeyEvent.VK_NUMPAD0,
+     KeyEvent.VK_NUMPAD1,
+     KeyEvent.VK_NUMPAD2,
+     KeyEvent.VK_NUMPAD3,
+     KeyEvent.VK_ENTER}
+  };
+  
   /**
    * Creates the keyboard layout.
    *
@@ -59,157 +91,65 @@ public class KeyboardLayout {
     log.fine("New keyboard layout creation started");
     assert keyboardHardware != null;
 
-    buttons[0][0] = new KeyboardButton(keyboardHardware,
-				       "RE",
-				       -1,
-				       -1,
-				       KeyEvent.VK_Z,
-				       "toolTip.RE");
+    buttons[0][0] =
+      new KeyboardButton(keyboardHardware, "RE", -1, -1, "toolTip.RE");
     buttons[0][0].setReset();
-    buttons[0][1] = new KeyboardButton(keyboardHardware,
-				       "I",
-				       -1,
-				       -1,
-				       KeyEvent.VK_I,
-				       "toolTip.I");
+    buttons[0][1] =
+      new KeyboardButton(keyboardHardware, "I", -1, -1, "toolTip.I");
     buttons[0][1].setInterrupt();
-    buttons[0][2] = new KeyboardButton(keyboardHardware,
-				       "EX",
-				       3,
-				       2,
-				       KeyEvent.VK_X,
-				       "toolTip.EX");
-    buttons[0][3] = new KeyboardButton(keyboardHardware,
-				       "R",
-				       3,
-				       1,
-				       KeyEvent.VK_R,
-				       "toolTip.R");
-    buttons[0][4] = new KeyboardButton(keyboardHardware,
-				       "BR",
-				       4,
-				       0,
-				       KeyEvent.VK_Q,
-				       "toolTip.BR");
-    buttons[1][0] = new KeyboardButton(keyboardHardware,
-				       "C",
-				       5,
-				       2,
-				       KeyEvent.VK_C,
-				       null);
-    buttons[1][1] = new KeyboardButton(keyboardHardware,
-				       "D",
-				       4,
-				       2,
-				       KeyEvent.VK_D,
-				       null);
-    buttons[1][2] = new KeyboardButton(keyboardHardware,
-				       "E",
-				       5,
-				       1,
-				       KeyEvent.VK_E,
-				       null);
-    buttons[1][3] = new KeyboardButton(keyboardHardware,
-				       "F",
-				       4,
-				       1,
-				       KeyEvent.VK_F,
-				       null);
-    buttons[1][4] = new KeyboardButton(keyboardHardware,
-				       "M",
-				       5,
-				       0,
-				       KeyEvent.VK_M,
-				       "toolTip.M");
-    buttons[2][0] = new KeyboardButton(keyboardHardware,
-				       "8",
-				       2,
-				       2,
-				       KeyEvent.VK_NUMPAD8,
-				       null);
-    buttons[2][1] = new KeyboardButton(keyboardHardware,
-				       "9",
-				       6,
-				       2,
-				       KeyEvent.VK_NUMPAD9,
-				       null);
-    buttons[2][2] = new KeyboardButton(keyboardHardware,
-				       "A",
-				       2,
-				       1,
-				       KeyEvent.VK_A,
-				       null);
-    buttons[2][3] = new KeyboardButton(keyboardHardware,
-				       "B",
-				       6,
-				       1,
-				       KeyEvent.VK_B,
-				       null);
-    buttons[2][4] = new KeyboardButton(keyboardHardware,
-				       "L",
-				       2,
-				       0,
-				       KeyEvent.VK_L,
-				       "toolTip.L");
-    buttons[3][0] = new KeyboardButton(keyboardHardware,
-				       "4",
-				       1,
-				       2,
-				       KeyEvent.VK_NUMPAD4,
-				       null);
-    buttons[3][1] = new KeyboardButton(keyboardHardware,
-				       "5",
-				       7,
-				       2,
-				       KeyEvent.VK_NUMPAD5,
-				       null);
-    buttons[3][2] = new KeyboardButton(keyboardHardware,
-				       "6",
-				       1,
-				       1,
-				       KeyEvent.VK_NUMPAD6,
-				       null);
-    buttons[3][3] = new KeyboardButton(keyboardHardware,
-				       "7",
-				       7,
-				       1,
-				       KeyEvent.VK_NUMPAD7, null);
-    buttons[3][4] = new KeyboardButton(keyboardHardware,
-				       "S",
-				       1,
-				       0,
-				       KeyEvent.VK_S,
-				       "toolTip.S");
-    buttons[4][0] = new KeyboardButton(keyboardHardware,
-				       "0",
-				       0,
-				       2,
-				       KeyEvent.VK_NUMPAD0,
-				       null);
-    buttons[4][1] = new KeyboardButton(keyboardHardware,
-				       "1",
-				       8,
-				       2,
-				       KeyEvent.VK_NUMPAD1,
-				       null);
-    buttons[4][2] = new KeyboardButton(keyboardHardware,
-				       "2",
-				       0,
-				       1,
-				       KeyEvent.VK_NUMPAD2,
-				       null);
-    buttons[4][3] = new KeyboardButton(keyboardHardware,
-				       "3",
-				       8,
-				       1,
-				       KeyEvent.VK_NUMPAD3,
-				       null);
-    buttons[4][4] = new KeyboardButton(keyboardHardware,
-				       "EQ",
-				       8,
-				       0,
-				       KeyEvent.VK_ENTER,
-				       "toolTip.EQ");
+    buttons[0][2] =
+      new KeyboardButton(keyboardHardware, "EX", 3, 2, "toolTip.EX");
+    buttons[0][3] =
+      new KeyboardButton(keyboardHardware, "R", 3, 1, "toolTip.R");
+    buttons[0][4] =
+      new KeyboardButton(keyboardHardware, "BR", 4, 0, "toolTip.BR");
+    buttons[1][0] =
+      new KeyboardButton(keyboardHardware, "C", 5, 2, null);
+    buttons[1][1] =
+      new KeyboardButton(keyboardHardware, "D", 4, 2, null);
+    buttons[1][2] =
+      new KeyboardButton(keyboardHardware, "E", 5, 1, null);
+    buttons[1][3] =
+      new KeyboardButton(keyboardHardware, "F", 4, 1, null);
+    buttons[1][4] =
+      new KeyboardButton(keyboardHardware, "M", 5, 0, "toolTip.M");
+    buttons[2][0] =
+      new KeyboardButton(keyboardHardware, "8", 2, 2, null);
+    buttons[2][1] =
+      new KeyboardButton(keyboardHardware, "9", 6, 2, null);
+    buttons[2][2] =
+      new KeyboardButton(keyboardHardware, "A", 2, 1, null);
+    buttons[2][3] =
+      new KeyboardButton(keyboardHardware, "B", 6, 1, null);
+    buttons[2][4] =
+      new KeyboardButton(keyboardHardware, "L", 2, 0, "toolTip.L");
+    buttons[3][0] =
+      new KeyboardButton(keyboardHardware, "4", 1, 2, null);
+    buttons[3][1] =
+      new KeyboardButton(keyboardHardware, "5", 7, 2, null);
+    buttons[3][2] =
+      new KeyboardButton(keyboardHardware, "6", 1, 1, null);
+    buttons[3][3] =
+      new KeyboardButton(keyboardHardware, "7", 7, 1, null);
+    buttons[3][4] =
+      new KeyboardButton(keyboardHardware, "S", 1, 0, "toolTip.S");
+    buttons[4][0] =
+      new KeyboardButton(keyboardHardware, "0", 0, 2, null);
+    buttons[4][1] =
+      new KeyboardButton(keyboardHardware, "1", 8, 2, null);
+    buttons[4][2] =
+      new KeyboardButton(keyboardHardware, "2", 0, 1, null);
+    buttons[4][3] =
+      new KeyboardButton(keyboardHardware, "3", 8, 1, null);
+    buttons[4][4] =
+      new KeyboardButton(keyboardHardware, "EQ", 8, 0, "toolTip.EQ");
+
+    for (int row = 0; row < NUMBER_BUTTON_ROWS; row++) {
+      for (int column = 0; column < NUMBER_BUTTON_COLUMNS; column++) {
+	buttons[row][column].setShortcut(
+	  UserPreferences.getShortcut(row, column));
+      }
+    }
 	
     log.fine("New keyboard layout created and populated");
   }
