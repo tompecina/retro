@@ -85,7 +85,7 @@ public class SettingsPanel extends JPanel {
     tabbedPanel.addTab(Application.getString(this, "settings.memory"),
 		       tempPanel);
 
-    keyboardPanel = new SettingsKeyboardPanel(computer);
+    keyboardPanel = new SettingsKeyboardPanel(frame, computer);
     tempPanel = new JPanel(new BorderLayout());
     tempPanel.add(keyboardPanel, BorderLayout.PAGE_START);
     tabbedPanel.addTab(Application.getString(this, "settings.keyboard"),

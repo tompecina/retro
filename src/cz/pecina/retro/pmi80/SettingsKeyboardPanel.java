@@ -23,21 +23,21 @@ package cz.pecina.retro.pmi80;
 import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
+import java.awt.Frame;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Dimension;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JButton;
-import javax.swing.ScrollPaneConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import cz.pecina.retro.common.Application;
-import cz.pecina.retro.gui.WheelSlider;
 import cz.pecina.retro.gui.IconCache;
 import cz.pecina.retro.gui.ShortcutDialog;
 
@@ -53,6 +53,9 @@ public class SettingsKeyboardPanel extends JScrollPane {
   private static final Logger log =
     Logger.getLogger(SettingsKeyboardPanel.class.getName());
     
+  // the enclosing frame
+  private Frame frame;
+
   // computer object
   private Computer computer;
 
@@ -70,13 +73,17 @@ public class SettingsKeyboardPanel extends JScrollPane {
   /**
    * Creates the Settings/Keyboard panel.
    *
+   * @param frame    the controlling frame
    * @param computer the computer object
    */
-  public SettingsKeyboardPanel(final Computer computer) {
+  public SettingsKeyboardPanel(final Frame frame, final Computer computer) {
     super(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 	  ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     log.fine("New Settings/Keyboard panel creation started");
-
+    assert frame != null;
+    assert computer != null;
+    
+    this.frame = frame;
     this.computer = computer;
 
     final JPanel shortcutsPane = new JPanel(new GridBagLayout());
@@ -218,7 +225,7 @@ public class SettingsKeyboardPanel extends JScrollPane {
 	    list.add(shortcuts[row2][column2]);
 	  }
 	}
-	final int shortcut = 49; // ShortcutDialog.showDialog(list);
+	final int shortcut = ShortcutDialog.getShortcut(frame, list);
 	if (shortcut != -1) {
 	  shortcuts[row][column] = shortcut;
 	  label.setText(shortcutToText(shortcut));

@@ -22,9 +22,12 @@ package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
 import java.io.File;
+import java.awt.Frame;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Dimension;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -55,103 +58,53 @@ public class ShortcutDialog extends JDialog {
   // // enclosing panel
   // private TapeRecorderPanel panel;
 
-  // /**
-  //  * Creates the shortcut selection dialog box.
-  //  *
-  //  * @param frame         enclosing frame
-  //  * @param usedShortcuts a list of shortuts already used
-  //  */
-  // public ShortcutDialog(final Frame frame,
-  // 			final List<Integer> usedShortcuts) {
-  //   super(frame, Application.getString(ShortcutDialog.class, "shortcutDialog.title"), true);
-  //   log.fine("New ShortcutDialog creation started");
-  //   this.panel = panel;
-  //   this.tapeRecorderHardware = tapeRecorderHardware;
-	
-  //   final JPanel dialogPanel = new JPanel(new BorderLayout());
-  //   final ButtonGroup saveGroup = new ButtonGroup();
+  /**
+   * Displayes a shortcut selection dialog and returns the result.
+   *
+   * @param  frame             enclosing frame
+   * @param  assignedShortcuts a list of shortuts already assigned
+   * @return                   the shortcut or <code>-1</code> if aborted
+   */
+  public static int getShortcut(final Frame frame,
+				final Iterable<Integer> assignedShortcuts) {
+    log.fine("New ShortcutDialog creation started");
+    new ShortcutDialog(frame);
+    return 49;
+  }
 
-  //   final JPanel formatsPanel =
-  //     new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
-  //   formatsPanel.setBorder(BorderFactory.createTitledBorder(Application
-  //     .getString(this, "ejectDialog.format")));
-  //   final ButtonGroup group = new ButtonGroup();
-  //   if (true)  {  // XML is the default format, it cannot be suppressed
-  //     formatXML =
-  // 	new JRadioButton(Application.getString(this, "ejectDialog.XML"));
-  //     group.add(formatXML);
-  //     formatsPanel.add(formatXML);
-  //     formatXML.setSelected(true);
-  //   }
-  //   if (tapeRecorderHardware.getTapeRecorderInterface()
-  // 	.tapeFormats.contains("PMT")) {
-  //     formatPMT =
-  // 	new JRadioButton(Application.getString(this, "ejectDialog.PMT"));
-  //     group.add(formatPMT);
-  //     formatsPanel.add(formatPMT);
-  //   }
-  //   if (tapeRecorderHardware.getTapeRecorderInterface()
-  // 	.tapeFormats.contains("PMITAPE")) {
-  //     formatPMITAPE =
-  // 	new JRadioButton(Application.getString(this, "ejectDialog.PMITAPE"));
-  //     group.add(formatPMITAPE);
-  //     formatsPanel.add(formatPMITAPE);
-  //   }
-  //   if (tapeRecorderHardware.getTapeRecorderInterface()
-  // 	.tapeFormats.contains("SAM")) {
-  //     formatSAM =
-  // 	new JRadioButton(Application.getString(this, "ejectDialog.SAM"));
-  //     group.add(formatSAM);
-  //     formatsPanel.add(formatSAM);
-  //   }
-  //   dialogPanel.add(formatsPanel);
+  // private construtor
+  private ShortcutDialog(final Frame frame) {
+    super(frame,
+	  Application.getString(ShortcutDialog.class, "shortcutDialog.title"),
+	  true);
+    final JPanel dialogPanel = new JPanel(new BorderLayout());
+    final ButtonGroup saveGroup = new ButtonGroup();
+    final JPanel promptPanel =
+      new JPanel(new BorderLayout());
+    final JLabel promptLabel = new JLabel(Application.getString(ShortcutDialog.class, "shortcutDialog.prompt"));
+    promptLabel.setHorizontalAlignment(JLabel.CENTER);
+    promptPanel.add(promptLabel);
+    promptPanel.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+    dialogPanel.add(promptPanel);
 
-  //   final JPanel buttonsPanel = new JPanel(new FlowLayout());
-  //   final JButton saveButton =
-  //     new JButton(Application.getString(this, "ejectDialog.save"));
-  //   saveButton.addActionListener(new SaveListener());
-  //   buttonsPanel.add(saveButton);
-  //   final JButton loadButton =
-  //     new JButton(Application.getString(this, "ejectDialog.load"));
-  //   loadButton.addActionListener(new LoadListener());
-  //   buttonsPanel.add(loadButton);
-  //   final JButton blankButton =
-  //     new JButton(Application.getString(this, "ejectDialog.blank"));
-  //   blankButton.addActionListener(new BlankListener());
-  //   buttonsPanel.add(blankButton);
-  //   final JButton cancelButton =
-  //     new JButton(Application.getString(this, "ejectDialog.cancel"));
-  //   cancelButton.addActionListener(new CloseListener());
-  //   buttonsPanel.add(cancelButton);
-  //   dialogPanel.add(buttonsPanel, BorderLayout.PAGE_END);
+    final JPanel buttonsPanel = new JPanel(new FlowLayout());
+    final JButton setButton =
+      new JButton(Application.getString(ShortcutDialog.class, "shortcutDialog.button.set"));
+    // setButton.addActionListener(new SetListener());
+    setButton.setEnabled(false);
+    buttonsPanel.add(setButton);
+    final JButton cancelButton =
+      new JButton(Application.getString(ShortcutDialog.class, "shortcutDialog.button.cancel"));
+    // cancelButton.addActionListener(new CloseListener());
+    buttonsPanel.add(cancelButton);
+    dialogPanel.add(buttonsPanel, BorderLayout.PAGE_END);
 
-  //   add(dialogPanel);
-  //   pack();
-  //   setLocationRelativeTo(panel.getFrame());
-  //   setVisible(true);
-  //   panel.getTapeRecorderHardware().getTapeRecorderButtonsLayout()
-  //     .getButton(TapeRecorderButtonsLayout.BUTTON_POSITION_EJECT)
-  //     .setPressed(false);
-  // }
-
-  // // prepare file name extension filters
-  // private void prepareFilters() {
-  //   log.finer("File name extension filters prepared");
-  //   FileNameExtensionFilter filter;
-  //   fileChooser.resetChoosableFileFilters();
-  //   fileChooser.setAcceptAllFileFilterUsed(true);
-  //   if (formatXML.isSelected()) {
-  //     filter = XMLFilter;
-  //   } else if (formatPMT.isSelected()) {
-  //     filter = PMTFilter;
-  //   } else if (formatPMITAPE.isSelected()) {
-  //     filter = PMITAPEFilter;
-  //   } else {
-  //     filter = SAMFilter;
-  //   }
-  //   fileChooser.addChoosableFileFilter(filter);
-  //   fileChooser.setFileFilter(filter);
-  // }
+    add(dialogPanel);
+    setMinimumSize(new Dimension(400, 150));
+    pack();
+    setLocationRelativeTo(frame);
+    setVisible(true);
+  }
 
   // // Displays localized error message
   // private void errorBox(final RuntimeException exception) {
