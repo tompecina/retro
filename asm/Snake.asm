@@ -192,7 +192,7 @@ l17:	mvi	a, 1
 	call	setled
 
 ; pause while waiting for new direction
-l18:	mvi	e, 200
+l18:	mvi	e, 100
 l15:	call	refk
 	call	setdir
 	dcr	e
