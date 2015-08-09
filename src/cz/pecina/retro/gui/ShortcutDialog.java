@@ -38,6 +38,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.gui.ErrorBox;
 import cz.pecina.retro.gui.InfoBox;
@@ -62,14 +64,15 @@ public class ShortcutDialog extends JDialog {
    * Displayes a shortcut selection dialog and returns the result.
    *
    * @param  frame             enclosing frame
-   * @param  assignedShortcuts a list of shortuts already assigned
-   * @return                   the shortcut or <code>-1</code> if aborted
+   * @param  assignedShortcuts list of shortcuts already assigned
+   * @return                   the shortcut or <code>null</code> if aborted
    */
-  public static int getShortcut(final Frame frame,
-				final Iterable<Integer> assignedShortcuts) {
+  public static Shortcut getShortcut(
+    final Frame frame,
+    final Iterable<Shortcut> assignedShortcuts) {
     log.fine("New ShortcutDialog creation started");
     new ShortcutDialog(frame);
-    return 49;
+    return null;
   }
 
   // private construtor
@@ -103,7 +106,20 @@ public class ShortcutDialog extends JDialog {
     setMinimumSize(new Dimension(400, 150));
     pack();
     setLocationRelativeTo(frame);
+    setFocusable(true);
+    addKeyListener(new ShortcutListener());
     setVisible(true);
+  }
+
+  // shortcut listener
+  private class ShortcutListener extends KeyAdapter {
+    @Override
+    public void keyPressed(final KeyEvent e) {
+      System.err.println(e);
+      System.err.println(e.getKeyCode());
+      System.err.println(KeyEvent.getKeyText(e.getKeyCode()));
+      System.err.println(e.getKeyLocation());
+    }
   }
 
   // // Displays localized error message

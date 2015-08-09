@@ -56,12 +56,12 @@ public class LockableButton extends GenericButton {
    * @param template the icon template string (if <code>null</code>,
    *                 a dummy button without a graphical representation
    *                 is created)
-   * @param shortcut keyboard shortcut for the button (<code>-1</code>
+   * @param shortcut keyboard shortcut for the button (<code>null</code>
    *                 if none)
    * @param toolTip  tool-tip for the button (<code>null</code> if none)
    */
   public LockableButton(final String template,
-			final int shortcut,
+			final Shortcut shortcut,
 			final String toolTip) {
     super(template, shortcut, toolTip);
     if (template != null) {

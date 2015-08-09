@@ -116,27 +116,49 @@ public class DACDigitalButtonsLayout {
    */
   public DACDigitalButtonsLayout() {
     buttons[BUTTON_POSITION_AUTO] =
-      new SwitchButton("gui/UniversalButton/round-gray-%d-%s.png", -1, null);
+      new SwitchButton("gui/UniversalButton/round-gray-%d-%s.png",
+		       null,
+		       null);
     buttons[BUTTON_POSITION_MAN] =
-      new PushButton("gui/UniversalButton/round-gray-%d-%s.png", -1, null);
+      new PushButton("gui/UniversalButton/round-gray-%d-%s.png",
+		     null,
+		     null);
     buttons[BUTTON_POSITION_V] =
-      new PushOnlyButton("gui/UniversalButton/round-black-%d-%s.png", -1, null);
+      new PushOnlyButton("gui/UniversalButton/round-black-%d-%s.png",
+			 null,
+			 null);
     buttons[BUTTON_POSITION_KOHM] =
-      new PushOnlyButton("gui/UniversalButton/round-black-%d-%s.png", -1, null);
+      new PushOnlyButton("gui/UniversalButton/round-black-%d-%s.png",
+			 null,
+			 null);
     buttons[BUTTON_POSITION_MA] =
-      new PushOnlyButton("gui/UniversalButton/round-black-%d-%s.png", -1, null);
+      new PushOnlyButton("gui/UniversalButton/round-black-%d-%s.png",
+			 null,
+			 null);
     buttons[BUTTON_POSITION_AC] =
-      new SwitchButton("gui/UniversalButton/round-black-%d-%s.png", -1, null);
+      new SwitchButton("gui/UniversalButton/round-black-%d-%s.png",
+		       null,
+		       null);
     buttons[BUTTON_POSITION_0_2] =
-      new PushOnlyButton("gui/UniversalButton/round-gray-%d-%s.png", -1, null);
+      new PushOnlyButton("gui/UniversalButton/round-gray-%d-%s.png",
+			 null,
+			 null);
     buttons[BUTTON_POSITION_2] =
-      new PushOnlyButton("gui/UniversalButton/round-gray-%d-%s.png", -1, null);
+      new PushOnlyButton("gui/UniversalButton/round-gray-%d-%s.png",
+			 null,
+			 null);
     buttons[BUTTON_POSITION_20] =
-      new PushOnlyButton("gui/UniversalButton/round-gray-%d-%s.png", -1, null);
+      new PushOnlyButton("gui/UniversalButton/round-gray-%d-%s.png",
+			 null,
+			 null);
     buttons[BUTTON_POSITION_200] =
-      new PushOnlyButton("gui/UniversalButton/round-gray-%d-%s.png", -1, null);
+      new PushOnlyButton("gui/UniversalButton/round-gray-%d-%s.png",
+			 null,
+			 null);
     buttons[BUTTON_POSITION_2000] =
-      new PushOnlyButton("gui/UniversalButton/round-gray-%d-%s.png", -1, null);
+      new PushOnlyButton("gui/UniversalButton/round-gray-%d-%s.png",
+			 null,
+			 null);
   }
 
   /**

@@ -44,12 +44,14 @@ public class PushOnlyButton extends GenericButton {
    * Creates an instance of a button.
    *
    * @param template the icon template string (if <code>null</code>,
-   *        a dummy button without a graphical representation is created)
-   * @param shortcut keyboard shortcut for the button (<code>-1</code> if none)
+   *                 a dummy button without a graphical representation
+   *                 is created)
+   * @param shortcut keyboard shortcut for the button (<code>-1</code>
+   *                 if none)
    * @param toolTip  tool-tip for the button (<code>null</code> if none)
    */
   public PushOnlyButton(final String template,
-			final int shortcut,
+			final Shortcut shortcut,
 			final String toolTip) {
     super(template, shortcut, toolTip);
     addMouseListener(new PushOnlyMouseListener());

@@ -25,6 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 import cz.pecina.retro.gui.BackgroundFixedPane;
 import cz.pecina.retro.gui.PushButton;
+import cz.pecina.retro.gui.Shortcut;
 
 /**
  * The Intel 8080A hardware debugger panel.
@@ -128,16 +129,17 @@ public class DebuggerPanel extends BackgroundFixedPane {
       button.place(this,
 		   (i * DEBUGGER_BUTTON_GRID_X) + DEBUGGER_BUTTON_OFFSET_X,
 		   DEBUGGER_BUTTON_OFFSET_Y);
-      if (button.getShortcut() != -1) {
-	getInputMap().put(KeyStroke.getKeyStroke(
-	  button.getShortcut(), 0, false),
-	  "KeyPressedAction_" + button.getShortcut());
-	getActionMap().put("KeyPressedAction_" + button.getShortcut(),
+      final Shortcut shortcut = button.getShortcut();
+      if (shortcut != null) {
+	getInputMap().put(
+	  KeyStroke.getKeyStroke(shortcut.getKeyCode(), 0, false),
+	  "KeyPressedAction_" + shortcut.getId());
+	getActionMap().put("KeyPressedAction_" + shortcut.getId(),
 			   button.keyPressedAction());
 	getInputMap().put(KeyStroke.getKeyStroke(
-	  button.getShortcut(), 0, true),
-	  "KeyReleasedAction_" + button.getShortcut());
-	getActionMap().put("KeyReleasedAction_" + button.getShortcut(),
+	  shortcut.getKeyCode(), 0, true),
+	  "KeyReleasedAction_" + shortcut.getId());
+	getActionMap().put("KeyReleasedAction_" + shortcut.getId(),
 			   button.keyReleasedAction());
       }
     }

@@ -74,7 +74,7 @@ public class IconButton extends GenericButton implements Localized {
 		    final int positionY,
 		    final String toolTipResource) {
     super("pmd85/IconButton/" + id + "-%d-%s.png",
-	  -1,
+	  null,
 	  (toolTipResource == null) ?
 	    null :
 	    Application.getString(IconButton.class, toolTipResource));

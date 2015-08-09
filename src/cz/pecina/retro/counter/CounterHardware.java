@@ -167,7 +167,7 @@ public class CounterHardware implements IOElement, CPUEventOwner {
 
     // set up buttons
     autoButton = new SwitchButton("gui/UniversalButton/round-gray-%d-%s.png",
-				  -1,
+				  null,
 				  null);
     autoButton.addChangeListener(
       new ChangeListener() {
@@ -179,7 +179,7 @@ public class CounterHardware implements IOElement, CPUEventOwner {
 	}
       });
     manButton = new SwitchButton("gui/UniversalButton/round-gray-%d-%s.png",
-				 -1,
+				 null,
 				 null);
     manButton.addChangeListener(
       new ChangeListener() {

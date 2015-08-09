@@ -36,9 +36,9 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.gui.IconCache;
+import cz.pecina.retro.gui.Shortcut;
 import cz.pecina.retro.gui.ShortcutDialog;
 
 /**
@@ -60,14 +60,15 @@ public class SettingsKeyboardPanel extends JScrollPane {
   private Computer computer;
 
   // tentative map of shortcuts
-  private int[][] shortcuts = new int[KeyboardLayout.NUMBER_BUTTON_ROWS]
-    [KeyboardLayout.NUMBER_BUTTON_COLUMNS];
+  private Shortcut[][] shortcuts =
+    new Shortcut[KeyboardLayout.NUMBER_BUTTON_ROWS]
+                [KeyboardLayout.NUMBER_BUTTON_COLUMNS];
   
   // convert shortcut to text description
-  private String shortcutToText(final int shortcut) {
-    return (shortcut != -1) ?
-           KeyEvent.getKeyText(shortcut) :
-           Application.getString(this, "settings.keyboard.noShortcut");
+  private String shortcutToText(final Shortcut shortcut) {
+    return (shortcut != null) ?
+            shortcut.getDesc() :
+            Application.getString(this, "settings.keyboard.noShortcut");
   }
   
   /**
@@ -215,20 +216,20 @@ public class SettingsKeyboardPanel extends JScrollPane {
     @Override
     public void actionPerformed(final ActionEvent event) {
       log.finer("Change button event detected");
-      final List<Integer> list = new ArrayList<>();
+      final List<Shortcut> list = new ArrayList<>();
       for (int row2 = 0; row2 < KeyboardLayout.NUMBER_BUTTON_ROWS; row2++) {
 	for (int column2 = 0;
 	     column2 < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
 	     column2++) {
 	  if (((row != row2) || (column != column2)) &&
-	      (shortcuts[row2][column2] != -1)) {
+	      (shortcuts[row2][column2] != null)) {
 	    list.add(shortcuts[row2][column2]);
 	  }
 	}
-	final int shortcut = ShortcutDialog.getShortcut(frame, list);
-	if (shortcut != -1) {
+	final Shortcut shortcut = ShortcutDialog.getShortcut(frame, list);
+	if (shortcut != null) {
 	  shortcuts[row][column] = shortcut;
-	  label.setText(shortcutToText(shortcut));
+	  label.setText(shortcut.getDesc());
 	}
       }
     }
@@ -250,8 +251,8 @@ public class SettingsKeyboardPanel extends JScrollPane {
     @Override
     public void actionPerformed(final ActionEvent event) {
       log.finer("Clear button event detected");
-      shortcuts[row][column] = -1;
-      label.setText(shortcutToText(-1));
+      shortcuts[row][column] = null;
+      label.setText(shortcutToText(null));
     }
   }
 }

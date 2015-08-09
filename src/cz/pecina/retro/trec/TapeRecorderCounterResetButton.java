@@ -48,7 +48,7 @@ public class TapeRecorderCounterResetButton
    * @param toolTipResource tool-tip for the button (<code>null</code> if none)
    */
   public TapeRecorderCounterResetButton(final String toolTipResource) {
-    super("gui/CounterResetButton/basic-gray-%d-%s.png", -1,
+    super("gui/CounterResetButton/basic-gray-%d-%s.png", null,
       (toolTipResource == null) ? null : Application
       .getString(TapeRecorderCounterResetButton.class, toolTipResource));
     this.toolTipResource = toolTipResource;

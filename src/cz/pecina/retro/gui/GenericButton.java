@@ -64,7 +64,7 @@ public abstract class GenericButton
   protected Icon onIcon;
 
   // shortcut
-  private int shortcut;
+  private Shortcut shortcut;
 
   // tool-tip
   private String toolTip;
@@ -78,12 +78,12 @@ public abstract class GenericButton
    * @param template the icon template string (if <code>null</code>,
    *                 a dummy button without a graphical representation
    *                 is created)
-   * @param shortcut keyboard shortcut for the button (<code>-1</code>
+   * @param shortcut keyboard shortcut for the button (<code>null</code>
    *                 if none)
    * @param toolTip  tool-tip for the button (<code>null</code> if none)
    */
   public GenericButton(final String template,
-		       final int shortcut,
+		       final Shortcut shortcut,
 		       final String toolTip) {
     super();
     log.fine("New GenericButton creation started: " + template);
@@ -164,10 +164,10 @@ public abstract class GenericButton
    * Sets the keyboard shortcut associated with the button.
    *
    * @param shortcut the keyboard shortcut associated with the button
-   *                 or <code>-1</code> if none
+   *                 or <code>null</code> if none
 
    */
-  public void setShortcut(final int shortcut) {
+  public void setShortcut(final Shortcut shortcut) {
     this.shortcut = shortcut;
   }
 
@@ -175,9 +175,9 @@ public abstract class GenericButton
    * Gets the keyboard shortcut associated with the button.
    *
    * @return the keyboard shortcut associated with the button
-   *         or <code>-1</code> if none
+   *         or <code>null</code> if none
    */
-  public int getShortcut() {
+  public Shortcut getShortcut() {
     return shortcut;
   }
 

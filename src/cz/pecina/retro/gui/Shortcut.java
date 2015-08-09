@@ -21,6 +21,7 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
+import java.awt.event.KeyEvent;
 
 /**
  * Keyboard shortcut object.
@@ -37,7 +38,7 @@ public class Shortcut {
   // code of the key
   private int keyCode;
 
-  // location of the key
+  // location of the key (-1 = any)
   private int keyLocation;
 
   /**
@@ -65,7 +66,36 @@ public class Shortcut {
   }
 
   /**
-   * Sets the code of the key.
+   * Creates an instance of a keyboard shortcut object.
+   *
+   * @param id the ID of the shortcut
+   */
+  public Shortcut(final String id) {
+    switch (id.substring(0, 1)) {
+      case "S":
+	keyLocation = KeyEvent.KEY_LOCATION_STANDARD;
+	break;
+      case "L":
+	keyLocation = KeyEvent.KEY_LOCATION_LEFT;
+	break;
+      case "R":
+	keyLocation = KeyEvent.KEY_LOCATION_RIGHT;
+	break;
+      case "N":
+	keyLocation = KeyEvent.KEY_LOCATION_NUMPAD;
+	break;
+      case "U":
+	keyLocation = KeyEvent.KEY_LOCATION_UNKNOWN;
+	break;
+      default:
+	keyLocation = -1;
+	break;
+    }
+    keyCode = Integer.parseInt(id.substring(1));
+  }
+  
+  /**
+   * Gets the code of the key.
    *
    * @return the code of the key
    */
@@ -74,11 +104,57 @@ public class Shortcut {
   }
 
   /**
-   * Sets the location of the key.
+   * Gets the location of the key.
    *
-   * @return the location of the key
+   * @return the location of the key (<code>-1</code>
+   *          means any location)
    */
   public int getKeyLocation() {
     return keyLocation;
+  }
+
+  /**
+   * Gets the ID of the shortcut.
+   *
+   * @return the ID of the shortcut
+   */
+  public String getId() {
+    String location;
+    if (keyLocation == KeyEvent.KEY_LOCATION_STANDARD) {
+      location = "S";
+    } else if (keyLocation == KeyEvent.KEY_LOCATION_LEFT) {
+      location = "L";
+    } else if (keyLocation == KeyEvent.KEY_LOCATION_RIGHT) {
+      location = "R";
+    } else if (keyLocation == KeyEvent.KEY_LOCATION_NUMPAD) {
+      location = "N";
+    } else if (keyLocation == KeyEvent.KEY_LOCATION_UNKNOWN) {
+      location = "U";
+    } else {
+      location = "A";
+    }
+    return location + keyCode;
+  }
+
+  /**
+   * Gets a textual description of the shortcut.  As there is no
+   * distinction between "standard" and "any" locations, the
+   * information is incomplete and should never be used for shortcut
+   * identification or serialization.  Use {@code #getId} instead.
+   *
+   * @return the long description of the shortcut
+   */
+  public String getDesc() {
+    String location = "";
+    if (keyLocation == KeyEvent.KEY_LOCATION_LEFT) {
+      location = "/L";
+    } else if (keyLocation == KeyEvent.KEY_LOCATION_RIGHT) {
+      location = "/R";
+    } else if (keyLocation == KeyEvent.KEY_LOCATION_NUMPAD) {
+      location = "/N";
+    } else if (keyLocation == KeyEvent.KEY_LOCATION_UNKNOWN) {
+      location = "/U";
+    }
+    return KeyEvent.getKeyText(keyCode) + location;
   }
 }

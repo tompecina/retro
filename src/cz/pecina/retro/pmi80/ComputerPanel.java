@@ -26,6 +26,7 @@ import cz.pecina.retro.gui.BackgroundFixedPane;
 import cz.pecina.retro.gui.GenericBitmap;
 import cz.pecina.retro.gui.SSD;
 import cz.pecina.retro.gui.GUI;
+import cz.pecina.retro.gui.Shortcut;
 
 /**
  * Main control panel of the computer.
@@ -131,15 +132,15 @@ public class ComputerPanel extends BackgroundFixedPane {
     	   column++) {
     	final KeyboardButton button =
     	  keyboardHardware.getKeyboardLayout().getButton(row, column);
-    	final int shortcut = button.getShortcut();
-    	if (shortcut != -1) {
-    	  getInputMap().put(KeyStroke.getKeyStroke(shortcut, 0, false),
-    			    "KeyPressedAction_" + shortcut);
-    	  getActionMap().put("KeyPressedAction_" + shortcut,
+    	final Shortcut shortcut = button.getShortcut();
+    	if (shortcut != null) {
+    	  getInputMap().put(KeyStroke.getKeyStroke(shortcut.getKeyCode(), 0, false),
+    			    "KeyPressedAction_" + shortcut.getId());
+    	  getActionMap().put("KeyPressedAction_" + shortcut.getId(),
     			     button.keyPressedAction());
-    	  getInputMap().put(KeyStroke.getKeyStroke(shortcut, 0, true),
-    			    "KeyReleasedAction_" + shortcut);
-    	  getActionMap().put("KeyReleasedAction_" + shortcut,
+    	  getInputMap().put(KeyStroke.getKeyStroke(shortcut.getKeyCode(), 0, true),
+    			    "KeyReleasedAction_" + shortcut.getId());
+    	  getActionMap().put("KeyReleasedAction_" + shortcut.getId(),
     			     button.keyReleasedAction());
     	}
     	log.finest("Shortcut for button '" + button + "' set to: " + shortcut);

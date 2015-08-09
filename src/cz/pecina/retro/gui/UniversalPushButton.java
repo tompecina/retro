@@ -40,14 +40,14 @@ public class UniversalPushButton extends PushButton {
    * @param type     type of the button
    * @param color    color of the button
    * @param symbol   symbol on the button
-   * @param shortcut keyboard shortcut for the button (<code>-1</code>
+   * @param shortcut keyboard shortcut for the button (<code>null</code>
    *                 if none)
    * @param toolTip  tool-tip for the button (<code>null</code> if none)
    */
   public UniversalPushButton(final String type,
 			     final String color,
 			     final String symbol,
-			     final int shortcut,
+			     final Shortcut shortcut,
 			     final String toolTip) {
     super("gui/UniversalButton/" + type + "-" + color + "-" + symbol +
 	  "-%d-%s.png", shortcut, toolTip);

@@ -180,7 +180,7 @@ public class DebuggerHardware {
     new UniversalPushButton(blockModel.buttonType,
 			    blockModel.buttonColor,
 			    "up",
-			    -1,
+			    null,
 			    null);
 
   /**
@@ -190,7 +190,7 @@ public class DebuggerHardware {
     new UniversalPushButton(blockModel.buttonType,
 			    blockModel.buttonColor,
 			    "up",
-			    -1,
+			    null,
 			    null);
 
   /**
@@ -200,7 +200,7 @@ public class DebuggerHardware {
     new UniversalPushButton(blockModel.buttonType,
 			    blockModel.buttonColor,
 			    "up",
-			    -1,
+			    null,
 			    null);
 
   /**
@@ -210,7 +210,7 @@ public class DebuggerHardware {
     new UniversalPushButton(blockModel.buttonType,
 			    blockModel.buttonColor,
 			    "up",
-			    -1,
+			    null,
 			    null);
 
   /**
@@ -247,19 +247,19 @@ public class DebuggerHardware {
    * STEP IN debugger button.
    */
   public final PushButton stepInButton =
-    new PushButton("debug/DebuggerButton/stepin-%d-%s.png", -1, null);
+    new PushButton("debug/DebuggerButton/stepin-%d-%s.png", null, null);
 
   /**
    * STEP OVER debugger button.
    */
   public final PushButton stepOverButton =
-    new PushButton("debug/DebuggerButton/stepover-%d-%s.png", -1, null);
+    new PushButton("debug/DebuggerButton/stepover-%d-%s.png", null, null);
 
   /**
    * STEP IN debugger button.
    */
   public final PushButton runStopButton =
-    new PushButton("debug/DebuggerButton/runstop-%d-%s.png", -1, null);
+    new PushButton("debug/DebuggerButton/runstop-%d-%s.png", null, null);
 
   /**
    * Debugger buttons as an array.

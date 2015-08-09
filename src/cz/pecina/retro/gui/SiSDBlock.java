@@ -110,14 +110,14 @@ public class SiSDBlock {
 	  new UniversalPushButton(model.buttonType,
 				  model.buttonColor,
 				  model.incrementButtonSymbol,
-				  -1,
+				  null,
 				  null);
 	button.addMouseListener(new NudgeListener(this, i, 1));
 	decrementButtons[i] = button =
 	  new UniversalPushButton(model.buttonType,
 				  model.buttonColor,
 				  model.decrementButtonSymbol,
-				  -1,
+				  null,
 				  null);
 	button.addMouseListener(new NudgeListener(this, i, -1));
       }

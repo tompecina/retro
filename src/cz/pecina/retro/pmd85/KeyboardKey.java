@@ -77,7 +77,7 @@ public class KeyboardKey extends LockableButton {
 		     final int offsetY,
 		     final int matrixRow,
 		     final int matrixColumn) {
-    super("pmd85/KeyboardKey/" + cap + "-%d-%s.png", -1, null);
+    super("pmd85/KeyboardKey/" + cap + "-%d-%s.png", null, null);
     log.fine("New key creation started: " + cap +
 	     ", matrix column: " + matrixColumn + ", matrix row: " + matrixRow);
     assert keyboardHardware != null;
@@ -112,7 +112,7 @@ public class KeyboardKey extends LockableButton {
    * @param matrixColumn position of the key in the hardware matrix (column)
    */
   public KeyboardKey(final int matrixRow, final int matrixColumn) {
-    super(null, -1, null);
+    super(null, null, null);
     log.finer("New dummy KeyboardKey creation started for position: " +
 	      matrixRow + ", " + matrixColumn);
     assert (matrixColumn >= 0) &&

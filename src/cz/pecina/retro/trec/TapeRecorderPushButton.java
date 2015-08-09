@@ -52,7 +52,7 @@ public class TapeRecorderPushButton extends PushButton implements Localized {
    */
   public TapeRecorderPushButton(final String id,
 				final String toolTipResource) {
-    super("trec/TapeRecorderButton/" + id + "-%d-%s.png", -1,
+    super("trec/TapeRecorderButton/" + id + "-%d-%s.png", null,
       (toolTipResource == null) ? null : Application
       .getString(TapeRecorderPushButton.class, toolTipResource));
     this.id = id;

@@ -54,7 +54,7 @@ public class TapeRecorderPushOnlyButton
    */
   public TapeRecorderPushOnlyButton(final String id,
 				    final String toolTipResource) {
-    super("trec/TapeRecorderButton/" + id + "-%d-%s.png", -1,
+    super("trec/TapeRecorderButton/" + id + "-%d-%s.png", null,
       (toolTipResource == null) ? null : Application
       .getString(TapeRecorderPushOnlyButton.class, toolTipResource));
     this.id = id;

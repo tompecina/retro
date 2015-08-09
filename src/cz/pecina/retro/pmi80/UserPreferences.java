@@ -32,6 +32,7 @@ import cz.pecina.retro.common.GeneralConstants;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.gui.GUI;
+import cz.pecina.retro.gui.Shortcut;
 import cz.pecina.retro.cpu.SimpleMemory;
 
 /**
@@ -53,23 +54,15 @@ public final class UserPreferences extends GeneralUserPreferences {
   private static int startROM, startRAM;
 
   // keyboard shortcuts
-  private static int[][] shortcuts;
+  private static Shortcut[][] shortcuts =
+    new Shortcut[KeyboardLayout.NUMBER_BUTTON_ROWS]
+                [KeyboardLayout.NUMBER_BUTTON_COLUMNS];
 
   // gets preferences from the backing store
   private static void getPreferences() {
     if (!retrieved) {
       GeneralUserPreferences.getGeneralPreferences();
 
-      shortcuts = new int[KeyboardLayout.NUMBER_BUTTON_ROWS]
-	[KeyboardLayout.NUMBER_BUTTON_COLUMNS];
-      for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++) {
-	for (int column = 0;
-	     column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
-	     column++) {
-	  shortcuts[row][column] = -1;
-	}
-      }
-      
       startROM = Parameters.preferences.getInt("startROM", -1);
       if (startROM == -1) {
 	startROM = Constants.DEFAULT_START_ROM;
@@ -86,14 +79,17 @@ public final class UserPreferences extends GeneralUserPreferences {
 	for (int column = 0;
 	     column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
 	     column++) {
-	  int shortcut =
-	    Parameters.preferences.getInt("shortcut." + row + "." + column, -2);
-	  if (shortcut == -2) {
+	  final String shortcutString =
+	    Parameters.preferences.get("shortcut." + row + "." + column, null);
+	  Shortcut shortcut;
+	  if (shortcutString == null) {
 	    shortcut = KeyboardLayout.DEFAULT_SHORTCUTS[row][column];
+	  } else {
+	    shortcut = new Shortcut(shortcutString);
 	  }
 	  shortcuts[row][column] = shortcut;
-	  Parameters.preferences.putInt("shortcut." + row + "." + column,
-					shortcut);
+	  Parameters.preferences.put("shortcut." + row + "." + column,
+				     shortcut.getId());
 	}
       }
       
@@ -163,15 +159,15 @@ public final class UserPreferences extends GeneralUserPreferences {
   public static void setShortcut(final KeyboardLayout keyboardLayout,
 				 final int row,
 				 final int column,
-				 final int shortcut) {
+				 final Shortcut shortcut) {
     assert (row >= 0) && (row < KeyboardLayout.NUMBER_BUTTON_ROWS);
     assert (column >= 0) && (column < KeyboardLayout.NUMBER_BUTTON_COLUMNS);
     getPreferences();
     shortcuts[row][column] = shortcut;
-    Parameters.preferences.putInt("shortcut." + row + "." + column, shortcut);
+    Parameters.preferences.put("shortcut." + row + "." + column, shortcut.getId());
     keyboardLayout.getButton(row, column).setShortcut(shortcut);
     log.fine("Shortcut for button (" + row + "," + column +
-	     ") in user preferences set to: " + shortcut);
+	     ") in user preferences set to: " + shortcut.getDesc());
   }
 
   /**
@@ -181,14 +177,14 @@ public final class UserPreferences extends GeneralUserPreferences {
    * @param  column   the column
    * @return shortcut the keyboard shortcut or <code>-1</code> if none
    */
-  public static int getShortcut(final int row,
-				final int column) {
+  public static Shortcut getShortcut(final int row,
+				     final int column) {
     assert (row >= 0) && (row < KeyboardLayout.NUMBER_BUTTON_ROWS);
     assert (column >= 0) && (column < KeyboardLayout.NUMBER_BUTTON_COLUMNS);
     getPreferences();
-    final int shortcut = shortcuts[row][column];
+    final Shortcut shortcut = shortcuts[row][column];
     log.fine("Shortcut for button (" + row + "," + column +
-	     ") retrieved from user preferences: " + shortcut);
+	     ") retrieved from user preferences: " + shortcut.getDesc());
     return shortcut;
   }
 

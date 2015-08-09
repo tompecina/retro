@@ -72,7 +72,7 @@ public class KeyboardButton extends LockableButton implements Localized {
 			final int matrixRow,
 			final String toolTipResource) {
     super("pmi80/KeyboardButton/" + id + "-%d-%s.png",
-	  -1,
+	  null,
 	  (toolTipResource == null) ?
 	    null :
 	    Application.getString(KeyboardButton.class, toolTipResource));
@@ -108,7 +108,7 @@ public class KeyboardButton extends LockableButton implements Localized {
    * @param matrixRow    position of the key in the hardware matrix (row)
    */
   public KeyboardButton(final int matrixColumn, final int matrixRow) {
-    super(null, -1, null);
+    super(null, null, null);
     log.finer("New dummy KeyboardButton creation started for position: " +
 	      matrixColumn + ", " + matrixRow);
     assert (matrixColumn >= 0) &&

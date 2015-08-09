@@ -123,7 +123,7 @@ public class PCKeyboardKey extends LockableButton {
 		       final int offsetY,
 		       final int scanCode,
 		       final Shortcut[] shortcuts) {
-    super("pckbd/PCKeyboardKey/" + id + "-%d-%s.png", -1, null);
+    super("pckbd/PCKeyboardKey/" + id + "-%d-%s.png", null, null);
     assert hardware != null;
     assert (id != null) && !id.isEmpty();
     assert offsetX >= 0;

@@ -22,6 +22,7 @@ package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
 import java.awt.event.KeyEvent;
+import cz.pecina.retro.gui.Shortcut;
 
 /**
  * Layout of keyboard buttons.  It contains only physically existing buttons,
@@ -53,32 +54,32 @@ public class KeyboardLayout {
   /**
    * Default keyboard shortcuts.
    */
-  public static final int[][] DEFAULT_SHORTCUTS = {
-    {KeyEvent.VK_Z,
-     KeyEvent.VK_I,
-     KeyEvent.VK_X,
-     KeyEvent.VK_R,
-     KeyEvent.VK_Q},
-    {KeyEvent.VK_C,
-     KeyEvent.VK_D,
-     KeyEvent.VK_E,
-     KeyEvent.VK_F,
-     KeyEvent.VK_M},
-    {KeyEvent.VK_NUMPAD8,
-     KeyEvent.VK_NUMPAD9,
-     KeyEvent.VK_A,
-     KeyEvent.VK_B,
-     KeyEvent.VK_L},
-    {KeyEvent.VK_NUMPAD4,
-     KeyEvent.VK_NUMPAD5,
-     KeyEvent.VK_NUMPAD6,
-     KeyEvent.VK_NUMPAD7,
-     KeyEvent.VK_S},
-    {KeyEvent.VK_NUMPAD0,
-     KeyEvent.VK_NUMPAD1,
-     KeyEvent.VK_NUMPAD2,
-     KeyEvent.VK_NUMPAD3,
-     KeyEvent.VK_ENTER}
+  public static final Shortcut[][] DEFAULT_SHORTCUTS = {
+    {new Shortcut(KeyEvent.VK_Z),
+     new Shortcut(KeyEvent.VK_I),
+     new Shortcut(KeyEvent.VK_X),
+     new Shortcut(KeyEvent.VK_R),
+     new Shortcut(KeyEvent.VK_Q)},
+    {new Shortcut(KeyEvent.VK_C),
+     new Shortcut(KeyEvent.VK_D),
+     new Shortcut(KeyEvent.VK_E),
+     new Shortcut(KeyEvent.VK_F),
+     new Shortcut(KeyEvent.VK_M)},
+    {new Shortcut(KeyEvent.VK_NUMPAD8, KeyEvent.KEY_LOCATION_NUMPAD),
+     new Shortcut(KeyEvent.VK_NUMPAD9, KeyEvent.KEY_LOCATION_NUMPAD),
+     new Shortcut(KeyEvent.VK_A),
+     new Shortcut(KeyEvent.VK_B),
+     new Shortcut(KeyEvent.VK_L)},
+    {new Shortcut(KeyEvent.VK_NUMPAD4, KeyEvent.KEY_LOCATION_NUMPAD),
+     new Shortcut(KeyEvent.VK_NUMPAD5, KeyEvent.KEY_LOCATION_NUMPAD),
+     new Shortcut(KeyEvent.VK_NUMPAD6, KeyEvent.KEY_LOCATION_NUMPAD),
+     new Shortcut(KeyEvent.VK_NUMPAD7, KeyEvent.KEY_LOCATION_NUMPAD),
+     new Shortcut(KeyEvent.VK_S)},
+    {new Shortcut(KeyEvent.VK_NUMPAD0, KeyEvent.KEY_LOCATION_NUMPAD),
+     new Shortcut(KeyEvent.VK_NUMPAD1, KeyEvent.KEY_LOCATION_NUMPAD),
+     new Shortcut(KeyEvent.VK_NUMPAD2, KeyEvent.KEY_LOCATION_NUMPAD),
+     new Shortcut(KeyEvent.VK_NUMPAD3, KeyEvent.KEY_LOCATION_NUMPAD),
+     new Shortcut(KeyEvent.VK_ENTER)}
   };
 
   /**

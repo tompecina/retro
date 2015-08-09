@@ -54,7 +54,7 @@ public class TapeRecorderSwitchButton
    */
   public TapeRecorderSwitchButton(final String id,
 				  final String toolTipResource) {
-    super("trec/TapeRecorderButton/" + id + "-%d-%s.png", -1,
+    super("trec/TapeRecorderButton/" + id + "-%d-%s.png", null,
       (toolTipResource == null) ? null : Application
       .getString(TapeRecorderSwitchButton.class, toolTipResource));
     this.id = id;
