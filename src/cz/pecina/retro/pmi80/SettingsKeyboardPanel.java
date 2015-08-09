@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.awt.Frame;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.BorderLayout;
 import java.awt.Insets;
 import java.awt.Dimension;
 import javax.swing.JScrollPane;
@@ -96,13 +97,30 @@ public class SettingsKeyboardPanel extends JScrollPane {
 
     setViewportBorder(BorderFactory.createEmptyBorder(5, 8, 0, 8));
   
+    final GridBagConstraints restorePaneConstraints =
+      new GridBagConstraints();
+    final JButton restoreButton = new JButton(Application
+      .getString(this, "settings.keyboard.button.restore"));
+    restorePaneConstraints.gridx = 0;
+    restorePaneConstraints.gridy = 0;
+    restorePaneConstraints.gridwidth = GridBagConstraints.REMAINDER;
+    restorePaneConstraints.insets = new Insets(15, 0, 10, 0);
+    restorePaneConstraints.anchor = GridBagConstraints.CENTER;
+    restorePaneConstraints.weightx = 0.0;
+    restorePaneConstraints.weighty = 0.0;
+    final JPanel restorePane = new JPanel(new BorderLayout());
+    restoreButton.setPreferredSize(new Dimension(440, 30));
+    restorePane.add(restoreButton);
+    shortcutsPane.add(restorePane, restorePaneConstraints);
+    // restoreButton.addActionListener(new RestoreListener());
+
     for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++) {
       for (int column = 0;
 	   column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
 	   column++) {
 	
 	final int line =
-	  (row * KeyboardLayout.NUMBER_BUTTON_COLUMNS) + column;
+	  (row * KeyboardLayout.NUMBER_BUTTON_COLUMNS) + column + 1;
 	final KeyboardButton button = computer.getComputerHardware()
 	  .getKeyboardHardware().getKeyboardLayout().getButton(row, column);
 
@@ -112,9 +130,9 @@ public class SettingsKeyboardPanel extends JScrollPane {
 	  String.format(button.getTemplate(), 1, "u")));
 	buttonConstraints.gridx = 0;
 	buttonConstraints.gridy = line;
-	buttonConstraints.insets = new Insets(8, 0, 8, 0);
+	buttonConstraints.insets = new Insets(10, 0, 10, 0);
 	buttonConstraints.anchor = GridBagConstraints.LINE_END;
-	buttonConstraints.weightx = 0.0;
+	buttonConstraints.weightx = 0.4;
 	buttonConstraints.weighty = 0.0;
 	shortcutsPane.add(buttonLabel, buttonConstraints);
 	
@@ -123,7 +141,7 @@ public class SettingsKeyboardPanel extends JScrollPane {
 	shortcutLabels[row][column] = new JLabel();
 	shortcutConstraints.gridx = 1;
 	shortcutConstraints.gridy = line;
-	shortcutConstraints.insets = new Insets(0, 8, 0, 8);
+	shortcutConstraints.insets = new Insets(0, 10, 0, 10);
 	shortcutConstraints.anchor = GridBagConstraints.CENTER;
 	shortcutConstraints.weightx = 0.0;
 	shortcutConstraints.weighty = 0.0;
@@ -135,7 +153,7 @@ public class SettingsKeyboardPanel extends JScrollPane {
 	  .getString(this, "settings.keyboard.button.change"));
 	changeButtonConstraints.gridx = 2;
 	changeButtonConstraints.gridy = line;
-	changeButtonConstraints.insets = new Insets(0, 0, 0, 8);
+	changeButtonConstraints.insets = new Insets(0, 0, 0, 7);
 	changeButtonConstraints.anchor = GridBagConstraints.LINE_START;
 	changeButtonConstraints.weightx = 0.0;
 	changeButtonConstraints.weighty = 0.0;
@@ -148,9 +166,9 @@ public class SettingsKeyboardPanel extends JScrollPane {
 	  .getString(this, "settings.keyboard.button.clear"));
 	clearButtonConstraints.gridx = 3;
 	clearButtonConstraints.gridy = line;
-	clearButtonConstraints.insets = new Insets(0, 0, 0, 0);
+	clearButtonConstraints.insets = new Insets(0, 0, 0, 10);
 	clearButtonConstraints.anchor = GridBagConstraints.LINE_START;
-	clearButtonConstraints.weightx = 0.0;
+	clearButtonConstraints.weightx = 0.6;
 	clearButtonConstraints.weighty = 0.0;
 	shortcutsPane.add(clearButton, clearButtonConstraints);
 	clearButton.addActionListener(new ClearListener(row, column));

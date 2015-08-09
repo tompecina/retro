@@ -44,7 +44,17 @@ public class Shortcut {
   /**
    * Creates an instance of a keyboard shortcut object.
    *
-   * @param keyCode code of the key
+   * @param ch character representing the key
+   */
+  public Shortcut(final char ch) {
+    this(KeyEvent.getExtendedKeyCodeForChar(ch),
+	 KeyEvent.KEY_LOCATION_STANDARD);
+  }
+
+  /**
+   * Creates an instance of a keyboard shortcut object.
+   *
+   * @param keyCode extended code of the key
    */
   public Shortcut(final int keyCode) {
     this(keyCode, -1);
@@ -53,7 +63,7 @@ public class Shortcut {
   /**
    * Creates an instance of a keyboard shortcut object.
    *
-   * @param keyCode code of the key
+   * @param keyCode     extended code of the key
    * @param keyLocation location of the key
    */
   public Shortcut(final int keyCode, final int keyLocation) {
