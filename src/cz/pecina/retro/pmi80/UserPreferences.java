@@ -47,6 +47,9 @@ public final class UserPreferences extends GeneralUserPreferences {
   private static final Logger log =
     Logger.getLogger(UserPreferences.class.getName());
 
+  // string indicating null value in preferences
+  private static final String NULL_STRING = "null";
+
   // true if preferences already retrieved
   private static boolean retrieved;
   
@@ -84,12 +87,16 @@ public final class UserPreferences extends GeneralUserPreferences {
 	  Shortcut shortcut;
 	  if (shortcutString == null) {
 	    shortcut = KeyboardLayout.DEFAULT_SHORTCUTS[row][column];
+	  } else if (shortcutString.equals(NULL_STRING)) {
+	    shortcut = null;
 	  } else {
 	    shortcut = new Shortcut(shortcutString);
 	  }
 	  shortcuts[row][column] = shortcut;
 	  Parameters.preferences.put("shortcut." + row + "." + column,
-				     shortcut.getId());
+				     (shortcut != null) ?
+				     shortcut.getID() :
+				     NULL_STRING);
 	}
       }
       
@@ -154,7 +161,8 @@ public final class UserPreferences extends GeneralUserPreferences {
    * @param keyboardLayout the keyboard layout
    * @param row            the row
    * @param column         the column
-   * @param shortcut       the new keyboard shortcut or <code>-1</code> if none
+   * @param shortcut       the new keyboard shortcut or <code>null</code>
+   *                       if none
    */
   public static void setShortcut(final KeyboardLayout keyboardLayout,
 				 final int row,
@@ -164,10 +172,14 @@ public final class UserPreferences extends GeneralUserPreferences {
     assert (column >= 0) && (column < KeyboardLayout.NUMBER_BUTTON_COLUMNS);
     getPreferences();
     shortcuts[row][column] = shortcut;
-    Parameters.preferences.put("shortcut." + row + "." + column, shortcut.getId());
+    Parameters.preferences.put("shortcut." + row + "." + column,
+			       (shortcut != null) ?
+			       shortcut.getID() :
+			       NULL_STRING);
     keyboardLayout.getButton(row, column).setShortcut(shortcut);
     log.fine("Shortcut for button (" + row + "," + column +
-	     ") in user preferences set to: " + shortcut.getDesc());
+	     ") in user preferences set to: " +
+	     ((shortcut != null) ? shortcut.getID() : "none"));
   }
 
   /**
@@ -175,7 +187,8 @@ public final class UserPreferences extends GeneralUserPreferences {
    *
    * @param  row      the row
    * @param  column   the column
-   * @return shortcut the keyboard shortcut or <code>-1</code> if none
+   * @return shortcut the keyboard shortcut or <code>null</code>
+   *                  if none
    */
   public static Shortcut getShortcut(final int row,
 				     final int column) {
@@ -184,7 +197,8 @@ public final class UserPreferences extends GeneralUserPreferences {
     getPreferences();
     final Shortcut shortcut = shortcuts[row][column];
     log.fine("Shortcut for button (" + row + "," + column +
-	     ") retrieved from user preferences: " + shortcut.getDesc());
+	     ") retrieved from user preferences: " +
+	     ((shortcut != null) ? shortcut.getID() : "none"));
     return shortcut;
   }
 

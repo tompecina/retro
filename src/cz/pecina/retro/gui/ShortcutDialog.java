@@ -21,29 +21,24 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
-import java.io.File;
+import java.util.List;
 import java.awt.Frame;
+import java.awt.Component;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Dimension;
+import java.awt.Color;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.BoxLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import cz.pecina.retro.common.Application;
-import cz.pecina.retro.gui.ErrorBox;
-import cz.pecina.retro.gui.InfoBox;
-import cz.pecina.retro.gui.ConfirmationBox;
 
 /**
  * Shortcut selection dialog box.
@@ -57,178 +52,135 @@ public class ShortcutDialog extends JDialog {
   private static final Logger log =
     Logger.getLogger(ShortcutDialog.class.getName());
 
-  // // enclosing panel
-  // private TapeRecorderPanel panel;
+  // selected shortcut
+  private Shortcut shortcut;
 
+  // new shortcut
+  private Shortcut newShortcut;
+
+  // set button
+  private JButton setButton;
+  
+  // dynamically modified labels
+  final JLabel promptLabel, shortcutLabel;
+  
   /**
-   * Displayes a shortcut selection dialog and returns the result.
+   * Displays a shortcut selection dialog and returns the result.
    *
    * @param  frame             enclosing frame
+   * @param  currentShortcut   shortcut curently assigned to this key or
+   *                           <code>null</code> if none
    * @param  assignedShortcuts list of shortcuts already assigned
    * @return                   the shortcut or <code>null</code> if aborted
    */
   public static Shortcut getShortcut(
-    final Frame frame,
-    final Iterable<Shortcut> assignedShortcuts) {
+      final Frame frame,
+      final Shortcut currentShortcut,
+      final List<Shortcut> assignedShortcuts) {
     log.fine("New ShortcutDialog creation started");
-    new ShortcutDialog(frame);
-    return null;
+    final ShortcutDialog dialog =
+      new ShortcutDialog(frame, currentShortcut, assignedShortcuts);
+    return dialog.newShortcut;
   }
 
-  // private construtor
-  private ShortcutDialog(final Frame frame) {
+  // private constructor
+  private ShortcutDialog(final Frame frame,
+			 final Shortcut currentShortcut,
+			 final List<Shortcut> assignedShortcuts) {
     super(frame,
 	  Application.getString(ShortcutDialog.class, "shortcutDialog.title"),
 	  true);
+
     final JPanel dialogPanel = new JPanel(new BorderLayout());
-    final ButtonGroup saveGroup = new ButtonGroup();
+
     final JPanel promptPanel =
-      new JPanel(new BorderLayout());
-    final JLabel promptLabel = new JLabel(Application.getString(ShortcutDialog.class, "shortcutDialog.prompt"));
-    promptLabel.setHorizontalAlignment(JLabel.CENTER);
+      new JPanel();
+    promptPanel.setLayout(new BoxLayout(promptPanel, BoxLayout.PAGE_AXIS));
+    promptPanel.setBorder(BorderFactory.createEmptyBorder(35, 5, 35, 5));
+
+    shortcutLabel = new JLabel();
+    shortcutLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    shortcutLabel.setForeground(Color.BLUE);
+    shortcutLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 3, 0));
+    promptPanel.add(shortcutLabel);
+
+    promptLabel = new JLabel(Application.getString(ShortcutDialog.class,
+						   "shortcutDialog.prompt"));
+    promptLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     promptPanel.add(promptLabel);
-    promptPanel.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+
     dialogPanel.add(promptPanel);
 
     final JPanel buttonsPanel = new JPanel(new FlowLayout());
-    final JButton setButton =
-      new JButton(Application.getString(ShortcutDialog.class, "shortcutDialog.button.set"));
-    // setButton.addActionListener(new SetListener());
+    setButton =
+      new JButton(Application.getString(ShortcutDialog.class,
+					"shortcutDialog.button.set"));
+    setButton.addActionListener(new SetListener());
     setButton.setEnabled(false);
     buttonsPanel.add(setButton);
     final JButton cancelButton =
-      new JButton(Application.getString(ShortcutDialog.class, "shortcutDialog.button.cancel"));
-    // cancelButton.addActionListener(new CloseListener());
+      new JButton(Application.getString(ShortcutDialog.class,
+					"shortcutDialog.button.cancel"));
+    cancelButton.addActionListener(new CancelListener());
     buttonsPanel.add(cancelButton);
     dialogPanel.add(buttonsPanel, BorderLayout.PAGE_END);
 
     add(dialogPanel);
-    setMinimumSize(new Dimension(400, 150));
-    pack();
+
+    setMinimumSize(new Dimension(480, 110));
     setLocationRelativeTo(frame);
     setFocusable(true);
-    addKeyListener(new ShortcutListener());
+    addKeyListener(new ShortcutListener(currentShortcut, assignedShortcuts));
+    pack();
     setVisible(true);
   }
 
   // shortcut listener
   private class ShortcutListener extends KeyAdapter {
+    private Shortcut currentShortcut;
+    private List<Shortcut> assignedShortcuts;
     @Override
-    public void keyPressed(final KeyEvent e) {
-      System.err.println(e);
-      System.err.println(e.getKeyCode());
-      System.err.println(KeyEvent.getKeyText(e.getKeyCode()));
-      System.err.println(e.getKeyLocation());
+    public void keyPressed(final KeyEvent event) {
+      log.finer("Key event detected:" + event);
+      shortcut =
+	new Shortcut(event.getExtendedKeyCode(), event.getKeyLocation());
+      shortcutLabel.setText(shortcut.getDesc());
+      String promptKey;
+      if ((currentShortcut != null) && currentShortcut.equals(shortcut)) {
+	promptKey = "current";
+      } else if (assignedShortcuts.contains(shortcut)) {
+	promptKey = "assigned";
+      } else {
+	promptKey = "available";
+      }
+      promptLabel.setText(Application.getString(ShortcutDialog.class,
+						"shortcutDialog." + promptKey));
+      setButton.setEnabled((currentShortcut == null) || !currentShortcut.equals(shortcut));
+      event.consume();
+    }
+	private ShortcutListener(final Shortcut currentShortcut,
+				 final List<Shortcut> assignedShortcuts) {
+      this.assignedShortcuts = assignedShortcuts;
+      this.currentShortcut = currentShortcut;
     }
   }
 
-  // // Displays localized error message
-  // private void errorBox(final RuntimeException exception) {
-  //   ErrorBox.display(panel, String.format(Application
-  //     .getString(this, "ejectDialog.error.message"),
-  //     exception.getLocalizedMessage()));
-  // }
-
-  // // save listener
-  // private class SaveListener implements ActionListener {
-  //   @Override
-  //   public void actionPerformed(final ActionEvent event) {
-  //     log.finer("Save listener action started");
-  //     prepareFilters();
-  //     if (fileChooser.showSaveDialog(ShortcutDialog.this) ==
-  // 	  JFileChooser.APPROVE_OPTION) {
-  // 	final File file = fileChooser.getSelectedFile();
-  // 	try {
-  // 	  if (formatXML.isSelected()) {
-  // 	    new XML(tapeRecorderHardware.getTape(),
-  // 	      tapeRecorderHardware.getTapeRecorderInterface()).write(file);
-  // 	  } else if (formatPMT.isSelected()) {
-  // 	    new PMT(tapeRecorderHardware.getTape(),
-  // 	      tapeRecorderHardware.getTapeRecorderInterface()).write(file);
-  // 	  } else if (formatPMITAPE.isSelected()) {
-  // 	    new PMITAPE(tapeRecorderHardware.getTape(),
-  // 	      tapeRecorderHardware.getTapeRecorderInterface()).write(file);
-  // 	  } else {
-  // 	    assert formatSAM.isSelected();
-  // 	    new SAM(tapeRecorderHardware.getTape(),
-  // 	      tapeRecorderHardware.getTapeRecorderInterface()).write(file);
-  // 	  }
-  // 	} catch (RuntimeException exception) {
-  // 	  errorBox(exception);
-  // 	  return;
-  // 	}
-  // 	setVisible(false);
-  // 	InfoBox.display(panel, Application
-  // 	  .getString(this, "ejectDialog.tapeSaved"));
-  //     }
-  //   }
-  // }
-	
-  // // load listener
-  // private class LoadListener implements ActionListener {
-  //   @Override
-  //   public void actionPerformed(final ActionEvent event) {
-  //     log.finer("Load listener action started");
-  //     if (tapeRecorderHardware.getTape().isEmpty() ||
-  // 	  (ConfirmationBox.display(panel, Application
-  // 	  .getString(this, "ejectDialog.confirm.question")) ==
-  // 	   JOptionPane.YES_OPTION)) {
-  // 	prepareFilters();
-  // 	if (fileChooser.showOpenDialog(ShortcutDialog.this) ==
-  // 	    JFileChooser.APPROVE_OPTION) {
-  // 	  final File file = fileChooser.getSelectedFile();
-  // 	  try {
-  // 	    if (formatXML.isSelected()) {
-  // 	      new XML(tapeRecorderHardware.getTape(),
-  // 	        tapeRecorderHardware.getTapeRecorderInterface()).read(file);
-  // 	    } else if (formatPMT.isSelected()) {
-  // 	      new PMT(tapeRecorderHardware.getTape(),
-  // 	        tapeRecorderHardware.getTapeRecorderInterface()).read(file);
-  // 	    } else if (formatPMITAPE.isSelected()) {
-  // 	      new PMITAPE(tapeRecorderHardware.getTape(),
-  // 	        tapeRecorderHardware.getTapeRecorderInterface()).read(file);
-  // 	    } else {
-  // 	      assert formatSAM.isSelected();
-  // 	      new SAM(tapeRecorderHardware.getTape(),
-  // 	        tapeRecorderHardware.getTapeRecorderInterface()).read(file);
-  // 	    }
-  // 	  } catch (RuntimeException exception) {
-  // 	    errorBox(exception);
-  // 	    return;
-  // 	  }
-  // 	  tapeRecorderHardware.resetTape();
-  // 	  setVisible(false);
-  // 	  InfoBox.display(panel, Application
-  // 	    .getString(this, "ejectDialog.tapeLoaded"));
-  // 	}
-  //     }
-  //   }
-  // }
-
-  // // blank listener	
-  // private class BlankListener implements ActionListener {
-  //   @Override
-  //   public void actionPerformed(final ActionEvent event) {
-  //     log.finer("Blank listener action started");
-  //     if (tapeRecorderHardware.getTape().isEmpty() ||
-  // 	  (ConfirmationBox.display(panel, Application
-  // 	  .getString(this, "ejectDialog.confirm.question")) ==
-  // 	   JOptionPane.YES_OPTION)) {
-  // 	tapeRecorderHardware.getTape().clear();
-  // 	tapeRecorderHardware.resetTape();
-  // 	setVisible(false);
-  // 	InfoBox.display(panel, Application
-  // 	  .getString(this, "ejectDialog.tapeBlank"));
-  //     }
-  //   }
-  // }
-	
-  // // close listener
-  // private class CloseListener implements ActionListener {
-  //   @Override
-  //   public void actionPerformed(final ActionEvent event) {
-  //     log.finer("Close listener action started");
-  //     setVisible(false);
-  //   }
-  // }
+  // set button listener
+  private class SetListener implements ActionListener {
+    @Override
+    public void actionPerformed(final ActionEvent event) {
+      log.finer("Set button event detected");
+      newShortcut = shortcut;
+      dispose();
+    }
+  }
+  
+  // cancel button listener
+  private class CancelListener implements ActionListener {
+    @Override
+    public void actionPerformed(final ActionEvent event) {
+      log.finer("Cancel button event detected");
+      dispose();
+    }
+  }
 }

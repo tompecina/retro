@@ -118,7 +118,7 @@ public class Shortcut {
    *
    * @return the ID of the shortcut
    */
-  public String getId() {
+  public String getID() {
     String location;
     if (keyLocation == KeyEvent.KEY_LOCATION_STANDARD) {
       location = "S";
@@ -138,9 +138,9 @@ public class Shortcut {
 
   /**
    * Gets a textual description of the shortcut.  As there is no
-   * distinction between "standard" and "any" locations, the
+   * distinction between "standard", "unknown" and "any" locations, the
    * information is incomplete and should never be used for shortcut
-   * identification or serialization.  Use {@code #getId} instead.
+   * identification or serialization.  Use {@code #getID} instead.
    *
    * @return the long description of the shortcut
    */
@@ -152,9 +152,17 @@ public class Shortcut {
       location = "/R";
     } else if (keyLocation == KeyEvent.KEY_LOCATION_NUMPAD) {
       location = "/N";
-    } else if (keyLocation == KeyEvent.KEY_LOCATION_UNKNOWN) {
-      location = "/U";
     }
     return KeyEvent.getKeyText(keyCode) + location;
+  }
+
+  // for description see Object
+  @Override
+  public boolean equals(final Object o) {
+    log.finest("Comparing to: " + o);
+    return (o != null) &&
+           (o instanceof Shortcut) &&
+           (((Shortcut)o).keyCode == keyCode) &&
+           (((Shortcut)o).keyLocation == keyLocation);
   }
 }

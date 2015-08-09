@@ -62,7 +62,7 @@ public class TapeRecorderSwitchButton
     Application.addLocalized(this);
     log.fine("New TapeRecorderSwitchButton created: " + id);
   }
-    
+
   // for description see Object
   @Override
   public String toString() {
