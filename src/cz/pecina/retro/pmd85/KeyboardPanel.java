@@ -24,7 +24,9 @@ import java.util.logging.Logger;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
+import javax.swing.KeyStroke;
 import cz.pecina.retro.gui.BackgroundFixedPane;
+import cz.pecina.retro.gui.Shortcut;
 
 /**
  * The PMD 85 keyboard panel.
@@ -76,6 +78,7 @@ public class KeyboardPanel extends BackgroundFixedPane {
     		key.getOffsetY() * BASE_HEIGHT);
       log.finest("Key '" + key + "' added");
     }
+    setShortcuts();
     log.finer("Keys set up");
 
     // set up LEDs
@@ -104,5 +107,31 @@ public class KeyboardPanel extends BackgroundFixedPane {
    */
   public KeyboardHardware getKeyboardHardware() {
     return keyboardHardware;
+  }
+
+  /**
+   * Sets up keyboard shortcuts.
+   */
+  public void setShortcuts() {
+    log.finer("Setting up keyboard shortcuts");
+    getInputMap().clear();
+    getActionMap().clear();
+    for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
+      final KeyboardKey key =
+    	  keyboardHardware.getKeyboardLayout().getKey(i);
+    	final Shortcut shortcut = key.getShortcut();
+    	if (shortcut != null) {
+    	  getInputMap().put(KeyStroke.getKeyStroke(
+	    shortcut.getKeyCode(), 0, false), "KeyPressedAction_" + shortcut.getID());
+    	  getActionMap().put("KeyPressedAction_" + shortcut.getID(),
+    			     key.keyPressedAction());
+    	  getInputMap().put(KeyStroke.getKeyStroke(
+	    shortcut.getKeyCode(), 0, true), "KeyReleasedAction_" + shortcut.getID());
+    	  getActionMap().put("KeyReleasedAction_" + shortcut.getID(),
+    			     key.keyReleasedAction());
+    	}
+    	log.finest("Shortcut for key '" + key + "' set to: " + shortcut);
+    }
+    log.finer("Keyboard shortcuts set up");
   }
 }

@@ -22,17 +22,11 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
-import java.util.prefs.BackingStoreException;
 import java.util.Locale;
-import java.util.Arrays;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
 import cz.pecina.retro.common.GeneralUserPreferences;
-import cz.pecina.retro.common.GeneralConstants;
-import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
-import cz.pecina.retro.gui.GUI;
-import cz.pecina.retro.cpu.SimpleMemory;
+import cz.pecina.retro.common.Parameters;
+import cz.pecina.retro.gui.Shortcut;
 
 /**
  * Static user preferences to be imported on start-up (emulator specific).
@@ -49,6 +43,10 @@ public final class UserPreferences extends GeneralUserPreferences {
   // true if preferences already retrieved
   private static boolean retrieved;
   
+  // keyboard shortcuts
+  private static Shortcut[] shortcuts =
+    new Shortcut[KeyboardLayout.NUMBER_KEYS];
+
   /**
    * Gets preferences from the backing store.
    */
@@ -59,9 +57,84 @@ public final class UserPreferences extends GeneralUserPreferences {
         GeneralUserPreferences.getLocale()));
       Application.addModule(UserPreferences.class);
       
+      for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
+	final String shortcutString =
+	  Parameters.preferences.get("shortcut." + i, null);
+	Shortcut shortcut;
+	if (shortcutString == null) {
+	  shortcut = getDefaultShortcut(i);
+	} else if (shortcutString.equals(NULL_STRING)) {
+	  shortcut = null;
+	} else {
+	  shortcut = new Shortcut(shortcutString);
+	}
+	shortcuts[i] = shortcut;
+	Parameters.preferences.put("shortcut." + i,
+				   (shortcut != null) ?
+				   shortcut.getID() :
+				   NULL_STRING);
+      }
       retrieved = true;
     }
     log.finer("User preferences retrieved");
+  }
+
+
+  /**
+   * Sets the keyboard shortcut.
+   *
+   * @param keyboardLayout the keyboard layout
+   * @param number         the internal key number
+   * @param shortcut       the new keyboard shortcut or <code>null</code>
+   *                       if none
+   */
+  public static void setShortcut(final KeyboardLayout keyboardLayout,
+				 final int number,
+				 final Shortcut shortcut) {
+    assert (number >= 0) && (number < KeyboardLayout.NUMBER_KEYS);
+    getPreferences();
+    shortcuts[number] = shortcut;
+    Parameters.preferences.put("shortcut." + number,
+			       (shortcut != null) ?
+			       shortcut.getID() :
+			       NULL_STRING);
+    keyboardLayout.getKey(number).setShortcut(shortcut);
+    log.fine("Shortcut for button " + number +
+	     " in user preferences set to: " +
+	     ((shortcut != null) ? shortcut.getID() : "none"));
+  }
+
+  /**
+   * Gets the keyboard shortcut.
+   *
+   * @param  number   the internal key number
+   * @return shortcut the keyboard shortcut or <code>null</code>
+   *                  if none
+   */
+  public static Shortcut getShortcut(final int number) {
+    assert (number >= 0) && (number < KeyboardLayout.NUMBER_KEYS);
+    getPreferences();
+    final Shortcut shortcut = shortcuts[number];
+    log.fine("Shortcut for button " + number +
+	     " retrieved from user preferences: " +
+	     ((shortcut != null) ? shortcut.getID() : "none"));
+    return shortcut;
+  }
+
+  /**
+   * Gets the default keyboard shortcut.
+   *
+   * @param  number   the internal key number
+   * @return shortcut the default keyboard shortcut
+   */
+  public static Shortcut getDefaultShortcut(final int number) {
+    assert (number >= 0) && (number < KeyboardLayout.NUMBER_KEYS);
+    final String shortcutString = Application.getString(
+      UserPreferences.class,
+      "keyboard.default.shortcut." + number);
+    return shortcutString.equals(NULL_STRING) ?
+           null :
+           new Shortcut(shortcutString);
   }
 
   // default constructor disabled

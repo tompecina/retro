@@ -146,6 +146,6 @@ public class ComputerPanel extends BackgroundFixedPane {
     	log.finest("Shortcut for button '" + button + "' set to: " + shortcut);
       }
     }
-    log.finer("Buttons set up");
+    log.finer("Keyboard shortcuts set up");
   }
 }

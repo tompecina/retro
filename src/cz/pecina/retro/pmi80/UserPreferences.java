@@ -95,7 +95,6 @@ public final class UserPreferences extends GeneralUserPreferences {
 				     NULL_STRING);
 	}
       }
-      
       retrieved = true;
     }
     log.finer("User preferences retrieved");

@@ -63,6 +63,15 @@ public class KeyboardFrame extends HidingFrame implements Resizeable {
     log.fine("KeyboardFrame set up");
   }
 
+  /**
+   * Gets the keyboard panel.
+   *
+   * @return the keyboard panel
+   */
+  public KeyboardPanel getKeyboardPanel() {
+    return keyboardPanel;
+  }
+  
   // redraw frame
   private void redraw() {
     log.fine("KeyboardFrame redraw started");

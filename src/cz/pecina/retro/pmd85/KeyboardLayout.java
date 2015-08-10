@@ -42,115 +42,6 @@ public class KeyboardLayout {
    */
   public static final int NUMBER_KEYS = 77;
 
-  // /**
-  //  * Default keyboard shortcuts.
-  //  */
-  // public static final Map<String,Shortcut[]> DEFAULT_SHORTCUTS =
-  //   new TreeMap<>();
-  // static {
-  //   DEFAULT_SHORTCUTS.put("en-US", new Shortcut[] {
-  //     new Shortcut(KeyEvent.VK_F1,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // K0
-  //     new Shortcut(KeyEvent.VK_F2,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // K1
-  //     new Shortcut(KeyEvent.VK_F3,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // K2
-  //     new Shortcut(KeyEvent.VK_F4,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // K3
-  //     new Shortcut(KeyEvent.VK_F5,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // K4
-  //     new Shortcut(KeyEvent.VK_F6,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // K5
-  //     new Shortcut(KeyEvent.VK_F7,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // K6
-  //     new Shortcut(KeyEvent.VK_F8,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // K7
-  //     new Shortcut(KeyEvent.VK_F9,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // K8
-  //     new Shortcut(KeyEvent.VK_F10,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // K9
-  //     new Shortcut(KeyEvent.VK_F11,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // K10
-  //     new Shortcut(KeyEvent.VK_F12,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // K11
-  //     new Shortcut(KeyEvent.VK_BACK_QUOTE,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // WRK
-  //     new Shortcut(KeyEvent.VK_TAB,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // C-D
-  //     new Shortcut(KeyEvent.VK_PAGE_UP,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),            // RCL
-  //     new Shortcut(KeyEvent.VK_CONTROL,
-  // 		   KeyEvent.KEY_LOCATION_RIGHT),               // RST
-  //     new Shortcut(KeyEvent.VK_1,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),             // 1 / !
-  //     new Shortcut(KeyEvent.VK_2,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),             // 2 / "
-  //     new Shortcut(KeyEvent.VK_3,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),             // 3 / #
-  //     new Shortcut(KeyEvent.VK_4,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),             // 4 / $
-  //     new Shortcut(KeyEvent.VK_5,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),             // 5 / %
-  //     new Shortcut(KeyEvent.VK_6,
-  // 		   KeyEvent.KEY_LOCATION_STANDARD),             // 6 / &
-  //     new Shortcut(KeyEvent.VK_7, KeyEvent.KEY_LOCATION_STANDARD),             // 7 / '
-  //     new Shortcut(KeyEvent.VK_8, KeyEvent.KEY_LOCATION_STANDARD),             // 8 / (
-  //     new Shortcut(KeyEvent.VK_9, KeyEvent.KEY_LOCATION_STANDARD),             // 9 / )
-  //     new Shortcut(KeyEvent.VK_0, KeyEvent.KEY_LOCATION_STANDARD),             // 0 / -
-  //     new Shortcut(KeyEvent.VK_MINUS, KeyEvent.KEY_LOCATION_STANDARD),         // _ / =
-  //     new Shortcut(KeyEvent.VK_EQUALS, KeyEvent.KEY_LOCATION_STANDARD),        // } / {
-  //     new Shortcut(KeyEvent.VK_INSERT, KeyEvent.KEY_LOCATION_STANDARD),        // INS
-  //     new Shortcut(KeyEvent.VK_DELETE, KeyEvent.KEY_LOCATION_STANDARD),        // DEL
-  //     new Shortcut(KeyEvent.VK_BACKSPACE, KeyEvent.KEY_LOCATION_STANDARD),     // CLR
-  //     new Shortcut(KeyEvent.VK_Q, KeyEvent.KEY_LOCATION_STANDARD),             // Q
-  //     new Shortcut(KeyEvent.VK_W, KeyEvent.KEY_LOCATION_STANDARD),             // W
-  //     new Shortcut(KeyEvent.VK_E, KeyEvent.KEY_LOCATION_STANDARD),             // E
-  //     new Shortcut(KeyEvent.VK_R, KeyEvent.KEY_LOCATION_STANDARD),             // R
-  //     new Shortcut(KeyEvent.VK_T, KeyEvent.KEY_LOCATION_STANDARD),             // T
-  //     new Shortcut(KeyEvent.VK_Y, KeyEvent.KEY_LOCATION_STANDARD),             // Y
-  //     new Shortcut(KeyEvent.VK_U, KeyEvent.KEY_LOCATION_STANDARD),             // U
-  //     new Shortcut(KeyEvent.VK_I, KeyEvent.KEY_LOCATION_STANDARD),             // I
-  //     new Shortcut(KeyEvent.VK_O, KeyEvent.KEY_LOCATION_STANDARD),             // O
-  //     new Shortcut(KeyEvent.VK_P, KeyEvent.KEY_LOCATION_STANDARD),             // P
-  //     new Shortcut(KeyEvent.VK_OPEN_BRACKET, KeyEvent.KEY_LOCATION_STANDARD),  // @ / `
-  //     new Shortcut(KeyEvent.VK_CLOSE_BRACKET, KeyEvent.KEY_LOCATION_STANDARD), // \ / ^
-  //     new Shortcut(KeyEvent.VK_LEFT, KeyEvent.KEY_LOCATION_STANDARD),          // <--
-  //     new Shortcut(KeyEvent.VK_HOME, KeyEvent.KEY_LOCATION_STANDARD),          // home
-  //     new Shortcut(KeyEvent.VK_RIGHT, KeyEvent.KEY_LOCATION_STANDARD),         // -->
-  //     new Shortcut(KeyEvent.VK_A, KeyEvent.KEY_LOCATION_STANDARD),             // A
-  //     new Shortcut(KeyEvent.VK_S, KeyEvent.KEY_LOCATION_STANDARD),             // S
-  //     new Shortcut(KeyEvent.VK_D, KeyEvent.KEY_LOCATION_STANDARD),             // D
-  //     new Shortcut(KeyEvent.VK_F, KeyEvent.KEY_LOCATION_STANDARD),             // F
-  //     new Shortcut(KeyEvent.VK_G, KeyEvent.KEY_LOCATION_STANDARD),             // G
-  //     new Shortcut(KeyEvent.VK_H, KeyEvent.KEY_LOCATION_STANDARD),             // H
-  //     new Shortcut(KeyEvent.VK_J, KeyEvent.KEY_LOCATION_STANDARD),             // J
-  //     new Shortcut(KeyEvent.VK_L, KeyEvent.KEY_LOCATION_STANDARD),             // L
-  //     new Shortcut(KeyEvent.VK_SEMICOLON, KeyEvent.KEY_LOCATION_STANDARD),     // ; / +
-  //     new Shortcut(KeyEvent.VK_QUOTE, KeyEvent.KEY_LOCATION_STANDARD),         // : / *
-  //     new Shortcut(KeyEvent.VK_BACK_SLASH, KeyEvent.KEY_LOCATION_STANDARD),    // ] / [
-  //     new Shortcut(KeyEvent.VK_UP, KeyEvent.KEY_LOCATION_STANDARD),            // |<--
-  //     new Shortcut(KeyEvent.VK_END, KeyEvent.KEY_LOCATION_STANDARD),           // END
-  //     new Shortcut(KeyEvent.VK_DOWN, KeyEvent.KEY_LOCATION_STANDARD),          // -->|
-  //     new Shortcut(KeyEvent.VK_SHIFT, KeyEvent.KEY_LOCATION_LEFT),             // left shift
-  //     new Shortcut(KeyEvent.VK_Y, KeyEvent.KEY_LOCATION_STANDARD),             // Y
-  //     new Shortcut(KeyEvent.VK_X, KeyEvent.KEY_LOCATION_STANDARD),             // X
-  //     new Shortcut(KeyEvent.VK_C, KeyEvent.KEY_LOCATION_STANDARD),             // C
-  //     new Shortcut(KeyEvent.VK_V, KeyEvent.KEY_LOCATION_STANDARD),             // V
-  //     new Shortcut(KeyEvent.VK_B, KeyEvent.KEY_LOCATION_STANDARD),             // B
-  //     new Shortcut(KeyEvent.VK_N, KeyEvent.KEY_LOCATION_STANDARD),             // N
-  //     new Shortcut(KeyEvent.VK_M, KeyEvent.KEY_LOCATION_STANDARD),             // M
-  //     new Shortcut(KeyEvent.VK_COMMA, KeyEvent.KEY_LOCATION_STANDARD),         // , / <
-  //     new Shortcut(KeyEvent.VK_PERIOD, KeyEvent.KEY_LOCATION_STANDARD),        // , / >
-  //     new Shortcut(KeyEvent.VK_SLASH, KeyEvent.KEY_LOCATION_STANDARD),         // / / ?
-  //     new Shortcut(KeyEvent.VK_SHIFT, KeyEvent.KEY_LOCATION_RIGHT),            // right shift
-  //     new Shortcut(KeyEvent.VK_ESCAPE, KeyEvent.KEY_LOCATION_STANDARD),        // STOP
-  //     new Shortcut(KeyEvent.VK_ENTER, KeyEvent.KEY_LOCATION_STANDARD),         // left EOL
-  //     new Shortcut(KeyEvent.VK_ENTER, KeyEvent.KEY_LOCATION_NUMPAD),           // right EOL
-  //     new Shortcut(KeyEvent.VK_SPACE, KeyEvent.KEY_LOCATION_STANDARD)          // space
-  //   });
-
-
-
   // array of keys
   private KeyboardKey keys[];
 
@@ -259,11 +150,11 @@ public class KeyboardLayout {
   public void modify( final Constants.Model model) {
     log.fine("Modifying keyboard layout for: " + model);
     if (model != Constants.Model.PMD_85_1) {
-      getKeyByContact(27).setCap("brace");
-      getKeyByContact(41).setCap("at");
-      getKeyByContact(57).setCap("bracket");
-      getKeyByContact(79).setCap("shortspace");
-      getKeyByContact(79).setOffsetX(15);
+      getKey(27).setCap("brace");
+      getKey(41).setCap("at");
+      getKey(57).setCap("bracket");
+      getKey(76).setCap("shortspace");
+      getKey(76).setOffsetX(15);
     }
     log.finer("Keyboard layout modified");
   }
@@ -271,7 +162,7 @@ public class KeyboardLayout {
   /**
    * Gets the array of keys.
    *
-   * @return the array of keys
+   * @return array of keys
    */
   public KeyboardKey[] getKeys() {
     log.finer("Getting the array of keys");
@@ -279,10 +170,22 @@ public class KeyboardLayout {
   }
 
   /**
+   * Gets the key by the internal number.
+   *
+   * @param  number the internal number
+   * @return        the key
+   */
+  public KeyboardKey getKey(final int number) {
+    assert (number >= 0) && (number < NUMBER_KEYS);
+    log.finer("Getting key by number: " + number);
+    return keys[number];
+  }
+
+  /**
    * Gets the key by the contact number.
    *
-   * @param contact the contact number
-   * @return        the key or <code>null</code> of not found
+   * @param  contact the contact number
+   * @return         the key or <code>null</code> of not found
    */
   public KeyboardKey getKeyByContact(final int contact) {
     log.finer("Getting key by contact: " + contact);

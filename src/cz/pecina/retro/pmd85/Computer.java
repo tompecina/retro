@@ -107,9 +107,9 @@ public class Computer {
 
     // set up the frames
     computerFrame =
-      new ComputerFrame(this //,
+      new ComputerFrame(this,
     			// computerHardware.getDisplayHardware(),
-    			// computerHardware.getKeyboardHardware()
+    			computerHardware.getKeyboardHardware()
 			);
     // memoryFrame = new MemoryFrame(this, computerHardware.getHardware());
     keyboardFrame = new KeyboardFrame(this, computerHardware.getKeyboardHardware());
@@ -166,6 +166,15 @@ public class Computer {
    */
   public ComputerFrame getComputerFrame() {
     return computerFrame;
+  }
+
+  /**
+   * Gets the keyboard frame.
+   *
+   * @return the keyboard frame
+   */
+  public KeyboardFrame getKeyboardFrame() {
+    return keyboardFrame;
   }
 
   /**

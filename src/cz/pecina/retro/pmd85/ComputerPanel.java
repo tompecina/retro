@@ -26,6 +26,7 @@ import cz.pecina.retro.gui.BackgroundFixedPane;
 import cz.pecina.retro.gui.GenericBitmap;
 import cz.pecina.retro.gui.SSD;
 import cz.pecina.retro.gui.GUI;
+import cz.pecina.retro.gui.Shortcut;
 
 /**
  * Main control panel of the computer.
@@ -48,6 +49,12 @@ public class ComputerPanel extends BackgroundFixedPane {
   private static final int MARKING_OFFSET_X = 12;
   private static final int MARKING_OFFSET_Y = 278;
 
+  // the computer control object
+  private Computer computer;
+  
+  // keyboard hardware
+  private KeyboardHardware keyboardHardware;
+  
   // brand marking
   private final Marking marking = new Marking();
 
@@ -59,15 +66,21 @@ public class ComputerPanel extends BackgroundFixedPane {
    * @param displayHardware  the display hardware to operate on
    * @param keyboardHardware the keyboard hardware to operate on
    */
-  public ComputerPanel(final Computer computer //,
+  public ComputerPanel(final Computer computer,
 		       // final DisplayHardware displayHardware,
-		       // final KeyboardHardware keyboardHardware
+		       final KeyboardHardware keyboardHardware
 		       ) {
     super("pmd85/ComputerPanel/mask", "plastic", "gray");
     assert computer != null;
     // assert displayHardware != null;
-    // assert keyboardHardware != null;
+    assert keyboardHardware != null;
     log.fine("New ComputerPanel creation started");
+
+    this.computer = computer;
+    this.keyboardHardware = keyboardHardware;
+    
+    // set up keyboard shortcuts
+    setShortcuts();
 
     // set up LEDs
     final ComputerHardware computerHardware = computer.getComputerHardware();
@@ -89,5 +102,31 @@ public class ComputerPanel extends BackgroundFixedPane {
     log.finer("Icons set up");
 
     log.fine("Computer control panel set up");
+  }
+
+  /**
+   * Sets up keyboard shortcuts.
+   */
+  public void setShortcuts() {
+    log.finer("Setting up keyboard shortcuts");
+    getInputMap().clear();
+    getActionMap().clear();
+    for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
+      final KeyboardKey key =
+    	  keyboardHardware.getKeyboardLayout().getKey(i);
+    	final Shortcut shortcut = key.getShortcut();
+    	if (shortcut != null) {
+    	  getInputMap().put(KeyStroke.getKeyStroke(shortcut.getKeyCode(), 0, false),
+    			    "KeyPressedAction_" + shortcut.getID());
+    	  getActionMap().put("KeyPressedAction_" + shortcut.getID(),
+    			     key.keyPressedAction());
+    	  getInputMap().put(KeyStroke.getKeyStroke(shortcut.getKeyCode(), 0, true),
+    			    "KeyReleasedAction_" + shortcut.getID());
+    	  getActionMap().put("KeyReleasedAction_" + shortcut.getID(),
+    			     key.keyReleasedAction());
+    	}
+    	log.finest("Shortcut for key '" + key + "' set to: " + shortcut);
+    }
+    log.finer("Keyboard shortcuts set up");
   }
 }
