@@ -80,16 +80,26 @@ public final class Application {
   /**
    * Adds a localized module.
    *
-   * @param bundle object identifying the resource bundle to be added
+   * @param cl class identifying the resource bundle to be added
    */
-  public static void addModule(final Object bundle) {
-    assert bundle != null;
+  public static void addModule(final Class cl) {
+    assert cl != null;
     assert locale != null;
-    final Package pack = bundle.getClass().getPackage();
+    final Package pack = cl.getPackage();
     final String name = pack.getName();
     textResources.put(pack, PropertyResourceBundle
 		      .getBundle(name + ".TextResources", locale));
     log.fine("New localized module added to Application: " + name);
+  }
+
+  /**
+   * Adds a localized module.
+   *
+   * @param bundle object identifying the resource bundle to be added
+   */
+  public static void addModule(final Object bundle) {
+    assert bundle != null;
+    addModule(bundle.getClass());
   }
 
   /**
@@ -149,21 +159,28 @@ public final class Application {
   /**
    * Gets a localized text resource.
    *
+   * @param  bundle the <code>Class</code> identifying the resource bundle
+   * @param  key    the key for the desired string
+   * @return        the string for the given key
+   */
+  public static String getString(final Class cl, final String key) {
+    log.finest("Text resource requested: " + key);
+    assert cl != null;
+    assert (key != null) && !key.isEmpty();
+    final String s = textResources.get(cl.getPackage()).getString(key);
+    log.finer("Text resource retrieved: " + key + " -> " + s);
+    return s;
+  }
+
+  /**
+   * Gets a localized text resource.
+   *
    * @param  bundle the object identifying the resource bundle
-   *                (normally <code>this</code> or a <code>Class</code>
-   *                object for static references)
    * @param  key    the key for the desired string
    * @return        the string for the given key
    */
   public static String getString(final Object bundle, final String key) {
-    log.finest("Text resource requested: " + key);
-    assert bundle != null;
-    assert (key != null) && !key.isEmpty();
-    final Class cl =
-      (bundle instanceof Class) ? (Class)bundle : bundle.getClass();
-    final String s = textResources.get(cl.getPackage()).getString(key);
-    log.finer("Text resource retrieved: " + key + " -> " + s);
-    return s;
+    return getString(bundle.getClass(), key);
   }
 
   /**
@@ -180,7 +197,7 @@ public final class Application {
   public static RuntimeException createError(final Object bundle,
 					     final String errorKey,
 					     final Object... varargs) {
-    log.finest("Exceptio requested: " + errorKey);
+    log.finest("Exception requested: " + errorKey);
     assert bundle != null;
     assert (errorKey != null) && !errorKey.isEmpty();
     final Class cl =

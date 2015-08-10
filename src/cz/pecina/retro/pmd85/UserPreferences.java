@@ -49,10 +49,15 @@ public final class UserPreferences extends GeneralUserPreferences {
   // true if preferences already retrieved
   private static boolean retrieved;
   
-  // gets preferences from the backing store
-  private static void getPreferences() {
+  /**
+   * Gets preferences from the backing store.
+   */
+  public static void getPreferences() {
     if (!retrieved) {
       GeneralUserPreferences.getGeneralPreferences();
+      Application.setLocale(Locale.forLanguageTag(
+        GeneralUserPreferences.getLocale()));
+      Application.addModule(UserPreferences.class);
       
       retrieved = true;
     }

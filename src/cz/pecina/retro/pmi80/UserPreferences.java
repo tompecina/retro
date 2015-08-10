@@ -21,17 +21,11 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
-import java.util.prefs.Preferences;
-import java.util.prefs.BackingStoreException;
 import java.util.Locale;
-import java.util.Arrays;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
+import java.util.prefs.Preferences;
 import cz.pecina.retro.common.GeneralUserPreferences;
-import cz.pecina.retro.common.GeneralConstants;
-import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
-import cz.pecina.retro.gui.GUI;
+import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.gui.Shortcut;
 import cz.pecina.retro.cpu.SimpleMemory;
 
@@ -47,9 +41,6 @@ public final class UserPreferences extends GeneralUserPreferences {
   private static final Logger log =
     Logger.getLogger(UserPreferences.class.getName());
 
-  // string indicating null value in preferences
-  private static final String NULL_STRING = "null";
-
   // true if preferences already retrieved
   private static boolean retrieved;
   
@@ -61,11 +52,16 @@ public final class UserPreferences extends GeneralUserPreferences {
     new Shortcut[KeyboardLayout.NUMBER_BUTTON_ROWS]
                 [KeyboardLayout.NUMBER_BUTTON_COLUMNS];
 
-  // gets preferences from the backing store
-  private static void getPreferences() {
+  /**
+   * Gets preferences from the backing store.
+   */
+  public static void getPreferences() {
     if (!retrieved) {
       GeneralUserPreferences.getGeneralPreferences();
-
+      Application.setLocale(Locale.forLanguageTag(
+        GeneralUserPreferences.getLocale()));
+      Application.addModule(UserPreferences.class);
+      
       startROM = Parameters.preferences.getInt("startROM", -1);
       if (startROM == -1) {
 	startROM = Constants.DEFAULT_START_ROM;
@@ -77,7 +73,7 @@ public final class UserPreferences extends GeneralUserPreferences {
 	startRAM = Constants.DEFAULT_START_RAM;
 	Parameters.preferences.putInt("startRAM", startRAM);
       }
-      
+
       for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++) {
 	for (int column = 0;
 	     column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
@@ -86,7 +82,7 @@ public final class UserPreferences extends GeneralUserPreferences {
 	    Parameters.preferences.get("shortcut." + row + "." + column, null);
 	  Shortcut shortcut;
 	  if (shortcutString == null) {
-	    shortcut = KeyboardLayout.DEFAULT_SHORTCUTS[row][column];
+	    shortcut = getDefaultShortcut(row, column);
 	  } else if (shortcutString.equals(NULL_STRING)) {
 	    shortcut = null;
 	  } else {
@@ -156,7 +152,7 @@ public final class UserPreferences extends GeneralUserPreferences {
   }
 
   /**
-   * Sets keyboard shortcut.
+   * Sets the keyboard shortcut.
    *
    * @param keyboardLayout the keyboard layout
    * @param row            the row
@@ -183,7 +179,7 @@ public final class UserPreferences extends GeneralUserPreferences {
   }
 
   /**
-   * Gets keyboard shortcut.
+   * Gets the keyboard shortcut.
    *
    * @param  row      the row
    * @param  column   the column
@@ -200,6 +196,25 @@ public final class UserPreferences extends GeneralUserPreferences {
 	     ") retrieved from user preferences: " +
 	     ((shortcut != null) ? shortcut.getID() : "none"));
     return shortcut;
+  }
+
+  /**
+   * Gets the default keyboard shortcut.
+   *
+   * @param  row      the row
+   * @param  column   the column
+   * @return shortcut the default keyboard shortcut
+   */
+  public static Shortcut getDefaultShortcut(final int row,
+					    final int column) {
+    assert (row >= 0) && (row < KeyboardLayout.NUMBER_BUTTON_ROWS);
+    assert (column >= 0) && (column < KeyboardLayout.NUMBER_BUTTON_COLUMNS);
+    final String shortcutString = Application.getString(
+      UserPreferences.class,
+      "keyboard.default.shortcut." + row + "." + column);
+    return shortcutString.equals(NULL_STRING) ?
+           null :
+           new Shortcut(shortcutString);
   }
 
   // default constructor disabled

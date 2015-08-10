@@ -52,37 +52,6 @@ public class KeyboardLayout {
     new KeyboardButton[NUMBER_BUTTON_ROWS][NUMBER_BUTTON_COLUMNS];
 
   /**
-   * Default keyboard shortcuts.
-   */
-  public static final Shortcut[][] DEFAULT_SHORTCUTS = {
-    {new Shortcut(KeyEvent.VK_Z, KeyEvent.KEY_LOCATION_STANDARD),
-     new Shortcut(KeyEvent.VK_I, KeyEvent.KEY_LOCATION_STANDARD),
-     new Shortcut(KeyEvent.VK_X, KeyEvent.KEY_LOCATION_STANDARD),
-     new Shortcut(KeyEvent.VK_R, KeyEvent.KEY_LOCATION_STANDARD),
-     new Shortcut(KeyEvent.VK_Q, KeyEvent.KEY_LOCATION_STANDARD)},
-    {new Shortcut(KeyEvent.VK_C, KeyEvent.KEY_LOCATION_STANDARD),
-     new Shortcut(KeyEvent.VK_D, KeyEvent.KEY_LOCATION_STANDARD),
-     new Shortcut(KeyEvent.VK_E, KeyEvent.KEY_LOCATION_STANDARD),
-     new Shortcut(KeyEvent.VK_F, KeyEvent.KEY_LOCATION_STANDARD),
-     new Shortcut(KeyEvent.VK_M, KeyEvent.KEY_LOCATION_STANDARD)},
-    {new Shortcut(KeyEvent.VK_NUMPAD8, KeyEvent.KEY_LOCATION_NUMPAD),
-     new Shortcut(KeyEvent.VK_NUMPAD9, KeyEvent.KEY_LOCATION_NUMPAD),
-     new Shortcut(KeyEvent.VK_A, KeyEvent.KEY_LOCATION_STANDARD),
-     new Shortcut(KeyEvent.VK_B, KeyEvent.KEY_LOCATION_STANDARD),
-     new Shortcut(KeyEvent.VK_L, KeyEvent.KEY_LOCATION_STANDARD)},
-    {new Shortcut(KeyEvent.VK_NUMPAD4, KeyEvent.KEY_LOCATION_NUMPAD),
-     new Shortcut(KeyEvent.VK_NUMPAD5, KeyEvent.KEY_LOCATION_NUMPAD),
-     new Shortcut(KeyEvent.VK_NUMPAD6, KeyEvent.KEY_LOCATION_NUMPAD),
-     new Shortcut(KeyEvent.VK_NUMPAD7, KeyEvent.KEY_LOCATION_NUMPAD),
-     new Shortcut(KeyEvent.VK_S, KeyEvent.KEY_LOCATION_STANDARD)},
-    {new Shortcut(KeyEvent.VK_NUMPAD0, KeyEvent.KEY_LOCATION_NUMPAD),
-     new Shortcut(KeyEvent.VK_NUMPAD1, KeyEvent.KEY_LOCATION_NUMPAD),
-     new Shortcut(KeyEvent.VK_NUMPAD2, KeyEvent.KEY_LOCATION_NUMPAD),
-     new Shortcut(KeyEvent.VK_NUMPAD3, KeyEvent.KEY_LOCATION_NUMPAD),
-     new Shortcut(KeyEvent.VK_ENTER, KeyEvent.KEY_LOCATION_NUMPAD)}
-  };
-
-  /**
    * Creates the keyboard layout.
    *
    * @param keyboardHardware the keyboard hardware object used for the buttons

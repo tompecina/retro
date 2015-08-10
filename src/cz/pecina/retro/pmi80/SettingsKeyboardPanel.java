@@ -109,10 +109,10 @@ public class SettingsKeyboardPanel extends JScrollPane {
     restorePaneConstraints.weightx = 0.0;
     restorePaneConstraints.weighty = 0.0;
     final JPanel restorePane = new JPanel(new BorderLayout());
-    restoreButton.setPreferredSize(new Dimension(440, 30));
+    restoreButton.setPreferredSize(new Dimension(440, 35));
     restorePane.add(restoreButton);
     shortcutsPane.add(restorePane, restorePaneConstraints);
-    // restoreButton.addActionListener(new RestoreListener());
+    restoreButton.addActionListener(new RestoreListener());
 
     for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++) {
       for (int column = 0;
@@ -229,7 +229,6 @@ public class SettingsKeyboardPanel extends JScrollPane {
     return new SetListener();
   }
 
-
   // change button listener
   private class ChangeListener implements ActionListener {
     private int row, column;
@@ -290,6 +289,24 @@ public class SettingsKeyboardPanel extends JScrollPane {
       log.finer("Clear button event detected");
       shortcuts[row][column] = null;
       shortcutLabels[row][column].setText(shortcutToText(null));
+    }
+  }
+
+  // restore button listener
+  private class RestoreListener implements ActionListener {
+    @Override
+    public void actionPerformed(final ActionEvent event) {
+      log.finer("Restore button event detected");
+      for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++) {
+	for (int column = 0;
+	     column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
+	     column++) {
+	  shortcuts[row][column] =
+	    UserPreferences.getDefaultShortcut(row, column);
+	  shortcutLabels[row][column]
+	    .setText(shortcutToText(shortcuts[row][column]));
+	}
+      }
     }
   }
 }

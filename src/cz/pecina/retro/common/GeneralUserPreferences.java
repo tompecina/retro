@@ -45,6 +45,11 @@ public abstract class GeneralUserPreferences {
   private static final Logger log =
     Logger.getLogger(GeneralUserPreferences.class.getName());
 
+  /**
+   * String indicating null value in preferences.
+   */
+  public static final String NULL_STRING = "null";
+
   // node class
   private static Class nodeClass;
   

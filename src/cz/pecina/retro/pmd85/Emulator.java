@@ -21,7 +21,6 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
-import java.util.Locale;
 import javax.swing.ToolTipManager;
 import cz.pecina.retro.common.GeneralConstants;
 import cz.pecina.retro.common.GeneralUserPreferences;
@@ -62,9 +61,8 @@ public class Emulator {
 
     // initialize application
     GeneralUserPreferences.setNodeClass(UserPreferences.class);
-    Application.setLocale(Locale.forLanguageTag(UserPreferences.getLocale()));
-    Application.addModules(this,
-    			   new GUI(),
+    UserPreferences.getPreferences();
+    Application.addModules(new GUI(),
     			   new Memory(),
     			   new TapeRecorder(),
     			   new Debugger(),
