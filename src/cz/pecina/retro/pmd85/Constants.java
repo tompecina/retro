@@ -28,8 +28,22 @@ package cz.pecina.retro.pmd85;
  */
 public final class Constants {
     
+  /**
+   * Number of PMD 85 models.
+   */
+  public static final int NUMBER_MODELS = 5;
+
+  /**
+   * PMD 85 models.
+   */
   public enum Model {PMD_85_1, PMD_85_2, PMD_85_2A, PMD_85_3, PMD_85_3B};
-  
+
+  /**
+   * Array of PMD 85 model strings.
+   */
+  public static final String[] MODELS =
+    {"PMD 85-1", "PMD 85-2", "PMD 85-2A", "PMD 85-3", "PMD 85-3B"};
+
   public static final double CPU_FREQUENCY = 2.048e6;
   public static final int TIMER_PERIOD = 20;  // in msec
   public static final long TIMER_CYCLES =
