@@ -54,7 +54,7 @@ public class Computer {
   private ComputerFrame computerFrame;
 
   // the settings frame
-  // private SettingsFrame settingsFrame;
+  private SettingsFrame settingsFrame;
 
   // the memory frame
   // private MemoryFrame memoryFrame;
@@ -63,7 +63,7 @@ public class Computer {
   private KeyboardFrame keyboardFrame;
 
   // the peripherals frame
-  // private PeripheralsFrame peripheralsFrame;
+  private PeripheralsFrame peripheralsFrame;
 
   // the tape recorder frame
   // private TapeRecorderFrame tapeRecorderFrame;
@@ -119,8 +119,8 @@ public class Computer {
     debuggerFrame = new DebuggerFrame(
       this,
       computerHardware.getDebuggerHardware());
-    // peripheralsFrame = new PeripheralsFrame(this, computerHardware);
-    // settingsFrame = new SettingsFrame(this, peripheralsFrame.getPeripherals());
+    peripheralsFrame = new PeripheralsFrame(this, computerHardware);
+    settingsFrame = new SettingsFrame(this, peripheralsFrame.getPeripherals());
     // aboutFrame = new AboutFrame(this);
 
     // reset tape recorder counter (not needed unless the cycle counter
