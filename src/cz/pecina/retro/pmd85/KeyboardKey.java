@@ -45,9 +45,6 @@ public class KeyboardKey extends LockableButton {
   // cap of the key
   private String cap;
 
-  // contact number
-  private int contact;
-
   // key position in the matrix
   private int offsetX, offsetY;
 
@@ -62,7 +59,6 @@ public class KeyboardKey extends LockableButton {
    *
    * @param keyboardHardware the keyboard hardware object to operate on
    * @param cap              cap of the key
-   * @param contact          contact number
    * @param offsetx          x-offset of the key in 1/2s of the base key width
    * @param offsety          y-offset of the key in 1/2s of the base key height
    * @param matrixRow        position of the key in the hardware matrix
@@ -72,7 +68,6 @@ public class KeyboardKey extends LockableButton {
    */
   public KeyboardKey(final KeyboardHardware keyboardHardware,
 		     final String cap,
-		     final int contact,
 		     final int offsetX,
 		     final int offsetY,
 		     final int matrixRow,
@@ -82,14 +77,12 @@ public class KeyboardKey extends LockableButton {
 	     ", matrix column: " + matrixColumn + ", matrix row: " + matrixRow);
     assert keyboardHardware != null;
     assert cap != null;
-    assert contact > 0;
     assert (matrixRow >= -1) &&
       (matrixRow < KeyboardHardware.NUMBER_MATRIX_ROWS);
     assert (matrixColumn >= -1) &&
       (matrixColumn < KeyboardHardware.NUMBER_MATRIX_COLUMNS);
     this.keyboardHardware = keyboardHardware;
     this.cap = cap;
-    this.contact = contact;
     this.offsetX = offsetX;
     this.offsetY = offsetY;
     this.matrixRow = matrixRow;
@@ -140,24 +133,6 @@ public class KeyboardKey extends LockableButton {
     this.cap = cap;
     super.setTemplate("pmd85/KeyboardKey/" + cap + "-%d-%s.png");
     log.fine("New cap set: " + cap);
-  }
-
-  /**
-   * Gets the cap of the key.
-   *
-   * @return the cap of the key
-   */
-  public String getCap() {
-    return cap;
-  }
-
-  /**
-   * Gets the contact number of the key.
-   *
-   * @return the contact number
-   */
-  public int getContact() {
-    return contact;
   }
 
   /**

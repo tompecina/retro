@@ -208,7 +208,7 @@ public class ComputerHardware {
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);
 
-    log.fine("New Computer hardware object createdo");
+    log.fine("New Computer hardware object created");
   }
   
   /**
@@ -218,6 +218,7 @@ public class ComputerHardware {
    * @param model the model
    */
   public void setModel(final Computer computer, final int model) {
+    log.fine("Setting model: " + model);
     marking.setState(model);
     computer.getComputerHardware().getKeyboardHardware()
       .getKeyboardLayout().modify(model);
