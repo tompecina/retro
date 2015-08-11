@@ -22,8 +22,6 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import cz.pecina.retro.common.Localized;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.gui.CloseableFrame;
@@ -62,12 +60,7 @@ public abstract class HidingFrame extends CloseableFrame implements Localized {
     GUI.setApplicationIcons(this);
     icon.setFrame(this);
     setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-    addFocusListener(new FocusAdapter() {
-	@Override
-	public void focusGained(FocusEvent event) {
-	  toFront();
-	}
-      });
+    setAutoRequestFocus(true);
     log.fine("New HidingFrame '" + title + "' set up");
   }
 
