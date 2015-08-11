@@ -82,7 +82,7 @@ public abstract class Device extends ArrayList<Descriptor> {
    * Gets the <code>Block</code> object identified by name.
    *
    * @param  name name of the <code>Block</code> object
-   * @return the <code>Block</code> object or null if not found
+   * @return      the <code>Block</code> object or null if not found
    */
   public Block getBlockByName(final String name) {
     log.finer("Requesting Block '" + name + "' from Device '" +

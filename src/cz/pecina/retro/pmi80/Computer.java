@@ -146,6 +146,7 @@ public class Computer {
     computerHardware.getTapeRecorderHardware().setCounterOffset(
       Parameters.systemClockSource.getSystemClock());
 
+    // start emulation
     new Timer(Constants.TIMER_PERIOD, new TimerListener()).start();
 
     log.fine("New Computer created");

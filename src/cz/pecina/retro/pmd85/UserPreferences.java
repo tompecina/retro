@@ -43,6 +43,9 @@ public final class UserPreferences extends GeneralUserPreferences {
   // true if preferences already retrieved
   private static boolean retrieved;
   
+  // the computer model
+  private static int model;
+
   // keyboard shortcuts
   private static Shortcut[] shortcuts =
     new Shortcut[KeyboardLayout.NUMBER_KEYS];
@@ -56,6 +59,12 @@ public final class UserPreferences extends GeneralUserPreferences {
       Application.setLocale(Locale.forLanguageTag(
         GeneralUserPreferences.getLocale()));
       Application.addModule(UserPreferences.class);
+
+      model = Parameters.preferences.getInt("model", -1);
+      if (model == -1) {
+	model = Constants.DEFAULT_MODEL;
+	Parameters.preferences.putInt("model", model);
+      }
       
       for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
 	final String shortcutString =
@@ -79,6 +88,32 @@ public final class UserPreferences extends GeneralUserPreferences {
     log.finer("User preferences retrieved");
   }
 
+  /**
+   * Sets the computer model.
+   *
+   * @param computer the computer object
+   * @param model    the model
+   */
+  public static void setModel(final Computer computer, final int model) {
+    assert computer != null;
+    assert (model >= 0) && (model < Constants.NUMBER_MODELS);
+    getPreferences();
+    UserPreferences.model = model;
+    Parameters.preferences.putInt("model", model);
+    computer.getComputerHardware().setModel(computer, model);
+    log.fine("Model in user preferences set to: " + model);
+  }
+
+  /**
+   * Gets the computer model.
+   *
+   * @return the model
+   */
+  public static int getModel() {
+    getPreferences();
+    log.finer("Model retrieved from user preferences: " + model);
+    return model;
+  }
 
   /**
    * Sets the keyboard shortcut.

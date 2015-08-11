@@ -49,6 +49,7 @@ public class SettingsPanel extends JPanel {
 
   // computer-related panels
   private SettingsViewPanel viewPanel;
+  private SettingsModelPanel modelPanel;
   private SettingsKeyboardPanel keyboardPanel;
 
   // array of available peripherals
@@ -78,6 +79,11 @@ public class SettingsPanel extends JPanel {
     tempPanel.add(viewPanel, BorderLayout.PAGE_START);
     tabbedPanel.addTab(Application.getString(this, "settings.view"), tempPanel);
 
+    modelPanel = new SettingsModelPanel(computer);
+    tempPanel = new JPanel(new BorderLayout());
+    tempPanel.add(modelPanel, BorderLayout.PAGE_START);
+    tabbedPanel.addTab(Application.getString(this, "settings.model"), tempPanel);
+
     keyboardPanel = new SettingsKeyboardPanel(frame, computer);
     tempPanel = new JPanel(new BorderLayout());
     tempPanel.add(keyboardPanel, BorderLayout.PAGE_START);
@@ -102,6 +108,7 @@ public class SettingsPanel extends JPanel {
     frame.getRootPane().setDefaultButton(setButton);
     setButton.addActionListener(new SetListener());
     setButton.addActionListener(viewPanel.createSetListener());
+    setButton.addActionListener(modelPanel.createSetListener());
     setButton.addActionListener(keyboardPanel.createSetListener());
     buttonsPanel.add(setButton);
     final JButton cancelButton =
@@ -125,6 +132,7 @@ public class SettingsPanel extends JPanel {
    */
   public void setUp() {
     viewPanel.setUp();
+    modelPanel.setUp();
     keyboardPanel.setUp();
     log.fine("Widgets initialized");
   }

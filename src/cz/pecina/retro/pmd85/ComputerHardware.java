@@ -36,6 +36,7 @@ import cz.pecina.retro.trec.TapeRecorderInterface;
 import cz.pecina.retro.trec.TapeRecorderHardware;
 import cz.pecina.retro.debug.DebuggerHardware;
 import cz.pecina.retro.gui.LED;
+import cz.pecina.retro.gui.Marking;
 
 /**
  * Tesla PMD 85 hardware object.
@@ -51,6 +52,9 @@ public class ComputerHardware {
 
   // the general hardware
   private Hardware hardware;
+
+  // the computer model
+  private int model;
 
   // the memory
   private PMDMemory memory;
@@ -73,11 +77,15 @@ public class ComputerHardware {
   // the debugger hardware
   private DebuggerHardware debuggerHardware;
 
-  // LEDs
+  // the LEDs
   private final LED yellowLED = new LED("small", "yellow");
   private final LED redLED = new LED("small", "red");
   private final LED greenLED = new LED("small", "green");
 
+  // the marking
+  private final Marking marking =
+    new Marking("pmd85/Marking/basic-%d-%d.png", Constants.NUMBER_MODELS);
+  
   /**
    * Creates a new computer hardware object.
    */
@@ -195,12 +203,35 @@ public class ComputerHardware {
     //   .add(memoryController.getPin(1));
     
     // reset all stateful devices
-    hardware.reset();
+    // hardware.reset();
 
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);
 
     log.fine("New Computer hardware object createdo");
+  }
+  
+  /**
+   * Sets the model.
+   *
+   * @param computer the computer control object
+   * @param model the model
+   */
+  public void setModel(final Computer computer, final int model) {
+    marking.setState(model);
+    computer.getComputerHardware().getKeyboardHardware()
+      .getKeyboardLayout().modify(model);
+    computer.getKeyboardFrame().redraw();
+    hardware.reset();
+  }
+
+  /**
+   * Gets the model.
+   *
+   * @return the model
+   */
+  public int getModel() {
+    return model;
   }
 
   /**
@@ -300,5 +331,14 @@ public class ComputerHardware {
    */
   public LED getGreenLED() {
     return greenLED;
+  }
+
+  /**
+   * Gets the marking.
+   *
+   * @return the marking
+   */
+  public Marking getMarking() {
+    return marking;
   }
 }

@@ -6,8 +6,8 @@ for s in $seq; do
     w=$(($s*96))
     h=$(($s*16))
     o=0
-    for b in "PMD_85_1" "PMD_85_2" "PMD_85_2A" "PMD_85_3" "PMD_85_3B"; do
-	convert $opts -crop 1920x320+0+$o $pg $filtertrans $src/marking.png -alpha Set -channel A -evaluate Multiply $trans -resize ${w}x$h $dst/basic-$b-$s.png
+    for m in $(seq 0 4); do
+	convert $opts -crop 1920x320+0+$o $pg $filtertrans $src/marking.png -alpha Set -channel A -evaluate Multiply $trans -resize ${w}x$h $dst/basic-$s-$m.png
 	o=$(($o+320))
     done
 done

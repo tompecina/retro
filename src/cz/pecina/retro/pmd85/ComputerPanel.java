@@ -41,9 +41,9 @@ public class ComputerPanel extends BackgroundFixedPane {
     Logger.getLogger(ComputerPanel.class.getName());
     
   // LED positions
-  private static final int LED_OFFSET_X = 312;
-  private static final int LED_OFFSET_Y = 282;
-  private static final int LED_GRID_X = 11;
+  private static final int LED_OFFSET_X = 267;
+  private static final int LED_OFFSET_Y = 277;
+  private static final int LED_GRID_X = 12;
   
   // brand marking position
   private static final int MARKING_OFFSET_X = 12;
@@ -55,9 +55,6 @@ public class ComputerPanel extends BackgroundFixedPane {
   // keyboard hardware
   private KeyboardHardware keyboardHardware;
   
-  // brand marking
-  private final Marking marking = new Marking();
-
   /**
    * Creates the layered panel containing the elements of the main
    * control panel.
@@ -91,7 +88,7 @@ public class ComputerPanel extends BackgroundFixedPane {
     log.finer("LEDs set up");
 
     // set up brand marking
-    marking.place(this, MARKING_OFFSET_X, MARKING_OFFSET_Y);
+    computerHardware.getMarking().place(this, MARKING_OFFSET_X, MARKING_OFFSET_Y);
     log.finer("Brand marking set up");
 	
     // set up icons

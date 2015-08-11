@@ -72,8 +72,10 @@ public class KeyboardFrame extends HidingFrame implements Resizeable {
     return keyboardPanel;
   }
   
-  // redraw frame
-  private void redraw() {
+  /**
+   * Redraw the frame.
+   */
+  public void redraw() {
     log.fine("KeyboardFrame redraw started");
     super.setTitle(Application.getString(this, "keyboard.frameTitle"));
     remove(keyboardPanel);

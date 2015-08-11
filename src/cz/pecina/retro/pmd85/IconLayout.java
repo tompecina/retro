@@ -37,7 +37,7 @@ public class IconLayout {
   /**
    * Number of icons.
    */
-  public static final int NUMBER_ICONS = 7;
+  public static final int NUMBER_ICONS = 8;
 
   /**
    * Position of the "wheel" icon.
@@ -74,6 +74,11 @@ public class IconLayout {
    */
   public static final int ICON_POSITION_INFO = 6;
 
+  /**
+   * Position of the "power" icon.
+   */
+  public static final int ICON_POSITION_POWER = 7;
+
   // the icons
   public IconButton[] icons;
 
@@ -92,7 +97,8 @@ public class IconLayout {
       new IconButton(computer, "cassette", 312, 110, "toolTip.tapeRecorder"),
       new IconButton(computer, "cable", 311, 141, "toolTip.peripherals"),
       new IconButton(computer, "debug", 311, 174, "toolTip.debugger"),
-      new IconButton(computer, "info", 311, 204, "toolTip.about")
+      new IconButton(computer, "info", 311, 204, "toolTip.about"),
+      new IconButton(computer, "power", 314, 261, "toolTip.power")
     };
     log.fine("New IconLayout creation completed");
   }

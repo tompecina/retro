@@ -80,7 +80,6 @@ public class KeyboardHardware {
   public KeyboardHardware() {
     log.fine("New keyboard hardware creation started");
     keyboardLayout = new KeyboardLayout(this);
-    keyboardLayout.modify(Constants.Model.PMD_85_3);
     for (KeyboardKey key: keyboardLayout.getKeys()) {
       if (key.getMatrixRow() != -1) {
 	keys[key.getMatrixRow()][key.getMatrixColumn()] = key;

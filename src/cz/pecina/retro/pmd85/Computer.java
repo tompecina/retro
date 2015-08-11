@@ -128,6 +128,11 @@ public class Computer {
     computerHardware.getTapeRecorderHardware().setCounterOffset(
       Parameters.systemClockSource.getSystemClock());
 
+
+    // set the model and reset all stateful hardware
+    computerHardware.setModel(this, UserPreferences.getModel());
+
+    // start emulation
     new Timer(Constants.TIMER_PERIOD, new TimerListener()).start();
 
     log.fine("New Computer created");

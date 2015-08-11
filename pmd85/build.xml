@@ -439,9 +439,9 @@
     <srcfileset dir="${graphics.dir}/${package}"
 		includes="marking.png"/>
     <targetfilelist dir="${resources.dir}/${prefix}/${package}/Marking"
-		    files="basic-PMD_85_1-1.png"/>
+		    files="basic-1-0.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/Marking/basic-PMD_85_1-1.png"
+  <available file="${resources.dir}/${prefix}/${package}/Marking/basic-1-0.png"
 	     property="avail.pmd85.Marking"/>
   <target name="pmd85.Marking"
 	  unless="avail.pmd85.Marking">

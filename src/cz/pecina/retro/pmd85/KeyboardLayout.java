@@ -147,9 +147,9 @@ public class KeyboardLayout {
    *
    * @param model the computer model
    */
-  public void modify( final Constants.Model model) {
+  public void modify( final int model) {
     log.fine("Modifying keyboard layout for: " + model);
-    if (model != Constants.Model.PMD_85_1) {
+    if (model != 0) {
       getKey(27).setCap("brace");
       getKey(41).setCap("at");
       getKey(57).setCap("bracket");
