@@ -21,9 +21,12 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import javax.swing.JComponent;
-import cz.pecina.retro.gui.GUI;
+import javax.swing.Timer;
 
 /**
  * Display of the Tesla PMD 85 computer.
@@ -31,29 +34,111 @@ import cz.pecina.retro.gui.GUI;
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class Display extends JComponent {
+public class Display extends Timer {
 
   // static logger
   private static final Logger log =
     Logger.getLogger(Display.class.getName());
 
-  // dimensions of the display
-  private static final int DISPLAY_WIDTH = 288;
-  private static final int DISPLAY_HEIGHT = 256;
-  private static final int DISPLAY_WIDTH_CELLS = DISPLAY_WIDTH / 6;
+  /**
+   * Width of the display in pixels.
+   */
+  public static final int DISPLAY_WIDTH = 288;
+
+  /**
+   * Height of the display in pixels.
+   */
+  public static final int DISPLAY_HEIGHT = 256;
+
+  /**
+   * Width of the display in 6-pixel cells.
+   */
+  public static final int DISPLAY_WIDTH_CELLS = DISPLAY_WIDTH / 6;
+
+  // blinking period in msec
+  private static final int BLINK_PERIOD = 500;
+
+  // the computer control object
+  private Computer computer;
 
   // pixels
-  private byte[][] pixels = new byte [DISPLAY_HEIGHT][DISPLAY_WIDTH_CELLS];
+  private byte[][] pixels;
   
   // attributes
-  private byte[][] attributes = new byte [DISPLAY_HEIGHT][DISPLAY_WIDTH_CELLS];
+  private byte[][] attributes;
   
   // the color mode
-  private int colorMode = UserPreferences.getColorMode();
+  private int colorMode;
 
   // custom colors
-  private PMDColor[] customColors = UserPreferences.getCustomColors();
+  private PMDColor[] customColors;
+
+  // active colors
+  private PMDColor[] colors;
+
+  // the display planes
+  private DisplayPlane plane[] = new DisplayPlane[2];
+
+  // the display plane switch
+  private int planeSwitch;
   
+  // set the active colors
+  private void setActiveColors() {
+    switch (colorMode) {
+      case 0:
+	if (computer.getComputerHardware().getModel() < 3) {
+	  colors = PMDColor.WOB_COLORS[0];
+	} else {
+	  colors = PMDColor.WOB_COLORS[1];
+	}
+	break;
+      case 1:
+	if (computer.getComputerHardware().getModel() < 3) {
+	  colors = PMDColor.GOB_COLORS[0];
+	} else {
+	  colors = PMDColor.GOB_COLORS[1];
+	}
+	break;
+      case 2:
+	colors = PMDColor.DEFAULT_COLORS;
+	break;
+      default:
+	  colors = customColors;
+    }
+  }
+  
+  /**
+   * Creates the display control object.
+   *
+   * @param computer the computer control object
+   */
+  public Display(final Computer computer) {
+    super(BLINK_PERIOD, null);
+    log.fine("Display creation started");
+    assert computer != null;
+    this.computer = computer;
+    plane[0] = new DisplayPlane();
+    plane[1] = new DisplayPlane();
+    pixels = new byte[DISPLAY_HEIGHT][DISPLAY_WIDTH_CELLS];
+    attributes = new byte[DISPLAY_HEIGHT][DISPLAY_WIDTH_CELLS];
+    colorMode = UserPreferences.getColorMode();
+    customColors = UserPreferences.getCustomColors();
+    setActiveColors();
+    addActionListener(new BlinkListener());
+    start();
+    log.fine("Display created");
+  }
+
+  // blink listener
+  private class BlinkListener implements ActionListener {
+    @Override
+    public void actionPerformed(final ActionEvent event) {
+      plane[planeSwitch].setVisible(false);
+      planeSwitch = 1 - planeSwitch;
+      plane[planeSwitch].setVisible(true);
+    }
+  }
+
   /**
    * Writes one byte of memory-mapped data.
    *
@@ -72,6 +157,11 @@ public class Display extends JComponent {
       if ((pixels[row][column] != p) || (attributes[row][column] != a)) {
 	pixels[row][column] = p;
 	attributes[row][column] = a;
+	final Color color = colors[a].getColor();
+	plane[0].setByte(row, column, p, color);
+	plane[1].setByte(row, column,
+			 (colors[a].getBlinkFlag() ? 0 : p),
+			 color);
       }
     }
   }
@@ -87,6 +177,7 @@ public class Display extends JComponent {
     assert computer != null;
     assert (colorMode >= 0) && (colorMode < PMDColor.NUMBER_COLOR_MODES);
     this.colorMode = colorMode;
+    setActiveColors();
   }
 
   /**
@@ -109,6 +200,7 @@ public class Display extends JComponent {
     assert computer != null;
     assert (customColors != null) && (customColors.length == 4);
     this.customColors = customColors;
+    setActiveColors();
   }
 
   /**
@@ -133,18 +225,8 @@ public class Display extends JComponent {
     assert container != null;
     log.fine("Placing display, position: (" +
 	      positionX + "," + positionY + ")");
-
-    final int pixelSize = GUI.getPixelSize();
-    setBounds(positionX * pixelSize,
-	      positionY * pixelSize,
-	      DISPLAY_WIDTH * pixelSize,
-	      DISPLAY_HEIGHT * pixelSize);
-    final Dimension dim =
-      new Dimension(DISPLAY_WIDTH * pixelSize, DISPLAY_HEIGHT * pixelSize);
-    setPreferredSize(dim);
-    setMaximumSize(dim);
-    setMinimumSize(dim);
-    container.add(this);
+    plane[0].place(container, positionX, positionY);
+    plane[1].place(container, positionX, positionY);
     log.finer("Display placed");
   }
 }
