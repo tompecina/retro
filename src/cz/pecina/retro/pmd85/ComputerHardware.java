@@ -24,6 +24,9 @@ import java.util.logging.Logger;
 import java.util.Arrays;
 import java.io.InputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.net.URISyntaxException;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.common.Util;
@@ -84,8 +87,10 @@ public class ComputerHardware {
 
   // the marking
   private final Marking marking =
-    new Marking("pmd85/Marking/basic-%d-%d.png", Constants.NUMBER_MODELS);
-  
+    new Marking("pmd85/Marking/basic-%d-%d.png",
+		Constants.NUMBER_MODELS,
+		UserPreferences.getModel());
+
   /**
    * Creates a new computer hardware object.
    */
@@ -96,7 +101,7 @@ public class ComputerHardware {
     hardware = new Hardware("PMD_85");
 
     // set up memory
-    memory = new PMDMemory("MEMORY", 8, 64, 10);
+    memory = new PMDMemory("MEMORY", 8, 64, 32);
     hardware.add(memory);
     Parameters.memoryDevice = memory;
     Parameters.memoryObject = memory;
@@ -109,47 +114,10 @@ public class ComputerHardware {
 
     // connect CPU and memory
     cpu.setMemory(memory);
-
-    // load monitor
-    try (final InputStream monitor =
-	 getClass().getResourceAsStream("ROM/monitor-3.bin")) {
-      final byte[] buffer = new byte[0x2000];
-      final int n = monitor.read(buffer, 0, 0x2000);
-      if (n < 1) {
-	throw Application.createError(this, "monitorLoad");
-      }
-      final byte[] memoryArray =
-	Parameters.memoryDevice.getBlockByName("ROM").getMemory();
-      for (int addr = 0; addr < n; addr++) {
-	memoryArray[addr] = buffer[addr];
-      }
-    } catch (final NullPointerException |
-	     IOException |
-	     IndexOutOfBoundsException exception) {
-      log.fine("Error reading monitor");
-      throw Application.createError(this, "monitorLoad");
+    for (int port: Util.portIterator(0, 0)) {
+      cpu.addIOOutput(port, memory);
     }
-
-    // load Basic
-    try (final InputStream basic =
-	 getClass().getResourceAsStream("ROM/basic-3.bin")) {
-      final byte[] buffer = new byte[0x8000];
-      final int n = basic.read(buffer, 0, 10 * 0x400);
-      if (n < 1) {
-	throw Application.createError(this, "basicLoad");
-      }
-      final byte[] memoryArray =
-	Parameters.memoryDevice.getBlockByName("RMM").getMemory();
-      for (int addr = 0; addr < n; addr++) {
-	memoryArray[addr] = buffer[addr];
-      }
-    } catch (final NullPointerException |
-	     IOException |
-	     IndexOutOfBoundsException exception) {
-      log.fine("Error reading Basic");
-      throw Application.createError(this, "basicLoad");
-    }
-
+      
     // set up the system PIO
     systemPIO = new Intel8255("SYSTEM_PIO");
     hardware.add(systemPIO);
@@ -175,6 +143,10 @@ public class ComputerHardware {
 
     // set up the debugger hardware
     debuggerHardware = new DebuggerHardware(cpu);
+
+    // connect memory controller
+    new IONode().add(systemPIO.getPin(16 + 4)).add(memory.getAllRAMPin());
+    new IONode().add(systemPIO.getPin(16 + 5)).add(memory.getMirrorPin());
 
     // // connect keyboard
     // for (int i = 0; i < 4; i++) {
@@ -210,7 +182,58 @@ public class ComputerHardware {
 
     log.fine("New Computer hardware object created");
   }
-  
+    
+  // loads monitor
+  private void loadMonitor() {
+    try {
+      final byte buffer[] = Files.readAllBytes(Paths.get(getClass()
+         .getResource("ROM/monitor-" + model + ".bin").toURI()));
+      final int size = buffer.length;
+      if (size != ((model < 3) ? 0x1000 : 0x2000)) {
+	throw new IOException("Wrong size");
+      }
+      final byte[] memoryArray =
+	Parameters.memoryDevice.getBlockByName("ROM").getMemory();
+      for (int addr = 0; addr < size; addr++) {
+	memoryArray[addr] = buffer[addr];
+	if (model < 3) {
+	  memoryArray[addr + 0x1000] = buffer[addr];
+	}
+      }
+    } catch (final NullPointerException |
+	     URISyntaxException |
+	     IOException |
+	     IndexOutOfBoundsException exception) {
+      log.fine("Error reading monitor, exception: " + exception);
+      throw Application.createError(this, "monitorLoad");
+    }
+    log.fine("Monitor read");
+  }
+
+  // loads Basic
+  private void loadBasic() {
+    try {
+      final byte buffer[] = Files.readAllBytes(Paths.get(getClass()
+        .getResource("ROM/basic-" + model + ".bin").toURI()));
+      final int size = buffer.length;
+      if (size != ((model < 3) ? (9 * 0x400) : (10 * 0x400))) {
+	throw new IOException("Wrong size");
+      }
+      final byte[] memoryArray =
+	Parameters.memoryDevice.getBlockByName("RMM").getMemory();
+      for (int addr = 0; addr < 0x8000; addr++) {
+	memoryArray[addr] = (addr < size) ? buffer[addr] : (byte)0xff;
+      }
+    } catch (final NullPointerException |
+	     URISyntaxException |
+	     IOException |
+	     IndexOutOfBoundsException exception) {
+      log.fine("Error reading Basic, exception: " + exception);
+      throw Application.createError(this, "basicLoad");
+    }
+    log.fine("Basic read");
+  }
+
   /**
    * Sets the model.
    *
@@ -219,10 +242,15 @@ public class ComputerHardware {
    */
   public void setModel(final Computer computer, final int model) {
     log.fine("Setting model: " + model);
+    assert (model >= 0) && (model < Constants.NUMBER_MODELS);
+    this.model = model;
     marking.setState(model);
     computer.getComputerHardware().getKeyboardHardware()
       .getKeyboardLayout().modify(model);
-    computer.getKeyboardFrame().redraw();
+    computer.getKeyboardFrame().getKeyboardPanel().replaceKeys();
+    memory.setModel(model);
+    loadMonitor();
+    loadBasic();
     hardware.reset();
   }
 

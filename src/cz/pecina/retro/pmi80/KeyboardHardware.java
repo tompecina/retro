@@ -110,6 +110,7 @@ public class KeyboardHardware {
       number = n;
     }
 
+    @Override
     public int query() {
       final int s = 15 - displayHardware.getSelect();
       final int selectedColumn = (s < NUMBER_MATRIX_COLUMNS) ? s : -1;

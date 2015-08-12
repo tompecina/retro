@@ -149,7 +149,13 @@ public class KeyboardLayout {
    */
   public void modify( final int model) {
     log.fine("Modifying keyboard layout for: " + model);
-    if (model != 0) {
+    if (model == 0) {
+      getKey(27).setCap("blank");
+      getKey(41).setCap("bigat");
+      getKey(57).setCap("revbracket");
+      getKey(76).setCap("longspace");
+      getKey(76).setOffsetX(13);
+    } else {
       getKey(27).setCap("brace");
       getKey(41).setCap("at");
       getKey(57).setCap("bracket");

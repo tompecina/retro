@@ -99,6 +99,7 @@ public class DisplayHardware {
       mask = 1 << number;
     }
 
+    @Override
     public void notifyChange() {
       if ((select & mask) != (IONode.normalize(queryNode()) << number)) {
 	update();
@@ -118,6 +119,7 @@ public class DisplayHardware {
       mask = 1 << number;
     }
 
+    @Override
     public void notifyChange() {
       if ((data & mask) != (IONode.normalize(queryNode()) << number)) {
 	update();

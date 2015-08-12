@@ -23,8 +23,6 @@ package cz.pecina.retro.pmd85;
 import java.util.logging.Logger;
 import javax.swing.KeyStroke;
 import cz.pecina.retro.gui.BackgroundFixedPane;
-import cz.pecina.retro.gui.GenericBitmap;
-import cz.pecina.retro.gui.SSD;
 import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.gui.Shortcut;
 

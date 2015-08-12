@@ -52,13 +52,17 @@ public class Marking extends GenericBitmap implements Resizeable {
    *
    * @param template     the template
    * @param numberStates number of states
+   * @param state        initial state
    */
-  public Marking(final String template, final int numberStates) {
+  public Marking(final String template,
+		 final int numberStates,
+		 final int state) {
     assert (template != null) && !template.isEmpty();
     assert numberStates > 0;
     this.template = template;
     this.numberStates = numberStates;
     icons = new Icon[numberStates];
+    setState(state);
     GUI.addResizeable(this);
     redrawOnPixelResize();
     log.fine("New marking created");

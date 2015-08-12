@@ -31,13 +31,13 @@ public final class Constants {
   /**
    * Number of PMD 85 models.
    */
-  public static final int NUMBER_MODELS = 5;
+  public static final int NUMBER_MODELS = 4;
 
   /**
    * Array of PMD 85 model strings.
    */
   public static final String[] MODELS =
-    {"PMD 85-1", "PMD 85-2", "PMD 85-2A", "PMD 85-3", "PMD 85-3B"};
+    {"PMD 85-1", "PMD 85-2", "PMD 85-2A", "PMD 85-3"};
 
   /**
    * The default model.

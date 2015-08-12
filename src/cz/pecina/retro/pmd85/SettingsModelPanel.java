@@ -65,14 +65,14 @@ public class SettingsModelPanel extends JPanel {
     
     this.computer = computer;
 
-    setBorder(BorderFactory.createEmptyBorder(5, 8, 0, 8));
+    setBorder(BorderFactory.createEmptyBorder(8, 15, 0, 8));
     final ButtonGroup modelGroup = new ButtonGroup();
     for (int model = 0; model < Constants.NUMBER_MODELS; model++) {
       final GridBagConstraints modelConstraints = new GridBagConstraints();
       modelButtons[model] = new JRadioButton(Constants.MODELS[model]);
       modelConstraints.gridx = 0;
       modelConstraints.gridy = model;
-      modelConstraints.insets = new Insets(0, 0, 0, 0);
+      modelConstraints.insets = new Insets(2, 0, 0, 0);
       modelConstraints.anchor = GridBagConstraints.LINE_START;
       modelConstraints.weightx = 1.0;
       modelConstraints.weighty = 0.0;

@@ -25,8 +25,10 @@ import java.util.logging.Level;
 import org.jdom2.Element;
 import cz.pecina.retro.cpu.Device;
 import cz.pecina.retro.cpu.AbstractMemory;
+import cz.pecina.retro.cpu.IOElement;
 import cz.pecina.retro.cpu.Register;
 import cz.pecina.retro.cpu.Block;
+import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.memory.Snapshot;
 import cz.pecina.retro.memory.Info;
 
@@ -36,11 +38,23 @@ import cz.pecina.retro.memory.Info;
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class PMDMemory extends Device implements AbstractMemory {
+public class PMDMemory
+  extends Device
+  implements AbstractMemory, IOElement {
 
   // dynamic logger, per device
   private Logger log;
 
+  // the computer model
+  private int model;
+
+  // pins
+  private AllRAMPin allRAMPin = new AllRAMPin();
+  private MirrorPin mirrorPin = new MirrorPin();
+
+  // flags
+  private boolean resetFlag, allRAMFlag, mirrorFlag;
+  
   /**
    * ROM as an array of bytes.
    */
@@ -77,7 +91,7 @@ public class PMDMemory extends Device implements AbstractMemory {
    * @param name    device name
    * @param sizeROM size of ROM (in KiB)
    * @param sizeRAM size of RAM (in KiB)
-   * @param sizeRMM size of ROM module (in KiB)
+   * @param sizeRMM size of RMM module (in KiB)
    */
   public PMDMemory(final String name,
 		   final int sizeROM,
@@ -255,16 +269,139 @@ public class PMDMemory extends Device implements AbstractMemory {
     this.sizeRMM = sizeRMM;
   }
 
+  /**
+   * Sets the model.
+   *
+   * @param model the model
+   */
+  public void setModel(final int model) {
+    log.fine("Setting model: " + model);
+    this.model = model;
+  }
+
+  // for description see Device
+  @Override
+  public void reset() {
+    resetFlag = true;
+  }
+  
+  // for description see IOElement
+  @Override
+  public void portOutput(final int port, int data) {
+    resetFlag = false;
+  }
+
+  // for description see IOElement
+  @Override
+  public int portInput(final int port) {
+    return 0xff;
+  }
+
+  // AllRAM pin
+  private class AllRAMPin extends IOPin {
+
+    private AllRAMPin() {
+      super();
+    }
+
+    @Override
+    public void notifyChange() {
+      allRAMFlag = (queryNode() == 0);
+    }
+  }
+
+  /**
+   * Gets the AllRAM pin.
+   *
+   * @return the pin object
+   */
+  public IOPin getAllRAMPin() {
+    return allRAMPin;
+  }
+
+  // mirror pin
+  private class MirrorPin extends IOPin {
+
+    private MirrorPin() {
+      super();
+    }
+
+    @Override
+    public void notifyChange() {
+      mirrorFlag = (queryNode() == 0);
+    }
+  }
+
+  /**
+   * Gets the mirror pin.
+   *
+   * @return the pin object
+   */
+  public IOPin getMirrorPin() {
+    return mirrorPin;
+  }
+
   // for description see AbstractMemory
   @Override
   public int getByte(final int address) {
     assert (address >= 0) && (address < 0x10000);
+    int  data;
+    switch (model) {
+      case 0:
+      case 1:
+	if (resetFlag) {
+	  if (address < 0x2000) {
+	    data = rom[address];
+	  } else if ((address >= 0x8000) && (address < 0xc000)) {
+	    data = rom[address - 0x8000];
+	  } else {
+	    data = 0xff;
+	  }
+	} else {
+	  if ((address >= 0x8000) && (address < 0xc000)) {
+	    data = rom[address - 0x8000];
+	  } else {
+	    data = ram[address];
+	  }
+	}
+	break;
+      case 2:
+	if (allRAMFlag) {
+	  data = ram[address];
+	} else if (resetFlag) {
+	  if (address < 0x2000) {
+	    data = rom[address];
+	  } else if ((address >= 0x8000) && (address < 0xc000)) {
+	    data = rom[address - 0x8000];
+	  } else {
+	    data = ram[address];
+	  }
+	} else {
+	  if ((address >= 0x8000) && (address < 0xc000)) {
+	    data = rom[address - 0x8000];
+	  } else {
+	    data = ram[address];
+	  }
+	}
+	break;
+      default:
+	if (allRAMFlag) {
+	  data = ram[address];
+	} else if (mirrorFlag) {
+	  data = rom[address & 0x1fff];
+	} else if (address >= 0xe000) {
+	  data = rom[address - 0xe000];
+	} else {
+	  data = ram[address];
+	}
+	break;
+    }
     if (log.isLoggable(Level.FINEST))
       log.finest(String.format("Memory '%s' read: (%04x) -> %02x",
 			       name,
 			       address,
-			       rom[address] & 0xff));
-    return rom[address] & 0xff;
+			       data & 0xff));
+    return data & 0xff;
   }
 
   // for description see AbstractMemory
@@ -272,19 +409,14 @@ public class PMDMemory extends Device implements AbstractMemory {
   public void setByte(final int address, final int data) {
     assert (address >= 0) && (address < 0x10000);
     assert (data >= 0) && (data < 0x100);
-    // if ((address < (startROM * 0x0400)) ||
-    // 	(address >= (startRAM * 0x0400))) {
-    //   rom[address] = (byte)data;
-    //   if (log.isLoggable(Level.FINEST)) {
-    // 	log.finest(String.format("Memory '%s' written: %02x -> (%04x)",
-    // 				 name,
-    // 				 (byte)data,
-    // 				 address));
-    //   }
-    // } else if (log.isLoggable(Level.FINER)) {
-    //   log.finer(String.format("Memory '%s' write denied, address: %04x",
-    // 			      name,
-    // 			      address));
-    // }
+    if ((model > 1) || (!resetFlag)) {
+      ram[address] = (byte)data;
+    }
+    if (log.isLoggable(Level.FINEST)) {
+      log.finest(String.format("Memory '%s' written: %02x -> (%04x)",
+			       name,
+			       (byte)data,
+			       address));
+    }
   }
 }

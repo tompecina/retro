@@ -110,6 +110,7 @@ public class KeyboardHardware {
       mask = 1 << number;
     }
 
+    @Override
     public void notifyChange() {
       if ((select & mask) != (IONode.normalize(queryNode()) << number)) {
 	select ^= mask;
@@ -138,6 +139,7 @@ public class KeyboardHardware {
       number = n;
     }
 
+    @Override
     public int query() {
       final int selectedColumn = (select < NUMBER_MATRIX_COLUMNS) ? select : -1;
       return (selectedColumn == -1) ?
