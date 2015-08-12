@@ -61,12 +61,12 @@ public class PMDMemory
   /**
    * ROM as an array of bytes.
    */
-  protected final byte[] rom;;
+  protected final byte[] rom;
 
   /**
    * RAM as an array of bytes.
    */
-  protected final byte[] ram;;
+  protected final byte[] ram;
 
   /**
    * ROM module as an array of bytes or <code>null</code> if not present.

@@ -49,8 +49,11 @@ public class Display extends JComponent {
   private byte[][] attributes = new byte [DISPLAY_HEIGHT][DISPLAY_WIDTH_CELLS];
   
   // the color mode
-  private int colorMode;
+  private int colorMode = UserPreferences.getColorMode();
 
+  // custom colors
+  private PMDColor[] customColors = UserPreferences.getCustomColors();
+  
   /**
    * Writes one byte of memory-mapped data.
    *
@@ -81,7 +84,8 @@ public class Display extends JComponent {
    */
   public void setColorMode(final Computer computer, final int colorMode) {
     log.fine("Setting color mode: " + colorMode);
-    assert (colorMode >= 0) && (colorMode < Constants.NUMBER_COLOR_MODES);
+    assert computer != null;
+    assert (colorMode >= 0) && (colorMode < PMDColor.NUMBER_COLOR_MODES);
     this.colorMode = colorMode;
   }
 
@@ -92,6 +96,28 @@ public class Display extends JComponent {
    */
   public int getColorMode() {
     return colorMode;
+  }
+
+  /**
+   * Sets the custom colors.
+   *
+   * @param computer     the computer control object
+   * @param customColors the custom colors
+   */
+  public void setCustomColors(final Computer computer, final PMDColor[] customColors) {
+    log.fine("Setting custom colors");
+    assert computer != null;
+    assert (customColors != null) && (customColors.length == 4);
+    this.customColors = customColors;
+  }
+
+  /**
+   * Gets the custom colors.
+   *
+   * @return the custom colors
+   */
+  public PMDColor[] getCustomColors() {
+    return customColors;
   }
 
   /**

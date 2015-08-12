@@ -70,7 +70,7 @@ public class Swatch extends JComponent {
    *
    * @param color new color of the swatch
    */
-  public void setState(final Color color) {
+  public void setColor(final Color color) {
     assert color != null;
     this.color = color;
     repaint();

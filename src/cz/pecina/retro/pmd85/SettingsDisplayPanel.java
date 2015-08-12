@@ -24,10 +24,15 @@ import java.util.logging.Logger;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JCheckBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import cz.pecina.retro.common.Application;
@@ -51,9 +56,21 @@ public class SettingsDisplayPanel extends JPanel {
   // the current color mode
   private int currentColorMode;
 
-  // mode buttons
+  // color mode buttons
   private JRadioButton[] colorModeButtons =
-    new JRadioButton[Constants.NUMBER_COLOR_MODES];
+    new JRadioButton[PMDColor.NUMBER_COLOR_MODES];
+
+  // the current custom colors
+  private PMDColor[] currentCustomColors;
+
+  // new custom colors
+  private PMDColor[] customColors;
+
+  // custom color swatches
+  private Swatch[] swatches = new Swatch[4];
+
+  // custom color checkboxes
+  private JCheckBox[] checkBoxes = new JCheckBox[4];
 
   /**
    * Creates the Settings/Display panel.
@@ -69,38 +86,72 @@ public class SettingsDisplayPanel extends JPanel {
 
     setBorder(BorderFactory.createEmptyBorder(8, 15, 0, 8));
     final ButtonGroup colorModeGroup = new ButtonGroup();
-    for (int mode = 0; mode < Constants.NUMBER_COLOR_MODES; mode++) {
+    for (int mode = 0; mode < PMDColor.NUMBER_COLOR_MODES; mode++) {
       final GridBagConstraints colorModeConstraints = new GridBagConstraints();
       colorModeButtons[mode] = new JRadioButton(Application.getString(
         this,
         "settings.display.colorMode." + mode));
       colorModeConstraints.gridx = 0;
       colorModeConstraints.gridy = mode;
+      colorModeConstraints.gridwidth = GridBagConstraints.REMAINDER;
       colorModeConstraints.insets = new Insets(2, 0, 0, 0);
       colorModeConstraints.anchor = GridBagConstraints.LINE_START;
-      colorModeConstraints.weightx = 1.0;
+      colorModeConstraints.weightx = 0.0;
       colorModeConstraints.weighty = 0.0;
       add(colorModeButtons[mode], colorModeConstraints);
       colorModeGroup.add(colorModeButtons[mode]);
     }
-    final GridBagConstraints xxxConstraints = new GridBagConstraints();
-    // final javax.swing.JButton xxx = new javax.swing.JButton("Choose!");
-    final Swatch xxx = new Swatch(14, java.awt.Color.GREEN);
-    xxx.setBorder(BorderFactory.createLineBorder(java.awt.Color.BLACK, 1));
-    xxxConstraints.gridx = 0;
-    xxxConstraints.gridy = Constants.NUMBER_COLOR_MODES;
-    xxxConstraints.insets = new Insets(2, 0, 0, 0);
-    xxxConstraints.anchor = GridBagConstraints.LINE_START;
-    xxxConstraints.weightx = 1.0;
-    xxxConstraints.weighty = 0.0;
-    add(xxx, xxxConstraints);
-    // xxx.addActionListener(new ActionListener() {
-    // 	@Override
-    // 	public void actionPerformed(final ActionEvent event) {
-    // 	  javax.swing.JColorChooser.showDialog(SettingsDisplayPanel.this, "TITLE!", java.awt.Color.WHITE);
-    // 	}
-    //   });
-      	  
+
+    for (int i = 0; i < 4; i++) {
+
+      final GridBagConstraints customColorNumberConstraints =
+	new GridBagConstraints();
+      final JLabel customColorLabel =
+	new JLabel(String.format("%d%d:", (i >> 1), (i & 1)));
+      customColorNumberConstraints.gridx = 0;
+      customColorNumberConstraints.gridy = PMDColor.NUMBER_COLOR_MODES + i;
+      customColorNumberConstraints.insets = new Insets(2, 0, 0, 0);
+      customColorNumberConstraints.anchor = GridBagConstraints.LINE_START;
+      customColorNumberConstraints.weightx = 0.0;
+      customColorNumberConstraints.weighty = 0.0;
+      add(customColorLabel, customColorNumberConstraints);
+      
+      final GridBagConstraints customColorSwatchConstraints =
+	new GridBagConstraints();
+      swatches[i] = new Swatch(14, Color.WHITE);
+      customColorSwatchConstraints.gridx = 1;
+      customColorSwatchConstraints.gridy = PMDColor.NUMBER_COLOR_MODES + i;
+      customColorSwatchConstraints.insets = new Insets(2, 0, 0, 0);
+      customColorSwatchConstraints.anchor = GridBagConstraints.LINE_START;
+      customColorSwatchConstraints.weightx = 0.0;
+      customColorSwatchConstraints.weighty = 0.0;
+      add(swatches[i], customColorSwatchConstraints);
+
+      final GridBagConstraints customColorButtonConstraints =
+	new GridBagConstraints();
+      final JButton customColorButton =
+	new JButton(Application.getString(this, "settings.display.button"));
+      customColorButtonConstraints.gridx = 2;
+      customColorButtonConstraints.gridy = PMDColor.NUMBER_COLOR_MODES + i;
+      customColorButtonConstraints.insets = new Insets(2, 0, 0, 0);
+      customColorButtonConstraints.anchor = GridBagConstraints.LINE_START;
+      customColorButtonConstraints.weightx = 0.0;
+      customColorButtonConstraints.weighty = 0.0;
+      customColorButton.addActionListener(new CustomColorButtonListener(i));
+      add(customColorButton, customColorButtonConstraints);
+
+      final GridBagConstraints customColorCheckBoxConstraints =
+	new GridBagConstraints();
+      checkBoxes[i] =
+	new JCheckBox(Application.getString(this, "settings.display.checkbox"));
+      customColorCheckBoxConstraints.gridx = 3;
+      customColorCheckBoxConstraints.gridy = PMDColor.NUMBER_COLOR_MODES + i;
+      customColorCheckBoxConstraints.insets = new Insets(2, 0, 0, 0);
+      customColorCheckBoxConstraints.anchor = GridBagConstraints.LINE_START;
+      customColorCheckBoxConstraints.weightx = 0.0;
+      customColorCheckBoxConstraints.weighty = 0.0;
+      add(checkBoxes[i], customColorCheckBoxConstraints);
+    }
     log.fine("Settings/Display panel set up");
   }
 
@@ -109,10 +160,34 @@ public class SettingsDisplayPanel extends JPanel {
    */
   public void setUp() {
     currentColorMode = UserPreferences.getColorMode();
-    for (int mode = 0; mode < Constants.NUMBER_COLOR_MODES; mode++) {
+    for (int mode = 0; mode < PMDColor.NUMBER_COLOR_MODES; mode++) {
       colorModeButtons[mode].setSelected(mode == currentColorMode);
     }
+    currentCustomColors = UserPreferences.getCustomColors();
+    customColors = UserPreferences.getCustomColors();
+    for (int i = 0; i < 4; i++) {
+      swatches[i].setColor(customColors[i].getColor());
+      checkBoxes[i].setSelected(customColors[i].getBlinkFlag());
+    }
     log.fine("Widgets initialized");
+  }
+
+  // custom color button listener
+  private class CustomColorButtonListener implements ActionListener {
+    private int i;
+
+    public CustomColorButtonListener(final int i) {
+      this.i = i;
+    }
+    
+    @Override
+    public void actionPerformed(final ActionEvent event) {
+      final Color color = JColorChooser.showDialog(SettingsDisplayPanel.this,
+        Application.getString(this, "settings.display.colorChooser.title"),
+	customColors[i].getColor());
+      customColors[i].setColor(color);
+      swatches[i].setColor(color);
+    }
   }
 
   // partial set listener
@@ -120,12 +195,16 @@ public class SettingsDisplayPanel extends JPanel {
     @Override
     public void actionPerformed(final ActionEvent event) {
       log.finer("Set button event detected");
-      for (int mode = 0; mode < Constants.NUMBER_COLOR_MODES; mode++) {
+      for (int mode = 0; mode < PMDColor.NUMBER_COLOR_MODES; mode++) {
 	if ((mode != currentColorMode) && colorModeButtons[mode].isSelected()) {
 	  UserPreferences.setColorMode(computer, mode);
 	  break;
 	}
       }
+      for (int i = 0; i < 4; i++) {
+	customColors[i].setBlinkFlag(checkBoxes[i].isSelected());
+      }
+      UserPreferences.setCustomColors(computer, customColors);
       log.fine("Partial changes implemented");
     }
   }

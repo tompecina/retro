@@ -39,7 +39,7 @@ public class PMDColor {
   /**
    * Number of color modes.
    */
-  public static int NUMBER_COLOR_MODES = 3;
+  public static int NUMBER_COLOR_MODES = 4;
   
   /**
    * Default color mode.
@@ -52,14 +52,44 @@ public class PMDColor {
   public static int NUMBER_COLORS = 4;
 
   /**
-   * Default color mode.
+   * White-on-black color modes.
+   */
+  public static PMDColor[][] WOB_COLORS= {
+    {
+      new PMDColor(new Color(0xffffff), false),
+      new PMDColor(new Color(0x808080), false),
+      new PMDColor(new Color(0xffffff), true),
+      new PMDColor(new Color(0x808080), true)},
+    {
+      new PMDColor(new Color(0xffffff), false),
+      new PMDColor(new Color(0xc0c0c0), false),
+      new PMDColor(new Color(0x808080), false),
+      new PMDColor(new Color(0x404040), false)}};
+  
+  /**
+   * Green-on-black color modes.
+   */
+  public static PMDColor[][] GOB_COLORS = {
+    {
+      new PMDColor(new Color(0x00ff00), false),
+      new PMDColor(new Color(0x008000), false),
+      new PMDColor(new Color(0x00ff00), true),
+      new PMDColor(new Color(0x008000), true)},
+    {
+      new PMDColor(new Color(0x00ff00), false),
+      new PMDColor(new Color(0x00c000), false),
+      new PMDColor(new Color(0x008000), false),
+      new PMDColor(new Color(0x004000), false)}};
+  
+  /**
+   * Default custom color mode.
    */
   public static PMDColor DEFAULT_COLORS[] = {
-    new PMDColor(Color.WHITE, false),
-    new PMDColor(Color.RED, false),
-    new PMDColor(Color.BLUE, false),
-    new PMDColor(Color.MAGENTA, false)};
-  
+    new PMDColor(new Color(0x00ff00), false),
+    new PMDColor(new Color(0xff0000), false),
+    new PMDColor(new Color(0x0000ff), false),
+    new PMDColor(new Color(0xff00ff), false)};
+
   // color
   private Color color;
 
@@ -80,6 +110,15 @@ public class PMDColor {
   }
 
   /**
+   * Sets the color.
+   *
+   * @param color the color of the pixels
+   */
+  public void setColor(final Color color) {
+    this.color = color;
+  }
+
+  /**
    * Gets the color.
    *
    * @return the color of the pixels
@@ -88,6 +127,14 @@ public class PMDColor {
     return color;
   }
 
+  /**
+   * Sets the blinking flag.
+   *
+   * @param blinkFlag <code>true</code> if blinking
+   */
+  public void setBlinkFlag(final boolean blinkFlag) {
+    this.blinkFlag = blinkFlag;
+  }
 
   /**
    * Gets the blinking flag.

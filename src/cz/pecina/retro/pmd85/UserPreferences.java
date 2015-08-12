@@ -23,6 +23,7 @@ package cz.pecina.retro.pmd85;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import java.util.Locale;
+import java.awt.Color;
 import cz.pecina.retro.common.GeneralUserPreferences;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.common.Parameters;
@@ -52,6 +53,9 @@ public final class UserPreferences extends GeneralUserPreferences {
 
   // the color mode
   private static int colorMode;
+
+  // the custom colors
+  private static PMDColor[] customColors = new PMDColor[4];
 
   /**
    * Gets preferences from the backing store.
@@ -89,8 +93,22 @@ public final class UserPreferences extends GeneralUserPreferences {
       
       colorMode = Parameters.preferences.getInt("colorMode", -1);
       if (colorMode == -1) {
-	colorMode = Constants.DEFAULT_COLOR_MODE;
+	colorMode = PMDColor.DEFAULT_COLOR_MODE;
 	Parameters.preferences.putInt("colorMode", colorMode);
+      }
+
+      for (int i = 0; i < 4; i++) {
+	final int color =
+	  Parameters.preferences.getInt("customColors.color." + i, -1);
+	final boolean blinkFlag = 
+	  Parameters.preferences.getBoolean("customColors.blink." + i, false);
+	customColors[i] = (color == -1) ?
+	                  PMDColor.DEFAULT_COLORS[i] :
+	                  new PMDColor(new Color(color), blinkFlag);
+	Parameters.preferences.putInt("customColors.color." + i,
+				      customColors[i].getColor().getRGB());
+	Parameters.preferences.putBoolean("customColors.blink." + i,
+					  customColors[i].getBlinkFlag());
       }
       retrieved = true;
     }
@@ -190,7 +208,7 @@ public final class UserPreferences extends GeneralUserPreferences {
   public static void setColorMode(final Computer computer,
 				  final int colorMode) {
     assert computer != null;
-    assert (colorMode >= 0) && (colorMode < Constants.NUMBER_COLOR_MODES);
+    assert (colorMode >= 0) && (colorMode < PMDColor.NUMBER_COLOR_MODES);
     getPreferences();
     UserPreferences.colorMode = colorMode;
     Parameters.preferences.putInt("colorMode", colorMode);
@@ -208,6 +226,40 @@ public final class UserPreferences extends GeneralUserPreferences {
     getPreferences();
     log.finer("Color mode retrieved from user preferences: " + colorMode);
     return colorMode;
+  }
+
+  /**
+   * Sets the custom colors.
+   *
+   * @param computer     the computer object
+   * @param customColors array of custom colors
+   */
+  public static void setCustomColors(final Computer computer,
+				     final PMDColor[] customColors) {
+    assert computer != null;
+    assert (customColors != null) && (customColors.length == 4);
+    getPreferences();
+    UserPreferences.customColors = customColors;
+    for (int i = 0; i < 4; i++) {
+      Parameters.preferences.putInt("customColors.color." + i,
+				    customColors[i].getColor().getRGB());
+      Parameters.preferences.putBoolean("customColors.blink." + i,
+					customColors[i].getBlinkFlag());
+    }
+    computer.getComputerHardware().getDisplayHardware().getDisplay()
+      .setCustomColors(computer, customColors);
+    log.fine("Custom colors in user preferences set");
+  }
+
+  /**
+   * Gets the custom colors.
+   *
+   * @return array of custom colors
+   */
+  public static PMDColor[] getCustomColors() {
+    getPreferences();
+    log.finer("Custom colors retrieved from user preferences");
+    return customColors;
   }
 
   // default constructor disabled
