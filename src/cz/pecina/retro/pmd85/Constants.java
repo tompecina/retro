@@ -20,6 +20,8 @@
 
 package cz.pecina.retro.pmd85;
 
+import java.awt.Color;
+
 /**
  * Constants specific to Tesla PMD 85.
  *
@@ -47,12 +49,26 @@ public final class Constants {
   /**
    * Number of color modes.
    */
-  public static int NUMBER_COLOR_MODES = 3;  
+  public static int NUMBER_COLOR_MODES = 3;
   
   /**
    * Default color mode.
    */
-  public static int DEFAULT_COLOR_MODE = 0;  
+  public static int DEFAULT_COLOR_MODE = 0;
+
+  /**
+   * Number of colors.
+   */
+  public static int NUMBER_COLORS = 4;
+
+  /**
+   * Default color mode.
+   */
+  public static PMDColor DEFAULT_COLOR[] = {
+    new PMDColor(Color.WHITE, false),
+    new PMDColor(Color.RED, false),
+    new PMDColor(Color.BLUE, false),
+    new PMDColor(Color.MAGENTA, false)};
   
   public static final double CPU_FREQUENCY = 2.048e6;
   public static final int TIMER_PERIOD = 20;  // in msec

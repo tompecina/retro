@@ -31,6 +31,7 @@ import javax.swing.BorderFactory;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import cz.pecina.retro.common.Application;
+import cz.pecina.retro.gui.Swatch;
 
 /**
  * The Settings/Display panel.
@@ -82,6 +83,24 @@ public class SettingsDisplayPanel extends JPanel {
       add(colorModeButtons[mode], colorModeConstraints);
       colorModeGroup.add(colorModeButtons[mode]);
     }
+    final GridBagConstraints xxxConstraints = new GridBagConstraints();
+    // final javax.swing.JButton xxx = new javax.swing.JButton("Choose!");
+    final Swatch xxx = new Swatch(14, java.awt.Color.GREEN);
+    xxx.setBorder(BorderFactory.createLineBorder(java.awt.Color.BLACK, 1));
+    xxxConstraints.gridx = 0;
+    xxxConstraints.gridy = Constants.NUMBER_COLOR_MODES;
+    xxxConstraints.insets = new Insets(2, 0, 0, 0);
+    xxxConstraints.anchor = GridBagConstraints.LINE_START;
+    xxxConstraints.weightx = 1.0;
+    xxxConstraints.weighty = 0.0;
+    add(xxx, xxxConstraints);
+    // xxx.addActionListener(new ActionListener() {
+    // 	@Override
+    // 	public void actionPerformed(final ActionEvent event) {
+    // 	  javax.swing.JColorChooser.showDialog(SettingsDisplayPanel.this, "TITLE!", java.awt.Color.WHITE);
+    // 	}
+    //   });
+      	  
     log.fine("Settings/Display panel set up");
   }
 
