@@ -38,6 +38,10 @@ public class ComputerPanel extends BackgroundFixedPane {
   private static final Logger log =
     Logger.getLogger(ComputerPanel.class.getName());
     
+  // display position
+  private static final int DISPLAY_OFFSET_X = 12;
+  private static final int DISPLAY_OFFSET_Y = 12;
+
   // LED positions
   private static final int LED_OFFSET_X = 267;
   private static final int LED_OFFSET_Y = 277;
@@ -62,7 +66,7 @@ public class ComputerPanel extends BackgroundFixedPane {
    * @param keyboardHardware the keyboard hardware to operate on
    */
   public ComputerPanel(final Computer computer,
-		       // final DisplayHardware displayHardware,
+		       final DisplayHardware displayHardware,
 		       final KeyboardHardware keyboardHardware
 		       ) {
     super("pmd85/ComputerPanel/mask", "plastic", "gray");
@@ -77,11 +81,23 @@ public class ComputerPanel extends BackgroundFixedPane {
     // set up keyboard shortcuts
     setShortcuts();
 
+    // set up display
+    displayHardware.getDisplay().place(this,
+				       DISPLAY_OFFSET_X,
+				       DISPLAY_OFFSET_Y);
+    log.finer("Display set up");
+
     // set up LEDs
     final ComputerHardware computerHardware = computer.getComputerHardware();
-    computerHardware.getYellowLED().place(this, LED_OFFSET_X, LED_OFFSET_Y);
-    computerHardware.getRedLED().place(this, LED_OFFSET_X + LED_GRID_X, LED_OFFSET_Y);
-    computerHardware.getGreenLED().place(this, LED_OFFSET_X + (2 * LED_GRID_X), LED_OFFSET_Y);
+    computerHardware.getYellowLED().place(this,
+					  LED_OFFSET_X,
+					  LED_OFFSET_Y);
+    computerHardware.getRedLED().place(this,
+				       LED_OFFSET_X + LED_GRID_X,
+				       LED_OFFSET_Y);
+    computerHardware.getGreenLED().place(this,
+					 LED_OFFSET_X + (2 * LED_GRID_X),
+					 LED_OFFSET_Y);
     computerHardware.getGreenLED().setState(1);
     log.finer("LEDs set up");
 

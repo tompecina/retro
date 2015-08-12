@@ -44,7 +44,7 @@ public class ComputerFrame extends JFrame implements Localized, Resizeable {
   private ComputerPanel computerPanel;
 
   // the display hardware object
-  // private DisplayHardware displayHardware;
+  private DisplayHardware displayHardware;
 
   // the computer control object
   private Computer computer;
@@ -60,21 +60,21 @@ public class ComputerFrame extends JFrame implements Localized, Resizeable {
    * @param keyboardHardware the keyboard hardware to operate on
    */
   public ComputerFrame(final Computer computer,
-		       // final DisplayHardware displayHardware,
+		       final DisplayHardware displayHardware,
 		       final KeyboardHardware keyboardHardware
 		       ) {
     super(Application.getString(ComputerFrame.class, "appName"));
     log.fine("New ComputerFrame creation started");
     assert computer != null;
-    // assert displayHardware != null;
+    assert displayHardware != null;
     assert keyboardHardware != null;
     this.computer = computer;
-    // this.displayHardware = displayHardware;
+    this.displayHardware = displayHardware;
     this.keyboardHardware = keyboardHardware;
     log.finer("Application icons set up");
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     computerPanel =
-      new ComputerPanel(computer /* , displayHardware */ , keyboardHardware);
+      new ComputerPanel(computer, displayHardware, keyboardHardware);
     add(computerPanel);
     pack();
     setLocationRelativeTo(null);
@@ -91,7 +91,7 @@ public class ComputerFrame extends JFrame implements Localized, Resizeable {
     ComputerFrame.super.setTitle(Application.getString(this, "appName"));
     remove(computerPanel);
     computerPanel =
-      new ComputerPanel(computer /* , displayHardware */ , keyboardHardware);
+      new ComputerPanel(computer, displayHardware, keyboardHardware);
     add(computerPanel);
     pack();
     log.fine("ComputerFrame redraw completed");

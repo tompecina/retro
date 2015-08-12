@@ -69,7 +69,7 @@ public class ComputerHardware {
   private Intel8255 systemPIO;
 
   // the display hardware
-  // private DisplayHardware displayHardware;
+  private DisplayHardware displayHardware;
 
   // the keyboard hardware
   private KeyboardHardware keyboardHardware;
@@ -100,8 +100,11 @@ public class ComputerHardware {
     // create new hardware
     hardware = new Hardware("PMD_85");
 
+    // set up the display hardware
+    displayHardware = new DisplayHardware();
+
     // set up memory
-    memory = new PMDMemory("MEMORY", 8, 64, 32);
+    memory = new PMDMemory("MEMORY", 8, 64, 32, displayHardware);
     hardware.add(memory);
     Parameters.memoryDevice = memory;
     Parameters.memoryObject = memory;
@@ -125,9 +128,6 @@ public class ComputerHardware {
       cpu.addIOInput(port, systemPIO); 
       cpu.addIOOutput(port, systemPIO);
     }
-
-    // set up the display hardware
-    // displayHardware = new DisplayHardware();
 
     // set up the keyboard hardware
     keyboardHardware = new KeyboardHardware();
@@ -167,15 +167,6 @@ public class ComputerHardware {
     //   .add(keyboardHardware.getRedLEDPin(i)).add(redLEDPin);
     // new IONode().add(new LowPin()).add(keyboardHardware.getGreenLEDPin(i))
     //   .add(greenLEDPin);
-
-    // // connect memory controller
-    // new IONode().add(systemPIO.getPin(16 + 4))
-    //   .add(memoryController.getPin(0));
-    // new IONode().add(systemPIO.getPin(16 + 5))
-    //   .add(memoryController.getPin(1));
-    
-    // reset all stateful devices
-    // hardware.reset();
 
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);
@@ -313,9 +304,9 @@ public class ComputerHardware {
    *
    * @return the display hardware object
    */
-  // public DisplayHardware getDisplayHardware() {
-  //   return displayHardware;
-  // }
+  public DisplayHardware getDisplayHardware() {
+    return displayHardware;
+  }
 
   /**
    * Gets the tape recorder hardware.

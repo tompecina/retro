@@ -55,6 +55,9 @@ public class PMDMemory
   // flags
   private boolean resetFlag, allRAMFlag, mirrorFlag;
   
+  // the display hardware
+  private DisplayHardware displayHardware;
+
   /**
    * ROM as an array of bytes.
    */
@@ -96,15 +99,18 @@ public class PMDMemory
   public PMDMemory(final String name,
 		   final int sizeROM,
 		   final int sizeRAM,
-		   final int sizeRMM) {
+		   final int sizeRMM,
+		   final DisplayHardware displayHardware) {
     super(name);
     log = Logger.getLogger(getClass().getName() + "." + name);
     assert (sizeROM > 0) && (sizeROM <= 8); 
     assert (sizeRAM > 0) && (sizeRAM <= 64); 
     assert (sizeRMM >= 0) && (sizeRMM <= 32); 
+    assert displayHardware != null;
     this.sizeROM = sizeROM;
     this.sizeRAM = sizeRAM;
     this.sizeRMM = sizeRMM;
+    this.displayHardware = displayHardware;
     rom = new byte[sizeROM * 0x400];
     ram = new byte[sizeRAM * 0x400];
     rmm = (sizeRMM > 0) ? new byte[sizeRMM * 0x400] : null;
@@ -411,6 +417,9 @@ public class PMDMemory
     assert (data >= 0) && (data < 0x100);
     if ((model > 1) || (!resetFlag)) {
       ram[address] = (byte)data;
+    }
+    if (address >= 0xc000) {
+      displayHardware.getDisplay().setByte(address, data);
     }
     if (log.isLoggable(Level.FINEST)) {
       log.finest(String.format("Memory '%s' written: %02x -> (%04x)",

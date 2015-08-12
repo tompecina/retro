@@ -108,7 +108,7 @@ public class Computer {
     // set up the frames
     computerFrame =
       new ComputerFrame(this,
-    			// computerHardware.getDisplayHardware(),
+    			computerHardware.getDisplayHardware(),
     			computerHardware.getKeyboardHardware()
 			);
     // memoryFrame = new MemoryFrame(this, computerHardware.getHardware());

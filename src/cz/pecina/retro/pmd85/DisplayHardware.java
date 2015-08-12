@@ -1,4 +1,4 @@
-/* Constants.java
+/* DisplayHardware.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -20,44 +20,27 @@
 
 package cz.pecina.retro.pmd85;
 
+import java.util.logging.Logger;
+
 /**
- * Constants specific to Tesla PMD 85.
+ * Display hardware of the Tesla PMD 85 computer.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public final class Constants {
-    
-  /**
-   * Number of PMD 85 models.
-   */
-  public static final int NUMBER_MODELS = 4;
+public class DisplayHardware {
+
+  // static logger
+  private static final Logger log =
+    Logger.getLogger(DisplayHardware.class.getName());
+
+  // the display
+  private Display display = new Display();
 
   /**
-   * Array of PMD 85 model strings.
+   * Gets the display.
    */
-  public static final String[] MODELS =
-    {"PMD 85-1", "PMD 85-2", "PMD 85-2A", "PMD 85-3"};
-
-  /**
-   * The default model.
-   */
-  public static final int DEFAULT_MODEL = 4;  // PMD 85-3B
-
-  /**
-   * Number of color models.
-   */
-  public static int NUMBER_COLOR_MODELS = 4;  
-  
-  public static final double CPU_FREQUENCY = 2.048e6;
-  public static final int TIMER_PERIOD = 20;  // in msec
-  public static final long TIMER_CYCLES =
-    Math.round(TIMER_PERIOD * CPU_FREQUENCY / 1e3);
-
-  public static final String RES_PREFIX = "cz/pecina/retro/pmd85/";
-
-  public static final int TAPE_SAMPLE_RATE = 1111111;
-
-  // default constructor disabled
-  private Constants() {};
+  public Display getDisplay() {
+    return display;
+  }
 }
