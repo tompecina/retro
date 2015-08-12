@@ -51,6 +51,7 @@ public class SettingsPanel extends JPanel {
   private SettingsViewPanel viewPanel;
   private SettingsModelPanel modelPanel;
   private SettingsKeyboardPanel keyboardPanel;
+  private SettingsDisplayPanel displayPanel;
 
   // array of available peripherals
   private Peripheral[] peripherals;
@@ -90,6 +91,12 @@ public class SettingsPanel extends JPanel {
     tabbedPanel.addTab(Application.getString(this, "settings.keyboard"),
 		       tempPanel);
 
+    displayPanel = new SettingsDisplayPanel(computer);
+    tempPanel = new JPanel(new BorderLayout());
+    tempPanel.add(displayPanel, BorderLayout.PAGE_START);
+    tabbedPanel.addTab(Application.getString(this, "settings.display"),
+		       tempPanel);
+
     for (Peripheral peripheral: peripherals) {
       final JPanel peripheralPanel = peripheral.createSettingsPanel();
       if (peripheralPanel != null) {
@@ -110,6 +117,7 @@ public class SettingsPanel extends JPanel {
     setButton.addActionListener(viewPanel.createSetListener());
     setButton.addActionListener(modelPanel.createSetListener());
     setButton.addActionListener(keyboardPanel.createSetListener());
+    setButton.addActionListener(displayPanel.createSetListener());
     buttonsPanel.add(setButton);
     final JButton cancelButton =
       new JButton(Application.getString(this, "settings.button.cancel"));
@@ -134,6 +142,7 @@ public class SettingsPanel extends JPanel {
     viewPanel.setUp();
     modelPanel.setUp();
     keyboardPanel.setUp();
+    displayPanel.setUp();
     log.fine("Widgets initialized");
   }
 

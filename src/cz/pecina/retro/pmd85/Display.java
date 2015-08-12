@@ -48,6 +48,9 @@ public class Display extends JComponent {
   // attributes
   private byte[][] attributes = new byte [DISPLAY_HEIGHT][DISPLAY_WIDTH_CELLS];
   
+  // the color mode
+  private int colorMode;
+
   /**
    * Writes one byte of memory-mapped data.
    *
@@ -68,6 +71,27 @@ public class Display extends JComponent {
 	attributes[row][column] = a;
       }
     }
+  }
+
+  /**
+   * Sets the color mode.
+   *
+   * @param computer  the computer control object
+   * @param colorMode the color mode
+   */
+  public void setColorMode(final Computer computer, final int colorMode) {
+    log.fine("Setting color mode: " + colorMode);
+    assert (colorMode >= 0) && (colorMode < Constants.NUMBER_COLOR_MODES);
+    this.colorMode = colorMode;
+  }
+
+  /**
+   * Gets the color mode.
+   *
+   * @return the color mode
+   */
+  public int getColorMode() {
+    return colorMode;
   }
 
   /**

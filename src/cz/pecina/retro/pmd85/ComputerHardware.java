@@ -229,7 +229,7 @@ public class ComputerHardware {
    * Sets the model.
    *
    * @param computer the computer control object
-   * @param model the model
+   * @param model    the model
    */
   public void setModel(final Computer computer, final int model) {
     log.fine("Setting model: " + model);

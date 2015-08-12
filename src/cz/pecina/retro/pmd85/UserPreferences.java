@@ -50,6 +50,9 @@ public final class UserPreferences extends GeneralUserPreferences {
   private static Shortcut[] shortcuts =
     new Shortcut[KeyboardLayout.NUMBER_KEYS];
 
+  // the color mode
+  private static int colorMode;
+
   /**
    * Gets preferences from the backing store.
    */
@@ -82,6 +85,12 @@ public final class UserPreferences extends GeneralUserPreferences {
 				   (shortcut != null) ?
 				   shortcut.getID() :
 				   NULL_STRING);
+      }
+      
+      colorMode = Parameters.preferences.getInt("colorMode", -1);
+      if (colorMode == -1) {
+	colorMode = Constants.DEFAULT_COLOR_MODE;
+	Parameters.preferences.putInt("colorMode", colorMode);
       }
       retrieved = true;
     }
@@ -170,6 +179,35 @@ public final class UserPreferences extends GeneralUserPreferences {
     return shortcutString.equals(NULL_STRING) ?
            null :
            new Shortcut(shortcutString);
+  }
+
+  /**
+   * Sets the color mode.
+   *
+   * @param computer  the computer object
+   * @param colorMode the color mode
+   */
+  public static void setColorMode(final Computer computer,
+				  final int colorMode) {
+    assert computer != null;
+    assert (colorMode >= 0) && (colorMode < Constants.NUMBER_COLOR_MODES);
+    getPreferences();
+    UserPreferences.colorMode = colorMode;
+    Parameters.preferences.putInt("colorMode", colorMode);
+    computer.getComputerHardware().getDisplayHardware().getDisplay()
+      .setColorMode(computer, colorMode);
+    log.fine("Color mode in user preferences set to: " + colorMode);
+  }
+
+  /**
+   * Gets the color mode.
+   *
+   * @return the color mode
+   */
+  public static int getColorMode() {
+    getPreferences();
+    log.finer("Color mode retrieved from user preferences: " + colorMode);
+    return colorMode;
   }
 
   // default constructor disabled

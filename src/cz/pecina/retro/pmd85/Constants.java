@@ -42,12 +42,17 @@ public final class Constants {
   /**
    * The default model.
    */
-  public static final int DEFAULT_MODEL = 4;  // PMD 85-3B
+  public static final int DEFAULT_MODEL = 3;  // PMD 85-3
 
   /**
-   * Number of color models.
+   * Number of color modes.
    */
-  public static int NUMBER_COLOR_MODELS = 4;  
+  public static int NUMBER_COLOR_MODES = 3;  
+  
+  /**
+   * Default color mode.
+   */
+  public static int DEFAULT_COLOR_MODE = 0;  
   
   public static final double CPU_FREQUENCY = 2.048e6;
   public static final int TIMER_PERIOD = 20;  // in msec
