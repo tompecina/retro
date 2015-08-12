@@ -35,6 +35,31 @@ public class PMDColor {
   private static final Logger log =
     Logger.getLogger(PMDColor.class.getName());
 
+
+  /**
+   * Number of color modes.
+   */
+  public static int NUMBER_COLOR_MODES = 3;
+  
+  /**
+   * Default color mode.
+   */
+  public static int DEFAULT_COLOR_MODE = 0;
+
+  /**
+   * Number of colors.
+   */
+  public static int NUMBER_COLORS = 4;
+
+  /**
+   * Default color mode.
+   */
+  public static PMDColor DEFAULT_COLORS[] = {
+    new PMDColor(Color.WHITE, false),
+    new PMDColor(Color.RED, false),
+    new PMDColor(Color.BLUE, false),
+    new PMDColor(Color.MAGENTA, false)};
+  
   // color
   private Color color;
 

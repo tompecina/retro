@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Dimension;
 import javax.swing.JComponent;
+import javax.swing.BorderFactory;
 
 /**
  * Square fixed-size swatch.
@@ -59,6 +60,7 @@ public class Swatch extends JComponent {
     setMinimumSize(dim);
     setPreferredSize(dim);
     setMaximumSize(dim);
+    setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
     repaint();
     log.fine("New swatch created, size: " + size + ", color: " + color);
   }
