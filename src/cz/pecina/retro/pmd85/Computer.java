@@ -77,6 +77,12 @@ public class Computer {
   // the icon layout
   private IconLayout iconLayout;
 
+  // the reset button
+  private KeyboardKey resetKey;
+
+  // the shift buttons
+  private KeyboardKey leftShiftKey, rightShiftKey;
+
   // debugger states
   private enum DebuggerState {HIDDEN, RUNNING, STOPPED};
 
@@ -122,6 +128,21 @@ public class Computer {
     peripheralsFrame = new PeripheralsFrame(this, computerHardware);
     settingsFrame = new SettingsFrame(this, peripheralsFrame.getPeripherals());
     // aboutFrame = new AboutFrame(this);
+
+    // find reset and shift keys
+    for (KeyboardKey key: computerHardware.getKeyboardHardware()
+	   .getKeyboardLayout().getKeys()) {
+      if (key.isReset()) {
+	resetKey = key;
+      }
+      if (key.isShift()) {
+	if (leftShiftKey == null) {
+	  leftShiftKey = key;
+	} else {
+	  rightShiftKey = key;
+	}
+      }
+    }
 
     // reset tape recorder counter (not needed unless the cycle counter
     // is initially set to a non-zero value)
@@ -213,13 +234,13 @@ public class Computer {
   //   	computerHardware.getDisplayHardware().reset();
     	stepInButtonCounter = stepOverButtonCounter = 0;
     	runStopButtonPressed = false;
-    	// if (resetButton.isPressed()) {
-    	//   computerHardware.getCPU().requestReset();
-    	//   computerHardware.getSystemPPI().reset();
-    	//   computerHardware.getPeripheralPPI().reset();
-    	//   computerHardware.getDisplayHardware().display();
-    	//   break;
-    	// }
+    	if (resetKey.isPressed() && (leftShiftKey.isPressed() || rightShiftKey.isPressed()))  {
+    	  computerHardware.getCPU().requestReset();
+    	  computerHardware.getSystemPIO().reset();
+    	  // computerHardware.getPeripheralPPI().reset();
+    	  // computerHardware.getDisplayHardware().display();
+    	  break;
+    	}
     	// if (interruptButton.isPressed()) {
     	//   if (!interruptButtonPressed) {
     	//     computerHardware.getCPU().requestInterrupt(7);
@@ -239,13 +260,13 @@ public class Computer {
     	computerHardware.getDebuggerHardware().removeTemporaryBreakpoints();
     	// computerHardware.getDisplayHardware().displayImmediate();
     	computerHardware.getDebuggerHardware().update();
-    	// if (resetButton.isPressed()) {
-    	//   computerHardware.getCPU().reset();
-    	//   // computerHardware.getSystemPPI().reset();
-    	//   // computerHardware.getPeripheralPPI().reset();
-    	//   computerHardware.getDebuggerHardware().activate();
-    	//   break;
-    	// }
+    	if (resetKey.isPressed() && (leftShiftKey.isPressed() || rightShiftKey.isPressed()))  {
+    	  computerHardware.getCPU().reset();
+    	  computerHardware.getSystemPIO().reset();
+    	  // computerHardware.getPeripheralPPI().reset();
+    	  computerHardware.getDebuggerHardware().activate();
+    	  break;
+    	}
     	// if (interruptButton.isPressed()) {
     	//   if (!interruptButtonPressed) {
     	//     computerHardware.getCPU().interrupt(7);
@@ -303,13 +324,13 @@ public class Computer {
     	break;
       case RUNNING:
     	// computerHardware.getDisplayHardware().reset();
-    	// if (resetButton.isPressed()) {
-    	//   computerHardware.getCPU().requestReset();
-    	//   computerHardware.getSystemPPI().reset();
-    	//   computerHardware.getPeripheralPPI().reset();
-    	//   computerHardware.getDisplayHardware().display();
-    	//   break;
-    	// }
+    	if (resetKey.isPressed() && (leftShiftKey.isPressed() || rightShiftKey.isPressed()))  {
+    	  computerHardware.getCPU().requestReset();
+    	  computerHardware.getSystemPIO().reset();
+    	  // computerHardware.getPeripheralPPI().reset();
+    	  // computerHardware.getDisplayHardware().display();
+    	  break;
+    	}
     	// if (interruptButton.isPressed()) {
     	//   if (!interruptButtonPressed) {
     	//     computerHardware.getCPU().requestInterrupt(7);

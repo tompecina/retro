@@ -21,6 +21,8 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+import java.util.List;
+import java.util.ArrayList;
 import cz.pecina.retro.gui.LED;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.IONode;
@@ -53,6 +55,10 @@ public class KeyboardHardware {
   // scan pins
   private final ScanPin[] scanPins = new ScanPin[NUMBER_MATRIX_ROWS];
 
+  // shift pin & stop pin
+  private final KeyPin shiftPin = new KeyPin();
+  private final KeyPin stopPin = new KeyPin();
+
   // currently selected column
   private int select;
 
@@ -71,6 +77,11 @@ public class KeyboardHardware {
   private final LED redLED = new LED("small", "red");
   private final LED greenLED = new LED("small", "green");
 
+  // LED pins
+  private final LEDPin yellowLEDPin = new LEDPin(yellowLED);
+  private final LEDPin redLEDPin = new LEDPin(redLED);
+  private final LEDPin greenLEDPin = new LEDPin(greenLED);
+  
   // leyout of buttons
   private KeyboardLayout keyboardLayout;
 
@@ -83,6 +94,12 @@ public class KeyboardHardware {
     for (KeyboardKey key: keyboardLayout.getKeys()) {
       if (key.getMatrixRow() != -1) {
 	keys[key.getMatrixRow()][key.getMatrixColumn()] = key;
+      }
+      if (key.isShift()) {
+	shiftPin.addKey(key);
+      }
+      if (key.isStop()) {
+	stopPin.addKey(key);
       }
     }
     for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {
@@ -205,6 +222,44 @@ public class KeyboardHardware {
     }
   }
 
+  // shift & stop pins
+  private class KeyPin extends IOPin {
+    private List<KeyboardKey> keys = new ArrayList<>();
+
+    public void addKey(final KeyboardKey key) {
+      assert key != null;
+      keys.add(key);
+    }
+    
+    @Override
+    public int query() {
+      for (KeyboardKey key: keys) {
+	if (key.isPressed()) {
+	  return 0;
+	}
+      }
+      return 1;
+    }
+  }
+
+  /**
+   * Gets the shift pin.
+   *
+   * @return the shift pin.
+   */
+  public IOPin getShiftPin() {
+    return shiftPin;
+  }
+
+  /**
+   * Gets the stop pin.
+   *
+   * @return the stop pin.
+   */
+  public IOPin getStopPin() {
+    return stopPin;
+  }
+
   /**
    * Gets the keyboard layout object.
    *
@@ -239,5 +294,48 @@ public class KeyboardHardware {
    */
   public LED getGreenLED() {
     return greenLED;
+  }
+
+  // LED pins
+  private class LEDPin extends IOPin {
+    private LED led;
+
+    private LEDPin(final LED led) {
+      super();
+      assert (led != null);
+      this.led = led;
+    }
+
+    @Override
+    public void notifyChange() {
+      led.setState(IONode.normalize(queryNode()) == 1);
+    }
+  }
+
+  /**
+   * Gets the yellow LED pin.
+   *
+   * @return the yellow LED pin
+   */
+  public IOPin getYellowLEDPin() {
+    return yellowLEDPin;
+  }
+
+  /**
+   * Gets the red LED pin.
+   *
+   * @return the red LED pin
+   */
+  public IOPin getRedLEDPin() {
+    return redLEDPin;
+  }
+
+  /**
+   * Gets the green LED pin.
+   *
+   * @return the green LED pin
+   */
+  public IOPin getGreenLEDPin() {
+    return greenLEDPin;
   }
 }

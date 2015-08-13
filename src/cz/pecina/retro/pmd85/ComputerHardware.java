@@ -35,6 +35,8 @@ import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.Intel8080A;
 import cz.pecina.retro.cpu.Intel8255;
 import cz.pecina.retro.cpu.LowPin;
+import cz.pecina.retro.cpu.IOPin;
+import cz.pecina.retro.cpu.IONode;
 import cz.pecina.retro.trec.TapeRecorderInterface;
 import cz.pecina.retro.trec.TapeRecorderHardware;
 import cz.pecina.retro.debug.DebuggerHardware;
@@ -80,10 +82,15 @@ public class ComputerHardware {
   // the debugger hardware
   private DebuggerHardware debuggerHardware;
 
-  // the LEDs
+  // LEDs
   private final LED yellowLED = new LED("small", "yellow");
   private final LED redLED = new LED("small", "red");
   private final LED greenLED = new LED("small", "green");
+
+  // LED pins
+  private final LEDPin yellowLEDPin = new LEDPin(yellowLED);
+  private final LEDPin redLEDPin = new LEDPin(redLED);
+  private final LEDPin greenLEDPin = new LEDPin(greenLED);
 
   // the marking
   private final Marking marking =
@@ -157,17 +164,17 @@ public class ComputerHardware {
       new IONode().add(systemPIO.getPin(8 + i))
     	.add(keyboardHardware.getScanPin(i));
     }
-    // new IONode().add(systemPIO.getPin(8 + 5))
-    //   .add(keyboardHardware.getShiftPin());
-    // new IONode().add(systemPIO.getPin(8 + 6))
-    //   .add(keyboardHardware.getStopPin());
-    // new IONode().add(systemPIO.getPin(16 + 2))
-    //   .add(keyboardHardware.getYellowLEDPin(i)).add(yellowLEDPin);
-    // new IONode().add(systemPIO.getPin(16 + 3))
-    //   .add(keyboardHardware.getRedLEDPin(i)).add(redLEDPin);
-    // new IONode().add(new LowPin()).add(keyboardHardware.getGreenLEDPin(i))
-    //   .add(greenLEDPin);
-
+    new IONode().add(systemPIO.getPin(8 + 5))
+      .add(keyboardHardware.getShiftPin());
+    new IONode().add(systemPIO.getPin(8 + 6))
+      .add(keyboardHardware.getStopPin());
+    new IONode().add(systemPIO.getPin(16 + 2))
+      .add(keyboardHardware.getYellowLEDPin()).add(yellowLEDPin);
+    new IONode().add(systemPIO.getPin(16 + 3))
+      .add(keyboardHardware.getRedLEDPin()).add(redLEDPin);
+    new IONode().add(new LowPin())
+      .add(keyboardHardware.getGreenLEDPin()).add(greenLEDPin);
+    
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);
 
@@ -324,6 +331,22 @@ public class ComputerHardware {
    */
   public DebuggerHardware getDebuggerHardware() {
     return debuggerHardware;
+  }
+
+  // LED pins
+  private class LEDPin extends IOPin {
+    private LED led;
+
+    private LEDPin(final LED led) {
+      super();
+      assert (led != null);
+      this.led = led;
+    }
+
+    @Override
+    public void notifyChange() {
+      led.setState(IONode.normalize(queryNode()) == 1);
+    }
   }
 
   /**
