@@ -21,12 +21,12 @@
 package cz.pecina.retro.cpu;
 
 /**
- * Abstract I/O pin that can be connected to a node.
+ * An I/O pin that can be connected to a node.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public abstract class IOPin {
+public class IOPin {
 
   /**
    * The node to which the pin is connected.

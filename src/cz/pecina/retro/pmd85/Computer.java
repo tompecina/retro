@@ -235,8 +235,10 @@ public class Computer {
     	stepInButtonCounter = stepOverButtonCounter = 0;
     	runStopButtonPressed = false;
     	if (resetKey.isPressed() && (leftShiftKey.isPressed() || rightShiftKey.isPressed()))  {
-    	  computerHardware.getCPU().requestReset();
-    	  computerHardware.getSystemPIO().reset();
+    	  // computerHardware.getCPU().requestReset();
+    	  // computerHardware.getSystemPIO().reset();
+    	  // computerHardware.getMemory().reset();
+	  computerHardware.reset();
     	  // computerHardware.getPeripheralPPI().reset();
     	  // computerHardware.getDisplayHardware().display();
     	  break;
@@ -261,8 +263,10 @@ public class Computer {
     	// computerHardware.getDisplayHardware().displayImmediate();
     	computerHardware.getDebuggerHardware().update();
     	if (resetKey.isPressed() && (leftShiftKey.isPressed() || rightShiftKey.isPressed()))  {
-    	  computerHardware.getCPU().reset();
-    	  computerHardware.getSystemPIO().reset();
+    	  // computerHardware.getCPU().reset();
+    	  // computerHardware.getSystemPIO().reset();
+    	  // computerHardware.getMemory().reset();
+	  computerHardware.reset();
     	  // computerHardware.getPeripheralPPI().reset();
     	  computerHardware.getDebuggerHardware().activate();
     	  break;
@@ -325,8 +329,10 @@ public class Computer {
       case RUNNING:
     	// computerHardware.getDisplayHardware().reset();
     	if (resetKey.isPressed() && (leftShiftKey.isPressed() || rightShiftKey.isPressed()))  {
-    	  computerHardware.getCPU().requestReset();
-    	  computerHardware.getSystemPIO().reset();
+    	  // computerHardware.getCPU().requestReset();
+    	  // computerHardware.getSystemPIO().reset();
+    	  // computerHardware.getMemory().reset();
+	  computerHardware.reset();
     	  // computerHardware.getPeripheralPPI().reset();
     	  // computerHardware.getDisplayHardware().display();
     	  break;

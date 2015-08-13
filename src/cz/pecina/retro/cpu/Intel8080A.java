@@ -298,6 +298,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
    * @see #reset
    */
   public void requestReset() {
+    log.fine("Reset requested");
     resetPending = true;
   }
 
@@ -311,6 +312,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     PC = 0;
     resetPending = false;
     interruptPending = -1;
+    log.fine("Reset performed");
   }
 
   // for description see Processor

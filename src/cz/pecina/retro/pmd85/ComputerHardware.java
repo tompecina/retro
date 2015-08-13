@@ -79,6 +79,9 @@ public class ComputerHardware {
   // the tape recorder hardware
   private TapeRecorderHardware tapeRecorderHardware;
 
+  // the ROMModule hardware
+  private ROMModuleHardware romModuleHardware;
+
   // the debugger hardware
   private DebuggerHardware debuggerHardware;
 
@@ -175,6 +178,15 @@ public class ComputerHardware {
     new IONode().add(new LowPin())
       .add(keyboardHardware.getGreenLEDPin()).add(greenLEDPin);
     
+    // set up the ROM module hardware
+    romModuleHardware = new ROMModuleHardware(this);
+
+    // connect the ROM module
+    for (int port: Util.portIterator(0x88, 0x8c)) {
+      cpu.addIOInput(port, romModuleHardware.getPIO()); 
+      cpu.addIOOutput(port, romModuleHardware.getPIO());
+    }
+    
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);
 
@@ -249,9 +261,16 @@ public class ComputerHardware {
     memory.setModel(model);
     loadMonitor();
     loadBasic();
-    hardware.reset();
+    reset();
   }
 
+  /**
+   * Resets hardware.
+   */
+  public void reset() {
+    hardware.reset();
+  }
+  
   /**
    * Gets the model.
    *
@@ -322,6 +341,15 @@ public class ComputerHardware {
    */
   public TapeRecorderHardware getTapeRecorderHardware() {
     return tapeRecorderHardware;
+  }
+
+  /**
+   * Gets the ROM module hardware.
+   *
+   * @return the ROM module hardware object
+   */
+  public ROMModuleHardware getROMModuleHardware() {
+    return romModuleHardware;
   }
 
   /**
