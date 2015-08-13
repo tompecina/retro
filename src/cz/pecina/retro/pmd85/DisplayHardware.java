@@ -53,4 +53,11 @@ public class DisplayHardware {
   public Display getDisplay() {
     return display;
   }
+
+  /**
+   * Repaints the display.
+   */
+  public void repaint() {
+    display.repaint();
+  }
 }

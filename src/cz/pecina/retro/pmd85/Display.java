@@ -133,6 +133,7 @@ public class Display extends Timer {
   private class BlinkListener implements ActionListener {
     @Override
     public void actionPerformed(final ActionEvent event) {
+      log.finest("Switching display planes: " + planeSwitch);
       plane[planeSwitch].setVisible(false);
       planeSwitch = 1 - planeSwitch;
       plane[planeSwitch].setVisible(true);
@@ -224,5 +225,13 @@ public class Display extends Timer {
     plane[0].place(container, positionX, positionY);
     plane[1].place(container, positionX, positionY);
     log.finer("Display placed");
+  }
+
+  /**
+   * Repaints the display planes.
+   */
+  public void repaint() {
+    plane[0].repaint();
+    plane[1].repaint();
   }
 }

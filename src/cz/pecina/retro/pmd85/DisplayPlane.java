@@ -49,9 +49,6 @@ public class DisplayPlane extends JComponent implements Resizeable {
   private Color[][] colors =
     new Color[Display.DISPLAY_HEIGHT][Display.DISPLAY_WIDTH_CELLS];
 
-  // flag set to true if repaint needed
-  private boolean needsRepaint;
-  
   /**
    * Creates an instance of a display plane.
    */
@@ -91,7 +88,6 @@ public class DisplayPlane extends JComponent implements Resizeable {
         "Writing byte, position (%d,%d), data: 0x%02x", row, column, pixels));
       this.pixels[row][column] = (byte)pixels;
       colors[row][column] = color;
-      needsRepaint = true;
     }
   }
 
@@ -128,26 +124,23 @@ public class DisplayPlane extends JComponent implements Resizeable {
   // for description see JComponent
   @Override
   protected void paintComponent(final Graphics graphics) {
-    if (needsRepaint) {
-      log.finest("Repainting display plane");
-      final int pixelSize = GUI.getPixelSize();
-      for (int row = 0; row < Display.DISPLAY_HEIGHT; row++) {
-	for (int column = 0; column < Display.DISPLAY_WIDTH_CELLS; column++) {
-	  int p = pixels[row][column];
-	  final Color c = colors[row][column];
-	  for (int i = 0; i < 6; i++) {
-	    graphics.setColor(((p & 1) == 1) ? c : Color.BLACK);
-	    graphics.fillRect(pixelSize * ((column * 6) + i),
-			      pixelSize * row,
-			      pixelSize,
-			      pixelSize);
-	    p >>= 1;
-	  }
+    log.finest("Repainting display plane");
+    final int pixelSize = GUI.getPixelSize();
+    for (int row = 0; row < Display.DISPLAY_HEIGHT; row++) {
+      for (int column = 0; column < Display.DISPLAY_WIDTH_CELLS; column++) {
+	int p = pixels[row][column];
+	final Color c = colors[row][column];
+	for (int i = 0; i < 6; i++) {
+	  graphics.setColor(((p & 1) == 1) ? c : Color.BLACK);
+	  graphics.fillRect(pixelSize * ((column * 6) + i),
+			    pixelSize * row,
+			    pixelSize,
+			    pixelSize);
+	  p >>= 1;
 	}
       }
-      needsRepaint = false;
-      log.finest("Display plane repainted");
     }
+    log.finest("Display plane repainted");
   }
 
   // for description see Resizeable
@@ -161,7 +154,6 @@ public class DisplayPlane extends JComponent implements Resizeable {
     setMinimumSize(dim);
     setPreferredSize(dim);
     setMaximumSize(dim);
-    needsRepaint = true;
     log.finest("Display plane redraw completed");
   }
 }

@@ -205,7 +205,7 @@ public class Computer {
     }
     busy = true;
 
-  //   computerHardware.getKeyboardHardware().updateBuffer();
+    computerHardware.getKeyboardHardware().updateBuffer();
 
     switch (debuggerState) {
       case HIDDEN:
@@ -341,6 +341,7 @@ public class Computer {
     }
     // computerHardware.getTapeRecorderHardware().process();
     // computerHardware.getKeyboardHardware().resetBuffer();
+    computerHardware.getDisplayHardware().repaint();
 	
     busy = false;
   }
