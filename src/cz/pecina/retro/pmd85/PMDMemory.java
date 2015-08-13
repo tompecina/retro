@@ -103,7 +103,7 @@ public class PMDMemory
 		   final DisplayHardware displayHardware) {
     super(name);
     log = Logger.getLogger(getClass().getName() + "." + name);
-    assert (sizeROM > 0) && (sizeROM <= 16); 
+    assert (sizeROM > 0) && (sizeROM <= 8); 
     assert (sizeRAM > 0) && (sizeRAM <= 64); 
     assert (sizeRMM >= 0) && (sizeRMM <= 32); 
     assert displayHardware != null;
@@ -356,16 +356,16 @@ public class PMDMemory
       case 0:
       case 1:
 	if (resetFlag) {
-	  if (address < 0x2000) {
-	    data = rom[address];
+	  if (address < 0x4000) {
+	    data = rom[address & 0x1fff];
 	  } else if ((address >= 0x8000) && (address < 0xc000)) {
-	    data = rom[address - 0x8000];
+	    data = rom[(address - 0x8000) & 0x1fff];
 	  } else {
 	    data = 0xff;
 	  }
 	} else {
 	  if ((address >= 0x8000) && (address < 0xc000)) {
-	    data = rom[address - 0x8000];
+	    data = rom[(address - 0x8000) & 0x1fff];
 	  } else {
 	    data = ram[address];
 	  }
@@ -375,16 +375,16 @@ public class PMDMemory
 	if (allRAMFlag) {
 	  data = ram[address];
 	} else if (resetFlag) {
-	  if (address < 0x2000) {
-	    data = rom[address];
+	  if (address < 0x4000) {
+	    data = rom[address & 0x1fff];
 	  } else if ((address >= 0x8000) && (address < 0xc000)) {
-	    data = rom[address - 0x8000];
+	    data = rom[(address - 0x8000) & 0x1fff];
 	  } else {
 	    data = ram[address];
 	  }
 	} else {
 	  if ((address >= 0x8000) && (address < 0xc000)) {
-	    data = rom[address - 0x8000];
+	    data = rom[(address - 0x8000) & 0x1fff];
 	  } else {
 	    data = ram[address];
 	  }
