@@ -146,7 +146,7 @@ public class ComputerHardware {
 
     // connect memory controller
     new IONode().add(systemPIO.getPin(16 + 4)).add(memory.getAllRAMPin());
-    new IONode().add(systemPIO.getPin(16 + 5)).add(memory.getMirrorPin());
+    new IONode().add(systemPIO.getPin(16 + 5)).add(memory.getAllROMPin());
 
     // connect keyboard
     for (int i = 0; i < 4; i++) {

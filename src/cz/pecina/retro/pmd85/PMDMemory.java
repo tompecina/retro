@@ -50,10 +50,10 @@ public class PMDMemory
 
   // pins
   private AllRAMPin allRAMPin = new AllRAMPin();
-  private MirrorPin mirrorPin = new MirrorPin();
+  private AllROMPin allROMPin = new AllROMPin();
 
   // flags
-  private boolean resetFlag, allRAMFlag, mirrorFlag;
+  private boolean resetFlag, allRAMFlag, allROMFlag;
   
   // the display hardware
   private DisplayHardware displayHardware;
@@ -325,26 +325,26 @@ public class PMDMemory
     return allRAMPin;
   }
 
-  // mirror pin
-  private class MirrorPin extends IOPin {
+  // AllROM pin
+  private class AllROMPin extends IOPin {
 
-    private MirrorPin() {
+    private AllROMPin() {
       super();
     }
 
     @Override
     public void notifyChange() {
-      mirrorFlag = (queryNode() == 0);
+      allROMFlag = (queryNode() == 0);
     }
   }
 
   /**
-   * Gets the mirror pin.
+   * Gets the AllROM pin.
    *
    * @return the pin object
    */
-  public IOPin getMirrorPin() {
-    return mirrorPin;
+  public IOPin getAllROMPin() {
+    return allROMPin;
   }
 
   // for description see AbstractMemory
@@ -393,7 +393,7 @@ public class PMDMemory
       default:
 	if (allRAMFlag) {
 	  data = ram[address];
-	} else if (mirrorFlag) {
+	} else if (allROMFlag) {
 	  data = rom[address & 0x1fff];
 	} else if (address >= 0xe000) {
 	  data = rom[address - 0xe000];

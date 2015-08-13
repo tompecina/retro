@@ -88,6 +88,7 @@ public class DisplayPlane extends JComponent implements Resizeable {
         "Writing byte, position (%d,%d), data: 0x%02x", row, column, pixels));
       this.pixels[row][column] = (byte)pixels;
       colors[row][column] = color;
+      paintCell(row, column, getGraphics());
     }
   }
 
@@ -121,23 +122,32 @@ public class DisplayPlane extends JComponent implements Resizeable {
     log.finer("Display plane placed");
   }
 
+  // paint one cell
+  private void paintCell(final int row,
+			 final int column,
+			 final Graphics graphics) {
+    log.finest("Painting cell at (" + row + "," + column + ")");
+    final int pixelSize = GUI.getPixelSize();
+    int p = pixels[row][column];
+    final Color c = colors[row][column];
+    for (int i = 0; i < 6; i++) {
+      graphics.setColor(((p & 1) == 1) ? c : Color.BLACK);
+      graphics.fillRect(pixelSize * ((column * 6) + i),
+			pixelSize * row,
+			pixelSize,
+			pixelSize);
+      p >>= 1;
+    }
+    log.finest("Cell repainted");
+  }
+
   // for description see JComponent
   @Override
   protected void paintComponent(final Graphics graphics) {
     log.finest("Repainting display plane");
-    final int pixelSize = GUI.getPixelSize();
     for (int row = 0; row < Display.DISPLAY_HEIGHT; row++) {
       for (int column = 0; column < Display.DISPLAY_WIDTH_CELLS; column++) {
-	int p = pixels[row][column];
-	final Color c = colors[row][column];
-	for (int i = 0; i < 6; i++) {
-	  graphics.setColor(((p & 1) == 1) ? c : Color.BLACK);
-	  graphics.fillRect(pixelSize * ((column * 6) + i),
-			    pixelSize * row,
-			    pixelSize,
-			    pixelSize);
-	  p >>= 1;
-	}
+	paintCell(row, column, graphics);
       }
     }
     log.finest("Display plane repainted");

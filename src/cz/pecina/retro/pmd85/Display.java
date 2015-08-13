@@ -137,6 +137,7 @@ public class Display extends Timer {
       plane[planeSwitch].setVisible(false);
       planeSwitch = 1 - planeSwitch;
       plane[planeSwitch].setVisible(true);
+      plane[planeSwitch].repaint();
     }
   }
 

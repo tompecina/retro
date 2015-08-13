@@ -44,7 +44,7 @@ public final class Constants {
    */
   public static final int DEFAULT_MODEL = 3;  // PMD 85-3
   public static final double CPU_FREQUENCY = 2.048e6;
-  public static final int TIMER_PERIOD = 20;  // in msec
+  public static final int TIMER_PERIOD = 50;  // in msec
   public static final long TIMER_CYCLES =
     Math.round(TIMER_PERIOD * CPU_FREQUENCY / 1e3);
 
