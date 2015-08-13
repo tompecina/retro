@@ -95,6 +95,9 @@ public class KeyboardHardware {
     for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {
       scanPins[row] = new ScanPin(row);
     }
+    for (int i = 0; i < 4; i++) {
+      selectPins[i] = new SelectPin(i);
+    }
     resetBuffer();
     log.fine("New keyboard hardware created");
   }

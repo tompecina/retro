@@ -148,19 +148,19 @@ public class ComputerHardware {
     new IONode().add(systemPIO.getPin(16 + 4)).add(memory.getAllRAMPin());
     new IONode().add(systemPIO.getPin(16 + 5)).add(memory.getMirrorPin());
 
-    // // connect keyboard
-    // for (int i = 0; i < 4; i++) {
-    //   new IONode().add(systemPIO.getPin(i))
-    // 	.add(keyboardHardware.getSelectPin(i));
-    // }
-    // for (int i = 0; i < 5; i++) {
-    //   new IONode().add(systemPIO.getPin(8 + i))
-    // 	.add(keyboardHardware.getScanPin(i));
-    // }
+    // connect keyboard
+    for (int i = 0; i < 4; i++) {
+      new IONode().add(systemPIO.getPin(i))
+    	.add(keyboardHardware.getSelectPin(i));
+    }
+    for (int i = 0; i < 5; i++) {
+      new IONode().add(systemPIO.getPin(8 + i))
+    	.add(keyboardHardware.getScanPin(i));
+    }
     // new IONode().add(systemPIO.getPin(8 + 5))
-    //   .add(keyboardHardware.getShiftPin(i));
+    //   .add(keyboardHardware.getShiftPin());
     // new IONode().add(systemPIO.getPin(8 + 6))
-    //   .add(keyboardHardware.getStopPin(i));
+    //   .add(keyboardHardware.getStopPin());
     // new IONode().add(systemPIO.getPin(16 + 2))
     //   .add(keyboardHardware.getYellowLEDPin(i)).add(yellowLEDPin);
     // new IONode().add(systemPIO.getPin(16 + 3))

@@ -340,7 +340,7 @@ public class Computer {
     	break;
     }
     // computerHardware.getTapeRecorderHardware().process();
-    // computerHardware.getKeyboardHardware().resetBuffer();
+    computerHardware.getKeyboardHardware().resetBuffer();
     computerHardware.getDisplayHardware().repaint();
 	
     busy = false;
