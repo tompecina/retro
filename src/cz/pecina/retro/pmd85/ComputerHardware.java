@@ -101,7 +101,7 @@ public class ComputerHardware {
     hardware = new Hardware("PMD_85");
 
     // set up the display hardware
-    displayHardware = new DisplayHardware();
+    displayHardware = new DisplayHardware(this);
 
     // set up memory
     memory = new PMDMemory("MEMORY", 8, 64, 32, displayHardware);

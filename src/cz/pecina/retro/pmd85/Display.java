@@ -58,8 +58,8 @@ public class Display extends Timer {
   // blinking period in msec
   private static final int BLINK_PERIOD = 500;
 
-  // the computer control object
-  private Computer computer;
+  // the computer hardware object
+  private ComputerHardware computerHardware;
 
   // pixels
   private byte[][] pixels;
@@ -86,14 +86,14 @@ public class Display extends Timer {
   private void setActiveColors() {
     switch (colorMode) {
       case 0:
-	if (computer.getComputerHardware().getModel() < 3) {
+	if (computerHardware.getModel() < 3) {
 	  colors = PMDColor.WOB_COLORS[0];
 	} else {
 	  colors = PMDColor.WOB_COLORS[1];
 	}
 	break;
       case 1:
-	if (computer.getComputerHardware().getModel() < 3) {
+	if (computerHardware.getModel() < 3) {
 	  colors = PMDColor.GOB_COLORS[0];
 	} else {
 	  colors = PMDColor.GOB_COLORS[1];
@@ -110,13 +110,13 @@ public class Display extends Timer {
   /**
    * Creates the display control object.
    *
-   * @param computer the computer control object
+   * @param computerHardware the computer hardware object
    */
-  public Display(final Computer computer) {
+  public Display(final ComputerHardware computerHardware) {
     super(BLINK_PERIOD, null);
     log.fine("Display creation started");
-    assert computer != null;
-    this.computer = computer;
+    assert computerHardware != null;
+    this.computerHardware = computerHardware;
     plane[0] = new DisplayPlane();
     plane[1] = new DisplayPlane();
     pixels = new byte[DISPLAY_HEIGHT][DISPLAY_WIDTH_CELLS];
@@ -169,12 +169,10 @@ public class Display extends Timer {
   /**
    * Sets the color mode.
    *
-   * @param computer  the computer control object
    * @param colorMode the color mode
    */
-  public void setColorMode(final Computer computer, final int colorMode) {
+  public void setColorMode(final int colorMode) {
     log.fine("Setting color mode: " + colorMode);
-    assert computer != null;
     assert (colorMode >= 0) && (colorMode < PMDColor.NUMBER_COLOR_MODES);
     this.colorMode = colorMode;
     setActiveColors();
@@ -192,12 +190,10 @@ public class Display extends Timer {
   /**
    * Sets the custom colors.
    *
-   * @param computer     the computer control object
    * @param customColors the custom colors
    */
-  public void setCustomColors(final Computer computer, final PMDColor[] customColors) {
+  public void setCustomColors(final PMDColor[] customColors) {
     log.fine("Setting custom colors");
-    assert computer != null;
     assert (customColors != null) && (customColors.length == 4);
     this.customColors = customColors;
     setActiveColors();

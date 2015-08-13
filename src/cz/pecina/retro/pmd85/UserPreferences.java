@@ -213,7 +213,7 @@ public final class UserPreferences extends GeneralUserPreferences {
     UserPreferences.colorMode = colorMode;
     Parameters.preferences.putInt("colorMode", colorMode);
     computer.getComputerHardware().getDisplayHardware().getDisplay()
-      .setColorMode(computer, colorMode);
+      .setColorMode(colorMode);
     log.fine("Color mode in user preferences set to: " + colorMode);
   }
 
@@ -247,7 +247,7 @@ public final class UserPreferences extends GeneralUserPreferences {
 					customColors[i].getBlinkFlag());
     }
     computer.getComputerHardware().getDisplayHardware().getDisplay()
-      .setCustomColors(computer, customColors);
+      .setCustomColors(customColors);
     log.fine("Custom colors in user preferences set");
   }
 

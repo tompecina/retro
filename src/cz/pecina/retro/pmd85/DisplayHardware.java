@@ -35,7 +35,17 @@ public class DisplayHardware {
     Logger.getLogger(DisplayHardware.class.getName());
 
   // the display
-  private Display display = new Display();
+  private Display display;
+
+  /**
+   * Creates a new display hardware object.
+   *
+   * @param computerHardware the computer hardware object
+   */
+  public DisplayHardware(final ComputerHardware computerHardware) {
+    assert computerHardware != null;
+    display = new Display(computerHardware);
+  }
 
   /**
    * Gets the display.

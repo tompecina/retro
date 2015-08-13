@@ -23,17 +23,19 @@ package cz.pecina.retro.pmd85;
 import java.util.logging.Logger;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import javax.swing.JComponent;
 import cz.pecina.retro.gui.GUI;
+import cz.pecina.retro.gui.Resizeable;
 
 /**
- * Display plane object.  These planes are two in PMD 85 and and implement
- * the effect of blinking pixels.
+ * Display plane object.  These planes are two in PMD 85 and switching between
+ * them implements the effect of blinking pixels.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class DisplayPlane extends JComponent {
+public class DisplayPlane extends JComponent implements Resizeable {
 
   // static logger
   private static final Logger log =
@@ -46,6 +48,23 @@ public class DisplayPlane extends JComponent {
   // colors
   private Color[][] colors =
     new Color[Display.DISPLAY_HEIGHT][Display.DISPLAY_WIDTH_CELLS];
+
+  // flag set to true if repaint needed
+  private boolean needsRepaint;
+  
+  /**
+   * Creates an instance of a display plane.
+   */
+  public DisplayPlane() {
+    for (int row = 0; row < Display.DISPLAY_HEIGHT; row++) {
+      for (int column = 0; column < Display.DISPLAY_WIDTH_CELLS; column++) {
+	colors[row][column] = Color.BLACK;
+      }
+    }
+    redrawOnPixelResize();
+    GUI.addResizeable(this);
+    log.fine("New display plane  created");
+  }
 
   /**
    * Writes one byte of memory-mapped data.
@@ -60,6 +79,10 @@ public class DisplayPlane extends JComponent {
 		      final int column,
 		      final int pixels,
 		      final Color color) {
+    log.finest(String.format("Setting byte at (%d,%d) to 0x%02x, color: %s",
+			     row, column,
+			     pixels,
+			     color));
     assert (row >= 0) & (row < 0x100);
     assert (column >= 0) & (column < 0x30);
     if ((this.pixels[row][column] != (byte)pixels) ||
@@ -68,6 +91,7 @@ public class DisplayPlane extends JComponent {
         "Writing byte, position (%d,%d), data: 0x%02x", row, column, pixels));
       this.pixels[row][column] = (byte)pixels;
       colors[row][column] = color;
+      needsRepaint = true;
     }
   }
 
@@ -99,5 +123,45 @@ public class DisplayPlane extends JComponent {
     container.add(this);
     setVisible(false);
     log.finer("Display plane placed");
+  }
+
+  // for description see JComponent
+  @Override
+  protected void paintComponent(final Graphics graphics) {
+    if (needsRepaint) {
+      log.finest("Repainting display plane");
+      final int pixelSize = GUI.getPixelSize();
+      for (int row = 0; row < Display.DISPLAY_HEIGHT; row++) {
+	for (int column = 0; column < Display.DISPLAY_WIDTH_CELLS; column++) {
+	  int p = pixels[row][column];
+	  final Color c = colors[row][column];
+	  for (int i = 0; i < 6; i++) {
+	    graphics.setColor(((p & 1) == 1) ? c : Color.BLACK);
+	    graphics.fillRect(pixelSize * ((column * 6) + i),
+			      pixelSize * row,
+			      pixelSize,
+			      pixelSize);
+	    p >>= 1;
+	  }
+	}
+      }
+      needsRepaint = false;
+      log.finest("Display plane repainted");
+    }
+  }
+
+  // for description see Resizeable
+  @Override
+  public void redrawOnPixelResize() {
+    log.finest("Display plane redraw started");
+    final int pixelSize = GUI.getPixelSize();
+    final Dimension dim =
+      new Dimension(Display.DISPLAY_WIDTH * pixelSize,
+		    Display.DISPLAY_HEIGHT * pixelSize);
+    setMinimumSize(dim);
+    setPreferredSize(dim);
+    setMaximumSize(dim);
+    needsRepaint = true;
+    log.finest("Display plane redraw completed");
   }
 }
