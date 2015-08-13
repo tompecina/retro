@@ -114,7 +114,7 @@ public class ComputerHardware {
     displayHardware = new DisplayHardware(this);
 
     // set up memory
-    memory = new PMDMemory("MEMORY", 8, 64, 32, displayHardware);
+    memory = new PMDMemory("MEMORY", 16, 64, 32, displayHardware);
     hardware.add(memory);
     Parameters.memoryDevice = memory;
     Parameters.memoryObject = memory;
@@ -208,6 +208,8 @@ public class ComputerHardware {
 	memoryArray[addr] = buffer[addr];
 	if (model < 3) {
 	  memoryArray[addr + 0x1000] = buffer[addr];
+	  memoryArray[addr + 0x2000] = buffer[addr];
+	  memoryArray[addr + 0x3000] = buffer[addr];
 	}
       }
     } catch (final NullPointerException |

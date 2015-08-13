@@ -103,7 +103,7 @@ public class PMDMemory
 		   final DisplayHardware displayHardware) {
     super(name);
     log = Logger.getLogger(getClass().getName() + "." + name);
-    assert (sizeROM > 0) && (sizeROM <= 8); 
+    assert (sizeROM > 0) && (sizeROM <= 16); 
     assert (sizeRAM > 0) && (sizeRAM <= 64); 
     assert (sizeRMM >= 0) && (sizeRMM <= 32); 
     assert displayHardware != null;
