@@ -21,6 +21,7 @@
 package cz.pecina.retro.cpu;
 
 import java.util.logging.Logger;
+import java.util.List;
 import java.util.ArrayList;
 import org.jdom2.Element;
 
@@ -95,6 +96,22 @@ public abstract class Device extends ArrayList<Descriptor> {
     }
     log.finer("Block '" + name + "' not found");
     return null;
+  }
+
+  /**
+   * Gets a list of all <code>Block</code> objects.
+   *
+   * @return the list of all <code>Block</code> objects
+   */
+  public List<Block> getBlocks() {
+    log.finer("Requesting list of all blocks from Device '" + this.name + "'");
+    final List<Block> list = new ArrayList<>();
+    for (Descriptor descriptor: this) {
+      if (descriptor instanceof Block) {
+	list.add((Block)descriptor);
+      }
+    }
+    return list;
   }
 
   /**

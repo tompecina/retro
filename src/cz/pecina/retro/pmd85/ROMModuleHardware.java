@@ -60,6 +60,9 @@ public class ROMModuleHardware {
 
     memory = computerHardware.getMemory();
 
+    // register PIO
+    computerHardware.getHardware().add(pio);
+
     // set up address pins
     for (int i = 0; i < 16; i++) {
       addressPins[i] = new IOPin();

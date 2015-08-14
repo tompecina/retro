@@ -57,7 +57,7 @@ public class Computer {
   private SettingsFrame settingsFrame;
 
   // the memory frame
-  // private MemoryFrame memoryFrame;
+  private MemoryFrame memoryFrame;
 
   // the keyboard frame
   private KeyboardFrame keyboardFrame;
@@ -117,7 +117,7 @@ public class Computer {
     			computerHardware.getDisplayHardware(),
     			computerHardware.getKeyboardHardware()
 			);
-    // memoryFrame = new MemoryFrame(this, computerHardware.getHardware());
+    memoryFrame = new MemoryFrame(this, computerHardware.getHardware());
     keyboardFrame = new KeyboardFrame(this, computerHardware.getKeyboardHardware());
     // tapeRecorderFrame = new TapeRecorderFrame(
     //   this,

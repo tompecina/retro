@@ -21,6 +21,7 @@
 package cz.pecina.retro.memory;
 
 import java.util.logging.Logger;
+import java.util.List;
 import java.io.File;
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
@@ -29,8 +30,10 @@ import javax.swing.JButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.gui.ErrorBox;
+import cz.pecina.retro.cpu.Block;
 
 /**
  * Memory tab.
@@ -44,14 +47,24 @@ public abstract class MemoryTab extends JPanel {
   private static final Logger log =
     Logger.getLogger(MemoryTab.class.getName());
 
-  // temporary fix
-  protected static final String sourceMemoryBank = "COMBINED";
-  protected static final String destinationMemoryBank = "COMBINED";
+  // memory banks with default values for bankless devices
+  protected static String sourceMemoryBank = "COMBINED";
+  protected static String destinationMemoryBank = "COMBINED";
 
   /**
    * The enclosing MemoryPanel object.
    */
   protected MemoryPanel panel;
+
+  /**
+   * A list of all memory banks.
+   */
+  protected List<Block> banks;
+
+  /**
+   * Number of memory banks.
+   */
+  protected int numberBanks;
 
   /**
    * File chooser used by Save and Load panels.
@@ -93,6 +106,8 @@ public abstract class MemoryTab extends JPanel {
   public MemoryTab(final MemoryPanel panel) {
     super(new GridBagLayout());
     this.panel = panel;
+    banks = Parameters.memoryDevice.getBlocks();
+    numberBanks = banks.size();
   }
 
   /**

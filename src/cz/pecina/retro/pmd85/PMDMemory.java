@@ -114,16 +114,6 @@ public class PMDMemory
     rom = new byte[sizeROM * 0x400];
     ram = new byte[sizeRAM * 0x400];
     rmm = (sizeRMM > 0) ? new byte[sizeRMM * 0x400] : null;
-    add(new Register("ROM") {
-	@Override
-	public String getValue() {
-	  return String.valueOf(PMDMemory.this.sizeROM);
-	}
-	@Override
-	public void processValue(final String value) {
-	  PMDMemory.this.sizeROM = Integer.parseInt(value);
-	}
-      });
     add(new Register("RAM") {
 	@Override
 	public String getValue() {
@@ -134,6 +124,16 @@ public class PMDMemory
 	  PMDMemory.this.sizeRAM = Integer.parseInt(value);
 	}
       });
+    add(new Register("ROM") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(PMDMemory.this.sizeROM);
+	}
+	@Override
+	public void processValue(final String value) {
+	  PMDMemory.this.sizeROM = Integer.parseInt(value);
+	}
+      });
     add(new Register("RMM") {
 	@Override
 	public String getValue() {
@@ -142,20 +142,6 @@ public class PMDMemory
 	@Override
 	public void processValue(final String value) {
 	  PMDMemory.this.sizeRMM = Integer.parseInt(value);
-	}
-      });
-    add(new Block("ROM") {
-	@Override
-	public byte[] getMemory() {
-	  return rom;
-	}
-	@Override
-	public void getContent(final Element block) {
-	  Snapshot.buildBlockElement(rom, block, 0, sizeROM * 0x400);
-	}
-	@Override
-	public void processContent(final Element block) {
-	  Snapshot.processBlockElement(rom, block, 0);
 	}
       });
     add(new Block("RAM") {
@@ -170,6 +156,20 @@ public class PMDMemory
 	@Override
 	public void processContent(final Element block) {
 	  Snapshot.processBlockElement(ram, block, 0);
+	}
+      });
+    add(new Block("ROM") {
+	@Override
+	public byte[] getMemory() {
+	  return rom;
+	}
+	@Override
+	public void getContent(final Element block) {
+	  Snapshot.buildBlockElement(rom, block, 0, sizeROM * 0x400);
+	}
+	@Override
+	public void processContent(final Element block) {
+	  Snapshot.processBlockElement(rom, block, 0);
 	}
       });
     if (sizeRMM > 0) {
