@@ -21,12 +21,17 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
-import cz.pecina.retro.cpu.Intel8255;
-import cz.pecina.retro.cpu.IOPin;
-import cz.pecina.retro.cpu.IONode;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.regex.MatchResult;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 /**
- * Hardware of the Tesla PMD 85 pluggable ROM module.
+ * BASIG G programs utilities.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -37,7 +42,8 @@ public class Basic {
   private static final Logger log =
     Logger.getLogger(Basic.class.getName());
 
-  private static final String[] TOKENS = {
+  // BASIC G tokens 0x80-0xff
+  private static String TOKENS[] = {
     /* 0x80 */ "END", 
     /* 0x81 */ "FOR",
     /* 0x82 */ "NEXT",
@@ -65,12 +71,12 @@ public class Basic {
     /* 0x98 */ "LIST",
     /* 0x99 */ "CLEAR",
     /* 0x9a */ "LLIST",
-    /* 0x9b */ "RAD",   // used for MONIT in model PMD 85-1
+    /* 0x9b */ "RAD",    // MONIT in PMD 85-1
     /* 0x9c */ "NEW",
     /* 0x9d */ "TAB(",
     /* 0x9e */ "TO",
     /* 0x9f */ "FNC",
-    /* 0xa0 */"SPC(",
+    /* 0xa0 */ "SPC(",
     /* 0xa1 */ "THEN",
     /* 0xa2 */ "NOT",
     /* 0xa3 */ "STEP",
@@ -116,7 +122,7 @@ public class Basic {
     /* 0xcb */ "GCLEAR",
     /* 0xcc */ "PAUSE",
     /* 0xcd */ "DISP",
-    /* 0xce */ "_",     // equivalent to ?
+    /* 0xce */ "_",      // equivalent to ?
     /* 0xcf */ "BMOVE",
     /* 0xd0 */ "BPLOT",
     /* 0xd1 */ "LOAD",
@@ -168,70 +174,194 @@ public class Basic {
     /* 0xff */ null
   };
 
-  // the memory object
-  private PMDMemory memory;
+  // REM token
+  private static final int REM = 0x8e;
+  
+  // check address against end address
+  private static void check(final int address,
+			    final int endAddress)
+                            throws BasicException {
+    if (address > endAddress) {
+      throw new BasicException("Outside the program area");
+    }
+  }
 
-  // the PIO
-  private Intel8255 pio = new Intel8255("ROM_MODULE_PIO");
+  // PMD 85 charset
+  private static final Charset CS = new PMDCharset();
+  
+  // encode one character
+  private static byte encodeChar(final Character ch) {
+    return CS.encode(ch.toString()).get();
+  }
 
-  // address pins
-  private IOPin[] addressPins = new IOPin[16];
+  // decode one byte
+  private static String decodeChar(final int b) {
+    return CS.decode(ByteBuffer.wrap(new byte[] {(byte)b})).toString();
+  }
 
-  // data pins
-  private DataPin[] dataPins = new DataPin[8];
-
+  // pattern for getting the line number
+  private static final Pattern LINE_NUMBER_PATTERN =
+    Pattern.compile("^(\\d+) *(\\D.*)$");
+    
   /**
-   * Creates a new ROM module hardware object.
+   * Encodes BASIC program in text to RAM.
    *
-   * @param computerHardware the computer hardware object
+   * @param reader       the program as text
+   * @param ram          the RAM
+   * @param startAddress the starting address
+   * @param endAddress   the ending address beyond which the program 
+   *                     may not be written
    */
-  public Basic(final ComputerHardware computerHardware) {
-    log.fine("ROM module creation started");
-    assert computerHardware != null;
-
-    memory = computerHardware.getMemory();
-
-    // set up address pins
-    for (int i = 0; i < 16; i++) {
-      addressPins[i] = new IOPin();
-      new IONode().add(pio.getPin(8 + i)).add(addressPins[i]);
+  public static void encode(final BufferedReader reader,
+			    final byte[] ram,
+			    final int startAddress,
+			    final int endAddress)
+                            throws IOException,
+				   BasicException {
+    log.fine("Encoding started");
+    assert reader != null;
+    assert ram != null;
+    assert (startAddress >= 0) && (startAddress < ram.length);
+    assert (endAddress > startAddress) && (endAddress < ram.length);
+    String line;
+    int a = startAddress, nextLineAddress;
+    while ((line = reader.readLine()) != null) {
+      log.finer("Parsing line: " + line);
+      final Matcher matcher = LINE_NUMBER_PATTERN.matcher(line);
+      if (!matcher.matches()) {
+	throw new BasicException("Line number missing");
+      }
+      final MatchResult matchResult = matcher.toMatchResult();
+      final int lineNumber = Integer.parseInt(matchResult.group(1));
+      log.finest("Line number: " + lineNumber);
+      if (lineNumber > 0xffff) {
+	throw new BasicException("Illegal line number");
+      }
+      line = matchResult.group(2);
+      nextLineAddress = a;
+      a += 2;
+      check(a + 1, endAddress);
+      ram[a++] = (byte)(lineNumber & 0xff);
+      ram[a++] = (byte)(lineNumber >> 8);
+      boolean inRem = false;
+      boolean inString = false;
+      while (!line.isEmpty()) {
+	final char ch = line.charAt(0);
+	int nextByte = 0;
+	if (inRem) {
+	  nextByte = encodeChar(ch);
+	  line = line.substring(1);
+	} else if (inString) {
+	  if (ch == '"') {
+	    inString = false;
+	  }
+	  nextByte = encodeChar(ch);
+	  line = line.substring(1);
+	} else if (ch == '"') {
+	  inString = true;
+	  nextByte = encodeChar(ch);
+	  line = line.substring(1);
+	} else {
+	  int i;
+	  for (i = 0; i < 0x80; i++) {
+	    final String token = TOKENS[i];
+	    if (token != null) {
+	      if (line.startsWith(token)) {
+		nextByte = 0x80 + i;
+		line = line.substring(token.length());
+		break;
+	      }
+	    }
+	  }
+	  if (i == 0x80) {
+	    nextByte = encodeChar(ch);
+	    line = line.substring(1);
+	  }
+	}
+	check(a, endAddress);
+	ram[a++] = (byte)nextByte;
+      }
+      check(a, endAddress);
+      ram[a++] = (byte)0;
+      ram[nextLineAddress++] = (byte)(a & 0xff);
+      ram[nextLineAddress] = (byte)(a >> 8);
     }
-    
-    // set up data pins
-    for (int i = 0; i < 8; i++) {
-      dataPins[i] = new DataPin(i);
-      new IONode().add(pio.getPin(i)).add(dataPins[i]);
-    }
-    
-    log.finer("ROM module set up");
+    check(a + 2, endAddress);
+    ram[a] = ram[a + 1] = ram[a + 2] = (byte)0;
+    log.fine("Encoding finished");
   }
 
   /**
-   * Gets the PIO.
+   * Decodes BASIC program in text from RAM.
+   *
+   * @param ram          the RAM
+   * @param writer       the program as text
+   * @param startAddress the starting address
+   * @param endAddress   the ending address beyond which the program 
+   *                     may not be read
    */
-  public Intel8255 getPIO() {
-    return pio;
-  }
-
-  // data pins
-  private class DataPin extends IOPin {
-    private int mask;
-
-    private DataPin(final int n) {
-      super();
-      assert (n >= 0) && (n < 8);
-      mask = 1 << n;
-    }
-
-    @Override
-    public int query() {
-      int a = 0;
-      for (int i = 15; i >= 0; i--) {
-	a = (a << 1) | (addressPins[i].queryNode() & 1);
+  public static void decode(final byte[] ram,
+			    final PrintWriter writer,
+			    final int startAddress,
+			    final int endAddress)
+                            throws IOException,
+				   BasicException {
+    log.fine("Decoding started");
+    assert writer != null;
+    assert ram != null;
+    assert (startAddress >= 0) && (startAddress < ram.length);
+    assert (endAddress > startAddress) && (endAddress < ram.length);
+    int a = startAddress;
+    while (true) {
+      check(a + 1, endAddress);
+      final int nextAddress = (ram[a] & 0xff) + ((ram[a + 1] & 0xff) << 8);
+      if (nextAddress == 0) {
+	break;
       }
-      return (a < (memory.getSizeRMM() * 0x400)) ?
-	     (memory.getRMM()[a] & mask) :
-	     0xff;
+      a += 2;
+      if (nextAddress < (a + 3)) {
+	throw new BasicException("Illegal next line pointer");
+      }
+      check(nextAddress, endAddress);
+      final int lineNumber = (ram[a] & 0xff) + ((ram[a + 1] & 0xff) << 8);
+      if (lineNumber > 0xffff) {
+	throw new BasicException("Illegal line number");
+      }
+      a += 2;
+      writer.printf("%d ", lineNumber);
+      boolean inRem = false;
+      boolean inString = false;
+      String s;
+      while (a < (nextAddress - 1)) {
+	final int nextByte = ram[a++] & 0xff;
+	if (nextByte == 0) {
+	  throw new BasicException("Premature end-of-line marker");
+	} else if (inRem) {
+	  s = decodeChar(nextByte);
+	} else if (inString) {
+	  if (nextByte == (int)'"') {
+	    inString = false;
+	  }
+	  s = decodeChar(nextByte);
+	} else if (nextByte == REM) {
+	  inRem = true;
+	  s = "REM";
+	} else if (nextByte == (int)'"') {
+	  inString = true;
+	  s = "\"";
+	} else if ((nextByte >= 0x80) &&
+		   (TOKENS[nextByte - 0x80] != null)) {
+	  s = TOKENS[nextByte - 0x80];
+	} else {
+	  s = decodeChar(nextByte);
+	}
+	writer.print(s);	  
+      }
+      if (ram[a++] != (byte)0) {
+	throw new BasicException("Bad line terminator");
+      }
+      writer.printf("%n");
     }
+    log.fine("Decoding finished");
   }
 }

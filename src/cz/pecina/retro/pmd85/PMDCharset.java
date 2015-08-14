@@ -45,70 +45,70 @@ public class PMDCharset extends Charset {
   // conversion table for characters 0xc0-0xff
   private static final List<Character> SPECIAL_CHARACTERS =
     Arrays.asList(new Character[] {
-    /* 0xc0 */ '\u222b',  // integral
-    /* 0xc1 */ 'á',
-    /* 0xc2 */ '\u03b1',  // alpha
-    /* 0xc3 */ 'č',
-    /* 0xc4 */ 'ď',
-    /* 0xc5 */ 'ě',
-    /* 0xc6 */ 'ŕ',
-    /* 0xc7 */ '\u2580',  // upper half block
-    /* 0xc8 */ 'ü',
-    /* 0xc9 */ 'í',
-    /* 0xca */ 'ů',
-    /* 0xcb */ 'ĺ',
-    /* 0xcc */ 'ľ',
-    /* 0xcd */ 'ö',
-    /* 0xce */ 'ň',
-    /* 0xcf */ 'ó',
-    /* 0xd0 */ 'ô',
-    /* 0xd1 */ 'ä',
-    /* 0xd2 */ 'ř',
-    /* 0xd3 */ 'š',
-    /* 0xd4 */ 'ť',
-    /* 0xd5 */ 'ú',
-    /* 0xd6 */ '\u03b2',  // beta
-    /* 0xd7 */ 'é',
-    /* 0xd8 */ 'à',
-    /* 0xd9 */ 'ý',
-    /* 0xda */ 'ž',
-    /* 0xdb */ '\u258c',  // left half block
-    /* 0xdc */ '\u2590',  // right half block
-    /* 0xdd */ '\u2599',  // quadrant upper left and lower left and lower right
-    /* 0xde */ '\u259b',  // quadrant upper left and upper right and lower left
-    /* 0xdf */ '\u259c',  // quadrant upper left and upper right and lower right
-    /* 0xe0 */ '\u03c0',  // pi
-    /* 0xe1 */ 'Á',
-    /* 0xe2 */ '\u03b3',  // gamma
-    /* 0xe3 */ 'Č',
-    /* 0xe4 */ 'Ď',
-    /* 0xe5 */ 'Ě',
-    /* 0xe6 */ 'Ŕ',
-    /* 0xe7 */ '\u2584',  // lower half block
-    /* 0xe8 */ 'Ü',
-    /* 0xe9 */ 'Í',
-    /* 0xea */ 'Ů',
-    /* 0xeb */ 'Ĺ',
-    /* 0xec */ 'Ľ',
-    /* 0xed */ 'Ö',
-    /* 0xee */ 'Ň',
-    /* 0xef */ 'Ó',
-    /* 0xf0 */ 'Ô',
-    /* 0xf1 */ 'Ä',
-    /* 0xf2 */ 'Ř',
-    /* 0xf3 */ 'Š',
-    /* 0xf4 */ 'Ť',
-    /* 0xf5 */ 'Ú',
-    /* 0xf6 */ '\u03b4',  //delta
-    /* 0xf7 */ 'É',
-    /* 0xf8 */ 'À',
-    /* 0xf9 */ 'Ý',
-    /* 0xfa */ 'Ž',
-    /* 0xfb */ '\u259d',  // quadrant upper right
-    /* 0xfc */ '\u2597',  // quadrant lower right
-    /* 0xfd */ '\u259f',  // quadrant upper right and lower left and lower right
-    /* 0xfe */ '\u2596',  // quadrant lower left
-    /* 0xff */ '\u2598'   // quadrant upper left
+      /* 0xc0 */ '\u222b',  // integral
+      /* 0xc1 */ 'á',
+      /* 0xc2 */ '\u03b1',  // alpha
+      /* 0xc3 */ 'č',
+      /* 0xc4 */ 'ď',
+      /* 0xc5 */ 'ě',
+      /* 0xc6 */ 'ŕ',
+      /* 0xc7 */ '\u2580',  // upper half block
+      /* 0xc8 */ 'ü',
+      /* 0xc9 */ 'í',
+      /* 0xca */ 'ů',
+      /* 0xcb */ 'ĺ',
+      /* 0xcc */ 'ľ',
+      /* 0xcd */ 'ö',
+      /* 0xce */ 'ň',
+      /* 0xcf */ 'ó',
+      /* 0xd0 */ 'ô',
+      /* 0xd1 */ 'ä',
+      /* 0xd2 */ 'ř',
+      /* 0xd3 */ 'š',
+      /* 0xd4 */ 'ť',
+      /* 0xd5 */ 'ú',
+      /* 0xd6 */ '\u03b2',  // beta
+      /* 0xd7 */ 'é',
+      /* 0xd8 */ 'à',
+      /* 0xd9 */ 'ý',
+      /* 0xda */ 'ž',
+      /* 0xdb */ '\u258c',  // left half block
+      /* 0xdc */ '\u2590',  // right half block
+      /* 0xdd */ '\u2599',  // quadrant upper left and lower left and lower right
+      /* 0xde */ '\u259b',  // quadrant upper left and upper right and lower left
+      /* 0xdf */ '\u259c',  // quadrant upper left and upper right and lower right
+      /* 0xe0 */ '\u03c0',  // pi
+      /* 0xe1 */ 'Á',
+      /* 0xe2 */ '\u03b3',  // gamma
+      /* 0xe3 */ 'Č',
+      /* 0xe4 */ 'Ď',
+      /* 0xe5 */ 'Ě',
+      /* 0xe6 */ 'Ŕ',
+      /* 0xe7 */ '\u2584',  // lower half block
+      /* 0xe8 */ 'Ü',
+      /* 0xe9 */ 'Í',
+      /* 0xea */ 'Ů',
+      /* 0xeb */ 'Ĺ',
+      /* 0xec */ 'Ľ',
+      /* 0xed */ 'Ö',
+      /* 0xee */ 'Ň',
+      /* 0xef */ 'Ó',
+      /* 0xf0 */ 'Ô',
+      /* 0xf1 */ 'Ä',
+      /* 0xf2 */ 'Ř',
+      /* 0xf3 */ 'Š',
+      /* 0xf4 */ 'Ť',
+      /* 0xf5 */ 'Ú',
+      /* 0xf6 */ '\u03b4',  //delta
+      /* 0xf7 */ 'É',
+      /* 0xf8 */ 'À',
+      /* 0xf9 */ 'Ý',
+      /* 0xfa */ 'Ž',
+      /* 0xfb */ '\u259d',  // quadrant upper right
+      /* 0xfc */ '\u2597',  // quadrant lower right
+      /* 0xfd */ '\u259f',  // quadrant upper right and lower left and lower right
+      /* 0xfe */ '\u2596',  // quadrant lower left
+      /* 0xff */ '\u2598'   // quadrant upper left
   });
 
   /**
