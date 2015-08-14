@@ -68,6 +68,8 @@ public class Load extends MemoryTab {
     super(panel);
     log.fine("New Memory/Load panel creation started");
  
+    int line = 0;
+
     setBorder(BorderFactory.createEmptyBorder(5, 8, 0, 8));
     final ButtonGroup loadGroup = new ButtonGroup();
 
@@ -77,7 +79,7 @@ public class Load extends MemoryTab {
       new JRadioButton(Application.getString(this, "load.raw"));
     loadRadioRaw.setSelected(true);
     loadRadioRawConstraints.gridx = 0;
-    loadRadioRawConstraints.gridy = 0;
+    loadRadioRawConstraints.gridy = line;
     loadRadioRawConstraints.anchor = GridBagConstraints.LINE_START;
     loadRadioRawConstraints.weightx = 0.0;
     loadRadioRawConstraints.weighty = 0.0;
@@ -89,7 +91,7 @@ public class Load extends MemoryTab {
     final JLabel loadRawDestination =
       new JLabel(Application.getString(this, "load.raw.destination") + ":");
     loadRawDestinationConstraints.gridx = 1;
-    loadRawDestinationConstraints.gridy = 0;
+    loadRawDestinationConstraints.gridy = line;
     loadRawDestinationConstraints.insets = new Insets(0, 10, 0, 0);
     loadRawDestinationConstraints.anchor = GridBagConstraints.LINE_END;
     loadRawDestinationConstraints.weightx = 0.0;
@@ -103,7 +105,7 @@ public class Load extends MemoryTab {
     loadRawDestination.setLabelFor(loadRawDestinationField);
     loadRawDestinationField.addMouseListener(new RadioClick(loadRadioRaw));
     loadRawDestinationFieldConstraints.gridx = 2;
-    loadRawDestinationFieldConstraints.gridy = 0;
+    loadRawDestinationFieldConstraints.gridy = line;
     loadRawDestinationFieldConstraints.gridwidth = GridBagConstraints.REMAINDER;
     loadRawDestinationFieldConstraints.insets = new Insets(0, 3, 0, 0);
     loadRawDestinationFieldConstraints.anchor = GridBagConstraints.LINE_START;
@@ -111,13 +113,15 @@ public class Load extends MemoryTab {
     loadRawDestinationFieldConstraints.weighty = 0.0;
     add(loadRawDestinationField, loadRawDestinationFieldConstraints);
 
+    line++;
+    
     final GridBagConstraints loadRadioHEXConstraints =
       new GridBagConstraints();
     loadRadioHEX =
       new JRadioButton(Application.getString(this, "load.HEX"));
     loadRadioHEX.setSelected(true);
     loadRadioHEXConstraints.gridx = 0;
-    loadRadioHEXConstraints.gridy = 1;
+    loadRadioHEXConstraints.gridy = line;
     loadRadioHEXConstraints.anchor = GridBagConstraints.LINE_START;
     loadRadioHEXConstraints.weightx = 0.0;
     loadRadioHEXConstraints.weighty = 0.0;
@@ -129,7 +133,7 @@ public class Load extends MemoryTab {
     final JLabel loadHEXDestination =
       new JLabel(Application.getString(this, "load.HEX.destination") + ":");
     loadHEXDestinationConstraints.gridx = 1;
-    loadHEXDestinationConstraints.gridy = 1;
+    loadHEXDestinationConstraints.gridy = line;
     loadHEXDestinationConstraints.insets = new Insets(0, 10, 0, 0);
     loadHEXDestinationConstraints.anchor = GridBagConstraints.LINE_END;
     loadHEXDestinationConstraints.weightx = 0.0;
@@ -142,7 +146,7 @@ public class Load extends MemoryTab {
     loadHEXDestination.setLabelFor(loadHEXDestinationField);
     loadHEXDestinationField.addMouseListener(new RadioClick(loadRadioHEX));
     loadHEXDestinationFieldConstraints.gridx = 2;
-    loadHEXDestinationFieldConstraints.gridy = 1;
+    loadHEXDestinationFieldConstraints.gridy = line;
     loadHEXDestinationFieldConstraints.insets = new Insets(0, 3, 0, 0);
     loadHEXDestinationFieldConstraints.anchor = GridBagConstraints.LINE_START;
     loadHEXDestinationFieldConstraints.weightx = 0.0;
@@ -154,7 +158,7 @@ public class Load extends MemoryTab {
     final JLabel loadHEXOptional =
       new JLabel("(" + Application.getString(this, "load.HEX.optional") + ")");
     loadHEXOptionalConstraints.gridx = 3;
-    loadHEXOptionalConstraints.gridy = 1;
+    loadHEXOptionalConstraints.gridy = line;
     loadHEXOptionalConstraints.gridwidth = GridBagConstraints.REMAINDER;
     loadHEXOptionalConstraints.insets = new Insets(0, 3, 0, 0);
     loadHEXOptionalConstraints.anchor = GridBagConstraints.LINE_START;
@@ -162,12 +166,14 @@ public class Load extends MemoryTab {
     loadHEXOptionalConstraints.weighty = 0.0;
     add(loadHEXOptional, loadHEXOptionalConstraints);
 
+    line++;
+    
     final GridBagConstraints loadRadioXMLConstraints =
       new GridBagConstraints();
     loadRadioXML = new JRadioButton(Application.getString(this, "load.XML"));
     loadRadioXML.setSelected(true);
     loadRadioXMLConstraints.gridx = 0;
-    loadRadioXMLConstraints.gridy = 2;
+    loadRadioXMLConstraints.gridy = line;
     loadRadioXMLConstraints.anchor = GridBagConstraints.LINE_START;
     loadRadioXMLConstraints.weightx = 0.0;
     loadRadioXMLConstraints.weighty = 0.0;
@@ -179,7 +185,7 @@ public class Load extends MemoryTab {
     final JLabel loadXMLDestination =
       new JLabel(Application.getString(this, "load.XML.destination") + ":");
     loadXMLDestinationConstraints.gridx = 1;
-    loadXMLDestinationConstraints.gridy = 2;
+    loadXMLDestinationConstraints.gridy = line;
     loadXMLDestinationConstraints.insets = new Insets(0, 10, 0, 0);
     loadXMLDestinationConstraints.anchor = GridBagConstraints.LINE_END;
     loadXMLDestinationConstraints.weightx = 0.0;
@@ -192,7 +198,7 @@ public class Load extends MemoryTab {
     loadXMLDestination.setLabelFor(loadXMLDestinationField);
     loadXMLDestinationField.addMouseListener(new RadioClick(loadRadioXML));
     loadXMLDestinationFieldConstraints.gridx = 2;
-    loadXMLDestinationFieldConstraints.gridy = 2;
+    loadXMLDestinationFieldConstraints.gridy = line;
     loadXMLDestinationFieldConstraints.insets = new Insets(0, 3, 0, 0);
     loadXMLDestinationFieldConstraints.anchor = GridBagConstraints.LINE_START;
     loadXMLDestinationFieldConstraints.weightx = 0.0;
@@ -204,7 +210,7 @@ public class Load extends MemoryTab {
     final JLabel loadXMLOptional =
       new JLabel("(" + Application.getString(this, "load.XML.optional") + ")");
     loadXMLOptionalConstraints.gridx = 3;
-    loadXMLOptionalConstraints.gridy = 2;
+    loadXMLOptionalConstraints.gridy = line;
     loadXMLOptionalConstraints.gridwidth = GridBagConstraints.REMAINDER;
     loadXMLOptionalConstraints.insets = new Insets(0, 3, 0, 0);
     loadXMLOptionalConstraints.anchor = GridBagConstraints.LINE_START;
@@ -212,13 +218,15 @@ public class Load extends MemoryTab {
     loadXMLOptionalConstraints.weighty = 0.0;
     add(loadXMLOptional, loadXMLOptionalConstraints);
 
+    line++;
+    
     final GridBagConstraints loadRadioSnapshotConstraints =
       new GridBagConstraints();
     loadRadioSnapshot =
       new JRadioButton(Application.getString(this, "load.snapshot"));
     loadRadioSnapshot.setSelected(true);
     loadRadioSnapshotConstraints.gridx = 0;
-    loadRadioSnapshotConstraints.gridy = 3;
+    loadRadioSnapshotConstraints.gridy = line;
     loadRadioSnapshotConstraints.gridwidth = GridBagConstraints.REMAINDER;
     loadRadioSnapshotConstraints.anchor = GridBagConstraints.LINE_START;
     loadRadioSnapshotConstraints.weightx = 0.0;
@@ -226,12 +234,14 @@ public class Load extends MemoryTab {
     add(loadRadioSnapshot, loadRadioSnapshotConstraints);
     loadGroup.add(loadRadioSnapshot);
 
+    line++;
+    
     final GridBagConstraints loadButtonsConstraints =
       new GridBagConstraints();
     final JPanel loadButtonsPanel =
       new JPanel(new FlowLayout(FlowLayout.TRAILING));
     loadButtonsConstraints.gridx = 0;
-    loadButtonsConstraints.gridy = 4;
+    loadButtonsConstraints.gridy = line;
     loadButtonsConstraints.gridwidth = GridBagConstraints.REMAINDER;
     loadButtonsConstraints.anchor = GridBagConstraints.LAST_LINE_END;
     loadButtonsConstraints.weightx = 0.0;

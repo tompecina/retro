@@ -69,6 +69,8 @@ public class Save extends MemoryTab {
     super(panel);
     log.fine("New Memory/Save panel creation started");
  
+    int line = 0;
+
     setBorder(BorderFactory.createEmptyBorder(5, 8, 0, 8));
     final ButtonGroup saveGroup = new ButtonGroup();
 
@@ -78,7 +80,7 @@ public class Save extends MemoryTab {
       new JRadioButton(Application.getString(this, "save.raw"));
     saveRadioRaw.setSelected(true);
     saveRadioRawConstraints.gridx = 0;
-    saveRadioRawConstraints.gridy = 0;
+    saveRadioRawConstraints.gridy = line;
     saveRadioRawConstraints.anchor = GridBagConstraints.LINE_START;
     saveRadioRawConstraints.weightx = 0.0;
     saveRadioRawConstraints.weighty = 0.0;
@@ -90,7 +92,7 @@ public class Save extends MemoryTab {
     final JLabel saveRawStart =
       new JLabel(Application.getString(this, "save.raw.start") + ":");
     saveRawStartConstraints.gridx = 1;
-    saveRawStartConstraints.gridy = 0;
+    saveRawStartConstraints.gridy = line;
     saveRawStartConstraints.insets = new Insets(0, 10, 0, 0);
     saveRawStartConstraints.anchor = GridBagConstraints.LINE_END;
     saveRawStartConstraints.weightx = 0.0;
@@ -103,7 +105,7 @@ public class Save extends MemoryTab {
     saveRawStart.setLabelFor(saveRawStartField);
     saveRawStartField.addMouseListener(new RadioClick(saveRadioRaw));
     saveRawStartFieldConstraints.gridx = 2;
-    saveRawStartFieldConstraints.gridy = 0;
+    saveRawStartFieldConstraints.gridy = line;
     saveRawStartFieldConstraints.insets = new Insets(0, 3, 0, 10);
     saveRawStartFieldConstraints.anchor = GridBagConstraints.LINE_START;
     saveRawStartFieldConstraints.weightx = 0.0;
@@ -115,7 +117,7 @@ public class Save extends MemoryTab {
     final JLabel saveRawEnd =
       new JLabel(Application.getString(this, "save.raw.end") + ":");
     saveRawEndConstraints.gridx = 3;
-    saveRawEndConstraints.gridy = 0;
+    saveRawEndConstraints.gridy = line;
     saveRawEndConstraints.insets = new Insets(0, 10, 0, 0);
     saveRawEndConstraints.anchor = GridBagConstraints.LINE_END;
     saveRawEndConstraints.weightx = 0.0;
@@ -128,7 +130,7 @@ public class Save extends MemoryTab {
     saveRawEnd.setLabelFor(saveRawEndField);
     saveRawEndField.addMouseListener(new RadioClick(saveRadioRaw));
     saveRawEndFieldConstraints.gridx = 4;
-    saveRawEndFieldConstraints.gridy = 0;
+    saveRawEndFieldConstraints.gridy = line;
     saveRawEndFieldConstraints.gridwidth = GridBagConstraints.REMAINDER;
     saveRawEndFieldConstraints.insets = new Insets(0, 3, 0, 0);
     saveRawEndFieldConstraints.anchor = GridBagConstraints.LINE_START;
@@ -136,13 +138,15 @@ public class Save extends MemoryTab {
     saveRawEndFieldConstraints.weighty = 0.0;
     add(saveRawEndField, saveRawEndFieldConstraints);
 
+    line++;
+    
     final GridBagConstraints saveRadioHEXConstraints =
       new GridBagConstraints();
     saveRadioHEX =
       new JRadioButton(Application.getString(this, "save.HEX"));
     saveRadioHEX.setSelected(true);
     saveRadioHEXConstraints.gridx = 0;
-    saveRadioHEXConstraints.gridy = 1;
+    saveRadioHEXConstraints.gridy = line;
     saveRadioHEXConstraints.anchor = GridBagConstraints.LINE_START;
     saveRadioHEXConstraints.weightx = 0.0;
     saveRadioHEXConstraints.weighty = 0.0;
@@ -154,7 +158,7 @@ public class Save extends MemoryTab {
     final JLabel saveHEXStart =
       new JLabel(Application.getString(this, "save.HEX.start") + ":");
     saveHEXStartConstraints.gridx = 1;
-    saveHEXStartConstraints.gridy = 1;
+    saveHEXStartConstraints.gridy = line;
     saveHEXStartConstraints.insets = new Insets(0, 10, 0, 0);
     saveHEXStartConstraints.anchor = GridBagConstraints.LINE_END;
     saveHEXStartConstraints.weightx = 0.0;
@@ -167,7 +171,7 @@ public class Save extends MemoryTab {
     saveHEXStart.setLabelFor(saveHEXStartField);
     saveHEXStartField.addMouseListener(new RadioClick(saveRadioHEX));
     saveHEXStartFieldConstraints.gridx = 2;
-    saveHEXStartFieldConstraints.gridy = 1;
+    saveHEXStartFieldConstraints.gridy = line;
     saveHEXStartFieldConstraints.insets = new Insets(0, 3, 0, 10);
     saveHEXStartFieldConstraints.anchor = GridBagConstraints.LINE_START;
     saveHEXStartFieldConstraints.weightx = 0.0;
@@ -179,7 +183,7 @@ public class Save extends MemoryTab {
     final JLabel saveHEXEnd =
       new JLabel(Application.getString(this, "save.HEX.end") + ":");
     saveHEXEndConstraints.gridx = 3;
-    saveHEXEndConstraints.gridy = 1;
+    saveHEXEndConstraints.gridy = line;
     saveHEXEndConstraints.insets = new Insets(0, 10, 0, 0);
     saveHEXEndConstraints.anchor = GridBagConstraints.LINE_END;
     saveHEXEndConstraints.weightx = 0.0;
@@ -192,7 +196,7 @@ public class Save extends MemoryTab {
     saveHEXEnd.setLabelFor(saveHEXEndField);
     saveHEXEndField.addMouseListener(new RadioClick(saveRadioHEX));
     saveHEXEndFieldConstraints.gridx = 4;
-    saveHEXEndFieldConstraints.gridy = 1;
+    saveHEXEndFieldConstraints.gridy = line;
     saveHEXEndFieldConstraints.insets = new Insets(0, 3, 0, 10);
     saveHEXEndFieldConstraints.anchor = GridBagConstraints.LINE_START;
     saveHEXEndFieldConstraints.weightx = 0.0;
@@ -204,7 +208,7 @@ public class Save extends MemoryTab {
     final JLabel saveHEXDestination =
       new JLabel(Application.getString(this, "save.HEX.destination") + ":");
     saveHEXDestinationConstraints.gridx = 5;
-    saveHEXDestinationConstraints.gridy = 1;
+    saveHEXDestinationConstraints.gridy = line;
     saveHEXDestinationConstraints.insets = new Insets(0, 10, 0, 0);
     saveHEXDestinationConstraints.anchor = GridBagConstraints.LINE_END;
     saveHEXDestinationConstraints.weightx = 0.0;
@@ -217,7 +221,7 @@ public class Save extends MemoryTab {
     saveHEXDestination.setLabelFor(saveHEXDestinationField);
     saveHEXDestinationField.addMouseListener(new RadioClick(saveRadioHEX));
     saveHEXDestinationFieldConstraints.gridx = 6;
-    saveHEXDestinationFieldConstraints.gridy = 1;
+    saveHEXDestinationFieldConstraints.gridy = line;
     saveHEXDestinationFieldConstraints.insets = new Insets(0, 3, 0, 0);
     saveHEXDestinationFieldConstraints.anchor = GridBagConstraints.LINE_START;
     saveHEXDestinationFieldConstraints.weightx = 0.0;
@@ -229,7 +233,7 @@ public class Save extends MemoryTab {
     final JLabel saveHEXOptional =
       new JLabel("(" + Application.getString(this, "save.HEX.optional") + ")");
     saveHEXOptionalConstraints.gridx = 7;
-    saveHEXOptionalConstraints.gridy = 1;
+    saveHEXOptionalConstraints.gridy = line;
     saveHEXOptionalConstraints.gridwidth = GridBagConstraints.REMAINDER;
     saveHEXOptionalConstraints.insets = new Insets(0, 3, 0, 0);
     saveHEXOptionalConstraints.anchor = GridBagConstraints.LINE_START;
@@ -237,13 +241,15 @@ public class Save extends MemoryTab {
     saveHEXOptionalConstraints.weighty = 0.0;
     add(saveHEXOptional, saveHEXOptionalConstraints);
 
+    line++;
+
     final GridBagConstraints saveRadioXMLConstraints =
       new GridBagConstraints();
     saveRadioXML =
       new JRadioButton(Application.getString(this, "save.XML"));
     saveRadioXML.setSelected(true);
     saveRadioXMLConstraints.gridx = 0;
-    saveRadioXMLConstraints.gridy = 2;
+    saveRadioXMLConstraints.gridy = line;
     saveRadioXMLConstraints.anchor = GridBagConstraints.LINE_START;
     saveRadioXMLConstraints.weightx = 0.0;
     saveRadioXMLConstraints.weighty = 0.0;
@@ -255,7 +261,7 @@ public class Save extends MemoryTab {
     final JLabel saveXMLStart =
       new JLabel(Application.getString(this, "save.XML.start") + ":");
     saveXMLStartConstraints.gridx = 1;
-    saveXMLStartConstraints.gridy = 2;
+    saveXMLStartConstraints.gridy = line;
     saveXMLStartConstraints.insets = new Insets(0, 10, 0, 0);
     saveXMLStartConstraints.anchor = GridBagConstraints.LINE_END;
     saveXMLStartConstraints.weightx = 0.0;
@@ -268,7 +274,7 @@ public class Save extends MemoryTab {
     saveXMLStart.setLabelFor(saveXMLStartField);
     saveXMLStartField.addMouseListener(new RadioClick(saveRadioXML));
     saveXMLStartFieldConstraints.gridx = 2;
-    saveXMLStartFieldConstraints.gridy = 2;
+    saveXMLStartFieldConstraints.gridy = line;
     saveXMLStartFieldConstraints.insets = new Insets(0, 3, 0, 10);
     saveXMLStartFieldConstraints.anchor = GridBagConstraints.LINE_START;
     saveXMLStartFieldConstraints.weightx = 0.0;
@@ -280,7 +286,7 @@ public class Save extends MemoryTab {
     final JLabel saveXMLEnd =
       new JLabel(Application.getString(this, "save.XML.end") + ":");
     saveXMLEndConstraints.gridx = 3;
-    saveXMLEndConstraints.gridy = 2;
+    saveXMLEndConstraints.gridy = line;
     saveXMLEndConstraints.insets = new Insets(0, 10, 0, 0);
     saveXMLEndConstraints.anchor = GridBagConstraints.LINE_END;
     saveXMLEndConstraints.weightx = 0.0;
@@ -293,7 +299,7 @@ public class Save extends MemoryTab {
     saveXMLEnd.setLabelFor(saveXMLEndField);
     saveXMLEndField.addMouseListener(new RadioClick(saveRadioXML));
     saveXMLEndFieldConstraints.gridx = 4;
-    saveXMLEndFieldConstraints.gridy = 2;
+    saveXMLEndFieldConstraints.gridy = line;
     saveXMLEndFieldConstraints.insets = new Insets(0, 3, 0, 10);
     saveXMLEndFieldConstraints.anchor = GridBagConstraints.LINE_START;
     saveXMLEndFieldConstraints.weightx = 0.0;
@@ -305,7 +311,7 @@ public class Save extends MemoryTab {
     final JLabel saveXMLDestination =
       new JLabel(Application.getString(this, "save.XML.destination") + ":");
     saveXMLDestinationConstraints.gridx = 5;
-    saveXMLDestinationConstraints.gridy = 2;
+    saveXMLDestinationConstraints.gridy = line;
     saveXMLDestinationConstraints.insets = new Insets(0, 10, 0, 0);
     saveXMLDestinationConstraints.anchor = GridBagConstraints.LINE_END;
     saveXMLDestinationConstraints.weightx = 0.0;
@@ -318,7 +324,7 @@ public class Save extends MemoryTab {
     saveXMLDestination.setLabelFor(saveXMLDestinationField);
     saveXMLDestinationField.addMouseListener(new RadioClick(saveRadioXML));
     saveXMLDestinationFieldConstraints.gridx = 6;
-    saveXMLDestinationFieldConstraints.gridy = 2;
+    saveXMLDestinationFieldConstraints.gridy = line;
     saveXMLDestinationFieldConstraints.insets = new Insets(0, 3, 0, 0);
     saveXMLDestinationFieldConstraints.anchor = GridBagConstraints.LINE_START;
     saveXMLDestinationFieldConstraints.weightx = 0.0;
@@ -330,7 +336,7 @@ public class Save extends MemoryTab {
     final JLabel saveXMLOptional =
       new JLabel("(" + Application.getString(this, "save.XML.optional") + ")");
     saveXMLOptionalConstraints.gridx = 7;
-    saveXMLOptionalConstraints.gridy = 2;
+    saveXMLOptionalConstraints.gridy = line;
     saveXMLOptionalConstraints.gridwidth = GridBagConstraints.REMAINDER;
     saveXMLOptionalConstraints.insets = new Insets(0, 3, 0, 0);
     saveXMLOptionalConstraints.anchor = GridBagConstraints.LINE_START;
@@ -338,13 +344,15 @@ public class Save extends MemoryTab {
     saveXMLOptionalConstraints.weighty = 0.0;
     add(saveXMLOptional, saveXMLOptionalConstraints);
 
+    line++;
+    
     final GridBagConstraints saveRadioSnapshotConstraints =
       new GridBagConstraints();
     saveRadioSnapshot =
       new JRadioButton(Application.getString(this, "save.snapshot"));
     saveRadioSnapshot.setSelected(true);
     saveRadioSnapshotConstraints.gridx = 0;
-    saveRadioSnapshotConstraints.gridy = 3;
+    saveRadioSnapshotConstraints.gridy = line;
     saveRadioSnapshotConstraints.gridwidth = GridBagConstraints.REMAINDER;
     saveRadioSnapshotConstraints.anchor = GridBagConstraints.LINE_START;
     saveRadioSnapshotConstraints.weightx = 0.0;
@@ -357,7 +365,7 @@ public class Save extends MemoryTab {
     final JPanel saveButtonsPanel =
       new JPanel(new FlowLayout(FlowLayout.TRAILING));
     saveButtonsConstraints.gridx = 0;
-    saveButtonsConstraints.gridy = 4;
+    saveButtonsConstraints.gridy = line;
     saveButtonsConstraints.gridwidth = GridBagConstraints.REMAINDER;
     saveButtonsConstraints.anchor = GridBagConstraints.LAST_LINE_END;
     saveButtonsConstraints.weightx = 0.0;
