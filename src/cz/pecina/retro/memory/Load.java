@@ -21,6 +21,8 @@
 package cz.pecina.retro.memory;
 
 import java.util.logging.Logger;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.File;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -40,6 +42,7 @@ import cz.pecina.retro.common.Application;
 import cz.pecina.retro.gui.RadioClick;
 import cz.pecina.retro.gui.HexField;
 import cz.pecina.retro.gui.InfoBox;
+import cz.pecina.retro.cpu.Block;
 
 /**
  * Memory/Load panel.
@@ -59,6 +62,9 @@ public class Load extends MemoryTab {
   private HexField loadRawDestinationField, loadHEXDestinationField,
     loadXMLDestinationField;
 
+  // list of bank selection radio buttons
+  private List<JRadioButton> destinationBankRadioButtons = new ArrayList<>();
+      
   /**
    * Creates Memory/Load panel.
    *
@@ -72,6 +78,44 @@ public class Load extends MemoryTab {
     final ButtonGroup loadGroup = new ButtonGroup();
     int line = 0;
 
+    if (numberBanks > 1) {
+
+      final GridBagConstraints destinationBankLabelConstraints =
+	new GridBagConstraints();
+      final JLabel destinationBankLabel =
+	new JLabel(Application.getString(this, "bank.destination") + ":");
+      destinationBankLabelConstraints.gridx = 0;
+      destinationBankLabelConstraints.gridy = line;
+      destinationBankLabelConstraints.insets = new Insets(0, 3, 0, 0);
+      destinationBankLabelConstraints.anchor = GridBagConstraints.LINE_END;
+      destinationBankLabelConstraints.weightx = 0.0;
+      destinationBankLabelConstraints.weighty = 0.0;
+      add(destinationBankLabel, destinationBankLabelConstraints);
+
+      final GridBagConstraints destinationBankPanelConstraints =
+	new GridBagConstraints();
+      final JPanel destinationBankPanel =
+	new JPanel(new FlowLayout(FlowLayout.LEADING));
+      destinationBankPanelConstraints.gridx = 1;
+      destinationBankPanelConstraints.gridy = line;
+      destinationBankPanelConstraints.gridwidth = GridBagConstraints.REMAINDER;
+      destinationBankPanelConstraints.anchor = GridBagConstraints.LINE_START;
+      destinationBankPanelConstraints.weightx = 0.0;
+      destinationBankPanelConstraints.weighty = 0.0;
+
+      final ButtonGroup destinationBankGroup = new ButtonGroup();
+      for (Block bank: banks) {
+	final JRadioButton destinationBankRadioButton = new JRadioButton(bank.getName());
+	destinationBankRadioButtons.add(destinationBankRadioButton);
+	destinationBankPanel.add(destinationBankRadioButton);
+	destinationBankGroup.add(destinationBankRadioButton);
+      }
+      destinationBankRadioButtons.get(0).setSelected(true);
+      
+      add(destinationBankPanel, destinationBankPanelConstraints);
+      line++;
+    }
+    
     final GridBagConstraints loadRadioRawConstraints =
       new GridBagConstraints();
     loadRadioRaw =
@@ -227,6 +271,7 @@ public class Load extends MemoryTab {
     loadRadioSnapshotConstraints.gridx = 0;
     loadRadioSnapshotConstraints.gridy = line;
     loadRadioSnapshotConstraints.gridwidth = GridBagConstraints.REMAINDER;
+    loadRadioSnapshotConstraints.insets = new Insets(15, 0, 0, 0);
     loadRadioSnapshotConstraints.anchor = GridBagConstraints.LINE_START;
     loadRadioSnapshotConstraints.weightx = 0.0;
     loadRadioSnapshotConstraints.weighty = 0.0;
@@ -264,6 +309,15 @@ public class Load extends MemoryTab {
     @Override
     public void actionPerformed(final ActionEvent event) {
       log.finer("Load listener action started");
+      if (numberBanks > 1) {
+	for (JRadioButton button: destinationBankRadioButtons) {
+	  if (button.isSelected()) {
+	    sourceMemoryBank = destinationMemoryBank = button.getText();
+	    log.fine("Destination memory bank selected: " + destinationMemoryBank);
+	    break;
+	  }
+	}
+      }
       int destination = 0, number = 0;
       try {
 	if (loadRadioRaw.isSelected()) {
