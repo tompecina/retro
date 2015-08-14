@@ -68,10 +68,9 @@ public class Load extends MemoryTab {
     super(panel);
     log.fine("New Memory/Load panel creation started");
  
-    int line = 0;
-
     setBorder(BorderFactory.createEmptyBorder(5, 8, 0, 8));
     final ButtonGroup loadGroup = new ButtonGroup();
+    int line = 0;
 
     final GridBagConstraints loadRadioRawConstraints =
       new GridBagConstraints();

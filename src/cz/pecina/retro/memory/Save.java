@@ -69,10 +69,9 @@ public class Save extends MemoryTab {
     super(panel);
     log.fine("New Memory/Save panel creation started");
  
-    int line = 0;
-
     setBorder(BorderFactory.createEmptyBorder(5, 8, 0, 8));
     final ButtonGroup saveGroup = new ButtonGroup();
+    int line = 0;
 
     final GridBagConstraints saveRadioRawConstraints =
       new GridBagConstraints();

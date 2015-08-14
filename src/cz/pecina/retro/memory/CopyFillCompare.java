@@ -65,10 +65,9 @@ public class CopyFillCompare extends MemoryTab {
     super(panel);
     log.fine("New Memory/CopyFillCompare creation started");
  
-    int line = 0;
-
     setBorder(BorderFactory.createEmptyBorder(5, 8, 0, 8));
     final ButtonGroup copyFillCompareGroup = new ButtonGroup();
+    int line = 0;
 
     final GridBagConstraints copyRadioConstraints =
       new GridBagConstraints();
