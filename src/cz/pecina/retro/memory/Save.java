@@ -96,7 +96,7 @@ public class Save extends MemoryTab {
       final GridBagConstraints sourceBankPanelConstraints =
 	new GridBagConstraints();
       final JPanel sourceBankPanel =
-	new JPanel(new FlowLayout(FlowLayout.LEADING));
+	new JPanel(new FlowLayout(FlowLayout.LEADING, 3, 0));
       sourceBankPanelConstraints.gridx = 1;
       sourceBankPanelConstraints.gridy = line;
       sourceBankPanelConstraints.gridwidth = GridBagConstraints.REMAINDER;

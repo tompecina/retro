@@ -135,7 +135,7 @@ public class ComputerHardware {
     systemPIO = new Intel8255("SYSTEM_PIO");
     hardware.add(systemPIO);
     for (int port: Util.portIterator(0x84, 0x8c)) {
-      cpu.addIOInput(port, systemPIO); 
+      cpu.addIOInput(port, systemPIO);
       cpu.addIOOutput(port, systemPIO);
     }
 

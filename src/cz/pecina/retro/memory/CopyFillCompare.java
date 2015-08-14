@@ -93,7 +93,7 @@ public class CopyFillCompare extends MemoryTab {
       final GridBagConstraints sourceBankPanelConstraints =
 	new GridBagConstraints();
       final JPanel sourceBankPanel =
-	new JPanel(new FlowLayout(FlowLayout.LEADING));
+	new JPanel(new FlowLayout(FlowLayout.LEADING, 3, 0));
       sourceBankPanelConstraints.gridx = 1;
       sourceBankPanelConstraints.gridy = line;
       sourceBankPanelConstraints.gridwidth = GridBagConstraints.REMAINDER;
@@ -128,7 +128,7 @@ public class CopyFillCompare extends MemoryTab {
       final GridBagConstraints destinationBankPanelConstraints =
 	new GridBagConstraints();
       final JPanel destinationBankPanel =
-	new JPanel(new FlowLayout(FlowLayout.LEADING));
+	new JPanel(new FlowLayout(FlowLayout.LEADING, 3, 0));
       destinationBankPanelConstraints.gridx = 1;
       destinationBankPanelConstraints.gridy = line;
       destinationBankPanelConstraints.gridwidth = GridBagConstraints.REMAINDER;
@@ -144,7 +144,6 @@ public class CopyFillCompare extends MemoryTab {
 	destinationBankGroup.add(destinationBankRadioButton);
       }
       destinationBankRadioButtons.get(0).setSelected(true);
-      
       add(destinationBankPanel, destinationBankPanelConstraints);
       line++;
     }

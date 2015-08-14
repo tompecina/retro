@@ -95,7 +95,7 @@ public class Load extends MemoryTab {
       final GridBagConstraints destinationBankPanelConstraints =
 	new GridBagConstraints();
       final JPanel destinationBankPanel =
-	new JPanel(new FlowLayout(FlowLayout.LEADING));
+	new JPanel(new FlowLayout(FlowLayout.LEADING, 3, 0));
       destinationBankPanelConstraints.gridx = 1;
       destinationBankPanelConstraints.gridy = line;
       destinationBankPanelConstraints.gridwidth = GridBagConstraints.REMAINDER;
