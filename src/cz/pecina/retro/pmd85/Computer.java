@@ -226,8 +226,6 @@ public class Computer {
     }
     busy = true;
 
-    computerHardware.getKeyboardHardware().updateBuffer();
-
     switch (debuggerState) {
       case HIDDEN:
     	computerHardware.getDebuggerHardware().removeTemporaryBreakpoints();
@@ -370,7 +368,7 @@ public class Computer {
     	break;
     }
     // computerHardware.getTapeRecorderHardware().process();
-    computerHardware.getKeyboardHardware().resetBuffer();
+    computerHardware.getKeyboardHardware().updateBuffer();
     computerHardware.getDisplayHardware().repaint();
 	
     busy = false;

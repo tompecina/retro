@@ -23,6 +23,8 @@ package cz.pecina.retro.pmd85;
 import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 import cz.pecina.retro.gui.LED;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.IONode;
@@ -63,9 +65,11 @@ public class KeyboardHardware {
   private int select;
 
   // matrices of key presses
-  private final boolean[][] buffer =
-    new boolean[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
   private final boolean[][] matrix =
+    new boolean[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
+  private final boolean[][] next =
+    new boolean[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
+  private final boolean[][] buffer =
     new boolean[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
 
   // matrix of keys
@@ -106,6 +110,9 @@ public class KeyboardHardware {
       for (int column = 0; column < NUMBER_MATRIX_COLUMNS; column++) {
 	if (keys[row][column] == null) {
 	  keys[row][column] = new KeyboardKey(row, column);
+	  log.finer("Dummy key (" + row + "," + column + ") added");
+	} else {
+	  keys[row][column].addChangeListener(new KeyListener(row, column));
 	}
       }
     }
@@ -115,8 +122,28 @@ public class KeyboardHardware {
     for (int i = 0; i < 4; i++) {
       selectPins[i] = new SelectPin(i);
     }
-    resetBuffer();
     log.fine("New keyboard hardware created");
+  }
+
+  // key listener
+  private class KeyListener implements ChangeListener {
+    private int row, column;
+
+    public KeyListener(final int row, final int column) {
+      assert (row >= 0) && (row < NUMBER_MATRIX_ROWS);
+      assert (column >= 0) && (column < NUMBER_MATRIX_COLUMNS);
+      this.row = row;
+      this.column = column;
+    }
+
+    @Override
+    public void stateChanged(final ChangeEvent event) {
+      log.finer("Key listener called for (" + row + "," + column + ")");
+      final boolean pressed = keys[row][column].isPressed();
+      log.finest("Pressed: " + pressed);
+      matrix[row][column] = pressed;
+      next[row][column] = next[row][column] || pressed;
+    }
   }
 
   // select pins
@@ -180,35 +207,13 @@ public class KeyboardHardware {
   }
 
   /**
-   * Resets the matrix of button presses.
-   */
-  public void resetBuffer() {
-    prepareMatrix();
-    copyMatrixToBuffer();
-  }
-
-  /**
    * Updates the matrix of keyboard presses.
    */
   public void updateBuffer() {
-    prepareMatrix();
-    addMatrixToBuffer();
-  }
-
-  // prepares matrix of keypresses
-  private void prepareMatrix() {
     for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {
       for (int column = 0; column < NUMBER_MATRIX_COLUMNS; column++) {
-	matrix[row][column] = keys[row][column].isPressed();
-      }
-    }
-  }
-
-  // copies matrix of keypresses to buffer
-  private void copyMatrixToBuffer() {
-    for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {
-      for (int column = 0; column < NUMBER_MATRIX_COLUMNS; column++) {
-	buffer[row][column] = matrix[row][column];
+	buffer[row][column] = next[row][column];
+	next[row][column] = matrix[row][column];
       }
     }
   }
