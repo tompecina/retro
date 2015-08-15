@@ -65,17 +65,31 @@ public class Load extends MemoryTab {
   // list of bank selection radio buttons
   private List<JRadioButton> destinationBankRadioButtons = new ArrayList<>();
       
+  // plugins
+  private MemoryPlugin[] plugins;
+
+  // number of plugins
+  private int numberPlugins;
+  
+  // plugins radio buttons
+  private JRadioButton[] loadRadioPlugins;
+
   /**
    * Creates Memory/Load panel.
    *
-   * @param panel enclosing panel
+   * @param panel   enclosing panel
+   * @param plugins array of memory plugins
    */
-  public Load(final MemoryPanel panel) {
+  public Load(final MemoryPanel panel, final MemoryPlugin[] plugins) {
     super(panel);
     log.fine("New Memory/Load panel creation started");
  
+    this.plugins = plugins;
+
     setBorder(BorderFactory.createEmptyBorder(5, 8, 0, 8));
     final ButtonGroup loadGroup = new ButtonGroup();
+    numberPlugins = plugins.length;
+    loadRadioPlugins = new JRadioButton[numberPlugins];
     int line = 0;
 
     if (numberBanks > 1) {
@@ -280,6 +294,24 @@ public class Load extends MemoryTab {
 
     line++;
     
+    for (int i = 0; i < numberPlugins; i++) {
+
+      final GridBagConstraints loadRadioPluginConstraints =
+      	new GridBagConstraints();
+      loadRadioPlugins[i] = new JRadioButton(plugins[i].getDescription());
+      loadRadioPluginConstraints.gridx = 0;
+      loadRadioPluginConstraints.gridy = line;
+      loadRadioPluginConstraints.gridwidth = GridBagConstraints.REMAINDER;
+      loadRadioPluginConstraints.insets = new Insets(0, 0, 0, 0);
+      loadRadioPluginConstraints.anchor = GridBagConstraints.LINE_START;
+      loadRadioPluginConstraints.weightx = 0.0;
+      loadRadioPluginConstraints.weighty = 0.0;
+      add(loadRadioPlugins[i], loadRadioPluginConstraints);
+      loadGroup.add(loadRadioPlugins[i]);
+      
+      line++;
+    }
+    
     final GridBagConstraints loadButtonsConstraints =
       new GridBagConstraints();
     final JPanel loadButtonsPanel =
@@ -340,6 +372,12 @@ public class Load extends MemoryTab {
 			Application.getString(this, "incompleteForm"));
 	return;
       }
+      int pluginIndex;
+      for (pluginIndex = numberPlugins - 1; pluginIndex >= 0; pluginIndex--) {
+	if (loadRadioPlugins[pluginIndex].isSelected()) {
+	  break;
+	}
+      }
       FileNameExtensionFilter filter;
       fileChooser.resetChoosableFileFilters();
       fileChooser.setAcceptAllFileFilterUsed(true);
@@ -347,8 +385,10 @@ public class Load extends MemoryTab {
 	filter = rawFilter;
       } else if (loadRadioHEX.isSelected()) {
 	filter = HEXFilter;
-      } else {
+      } else if (loadRadioXML.isSelected() || loadRadioSnapshot.isSelected()) {
 	filter = XMLFilter;
+      } else {
+	filter = plugins[pluginIndex].getFilter();
       }
       fileChooser.addChoosableFileFilter(filter);
       fileChooser.setFileFilter(filter);
@@ -370,8 +410,10 @@ public class Load extends MemoryTab {
 	      panel.getHardware(),
 	      sourceMemoryBank,
 	      destinationMemoryBank).read(file, destination).number;
-	  } else {
+	  } else if (loadRadioSnapshot.isSelected()) {
 	    new Snapshot(panel.getHardware()).read(file);
+	  } else {
+	    plugins[pluginIndex].read(panel.getHardware(), file);
 	  }
 	} catch (RuntimeException exception) {
 	  errorBox(exception);
@@ -380,10 +422,12 @@ public class Load extends MemoryTab {
 	if (loadRadioSnapshot.isSelected()) {
 	  InfoBox.display(panel,
 			  Application.getString(this, "snapshotLoaded"));
-	} else {
+	} else if (pluginIndex < 0) {
 	  InfoBox.display(
 	    panel,
 	    String.format(Application.getString(this, "loaded"), number));
+	} else {
+	  InfoBox.display(panel, plugins[pluginIndex].getSuccessString());
 	}
       }
     }

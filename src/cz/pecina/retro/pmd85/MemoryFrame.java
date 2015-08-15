@@ -26,6 +26,7 @@ import cz.pecina.retro.common.Application;
 import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.SimpleMemory;
 import cz.pecina.retro.memory.MemoryPanel;
+import cz.pecina.retro.memory.MemoryPlugin;
 
 /**
  * The Memory frame.
@@ -57,7 +58,10 @@ public class MemoryFrame extends HidingFrame {
     log.fine("New MemoryFrame creation started");
     assert hardware != null;
     this.hardware = hardware;
-    memoryPanel = new MemoryPanel(this, hardware);
+    memoryPanel = new MemoryPanel(this,
+				  hardware,
+				  new MemoryPlugin[] {},
+				  new MemoryPlugin[] {});
     add(memoryPanel);
     pack();
     log.fine("MemoryFrame set up");
@@ -68,7 +72,10 @@ public class MemoryFrame extends HidingFrame {
     log.fine("MemoryFrame redraw started");
     super.setTitle(Application.getString(this, "memory.frameTitle"));
     remove(memoryPanel);
-    memoryPanel = new MemoryPanel(this, hardware);
+    memoryPanel = new MemoryPanel(this,
+				  hardware,
+				  new MemoryPlugin[] {},
+				  new MemoryPlugin[] {});
     add(memoryPanel);
     pack();
     log.fine("MemoryFrame redraw completed");

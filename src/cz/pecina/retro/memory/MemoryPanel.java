@@ -52,17 +52,22 @@ public class MemoryPanel extends JTabbedPane {
   /**
    * Creates the memory panel.
    *
-   * @param frame    enclosing frame
-   * @param hardware hardware for shapshots
+   * @param frame       enclosing frame
+   * @param hardware    hardware for shapshots
+   * @param savePlugins array of save plugins
+   * @param loadPlugins array of save plugins
    */
-  public MemoryPanel(final CloseableFrame frame, final Hardware hardware) {
+  public MemoryPanel(final CloseableFrame frame,
+		     final Hardware hardware,
+		     final MemoryPlugin[] savePlugins,
+		     final MemoryPlugin[] loadPlugins) {
     super();
     log.fine("New MemoryPanel creation started");
     this.frame = frame;
     this.hardware = hardware;
 
-    tabs = new MemoryTab[] {new Save(this),
-			    new Load(this),
+    tabs = new MemoryTab[] {new Save(this, savePlugins),
+			    new Load(this, loadPlugins),
 			    new CopyFillCompare(this)};
     addTab(Application.getString(this, "save"), tabs[0]);
     addTab(Application.getString(this, "load"), tabs[1]);

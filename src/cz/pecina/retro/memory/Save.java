@@ -65,18 +65,32 @@ public class Save extends MemoryTab {
 
   // list of bank selection radio buttons
   private List<JRadioButton> sourceBankRadioButtons = new ArrayList<>();
-      
+
+  // plugins
+  private MemoryPlugin[] plugins;
+
+  // number of plugins
+  private int numberPlugins;
+  
+  // plugins radio buttons
+  private JRadioButton[] saveRadioPlugins;
+  
   /**
    * Creates Memory/Save panel.
    *
-   * @param panel enclosing panel
+   * @param panel   enclosing panel
+   * @param plugins array of memory plugins
    */
-  public Save(final MemoryPanel panel) {
+  public Save(final MemoryPanel panel, final MemoryPlugin[] plugins) {
     super(panel);
     log.fine("New Memory/Save panel creation started");
  
+    this.plugins = plugins;
+
     setBorder(BorderFactory.createEmptyBorder(5, 8, 0, 8));
     final ButtonGroup saveGroup = new ButtonGroup();
+    numberPlugins = plugins.length;
+    saveRadioPlugins = new JRadioButton[numberPlugins];
     int line = 0;
 
     if (numberBanks > 1) {
@@ -405,6 +419,24 @@ public class Save extends MemoryTab {
     saveGroup.add(saveRadioSnapshot);
 
     line++;
+
+    for (int i = 0; i < numberPlugins; i++) {
+
+      final GridBagConstraints saveRadioPluginConstraints =
+      	new GridBagConstraints();
+      saveRadioPlugins[i] = new JRadioButton(plugins[i].getDescription());
+      saveRadioPluginConstraints.gridx = 0;
+      saveRadioPluginConstraints.gridy = line;
+      saveRadioPluginConstraints.gridwidth = GridBagConstraints.REMAINDER;
+      saveRadioPluginConstraints.insets = new Insets(0, 0, 0, 0);
+      saveRadioPluginConstraints.anchor = GridBagConstraints.LINE_START;
+      saveRadioPluginConstraints.weightx = 0.0;
+      saveRadioPluginConstraints.weighty = 0.0;
+      add(saveRadioPlugins[i], saveRadioPluginConstraints);
+      saveGroup.add(saveRadioPlugins[i]);
+      
+      line++;
+    }
     
     final GridBagConstraints saveButtonsConstraints =
       new GridBagConstraints();
@@ -470,6 +502,12 @@ public class Save extends MemoryTab {
 	InfoBox.display(panel, Application.getString(this, "incompleteForm"));
 	return;
       }
+      int pluginIndex;
+      for (pluginIndex = numberPlugins - 1; pluginIndex >= 0; pluginIndex--) {
+	if (saveRadioPlugins[pluginIndex].isSelected()) {
+	  break;
+	}
+      }
       FileNameExtensionFilter filter;
       fileChooser.resetChoosableFileFilters();
       fileChooser.setAcceptAllFileFilterUsed(true);
@@ -477,8 +515,10 @@ public class Save extends MemoryTab {
 	filter = rawFilter;
       } else if (saveRadioHEX.isSelected()) {
 	filter = HEXFilter;
-      } else {
+      } else if (saveRadioXML.isSelected() || saveRadioSnapshot.isSelected()) {
 	filter = XMLFilter;
+      } else {
+	filter = plugins[pluginIndex].getFilter();
       }
       fileChooser.addChoosableFileFilter(filter);
       fileChooser.setFileFilter(filter);
@@ -507,8 +547,10 @@ public class Save extends MemoryTab {
 						 start,
 						 ((end - start) & 0xffff) + 1,
 						 destination);
-	  } else {
+	  } else if (saveRadioSnapshot.isSelected()) {
 	    new Snapshot(panel.getHardware()).write(file);
+	  } else {
+	    plugins[pluginIndex].write(panel.getHardware(), file);
 	  }
 	} catch (RuntimeException exception) {
 	  errorBox(exception);
@@ -517,9 +559,11 @@ public class Save extends MemoryTab {
 	if (saveRadioSnapshot.isSelected()) {
 	  InfoBox.display(panel,
 			  Application.getString(this, "snapshotSaved"));
-	} else {
+	} else if (pluginIndex < 0) {
 	  InfoBox.display(panel,
 			  Application.getString(this, "saved"));
+	} else {
+	  InfoBox.display(panel, plugins[pluginIndex].getSuccessString());
 	}
       }
     }
