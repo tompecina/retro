@@ -298,7 +298,7 @@ public class Load extends MemoryTab {
 
       final GridBagConstraints loadRadioPluginConstraints =
       	new GridBagConstraints();
-      loadRadioPlugins[i] = new JRadioButton(plugins[i].getDescription());
+      loadRadioPlugins[i] = new JRadioButton(plugins[i].getLoadDescription());
       loadRadioPluginConstraints.gridx = 0;
       loadRadioPluginConstraints.gridy = line;
       loadRadioPluginConstraints.gridwidth = GridBagConstraints.REMAINDER;
@@ -427,7 +427,7 @@ public class Load extends MemoryTab {
 	    panel,
 	    String.format(Application.getString(this, "loaded"), number));
 	} else {
-	  InfoBox.display(panel, plugins[pluginIndex].getSuccessString());
+	  InfoBox.display(panel, plugins[pluginIndex].getSuccessfulLoadString());
 	}
       }
     }

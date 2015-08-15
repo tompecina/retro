@@ -46,6 +46,9 @@ public class MemoryFrame extends HidingFrame {
   // hardware object to operate on
   private Hardware hardware;
 
+  // plugins
+  private MemoryPlugin[] memoryPlugins = {new BasicMemoryPlugin()};
+
   /**
    * Creates the Memory frame.
    *
@@ -58,10 +61,7 @@ public class MemoryFrame extends HidingFrame {
     log.fine("New MemoryFrame creation started");
     assert hardware != null;
     this.hardware = hardware;
-    memoryPanel = new MemoryPanel(this,
-				  hardware,
-				  new MemoryPlugin[] {},
-				  new MemoryPlugin[] {});
+    memoryPanel = new MemoryPanel(this, hardware, memoryPlugins, memoryPlugins);
     add(memoryPanel);
     pack();
     log.fine("MemoryFrame set up");
@@ -72,10 +72,7 @@ public class MemoryFrame extends HidingFrame {
     log.fine("MemoryFrame redraw started");
     super.setTitle(Application.getString(this, "memory.frameTitle"));
     remove(memoryPanel);
-    memoryPanel = new MemoryPanel(this,
-				  hardware,
-				  new MemoryPlugin[] {},
-				  new MemoryPlugin[] {});
+    memoryPanel = new MemoryPanel(this, hardware, memoryPlugins, memoryPlugins);
     add(memoryPanel);
     pack();
     log.fine("MemoryFrame redraw completed");

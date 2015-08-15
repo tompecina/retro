@@ -55,7 +55,7 @@ public class MemoryPanel extends JTabbedPane {
    * @param frame       enclosing frame
    * @param hardware    hardware for shapshots
    * @param savePlugins array of save plugins
-   * @param loadPlugins array of save plugins
+   * @param loadPlugins array of load plugins
    */
   public MemoryPanel(final CloseableFrame frame,
 		     final Hardware hardware,

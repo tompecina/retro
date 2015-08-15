@@ -33,9 +33,18 @@ import cz.pecina.retro.cpu.Hardware;
 public interface MemoryPlugin {
 
   /**
-   * Gets the description of the plugin used on the panel.
+   * Gets the description of the plugin used on the Save panel.
    */
-  public String getDescription();
+  public default String getSaveDescription() {
+    return null;
+  }
+
+  /**
+   * Gets the description of the plugin used on the Load panel.
+   */
+  public default String getLoadDescription() {
+    return null;
+  }
 
   /**
    * Gets the file filter.
@@ -55,7 +64,16 @@ public interface MemoryPlugin {
   }
 
   /**
-   * Gets the string displayed on success.
+   * Gets the string displayed on successful save.
    */
-  public String getSuccessString();
+  public default String getSuccessfulSaveString() {
+    return null;
+  }
+
+  /**
+   * Gets the string displayed on successful load.
+   */
+  public default String getSuccessfulLoadString() {
+    return null;
+  }
 }

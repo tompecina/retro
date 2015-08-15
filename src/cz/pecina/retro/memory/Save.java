@@ -424,7 +424,7 @@ public class Save extends MemoryTab {
 
       final GridBagConstraints saveRadioPluginConstraints =
       	new GridBagConstraints();
-      saveRadioPlugins[i] = new JRadioButton(plugins[i].getDescription());
+      saveRadioPlugins[i] = new JRadioButton(plugins[i].getSaveDescription());
       saveRadioPluginConstraints.gridx = 0;
       saveRadioPluginConstraints.gridy = line;
       saveRadioPluginConstraints.gridwidth = GridBagConstraints.REMAINDER;
@@ -563,7 +563,7 @@ public class Save extends MemoryTab {
 	  InfoBox.display(panel,
 			  Application.getString(this, "saved"));
 	} else {
-	  InfoBox.display(panel, plugins[pluginIndex].getSuccessString());
+	  InfoBox.display(panel, plugins[pluginIndex].getSuccessfulSaveString());
 	}
       }
     }
