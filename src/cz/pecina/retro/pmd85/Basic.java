@@ -277,6 +277,9 @@ public class Basic {
 	      if (line.startsWith(token)) {
 		nextByte = 0x80 + i;
 		line = line.substring(token.length());
+		if (nextByte == REM) {
+		  inRem = true;
+		}
 		break;
 	      }
 	    }
