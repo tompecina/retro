@@ -20,6 +20,8 @@
 
 package cz.pecina.retro.cpu;
 
+import java.util.List;
+
 /**
  * CPU capable of maintaining memory, I/O space, reset condition,
  * interrupts and CPU-clock driven scheduler.
@@ -181,4 +183,32 @@ public interface Processor {
    * @return Disassembly object for the instruction
    */
   public abstract Disassembly getDisassembly(int address);
+
+  /**
+   * Stops the element for maintenance tasks such as snapshot loading.
+   */
+  public abstract void suspend();
+
+  /**
+   * Resumes the operation of the element.
+   */
+  public abstract void resume();
+
+  /**
+   * Returns <code>true</code> if the element is suspended.
+   *
+   * @return <code>true</code> if the element is suspended
+   */
+  public abstract boolean isSuspended();
+
+  /**
+   * Executes series of instructions.
+   *
+   * @param minCycles   minimum number of program cycles to execute
+   * @param mask        execution stops if the instruction matches mask
+   * @param breakpoints list of breakpoints
+   */
+  public abstract void exec(final long minCycles,
+			    final int mask,
+			    final List<Integer> breakpoints);
 }

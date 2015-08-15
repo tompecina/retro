@@ -21,6 +21,7 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.regex.MatchResult;
@@ -29,6 +30,7 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import cz.pecina.retro.common.Parameters;
 
 /**
  * BASIG-G programs utilities.
@@ -294,7 +296,38 @@ public class Basic {
     }
     check(a + 2, endAddress);
     ram[a] = ram[a + 1] = ram[a + 2] = (byte)0;
-    log.fine("Encoding finished");
+    a += 3;
+
+    log.fine("Encoding finished, resetting variables");
+
+    final int runAddress = a;
+    final int tempAddress = a + 6;
+    
+    check(a + 10, endAddress);
+    ram[a++] = (byte)0xf5;  // PUSH PSW
+    ram[a++] = (byte)0xcd;  // CALL tempAddress
+    ram[a++] = (byte)(tempAddress & 0xff);
+    ram[a++] = (byte)(tempAddress >> 8);
+    ram[a++] = (byte)0xf1;  // POP PSW
+    final int breakPoint = a;
+    ram[a++] = (byte)0x00;  // NOP
+    
+    // tempAddress
+    ram[a++] = (byte)0xe5;  // PUSH H
+    ram[a++] = (byte)0xc3;  // JMP 0x1e04
+    ram[a++] = (byte)0x04;
+    ram[a++] = (byte)0x1e;
+
+    final int pc = Parameters.cpu.getPC();
+    Parameters.cpu.setPC(runAddress);
+    Parameters.cpu.resume();
+    Parameters.cpu.exec(Integer.MAX_VALUE,
+			0,
+			Arrays.asList(new Integer[] {breakPoint}));
+    Parameters.cpu.suspend();
+    Parameters.cpu.setPC(pc);
+			
+    log.fine("Variables reset");
   }
 
   /**

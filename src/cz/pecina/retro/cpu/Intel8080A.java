@@ -5029,13 +5029,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     }
   }
 	
-  /**
-   * Executes series of instructions.
-   *
-   * @param minCycles   minimum number of program cycles to execute
-   * @param mask        execution stops if the instruction matches mask
-   * @param breakpoints list of breakpoints
-   */
+  // for description see Processor
+  @Override
   public void exec(final long minCycles,
 		   final int mask,
 		   final List<Integer> breakpoints) {
