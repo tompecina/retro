@@ -114,7 +114,7 @@ public class PMDMemory
     rom = new byte[sizeROM * 0x400];
     ram = new byte[sizeRAM * 0x400];
     rmm = (sizeRMM > 0) ? new byte[sizeRMM * 0x400] : null;
-    add(new Register("RAM") {
+    add(new Register("RAM_SIZE") {
 	@Override
 	public String getValue() {
 	  return String.valueOf(PMDMemory.this.sizeRAM);
@@ -124,7 +124,7 @@ public class PMDMemory
 	  PMDMemory.this.sizeRAM = Integer.parseInt(value);
 	}
       });
-    add(new Register("ROM") {
+    add(new Register("ROM_SIZE") {
 	@Override
 	public String getValue() {
 	  return String.valueOf(PMDMemory.this.sizeROM);
@@ -134,7 +134,7 @@ public class PMDMemory
 	  PMDMemory.this.sizeROM = Integer.parseInt(value);
 	}
       });
-    add(new Register("RMM") {
+    add(new Register("RMM_SIZE") {
 	@Override
 	public String getValue() {
 	  return String.valueOf(PMDMemory.this.sizeRMM);

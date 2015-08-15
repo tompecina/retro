@@ -144,7 +144,7 @@ public class KeyboardHardware {
    */
   public void updateBuffer() {
     prepareMatrix();
-    copyMatrixToBuffer();
+    addMatrixToBuffer();
   }
 
   // prepares matrix of button presses

@@ -139,6 +139,9 @@ public class KeyboardLayout {
     keys[75] = new KeyboardKey(keyboardHardware, "EOL", 32, 9, 4, 14);
     keys[76] = new KeyboardKey(keyboardHardware, "longspace", 13, 11, 4, 0);
 
+    for (int i = 0; i < NUMBER_KEYS; i++) {
+      keys[i].setShortcut( UserPreferences.getShortcut(i));
+    }
     log.fine("New keyboard layout created and populated");
   }
   

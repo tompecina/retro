@@ -161,7 +161,7 @@ public final class UserPreferences extends GeneralUserPreferences {
 			       shortcut.getID() :
 			       NULL_STRING);
     keyboardLayout.getKey(number).setShortcut(shortcut);
-    log.fine("Shortcut for button " + number +
+    log.fine("Shortcut for key " + number +
 	     " in user preferences set to: " +
 	     ((shortcut != null) ? shortcut.getID() : "none"));
   }
@@ -177,7 +177,7 @@ public final class UserPreferences extends GeneralUserPreferences {
     assert (number >= 0) && (number < KeyboardLayout.NUMBER_KEYS);
     getPreferences();
     final Shortcut shortcut = shortcuts[number];
-    log.fine("Shortcut for button " + number +
+    log.fine("Shortcut for key " + number +
 	     " retrieved from user preferences: " +
 	     ((shortcut != null) ? shortcut.getID() : "none"));
     return shortcut;

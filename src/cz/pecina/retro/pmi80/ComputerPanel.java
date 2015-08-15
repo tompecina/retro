@@ -141,8 +141,8 @@ public class ComputerPanel extends BackgroundFixedPane {
     			    "KeyReleasedAction_" + shortcut.getID());
     	  getActionMap().put("KeyReleasedAction_" + shortcut.getID(),
     			     button.keyReleasedAction());
+	  log.finest("Shortcut for button '" + button + "' set to: " + shortcut);
     	}
-    	log.finest("Shortcut for button '" + button + "' set to: " + shortcut);
       }
     }
     log.finer("Keyboard shortcuts set up");

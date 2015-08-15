@@ -103,9 +103,15 @@ public class KeyboardPanel extends BackgroundFixedPane {
     log.finer("Keys set up");
 
     // set up LEDs
-    keyboardHardware.getYellowLED().place(this, YELLOW_LED_OFFSET_X, YELLOW_LED_OFFSET_Y);
-    keyboardHardware.getRedLED().place(this, RED_LED_OFFSET_X, RED_LED_OFFSET_Y);
-    keyboardHardware.getGreenLED().place(this, GREEN_LED_OFFSET_X, GREEN_LED_OFFSET_Y);
+    keyboardHardware.getYellowLED().place(this,
+					  YELLOW_LED_OFFSET_X,
+					  YELLOW_LED_OFFSET_Y);
+    keyboardHardware.getRedLED().place(this,
+				       RED_LED_OFFSET_X,
+				       RED_LED_OFFSET_Y);
+    keyboardHardware.getGreenLED().place(this,
+					 GREEN_LED_OFFSET_X,
+					 GREEN_LED_OFFSET_Y);
     keyboardHardware.getGreenLED().setState(1);
     log.finer("LEDs set up");
 
@@ -140,18 +146,18 @@ public class KeyboardPanel extends BackgroundFixedPane {
     for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
       final KeyboardKey key =
     	  keyboardHardware.getKeyboardLayout().getKey(i);
-    	final Shortcut shortcut = key.getShortcut();
-    	if (shortcut != null) {
-    	  getInputMap().put(KeyStroke.getKeyStroke(
-	    shortcut.getKeyCode(), 0, false), "KeyPressedAction_" + shortcut.getID());
-    	  getActionMap().put("KeyPressedAction_" + shortcut.getID(),
-    			     key.keyPressedAction());
-    	  getInputMap().put(KeyStroke.getKeyStroke(
-	    shortcut.getKeyCode(), 0, true), "KeyReleasedAction_" + shortcut.getID());
-    	  getActionMap().put("KeyReleasedAction_" + shortcut.getID(),
-    			     key.keyReleasedAction());
-    	}
+      final Shortcut shortcut = key.getShortcut();
+      if (shortcut != null) {
+	getInputMap().put(KeyStroke.getKeyStroke(shortcut.getKeyCode(), 0, false),
+			  "KeyPressedAction_" + shortcut.getID());
+	getActionMap().put("KeyPressedAction_" + shortcut.getID(),
+			   key.keyPressedAction());
+	getInputMap().put(KeyStroke.getKeyStroke(shortcut.getKeyCode(), 0, true),
+			  "KeyReleasedAction_" + shortcut.getID());
+	getActionMap().put("KeyReleasedAction_" + shortcut.getID(),
+			   key.keyReleasedAction());
     	log.finest("Shortcut for key '" + key + "' set to: " + shortcut);
+      }
     }
     log.finer("Keyboard shortcuts set up");
   }

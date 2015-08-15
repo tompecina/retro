@@ -71,15 +71,15 @@ public class PMDColor {
    */
   public static PMDColor[][] GOB_COLORS = {
     {
-      new PMDColor(new Color(0x00ff00), false),
-      new PMDColor(new Color(0x008000), false),
-      new PMDColor(new Color(0x00ff00), true),
-      new PMDColor(new Color(0x008000), true)},
+      new PMDColor(new Color(0x80ff80), false),
+      new PMDColor(new Color(0x408040), false),
+      new PMDColor(new Color(0x80ff80), true),
+      new PMDColor(new Color(0x408040), true)},
     {
-      new PMDColor(new Color(0x00ff00), false),
-      new PMDColor(new Color(0x00c000), false),
-      new PMDColor(new Color(0x008000), false),
-      new PMDColor(new Color(0x004000), false)}};
+      new PMDColor(new Color(0x80ff80), false),
+      new PMDColor(new Color(0x60c060), false),
+      new PMDColor(new Color(0x408040), false),
+      new PMDColor(new Color(0x204020), false)}};
   
   /**
    * Default custom color mode.
