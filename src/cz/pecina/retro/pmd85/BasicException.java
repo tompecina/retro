@@ -23,7 +23,7 @@ package cz.pecina.retro.pmd85;
 import java.util.logging.Logger;
 
 /**
- * BASIG G program exception.
+ * BASIG-G program exception.
  *
  * @author @AUTHOR@
  * @version @VERSION@

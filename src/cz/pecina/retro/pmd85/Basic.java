@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
 /**
- * BASIG G programs utilities.
+ * BASIG-G programs utilities.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -42,7 +42,7 @@ public class Basic {
   private static final Logger log =
     Logger.getLogger(Basic.class.getName());
 
-  // BASIC G tokens 0x80-0xff
+  // BASIC-G tokens 0x80-0xff
   private static String TOKENS[] = {
     /* 0x80 */ "END", 
     /* 0x81 */ "FOR",
@@ -204,13 +204,15 @@ public class Basic {
     Pattern.compile("^(\\d+) *(\\D.*)$");
     
   /**
-   * Encodes BASIC program in text to RAM.
+   * Encodes BASIC-G program in text to RAM.
    *
-   * @param reader       the program as text
-   * @param ram          the RAM
-   * @param startAddress the starting address
-   * @param endAddress   the ending address beyond which the program 
-   *                     may not be written
+   * @param     reader         the program as text
+   * @param     ram            the RAM
+   * @param     startAddress   the starting address
+   * @param     endAddress     the ending address beyond which the program 
+   *                           may not be written
+   * @exception IOException    on I/O exception
+   * @exception BasicException on error during processing
    */
   public static void encode(final BufferedReader reader,
 			    final byte[] ram,
@@ -227,6 +229,10 @@ public class Basic {
     int a = startAddress, nextLineAddress;
     while ((line = reader.readLine()) != null) {
       log.finer("Parsing line: " + line);
+      line = line.trim();
+      if (line.isEmpty()) {
+	continue;
+      }
       final Matcher matcher = LINE_NUMBER_PATTERN.matcher(line);
       if (!matcher.matches()) {
 	throw new BasicException("Line number missing");
@@ -292,13 +298,15 @@ public class Basic {
   }
 
   /**
-   * Decodes BASIC program in text from RAM.
+   * Decodes BASIC-G program in RAM to text.
    *
-   * @param ram          the RAM
-   * @param writer       the program as text
-   * @param startAddress the starting address
-   * @param endAddress   the ending address beyond which the program 
-   *                     may not be read
+   * @param     ram            the RAM
+   * @param     writer         the program as text
+   * @param     startAddress   the starting address
+   * @param     endAddress     the ending address beyond which the program 
+   *                           may not be read
+   * @exception IOException    on I/O exception
+   * @exception BasicException on error during processing
    */
   public static void decode(final byte[] ram,
 			    final PrintWriter writer,
