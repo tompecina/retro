@@ -95,9 +95,16 @@ public abstract class GenericButton
     }
     this.shortcut = shortcut;
     setToolTip(toolTip);
+    addMouseListeners();
     log.fine("New GenericButton created: " + template);
   }
 
+  /**
+   * Adds mouse listeners to the button.
+   */
+  protected void addMouseListeners() {
+  }
+  
   /**
    * Redraw the icons.
    */

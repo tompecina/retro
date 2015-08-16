@@ -33,7 +33,7 @@ import cz.pecina.retro.common.Util;
 import cz.pecina.retro.cpu.IONode;
 import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.Intel8080A;
-import cz.pecina.retro.cpu.Intel8255;
+import cz.pecina.retro.cpu.Intel8255A;
 import cz.pecina.retro.cpu.Intel8251A;
 import cz.pecina.retro.cpu.LowPin;
 import cz.pecina.retro.cpu.IOPin;
@@ -68,8 +68,8 @@ public class ComputerHardware {
   // the CPU
   private Intel8080A cpu;
 
-  // the system 8255 (PIO)
-  private Intel8255 systemPIO;
+  // the system 8255A (PIO)
+  private Intel8255A systemPIO;
 
   // the 8251A (USARTO)
   private Intel8251A usart;
@@ -136,7 +136,7 @@ public class ComputerHardware {
     }
       
     // set up the system PIO
-    systemPIO = new Intel8255("SYSTEM_PIO");
+    systemPIO = new Intel8255A("SYSTEM_PIO");
     hardware.add(systemPIO);
     for (int port: Util.portIterator(0x84, 0x8c)) {
       cpu.addIOInput(port, systemPIO);
@@ -315,7 +315,7 @@ public class ComputerHardware {
    *
    * @return the system PIO
    */
-  public Intel8255 getSystemPIO() {
+  public Intel8255A getSystemPIO() {
     return systemPIO;
   }
 

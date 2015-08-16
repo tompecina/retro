@@ -29,7 +29,7 @@ import cz.pecina.retro.common.Application;
 import cz.pecina.retro.cpu.IONode;
 import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.Intel8080A;
-import cz.pecina.retro.cpu.Intel8255;
+import cz.pecina.retro.cpu.Intel8255A;
 import cz.pecina.retro.cpu.SimpleMemory;
 import cz.pecina.retro.cpu.NAND;
 import cz.pecina.retro.trec.TapeRecorderInterface;
@@ -57,11 +57,11 @@ public class ComputerHardware {
   // the CPU
   private Intel8080A cpu;
 
-  // the system 8255 (PPI1)
-  private Intel8255 systemPPI;
+  // the system 8255A (PPI1)
+  private Intel8255A systemPPI;
 
-  // the peripheral 8255 (PPI2)
-  private Intel8255 peripheralPPI;
+  // the peripheral 8255A (PPI2)
+  private Intel8255A peripheralPPI;
 
   // the display hardware
   private DisplayHardware displayHardware;
@@ -122,7 +122,7 @@ public class ComputerHardware {
     }
 
     // set up the system PPI
-    systemPPI = new Intel8255("SYSTEM_PPI");  // /CS = A2
+    systemPPI = new Intel8255A("SYSTEM_PPI");  // /CS = A2
     hardware.add(systemPPI);
     for (int port = 0xf8; port < 0xfc; port++) {
       cpu.addIOInput(port, systemPPI); 
@@ -130,7 +130,7 @@ public class ComputerHardware {
     }
 
     // set up the peripheral PPI
-    peripheralPPI = new Intel8255("PERIPHERAL_PPI");  // /CS = A3
+    peripheralPPI = new Intel8255A("PERIPHERAL_PPI");  // /CS = A3
     hardware.add(peripheralPPI);
     for (int port = 0xf4; port < 0xf8; port++) {
       cpu.addIOInput(port, peripheralPPI); 
@@ -210,7 +210,7 @@ public class ComputerHardware {
    *
    * @return the system PPI (PPI1)
    */
-  public Intel8255 getSystemPPI() {
+  public Intel8255A getSystemPPI() {
     return systemPPI;
   }
 
@@ -219,7 +219,7 @@ public class ComputerHardware {
    *
    * @return the system PPI (PPI2)
    */
-  public Intel8255 getPeripheralPPI() {
+  public Intel8255A getPeripheralPPI() {
     return peripheralPPI;
   }
 

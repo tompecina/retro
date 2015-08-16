@@ -1,4 +1,4 @@
-/* Intel8255.java
+/* Intel8255A.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -23,12 +23,12 @@ package cz.pecina.retro.cpu;
 import java.util.logging.Logger;
 
 /**
- * Intel 8255 Programmable Peripheral Interface.
+ * Intel 8255A Programmable Peripheral Interface.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class Intel8255 extends Device implements IOElement {
+public class Intel8255A extends Device implements IOElement {
 
   // dynamic logger, per device
   private Logger log;
@@ -137,10 +137,10 @@ public class Intel8255 extends Device implements IOElement {
    *
    * @param name device name
    */
-  public Intel8255(final String name) {
+  public Intel8255A(final String name) {
     super(name);
     log = Logger.getLogger(getClass().getName() + "." + name);
-    log.fine("New Intel 8255 creation started, name: " + name);
+    log.fine("New Intel 8255A creation started, name: " + name);
 
     add(new Register("MODE_A") {
 	@Override
@@ -297,7 +297,7 @@ public class Intel8255 extends Device implements IOElement {
       pins[i] = new Pin(i);
     }
     reset();
-    log.fine("New Intel 8255 creation completed, name: " + name);
+    log.fine("New Intel 8255A creation completed, name: " + name);
   }
 
   // for description see Device
@@ -306,7 +306,7 @@ public class Intel8255 extends Device implements IOElement {
     for (int i = 0; i < 24; i++) {
       pins[i].notifyChangeNode();
     }
-    log.fine("Post-unmarshal on 8255 completed");
+    log.fine("Post-unmarshal on 8255A completed");
   }
 
   // convert tri-state to level

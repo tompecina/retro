@@ -214,7 +214,8 @@ public class Intel8251A extends Device implements IOElement {
 	@Override
 	public void processValue(final String value) {
 	  mode = Integer.parseInt(value);
-	  log.finer("Mode set to: " + mode);
+	  log.finer("Mode set to: " + mode +
+		    ((mode == 0) ? " (sync)" : " (async)"));
 	}
       });
     add(new Register("BRF") {
@@ -225,7 +226,8 @@ public class Intel8251A extends Device implements IOElement {
 	@Override
 	public void processValue(final String value) {
 	  brf = Integer.parseInt(value);
-	  log.finer("Baud rate factor set to: " + brf);
+	  log.finer("Baud rate factor set to: " + brf +
+		    (new String[] {" (1x)", " (16x)", " (64x)"})[brf]);
 	}
       });
     add(new Register("CLEN") {
@@ -414,7 +416,8 @@ public class Intel8251A extends Device implements IOElement {
 	case 0:  // mode instruction
 	  log.fine(String.format("Mode instruction: 0x%02x", data));
 	  mode = (data | (data >> 1)) & 1;
-	  log.finer("Mode set to: " + mode);
+	  log.finer("Mode set to: " + mode +
+		    ((mode == 0) ? " (sync)" : " (async)"));
 	  clen = ((data >> 2) & 0x03) + 5;
 	  log.finer("Character length set to: " + clen);
 	  pen = (data >> 4) & 1;
@@ -424,7 +427,8 @@ public class Intel8251A extends Device implements IOElement {
 		    ((ep == 0) ? " (odd)" : " (even)"));
 	  if (mode == 1) {
 	    brf = (data & 0x03) - 1;
-	    log.finer("Baud rate factor set to: " + brf);
+	    log.finer("Baud rate factor set to: " + brf +
+		      (new String[] {" (1x)", " (16x)", " (64x)"})[brf]);
 	    sbits = (data >> 6) & 0x03;
 	    if (sbits-- == 0) {
 	      log.fine("Illegal number of stop bits");

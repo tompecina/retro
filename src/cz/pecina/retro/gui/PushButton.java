@@ -53,14 +53,12 @@ public class PushButton extends GenericButton {
 		    final Shortcut shortcut,
 		    final String toolTip) {
     super(template, shortcut, toolTip);
-    addListeners();
     log.fine("New PushButton created");
   }
 
-  /**
-   * Adds listeners to the button.
-   */
-  protected void addListeners() {
+  // for description see GenericButton
+  @Override
+  protected void addMouseListeners() {
     addMouseListener(new PushMouseListener());
   }
   

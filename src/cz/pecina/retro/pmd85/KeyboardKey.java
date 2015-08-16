@@ -21,6 +21,8 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import cz.pecina.retro.gui.LockableButton;

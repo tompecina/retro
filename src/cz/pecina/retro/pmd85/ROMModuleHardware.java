@@ -21,7 +21,7 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
-import cz.pecina.retro.cpu.Intel8255;
+import cz.pecina.retro.cpu.Intel8255A;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.IONode;
 
@@ -41,7 +41,7 @@ public class ROMModuleHardware {
   private PMDMemory memory;
 
   // the PIO
-  private Intel8255 pio = new Intel8255("ROM_MODULE_PIO");
+  private Intel8255A pio = new Intel8255A("ROM_MODULE_PIO");
 
   // address pins
   private IOPin[] addressPins = new IOPin[16];
@@ -81,7 +81,7 @@ public class ROMModuleHardware {
   /**
    * Gets the PIO.
    */
-  public Intel8255 getPIO() {
+  public Intel8255A getPIO() {
     return pio;
   }
 
