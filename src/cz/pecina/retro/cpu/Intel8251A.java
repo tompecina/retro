@@ -128,6 +128,12 @@ public class Intel8251A extends Device implements IOElement {
   // /TxC pin
   private final TxC txcPin = new TxC();
   
+  // receiver clock flag
+  private int rxc;
+  
+  // /RxC pin
+  private final RxC rxcPin = new RxC();
+  
   // modem flags
   private int dsr, dtr, cts, rts;
 
@@ -197,7 +203,25 @@ public class Intel8251A extends Device implements IOElement {
   private class TxC extends IOPin {
     @Override
     public void notifyChange() {
-      txc = 1 - IONode.normalize(queryNode());
+      final int newTxc = 1 - IONode.normalize(queryNode());
+      if (txc != newTxc) {
+	if (newTxc == 1) {  // falling edge of /TxC
+	}
+	txc = newTxc;
+      }
+    }
+  }
+  
+  // /RxC pin
+  private class RxC extends IOPin {
+    @Override
+    public void notifyChange() {
+      final int newRxc = 1 - IONode.normalize(queryNode());
+      if (rxc != newRxc) {
+	if (newRxc == 0) {  // rising edge of /RxC
+	}
+	rxc = newRxc;
+      }
     }
   }
   
@@ -273,6 +297,15 @@ public class Intel8251A extends Device implements IOElement {
     return txcPin;
   }
 
+  /**
+   * Gets the /RxC pin.
+   *
+   * @return the /RxC pin
+   */
+  public IOPin getRxcPin() {
+    return rxcPin;
+  }
+
   // notify on all pins
   private void notifyAllPins() {
     dtrPin.notifyChangeNode();
@@ -285,7 +318,6 @@ public class Intel8251A extends Device implements IOElement {
   public void update() {
     ctsPin.notifyChange();
     dsrPin.notifyChange();
-    txcPin.notifyChange();
   }
 
   /**
@@ -303,6 +335,8 @@ public class Intel8251A extends Device implements IOElement {
     rxrdy = 0;
     txd = 1;
     txrdy = 1;
+    txc = 1 - IONode.normalize(txcPin.queryNode());
+    rxc = 1 - IONode.normalize(rxcPin.queryNode());
     notifyAllPins();
     log.finer("USART reset");
   }
@@ -638,6 +672,28 @@ public class Intel8251A extends Device implements IOElement {
 	public void processValue(final String value) {
 	  txempty = Integer.parseInt(value);
 	  log.finer("TxEMPTY: " + txempty);
+	}
+      });
+    add(new Register("TxC") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(txc);
+	}
+	@Override
+	public void processValue(final String value) {
+	  txc = Integer.parseInt(value);
+	  log.finer("TxC: " + txc);
+	}
+      });
+    add(new Register("RxC") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(rxc);
+	}
+	@Override
+	public void processValue(final String value) {
+	  rxc = Integer.parseInt(value);
+	  log.finer("RxC: " + rxc);
 	}
       });
 
