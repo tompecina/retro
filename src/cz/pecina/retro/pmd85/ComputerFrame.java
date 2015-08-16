@@ -74,7 +74,7 @@ public class ComputerFrame extends JFrame implements Localized, Resizeable {
     log.finer("Application icons set up");
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     computerPanel =
-      new ComputerPanel(computer, displayHardware, keyboardHardware);
+      new ComputerPanel(this, computer, displayHardware, keyboardHardware);
     add(computerPanel);
     pack();
     setLocationRelativeTo(null);
@@ -91,7 +91,7 @@ public class ComputerFrame extends JFrame implements Localized, Resizeable {
     ComputerFrame.super.setTitle(Application.getString(this, "appName"));
     remove(computerPanel);
     computerPanel =
-      new ComputerPanel(computer, displayHardware, keyboardHardware);
+      new ComputerPanel(this, computer, displayHardware, keyboardHardware);
     add(computerPanel);
     pack();
     log.fine("ComputerFrame redraw completed");

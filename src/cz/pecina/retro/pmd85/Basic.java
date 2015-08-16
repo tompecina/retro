@@ -178,6 +178,9 @@ public class Basic {
 
   // REM token
   private static final int REM = 0x8e;
+
+  // common ?/_ token
+  private static final int QM = 0xce;
   
   // check address against end address
   private static void check(final int address,
@@ -268,6 +271,9 @@ public class Basic {
 	} else if (ch == '"') {
 	  inString = true;
 	  nextByte = encodeChar(ch);
+	  line = line.substring(1);
+	} else if (ch == '?') {
+	  nextByte = QM;
 	  line = line.substring(1);
 	} else {
 	  int i;

@@ -23,8 +23,9 @@ package cz.pecina.retro.pmd85;
 import java.util.logging.Logger;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
-import javax.swing.KeyStroke;
 import cz.pecina.retro.gui.BackgroundFixedPane;
 import cz.pecina.retro.gui.Shortcut;
 
@@ -141,24 +142,37 @@ public class KeyboardPanel extends BackgroundFixedPane {
    */
   public void setShortcuts() {
     log.finer("Setting up keyboard shortcuts");
-    getInputMap().clear();
-    getActionMap().clear();
-    for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
-      final KeyboardKey key =
-    	  keyboardHardware.getKeyboardLayout().getKey(i);
-      final Shortcut shortcut = key.getShortcut();
-      if (shortcut != null) {
-	getInputMap().put(KeyStroke.getKeyStroke(shortcut.getKeyCode(), 0, false),
-			  "KeyPressedAction_" + shortcut.getID());
-	getActionMap().put("KeyPressedAction_" + shortcut.getID(),
-			   key.keyPressedAction());
-	getInputMap().put(KeyStroke.getKeyStroke(shortcut.getKeyCode(), 0, true),
-			  "KeyReleasedAction_" + shortcut.getID());
-	getActionMap().put("KeyReleasedAction_" + shortcut.getID(),
-			   key.keyReleasedAction());
-    	log.finest("Shortcut for key '" + key + "' set to: " + shortcut);
+    frame.addKeyListener(new ShortcutListener());
+    log.finer("Keyboard shortcuts set up");
+  }
+
+  // shortcut listener
+  private class ShortcutListener extends KeyAdapter {
+    @Override
+    public void keyPressed(final KeyEvent event) {
+      final Shortcut shortcut  =
+	new Shortcut(event.getExtendedKeyCode(), event.getKeyLocation());
+      for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
+	final KeyboardKey key =
+	  keyboardHardware.getKeyboardLayout().getKey(i);
+	if (shortcut.equals(key.getShortcut())) {
+	  key.setPressed(true);
+	  break;
+	}
       }
     }
-    log.finer("Keyboard shortcuts set up");
+    @Override
+    public void keyReleased(final KeyEvent event) {
+      final Shortcut shortcut  =
+	new Shortcut(event.getExtendedKeyCode(), event.getKeyLocation());
+      for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
+	final KeyboardKey key =
+	  keyboardHardware.getKeyboardLayout().getKey(i);
+	if (shortcut.equals(key.getShortcut())) {
+	  key.setPressed(false);
+	  break;
+	}
+      }
+    }
   }
 }
