@@ -86,8 +86,17 @@ public class Intel8251A extends Device implements IOElement {
   // error flags
   private int pe, oe, fe;
 
-  // enter hunt mode;
-  private int eh;
+  // hunt mode
+  private int hunt;
+
+  // SYNDET direction
+  private int syndetDir;
+
+  // sync detect
+  private int syndet;
+
+  // break detect
+  private int brkdet;
 
   // modem signals
   private final DSR dsrPin = new DSR();
@@ -179,8 +188,10 @@ public class Intel8251A extends Device implements IOElement {
   public void reset() {
     state = 0;
     pe = oe = fe = 0;
-    sbrk = eh = 0;
+    sbrk = hunt = 0;
     dtr = rts = 0;
+    syndet = brkdet = 0;
+    syndetDir = INPUT;
     notifyAllPins();
     log.finer("USART reset");
   }
@@ -301,23 +312,23 @@ public class Intel8251A extends Device implements IOElement {
     add(new Register("SYNC1") {
 	@Override
 	public String getValue() {
-	  return String.valueOf(sync1);
+	  return String.format("%02x", sync1);
 	}
 	@Override
 	public void processValue(final String value) {
-	  sync1 = Integer.parseInt(value);
-	  log.finer("Sync character 1: " + sync1);
+	  sync1 = Integer.parseInt(value, 16);
+	  log.finer(String.format("Sync character 1: 0x%02", sync1));
 	}
       });
-    add(new Register("SYNC2") {
+    add(new Register("SYNC1") {
 	@Override
 	public String getValue() {
-	  return String.valueOf(sync2);
+	  return String.format("%02x", sync2);
 	}
 	@Override
 	public void processValue(final String value) {
-	  sync2 = Integer.parseInt(value);
-	  log.finer("Sync character 2: " + sync2);
+	  sync2 = Integer.parseInt(value, 16);
+	  log.finer(String.format("Sync character 2: 0x%02", sync2));
 	}
       });
     add(new Register("TxEN") {
@@ -375,15 +386,48 @@ public class Intel8251A extends Device implements IOElement {
 	  log.finer("RTS set to: " + rts);
 	}
       });
-    add(new Register("EH") {
+    add(new Register("HUNT") {
 	@Override
 	public String getValue() {
-	  return String.valueOf(eh);
+	  return String.valueOf(hunt);
 	}
 	@Override
 	public void processValue(final String value) {
-	  eh = Integer.parseInt(value);
-	  log.finer("Hunt mode: " + eh);
+	  hunt = Integer.parseInt(value);
+	  log.finer("Hunt mode: " + hunt);
+	}
+      });
+    add(new Register("SYNDET_DIR") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(syndetDir);
+	}
+	@Override
+	public void processValue(final String value) {
+	  syndetDir = Integer.parseInt(value);
+	  log.finer("SYNDET dir: " + syndetDir);
+	}
+      });
+    add(new Register("SYNDET") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(syndet);
+	}
+	@Override
+	public void processValue(final String value) {
+	  syndet = Integer.parseInt(value);
+	  log.finer("Sync detect: " + syndet);
+	}
+      });
+    add(new Register("BRKDET") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(brkdet);
+	}
+	@Override
+	public void processValue(final String value) {
+	  brkdet = Integer.parseInt(value);
+	  log.finer("Sync detect: " + brkdet);
 	}
       });
 
@@ -478,8 +522,8 @@ public class Intel8251A extends Device implements IOElement {
 	    }
 	    rts = (data >> 5) & 1;
 	    log.finer("RTS set to: " + rts);
-	    eh = (data >> 7) & 1;
-	    log.finer("Hunt mode: " + eh);
+	    hunt = (data >> 7) & 1;
+	    log.finer("Enter hunt mode: " + hunt);
 	    notifyAllPins();
 	  }
 	  break;

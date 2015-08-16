@@ -33,10 +33,6 @@ public class Intel8255A extends Device implements IOElement {
   // dynamic logger, per device
   private Logger log;
 
-  // port direction constants
-  private static final int OUTPUT = 0;
-  private static final int INPUT = 1;
-
   // ports
   private static final int PORT_A = 0;
   private static final int PORT_B = 1;

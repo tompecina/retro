@@ -29,6 +29,16 @@ package cz.pecina.retro.cpu;
 public interface IOElement {
 
   /**
+   * Port direction (output).
+   */
+  public static final int OUTPUT = 0;
+
+  /**
+   * Port direction (output).
+   */
+  public static final int INPUT = 1;
+
+  /**
    * Responds to port input request.
    *
    * @param  port port number
