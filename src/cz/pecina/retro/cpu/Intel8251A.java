@@ -98,14 +98,44 @@ public class Intel8251A extends Device implements IOElement {
   // break detect
   private int brkdet;
 
-  // modem signals
+  // buffer registers
+  private int tbr, rbr;
+
+  // received data ready flags
+  private int rxrdy;
+
+  // transmit flag
+  private int txd;
+  
+  // transmit pin
+  private final TxD txdPin = new TxD();
+  
+  // transmitter ready flag
+  private int txrdy;
+  
+  // transmitter ready pin
+  private final TxRDY txrdyPin = new TxRDY();
+  
+  // transmitter empty flag
+  private int txempty;
+  
+  // transmitter empty pin
+  private final TxEMPTY txemptyPin = new TxEMPTY();
+  
+  // transmitter clock flag
+  private int txc;
+  
+  // /TxC pin
+  private final TxC txcPin = new TxC();
+  
+  // modem flags
+  private int dsr, dtr, cts, rts;
+
+  // modem pins
   private final DSR dsrPin = new DSR();
   private final DTR dtrPin = new DTR();
   private final CTS ctsPin = new CTS();
   private final RTS rtsPin = new RTS();
-
-  // modem flags
-  private int dsr, dtr, cts, rts;
 
   // /DSR pin
   private class DSR extends IOPin {
@@ -136,6 +166,38 @@ public class Intel8251A extends Device implements IOElement {
     @Override
     public int query() {
       return 1 - rts;
+    }
+  }
+  
+  // TxD pin
+  private class TxD extends IOPin {
+    @Override
+    public int query() {
+      return txd;
+    }
+  }
+  
+  // TxRDY pin
+  private class TxRDY extends IOPin {
+    @Override
+    public int query() {
+      return txrdy;
+    }
+  }
+  
+  // TxEMPTY pin
+  private class TxEMPTY extends IOPin {
+    @Override
+    public int query() {
+      return txempty;
+    }
+  }
+  
+  // /TxC pin
+  private class TxC extends IOPin {
+    @Override
+    public void notifyChange() {
+      txc = 1 - IONode.normalize(queryNode());
     }
   }
   
@@ -175,10 +237,55 @@ public class Intel8251A extends Device implements IOElement {
     return rtsPin;
   }
 
+  /**
+   * Gets the TxD pin.
+   *
+   * @return the TxD pin
+   */
+  public IOPin getTxdPin() {
+    return txdPin;
+  }
+
+  /**
+   * Gets the TxRDY pin.
+   *
+   * @return the TxRDY pin
+   */
+  public IOPin getTxrdyPin() {
+    return txrdyPin;
+  }
+
+  /**
+   * Gets the TxEMPTY pin.
+   *
+   * @return the TxEMPTY pin
+   */
+  public IOPin getTxemptyPin() {
+    return txemptyPin;
+  }
+
+  /**
+   * Gets the /TxC pin.
+   *
+   * @return the /TxC pin
+   */
+  public IOPin getTxcPin() {
+    return txcPin;
+  }
+
   // notify on all pins
   private void notifyAllPins() {
     dtrPin.notifyChangeNode();
     rtsPin.notifyChangeNode();
+    txdPin.notifyChangeNode();
+    txrdyPin.notifyChangeNode();
+  }
+
+  // update internal flags from input pins
+  public void update() {
+    ctsPin.notifyChange();
+    dsrPin.notifyChange();
+    txcPin.notifyChange();
   }
 
   /**
@@ -192,6 +299,10 @@ public class Intel8251A extends Device implements IOElement {
     dtr = rts = 0;
     syndet = brkdet = 0;
     syndetDir = INPUT;
+    tbr = rbr = 0;
+    rxrdy = 0;
+    txd = 1;
+    txrdy = 1;
     notifyAllPins();
     log.finer("USART reset");
   }
@@ -320,7 +431,7 @@ public class Intel8251A extends Device implements IOElement {
 	  log.finer(String.format("Sync character 1: 0x%02", sync1));
 	}
       });
-    add(new Register("SYNC1") {
+    add(new Register("SYNC2") {
 	@Override
 	public String getValue() {
 	  return String.format("%02x", sync2);
@@ -430,8 +541,108 @@ public class Intel8251A extends Device implements IOElement {
 	  log.finer("Sync detect: " + brkdet);
 	}
       });
+    add(new Register("PE") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(pe);
+	}
+	@Override
+	public void processValue(final String value) {
+	  pe = Integer.parseInt(value);
+	  log.finer("Parity error: " + pe);
+	}
+      });
+    add(new Register("OE") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(oe);
+	}
+	@Override
+	public void processValue(final String value) {
+	  oe = Integer.parseInt(value);
+	  log.finer("Overrun error: " + oe);
+	}
+      });
+    add(new Register("FE") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(fe);
+	}
+	@Override
+	public void processValue(final String value) {
+	  fe = Integer.parseInt(value);
+	  log.finer("Framing error: " + fe);
+	}
+      });
+    add(new Register("TBR") {
+	@Override
+	public String getValue() {
+	  return String.format("%02x", tbr);
+	}
+	@Override
+	public void processValue(final String value) {
+	  tbr = Integer.parseInt(value, 16);
+	  log.finer(String.format("Transmit buffer register: 0x%02", tbr));
+	}
+      });
+    add(new Register("RBR") {
+	@Override
+	public String getValue() {
+	  return String.format("%02x", rbr);
+	}
+	@Override
+	public void processValue(final String value) {
+	  rbr = Integer.parseInt(value, 16);
+	  log.finer(String.format("Receive buffer register: 0x%02", rbr));
+	}
+      });
+    add(new Register("RxRDY") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(rxrdy);
+	}
+	@Override
+	public void processValue(final String value) {
+	  rxrdy = Integer.parseInt(value);
+	  log.finer("RxRDY: " + rxrdy);
+	}
+      });
+    add(new Register("TxD") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(txd);
+	}
+	@Override
+	public void processValue(final String value) {
+	  txd = Integer.parseInt(value);
+	  log.finer("TxD: " + txd);
+	}
+      });
+    add(new Register("TxRDY") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(txrdy);
+	}
+	@Override
+	public void processValue(final String value) {
+	  txrdy = Integer.parseInt(value);
+	  log.finer("TxRDY: " + txrdy);
+	}
+      });
+    add(new Register("TxEMPTY") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(txempty);
+	}
+	@Override
+	public void processValue(final String value) {
+	  txempty = Integer.parseInt(value);
+	  log.finer("TxEMPTY: " + txempty);
+	}
+      });
 
     reset();
+    update();
     log.fine("New Intel 8251A creation completed, name: " + name);
   }
 
@@ -439,6 +650,7 @@ public class Intel8251A extends Device implements IOElement {
   @Override
   public void postUnmarshal() {
     notifyAllPins();
+    update();
     log.fine("Post-unmarshal on 8251A completed");
   }
 
