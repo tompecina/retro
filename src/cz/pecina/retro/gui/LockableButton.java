@@ -68,10 +68,17 @@ public class LockableButton extends GenericButton {
       lockedIcon =
 	IconCache.get(String.format(template, GUI.getPixelSize(), "l"));
     }
-    addMouseListener(new LockableMouseListener());
+    addListeners();
     log.fine("New LockableButton created");
   }
 
+  /**
+   * Adds listeners to the button.
+   */
+  protected void addListeners() {
+    addMouseListener(new LockableMouseListener());
+  }
+  
   /**
    * Redraw the icons.
    */

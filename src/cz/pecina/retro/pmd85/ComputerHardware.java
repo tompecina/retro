@@ -34,7 +34,7 @@ import cz.pecina.retro.cpu.IONode;
 import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.Intel8080A;
 import cz.pecina.retro.cpu.Intel8255;
-import cz.pecina.retro.cpu.Intel8251;
+import cz.pecina.retro.cpu.Intel8251A;
 import cz.pecina.retro.cpu.LowPin;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.IONode;
@@ -71,8 +71,8 @@ public class ComputerHardware {
   // the system 8255 (PIO)
   private Intel8255 systemPIO;
 
-  // the 8251 (USARTO)
-  private Intel8251 usart;
+  // the 8251A (USARTO)
+  private Intel8251A usart;
 
   // the display hardware
   private DisplayHardware displayHardware;
@@ -192,7 +192,7 @@ public class ComputerHardware {
     }
     
     // set up the USART
-    usart = new Intel8251("USART");
+    usart = new Intel8251A("USART");
     hardware.add(usart);
     for (int port: Util.portIterator(0x1c, 0xfc)) {
       cpu.addIOInput(port, usart);
@@ -200,7 +200,7 @@ public class ComputerHardware {
     }
 
     // connect the USART
-    new IONode().add(usart.getCTSpin()).add(usart.getRTSpin());
+    new IONode().add(usart.getCtsPin()).add(usart.getRtsPin());
   
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);
