@@ -55,6 +55,11 @@ public class Display extends Timer {
    */
   public static final int DISPLAY_WIDTH_CELLS = DISPLAY_WIDTH / 6;
 
+  /**
+   * Start of the video RAM.
+   */
+  public static final int START_VIDEO = 0xc000;
+
   // blinking period in msec
   private static final int BLINK_PERIOD = 500;
 

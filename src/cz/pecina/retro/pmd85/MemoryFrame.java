@@ -40,14 +40,17 @@ public class MemoryFrame extends HidingFrame {
   private static final Logger log =
     Logger.getLogger(MemoryFrame.class.getName());
 
-  // Memory panel
+  // the computer hardware object
+  private Computer computer;
+
+  // memory panel
   private MemoryPanel memoryPanel;
 
   // hardware object to operate on
   private Hardware hardware;
 
   // plugins
-  private MemoryPlugin[] memoryPlugins = {new BasicMemoryPlugin()};
+  private MemoryPlugin[] saveMemoryPlugins, loadMemoryPlugins;
 
   /**
    * Creates the Memory frame.
@@ -59,9 +62,21 @@ public class MemoryFrame extends HidingFrame {
     super(Application.getString(MemoryFrame.class, "memory.frameTitle"),
 	  computer.getIconLayout().getIcon(IconLayout.ICON_POSITION_MEM));
     log.fine("New MemoryFrame creation started");
+    assert computer != null;
     assert hardware != null;
+    this.computer = computer;
     this.hardware = hardware;
-    memoryPanel = new MemoryPanel(this, hardware, memoryPlugins, memoryPlugins);
+
+    saveMemoryPlugins = new MemoryPlugin[] {
+      new BasicMemoryPlugin(),
+      new ScreenShotMemoryPlugin(computer.getComputerHardware())};
+    loadMemoryPlugins = new MemoryPlugin[] {
+      new BasicMemoryPlugin()};
+    
+    memoryPanel = new MemoryPanel(this,
+				  hardware,
+				  saveMemoryPlugins,
+				  loadMemoryPlugins);
     add(memoryPanel);
     pack();
     log.fine("MemoryFrame set up");
@@ -72,7 +87,10 @@ public class MemoryFrame extends HidingFrame {
     log.fine("MemoryFrame redraw started");
     super.setTitle(Application.getString(this, "memory.frameTitle"));
     remove(memoryPanel);
-    memoryPanel = new MemoryPanel(this, hardware, memoryPlugins, memoryPlugins);
+    memoryPanel = new MemoryPanel(this,
+				  hardware,
+				  saveMemoryPlugins,
+				  loadMemoryPlugins);
     add(memoryPanel);
     pack();
     log.fine("MemoryFrame redraw completed");
