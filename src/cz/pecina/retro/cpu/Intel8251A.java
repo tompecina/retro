@@ -101,9 +101,6 @@ public class Intel8251A extends Device implements IOElement {
   // buffer registers
   private int tbr, rbr;
 
-  // received data ready flags
-  private int rxrdy;
-
   // transmit flag
   private int txd;
   
@@ -128,12 +125,42 @@ public class Intel8251A extends Device implements IOElement {
   // /TxC pin
   private final TxC txcPin = new TxC();
   
+  // transmitter shift register
+  private int tsr, tsrLen;
+  
+  // receiver ready flag
+  private int rxrdy;
+  
+  // receiver ready pin
+  private final RxRDY rxrdyPin = new RxRDY();
+  
+  // receive flag
+  private int rxd;
+  
+  // receive pin
+  private final RxD rxdPin = new RxD();
+  
   // receiver clock flag
   private int rxc;
   
   // /RxC pin
   private final RxC rxcPin = new RxC();
   
+  // receiver shift register
+  private int rsr, rsrLen;
+  
+  // sync/break pin
+  private final SynBrkPin synBrkPin = new SynBrkPin();
+
+  // transmitter clock countdown
+  private int txcCountDown;
+  
+  // transmitter state
+  private int tState;
+
+  // parity calculators
+  private int tParity, rParity;
+
   // modem flags
   private int dsr, dtr, cts, rts;
 
@@ -148,6 +175,7 @@ public class Intel8251A extends Device implements IOElement {
     @Override
     public void notifyChange() {
       dsr = 1 - IONode.normalize(queryNode());
+      log.finer("DSR: " + dsr);
     }
   }
   
@@ -164,6 +192,7 @@ public class Intel8251A extends Device implements IOElement {
     @Override
     public void notifyChange() {
       cts = 1 - IONode.normalize(queryNode());
+      log.finer("CTS: " + cts);
     }
   }
   
@@ -179,7 +208,17 @@ public class Intel8251A extends Device implements IOElement {
   private class TxD extends IOPin {
     @Override
     public int query() {
+      log.finest("TxD: " + txd);
       return txd;
+    }
+  }
+  
+  // RxD pin
+  private class RxD extends IOPin {
+    @Override
+    public void notifyChange() {
+      rxd = IONode.normalize(queryNode());
+      log.finest("RxD: " + rxd);
     }
   }
   
@@ -187,7 +226,7 @@ public class Intel8251A extends Device implements IOElement {
   private class TxRDY extends IOPin {
     @Override
     public int query() {
-      return txrdy;
+      return txrdy & cts & txen;
     }
   }
   
@@ -198,17 +237,122 @@ public class Intel8251A extends Device implements IOElement {
       return txempty;
     }
   }
+
+  // get number of ticks to load count-down counter with
+  private int getTicks() {
+    assert (brf >= 0) && (brf < 3);
+    switch (brf) {
+      case 0:
+	return 0;
+      case 1:
+	return 15;
+      default:
+	return 63;
+    }
+  }
+  
+  // get reduced number of ticks to load count-down counter with
+  private int getHalfTicks() {
+    assert (brf >= 0) && (brf < 3);
+    switch (brf) {
+      case 0:
+	return 0;
+      case 1:
+	return 8;
+      default:
+	return 32;
+    }
+  }
   
   // /TxC pin
   private class TxC extends IOPin {
     @Override
     public void notifyChange() {
-      final int newTxc = 1 - IONode.normalize(queryNode());
+      // final int newTxc = 1 - IONode.normalize(queryNode());
+      int newTxc = 1 - txc;
       if (txc != newTxc) {
+	log.finest("Edge on /TxC detected");
 	if (newTxc == 1) {  // falling edge of /TxC
+	  log.finest("Falling edge on /TxC detected");
+	  if (mode == 0) {  // sync mode
+	    // ***
+	  } else {  // async mode
+	    if (txcCountDown == 0) {
+	      log.finest("Countdown is zero, tState: " + tState);
+	      switch (tState) {
+		case 0:  // idle
+		  break;
+		case 1:  // start-bit
+		  assert tsrLen > 0;
+		  txd = 0;
+		  txdPin.notifyChangeNode();
+		  txcCountDown = getTicks();
+		  tParity = 1 - ep;
+		  tState++;
+		  break;
+		case 2:  // data
+		  assert tsrLen > 0;
+		  txd = tsr & 1;
+		  txdPin.notifyChangeNode();
+		  tParity ^= txd;
+		  tsr >>= 1;
+		  txcCountDown = getTicks();
+		  if (--tsrLen == 0) {
+		    tState = (pen == 1) ? 3 : 4;
+		  }
+		  break;
+		case 3:  // parity
+		  txd = tParity;
+		  txdPin.notifyChangeNode();
+		  txcCountDown = getTicks();
+		  tState++;
+		  break;
+		case 4:  // stop-bit(s)
+		  txd = 1;
+		  txdPin.notifyChangeNode();
+		  txcCountDown = getTicks();
+		  if (sbits == 1) {
+		    txcCountDown += getHalfTicks();
+		  } else if (sbits == 2) {
+		    txcCountDown += getTicks();
+		  }
+		  tState++;
+		  break;
+		case 5:  // finished
+		  if (txrdy == 1) {
+		    txempty = 1;
+		    txemptyPin.notifyChangeNode();
+		    tState = 0;
+		  } else {
+		    tsr = tbr;
+		    tsrLen = clen;
+		    tbr = 0;
+		    txrdy = 1;
+		    txrdyPin.notifyChangeNode();
+		    txd = 0;
+		    txdPin.notifyChangeNode();
+		    txcCountDown = getTicks();
+		    tParity = 1 - ep;
+		    tState = 2;
+		  }
+		  log.finer("Byte transmitted");
+		  break;
+	      }
+	    } else {
+	      txcCountDown--;
+	    }
+	  }
 	}
 	txc = newTxc;
       }
+    }
+  }
+  
+  // RxRDY pin
+  private class RxRDY extends IOPin {
+    @Override
+    public int query() {
+      return rxrdy;
     }
   }
   
@@ -221,6 +365,26 @@ public class Intel8251A extends Device implements IOElement {
 	if (newRxc == 0) {  // rising edge of /RxC
 	}
 	rxc = newRxc;
+      }
+    }
+  }
+  
+  // sync/break pin
+  private class SynBrkPin extends IOPin {
+    @Override
+    public void notifyChange() {
+      if ((mode == 0) && (esd == 1)) {
+	syndet = IONode.normalize(queryNode());
+      }
+    }
+    @Override
+    public int query() {
+      if (mode == 1) {
+	return brkdet;
+      } else if (esd == 1) {
+	return IONode.HIGH_IMPEDANCE;
+      } else {
+	return syndet;
       }
     }
   }
@@ -298,6 +462,24 @@ public class Intel8251A extends Device implements IOElement {
   }
 
   /**
+   * Gets the RxRDY pin.
+   *
+   * @return the RxRDY pin
+   */
+  public IOPin getRxrdyPin() {
+    return rxrdyPin;
+  }
+
+  /**
+   * Gets the RxD pin.
+   *
+   * @return the RxD pin
+   */
+  public IOPin getRxdPin() {
+    return rxdPin;
+  }
+
+  /**
    * Gets the /RxC pin.
    *
    * @return the /RxC pin
@@ -306,18 +488,26 @@ public class Intel8251A extends Device implements IOElement {
     return rxcPin;
   }
 
-  // notify on all pins
+  // notify on all output pins
   private void notifyAllPins() {
+    log.finer("Notifying all output pins");
     dtrPin.notifyChangeNode();
     rtsPin.notifyChangeNode();
     txdPin.notifyChangeNode();
     txrdyPin.notifyChangeNode();
+    rxrdyPin.notifyChangeNode();
+    synBrkPin.notifyChangeNode();
+    log.finest("All output pins notified");
   }
 
-  // update internal flags from input pins
+  // update internal flags from all input pins
   public void update() {
+    log.finer("Updating from all input pins");
     ctsPin.notifyChange();
     dsrPin.notifyChange();
+    rxdPin.notifyChange();
+    synBrkPin.notifyChange();
+    log.finest("Update from all input pins completed");
   }
 
   /**
@@ -333,10 +523,15 @@ public class Intel8251A extends Device implements IOElement {
     syndetDir = INPUT;
     tbr = rbr = 0;
     rxrdy = 0;
-    txd = 1;
+    txd = txempty = 1;
     txrdy = 1;
+    tsr = rsr = 0;
+    tsrLen = rsrLen = 0;
     txc = 1 - IONode.normalize(txcPin.queryNode());
     rxc = 1 - IONode.normalize(rxcPin.queryNode());
+    txcCountDown = 0;
+    tState = 0;
+    tParity = rParity = 0;
     notifyAllPins();
     log.finer("USART reset");
   }
@@ -685,6 +880,17 @@ public class Intel8251A extends Device implements IOElement {
 	  log.finer("TxC: " + txc);
 	}
       });
+    add(new Register("RxRDY") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(rxrdy);
+	}
+	@Override
+	public void processValue(final String value) {
+	  rxrdy = Integer.parseInt(value);
+	  log.finer("RxRDY: " + rxrdy);
+	}
+      });
     add(new Register("RxC") {
 	@Override
 	public String getValue() {
@@ -694,6 +900,94 @@ public class Intel8251A extends Device implements IOElement {
 	public void processValue(final String value) {
 	  rxc = Integer.parseInt(value);
 	  log.finer("RxC: " + rxc);
+	}
+      });
+    add(new Register("TSR") {
+	@Override
+	public String getValue() {
+	  return String.format("%02x", tsr);
+	}
+	@Override
+	public void processValue(final String value) {
+	  tsr = Integer.parseInt(value, 16);
+	  log.finer(String.format("Transmitter shift register: 0x%02", tsr));
+	}
+      });
+    add(new Register("TSR_LENGTH") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(tsrLen);
+	}
+	@Override
+	public void processValue(final String value) {
+	  tsrLen = Integer.parseInt(value);
+	  log.finer("Transmitter shift register length: " + tsrLen);
+	}
+      });
+    add(new Register("RSR") {
+	@Override
+	public String getValue() {
+	  return String.format("%02x", rsr);
+	}
+	@Override
+	public void processValue(final String value) {
+	  rsr = Integer.parseInt(value, 16);
+	  log.finer(String.format("Receiver shift regisrer: 0x%02", rsr));
+	}
+      });
+    add(new Register("RSR_LENGTH") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(rsrLen);
+	}
+	@Override
+	public void processValue(final String value) {
+	  rsrLen = Integer.parseInt(value);
+	  log.finer("Receiver shift register length: " + rsrLen);
+	}
+      });
+    add(new Register("TXS") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(tState);
+	}
+	@Override
+	public void processValue(final String value) {
+	  tState = Integer.parseInt(value);
+	  log.finer("Transmitter state: " + tState);
+	}
+      });
+    add(new Register("TXC_COUNTDOWN") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(txcCountDown);
+	}
+	@Override
+	public void processValue(final String value) {
+	  txcCountDown = Integer.parseInt(value);
+	  log.finer("Transmitter clock countdown: " + txcCountDown);
+	}
+      });
+    add(new Register("TXP") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(tParity);
+	}
+	@Override
+	public void processValue(final String value) {
+	  tParity = Integer.parseInt(value);
+	  log.finer("Transmitter parity calculator: " + tParity);
+	}
+      });
+    add(new Register("RXP") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(rParity);
+	}
+	@Override
+	public void processValue(final String value) {
+	  rParity = Integer.parseInt(value);
+	  log.finer("Receiver parity calculator: " + rParity);
 	}
       });
 
@@ -713,7 +1007,18 @@ public class Intel8251A extends Device implements IOElement {
   // for description see IOElement
   @Override
   public int portInput(final int port) {
-    return 0x00;
+    if ((port & 1) == 0) {
+      // data
+      log.finer(String.format("Data input: 0x%02x", 0));
+      return 0;
+    } else {
+      // status
+      final int status = txrdy | (rxrdy << 1) | (txempty << 2) | (pe << 3) |
+	(oe << 4) | (fe << 5) | (((mode == 0) ? syndet : brkdet) << 6) |
+        (dsr << 7);
+      log.finest(String.format("Status: 0x%02x", status));
+      return status;
+    }
   }
 
   // for description see IOElement
@@ -721,7 +1026,23 @@ public class Intel8251A extends Device implements IOElement {
   public void portOutput(final int port, int data) {
     if ((port & 1) == 0) {
       // data
-      log.finest(String.format("Data: 0x%02x", data));
+      log.finer(String.format("Data output: 0x%02x", data));
+      if ((txen & cts) == 1) {
+	if (txempty == 1) {  // put the data directy in the shift-register
+	  tsr = data;
+	  tsrLen = clen;
+	  tbr = 0;
+	  txempty = 0;
+	  txemptyPin.notifyChangeNode();
+	  tState = 1;
+	  log.finest("Data put in TSR");
+	} else {  // put the data in the buffer
+	  tbr = data;
+	  txrdy = 0;
+	  txrdyPin.notifyChangeNode();
+	  log.finest("Data put in TBR");
+	}
+      }
     } else {
       // control
       switch (state) {
@@ -793,6 +1114,7 @@ public class Intel8251A extends Device implements IOElement {
 	    hunt = (data >> 7) & 1;
 	    log.finer("Enter hunt mode: " + hunt);
 	    notifyAllPins();
+	    update();
 	  }
 	  break;
       }
