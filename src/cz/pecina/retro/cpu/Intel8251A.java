@@ -33,6 +33,9 @@ public class Intel8251A extends Device implements IOElement {
   // dynamic logger, per device
   private Logger log;
 
+  // baud rate multipliers
+  private static final int[] BRM = {1, 16, 64};
+
   // main operating state
   private int state;  // 0 = idle, waiting for instruction
                       // 1 = waiting for SYNC1
@@ -158,6 +161,15 @@ public class Intel8251A extends Device implements IOElement {
   // transmitter state
   private int tState;
 
+  // receiver clock countdown
+  private int rxcCountDown;
+  
+  // receiver state
+  private int rState;
+
+  // break counter
+  private int brkCounter;
+  
   // parity calculators
   private int tParity, rParity;
 
@@ -268,11 +280,11 @@ public class Intel8251A extends Device implements IOElement {
   private class TxC extends IOPin {
     @Override
     public void notifyChange() {
-      // final int newTxc = 1 - IONode.normalize(queryNode());
-      int newTxc = 1 - txc;
+      final int newTxc = 1 - IONode.normalize(queryNode());
       if (txc != newTxc) {
 	log.finest("Edge on /TxC detected");
-	if (newTxc == 1) {  // falling edge of /TxC
+	if ((newTxc == 1) && (txen == 1)) {  // falling edge of /TxC
+	                                     // and transmitter enabled
 	  log.finest("Falling edge on /TxC detected");
 	  if (mode == 0) {  // sync mode
 	    // ***
@@ -362,7 +374,85 @@ public class Intel8251A extends Device implements IOElement {
     public void notifyChange() {
       final int newRxc = 1 - IONode.normalize(queryNode());
       if (rxc != newRxc) {
-	if (newRxc == 0) {  // rising edge of /RxC
+	if ((newRxc == 0) && (rxen == 1)) {  // rising edge of /RxC
+	                                     // and receiver enabled
+	  log.finest("Rising edge on /RxC detected");
+	  if (mode == 0) {  // sync mode
+	    // ***
+	  } else {  // async mode
+	    if (rxcCountDown == 0) {
+	      log.finest("Countdown is zero, rState: " + rState);
+	      switch (rState) {
+		case 0:  // scaning for start-bit
+		  if (rxd == 0) {
+		    if (brf == 0) {
+		      rxcCountDown = getTicks();
+		      rsr = 0;
+		      rsrLen = 0;
+		      rParity = 1 - ep;
+		      rState = 2;
+		    } else {
+		      rxcCountDown = getHalfTicks();
+		      rState++;
+		    }
+		  }
+		  break;
+		case 1:  // start-bit
+		  if (rxd == 1) {
+		    rState = 0;
+		  } else {
+		    rsr = 0;
+		    rsrLen = 0;
+		    rParity = 1 - ep;
+		    rxcCountDown = getTicks();
+		    rState++;
+		  }
+		  break;
+		case 2:  // data bits
+		  rsr = (rsr | (rxd << clen)) >> 1;
+		  rParity ^= rxd;
+		  rxcCountDown = getTicks();
+		  if (++rsrLen == clen) {
+		    rState = (pen == 1) ? 3 : 4;
+		  }
+		  break;
+		case 3:  // parity bit
+		  if (rxd != rParity) {
+		    pe = 1;
+		  }
+		  rxcCountDown = getTicks();
+		  rState++;
+		  break;
+		case 4:  // stop-bit(s)
+		  if (rxd == 0) {
+		    fe = 1;
+		  }
+		  if (rxrdy == 1) {
+		    oe = 1;
+		  }
+		  rbr = rsr;
+		  rsr = 0;
+		  rsrLen = 0;
+		  rxrdy = 1;
+		  rxrdyPin.notifyChangeNode();
+		  rState = 0;
+		  log.finer("Byte received");
+		  break;
+	      }
+	    } else {
+	      rxcCountDown--;
+	    }
+	    if (rxd == 0) {
+	      if (brkCounter > (2 * BRM[brf] * (clen + pe + 2))) {
+		brkdet = 1;
+	      } else {
+		brkCounter++;
+	      }
+	    } else {
+	      brkdet = 0;
+	      brkCounter = 0;
+	    }
+	  }
 	}
 	rxc = newRxc;
       }
@@ -529,8 +619,8 @@ public class Intel8251A extends Device implements IOElement {
     tsrLen = rsrLen = 0;
     txc = 1 - IONode.normalize(txcPin.queryNode());
     rxc = 1 - IONode.normalize(rxcPin.queryNode());
-    txcCountDown = 0;
-    tState = 0;
+    txcCountDown = rxcCountDown = brkCounter = 0;
+    tState = rState = 0;
     tParity = rParity = 0;
     notifyAllPins();
     log.finer("USART reset");
@@ -671,7 +761,7 @@ public class Intel8251A extends Device implements IOElement {
 	  log.finer(String.format("Sync character 2: 0x%02", sync2));
 	}
       });
-    add(new Register("TxEN") {
+    add(new Register("TXEN") {
 	@Override
 	public String getValue() {
 	  return String.valueOf(txen);
@@ -693,7 +783,7 @@ public class Intel8251A extends Device implements IOElement {
 	  log.finer("DTR set to: " + dtr);
 	}
       });
-    add(new Register("RxEN") {
+    add(new Register("RXEN") {
 	@Override
 	public String getValue() {
 	  return String.valueOf(rxen);
@@ -825,7 +915,7 @@ public class Intel8251A extends Device implements IOElement {
 	  log.finer(String.format("Receive buffer register: 0x%02", rbr));
 	}
       });
-    add(new Register("RxRDY") {
+    add(new Register("RXRDY") {
 	@Override
 	public String getValue() {
 	  return String.valueOf(rxrdy);
@@ -836,7 +926,7 @@ public class Intel8251A extends Device implements IOElement {
 	  log.finer("RxRDY: " + rxrdy);
 	}
       });
-    add(new Register("TxD") {
+    add(new Register("TXD") {
 	@Override
 	public String getValue() {
 	  return String.valueOf(txd);
@@ -847,7 +937,7 @@ public class Intel8251A extends Device implements IOElement {
 	  log.finer("TxD: " + txd);
 	}
       });
-    add(new Register("TxRDY") {
+    add(new Register("TXRDY") {
 	@Override
 	public String getValue() {
 	  return String.valueOf(txrdy);
@@ -858,7 +948,7 @@ public class Intel8251A extends Device implements IOElement {
 	  log.finer("TxRDY: " + txrdy);
 	}
       });
-    add(new Register("TxEMPTY") {
+    add(new Register("TXEMPTY") {
 	@Override
 	public String getValue() {
 	  return String.valueOf(txempty);
@@ -869,7 +959,7 @@ public class Intel8251A extends Device implements IOElement {
 	  log.finer("TxEMPTY: " + txempty);
 	}
       });
-    add(new Register("TxC") {
+    add(new Register("TXC") {
 	@Override
 	public String getValue() {
 	  return String.valueOf(txc);
@@ -880,7 +970,7 @@ public class Intel8251A extends Device implements IOElement {
 	  log.finer("TxC: " + txc);
 	}
       });
-    add(new Register("RxRDY") {
+    add(new Register("RXRDY") {
 	@Override
 	public String getValue() {
 	  return String.valueOf(rxrdy);
@@ -891,7 +981,7 @@ public class Intel8251A extends Device implements IOElement {
 	  log.finer("RxRDY: " + rxrdy);
 	}
       });
-    add(new Register("RxC") {
+    add(new Register("RXC") {
 	@Override
 	public String getValue() {
 	  return String.valueOf(rxc);
@@ -957,6 +1047,17 @@ public class Intel8251A extends Device implements IOElement {
 	  log.finer("Transmitter state: " + tState);
 	}
       });
+    add(new Register("RXS") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(rState);
+	}
+	@Override
+	public void processValue(final String value) {
+	  rState = Integer.parseInt(value);
+	  log.finer("Receiver state: " + rState);
+	}
+      });
     add(new Register("TXC_COUNTDOWN") {
 	@Override
 	public String getValue() {
@@ -966,6 +1067,28 @@ public class Intel8251A extends Device implements IOElement {
 	public void processValue(final String value) {
 	  txcCountDown = Integer.parseInt(value);
 	  log.finer("Transmitter clock countdown: " + txcCountDown);
+	}
+      });
+    add(new Register("RXC_COUNTDOWN") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(rxcCountDown);
+	}
+	@Override
+	public void processValue(final String value) {
+	  rxcCountDown = Integer.parseInt(value);
+	  log.finer("Receiver clock countdown: " + rxcCountDown);
+	}
+      });
+    add(new Register("BRK_COUNTER") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(brkCounter);
+	}
+	@Override
+	public void processValue(final String value) {
+	  brkCounter = Integer.parseInt(value);
+	  log.finer("Break counter: " + brkCounter);
 	}
       });
     add(new Register("TXP") {
@@ -1009,8 +1132,9 @@ public class Intel8251A extends Device implements IOElement {
   public int portInput(final int port) {
     if ((port & 1) == 0) {
       // data
-      log.finer(String.format("Data input: 0x%02x", 0));
-      return 0;
+      rxrdy = 0;
+      log.finer(String.format("Data input: 0x%02x", rbr));
+      return rbr;
     } else {
       // status
       final int status = txrdy | (rxrdy << 1) | (txempty << 2) | (pe << 3) |
@@ -1060,8 +1184,7 @@ public class Intel8251A extends Device implements IOElement {
 		    ((ep == 0) ? " (odd)" : " (even)"));
 	  if (mode == 1) {
 	    brf = (data & 0x03) - 1;
-	    log.finer("Baud rate factor set to: " + brf +
-		      (new String[] {" (1x)", " (16x)", " (64x)"})[brf]);
+	    log.finer("Baud rate factor set to: " + brf + " (" + BRM[brf] + ")");
 	    sbits = (data >> 6) & 0x03;
 	    if (sbits-- == 0) {
 	      log.fine("Illegal number of stop bits");
@@ -1099,10 +1222,20 @@ public class Intel8251A extends Device implements IOElement {
 	  } else {
 	    txen = data & 1;
 	    log.finer("Transmit enable: " + txen);
+	    if (txen == 0) {
+	      txrdy = 0;
+	      tbr = tsr = tsrLen = txcCountDown = 0;
+	      tState = 0;
+	    }
 	    dtr = (data >> 1) & 1;
 	    log.finer("DTR set to: " + dtr);
 	    rxen = (data >> 2) & 1;
 	    log.finer("Receive enable: " + rxen);
+	    if (rxen == 0) {
+	      rxrdy = 0;
+	      rbr = rsr = rsrLen = rxcCountDown = 0;
+	      rState = 0;
+	    }
 	    sbrk = (data >> 3) & 1;
 	    log.finer("Send break: " + sbrk);
 	    if (((data >> 4) & 1) == 1) {  // error reset

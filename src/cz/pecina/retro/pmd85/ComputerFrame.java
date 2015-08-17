@@ -81,6 +81,7 @@ public class ComputerFrame extends JFrame implements Localized, Resizeable {
     Application.addLocalized(this);
     GUI.addResizeable(this);
     GUI.setApplicationIcons(this);
+    setAutoRequestFocus(true);
     setVisible(true);
     log.fine("ComputerFrame set up and displayed");
   }

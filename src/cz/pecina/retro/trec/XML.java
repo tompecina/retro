@@ -87,6 +87,7 @@ public class XML extends TapeProcessor {
       long currPos = -1;
       for (long start: tape.navigableKeySet()) {
 	final long duration = tape.get(start);
+	log.finest(String.format("Fetched: (%d, %d)", start, duration));
 	if ((start > currPos) &&
 	    (duration > 0) &&
 	    ((start + duration) <= tapeRecorderInterface.getMaxTapeLength())) {
