@@ -77,7 +77,8 @@ public class SAM extends TapeProcessor {
     long currPos = 0;
     try (final FileOutputStream oStream = new FileOutputStream(file)) {
       for (long start: tape.navigableKeySet()) {
-	final long duration = tape.get(start) - TapeRecorder.PULSE_HOLDOFF;
+	final long duration =
+	  tape.get(start) - tapeRecorderInterface.holdOffPeriod;
 	if ((start > currPos) && (duration > 0) &&
 	    ((start + duration) <= tapeRecorderInterface.getMaxTapeLength())) {
 	  for (; currPos < start; currPos++) {
@@ -125,7 +126,7 @@ public class SAM extends TapeProcessor {
 	    }
 	    pulseStart = currCyc;
 	  } 
-	  pulseLast = currCyc + TapeRecorder.PULSE_HOLDOFF;
+	  pulseLast = currCyc + tapeRecorderInterface.holdOffPeriod;
 	}
 	count++;
       }

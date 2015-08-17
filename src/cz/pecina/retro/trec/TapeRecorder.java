@@ -39,12 +39,6 @@ public class TapeRecorder {
     Logger.getLogger(TapeRecorder.class.getName());
 
   /**
-   * Holdoff time determining the minimum length of a pulse
-   * recorded in the tape file.
-   */
-  public static final int PULSE_HOLDOFF = 333;  // 300us
-
-  /**
    * Initializes the package.
    */
   public TapeRecorder() {

@@ -244,13 +244,20 @@ public class TapeRecorderHardware {
 	  final long currCycleCounter =
 	    Parameters.systemClockSource.getSystemClock() -
 	    startCycleCounter + startPosition;
-	  if (currCycleCounter > pulseLast) {
+	  if (tapeRecorderInterface.holdOffPeriod > 0) {
+	    if (currCycleCounter > pulseLast) {
+	      if (!paused && (pulseStart != -1)) {
+		recording.put(pulseStart, pulseLast - pulseStart);
+	      }
+	      pulseStart = currCycleCounter;
+	    }
+	    pulseLast = currCycleCounter + tapeRecorderInterface.holdOffPeriod;
+	  } else {
 	    if (!paused && (pulseStart != -1)) {
-	      recording.put(pulseStart, pulseLast - pulseStart);
+	      recording.put(pulseStart, currCycleCounter - pulseStart);
 	    }
 	    pulseStart = currCycleCounter;
 	  }
-	  pulseLast = currCycleCounter + TapeRecorder.PULSE_HOLDOFF;
 	}
       }
     }

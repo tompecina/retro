@@ -150,9 +150,10 @@ public class ComputerHardware {
     final TapeRecorderInterface tapeRecorderInterface =
       new TapeRecorderInterface();
     tapeRecorderInterface.tapeSampleRate = Constants.TAPE_SAMPLE_RATE;
+    tapeRecorderInterface.timerPeriod = Constants.TIMER_PERIOD;
+    tapeRecorderInterface.holdOffPeriod = 333;  // 300us
     tapeRecorderInterface.tapeFormats =
       Arrays.asList(new String[] {"XML", "PMT", "PMITAPE", "SAM"});
-    tapeRecorderInterface.timerPeriod = Constants.TIMER_PERIOD;
     tapeRecorderHardware = new TapeRecorderHardware(tapeRecorderInterface);
 
     // set up the debugger hardware

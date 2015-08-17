@@ -45,6 +45,11 @@ public class TapeRecorderInterface {
   public int timerPeriod;
 
   /**
+   * Pulse consolidation limit in CPU samples/CPU cycles.
+   */
+  public int holdOffPeriod;
+
+  /**
    * Get maximum tape length, in samples/CPU cycles.
    *
    * @return maximum tape length, in samples/CPU cycles
