@@ -300,7 +300,7 @@ public class PCKeyboardHardware implements IOElement, CPUEventOwner {
     }
   }
 
-  // for description see CPUScheduler
+  // for description see CPUEventOwner
   @Override
   public void performScheduledEvent(final int parameter) {
     portData = parameter;

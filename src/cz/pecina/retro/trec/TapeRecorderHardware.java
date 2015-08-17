@@ -237,6 +237,7 @@ public class TapeRecorderHardware {
     public void notifyChange() {
       final boolean message = (queryNode() == 0);
       if (message != outState) {
+	log.finest("Changed level detected: " + message);
 	outState = message;
 	if (tapeRecorderState == TapeRecorderState.RECORD) {
 	  pulseCount++;

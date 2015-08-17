@@ -66,7 +66,7 @@ public class Computer {
   private PeripheralsFrame peripheralsFrame;
 
   // the tape recorder frame
-  // private TapeRecorderFrame tapeRecorderFrame;
+  private TapeRecorderFrame tapeRecorderFrame;
 
   // the debugger frame
   private DebuggerFrame debuggerFrame;
@@ -119,9 +119,9 @@ public class Computer {
 			);
     memoryFrame = new MemoryFrame(this, computerHardware.getHardware());
     keyboardFrame = new KeyboardFrame(this, computerHardware.getKeyboardHardware());
-    // tapeRecorderFrame = new TapeRecorderFrame(
-    //   this,
-    //   computerHardware.getTapeRecorderHardware());
+    tapeRecorderFrame = new TapeRecorderFrame(
+      this,
+      computerHardware.getTapeRecorderHardware());
     debuggerFrame = new DebuggerFrame(
       this,
       computerHardware.getDebuggerHardware());
@@ -367,7 +367,7 @@ public class Computer {
     	}
     	break;
     }
-    // computerHardware.getTapeRecorderHardware().process();
+    computerHardware.getTapeRecorderHardware().process();
     computerHardware.getKeyboardHardware().updateBuffer();
     computerHardware.getDisplayHardware().repaint();
 	

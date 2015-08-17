@@ -78,7 +78,7 @@ public class CPUScheduler {
     assert time >= 0;
     schedule.add(new CPUScheduledEvent(
       owner, Parameters.systemClockSource.getSystemClock() + time, parameter));
-    log.finest("New event added for: time (relative): " + time +
+    log.finer("New event added for: time (relative): " + time +
 	       ", parameter: " + parameter);
   }
 
@@ -97,7 +97,7 @@ public class CPUScheduler {
     assert owner != null;
     assert time > 0;
     schedule.add(new CPUScheduledEvent(owner, time, parameter));
-    log.finest("New event added for: time: " + time +
+    log.finer("New event added for: time: " + time +
 	       ", parameter: " + parameter);
   }
 
@@ -109,9 +109,32 @@ public class CPUScheduler {
    */
   public void removeAllScheduledEvents(final CPUEventOwner owner) {
     for (Iterator<CPUScheduledEvent> iter =
-	   schedule.iterator(); iter.hasNext();)
-      if (iter.next().getOwner() == owner)
+	   schedule.iterator(); iter.hasNext();) {
+      if (iter.next().getOwner() == owner) {
 	iter.remove();
+      }
+    }
+  }
+
+  /**
+   * Gets time remaining to the next event scheduled by a particular owner.
+   *
+   * @param  owner the owner whose events will be evalueted
+   * @param  time  the current system clock
+   * @return       the remaining time in clock cycles or <code>-1</code>
+   *               if no event scheduled
+   */
+  public long getRemainingTime(final CPUEventOwner owner, final long time) {
+    long r = -1;
+    for (Iterator<CPUScheduledEvent> iter =
+	   schedule.iterator(); iter.hasNext();) {
+      if (iter.next().getOwner() == owner) {
+	r = iter.next().getTime() - time;
+	break;
+      }
+    }
+    log.finer("Supplying remaining time: " + r + " at: " + time);
+    return r;
   }
 
   /**
@@ -125,6 +148,7 @@ public class CPUScheduler {
    * @param time the current system clock
    */
   void runSchedule(final long time) {
+    log.finest("Running schedule at: " + time);
     CPUScheduledEvent event;
     while (!schedule.isEmpty() && (schedule.first().getTime() <= time)) {
       event = schedule.first();

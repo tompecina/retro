@@ -35,6 +35,7 @@ import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.Intel8080A;
 import cz.pecina.retro.cpu.Intel8255A;
 import cz.pecina.retro.cpu.Intel8251A;
+import cz.pecina.retro.cpu.FrequencyGenerator;
 import cz.pecina.retro.cpu.LowPin;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.IONode;
@@ -71,8 +72,11 @@ public class ComputerHardware {
   // the system 8255A (PIO)
   private Intel8255A systemPIO;
 
-  // the 8251A (USARTO)
+  // the 8251A (USART)
   private Intel8251A usart;
+
+  // the tape recorder frequency generator (freq = phi2/0x6ab = ca 1199.77Hz)
+  private FrequencyGenerator gen;
 
   // the display hardware
   private DisplayHardware displayHardware;
@@ -151,7 +155,7 @@ public class ComputerHardware {
       new TapeRecorderInterface();
     tapeRecorderInterface.tapeSampleRate = Constants.TAPE_SAMPLE_RATE;
     tapeRecorderInterface.tapeFormats =
-      Arrays.asList(new String[] {"XML", "PMT", "PTP"});
+      Arrays.asList(new String[] {"XML", "PMT"});
     tapeRecorderInterface.timerPeriod = Constants.TIMER_PERIOD;
     tapeRecorderHardware = new TapeRecorderHardware(tapeRecorderInterface);
 
@@ -199,9 +203,18 @@ public class ComputerHardware {
       cpu.addIOOutput(port, usart);
     }
 
-    // connect the USART
+    // set up the frequency generator
+    gen = new FrequencyGenerator("GEN", 0x6abL - 1L, 1L);
+    hardware.add(gen);
+
+    // connect the USART and the tape recorder
     new IONode().add(usart.getCtsPin()).add(usart.getRtsPin());
-  
+    new IONode().add(usart.getTxcPin()).add(usart.getRxcPin())
+      .add(gen.getOutPin());
+    new IONode().add(usart.getTxdPin()).add(tapeRecorderHardware.getOutPin());
+    new IONode().add(usart.getRxdPin()).add(usart.getDsrPin())
+      .add(tapeRecorderHardware.getInPin());
+
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);
 

@@ -50,7 +50,7 @@ public final class Constants {
 
   public static final String RES_PREFIX = "cz/pecina/retro/pmd85/";
 
-  public static final int TAPE_SAMPLE_RATE = 1111111;
+  public static final int TAPE_SAMPLE_RATE = 2048000;
 
   // default constructor disabled
   private Constants() {};

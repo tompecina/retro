@@ -208,8 +208,8 @@ public class Intel8251A extends Device implements IOElement {
   private class TxD extends IOPin {
     @Override
     public int query() {
-      log.finest("TxD: " + txd);
-      return txd;
+      log.finest("TxD: " + txd + " Break: " + sbrk);
+      return txd & (1 - sbrk);
     }
   }
   
