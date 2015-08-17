@@ -240,10 +240,10 @@ public class TapeRecorderHardware {
 	log.finest("Changed level detected: " + message);
 	outState = message;
 	if (tapeRecorderState == TapeRecorderState.RECORD) {
-	  pulseCount++;
 	  final long currCycleCounter =
 	    Parameters.systemClockSource.getSystemClock() -
 	    startCycleCounter + startPosition;
+	  pulseCount++;
 	  if (tapeRecorderInterface.holdOffPeriod > 0) {
 	    if (currCycleCounter > pulseLast) {
 	      if (!paused && (pulseStart != -1)) {
@@ -252,12 +252,13 @@ public class TapeRecorderHardware {
 	      pulseStart = currCycleCounter;
 	    }
 	    pulseLast = currCycleCounter + tapeRecorderInterface.holdOffPeriod;
-	  } else {
-	    if (!paused && (pulseStart != -1)) {
+	  } else if (!paused) {
+	    if (message) {
+	      pulseStart = currCycleCounter;
+	    } else if ((currCycleCounter > pulseStart) && (pulseStart != -1)) {
 	      recording.put(pulseStart, currCycleCounter - pulseStart);
 	    }
-	    pulseStart = currCycleCounter;
-	  }
+	  }		
 	}
       }
     }
