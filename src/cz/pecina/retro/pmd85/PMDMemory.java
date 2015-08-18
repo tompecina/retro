@@ -353,8 +353,9 @@ public class PMDMemory
     assert (address >= 0) && (address < 0x10000);
     int  data;
     switch (model) {
-      case 0:
-      case 1:
+      
+      case 0:  // PMD 85-1
+      case 1:  // PMD 85-2
 	if (resetFlag) {
 	  if (address < 0x4000) {
 	    data = rom[address & 0x1fff];
@@ -371,7 +372,8 @@ public class PMDMemory
 	  }
 	}
 	break;
-      case 2:
+	
+      case 2:  // PMD 85-2A
 	if (allRAMFlag) {
 	  data = ram[address];
 	} else if (resetFlag) {
@@ -390,10 +392,12 @@ public class PMDMemory
 	  }
 	}
 	break;
+	
+      case 3:  // PMD 85-3
       default:
 	if (allRAMFlag) {
 	  data = ram[address];
-	} else if (allROMFlag) {
+	} else if (resetFlag) {
 	  data = rom[address & 0x1fff];
 	} else if (address >= 0xe000) {
 	  data = rom[address - 0xe000];

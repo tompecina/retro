@@ -273,6 +273,20 @@ public class Intel8251A extends Device implements IOElement {
 	return 32;
     }
   }
+
+  // put one character into the transmit shift register
+  private void tsrPut(int b) {
+    int parity = 0;
+    for (int i = 0; i < clen; i++) {
+      final int d = b & 1;
+      parity ^= 1 - ep;
+      tsr |= d << tsrLen++;
+      b >>= 1;
+    }
+    if (pen == 1) {
+      tsr |= parity << tsrLen++;
+    }
+  }
   
   // /TxC pin
   private class TxC extends IOPin {
@@ -285,7 +299,23 @@ public class Intel8251A extends Device implements IOElement {
 	                                     // and transmitter enabled
 	  log.finest("Falling edge on /TxC detected");
 	  if (mode == 0) {  // sync mode
-	    // ***
+	    if (tsrLen == 0) {
+	      if ((txen & cts) == 0) {
+		return;
+	      }
+	      if (txrdy == 0) {
+		tsrPut(sync1);
+		if (scs == 0) {
+		  tsrPut(sync2);
+		}
+	      } else {
+		tsrPut(tbr);
+	      }
+	      txempty = 0;
+	      txemptyPin.notifyChangeNode();
+	    }
+	    txd = tsr & 1;
+	    txdPin.notifyChangeNode();
 	  } else {  // async mode
 	    if (txcCountDown == 0) {
 	      log.finest("Countdown is zero, tState: " + tState);
