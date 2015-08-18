@@ -134,6 +134,7 @@ public class EjectDialog extends JDialog {
     final JPanel buttonsPanel = new JPanel(new FlowLayout());
     final JButton saveButton =
       new JButton(Application.getString(this, "ejectDialog.save"));
+    saveButton.setEnabled(!tapeRecorderHardware.getTape().isEmpty());
     saveButton.addActionListener(new SaveListener());
     buttonsPanel.add(saveButton);
     final JButton loadButton =
@@ -142,6 +143,7 @@ public class EjectDialog extends JDialog {
     buttonsPanel.add(loadButton);
     final JButton blankButton =
       new JButton(Application.getString(this, "ejectDialog.blank"));
+    blankButton.setEnabled(!tapeRecorderHardware.getTape().isEmpty());
     blankButton.addActionListener(new BlankListener());
     buttonsPanel.add(blankButton);
     final JButton cancelButton =

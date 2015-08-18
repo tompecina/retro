@@ -1184,7 +1184,7 @@ public class Intel8251A extends Device implements IOElement {
 		    ((ep == 0) ? " (odd)" : " (even)"));
 	  if (mode == 1) {
 	    brf = (data & 0x03) - 1;
-	    log.finer("Baud rate factor set to: " + brf + " (" + BRM[brf] + ")");
+	    log.finer("Baud rate factor set to: " + brf + " (" + BRM[brf] + "x)");
 	    sbits = (data >> 6) & 0x03;
 	    if (sbits-- == 0) {
 	      log.fine("Illegal number of stop bits");
@@ -1218,7 +1218,7 @@ public class Intel8251A extends Device implements IOElement {
 	  log.fine(String.format("Command instruction: 0x%02x", data));
 	  if (((data >> 6) & 1) == 1) {  // internal reset
 	    reset();
-	    log.fine("Internal reset");
+	    log.finer("Internal reset");
 	  } else {
 	    txen = data & 1;
 	    log.finer("Transmit enable: " + txen);

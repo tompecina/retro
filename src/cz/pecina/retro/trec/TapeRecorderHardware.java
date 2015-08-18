@@ -255,8 +255,11 @@ public class TapeRecorderHardware {
 	  } else if (!paused) {
 	    if (message) {
 	      pulseStart = currCycleCounter;
-	    } else if ((currCycleCounter > pulseStart) && (pulseStart != -1)) {
-	      recording.put(pulseStart, currCycleCounter - pulseStart);
+	    } else {
+	      if ((currCycleCounter > pulseStart) && (pulseStart != -1)) {
+		recording.put(pulseStart, currCycleCounter - pulseStart);
+	      }
+	      pulseStart = -1;
 	    }
 	  }		
 	}
@@ -294,8 +297,15 @@ public class TapeRecorderHardware {
 
   // stop recording
   private void stopRecording() {
-    if (pulseStart != -1) {
-      recording.put(pulseStart, pulseLast - pulseStart);
+    if (tapeRecorderInterface.holdOffPeriod > 0) {
+      if (pulseStart != -1) {
+	recording.put(pulseStart, pulseLast - pulseStart);
+      }
+    } else {
+      if (pulseStart != -1) {
+	recording.put(pulseStart, Parameters.systemClockSource.getSystemClock() -
+	  startCycleCounter + startPosition - pulseStart);
+      }
     }
     for (Iterator<Long> iter = tape.navigableKeySet().iterator();
 	 iter.hasNext();
