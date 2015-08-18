@@ -292,8 +292,6 @@ public class TapeRecorderHardware {
     pulseStart = pulseLast = -1;
     startCycleCounter = Parameters.systemClockSource.getSystemClock();
     startPosition = tapePosition;
-    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
-					.BUTTON_POSITION_EJECT).setBlocked(true);
     log.finer("Recording started");
   }
 
@@ -321,8 +319,6 @@ public class TapeRecorderHardware {
       final long duration = recording.get(start);
       tape.put(start, duration);
     }
-    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
-					.BUTTON_POSITION_EJECT).setBlocked(false);
     log.finer("Recording stopped");
   }
 
@@ -331,16 +327,12 @@ public class TapeRecorderHardware {
     startCycleCounter = Parameters.systemClockSource.getSystemClock();
     startPosition = tapePosition;
     replay = true;
-    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
-					.BUTTON_POSITION_EJECT).setBlocked(true);
     log.finer("Replay started");
   }
 
   // stop replay
   private void stopReplay() {
     replay = false;
-    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
-					.BUTTON_POSITION_EJECT).setBlocked(false);
     log.finer("Replay stopped");
   }
 
@@ -362,6 +354,8 @@ public class TapeRecorderHardware {
 	    recordingLED.setState(true);
 	    startRecording();
 	  }
+	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	    .BUTTON_POSITION_EJECT).setBlocked(true);
 	  tapeRecorderState = TapeRecorderState.RECORD;
 	} else if (tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 		   .BUTTON_POSITION_PLAY).isPressed()) {
@@ -370,14 +364,20 @@ public class TapeRecorderHardware {
 	    startReplay();
 	  }
 	  tapeRecorderState = TapeRecorderState.PLAY;
+	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	    .BUTTON_POSITION_EJECT).setBlocked(true);
 	} else if (tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 		   .BUTTON_POSITION_REWIND).isPressed()) {
 	  log.fine("REWIND pressed");
 	  tapeRecorderState = TapeRecorderState.REWIND;
+	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	    .BUTTON_POSITION_EJECT).setBlocked(true);
 	} else if (tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 		   .BUTTON_POSITION_FF).isPressed()) {
 	  log.fine("FF pressed");
 	  tapeRecorderState = TapeRecorderState.FF;
+	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	    .BUTTON_POSITION_EJECT).setBlocked(true);
 	} else if (tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 		   .BUTTON_POSITION_PAUSE).isPressed() != paused) {
 	  log.fine("PAUSE pressed");
@@ -425,6 +425,8 @@ public class TapeRecorderHardware {
 	    stopRecording();
 	  }
 	  tapeRecorderState = TapeRecorderState.STOPPED;
+	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	    .BUTTON_POSITION_EJECT).setBlocked(false);
 	} else if (tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 	           .BUTTON_POSITION_PAUSE).isPressed() != paused) {
 	  log.fine("PAUSE pressed");
@@ -448,6 +450,8 @@ public class TapeRecorderHardware {
 	    stopRecording();
 	  }
 	  tapeRecorderState = TapeRecorderState.STOPPED;
+	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	    .BUTTON_POSITION_EJECT).setBlocked(false);
 	} else {
 	  if (!paused) {
 	    tapePosition +=
@@ -465,6 +469,8 @@ public class TapeRecorderHardware {
 	      stopRecording();
 	    }
 	    tapeRecorderState = TapeRecorderState.STOPPED;
+	    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	      .BUTTON_POSITION_EJECT).setBlocked(false);
 	  }
 	}
 	break;
@@ -508,6 +514,8 @@ public class TapeRecorderHardware {
 	    stopReplay();
 	  }
 	  tapeRecorderState = TapeRecorderState.STOPPED;
+	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	    .BUTTON_POSITION_EJECT).setBlocked(false);
 	} else if (tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 		   .BUTTON_POSITION_PAUSE).isPressed() != paused) {
 	  log.fine("PAUSE pressed");
@@ -526,6 +534,8 @@ public class TapeRecorderHardware {
 	    stopReplay();
 	  }
 	  tapeRecorderState = TapeRecorderState.STOPPED;
+	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	    .BUTTON_POSITION_EJECT).setBlocked(false);
 	} else {
 	  if (!paused) {
 	    tapePosition += Parameters.systemClockSource.getSystemClock() -
@@ -542,6 +552,8 @@ public class TapeRecorderHardware {
 	      stopReplay();
 	    }
 	    tapeRecorderState = TapeRecorderState.STOPPED;
+	    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	      .BUTTON_POSITION_EJECT).setBlocked(false);
 	  }
 	}
 	break;
@@ -586,6 +598,8 @@ public class TapeRecorderHardware {
 	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 	    .BUTTON_POSITION_REWIND).setPressed(false);
 	  tapeRecorderState = TapeRecorderState.STOPPED;
+	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	    .BUTTON_POSITION_EJECT).setBlocked(false);
 	} else if (tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 	           .BUTTON_POSITION_PAUSE).isPressed() != paused) {
 	  log.fine("PAUSE pressed");
@@ -596,6 +610,8 @@ public class TapeRecorderHardware {
 	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 	    .BUTTON_POSITION_REWIND).setPressed(false);
 	  tapeRecorderState = TapeRecorderState.STOPPED;
+	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	    .BUTTON_POSITION_EJECT).setBlocked(false);
 	} else {
 	  tapePosition -= (Parameters.systemClockSource.getSystemClock() -
 			   lastCycleCounter) * FAST_MULTIPLIER;
@@ -605,6 +621,8 @@ public class TapeRecorderHardware {
 	    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 	      .BUTTON_POSITION_REWIND).setPressed(false);
 	    tapeRecorderState = TapeRecorderState.STOPPED;
+	    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	      .BUTTON_POSITION_EJECT).setBlocked(false);
 	  }
 	}
 	break;
@@ -650,6 +668,8 @@ public class TapeRecorderHardware {
 	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 	    .BUTTON_POSITION_FF).setPressed(false);
 	  tapeRecorderState = TapeRecorderState.STOPPED;
+	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	    .BUTTON_POSITION_EJECT).setBlocked(false);
 	} else if (tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 	           .BUTTON_POSITION_PAUSE).isPressed() != paused) {
 	  log.fine("PAUSE pressed");
@@ -660,6 +680,8 @@ public class TapeRecorderHardware {
 	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 	    .BUTTON_POSITION_FF).setPressed(false);
 	  tapeRecorderState = TapeRecorderState.STOPPED;
+	  tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	    .BUTTON_POSITION_EJECT).setBlocked(false);
 	} else {
 	  tapePosition += (Parameters.systemClockSource.getSystemClock() -
 			   lastCycleCounter) * FAST_MULTIPLIER;
@@ -669,6 +691,8 @@ public class TapeRecorderHardware {
 	    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
 	      .BUTTON_POSITION_FF).setPressed(false);
 	    tapeRecorderState = TapeRecorderState.STOPPED;
+	    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+	      .BUTTON_POSITION_EJECT).setBlocked(false);
 	  }
 	}
 	break;
