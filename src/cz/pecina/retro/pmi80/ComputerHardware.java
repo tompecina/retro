@@ -158,6 +158,8 @@ public class ComputerHardware {
     tapeRecorderInterface.holdOffPeriod = 333;  // 300us
     tapeRecorderInterface.tapeFormats =
       Arrays.asList(new String[] {"XML", "PMT", "PMITAPE", "SAM"});
+    tapeRecorderInterface.vuRecConstant = 166.7;
+    tapeRecorderInterface.vuPlayConstant = 17777.8;
     tapeRecorderHardware = new TapeRecorderHardware(tapeRecorderInterface);
 
     // set up the debugger hardware

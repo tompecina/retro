@@ -158,6 +158,8 @@ public class ComputerHardware {
     tapeRecorderInterface.timerPeriod = Constants.TIMER_PERIOD;
     tapeRecorderInterface.tapeFormats =
       Arrays.asList(new String[] {"XML", "PMT"});
+    tapeRecorderInterface.vuRecConstant = 50.0;
+    tapeRecorderInterface.vuPlayConstant = 80000.0;
     tapeRecorderHardware = new TapeRecorderHardware(tapeRecorderInterface);
 
     // set up the debugger hardware

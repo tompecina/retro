@@ -50,6 +50,16 @@ public class TapeRecorderInterface {
   public int holdOffPeriod;
 
   /**
+   * VU-meter sensitivity constant for recording.
+   */
+  public double vuRecConstant;
+
+  /**
+   * VU-meter sensitivity constant for replay.
+   */
+  public double vuPlayConstant;
+
+  /**
    * Get maximum tape length, in samples/CPU cycles.
    *
    * @return maximum tape length, in samples/CPU cycles

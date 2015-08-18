@@ -48,9 +48,6 @@ public class TapeRecorderHardware {
   private static final int BLINK_ON = 750;
   private static final int BLINK_OFF = 750;
 
-  // divisor determining the speed of tape recorder counter
-  private static final double COUNTER_DIVISOR = 1e7 / 9.0;
-  
   // multiplier for FF/REWIND operation
   private static final int FAST_MULTIPLIER = 8;
 
@@ -698,7 +695,7 @@ public class TapeRecorderHardware {
 	break;
     }
     counter.setState(((double)(tapePosition - counterOffset))
-		     / COUNTER_DIVISOR);
+		     / tapeRecorderInterface.tapeSampleRate);
     lastCycleCounter = Parameters.systemClockSource.getSystemClock();
     if (tapeRecorderCounterResetButton.isPressed()) {
       log.finest("Resetting counter");
@@ -708,7 +705,7 @@ public class TapeRecorderHardware {
     if (tapeRecorderState == TapeRecorderState.RECORD) {
       int i;
       for (i = 0; i < VUMeter.VUMETER_MAX; i++) {
-	if ((9 * pulseCount) < (75 * tapeRecorderInterface.timerPeriod * i)) {
+	if (pulseCount < (tapeRecorderInterface.vuRecConstant * i)) {
 	  break;
 	}
       }
@@ -720,7 +717,7 @@ public class TapeRecorderHardware {
       }
       int i;
       for (i = 0; i < VUMeter.VUMETER_MAX; i++) {
-	if ((9 * pulseCount) < (8000 * tapeRecorderInterface.timerPeriod * i)) {
+	if (pulseCount < (tapeRecorderInterface.vuPlayConstant * i)) {
 	  break;
 	}
       }
