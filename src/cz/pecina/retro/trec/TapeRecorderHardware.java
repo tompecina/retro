@@ -292,6 +292,8 @@ public class TapeRecorderHardware {
     pulseStart = pulseLast = -1;
     startCycleCounter = Parameters.systemClockSource.getSystemClock();
     startPosition = tapePosition;
+    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+					.BUTTON_POSITION_EJECT).setBlocked(true);
     log.finer("Recording started");
   }
 
@@ -319,6 +321,8 @@ public class TapeRecorderHardware {
       final long duration = recording.get(start);
       tape.put(start, duration);
     }
+    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+					.BUTTON_POSITION_EJECT).setBlocked(false);
     log.finer("Recording stopped");
   }
 
@@ -327,12 +331,16 @@ public class TapeRecorderHardware {
     startCycleCounter = Parameters.systemClockSource.getSystemClock();
     startPosition = tapePosition;
     replay = true;
+    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+					.BUTTON_POSITION_EJECT).setBlocked(true);
     log.finer("Replay started");
   }
 
   // stop replay
   private void stopReplay() {
     replay = false;
+    tapeRecorderButtonsLayout.getButton(TapeRecorderButtonsLayout
+					.BUTTON_POSITION_EJECT).setBlocked(false);
     log.finer("Replay stopped");
   }
 

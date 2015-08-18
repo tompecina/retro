@@ -60,7 +60,7 @@ public class TapeRecorderPushButton extends PushButton implements Localized {
     Application.addLocalized(this);
     log.fine("New TapeRecorderPushButton created: " + id);
   }
-    
+   
   // for description see Object
   @Override
   public String toString() {

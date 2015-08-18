@@ -145,7 +145,9 @@ public class TapeRecorderPanel extends BackgroundFixedPane {
   private class EjectListener extends MouseAdapter {
     @Override
     public void mousePressed(final MouseEvent event) {
-      new EjectDialog(TapeRecorderPanel.this, tapeRecorderHardware);
+      if (!((GenericButton)(event.getComponent())).isBlocked()) {
+	new EjectDialog(TapeRecorderPanel.this, tapeRecorderHardware);
+      }
     }
   }
 }

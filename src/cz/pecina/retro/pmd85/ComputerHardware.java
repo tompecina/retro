@@ -35,6 +35,7 @@ import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.Intel8080A;
 import cz.pecina.retro.cpu.Intel8255A;
 import cz.pecina.retro.cpu.Intel8251A;
+import cz.pecina.retro.cpu.XOR;
 import cz.pecina.retro.cpu.FrequencyGenerator;
 import cz.pecina.retro.cpu.LowPin;
 import cz.pecina.retro.cpu.IOPin;
@@ -207,14 +208,29 @@ public class ComputerHardware {
     gen = new FrequencyGenerator("GEN", 854L, 853L);
     hardware.add(gen);
 
-    // connect the USART and the tape recorder
-    new IONode().add(usart.getCtsPin()).add(usart.getRtsPin());
-    new IONode().add(usart.getTxcPin()).add(usart.getRxcPin())
-      .add(gen.getOutPin());
-    new IONode().add(usart.getTxdPin()).add(tapeRecorderHardware.getInPin());
-    new IONode().add(usart.getRxdPin()).add(usart.getDsrPin())
-      .add(tapeRecorderHardware.getOutPin());
+    // set up the input XOR
+    final XOR xor = new XOR("TapeRecorderXOR", 2);
 
+    // connect the USART and the tape recorder
+    new IONode()
+      .add(usart.getCtsPin())
+      .add(usart.getRtsPin());
+    new IONode()
+      .add(usart.getTxdPin())
+      .add(tapeRecorderHardware.getInPin());
+    new IONode()
+      .add(gen.getOutPin())
+      .add(usart.getTxcPin())
+      .add(usart.getRxcPin())
+      .add(xor.getInPin(0));
+    new IONode()
+      .add(tapeRecorderHardware.getOutPin())
+      .add(usart.getRxdPin())
+      .add(xor.getInPin(1));
+    new IONode()
+      .add(xor.getOutPin())
+      .add(usart.getDsrPin());
+      
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);
 
