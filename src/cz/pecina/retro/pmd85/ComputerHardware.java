@@ -35,7 +35,6 @@ import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.Intel8080A;
 import cz.pecina.retro.cpu.Intel8255A;
 import cz.pecina.retro.cpu.Intel8251A;
-import cz.pecina.retro.cpu.XOR;
 import cz.pecina.retro.cpu.FrequencyGenerator;
 import cz.pecina.retro.cpu.LowPin;
 import cz.pecina.retro.cpu.IOPin;
@@ -158,8 +157,8 @@ public class ComputerHardware {
     tapeRecorderInterface.timerPeriod = Constants.TIMER_PERIOD;
     tapeRecorderInterface.tapeFormats =
       Arrays.asList(new String[] {"XML", "PMT"});
-    tapeRecorderInterface.vuRecConstant = 50.0;
-    tapeRecorderInterface.vuPlayConstant = 80000.0;
+    tapeRecorderInterface.vuRecConstant = 55.0;
+    tapeRecorderInterface.vuPlayConstant = 90000.0;
     tapeRecorderHardware = new TapeRecorderHardware(tapeRecorderInterface);
 
     // set up the debugger hardware
@@ -178,16 +177,24 @@ public class ComputerHardware {
       new IONode().add(systemPIO.getPin(8 + i))
     	.add(keyboardHardware.getScanPin(i));
     }
-    new IONode().add(systemPIO.getPin(8 + 5))
+    new IONode()
+      .add(systemPIO.getPin(8 + 5))
       .add(keyboardHardware.getShiftPin());
-    new IONode().add(systemPIO.getPin(8 + 6))
+    new IONode()
+      .add(systemPIO.getPin(8 + 6))
       .add(keyboardHardware.getStopPin());
-    new IONode().add(systemPIO.getPin(16 + 2))
-      .add(keyboardHardware.getYellowLEDPin()).add(yellowLEDPin);
-    new IONode().add(systemPIO.getPin(16 + 3))
-      .add(keyboardHardware.getRedLEDPin()).add(redLEDPin);
-    new IONode().add(new LowPin())
-      .add(keyboardHardware.getGreenLEDPin()).add(greenLEDPin);
+    new IONode()
+      .add(systemPIO.getPin(16 + 2))
+      .add(keyboardHardware.getYellowLEDPin())
+      .add(yellowLEDPin);
+    new IONode()
+      .add(systemPIO.getPin(16 + 3))
+      .add(keyboardHardware.getRedLEDPin())
+      .add(redLEDPin);
+    new IONode()
+      .add(new LowPin())
+      .add(keyboardHardware.getGreenLEDPin())
+      .add(greenLEDPin);
     
     // set up the ROM module hardware
     romModuleHardware = new ROMModuleHardware(this);
@@ -210,8 +217,8 @@ public class ComputerHardware {
     gen = new FrequencyGenerator("GEN", 854L, 853L);
     hardware.add(gen);
 
-    // set up the input XOR
-    final XOR xor = new XOR("TapeRecorderXOR", 2);
+    // set up the DSR sampling circuit
+    final DSR dsr = new DSR("TapeRecorderDSR");
 
     // connect the USART and the tape recorder
     new IONode()
@@ -224,13 +231,13 @@ public class ComputerHardware {
       .add(gen.getOutPin())
       .add(usart.getTxcPin())
       .add(usart.getRxcPin())
-      .add(xor.getInPin(0));
+      .add(dsr.getClockPin());
     new IONode()
       .add(tapeRecorderHardware.getOutPin())
       .add(usart.getRxdPin())
-      .add(xor.getInPin(1));
+      .add(dsr.getSignalPin());
     new IONode()
-      .add(xor.getOutPin())
+      .add(dsr.getOutPin())
       .add(usart.getDsrPin());
       
     // load any startup images and snapshots

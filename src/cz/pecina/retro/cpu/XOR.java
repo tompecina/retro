@@ -135,6 +135,7 @@ public class XOR {
       for (IOPin pin: inPins) {
 	r ^= IONode.normalize(pin.queryNode());
       }
+      System.out.println("inpins: " + inPins[0].queryNode() + ":" + inPins[1].queryNode() + " outpin: " + r);
       return r;
     }
   }

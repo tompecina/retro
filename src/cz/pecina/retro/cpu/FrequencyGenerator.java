@@ -49,6 +49,9 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
   // CPU scheduler
   private final CPUScheduler scheduler = Parameters.cpu.getCPUScheduler();
 
+  // time of next event
+  private long nextEvent;
+
   // output pin
   private class OutPin extends IOPin {
     @Override
@@ -75,10 +78,8 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
     counter = 0;
     output = 0;
     outPin.notifyChangeNode();
-    scheduler.addScheduledEvent(
-      this,
-      Parameters.systemClockSource.getSystemClock() + offPeriod,
-      0);
+    nextEvent = Parameters.systemClockSource.getSystemClock() + offPeriod;
+    scheduler.addScheduledEvent(this, nextEvent, 0);
     log.finer("Frequency generator reset");
   }
 
@@ -172,11 +173,10 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
   public void performScheduledEvent(final int parameter) {
     output = 1 - output;
     outPin.notifyChangeNode();
-    scheduler.addScheduledEvent(
-      this,
-      Parameters.systemClockSource.getSystemClock() +
-        ((output == 0) ? offPeriod : onPeriod),
-      0);
+    final long currentTime = Parameters.systemClockSource.getSystemClock();
+    final long delay = currentTime - nextEvent;
+    nextEvent = currentTime + ((output == 0) ? offPeriod : onPeriod) - delay;
+    scheduler.addScheduledEvent(this, nextEvent, 0);
     log.finer("Event performed, output is now: " + output);
   }
 }

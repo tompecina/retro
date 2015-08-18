@@ -310,11 +310,16 @@ public class Intel8251A extends Device implements IOElement {
 		}
 	      } else {
 		tsrPut(tbr);
+		tbr = 0;
+		txrdy = 1;
+		txrdyPin.notifyChangeNode();
 	      }
 	      txempty = 0;
 	      txemptyPin.notifyChangeNode();
 	    }
 	    txd = tsr & 1;
+	    tsr >>= 1;
+	    tsrLen--;
 	    txdPin.notifyChangeNode();
 	  } else {  // async mode
 	    if (txcCountDown == 0) {
