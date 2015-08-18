@@ -92,9 +92,6 @@ public class Intel8251A extends Device implements IOElement {
   // hunt mode
   private int hunt;
 
-  // SYNDET direction
-  private int syndetDir;
-
   // sync detect
   private int syndet;
 
@@ -238,6 +235,7 @@ public class Intel8251A extends Device implements IOElement {
   private class TxRDY extends IOPin {
     @Override
     public int query() {
+      ctsPin.notifyChange();
       return txrdy & cts & txen;
     }
   }
@@ -377,14 +375,17 @@ public class Intel8251A extends Device implements IOElement {
 	if ((newRxc == 0) && (rxen == 1)) {  // rising edge of /RxC
 	                                     // and receiver enabled
 	  log.finest("Rising edge on /RxC detected");
+	  rxdPin.notifyChange();
 	  if (mode == 0) {  // sync mode
 	    // ***
 	  } else {  // async mode
 	    if (rxcCountDown == 0) {
 	      log.finest("Countdown is zero, rState: " + rState);
 	      switch (rState) {
-		case 0:  // scaning for start-bit
+		case 0:  // scanning for start-bit
 		  if (rxd == 0) {
+		    log.finest("Start-bit detected");
+		    System.out.println("Start-bit detected");
 		    if (brf == 0) {
 		      rxcCountDown = getTicks();
 		      rsr = 0;
@@ -596,6 +597,7 @@ public class Intel8251A extends Device implements IOElement {
     ctsPin.notifyChange();
     dsrPin.notifyChange();
     rxdPin.notifyChange();
+    System.out.println("RxD pins says: " + rxd);
     synBrkPin.notifyChange();
     log.finest("Update from all input pins completed");
   }
@@ -610,7 +612,6 @@ public class Intel8251A extends Device implements IOElement {
     sbrk = hunt = 0;
     dtr = rts = 0;
     syndet = brkdet = 0;
-    syndetDir = INPUT;
     tbr = rbr = 0;
     rxrdy = 0;
     txd = txempty = 1;
@@ -825,17 +826,6 @@ public class Intel8251A extends Device implements IOElement {
 	public void processValue(final String value) {
 	  hunt = Integer.parseInt(value);
 	  log.finer("Hunt mode: " + hunt);
-	}
-      });
-    add(new Register("SYNDET_DIR") {
-	@Override
-	public String getValue() {
-	  return String.valueOf(syndetDir);
-	}
-	@Override
-	public void processValue(final String value) {
-	  syndetDir = Integer.parseInt(value);
-	  log.finer("SYNDET dir: " + syndetDir);
 	}
       });
     add(new Register("SYNDET") {
@@ -1121,6 +1111,13 @@ public class Intel8251A extends Device implements IOElement {
 
   // for description see Device
   @Override
+  public void preMarshal() {
+    update();
+    log.fine("Post-marshal on 8251A completed");
+  }
+
+  // for description see Device
+  @Override
   public void postUnmarshal() {
     notifyAllPins();
     update();
@@ -1137,6 +1134,7 @@ public class Intel8251A extends Device implements IOElement {
       return rbr;
     } else {
       // status
+      update();
       final int status = txrdy | (rxrdy << 1) | (txempty << 2) | (pe << 3) |
 	(oe << 4) | (fe << 5) | (((mode == 0) ? syndet : brkdet) << 6) |
         (dsr << 7);
@@ -1151,8 +1149,9 @@ public class Intel8251A extends Device implements IOElement {
     if ((port & 1) == 0) {
       // data
       log.finer(String.format("Data output: 0x%02x", data));
+      ctsPin.notifyChange();
       if ((txen & cts) == 1) {
-	if (txempty == 1) {  // put the data directy in the shift-register
+	if (txempty == 1) {  // put the data directly in the shift-register
 	  tsr = data;
 	  tsrLen = clen;
 	  tbr = 0;
