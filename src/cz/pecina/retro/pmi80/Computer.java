@@ -45,7 +45,7 @@ public class Computer {
     Logger.getLogger(Computer.class.getName());
 
   // debugger button autorepeat constant
-  private static int AUTOREPEAT = 25;
+  private static int AUTOREPEAT = Math.round(200f / Constants.TIMER_PERIOD);
 
   // the computer hardware object
   private ComputerHardware computerHardware;
