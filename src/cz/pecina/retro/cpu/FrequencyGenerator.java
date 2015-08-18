@@ -98,9 +98,8 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
       "New frequency generator started, name: %s, off: %d, on: %d",
       name,
       offPeriod, onPeriod));
-    assert offPeriod >= 0L;
-    assert onPeriod >= 0L;
-    assert (offPeriod + onPeriod) > 0L;
+    assert offPeriod > 0L;
+    assert onPeriod > 0L;
 
     this.offPeriod = offPeriod;
     this.onPeriod = onPeriod;

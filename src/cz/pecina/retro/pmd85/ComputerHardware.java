@@ -204,7 +204,7 @@ public class ComputerHardware {
     }
 
     // set up the frequency generator
-    gen = new FrequencyGenerator("GEN", 0x6abL - 1L, 1L);
+    gen = new FrequencyGenerator("GEN", 854L, 853L);
     hardware.add(gen);
 
     // connect the USART and the tape recorder
