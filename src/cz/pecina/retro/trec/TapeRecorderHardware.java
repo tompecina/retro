@@ -69,11 +69,11 @@ public class TapeRecorderHardware {
   // true if the tape recorder is paused
   private boolean paused;
 
-  // computer-out tape recorder-in pin
-  private final OutPin outPin = new OutPin();
-
-  // computer-in tape recorder-out pin
+  // input pin
   private final InPin inPin = new InPin();
+
+  // output pin
+  private final OutPin outPin = new OutPin();
 
   // buttons
   private final TapeRecorderButtonsLayout tapeRecorderButtonsLayout =
@@ -112,21 +112,21 @@ public class TapeRecorderHardware {
   }
 
   /**
-   * Gets computer-in tape recorder-out pin.
+   * Gets the output pin.
    *
-   * @return <code>IOPin</code> object
-   */
-  public IOPin getInPin() {
-    return inPin;
-  }
-
-  /**
-   * Gets computer-out tape recorder-in pin.
-   *
-   * @return <code>IOPin</code> object
+   * @return the output pin
    */
   public IOPin getOutPin() {
     return outPin;
+  }
+
+  /**
+   * Gets the input pin.
+   *
+   * @return the input pin
+   */
+  public IOPin getInPin() {
+    return inPin;
   }
 
   /**
@@ -228,8 +228,8 @@ public class TapeRecorderHardware {
     return recordingLED;
   }
 
-  // computer-out tape recorder-in pin class
-  private class OutPin extends IOPin {
+  // in pin
+  private class InPin extends IOPin {
     private boolean outState;
 
     // for description see IOPin
@@ -267,8 +267,8 @@ public class TapeRecorderHardware {
     }
   }
 
-  // computer-in tape recorder-out pin class
-  private class InPin extends IOPin {
+  // output pin
+  private class OutPin extends IOPin {
 
     // for description see IOPin
     @Override

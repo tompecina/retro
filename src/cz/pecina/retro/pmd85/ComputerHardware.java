@@ -211,9 +211,9 @@ public class ComputerHardware {
     new IONode().add(usart.getCtsPin()).add(usart.getRtsPin());
     new IONode().add(usart.getTxcPin()).add(usart.getRxcPin())
       .add(gen.getOutPin());
-    new IONode().add(usart.getTxdPin()).add(tapeRecorderHardware.getOutPin());
+    new IONode().add(usart.getTxdPin()).add(tapeRecorderHardware.getInPin());
     new IONode().add(usart.getRxdPin()).add(usart.getDsrPin())
-      .add(tapeRecorderHardware.getInPin());
+      .add(tapeRecorderHardware.getOutPin());
 
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);

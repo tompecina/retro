@@ -175,12 +175,12 @@ public class ComputerHardware {
     new IONode().add(systemPPI.getPin(6))
       .add(displayHardware.getDataPin(6)).add(nand.getInPin(0));
     new IONode().add(systemPPI.getPin(7)).add(nand.getInPin(1));
-    new IONode().add(nand.getOutPin()).add(tapeRecorderHardware.getOutPin());
+    new IONode().add(nand.getOutPin()).add(tapeRecorderHardware.getInPin());
     for (int i = 0; i < KeyboardHardware.NUMBER_MATRIX_ROWS; i++) {
       new IONode().add(systemPPI.getPin(20 + i))
 	.add(keyboardHardware.getScanPin(i));
     }
-    new IONode().add(tapeRecorderHardware.getInPin()).add(invertor.getInPin());
+    new IONode().add(tapeRecorderHardware.getOutPin()).add(invertor.getInPin());
     new IONode().add(systemPPI.getPin(23)).add(invertor.getOutPin());
 
     // reset all stateful devices

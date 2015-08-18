@@ -385,7 +385,6 @@ public class Intel8251A extends Device implements IOElement {
 		case 0:  // scanning for start-bit
 		  if (rxd == 0) {
 		    log.finest("Start-bit detected");
-		    System.out.println("Start-bit detected");
 		    if (brf == 0) {
 		      rxcCountDown = getTicks();
 		      rsr = 0;
@@ -597,7 +596,6 @@ public class Intel8251A extends Device implements IOElement {
     ctsPin.notifyChange();
     dsrPin.notifyChange();
     rxdPin.notifyChange();
-    System.out.println("RxD pins says: " + rxd);
     synBrkPin.notifyChange();
     log.finest("Update from all input pins completed");
   }
