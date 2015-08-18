@@ -90,9 +90,9 @@ public class NAND {
    */
   public NAND(final String name, final int numberInPins) {
     assert name != null;
+    assert numberInPins > 0;
     log = Logger.getLogger(getClass().getName() + "." + name);
     log.fine("New NAND creation started: " + name);
-    assert numberInPins > 0;
     this.name = name;
     this.numberInPins = numberInPins;
     inPins = new InPin[numberInPins];

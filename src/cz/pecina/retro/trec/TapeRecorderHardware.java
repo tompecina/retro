@@ -279,10 +279,10 @@ public class TapeRecorderHardware {
 	  startCycleCounter;
 	final Long key = tape.lowerKey(preciseTapePosition + 1);
 	if ((key != null) && ((key + tape.get(key)) > preciseTapePosition)) {
-	  return 1;
+	  return 0;
 	}
       }
-      return 0;
+      return 1;
     }
   }
     

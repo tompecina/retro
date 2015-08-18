@@ -32,6 +32,7 @@ import cz.pecina.retro.cpu.Intel8080A;
 import cz.pecina.retro.cpu.Intel8255A;
 import cz.pecina.retro.cpu.SimpleMemory;
 import cz.pecina.retro.cpu.NAND;
+import cz.pecina.retro.cpu.Invertor;
 import cz.pecina.retro.trec.TapeRecorderInterface;
 import cz.pecina.retro.trec.TapeRecorderHardware;
 import cz.pecina.retro.debug.DebuggerHardware;
@@ -140,6 +141,9 @@ public class ComputerHardware {
     // set up the tape recorder NAND
     final NAND nand = new NAND("TapeRecorderNAND", 2);
 
+    // set up the tape recorder invertor
+    final Invertor invertor = new Invertor("TapeRecorderInvertor");
+
     // set up the display hardware
     displayHardware = new DisplayHardware();
 
@@ -176,8 +180,8 @@ public class ComputerHardware {
       new IONode().add(systemPPI.getPin(20 + i))
 	.add(keyboardHardware.getScanPin(i));
     }
-    new IONode().add(systemPPI.getPin(23))
-      .add(tapeRecorderHardware.getInPin());
+    new IONode().add(tapeRecorderHardware.getInPin()).add(invertor.getInPin());
+    new IONode().add(systemPPI.getPin(23)).add(invertor.getOutPin());
 
     // reset all stateful devices
     hardware.reset();
