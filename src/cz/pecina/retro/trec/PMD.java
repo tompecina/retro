@@ -23,6 +23,8 @@ package cz.pecina.retro.trec;
 import java.util.logging.Logger;
 import java.util.TreeMap;
 import java.util.Iterator;
+import java.util.List;
+import cz.pecina.retro.common.Application;
 
 /**
  * Common constants and utilities for PMD 85 specific formats.
@@ -30,11 +32,32 @@ import java.util.Iterator;
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class PMD {
+public final class PMD {
 
   // static logger
   private static final Logger log =
     Logger.getLogger(PMD.class.getName());
+
+  /**
+   * Slot duration in clock cycles.
+   */
+  public static final long SLOT = 0x6ab;
+
+  /**
+   * Calculates a plain one-byte checksum over a part of a list.
+   *
+   * @param  list the list to be processed
+   * @return the checksum
+   */
+  public static byte checkSum(final List<Byte> list,
+			      final int start,
+			      final int length) {
+    byte s = 0;
+    for (int i = 0; i < length; i++) {
+      s += list.get(start + i) & 0xff;
+    }
+    return s;
+  }
 
   /**
    * Splits a tape into bytes.
@@ -44,7 +67,6 @@ public class PMD {
    */
   public static TreeMap<Long,Byte> splitTape(final Tape tape) {
     log.fine("Splitting tape into bytes");
-    final long SLOT = 0x6ab;
     final TreeMap<Long,Byte> map = new TreeMap<>();
     final Iterator<Long> keys = tape.keySet().iterator();
     int state = 0, bit = 0, buffer = 0;
@@ -135,70 +157,101 @@ public class PMD {
   /**
    * Writes a pause to the tape.
    *
-   * @param  tape       the tape
-   * @param  start      the starting position
-   * @param  tapeLength the tape length in system clock cycles
-   * @param  length     the pause duration in system clock cycles
-   * @return            the new position
+   * @param  tape   the tape
+   * @param  start  the starting position
+   * @param  ifc    the tape recorder interface object
+   * @param  length the pause duration in system clock cycles
+   * @return        the new position
    */
-  public static long longPause(final Tape tape,
-			       final long start,
-			       final long tapeLength,
-			       final long length
-			       ) throws TapeException {
-    log.fine("Writing long pause");
-    final long p = start 
-    if (p > tapeLength) {
-      throw new TapeException(Application.getString(this, "error.tapeFull"));
+  public static long pause(final Tape tape,
+			   final long start,
+			   final TapeRecorderInterface ifc,
+			   final long length
+			   ) throws TapeException {
+    log.fine("Writing pause of length: " + length);
+    final long p = start + ((length * ifc.tapeSampleRate) / 1000); 
+    if (p > ifc.getMaxTapeLength()) {
+      throw new TapeException(Application.getString(PMD.class,
+						    "error.tapeFull"));
+    }
+    return p;
   }
   
   /**
    * Writes a long pause (2500ms) to the tape.
    *
-   * @param  tape       the tape
-   * @param  start      the starting position
-   * @param  tapeLength the tape length in system clock cycles
-   * @return            the new position
+   * @param  tape  the tape
+   * @param  start the starting position
+   * @param  ifc   the tape recorder interface object
+   * @return       the new position
    */
   public static long longPause(final Tape tape,
 			       final long start,
-			       final long tapeLength
+			       final TapeRecorderInterface ifc
 			       ) throws TapeException {
     log.fine("Writing long pause");
-    pause(tape, start, tapeLength, 2500);
+    return pause(tape, start, ifc, 2500);
   }
   
   /**
    * Writes a short pause (500ms) to the tape.
    *
-   * @param  tape       the tape
-   * @param  start      the starting position
-   * @param  tapeLength the tape length in system clock cycles
-   * @return            the new position
+   * @param  tape  the tape
+   * @param  start the starting position
+   * @param  ifc   the tape recorder interface object
+   * @return       the new position
    */
   public static long shortPause(final Tape tape,
 				final long start,
-				final long tapeLength
+				final TapeRecorderInterface ifc
 				) throws TapeException {
     log.fine("Writing short pause");
-    pause(tape, start, 500);
+    return pause(tape, start, ifc, 500);
   }
   
   /**
-   * Splits a tape into bytes.
+   * Writes a list of bytes to the tape.
    *
-   * @param  tape       the tape
-   * @param  start      the starting position
-   * @param  tapeLength the tape length in system clock cycles
-   * @param  bytes      the array of bytes to be written
-   * @return            the new position
+   * @param  tape  the tape
+   * @param  start the starting position
+   * @param  ifc   the tape recorder interface object
+   * @param  bytes a list of bytes to be written
+   * @return       the new position
    */
   public static long write(final Tape tape,
 			   final long start,
-			   final long tapeLength,
-			   final byte[] bytes
+			   final TapeRecorderInterface ifc,
+			   final List<Byte> bytes
 			   ) throws TapeException {
-    log.fine("Writing " + bytes.length + "to tape");
+    log.fine("Writing " + bytes.size() + " byte(s) to tape");
+    long pos = start, p = 0;
+    for (byte b: bytes) {
+      log.finest(String.format("Writing byte: 0x%02x", b));
+      if ((pos + (11 * SLOT)) > ifc.getMaxTapeLength()) {
+	throw new TapeException(Application.getString(PMD.class,
+						      "error.tapeFull"));
+      }
+      int s = ((b & 0xff) | 0x0300) << 1;
+      int l = 1, ctr = 0;
+      while (s != 0) {
+	final int n = s & 1;
+	if (n != l) {
+	  if (n == 0) {
+	    p = pos;
+	  } else {
+	    tape.put(p, ctr * SLOT);
+	  }
+	  ctr = 0;
+	  l = n;
+	}
+	pos += SLOT;
+	ctr++;
+	s >>= 1;
+      }
+    }
+    return pos;
   }
-  
+
+  // default constructor disabled
+  private PMD () {};
 }

@@ -112,10 +112,17 @@ public class PMDTAPE extends TapeProcessor {
       log.fine("Error, reading failed, exception: " + exception);
       throw Application.createError(this, "PMDTAPERead");
     }
-    
-    int remains = list.size();
+
+    // clear tape
+    tape.clear();
+
+    // for all header and blocks
+    int pointer = 0;
     long currPosition = 0;
-    while (remains > 0) {
+    log.finer("List size: " + list.size());
+    while (pointer < list.size()) {
+
+      // get header
       PMDHeader header;
       try {
 	header = new PMDHeader(list, 0, list.size());
@@ -123,24 +130,58 @@ public class PMDTAPE extends TapeProcessor {
 	log.fine("Failed, exception: " + exception.getMessage());
 	throw new RuntimeException(exception.getMessage());
       }
-      currPosition = PMD.longPause(tape,
-				   currPosition,
-				   tapeRecorderInterface.getMaxTapeLength());
-      currPosition = PMD.write(tape,
-			       currPosition,
-			       tapeRecorderInterface.getMaxTapeLength(),
-			       header.getBytes());
-      currPosition = PMD.shortPause(tape,
-				    currPosition,
-				    tapeRecorderInterface.getMaxTapeLength());
-    }
-    
 
-    System.exit(0);
-    
-    tape.clear();
-    
-    
+      // write header
+      try {
+	log.finer("Writing header for block " + header.getFileNumber() +
+		  ", name: '" + header.getFileName() + "'");
+	currPosition = PMD.longPause(tape,
+				     currPosition,
+				     tapeRecorderInterface);
+	currPosition = PMD.write(tape,
+				 currPosition,
+				 tapeRecorderInterface,
+				 header.getBytes());
+	pointer += 63;
+	log.finer("New pointer: " + pointer);
+      } catch (final TapeException exception) {
+	log.fine("Failed, exception: " + exception.getMessage());
+	throw new RuntimeException(exception.getMessage());
+      }
+      log.finer("Header written");
+
+      // write header
+      try {
+	log.finer("Writing block " + header.getFileNumber() +
+		  ", name: '" + header.getFileName() + "'");
+	int blockLength =  header.getFileLength();
+	log.finest(String.format("pointer: %d blockLength: %d list.size(): %d", pointer, blockLength, list.size()));
+	if ((pointer + blockLength) >= list.size()) {
+	  log.fine("Size mismatch");
+	  throw Application.createError(this, "PMDTAPERead.notEnoughData");
+	}
+	if (list.get(pointer + blockLength) !=
+	    PMD.checkSum(list, pointer, blockLength)) {
+	  log.fine("Bad checksum");
+	  throw Application.createError(this, "PMDTAPERead.notEnoughData");
+	}
+	blockLength++;
+	currPosition = PMD.shortPause(tape,
+				      currPosition,
+				      tapeRecorderInterface);
+	currPosition = PMD.write(tape,
+				 currPosition,
+				 tapeRecorderInterface,
+				 list.subList(pointer, pointer + blockLength));
+	pointer += blockLength;
+	log.finer("New pointer: " + pointer);
+      } catch (final TapeException exception) {
+	log.fine("Failed, exception: " + exception.getMessage());
+	throw new RuntimeException(exception.getMessage());
+      }
+      log.finer("Block written");
+      
+    }
     log.finer("Reading completed");
   }
 }

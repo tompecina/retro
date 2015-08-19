@@ -22,6 +22,7 @@ package cz.pecina.retro.trec;
 
 import java.util.logging.Logger;
 import java.util.List;
+import java.util.ArrayList;
 import cz.pecina.retro.common.Application;
 
 /**
@@ -51,6 +52,9 @@ public class PMDHeader {
   // file name
   private String fileName;
 
+  // list of bytes in the header
+  private final List<Byte> bytes = new ArrayList<>();
+  
   // check leader
   private boolean checkLeader(final List<Byte> list,
 			      final int start,
@@ -62,17 +66,6 @@ public class PMDHeader {
       }
     }
     return true;
-  }
-
-  // check sum
-  private byte checkSum(final List<Byte> list,
-			final int start,
-			final int length) {
-    byte s = 0;
-    for (int i = 0; i < length; i++) {
-      s += list.get(start + i) & 0xff;
-    }
-    return s;
   }
 
   /**
@@ -94,6 +87,11 @@ public class PMDHeader {
         .getString(this, "error.PMDTAPERead.notEnoughData"));
     }
     log.finest("Length ok");
+
+    for (int i = 0; i < 63; i++) {
+      bytes.add(list.get(offset + i));
+    }
+    log.finest("Copy of header made and saved");
     
     if (!(checkLeader(list, offset + 0, 0x10, (byte)0xff) &&
 	  checkLeader(list, offset + 0x10, 0x10, (byte)0x00) &&
@@ -128,7 +126,7 @@ public class PMDHeader {
     fileName = s.toString().trim();
     log.finest("File name: " + fileName);
     
-    if (checkSum(list, offset + 0x30, 0x0e) != list.get(offset + 0x3e)) {
+    if (PMD.checkSum(list, offset + 0x30, 0x0e) != list.get(offset + 0x3e)) {
       throw new TapeException(Application
         .getString(this, "error.PMDTAPERead.notEnoughData"));
     }
@@ -180,5 +178,14 @@ public class PMDHeader {
    */
   public String getFileName() {
     return fileName;
+  }
+
+  /**
+   * Gets the list of bytes in the header
+   *
+   * @return the list of bytes
+   */
+  public List<Byte> getBytes() {
+    return bytes;
   }
 }
