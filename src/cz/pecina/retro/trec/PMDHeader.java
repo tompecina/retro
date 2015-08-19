@@ -74,7 +74,7 @@ public class PMDHeader {
     }
     return s;
   }
-    
+
   /**
    * Constructs a new PMD 85 tape header.
    *
@@ -91,39 +91,48 @@ public class PMDHeader {
     
     if (length < 63) {
       throw new TapeException(Application
-        .getString(this, "PMDTAPERead.notEnoughData"));
+        .getString(this, "error.PMDTAPERead.notEnoughData"));
     }
+    log.finest("Length ok");
+    
     if (!(checkLeader(list, offset + 0, 0x10, (byte)0xff) &&
 	  checkLeader(list, offset + 0x10, 0x10, (byte)0x00) &&
 	  checkLeader(list, offset + 0x20, 0x10, (byte)0x55))) {
       throw new TapeException(Application
-        .getString(this, "PMDTAPERead.notEnoughData"));
+        .getString(this, "error.PMDTAPERead.notEnoughData"));
     }
+    log.finest("Leader ok");
     
     fileNumber = list.get(offset + 0x30) & 0xff;
     if (fileNumber > 99) {
       throw new TapeException(Application
-        .getString(this, "PMDTAPERead.notEnoughData"));
+        .getString(this, "error.PMDTAPERead.notEnoughData"));
     }
+    log.finest("File number: " + fileNumber);
 
     fileType = list.get(offset + 0x31) & 0xff;
+    log.finest("File type: " + fileType);
     
     startAddress = ((list.get(offset + 0x33) & 0xff) << 8) +
       (list.get(offset + 0x32) & 0xff);
-    
+    log.finest(String.format("Start address: 0x%04x", startAddress));
+
     fileLength = ((list.get(offset + 0x35) & 0xff) << 8) +
       (list.get(offset + 0x34) & 0xff) + 1;
+    log.finest(String.format("File length: 0x%04x", fileLength));
     
     final StringBuilder s = new StringBuilder();;
     for (int i = 0x36; i < 0x3e; i++) {
-      s.append((char)list.get(offset + 0x34));
+      s.append((char)(list.get(offset + 0x34) & 0xff));
     }
     fileName = s.toString().trim();
+    log.finest("File name: " + fileName);
     
-    if (checkSum(list, offset + 0x30, 0x0e) != list.get(offset + 0x3f)) {
+    if (checkSum(list, offset + 0x30, 0x0e) != list.get(offset + 0x3e)) {
       throw new TapeException(Application
-        .getString(this, "PMDTAPERead.notEnoughData"));
+        .getString(this, "error.PMDTAPERead.notEnoughData"));
     }
+    log.finest("Checksum ok");
     
     log.finer("New PMD tape header set up");
   }
@@ -163,6 +172,7 @@ public class PMDHeader {
   public int getFileLength() {
     return fileLength;
   }
+
   /**
    * Gets the file name
    *

@@ -113,13 +113,18 @@ public class PMDTAPE extends TapeProcessor {
       throw Application.createError(this, "PMDTAPERead");
     }
 
-    final PMDHeader header = new PMDHeader(list, 0, list.size());
+    try {
+      final PMDHeader header = new PMDHeader(list, 0, list.size());
+    } catch (final TapeException exception) {
+      log.fine("Exception: " + exception.getMessage());
+      throw new RuntimeException(exception.getMessage());
+    }
 
     System.exit(0);
     
     tape.clear();
     
     
-    log.fine("Reading completed");
+    log.finer("Reading completed");
   }
 }
