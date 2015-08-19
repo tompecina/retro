@@ -85,8 +85,8 @@ public class PMDHeader {
    */
   public PMDHeader(final List<Byte> list,
 		   final int offset,
-		   final int length)
-    throws TapeException {
+		   final int length
+		   ) throws TapeException {
     log.fine("Creating new PMD tape header");
     
     if (length < 63) {

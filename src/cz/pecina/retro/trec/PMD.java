@@ -40,7 +40,7 @@ public class PMD {
    * Splits a tape into bytes.
    *
    * @param  tape the tape to be processed
-   * @return      
+   * @return a <code>TreeMap</code> tree of bytes and positions      
    */
   public static TreeMap<Long,Byte> splitTape(final Tape tape) {
     log.fine("Splitting tape into bytes");
@@ -131,4 +131,74 @@ public class PMD {
       }
     }
   }
+
+  /**
+   * Writes a pause to the tape.
+   *
+   * @param  tape       the tape
+   * @param  start      the starting position
+   * @param  tapeLength the tape length in system clock cycles
+   * @param  length     the pause duration in system clock cycles
+   * @return            the new position
+   */
+  public static long longPause(final Tape tape,
+			       final long start,
+			       final long tapeLength,
+			       final long length
+			       ) throws TapeException {
+    log.fine("Writing long pause");
+    final long p = start 
+    if (p > tapeLength) {
+      throw new TapeException(Application.getString(this, "error.tapeFull"));
+  }
+  
+  /**
+   * Writes a long pause (2500ms) to the tape.
+   *
+   * @param  tape       the tape
+   * @param  start      the starting position
+   * @param  tapeLength the tape length in system clock cycles
+   * @return            the new position
+   */
+  public static long longPause(final Tape tape,
+			       final long start,
+			       final long tapeLength
+			       ) throws TapeException {
+    log.fine("Writing long pause");
+    pause(tape, start, tapeLength, 2500);
+  }
+  
+  /**
+   * Writes a short pause (500ms) to the tape.
+   *
+   * @param  tape       the tape
+   * @param  start      the starting position
+   * @param  tapeLength the tape length in system clock cycles
+   * @return            the new position
+   */
+  public static long shortPause(final Tape tape,
+				final long start,
+				final long tapeLength
+				) throws TapeException {
+    log.fine("Writing short pause");
+    pause(tape, start, 500);
+  }
+  
+  /**
+   * Splits a tape into bytes.
+   *
+   * @param  tape       the tape
+   * @param  start      the starting position
+   * @param  tapeLength the tape length in system clock cycles
+   * @param  bytes      the array of bytes to be written
+   * @return            the new position
+   */
+  public static long write(final Tape tape,
+			   final long start,
+			   final long tapeLength,
+			   final byte[] bytes
+			   ) throws TapeException {
+    log.fine("Writing " + bytes.length + "to tape");
+  }
+  
 }

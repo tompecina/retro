@@ -85,7 +85,7 @@ public class PMDTAPE extends TapeProcessor {
 	first = false;
       }
       writer.write("]");
-    } catch (Exception exception) {
+    } catch (final Exception exception) {
       log.fine("Error, writing failed, exception: " + exception);
       throw Application.createError(this, "PMITAPEWrite");
     }
@@ -108,17 +108,33 @@ public class PMDTAPE extends TapeProcessor {
 	log.finest("Reading byte: " + b);
 	list.add((byte)b);
       }
-    } catch (Exception exception) {
+    } catch (final Exception exception) {
       log.fine("Error, reading failed, exception: " + exception);
       throw Application.createError(this, "PMDTAPERead");
     }
-
-    try {
-      final PMDHeader header = new PMDHeader(list, 0, list.size());
-    } catch (final TapeException exception) {
-      log.fine("Exception: " + exception.getMessage());
-      throw new RuntimeException(exception.getMessage());
+    
+    int remains = list.size();
+    long currPosition = 0;
+    while (remains > 0) {
+      PMDHeader header;
+      try {
+	header = new PMDHeader(list, 0, list.size());
+      } catch (final TapeException exception) {
+	log.fine("Failed, exception: " + exception.getMessage());
+	throw new RuntimeException(exception.getMessage());
+      }
+      currPosition = PMD.longPause(tape,
+				   currPosition,
+				   tapeRecorderInterface.getMaxTapeLength());
+      currPosition = PMD.write(tape,
+			       currPosition,
+			       tapeRecorderInterface.getMaxTapeLength(),
+			       header.getBytes());
+      currPosition = PMD.shortPause(tape,
+				    currPosition,
+				    tapeRecorderInterface.getMaxTapeLength());
     }
+    
 
     System.exit(0);
     
