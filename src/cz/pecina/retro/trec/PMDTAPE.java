@@ -1,4 +1,4 @@
-/* PMITAPE.java
+/* PMDTAPE.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -22,103 +22,104 @@ package cz.pecina.retro.trec;
 
 import java.util.logging.Logger;
 import java.util.Scanner;
+import java.util.TreeMap;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.File;
 import java.io.FileWriter;
 import cz.pecina.retro.common.Application;
 
 /**
- * PMITAPE format reader/writer.
+ * PMDTAPE format reader/writer.
  * <p>
- * PMITAPE is a proprietary ASCII format developed by Martin Malý for
- * Tesla PMI-80.  The tape data is stored as a series of comma-separated
- * integers indicating time intervals between consecutive edges, measured
- * in CPU cycles.  It starts from the quiescent state of the tape recorder
- * interface.  The series is enclosed in square brackets.
+ * PMDTAPE is a proprietary ASCII format developed by Martin Malý for
+ * Tesla PMD 85.  The tape data is stored as a series of comma-separated
+ * integers indicating the characters, without any indicaiton of the
+ * characters' position on the tape.  The series is enclosed in
+ *  square brackets.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class PMITAPE extends TapeProcessor {
+public class PMDTAPE extends TapeProcessor {
 
   // static logger
   private static final Logger log =
-    Logger.getLogger(PMITAPE.class.getName());
+    Logger.getLogger(PMDTAPE.class.getName());
 
   // the tape recorder interface
   private TapeRecorderInterface tapeRecorderInterface;
   
   /**
-   * Creates an instance of PMITAPE format reader/writer.
+   * Creates an instance of PMDTAPE format reader/writer.
    *
    * @param tape                  the tape to operate on
    * @param tapeRecorderInterface the tape recorder interface object
    */
-  public PMITAPE(final Tape tape,
+  public PMDTAPE(final Tape tape,
 		 final TapeRecorderInterface tapeRecorderInterface) {
     super(tape);
     this.tapeRecorderInterface = tapeRecorderInterface;
-    log.fine("New PMITAPE created");
+    log.fine("New PMDTAPE created");
   }
 
   /**
-   * Writes the tape to a file in PMITAPE format.
+   * Writes the tape to a file in PMDTAPE format.
    *
    * @param file output file
    */
   public void write(final File file) {
-    log.fine("Writing PMITAPE-formatted data to a file, file: " + file);
-    long currPos = -1;
+    log.fine("Writing PMDTAPE-formatted data to a file, file: " + file);
+    assert file != null;
+    
+    final TreeMap<Long,Byte> map = PMD.splitTape(tape);
+    if (map == null) {
+      log.fine("Error, writing failed");
+      throw Application.createError(this, "PMDTAPEWrite.incompatible");
+    }
     try (final FileWriter writer = new FileWriter(file)) {
-      for (long start: tape.navigableKeySet()) {
-	final long duration = tape.get(start);
-	if ((start > currPos) &&
-	    (duration > 0) &&
-	    ((start + duration) <= tapeRecorderInterface.getMaxTapeLength())) {
-	  writer.write((currPos < 0) ? "[" : ",");
-	  final long gap = start - ((currPos < 0) ? 0 : currPos);
-	  writer.write(gap + "," + duration);
-	  log.finest(String.format("Write: (%d, %d)", gap, duration));
-	  currPos = start + duration;
-	}	    
-      }	
+      boolean first = true;
+      for (long pos: map.keySet()) {
+	writer.write(first ? "[" : ",");
+	writer.write(String.format("%d", (map.get(pos) & 0xff)));
+	first = false;
+      }
       writer.write("]");
     } catch (Exception exception) {
       log.fine("Error, writing failed, exception: " + exception);
       throw Application.createError(this, "PMITAPEWrite");
     }
+
     log.fine("Writing completed");
   }
 
   /**
-   * Reads the tape from a file in PMITAPE format.
+   * Reads the tape from a file in PMDTAPE format.
    *
    * @param file input file
    */
   public void read(final File file) {
-    log.fine("Reading PMITAPE-formatted data from a file, file: " + file);
-    long currPos = 0;
-    tape.clear();
+    log.fine("Reading PMDTAPE-formatted data from a file, file: " + file);
+    final List<Byte> list = new ArrayList<>();
     try (final Scanner scanner =
 	 new Scanner(file).useDelimiter("\\s*[\\[\\],]\\s*")) {
-      while (scanner.hasNextLong()) {
-	final long start = scanner.nextLong();
-	final long duration = scanner.nextLong();
-	if ((duration <= 0) ||
-	    ((currPos + start + duration) >
-	     tapeRecorderInterface.getMaxTapeLength())) {
-	  log.fine("Error, reading failed");
-	  throw Application.createError(this, "PMITAPE");
-	}
-	tape.put(start + currPos, duration);
-	log.finest(String.format("Read: (%d, %d)",
-				 start + currPos,
-				 duration));
-	currPos += start + duration;
+      while (scanner.hasNextInt()) {
+	final int b = scanner.nextInt();
+	log.finest("Reading byte: " + b);
+	list.add((byte)b);
       }
     } catch (Exception exception) {
       log.fine("Error, reading failed, exception: " + exception);
-      throw Application.createError(this, "PMITAPERead");
+      throw Application.createError(this, "PMDTAPERead");
     }
+
+    final PMDHeader header = new PMDHeader(list, 0, list.size());
+
+    System.exit(0);
+    
+    tape.clear();
+    
+    
     log.fine("Reading completed");
   }
 }

@@ -357,9 +357,9 @@ public class Intel8251A extends Device implements IOElement {
 		  txdPin.notifyChangeNode();
 		  txcCountDown = getTicks();
 		  if (sbits == 1) {
-		    txcCountDown += getHalfTicks();
+		    txcCountDown += getHalfTicks() + 1;
 		  } else if (sbits == 2) {
-		    txcCountDown += getTicks();
+		    txcCountDown += getTicks() + 1;
 		  }
 		  tState++;
 		  break;
@@ -1218,9 +1218,10 @@ public class Intel8251A extends Device implements IOElement {
 	    brf = (data & 0x03) - 1;
 	    log.finer("Baud rate factor set to: " + brf + " (" + BRM[brf] + "x)");
 	    sbits = (data >> 6) & 0x03;
-	    if (sbits-- == 0) {
+	    if (sbits == 0) {
 	      log.fine("Illegal number of stop bits");
-	      sbits = 0;
+	    } else {
+	      sbits--;
 	    }
 	    log.finer("Number of stop bits set to: " +
 		      (new String[] {"1", "1 1/2", "2"})[sbits]);
