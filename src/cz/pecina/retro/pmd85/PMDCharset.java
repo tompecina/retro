@@ -32,6 +32,9 @@ import java.nio.charset.CoderResult;
 
 /**
  * The charset used by Tesla PMD 85.
+ * <p>
+ * It is a subset of KOI8-CS enhanced with some extra characters (five Greek
+ * letters, integral sign, selected block characters).
  *
  * @author @AUTHOR@
  * @version @VERSION@

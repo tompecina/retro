@@ -81,7 +81,7 @@ public class PTP extends TapeProcessor {
 
     // convert tape to byte map
     log.fine("Creating byte map");
-    final TreeMap<Long,Byte> map = PMD.splitTape(tape);
+    final TreeMap<Long,Byte> map = PMDUtil.splitTape(tape);
     if (map == null) {
       log.fine("Error, writing failed");
       throw Application.createError(this, "PTPWrite.incompatible");
@@ -187,13 +187,13 @@ public class PTP extends TapeProcessor {
 	try {
 	  log.finer("Writing header for block " + header.getFileNumber() +
 		    ", name: '" + header.getFileName() + "'");
-	  currPosition = PMD.longPause(tape,
+	  currPosition = PMDUtil.longPause(tape,
+					   currPosition,
+					   tapeRecorderInterface);
+	  currPosition = PMDUtil.write(tape,
 				       currPosition,
-				       tapeRecorderInterface);
-	  currPosition = PMD.write(tape,
-				   currPosition,
-				   tapeRecorderInterface,
-				   header.getBytes());
+				       tapeRecorderInterface,
+				       header.getBytes());
 	  log.finer("New pointer: " + pointer);
 	} catch (final TapeException exception) {
 	  log.fine("Failed, exception: " + exception.getMessage());
@@ -230,7 +230,7 @@ public class PTP extends TapeProcessor {
 
 	// test the checksum
 	if (list.get(blockLength - 1) !=
-	    PMD.checkSum(list, 0, blockLength - 1)) {
+	    PMDUtil.checkSum(list, 0, blockLength - 1)) {
 	  log.fine("Bad checksum");
 	  throw Application.createError(this, "PTP");
 	}
@@ -240,13 +240,13 @@ public class PTP extends TapeProcessor {
 	try {
 	  log.finer("Writing block " + header.getFileNumber() +
 		    ", name: '" + header.getFileName() + "'");
-	  currPosition = PMD.shortPause(tape,
-					currPosition,
-					tapeRecorderInterface);
-	  currPosition = PMD.write(tape,
-				   currPosition,
-				   tapeRecorderInterface,
-				   list);
+	  currPosition = PMDUtil.shortPause(tape,
+					    currPosition,
+					    tapeRecorderInterface);
+	  currPosition = PMDUtil.write(tape,
+				       currPosition,
+				       tapeRecorderInterface,
+				       list);
 	  log.finer("New pointer: " + pointer);
 	} catch (final TapeException exception) {
 	  log.fine("Failed, exception: " + exception.getMessage());
@@ -259,13 +259,13 @@ public class PTP extends TapeProcessor {
 	// write custom type block
 	try {
 	  log.finer("Writing custom type block");
-	  currPosition = PMD.longPause(tape,
+	  currPosition = PMDUtil.longPause(tape,
+					   currPosition,
+					   tapeRecorderInterface);
+	  currPosition = PMDUtil.write(tape,
 				       currPosition,
-				       tapeRecorderInterface);
-	  currPosition = PMD.write(tape,
-				   currPosition,
-				   tapeRecorderInterface,
-				   list);
+				       tapeRecorderInterface,
+				       list);
 	  log.finer("New pointer: " + pointer);
 	} catch (final TapeException exception) {
 	  log.fine("Failed, exception: " + exception.getMessage());

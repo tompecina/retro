@@ -1,4 +1,4 @@
-/* PMD.java
+/* PMDUtil.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -32,11 +32,11 @@ import cz.pecina.retro.common.Application;
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public final class PMD {
+public final class PMDUtil {
 
   // static logger
   private static final Logger log =
-    Logger.getLogger(PMD.class.getName());
+    Logger.getLogger(PMDUtil.class.getName());
 
   /**
    * Slot duration in clock cycles.
@@ -171,7 +171,7 @@ public final class PMD {
     log.fine("Writing pause of length: " + length);
     final long p = start + ((length * ifc.tapeSampleRate) / 1000); 
     if (p > ifc.getMaxTapeLength()) {
-      throw new TapeException(Application.getString(PMD.class,
+      throw new TapeException(Application.getString(PMDUtil.class,
 						    "error.tapeFull"));
     }
     return p;
@@ -228,7 +228,7 @@ public final class PMD {
     for (byte b: bytes) {
       log.finest(String.format("Writing byte: 0x%02x", b));
       if ((pos + (11 * SLOT)) > ifc.getMaxTapeLength()) {
-	throw new TapeException(Application.getString(PMD.class,
+	throw new TapeException(Application.getString(PMDUtil.class,
 						      "error.tapeFull"));
       }
       int s = ((b & 0xff) | 0x0300) << 1;
@@ -253,5 +253,5 @@ public final class PMD {
   }
 
   // default constructor disabled
-  private PMD () {};
+  private PMDUtil () {};
 }

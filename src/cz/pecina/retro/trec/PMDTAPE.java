@@ -77,7 +77,7 @@ public class PMDTAPE extends TapeProcessor {
     log.fine("Writing PMDTAPE-formatted data to a file, file: " + file);
     assert file != null;
     
-    final TreeMap<Long,Byte> map = PMD.splitTape(tape);
+    final TreeMap<Long,Byte> map = PMDUtil.splitTape(tape);
     if (map == null) {
       log.fine("Error, writing failed");
       throw Application.createError(this, "PMDTAPEWrite.incompatible");
@@ -140,13 +140,13 @@ public class PMDTAPE extends TapeProcessor {
       try {
 	log.finer("Writing header for block " + header.getFileNumber() +
 		  ", name: '" + header.getFileName() + "'");
-	currPosition = PMD.longPause(tape,
+	currPosition = PMDUtil.longPause(tape,
+					 currPosition,
+					 tapeRecorderInterface);
+	currPosition = PMDUtil.write(tape,
 				     currPosition,
-				     tapeRecorderInterface);
-	currPosition = PMD.write(tape,
-				 currPosition,
-				 tapeRecorderInterface,
-				 header.getBytes());
+				     tapeRecorderInterface,
+				     header.getBytes());
 	pointer += 63;
 	log.finer("New pointer: " + pointer);
       } catch (final TapeException exception) {
@@ -165,18 +165,19 @@ public class PMDTAPE extends TapeProcessor {
 	  throw Application.createError(this, "PMDTAPERead.notEnoughData");
 	}
 	if (list.get(pointer + blockLength) !=
-	    PMD.checkSum(list, pointer, blockLength)) {
+	    PMDUtil.checkSum(list, pointer, blockLength)) {
 	  log.fine("Bad checksum");
 	  throw Application.createError(this, "PMDTAPERead.notEnoughData");
 	}
 	blockLength++;
-	currPosition = PMD.shortPause(tape,
-				      currPosition,
-				      tapeRecorderInterface);
-	currPosition = PMD.write(tape,
-				 currPosition,
-				 tapeRecorderInterface,
-				 list.subList(pointer, pointer + blockLength));
+	currPosition = PMDUtil.shortPause(tape,
+					  currPosition,
+					  tapeRecorderInterface);
+	currPosition = PMDUtil.write(
+	  tape,
+	  currPosition,
+	  tapeRecorderInterface,
+	  list.subList(pointer, pointer + blockLength));
 	pointer += blockLength;
 	log.finer("New pointer: " + pointer);
       } catch (final TapeException exception) {
