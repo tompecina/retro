@@ -36,7 +36,7 @@ import cz.pecina.retro.common.Application;
  * PMDTAPE is a proprietary ASCII format developed by Martin Malý for
  * Tesla PMD 85.  The tape data is stored as a series of comma-separated
  * integers indicating the characters, without any indicaiton of the
- * characters' position on the tape.  The series is enclosed in square
+ * character's position on the tape.  The series is enclosed in square
  * brackets.  PMDTAPE is less versatile than the internal format of PMD85,
  * which can only be truly represented in XML and PMT formats.  Therefore,
  * all PMDTAPE files can be imported into the PMD85 emulator, export is
@@ -77,11 +77,15 @@ public class PMDTAPE extends TapeProcessor {
     log.fine("Writing PMDTAPE-formatted data to a file, file: " + file);
     assert file != null;
     
+    // convert tape to byte map
     final TreeMap<Long,Byte> map = PMDUtil.splitTape(tape);
     if (map == null) {
       log.fine("Error, writing failed");
       throw Application.createError(this, "PMDTAPEWrite.incompatible");
     }
+    log.finer("Byte map created");
+
+    // write the bytes
     try (final FileWriter writer = new FileWriter(file)) {
       boolean first = true;
       for (long pos: map.keySet()) {

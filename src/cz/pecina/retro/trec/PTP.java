@@ -79,7 +79,7 @@ public class PTP extends TapeProcessor {
     log.fine("Writing PTP-formatted data to a file, file: " + file);
     assert file != null;
 
-    // convert tape to byte map
+    // convert tape into byte map
     log.fine("Creating byte map");
     final TreeMap<Long,Byte> map = PMDUtil.splitTape(tape);
     if (map == null) {
@@ -88,7 +88,7 @@ public class PTP extends TapeProcessor {
     }
     log.finer("Byte map created");
     
-    // split tape into presumable blocks
+    // split the tape into blocks
     final long GAP = tapeRecorderInterface.tapeSampleRate / 10;  // 100ms
     final List<List<Long>> lists = new ArrayList<>();
     {
@@ -110,12 +110,49 @@ public class PTP extends TapeProcessor {
     }
     log.finer("List split up");
 
+    // check for headers and add extra block if body is shorter than
+    // indicated by the header
+    for (int i = 0; i < lists.size() - 1; i++) {
+
+      // only process eligible candidates
+      if (lists.get(i).size() != 63) {
+	continue;
+      }
+
+      // check for header
+      boolean isHeader = true;
+      PMDHeader header = null;
+      final List<Byte> headerData = new ArrayList<>();
+      for (long l: lists.get(i)) {
+	headerData.add(map.get(l));
+      }
+      try {
+	header = new PMDHeader(headerData, 0, 63);
+      } catch (final TapeException exception) {
+	isHeader = false;
+      }
+
+      // check the size of the following block
+      final List<Long> oldBody = lists.get(i + 1);
+      if (isHeader && (oldBody.size() > (header.getBodyLength() + 1))) {
+	final List<Long> newBody =
+	  oldBody.subList(0, header.getBodyLength() + 1);
+	final List<Long> newBlock =
+	  oldBody.subList(header.getBodyLength() + 1, oldBody.size());
+	lists.remove(i + 1);
+	lists.add(i + 1, newBody);
+	lists.add(i + 2, newBlock);
+	log.finer("Additional block inserted at position " + (i + 1));
+      }
+    }
+    log.finer("All additional blocks inserted");
+    
     // process blocks
     try (OutputStream out = new FileOutputStream(file)) {
       for (List<Long> list: lists) {
-	final int blockSize = list.size();
-	out.write(blockSize & 0xff);
-	out.write(blockSize >> 8);
+	final int blockLength = list.size();
+	out.write(blockLength & 0xff);
+	out.write(blockLength >> 8);
 	for (long pos: list) {
 	  out.write(map.get(pos));
 	}
@@ -173,7 +210,7 @@ public class PTP extends TapeProcessor {
 	list.add(bytes[pointer++]);
       }
       
-      // check if header
+      // check for header
       boolean isHeader = true;
       PMDHeader header = null;
       try {
