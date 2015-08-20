@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import java.util.TreeMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 import cz.pecina.retro.common.Application;
 
 /**
@@ -47,11 +48,12 @@ public final class PMDUtil {
    * Calculates a plain one-byte checksum over a part of a list.
    *
    * @param  list the list to be processed
-   * @return the checksum
+   * @return      the checksum
    */
   public static byte checkSum(final List<Byte> list,
 			      final int start,
 			      final int length) {
+    log.fine("Calculating check sum for a sequence of length: " + length);
     byte s = 0;
     for (int i = 0; i < length; i++) {
       s += list.get(start + i) & 0xff;
@@ -63,7 +65,7 @@ public final class PMDUtil {
    * Splits a tape into bytes.
    *
    * @param  tape the tape to be processed
-   * @return a <code>TreeMap</code> tree of bytes and positions      
+   * @return      a <code>TreeMap</code> tree of bytes and positions      
    */
   public static TreeMap<Long,Byte> splitTape(final Tape tape) {
     log.fine("Splitting tape into bytes");
@@ -155,13 +157,102 @@ public final class PMDUtil {
   }
 
   /**
+   * Splits a list of bytes into PMD 85 blocks.
+   *
+   * @param  map a <code>TreeMap</code> of bytes to be processed
+   * @param  ifc the tape recorder interface object
+   * @return     a list of PMD 85 blocks
+   */
+  public static List<PMDBlock> splitBytes(final TreeMap<Long,Byte> map,
+					  final TapeRecorderInterface ifc) {
+    log.fine("Splitting list into blocks");
+
+    // find gaps between bytes
+    final long GAP = ifc.tapeSampleRate / 10;  // 100ms
+    final List<List<Long>> lists = new ArrayList<>();
+    long curr = Long.MIN_VALUE;
+    List<Long> list = null;
+    for (long start: map.keySet()) {
+      if (start > (curr + GAP)) {
+	if (list != null) {
+	  lists.add(list);
+	}
+	list = new ArrayList<Long>();
+      }
+      list.add(start);
+      curr = start;
+    }
+    if (list != null) {
+      lists.add(list);
+    }
+    log.finer("List split up");
+
+    // check for headers and add extra block if body is shorter than
+    // indicated by the header
+    for (int i = 0; i < lists.size() - 1; i++) {
+
+      // only process eligible candidates
+      if (lists.get(i).size() != 63) {
+	continue;
+      }
+
+      // check for header
+      boolean isHeader = false;
+      PMDBlock block = null;
+      final List<Byte> headerData = new ArrayList<>();
+      for (long l: lists.get(i)) {
+	headerData.add(map.get(l));
+      }
+      try {
+	block = createBlock(headerData);
+	isHeader = block instanceof PMDHeader;
+      } catch (final TapeException exception) {
+	isHeader = false;
+      }
+
+      // check the size of the following block
+      if (isHeader) {
+	final PMDHeader header = (PMDHeader)block;
+	final List<Long> oldBody = lists.get(i + 1);
+	if (oldBody.size() > (header.getBodyLength() + 1)) {
+	  final List<Long> newBody =
+	    oldBody.subList(0, header.getBodyLength() + 1);
+	  final List<Long> newBlock =
+	    oldBody.subList(header.getBodyLength() + 1, oldBody.size());
+	  lists.remove(i + 1);
+	  lists.add(i + 1, newBody);
+	  lists.add(i + 2, newBlock);
+	  log.finer("Additional block inserted at position " + (i + 1));
+	}
+      }
+    }
+    log.finer("All additional blocks inserted");
+
+    // convert lists of bytes into blocks
+    final List<PMDBlock> listBlocks = new ArrayList<>();
+    for (List<Long> list2: lists) {
+      final List<Byte> listBytes = new ArrayList<>();
+      for (long l: list2) {
+	listBytes.add(map.get(l));
+      }
+      try {
+	listBlocks.add(createBlock(listBytes));
+      } catch (final TapeException exception) {
+      }  // skip block
+    }
+    log.finer("List of blocks created, size: " + listBlocks.size());
+    return listBlocks;
+  }    
+
+  /**
    * Writes a pause to the tape.
    *
-   * @param  tape   the tape
-   * @param  start  the starting position
-   * @param  ifc    the tape recorder interface object
-   * @param  length the pause duration in system clock cycles
-   * @return        the new position
+   * @param     tape          the tape
+   * @param     start         the starting position
+   * @param     ifc           the tape recorder interface object
+   * @param     length        the pause duration in system clock cycles
+   * @return                  the new position
+   * @exception TapeException if tape full
    */
   public static long pause(final Tape tape,
 			   final long start,
@@ -180,10 +271,11 @@ public final class PMDUtil {
   /**
    * Writes a long pause (2500ms) to the tape.
    *
-   * @param  tape  the tape
-   * @param  start the starting position
-   * @param  ifc   the tape recorder interface object
-   * @return       the new position
+   * @param     tape          the tape
+   * @param     start         the starting position
+   * @param     ifc           the tape recorder interface object
+   * @return                  the new position
+   * @exception TapeException if tape full
    */
   public static long longPause(final Tape tape,
 			       final long start,
@@ -196,10 +288,11 @@ public final class PMDUtil {
   /**
    * Writes a short pause (500ms) to the tape.
    *
-   * @param  tape  the tape
-   * @param  start the starting position
-   * @param  ifc   the tape recorder interface object
-   * @return       the new position
+   * @param     tape          the tape
+   * @param     start         the starting position
+   * @param     ifc           the tape recorder interface object
+   * @return                  the new position
+   * @exception TapeException if tape full
    */
   public static long shortPause(final Tape tape,
 				final long start,
@@ -212,11 +305,12 @@ public final class PMDUtil {
   /**
    * Writes a list of bytes to the tape.
    *
-   * @param  tape  the tape
-   * @param  start the starting position
-   * @param  ifc   the tape recorder interface object
-   * @param  bytes a list of bytes to be written
-   * @return       the new position
+   * @param     tape          the tape
+   * @param     start         the starting position
+   * @param     ifc           the tape recorder interface object
+   * @param     bytes         list of bytes to be written
+   * @return                  the new position
+   * @exception TapeException on error in data
    */
   public static long write(final Tape tape,
 			   final long start,
@@ -252,6 +346,28 @@ public final class PMDUtil {
     return pos;
   }
 
+  /**
+   * Factory method for creating a PMD 85 tape block of appropriate type.
+   *
+   * @param     list          list of input data
+   * @exception TapeException on error in data
+   */
+  public static PMDBlock createBlock(final List<Byte> list
+				     ) throws TapeException {
+    log.fine("Creating PMD block, data size: " + list.size());
+    try {
+      return new PMDHeader(list);
+    } catch (final TapeException exception1) {
+      log.finer("Not a header");
+      try {
+	return new PMDValidBlock(list);
+      } catch (final TapeException exception2) {
+	log.finer("Not a valid block");
+	return new PMDBlock(list);
+      }
+    }
+  }
+    
   // default constructor disabled
   private PMDUtil () {};
 }

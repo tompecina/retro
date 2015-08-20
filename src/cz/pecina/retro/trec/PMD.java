@@ -1,4 +1,4 @@
-/* PMDTAPE.java
+/* PMD.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -21,105 +21,100 @@
 package cz.pecina.retro.trec;
 
 import java.util.logging.Logger;
-import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import cz.pecina.retro.common.Application;
 
 /**
- * PMDTAPE format reader/writer.
+ * PMD format reader/writer.
  * <p>
- * PMDTAPE is a proprietary ASCII format developed by Martin Malý for
- * Tesla PMD 85.  The tape data is stored as a series of comma-separated
- * integers indicating the characters, without any indication of the
- * character's position on the tape.  The series is enclosed in square
- * brackets.  PMDTAPE is less versatile than the internal format of PMD85,
- * which can only be truly represented in XML and PMT formats.  Therefore,
- * all PMDTAPE files can be imported into the PMD85 emulator, export is
+ * PMD is a binary format used widely by older Tesla PMD 85 emulators. The
+ * tape data is stored as a series of bytes, without any indication of the
+ * character's position on the tape.  PMD is less versatile than the internal
+ * format of PMD85, which can only be truly represented in XML and PMT formats.
+ * Therefore, all PMD files can be imported into the PMD85 emulator, export is
  * limited to those tapes that have correct structure of bytes.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class PMDTAPE extends TapeProcessor {
+public class PMD extends TapeProcessor {
 
   // static logger
   private static final Logger log =
-    Logger.getLogger(PMDTAPE.class.getName());
+    Logger.getLogger(PMD.class.getName());
 
   // the tape recorder interface
   private TapeRecorderInterface tapeRecorderInterface;
   
   /**
-   * Creates an instance of PMDTAPE format reader/writer.
+   * Creates an instance of PMD format reader/writer.
    *
    * @param tape                  the tape to operate on
    * @param tapeRecorderInterface the tape recorder interface object
    */
-  public PMDTAPE(final Tape tape,
-		 final TapeRecorderInterface tapeRecorderInterface) {
+  public PMD(final Tape tape,
+	     final TapeRecorderInterface tapeRecorderInterface) {
     super(tape);
     this.tapeRecorderInterface = tapeRecorderInterface;
-    log.fine("New PMDTAPE created");
+    log.fine("New PMD created");
   }
 
   /**
-   * Writes the tape to a file in PMDTAPE format.
+   * Writes the tape to a file in PMD format.
    *
    * @param file output file
    */
   public void write(final File file) {
-    log.fine("Writing PMDTAPE-formatted data to a file, file: " + file);
+    log.fine("Writing PMD-formatted data to a file, file: " + file);
     assert file != null;
     
     // convert tape to byte map
     final TreeMap<Long,Byte> map = PMDUtil.splitTape(tape);
     if (map == null) {
       log.fine("Error, writing failed");
-      throw Application.createError(this, "PMDTAPEWrite.incompatible");
+      throw Application.createError(this, "PMDWrite.incompatible");
     }
     log.finer("Byte map created");
 
     // write the bytes
-    try (final FileWriter writer = new FileWriter(file)) {
-      boolean first = true;
+    try (OutputStream out = new FileOutputStream(file)) {
       for (long pos: map.keySet()) {
-	writer.write(first ? "[" : ",");
-	writer.write(String.format("%d", (map.get(pos) & 0xff)));
-	first = false;
+	out.write(map.get(pos));
       }
-      writer.write("]");
     } catch (final IOException exception) {
       log.fine("Error, writing failed, exception: " + exception);
-      throw Application.createError(this, "PMDTAPEWrite");
+      throw Application.createError(this, "PMDWrite");
     }
 
     log.fine("Writing completed");
   }
 
   /**
-   * Reads the tape from a file in PMDTAPE format.
+   * Reads the tape from a file in PMD format.
    *
    * @param file input file
    */
   public void read(final File file) {
-    log.fine("Reading PMDTAPE-formatted data from a file, file: " + file);
+    log.fine("Reading PMD-formatted data from a file, file: " + file);
 
+    // read data into a list
     final List<Byte> list = new ArrayList<>();
-    try (final Scanner scanner =
-	 new Scanner(file).useDelimiter("\\s*[\\[\\],]\\s*")) {
-      while (scanner.hasNextInt()) {
-	final int b = scanner.nextInt();
-	log.finest("Reading byte: " + b);
+    try (InputStream in = new FileInputStream(file)) {
+      int b;
+      while ((b = in.read()) >= 0) {
 	list.add((byte)b);
       }
     } catch (final IOException exception) {
       log.fine("Error, reading failed, exception: " + exception);
-      throw Application.createError(this, "PMDTAPERead");
+      throw Application.createError(this, "PTPRead");
     }
 
     // clear tape

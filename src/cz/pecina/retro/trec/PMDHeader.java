@@ -26,12 +26,12 @@ import java.util.ArrayList;
 import cz.pecina.retro.common.Application;
 
 /**
- * PMD 85 header file.
+ * PMD 85 tape header.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class PMDHeader {
+public class PMDHeader extends PMDBlock {
 
   // static logger
   private static final Logger log =
@@ -52,9 +52,6 @@ public class PMDHeader {
   // file name
   private String fileName;
 
-  // list of bytes in the header
-  private final List<Byte> bytes = new ArrayList<>();
-  
   // check leader
   private boolean checkLeader(final List<Byte> list,
 			      final int start,
@@ -71,67 +68,63 @@ public class PMDHeader {
   /**
    * Constructs a new PMD 85 tape header.
    *
-   * @param list   list of input data
-   * @param offset offset in the list
-   * @param offset length of bytes available in the list, counting
-   *               from <code>offset</code>
+   * @param     list          list of input data
+   * @exception TapeException on error in data
    */
-  public PMDHeader(final List<Byte> list,
-		   final int offset,
-		   final int length
-		   ) throws TapeException {
+  public PMDHeader(final List<Byte> list) throws TapeException {
+    super(list);
     log.fine("Creating new PMD tape header");
-    
-    if (length < 63) {
-      throw new TapeException(Application
-        .getString(this, "error.PMDTAPERead.notEnoughData"));
+
+    // check length
+    if (list.size() != 63) {
+      throw new TapeException("Wrong block length");
     }
     log.finest("Length ok");
 
-    for (int i = 0; i < 63; i++) {
-      bytes.add(list.get(offset + i));
-    }
-    log.finest("Copy of header made and saved");
-    
-    if (!(checkLeader(list, offset + 0, 0x10, (byte)0xff) &&
-	  checkLeader(list, offset + 0x10, 0x10, (byte)0x00) &&
-	  checkLeader(list, offset + 0x20, 0x10, (byte)0x55))) {
-      throw new TapeException(Application
-        .getString(this, "error.PMDTAPERead.notEnoughData"));
+    // check leader
+    if (!(checkLeader(list, 0, 0x10, (byte)0xff) &&
+	  checkLeader(list, 0x10, 0x10, (byte)0x00) &&
+	  checkLeader(list, 0x20, 0x10, (byte)0x55))) {
+      throw new TapeException("Bad leader");
     }
     log.finest("Leader ok");
-    
-    fileNumber = list.get(offset + 0x30) & 0xff;
+
+    // check file number
+    fileNumber = list.get(0x30) & 0xff;
     if (fileNumber > 99) {
-      throw new TapeException(Application
-        .getString(this, "error.PMDTAPERead.notEnoughData"));
+      throw new TapeException("Invalid file number");
     }
     log.finest("File number: " + fileNumber);
 
-    fileType = list.get(offset + 0x31) & 0xff;
+    // get file type
+    fileType = list.get(0x31) & 0xff;
     log.finest("File type: " + fileType);
     
-    startAddress = ((list.get(offset + 0x33) & 0xff) << 8) +
-      (list.get(offset + 0x32) & 0xff);
+    // get start address
+    startAddress = ((list.get(0x33) & 0xff) << 8) +
+      (list.get(0x32) & 0xff);
     log.finest(String.format("Start address: 0x%04x", startAddress));
 
-    bodyLength = ((list.get(offset + 0x35) & 0xff) << 8) +
-      (list.get(offset + 0x34) & 0xff) + 1;
+    // get body length
+    bodyLength = ((list.get(0x35) & 0xff) << 8) +
+      (list.get(0x34) & 0xff) + 1;
     log.finest(String.format("File length: 0x%04x", bodyLength));
-    
+
+    // get file name
     final StringBuilder s = new StringBuilder();;
     for (int i = 0x36; i < 0x3e; i++) {
-      s.append((char)(list.get(offset + i) & 0xff));
+      s.append((char)(list.get(i) & 0xff));
     }
     fileName = s.toString().trim();
     log.finest("File name: " + fileName);
-    
-    if (PMD.checkSum(list, offset + 0x30, 0x0e) != list.get(offset + 0x3e)) {
-      throw new TapeException(Application
-        .getString(this, "error.PMDTAPERead.notEnoughData"));
+
+    // test check sum
+    if (PMDUtil.checkSum(list, 0x30, 0x0e) != (list.get(62))) {
+      log.finer("Bad chech sum");
+      throw new TapeException("Bad check sum");
     }
     log.finest("Checksum ok");
-    
+
     log.finer("New PMD tape header set up");
   }
 
@@ -154,7 +147,7 @@ public class PMDHeader {
   }
 
   /**
-   * Gets the starting address
+   * Gets the starting address.
    *
    * @return the starting address
    */
@@ -163,7 +156,7 @@ public class PMDHeader {
   }
 
   /**
-   * Gets the body length
+   * Gets the body length.
    *
    * @return the body length
    */
@@ -172,20 +165,11 @@ public class PMDHeader {
   }
 
   /**
-   * Gets the file name
+   * Gets the file name.
    *
    * @return the file name
    */
   public String getFileName() {
     return fileName;
-  }
-
-  /**
-   * Gets the list of bytes in the header
-   *
-   * @return the list of bytes
-   */
-  public List<Byte> getBytes() {
-    return bytes;
   }
 }

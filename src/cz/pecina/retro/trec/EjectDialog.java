@@ -54,7 +54,7 @@ public class EjectDialog extends JDialog {
 
   // components holding values used by listeners
   private JRadioButton formatXML, formatPMT, formatPMITAPE, formatSAM,
-    formatPTP, formatPMDTAPE;
+    formatPTP, formatPMD, formatPMDTAPE;
 
   // enclosing panel
   private TapeRecorderPanel panel;
@@ -82,6 +82,9 @@ public class EjectDialog extends JDialog {
   private static final FileNameExtensionFilter PTPFilter =
     new FileNameExtensionFilter(Application.getString(
       EjectDialog.class, "fileFilter.PTP"), "ptp");
+  private static final FileNameExtensionFilter PMDFilter =
+    new FileNameExtensionFilter(Application.getString(
+      EjectDialog.class, "fileFilter.PMD"), "pmd");
   private static final FileNameExtensionFilter PMDTAPEFilter =
     new FileNameExtensionFilter(Application.getString(
       EjectDialog.class, "fileFilter.PMDTAPE"), "pmdtape");
@@ -143,6 +146,13 @@ public class EjectDialog extends JDialog {
 			     .tapeFormats.contains("PTP"));
     formatsPanel.add(formatPTP);
 
+    formatPMD =
+      new JRadioButton(Application.getString(this, "ejectDialog.PMD"));
+    group.add(formatPMD);
+    formatPMD.setVisible(tapeRecorderHardware.getTapeRecorderInterface()
+			     .tapeFormats.contains("PMD"));
+    formatsPanel.add(formatPMD);
+
     formatPMDTAPE =
       new JRadioButton(Application.getString(this, "ejectDialog.PMDTAPE"));
     group.add(formatPMDTAPE);
@@ -198,6 +208,8 @@ public class EjectDialog extends JDialog {
       filter = SAMFilter;
     } else if (formatPTP.isSelected()) {
       filter = PTPFilter;
+    } else if (formatPMD.isSelected()) {
+      filter = PMDFilter;
     } else {
       filter = PMDTAPEFilter;
     }
@@ -236,6 +248,9 @@ public class EjectDialog extends JDialog {
 	      tapeRecorderHardware.getTapeRecorderInterface()).write(file);
 	  } else if (formatPTP.isSelected()) {
 	    new PTP(tapeRecorderHardware.getTape(),
+	      tapeRecorderHardware.getTapeRecorderInterface()).write(file);
+	  } else if (formatPMD.isSelected()) {
+	    new PMD(tapeRecorderHardware.getTape(),
 	      tapeRecorderHardware.getTapeRecorderInterface()).write(file);
 	  } else {
 	    assert formatPMDTAPE.isSelected();
@@ -281,6 +296,9 @@ public class EjectDialog extends JDialog {
 	        tapeRecorderHardware.getTapeRecorderInterface()).read(file);
 	    } else if (formatPTP.isSelected()) {
 	      new PTP(tapeRecorderHardware.getTape(),
+	        tapeRecorderHardware.getTapeRecorderInterface()).read(file);
+	    } else if (formatPMD.isSelected()) {
+	      new PMD(tapeRecorderHardware.getTape(),
 	        tapeRecorderHardware.getTapeRecorderInterface()).read(file);
 	    } else {
 	      assert formatPMDTAPE.isSelected();

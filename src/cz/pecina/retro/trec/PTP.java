@@ -43,7 +43,8 @@ import cz.pecina.retro.common.Application;
  * into the PMD85 emulator, export is limited to those tapes that have blocks
  * separated by gaps of at least 100ms.  No check is made on the correctness
  * of the blocks so even tapes containing non-standard and erroneous or
- * inconsistent blocks can be saved in PTP.
+ * inconsistent blocks can be saved in PTP.  Export only fails if the byte
+ * structure is broken and the tape cannot be converted into bytes.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -88,73 +89,17 @@ public class PTP extends TapeProcessor {
     }
     log.finer("Byte map created");
     
-    // split the tape into blocks
-    final long GAP = tapeRecorderInterface.tapeSampleRate / 10;  // 100ms
-    final List<List<Long>> lists = new ArrayList<>();
-    {
-      long curr = Long.MIN_VALUE;
-      List<Long> list = null;
-      for (long start: map.keySet()) {
-	if (start > (curr + GAP)) {
-	  if (list != null) {
-	    lists.add(list);
-	  }
-	  list = new ArrayList<Long>();
-	}
-	list.add(start);
-	curr = start;
-      }
-      if (list != null) {
-	lists.add(list);
-      }
-    }
-    log.finer("List split up");
-
-    // check for headers and add extra block if body is shorter than
-    // indicated by the header
-    for (int i = 0; i < lists.size() - 1; i++) {
-
-      // only process eligible candidates
-      if (lists.get(i).size() != 63) {
-	continue;
-      }
-
-      // check for header
-      boolean isHeader = true;
-      PMDHeader header = null;
-      final List<Byte> headerData = new ArrayList<>();
-      for (long l: lists.get(i)) {
-	headerData.add(map.get(l));
-      }
-      try {
-	header = new PMDHeader(headerData, 0, 63);
-      } catch (final TapeException exception) {
-	isHeader = false;
-      }
-
-      // check the size of the following block
-      final List<Long> oldBody = lists.get(i + 1);
-      if (isHeader && (oldBody.size() > (header.getBodyLength() + 1))) {
-	final List<Long> newBody =
-	  oldBody.subList(0, header.getBodyLength() + 1);
-	final List<Long> newBlock =
-	  oldBody.subList(header.getBodyLength() + 1, oldBody.size());
-	lists.remove(i + 1);
-	lists.add(i + 1, newBody);
-	lists.add(i + 2, newBlock);
-	log.finer("Additional block inserted at position " + (i + 1));
-      }
-    }
-    log.finer("All additional blocks inserted");
+    // split bytes into blocks
+    final List<PMDBlock> list = PMDUtil.splitBytes(map, tapeRecorderInterface);
     
-    // process blocks
+    // write blocks
     try (OutputStream out = new FileOutputStream(file)) {
-      for (List<Long> list: lists) {
-	final int blockLength = list.size();
+      for (PMDBlock block: list) {
+	final int blockLength = block.getLength();
 	out.write(blockLength & 0xff);
 	out.write(blockLength >> 8);
-	for (long pos: list) {
-	  out.write(map.get(pos));
+	for (byte b: block.getBytes()) {
+	  out.write(b);
 	}
       }
     } catch (final IOException exception) {
@@ -209,16 +154,19 @@ public class PTP extends TapeProcessor {
       for (int i = 0; i < blockLength; i++) {
 	list.add(bytes[pointer++]);
       }
+
+      // convert into block
+      PMDBlock block = null;
+      try {
+	block = PMDUtil.createBlock(list);
+      } catch (final TapeException exception) {
+	log.fine("Invalid PTP file, block cannot be created");
+	throw Application.createError(this, "PTP");
+      }
       
       // check for header
-      boolean isHeader = true;
-      PMDHeader header = null;
-      try {
-	header = new PMDHeader(list, 0, list.size());
-      } catch (final TapeException exception) {
-	isHeader = false;
-      }
-      if (isHeader) {
+      if (block instanceof PMDHeader) {
+	final PMDHeader header = (PMDHeader)block;
 
 	// write header
 	try {
