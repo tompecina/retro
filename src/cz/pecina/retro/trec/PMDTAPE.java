@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import cz.pecina.retro.common.Application;
 
 /**
@@ -35,8 +36,12 @@ import cz.pecina.retro.common.Application;
  * PMDTAPE is a proprietary ASCII format developed by Martin Malý for
  * Tesla PMD 85.  The tape data is stored as a series of comma-separated
  * integers indicating the characters, without any indicaiton of the
- * characters' position on the tape.  The series is enclosed in
- *  square brackets.
+ * characters' position on the tape.  The series is enclosed in square
+ * brackets.  PMDTAPE is less versatile than the internal format of PMD85,
+ * which can only be truly represented in XML and PMT formats.  Therefore,
+ * all PMDTAPE files can be imported into the PMD85 emulator, export is
+ * limited to those tapes that have correct header-body structure as the
+ * PMDTAPE format carries no information besides the raw bytes.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -85,9 +90,9 @@ public class PMDTAPE extends TapeProcessor {
 	first = false;
       }
       writer.write("]");
-    } catch (final Exception exception) {
+    } catch (final IOException exception) {
       log.fine("Error, writing failed, exception: " + exception);
-      throw Application.createError(this, "PMITAPEWrite");
+      throw Application.createError(this, "PMDTAPEWrite");
     }
 
     log.fine("Writing completed");
@@ -108,7 +113,7 @@ public class PMDTAPE extends TapeProcessor {
 	log.finest("Reading byte: " + b);
 	list.add((byte)b);
       }
-    } catch (final Exception exception) {
+    } catch (final IOException exception) {
       log.fine("Error, reading failed, exception: " + exception);
       throw Application.createError(this, "PMDTAPERead");
     }
@@ -116,7 +121,7 @@ public class PMDTAPE extends TapeProcessor {
     // clear tape
     tape.clear();
 
-    // for all header and blocks
+    // for all headers and blocks
     int pointer = 0;
     long currPosition = 0;
     log.finer("List size: " + list.size());
@@ -150,12 +155,11 @@ public class PMDTAPE extends TapeProcessor {
       }
       log.finer("Header written");
 
-      // write header
+      // write block
       try {
 	log.finer("Writing block " + header.getFileNumber() +
 		  ", name: '" + header.getFileName() + "'");
-	int blockLength =  header.getFileLength();
-	log.finest(String.format("pointer: %d blockLength: %d list.size(): %d", pointer, blockLength, list.size()));
+	int blockLength =  header.getBodyLength();
 	if ((pointer + blockLength) >= list.size()) {
 	  log.fine("Size mismatch");
 	  throw Application.createError(this, "PMDTAPERead.notEnoughData");

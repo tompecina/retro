@@ -46,8 +46,8 @@ public class PMDHeader {
   // start address
   private int startAddress;
 
-  // file length
-  private int fileLength;
+  // body length
+  private int bodyLength;
 
   // file name
   private String fileName;
@@ -115,13 +115,13 @@ public class PMDHeader {
       (list.get(offset + 0x32) & 0xff);
     log.finest(String.format("Start address: 0x%04x", startAddress));
 
-    fileLength = ((list.get(offset + 0x35) & 0xff) << 8) +
+    bodyLength = ((list.get(offset + 0x35) & 0xff) << 8) +
       (list.get(offset + 0x34) & 0xff) + 1;
-    log.finest(String.format("File length: 0x%04x", fileLength));
+    log.finest(String.format("File length: 0x%04x", bodyLength));
     
     final StringBuilder s = new StringBuilder();;
     for (int i = 0x36; i < 0x3e; i++) {
-      s.append((char)(list.get(offset + 0x34) & 0xff));
+      s.append((char)(list.get(offset + i) & 0xff));
     }
     fileName = s.toString().trim();
     log.finest("File name: " + fileName);
@@ -163,12 +163,12 @@ public class PMDHeader {
   }
 
   /**
-   * Gets the file length
+   * Gets the body length
    *
-   * @return the file length
+   * @return the body length
    */
-  public int getFileLength() {
-    return fileLength;
+  public int getBodyLength() {
+    return bodyLength;
   }
 
   /**

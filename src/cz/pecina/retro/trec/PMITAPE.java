@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import cz.pecina.retro.common.Application;
 
 /**
@@ -82,7 +83,7 @@ public class PMITAPE extends TapeProcessor {
 	}	    
       }	
       writer.write("]");
-    } catch (Exception exception) {
+    } catch (final IOException exception) {
       log.fine("Error, writing failed, exception: " + exception);
       throw Application.createError(this, "PMITAPEWrite");
     }
@@ -115,7 +116,7 @@ public class PMITAPE extends TapeProcessor {
 				 duration));
 	currPos += start + duration;
       }
-    } catch (Exception exception) {
+    } catch (final IOException exception) {
       log.fine("Error, reading failed, exception: " + exception);
       throw Application.createError(this, "PMITAPERead");
     }
