@@ -92,5 +92,5 @@ public final class Parameters {
   public static boolean openGL = true;
 
   // default constructor disabled
-  private Parameters() { }
+  private Parameters() {};
 }
