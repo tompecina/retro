@@ -153,7 +153,7 @@ public class WAV extends TapeProcessor {
     AudioFileFormat fileFormat = null;
     AudioFormat format = null;
     int bytesPerFrame = 0;
-    final List<byte[]> buffer = new ArrayList<>();
+    final List<byte[]> byteBuffer = new ArrayList<>();
     try (AudioInputStream stream = AudioSystem.getAudioInputStream(file)) {
       fileFormat = AudioSystem.getAudioFileFormat(file);
       format = stream.getFormat();
@@ -167,21 +167,122 @@ public class WAV extends TapeProcessor {
 	if (stream.read(b) != bytesPerFrame) {
 	  break;
 	}
-	buffer.add(b);
+	byteBuffer.add(b);
       }
     } catch (final UnsupportedAudioFileException | IOException exception) {
       log.fine("Error, reading failed, exception: " + exception);
       throw Application.createError(this, "WAVRead");
     }
+    log.fine("Audio data loaded, number of samples: " + byteBuffer.size());
 
     // check encoding
     final AudioFormat.Encoding encoding = format.getEncoding();
     if ((encoding != AudioFormat.Encoding.PCM_SIGNED) &&
 	(encoding != AudioFormat.Encoding.PCM_UNSIGNED)) {
-      log.fine("Error, unsupported encoding, exception: " + encoding);
-      throw Application.createError(this, "WAVRead");
+      log.fine("Error, unsupported encoding");
+      throw Application.createError(this, "WAVEncoding");
     }
 
+    // check sample size
+    final int sampleSize = format.getSampleSizeInBits();
+    if ((sampleSize != 8) && (sampleSize != 16)) {
+      log.fine("Error, unsupported sample size");
+      throw Application.createError(this, "WAVSampleSize");
+    }
+
+    // get audio parameters
+    final int channels = format.getChannels();
+    final int frameSize = channels * (sampleSize / 8);
+    final float sampleRate = format.getSampleRate();
+    final boolean bigEndian = format.isBigEndian();
+    log.finer(String.format(
+      "Encoding: %s, sample size: %d, channels: %d, sample rate: %g, big-endian: %s",
+      encoding, sampleSize, channels, sampleRate, bigEndian));
+
+    // convert data to a float sum over all channels
+    final List<Float> floatBuffer = new ArrayList<>();
+    for (byte[] sample: byteBuffer) {
+      if (sample.length != frameSize) {
+	log.fine("Error in format");
+	throw Application.createError(this, "WAV");
+      }
+      float sum = 0;
+      for (int channel = 0; channel < channels; channel++) {
+	int value;
+	if (sampleSize == 8) {
+	  value = sample[channel];
+	} else if (bigEndian) {
+	  value = ((sample[channel * 2] & 0xff) << 8) | ((sample[(channel * 2) + 1]) & 0xff);
+	} else {
+	  value = ((sample[(channel * 2) + 1] & 0xff) << 8) | ((sample[channel * 2]) & 0xff);
+	}
+	if (encoding == AudioFormat.Encoding.PCM_SIGNED) {
+	  if (sampleSize == 8) {
+	    value = (byte)value;
+	  } else {
+	    value = (short)value;
+	  }
+	} else {
+	  value -= (sampleSize == 8) ? 0x80 : 0x8000;
+	}
+	sum += value;
+      }
+      log.finest("Adding: " + sum);
+      floatBuffer.add(sum);
+    }
+    log.finer("Data converted to floats");
+
+    // calculate peak value
+    float peak = 0;
+    for (float sample: floatBuffer) {
+      final float abs = Math.abs(sample);
+      if (abs > peak) {
+	peak = abs;
+      }
+    }
+    log.finer("Peak value calculated: " + peak);
+
+    // apply hysteresis with a 1/3 peak threshhold
+    final float threshhold = peak / 3;
+    final List<Boolean> booleanBuffer = new ArrayList<>();
+    boolean level = false;
+    for (float sample: floatBuffer) {
+      if (sample > threshhold) {
+	level = true;
+      } else if (sample < -threshhold) {
+	level = false;
+      }
+      booleanBuffer.add(level);
+      log.finest("Adding: " + level);
+    }
+    log.finer("Hysteresis applied");
+
+    // clear tape
+    tape.clear();
+    
+    // write data to tape
+    boolean inPulse = false;
+    double pulseStart = 0;
+    double position = 0;
+    final double delta = tapeRecorderInterface.tapeSampleRate / sampleRate;
+    for (boolean sample: booleanBuffer) {
+      if (sample && !inPulse) {
+	pulseStart = position;
+	inPulse = true;
+      } else if (!sample && inPulse) {
+	tape.put(Math.round(pulseStart), Math.round(position - pulseStart));
+	log.finest("Pulse at (" + pulseStart + "," +
+		   (position - pulseStart) + ")");
+	inPulse = false;
+      }
+      position += delta;
+    }
+    if (inPulse) {
+      tape.put(Math.round(pulseStart), Math.round(position - pulseStart));
+      log.finest("Final pulse at (" + pulseStart + "," +
+		 (position - pulseStart) + ")");
+    }
+    
     log.fine("Reading completed");
-  }    
+  }
 }
