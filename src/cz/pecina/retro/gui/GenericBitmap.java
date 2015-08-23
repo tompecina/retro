@@ -21,10 +21,13 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
+
 import java.awt.Dimension;
+
 import javax.swing.JLabel;
 import javax.swing.JComponent;
 import javax.swing.Icon;
+
 import cz.pecina.retro.common.Application;
 
 /**

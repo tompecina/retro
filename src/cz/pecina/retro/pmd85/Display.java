@@ -21,10 +21,13 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import java.awt.Color;
 import java.awt.Dimension;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JComponent;
 import javax.swing.Timer;
 

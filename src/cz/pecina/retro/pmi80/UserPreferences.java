@@ -21,13 +21,18 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+
 import java.util.Locale;
+
 import java.util.prefs.Preferences;
+
 import cz.pecina.retro.common.GeneralUserPreferences;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.common.Parameters;
-import cz.pecina.retro.gui.Shortcut;
+
 import cz.pecina.retro.cpu.SimpleMemory;
+
+import cz.pecina.retro.gui.Shortcut;
 
 /**
  * Static user preferences to be imported on start-up (emulator specific).

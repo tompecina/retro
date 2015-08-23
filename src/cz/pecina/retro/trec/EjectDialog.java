@@ -21,9 +21,15 @@
 package cz.pecina.retro.trec;
 
 import java.util.logging.Logger;
+
 import java.io.File;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 import javax.swing.JDialog;
 import javax.swing.JRadioButton;
 import javax.swing.JFileChooser;
@@ -32,10 +38,11 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.gui.ErrorBox;
 import cz.pecina.retro.gui.InfoBox;
 import cz.pecina.retro.gui.ConfirmationBox;

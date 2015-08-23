@@ -22,7 +22,9 @@ package cz.pecina.retro.gui;
 
 import java.awt.Component;
 import java.awt.HeadlessException;
+
 import javax.swing.JOptionPane;
+
 import cz.pecina.retro.common.Application;
 
 /**

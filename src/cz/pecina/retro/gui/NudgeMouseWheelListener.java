@@ -21,6 +21,7 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
+
 import java.awt.event.MouseWheelListener;
 import java.awt.event.MouseWheelEvent;
 

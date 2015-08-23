@@ -21,8 +21,10 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
+
 import javax.swing.Icon;
 import javax.swing.JComponent;
 

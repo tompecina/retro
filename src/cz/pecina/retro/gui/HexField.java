@@ -21,8 +21,11 @@
 package cz.pecina.retro.gui;
 
 import java.util.regex.Pattern;
+
 import java.awt.Dimension;
+
 import javax.swing.JTextField;
+
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;

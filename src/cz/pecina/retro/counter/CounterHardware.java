@@ -22,16 +22,22 @@ package cz.pecina.retro.counter;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.Timer;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+
+import cz.pecina.retro.common.Parameters;
+import cz.pecina.retro.common.Util;
+
 import cz.pecina.retro.cpu.IOElement;
 import cz.pecina.retro.cpu.CPUEventOwner;
 import cz.pecina.retro.cpu.CPUScheduler;
-import cz.pecina.retro.common.Parameters;
-import cz.pecina.retro.common.Util;
+
 import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.gui.ESD;
 import cz.pecina.retro.gui.HexESD;

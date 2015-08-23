@@ -21,15 +21,18 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.BorderFactory;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 /**
  * The Settings/Model panel.

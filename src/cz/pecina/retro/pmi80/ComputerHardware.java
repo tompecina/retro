@@ -21,11 +21,15 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+
 import java.util.Arrays;
+
 import java.io.InputStream;
 import java.io.IOException;
+
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.cpu.IONode;
 import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.Intel8080A;
@@ -33,8 +37,10 @@ import cz.pecina.retro.cpu.Intel8255A;
 import cz.pecina.retro.cpu.SimpleMemory;
 import cz.pecina.retro.cpu.NAND;
 import cz.pecina.retro.cpu.Invertor;
+
 import cz.pecina.retro.trec.TapeRecorderInterface;
 import cz.pecina.retro.trec.TapeRecorderHardware;
+
 import cz.pecina.retro.debug.DebuggerHardware;
 
 /**
@@ -157,7 +163,7 @@ public class ComputerHardware {
     tapeRecorderInterface.timerPeriod = Constants.TIMER_PERIOD;
     tapeRecorderInterface.holdOffPeriod = 333;  // 300us
     tapeRecorderInterface.tapeFormats =
-      Arrays.asList(new String[] {"XML", "PMT", "PMITAPE", "SAM"});
+      Arrays.asList(new String[] {"XML", "PMT", "PMITAPE", "SAM", "WAV"});
     tapeRecorderInterface.vuRecConstant = 166.7;
     tapeRecorderInterface.vuPlayConstant = 17777.8;
     tapeRecorderHardware = new TapeRecorderHardware(tapeRecorderInterface);

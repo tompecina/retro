@@ -21,9 +21,12 @@
 package cz.pecina.retro.trec;
 
 import java.util.logging.Logger;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JFrame;
+
 import cz.pecina.retro.gui.BackgroundFixedPane;
 import cz.pecina.retro.gui.GenericButton;
 import cz.pecina.retro.gui.Counter;

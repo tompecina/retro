@@ -21,17 +21,23 @@
 package cz.pecina.retro.common;
 
 import java.util.logging.Logger;
-import java.util.prefs.Preferences;
-import java.util.prefs.BackingStoreException;
+
 import java.util.Locale;
 import java.util.Arrays;
+
+import java.util.prefs.Preferences;
+import java.util.prefs.BackingStoreException;
+
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+
 import cz.pecina.retro.common.GeneralConstants;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
-import cz.pecina.retro.gui.GUI;
+
 import cz.pecina.retro.cpu.SimpleMemory;
+
+import cz.pecina.retro.gui.GUI;
 
 /**
  * Static user preferences to be imported on start-up (general).

@@ -21,11 +21,14 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.common.Application;
-import cz.pecina.retro.gui.Resizeable;
-import cz.pecina.retro.gui.GUI;
+
 import cz.pecina.retro.debug.DebuggerPanel;
 import cz.pecina.retro.debug.DebuggerHardware;
+
+import cz.pecina.retro.gui.Resizeable;
+import cz.pecina.retro.gui.GUI;
 
 /**
  * The debugger frame.

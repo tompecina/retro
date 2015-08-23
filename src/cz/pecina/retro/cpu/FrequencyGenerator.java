@@ -21,6 +21,7 @@
 package cz.pecina.retro.cpu;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.common.Parameters;
 
 /**

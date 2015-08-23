@@ -21,15 +21,18 @@
 package cz.pecina.retro.trec;
 
 import java.util.logging.Logger;
+
 import java.util.TreeMap;
 import java.util.List;
 import java.util.ArrayList;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 import cz.pecina.retro.common.Application;
 
 /**

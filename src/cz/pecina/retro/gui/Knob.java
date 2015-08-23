@@ -21,14 +21,18 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.MouseWheelEvent;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+
 import cz.pecina.retro.common.Util;
 
 /**

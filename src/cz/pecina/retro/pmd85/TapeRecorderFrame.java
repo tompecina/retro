@@ -21,11 +21,14 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.common.Application;
-import cz.pecina.retro.gui.Resizeable;
-import cz.pecina.retro.gui.GUI;
+
 import cz.pecina.retro.trec.TapeRecorderHardware;
 import cz.pecina.retro.trec.TapeRecorderPanel;
+
+import cz.pecina.retro.gui.Resizeable;
+import cz.pecina.retro.gui.GUI;
 
 /**
  * The tape recorder frame.

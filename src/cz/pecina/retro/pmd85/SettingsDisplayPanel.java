@@ -21,10 +21,15 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Color;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
@@ -33,9 +38,9 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JCheckBox;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.gui.Swatch;
 
 /**

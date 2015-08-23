@@ -21,17 +21,24 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import javax.swing.ToolTipManager;
+
 import cz.pecina.retro.common.GeneralConstants;
 import cz.pecina.retro.common.GeneralUserPreferences;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
+
+import cz.pecina.retro.memory.Memory;
+
+import cz.pecina.retro.trec.TapeRecorder;
+
+import cz.pecina.retro.debug.Debugger;
+
+import cz.pecina.retro.peripherals.Peripherals;
+
 import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.gui.IconCache;
-import cz.pecina.retro.memory.Memory;
-import cz.pecina.retro.trec.TapeRecorder;
-import cz.pecina.retro.debug.Debugger;
-import cz.pecina.retro.peripherals.Peripherals;
 
 /**
  * Main class of the application.

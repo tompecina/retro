@@ -21,11 +21,15 @@
 package cz.pecina.retro.adc;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.peripherals.Peripheral;
+
 import cz.pecina.retro.common.Parameters;
-import cz.pecina.retro.cpu.IOElement;
-import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.common.Util;
+
+import cz.pecina.retro.cpu.IOElement;
+
+import cz.pecina.retro.gui.GUI;
 
 /**
  * 8-channel ADC hardware.

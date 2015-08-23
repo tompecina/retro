@@ -21,14 +21,19 @@
 package cz.pecina.retro.trec;
 
 import java.util.logging.Logger;
+
 import java.util.Map;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import cz.pecina.retro.common.Parameters;
+
 import cz.pecina.retro.cpu.IONode;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.CPUEventOwner;
 import cz.pecina.retro.cpu.CPUScheduler;
+
 import cz.pecina.retro.gui.GenericButton;
 import cz.pecina.retro.gui.Counter;
 import cz.pecina.retro.gui.BlinkLED;

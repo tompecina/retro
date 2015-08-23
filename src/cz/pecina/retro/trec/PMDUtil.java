@@ -21,10 +21,12 @@
 package cz.pecina.retro.trec;
 
 import java.util.logging.Logger;
+
 import java.util.TreeMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
+
 import cz.pecina.retro.common.Application;
 
 /**

@@ -21,10 +21,13 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+
 import javax.swing.JComponent;
+
 import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.gui.Resizeable;
 

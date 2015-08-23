@@ -21,15 +21,21 @@
 package cz.pecina.retro.debug;
 
 import java.util.logging.Logger;
+
 import java.util.List;
 import java.util.ArrayList;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.cpu.Intel8080A;
+
 import cz.pecina.retro.gui.BlockModel;
 import cz.pecina.retro.gui.PushButton;
 import cz.pecina.retro.gui.UniversalPushButton;

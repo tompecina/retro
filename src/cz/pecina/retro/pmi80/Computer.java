@@ -21,15 +21,21 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import javax.swing.Timer;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.cpu.Processor;
 import cz.pecina.retro.cpu.Opcode;
+
 import cz.pecina.retro.gui.GUI;
 
 /**

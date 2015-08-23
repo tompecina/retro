@@ -21,14 +21,18 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.BorderFactory;
+
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.gui.IconCache;
 import cz.pecina.retro.gui.NonEditableJEditorPane;
 

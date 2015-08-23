@@ -21,11 +21,16 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
+
 import java.util.Map;
 import java.util.HashMap;
+
 import java.net.URL;
+
 import javax.swing.ImageIcon;
+
 import cz.pecina.retro.Root;
+
 import cz.pecina.retro.common.Application;
 
 /**

@@ -21,9 +21,12 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import javax.swing.JFrame;
+
 import cz.pecina.retro.common.Localized;
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.gui.CloseableFrame;
 import cz.pecina.retro.gui.GUI;
 

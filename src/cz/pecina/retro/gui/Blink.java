@@ -21,7 +21,9 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
+
 import java.awt.event.ActionListener;
+
 import javax.swing.Timer;
 
 /**

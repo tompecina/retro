@@ -21,11 +21,14 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
 import javax.swing.JFrame;
+
 import cz.pecina.retro.gui.BackgroundFixedPane;
 import cz.pecina.retro.gui.Shortcut;
 

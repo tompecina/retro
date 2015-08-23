@@ -20,9 +20,10 @@
 
 package cz.pecina.retro.gui;
 
-import javax.swing.JRadioButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.JRadioButton;
 
 /**
  * Selects a radio button on a mouse click.

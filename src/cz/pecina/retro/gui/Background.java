@@ -21,12 +21,15 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
+
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Graphics;
 import java.awt.TexturePaint;
 import java.awt.Graphics2D;
+
 import java.awt.image.BufferedImage;
+
 import javax.swing.Icon;
 import javax.swing.JComponent;
 

@@ -21,6 +21,7 @@
 package cz.pecina.retro.dboutput;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.peripherals.BasePortPeripheral;
 
 /**

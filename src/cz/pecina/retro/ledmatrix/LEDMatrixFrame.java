@@ -21,8 +21,10 @@
 package cz.pecina.retro.ledmatrix;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.peripherals.Peripheral;
 import cz.pecina.retro.peripherals.PeripheralFrame;
+
 import cz.pecina.retro.gui.Resizeable;
 import cz.pecina.retro.gui.GUI;
 

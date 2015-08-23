@@ -21,8 +21,10 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
+
 import java.util.Map;
 import java.util.HashMap;
+
 import javax.swing.Icon;
 
 /**

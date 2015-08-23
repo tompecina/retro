@@ -21,12 +21,17 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
-import java.util.prefs.Preferences;
+
 import java.util.Locale;
+
+import java.util.prefs.Preferences;
+
 import java.awt.Color;
+
 import cz.pecina.retro.common.GeneralUserPreferences;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.common.Parameters;
+
 import cz.pecina.retro.gui.Shortcut;
 
 /**

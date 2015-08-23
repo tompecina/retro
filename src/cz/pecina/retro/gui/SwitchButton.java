@@ -21,11 +21,13 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
-import javax.swing.Icon;
-import javax.swing.AbstractAction;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.Icon;
+import javax.swing.AbstractAction;
 
 /**
  * Two-state button.

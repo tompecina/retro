@@ -21,12 +21,19 @@
 package cz.pecina.retro.memory;
 
 import java.util.logging.Logger;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import java.io.File;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.FlowLayout;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JFileChooser;
@@ -34,15 +41,18 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.ButtonGroup;
 import javax.swing.BorderFactory;
+
 import javax.swing.border.Border;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
 import cz.pecina.retro.common.Application;
+
+import cz.pecina.retro.cpu.Block;
+
 import cz.pecina.retro.gui.RadioClick;
 import cz.pecina.retro.gui.HexField;
 import cz.pecina.retro.gui.InfoBox;
-import cz.pecina.retro.cpu.Block;
 
 /**
  * Memory/Save panel.

@@ -21,7 +21,9 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import java.awt.event.KeyEvent;
+
 import cz.pecina.retro.gui.Shortcut;
 
 /**

@@ -21,9 +21,11 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Dimension;
+
 import javax.swing.JComponent;
 import javax.swing.BorderFactory;
 

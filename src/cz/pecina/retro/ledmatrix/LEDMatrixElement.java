@@ -22,10 +22,13 @@ package cz.pecina.retro.ledmatrix;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
+
 import javax.swing.Icon;
 import javax.swing.JComponent;
+
 import cz.pecina.retro.gui.Resizeable;
 import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.gui.IconCache;

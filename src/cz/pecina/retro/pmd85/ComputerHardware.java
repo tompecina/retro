@@ -21,15 +21,21 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import java.util.Arrays;
+
 import java.io.InputStream;
 import java.io.IOException;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import java.net.URISyntaxException;
+
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.common.Util;
+
 import cz.pecina.retro.cpu.IONode;
 import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.Intel8080A;
@@ -40,9 +46,12 @@ import cz.pecina.retro.cpu.FrequencyGenerator;
 import cz.pecina.retro.cpu.LowPin;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.IONode;
+
 import cz.pecina.retro.trec.TapeRecorderInterface;
 import cz.pecina.retro.trec.TapeRecorderHardware;
+
 import cz.pecina.retro.debug.DebuggerHardware;
+
 import cz.pecina.retro.gui.LED;
 import cz.pecina.retro.gui.Marking;
 

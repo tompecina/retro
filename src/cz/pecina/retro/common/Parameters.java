@@ -21,6 +21,7 @@
 package cz.pecina.retro.common;
 
 import java.util.prefs.Preferences;
+
 import cz.pecina.retro.cpu.SystemClockSource;
 import cz.pecina.retro.cpu.Processor;
 import cz.pecina.retro.cpu.Device;

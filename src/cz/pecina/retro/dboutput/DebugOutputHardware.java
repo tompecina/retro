@@ -21,8 +21,10 @@
 package cz.pecina.retro.dboutput;
 
 import java.util.logging.Logger;
-import cz.pecina.retro.cpu.IOElement;
+
 import cz.pecina.retro.common.Parameters;
+
+import cz.pecina.retro.cpu.IOElement;
 
 /**
  * Debug output from a port to <code>System.out</code> hardware.

@@ -21,7 +21,9 @@
 package cz.pecina.retro.memory;
 
 import java.io.File;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import cz.pecina.retro.cpu.Hardware;
 
 /**

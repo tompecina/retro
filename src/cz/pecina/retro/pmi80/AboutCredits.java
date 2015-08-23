@@ -21,9 +21,13 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+
 import java.awt.Dimension;
+
 import javax.swing.JScrollPane;
+
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.gui.NonEditableJEditorPane;
 
 /**

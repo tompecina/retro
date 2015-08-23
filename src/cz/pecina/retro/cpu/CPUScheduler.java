@@ -21,11 +21,13 @@
 package cz.pecina.retro.cpu;
 
 import java.util.logging.Logger;
+
 import java.util.TreeSet;
 import java.util.SortedSet;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+
 import cz.pecina.retro.common.Parameters;
 
 /**

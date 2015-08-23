@@ -21,10 +21,13 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+
 import cz.pecina.retro.common.Localized;
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.gui.Resizeable;
 import cz.pecina.retro.gui.GUI;
 

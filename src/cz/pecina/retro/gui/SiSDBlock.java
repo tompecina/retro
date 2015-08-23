@@ -21,13 +21,14 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import javax.swing.JComponent;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import cz.pecina.retro.gui.PushButton;
-import cz.pecina.retro.gui.UniversalPushButton;
 
 /**
  * Hexadecimal or alphanumeric block of SiSD elements.

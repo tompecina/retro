@@ -21,6 +21,7 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.cpu.IOPin;
 
 /**

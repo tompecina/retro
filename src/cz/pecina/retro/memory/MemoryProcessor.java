@@ -21,8 +21,10 @@
 package cz.pecina.retro.memory;
 
 import java.util.logging.Logger;
-import cz.pecina.retro.cpu.Hardware;
+
 import cz.pecina.retro.common.Parameters;
+
+import cz.pecina.retro.cpu.Hardware;
 
 /**
  * Memory processor.  Read/write functions are provided by

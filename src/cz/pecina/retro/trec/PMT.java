@@ -21,10 +21,12 @@
 package cz.pecina.retro.trec;
 
 import java.util.logging.Logger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.EOFException;
+
 import cz.pecina.retro.common.Application;
 
 /**

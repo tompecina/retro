@@ -21,11 +21,14 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import cz.pecina.retro.gui.LockableButton;
+
 import cz.pecina.retro.common.Localized;
 import cz.pecina.retro.common.Application;
+
+import cz.pecina.retro.gui.LockableButton;
 
 /**
  * Button on the control panel.

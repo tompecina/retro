@@ -21,7 +21,9 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.peripherals.Peripheral;
 
 /**

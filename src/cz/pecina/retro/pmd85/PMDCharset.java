@@ -21,10 +21,13 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import java.util.Arrays;
 import java.util.List;
+
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;

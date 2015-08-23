@@ -21,17 +21,22 @@
 package cz.pecina.retro.adc;
 
 import java.util.logging.Logger;
+
 import java.awt.Dimension;
-import javax.swing.JLabel;
-import javax.swing.JComponent;
-import javax.swing.Icon;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.JLabel;
+import javax.swing.JComponent;
+import javax.swing.Icon;
+
+import cz.pecina.retro.common.Util;
+
 import cz.pecina.retro.gui.Resizeable;
 import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.gui.IconCache;
-import cz.pecina.retro.common.Util;
 
 /**
  * ADC channel control element.

@@ -21,16 +21,21 @@
 package cz.pecina.retro.counter;
 
 import java.util.logging.Logger;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.BorderFactory;
+
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.peripherals.BasePortPeripheral;
+
 import cz.pecina.retro.gui.GUI;
 
 /**

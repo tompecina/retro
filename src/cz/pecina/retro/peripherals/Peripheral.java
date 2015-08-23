@@ -21,8 +21,11 @@
 package cz.pecina.retro.peripherals;
 
 import java.util.logging.Logger;
+
 import java.util.prefs.Preferences;
+
 import javax.swing.JPanel;
+
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.common.Parameters;
 

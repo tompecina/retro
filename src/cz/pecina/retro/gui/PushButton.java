@@ -21,11 +21,13 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
-import javax.swing.AbstractAction;
-import javax.swing.Icon;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
 
 /**
  * Normal button without the lock option.

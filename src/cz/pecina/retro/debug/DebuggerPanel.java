@@ -21,8 +21,10 @@
 package cz.pecina.retro.debug;
 
 import java.util.logging.Logger;
+
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
+
 import cz.pecina.retro.gui.BackgroundFixedPane;
 import cz.pecina.retro.gui.PushButton;
 import cz.pecina.retro.gui.Shortcut;

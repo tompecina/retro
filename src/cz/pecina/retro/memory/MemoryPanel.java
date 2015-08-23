@@ -21,11 +21,16 @@
 package cz.pecina.retro.memory;
 
 import java.util.logging.Logger;
+
 import javax.swing.JTabbedPane;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import cz.pecina.retro.cpu.Hardware;
+
 import cz.pecina.retro.common.Application;
+
+import cz.pecina.retro.cpu.Hardware;
+
 import cz.pecina.retro.gui.CloseableFrame;
 
 /**

@@ -21,11 +21,15 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+
 import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.BorderFactory;
+
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.gui.IconCache;
 
 /**

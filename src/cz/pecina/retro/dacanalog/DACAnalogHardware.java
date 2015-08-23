@@ -22,13 +22,19 @@ package cz.pecina.retro.dacanalog;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
+
 import java.awt.Color;
+
 import javax.swing.Timer;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import cz.pecina.retro.cpu.IOElement;
+
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Util;
+
 import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.gui.Needle;
 

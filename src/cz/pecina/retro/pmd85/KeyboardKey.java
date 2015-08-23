@@ -21,13 +21,17 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import cz.pecina.retro.gui.LockableButton;
+
 import cz.pecina.retro.common.Localized;
 import cz.pecina.retro.common.Application;
+
+import cz.pecina.retro.gui.LockableButton;
 
 /**
  * Key on the PMD 85 keybord.

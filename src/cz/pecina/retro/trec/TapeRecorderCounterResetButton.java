@@ -21,7 +21,9 @@
 package cz.pecina.retro.trec;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.gui.PushButton;
+
 import cz.pecina.retro.common.Localized;
 import cz.pecina.retro.common.Application;
 

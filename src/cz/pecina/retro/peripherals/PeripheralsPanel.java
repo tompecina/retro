@@ -21,16 +21,21 @@
 package cz.pecina.retro.peripherals;
 
 import java.util.logging.Logger;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.FlowLayout;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.gui.CloseableFrame;
 
 /**

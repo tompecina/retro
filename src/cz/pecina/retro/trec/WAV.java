@@ -21,18 +21,21 @@
 package cz.pecina.retro.trec;
 
 import java.util.logging.Logger;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+
 import cz.pecina.retro.common.Application;
 
 /**
@@ -149,13 +152,11 @@ public class WAV extends TapeProcessor {
   public void read(final File file) {
     log.fine("Reading tape data from an WAV file, file: " + file);
 
-    // read data and format information
-    AudioFileFormat fileFormat = null;
+    // read audio data
     AudioFormat format = null;
     int bytesPerFrame = 0;
     final List<byte[]> byteBuffer = new ArrayList<>();
     try (AudioInputStream stream = AudioSystem.getAudioInputStream(file)) {
-      fileFormat = AudioSystem.getAudioFileFormat(file);
       format = stream.getFormat();
       bytesPerFrame = format.getFrameSize();
       if (bytesPerFrame == AudioSystem.NOT_SPECIFIED) {

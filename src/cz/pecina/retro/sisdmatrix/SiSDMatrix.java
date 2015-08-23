@@ -21,7 +21,9 @@
 package cz.pecina.retro.sisdmatrix;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.peripherals.BasePortPeripheral;
+
 import cz.pecina.retro.gui.GUI;
 
 /**

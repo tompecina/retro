@@ -21,13 +21,17 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import cz.pecina.retro.common.Application;
 
 /**

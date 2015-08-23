@@ -21,14 +21,20 @@
 package cz.pecina.retro.pckbd;
 
 import java.util.logging.Logger;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
 import cz.pecina.retro.peripherals.Peripheral;
+
 import cz.pecina.retro.common.Parameters;
+
 import cz.pecina.retro.cpu.IOElement;
 import cz.pecina.retro.cpu.CPUEventOwner;
 import cz.pecina.retro.cpu.CPUScheduler;
+
 import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.gui.Shortcut;
 

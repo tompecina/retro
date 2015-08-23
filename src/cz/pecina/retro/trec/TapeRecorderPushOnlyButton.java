@@ -21,9 +21,11 @@
 package cz.pecina.retro.trec;
 
 import java.util.logging.Logger;
-import cz.pecina.retro.gui.PushOnlyButton;
+
 import cz.pecina.retro.common.Localized;
 import cz.pecina.retro.common.Application;
+
+import cz.pecina.retro.gui.PushOnlyButton;
 
 /**
  * Wrapper class for localized PushOnlyButton.

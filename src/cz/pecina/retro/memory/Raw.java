@@ -21,13 +21,16 @@
 package cz.pecina.retro.memory;
 
 import java.util.logging.Logger;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
-import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.cpu.Hardware;
+
+import cz.pecina.retro.common.Application;
 
 /**
  * Raw format reader/writer.

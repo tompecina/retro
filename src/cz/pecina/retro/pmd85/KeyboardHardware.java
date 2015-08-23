@@ -21,13 +21,17 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import cz.pecina.retro.gui.LED;
+
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.IONode;
+
+import cz.pecina.retro.gui.LED;
 
 /**
  * Keyboard of the Tesla PMD 85 computer.

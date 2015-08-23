@@ -21,7 +21,9 @@
 package cz.pecina.retro.cpu;
 
 import java.util.logging.Logger;
+
 import java.util.ArrayList;
+
 import org.jdom2.Element;
 
 /**

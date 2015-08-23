@@ -21,7 +21,9 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.common.Parameters;
+
 import cz.pecina.retro.cpu.IONode;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.Device;

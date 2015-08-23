@@ -21,10 +21,13 @@
 package cz.pecina.retro.trec;
 
 import java.util.logging.Logger;
+
 import java.util.Scanner;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import cz.pecina.retro.common.Application;
 
 /**

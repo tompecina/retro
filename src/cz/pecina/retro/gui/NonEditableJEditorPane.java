@@ -21,8 +21,11 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
+
 import java.net.URL;
+
 import javax.swing.JEditorPane;
+
 import java.io.IOException;
 
 /**

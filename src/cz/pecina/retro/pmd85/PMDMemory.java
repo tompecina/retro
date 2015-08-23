@@ -22,13 +22,16 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
+
 import org.jdom2.Element;
+
 import cz.pecina.retro.cpu.Device;
 import cz.pecina.retro.cpu.AbstractMemory;
 import cz.pecina.retro.cpu.IOElement;
 import cz.pecina.retro.cpu.Register;
 import cz.pecina.retro.cpu.Block;
 import cz.pecina.retro.cpu.IOPin;
+
 import cz.pecina.retro.memory.Snapshot;
 import cz.pecina.retro.memory.Info;
 

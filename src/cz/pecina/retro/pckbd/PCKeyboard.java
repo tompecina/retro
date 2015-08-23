@@ -21,7 +21,9 @@
 package cz.pecina.retro.pckbd;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.peripherals.VectorPeripheral;
+
 import cz.pecina.retro.gui.GUI;
 
 /**

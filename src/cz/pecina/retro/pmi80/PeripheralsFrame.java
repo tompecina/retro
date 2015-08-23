@@ -21,19 +21,31 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.peripherals.Peripheral;
 import cz.pecina.retro.peripherals.PeripheralsPanel;
+
 import cz.pecina.retro.ledmatrix.LEDMatrix;
+
 import cz.pecina.retro.colorledmatrix.ColorLEDMatrix;
+
 import cz.pecina.retro.sisdmatrix.SiSDMatrix;
+
 import cz.pecina.retro.pckbd.PCKeyboard;
+
 import cz.pecina.retro.adc.ADC;
+
 import cz.pecina.retro.dacanalog.DACAnalog;
+
 import cz.pecina.retro.dacdigital.DACDigital;
-import cz.pecina.retro.pmi80.iopanel.IOPanel;
+
 import cz.pecina.retro.counter.Counter;
+
 import cz.pecina.retro.dboutput.DebugOutput;
+
+import cz.pecina.retro.pmi80.iopanel.IOPanel;
 
 /**
  * The Peripherals frame.

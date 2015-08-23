@@ -21,10 +21,13 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
-import javax.swing.JSlider;
-import javax.swing.BoundedRangeModel;
+
 import java.awt.event.MouseWheelListener;
 import java.awt.event.MouseWheelEvent;
+
+import javax.swing.JSlider;
+import javax.swing.BoundedRangeModel;
+
 import cz.pecina.retro.common.Util;
 
 /**
@@ -40,8 +43,8 @@ public class WheelSlider extends JSlider {
     Logger.getLogger(WheelSlider.class.getName());
 
   /**
-   * Creates a horizontal slider with the range 0 to 100 and
-   * an initial value of 50.
+   * Creates a horizontal slider with the range {@code 0} to {@code 100} and
+   * an initial value of {@code 50}.
    */
   public WheelSlider() {
     super();

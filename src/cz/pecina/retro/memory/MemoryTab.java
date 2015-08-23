@@ -21,19 +21,28 @@
 package cz.pecina.retro.memory;
 
 import java.util.logging.Logger;
+
 import java.util.List;
+
 import java.io.File;
-import javax.swing.JPanel;
+
 import java.awt.GridBagLayout;
-import javax.swing.JFileChooser;
-import javax.swing.JButton;
-import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import javax.swing.JPanel;
+import javax.swing.JFileChooser;
+import javax.swing.JButton;
+
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
-import cz.pecina.retro.gui.ErrorBox;
+
 import cz.pecina.retro.cpu.Block;
+
+import cz.pecina.retro.gui.ErrorBox;
 
 /**
  * Memory tab.

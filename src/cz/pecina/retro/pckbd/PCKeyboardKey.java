@@ -21,8 +21,10 @@
 package cz.pecina.retro.pckbd;
 
 import java.util.logging.Logger;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+
 import cz.pecina.retro.gui.LockableButton;
 import cz.pecina.retro.gui.Shortcut;
 

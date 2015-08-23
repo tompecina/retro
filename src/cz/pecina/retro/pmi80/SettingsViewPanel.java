@@ -21,19 +21,24 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JSlider;
 import javax.swing.BorderFactory;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import cz.pecina.retro.common.GeneralConstants;
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.gui.WheelSlider;
 
 /**

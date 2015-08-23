@@ -21,17 +21,25 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+
 import java.io.File;
 import java.io.IOException;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
+
 import java.awt.image.BufferedImage;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import javax.imageio.ImageIO;
+
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
-import cz.pecina.retro.memory.MemoryPlugin;
+
 import cz.pecina.retro.cpu.Hardware;
+
+import cz.pecina.retro.memory.MemoryPlugin;
 
 /**
  * Memory plugin for saving screenshots.

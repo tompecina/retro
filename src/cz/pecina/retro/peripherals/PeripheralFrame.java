@@ -21,11 +21,15 @@
 package cz.pecina.retro.peripherals;
 
 import java.util.logging.Logger;
-import javax.swing.JFrame;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
+import javax.swing.JFrame;
+
 import cz.pecina.retro.common.Localized;
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.gui.GUI;
 
 /**

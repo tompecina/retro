@@ -21,13 +21,16 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import cz.pecina.retro.gui.GenericButton;
+
 import cz.pecina.retro.common.Localized;
 import cz.pecina.retro.common.Application;
+
+import cz.pecina.retro.gui.GenericButton;
 
 /**
  * Icons displayed on the main panel.

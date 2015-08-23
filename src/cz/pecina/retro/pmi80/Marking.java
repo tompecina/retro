@@ -21,7 +21,9 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
+
 import javax.swing.Icon;
+
 import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.gui.GenericBitmap;
 import cz.pecina.retro.gui.IconCache;

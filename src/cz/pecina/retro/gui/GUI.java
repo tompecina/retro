@@ -21,9 +21,12 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import java.awt.Image;
+
 import javax.swing.JFrame;
 
 /**

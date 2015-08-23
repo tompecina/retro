@@ -21,6 +21,7 @@
 package cz.pecina.retro.colorledmatrix;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.gui.BackgroundFixedPane;
 
 /**

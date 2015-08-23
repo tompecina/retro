@@ -21,9 +21,13 @@
 package cz.pecina.retro.sisdmatrix;
 
 import java.util.logging.Logger;
+
 import cz.pecina.retro.peripherals.Peripheral;
+
 import cz.pecina.retro.common.Parameters;
+
 import cz.pecina.retro.cpu.IOElement;
+
 import cz.pecina.retro.gui.SiSD;
 import cz.pecina.retro.gui.GUI;
 

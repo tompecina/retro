@@ -21,11 +21,14 @@
 package cz.pecina.retro.memory;
 
 import java.util.logging.Logger;
+
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintWriter;
+
 import cz.pecina.retro.common.Application;
+
 import cz.pecina.retro.cpu.Hardware;
 
 /**
