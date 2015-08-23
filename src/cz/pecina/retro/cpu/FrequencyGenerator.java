@@ -130,7 +130,7 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
     add(new Register("COUNTER") {
 	@Override
 	public String getValue() {
-	  return String.valueOf(FrequencyGenerator.this.scheduler.getRemainingTime(
+	  return String.valueOf(scheduler.getRemainingTime(
 	    FrequencyGenerator.this,
 	    Parameters.systemClockSource.getSystemClock()));
 	}

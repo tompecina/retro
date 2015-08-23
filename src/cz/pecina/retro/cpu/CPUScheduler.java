@@ -119,21 +119,20 @@ public class CPUScheduler {
   /**
    * Gets time remaining to the next event scheduled by a particular owner.
    *
-   * @param  owner the owner whose events will be evalueted
+   * @param  owner the owner whose events will be evaluated
    * @param  time  the current system clock
    * @return       the remaining time in clock cycles or <code>-1</code>
    *               if no event scheduled
    */
   public long getRemainingTime(final CPUEventOwner owner, final long time) {
     long r = -1;
-    for (Iterator<CPUScheduledEvent> iter =
-	   schedule.iterator(); iter.hasNext();) {
-      if (iter.next().getOwner() == owner) {
-	r = iter.next().getTime() - time;
+    for (CPUScheduledEvent event: schedule) {
+      if (event.getOwner() == owner) {
+	r = event.getTime() - time;
 	break;
       }
     }
-    log.finer("Supplying remaining time: " + r + " at: " + time);
+    log.finer("Remaining time: " + r + " at: " + time);
     return r;
   }
 

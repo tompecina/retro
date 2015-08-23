@@ -35,6 +35,7 @@ import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.Intel8080A;
 import cz.pecina.retro.cpu.Intel8255A;
 import cz.pecina.retro.cpu.Intel8251A;
+import cz.pecina.retro.cpu.XOR;
 import cz.pecina.retro.cpu.FrequencyGenerator;
 import cz.pecina.retro.cpu.LowPin;
 import cz.pecina.retro.cpu.IOPin;
@@ -75,8 +76,14 @@ public class ComputerHardware {
   // the 8251A (USART)
   private Intel8251A usart;
 
+  // the tape recorder XOR
+  private XOR xor;
+
   // the tape recorder frequency generator (freq = phi2/0x6ab = ca 1199.77Hz)
   private FrequencyGenerator gen;
+
+  // the tape recorder Manchester decoder
+  private ManchesterDecoder decoder;
 
   // the display hardware
   private DisplayHardware displayHardware;
@@ -156,9 +163,9 @@ public class ComputerHardware {
     tapeRecorderInterface.tapeSampleRate = Constants.TAPE_SAMPLE_RATE;
     tapeRecorderInterface.timerPeriod = Constants.TIMER_PERIOD;
     tapeRecorderInterface.tapeFormats =
-      Arrays.asList(new String[] {"XML", "PMT", "PTP", "PMD", "PMDTAPE"});
-    tapeRecorderInterface.vuRecConstant = 55.0;
-    tapeRecorderInterface.vuPlayConstant = 90000.0;
+      Arrays.asList(new String[] {"XML", "PMT", "PTP", "PMD", "PMDTAPE", "WAV"});
+    tapeRecorderInterface.vuRecConstant = 150.0;
+    tapeRecorderInterface.vuPlayConstant = 80.0;
     tapeRecorderHardware = new TapeRecorderHardware(tapeRecorderInterface);
 
     // set up the debugger hardware
@@ -213,12 +220,16 @@ public class ComputerHardware {
       cpu.addIOOutput(port, usart);
     }
 
+    // set up the tape recorder XOR
+    xor = new XOR("XOR", 2);
+
     // set up the frequency generator
-    gen = new FrequencyGenerator("GEN", 854L, 853L);
+    gen = new FrequencyGenerator("FREQUENCY_GENERATOR", 854, 853);
     hardware.add(gen);
 
-    // set up the DSR sampling circuit
-    final DSR dsr = new DSR("TapeRecorderDSR");
+    // set up the Manchester decoder
+    decoder = new ManchesterDecoder("MANCHESTER_DECODER");
+    hardware.add(decoder);
 
     // connect the USART and the tape recorder
     new IONode()
@@ -226,20 +237,25 @@ public class ComputerHardware {
       .add(usart.getRtsPin());
     new IONode()
       .add(usart.getTxdPin())
-      .add(tapeRecorderHardware.getInPin());
+      .add(xor.getInPin(0));
     new IONode()
       .add(gen.getOutPin())
       .add(usart.getTxcPin())
-      .add(usart.getRxcPin())
-      .add(dsr.getClockPin());
+      .add(xor.getInPin(1));
+    new IONode()
+      .add(xor.getOutPin())
+      .add(tapeRecorderHardware.getInPin());
     new IONode()
       .add(tapeRecorderHardware.getOutPin())
-      .add(usart.getRxdPin())
-      .add(dsr.getSignalPin());
+      .add(usart.getDsrPin())
+      .add(decoder.getInPin());
     new IONode()
-      .add(dsr.getOutPin())
-      .add(usart.getDsrPin());
-      
+      .add(decoder.getClockPin())
+      .add(usart.getRxcPin());
+    new IONode()
+      .add(decoder.getDataPin())
+      .add(usart.getRxdPin());
+
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);
 

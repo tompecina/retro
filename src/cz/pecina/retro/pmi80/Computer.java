@@ -141,11 +141,6 @@ public class Computer {
       }
     }
 
-    // reset tape recorder counter (not needed unless the cycle counter
-    // is initially set to a non-zero value)
-    computerHardware.getTapeRecorderHardware().setCounterOffset(
-      Parameters.systemClockSource.getSystemClock());
-
     // start emulation
     new Timer(Constants.TIMER_PERIOD, new TimerListener()).start();
 

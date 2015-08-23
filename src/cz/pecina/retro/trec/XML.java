@@ -63,7 +63,7 @@ public class XML extends TapeProcessor {
 	     final TapeRecorderInterface tapeRecorderInterface) {
     super(tape);
     this.tapeRecorderInterface = tapeRecorderInterface;
-    log.fine("New XML created");
+    log.fine("New XML reader/writer created");
   }
 
   /**

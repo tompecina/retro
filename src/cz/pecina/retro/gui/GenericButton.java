@@ -69,9 +69,6 @@ public abstract class GenericButton
   // tool-tip
   private String toolTip;
 
-  // blocked flag
-  private boolean blocked;
-  
   // list of change listeners
   private final List<ChangeListener> changeListeners = new ArrayList<>();
 
@@ -221,25 +218,6 @@ public abstract class GenericButton
     } else {
       setIcon(offIcon);
     }
-  }
-
-
-  /**
-   * Sets the blocked flag.
-   *
-   * @param state <code>true</code> if the button is blocked
-   */
-  public void setBlocked(final boolean blocked) {
-    this.blocked = blocked;
-  }
-  
-  /**
-   * Tests if the button is blocked.
-   *
-   * @return <code>true</code> if the button is blocked
-   */
-  public boolean isBlocked() {
-    return blocked;
   }
 
   /**

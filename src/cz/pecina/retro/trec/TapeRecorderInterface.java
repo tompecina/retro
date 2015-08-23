@@ -40,7 +40,7 @@ public class TapeRecorderInterface {
   public static List<String> tapeFormats;
 
   /**
-   * Duration of one emulation cycle (used for VU meter).
+   * Duration of one emulation cycle (used for VU-meter).
    */
   public int timerPeriod;
 

@@ -144,12 +144,6 @@ public class Computer {
       }
     }
 
-    // reset tape recorder counter (not needed unless the cycle counter
-    // is initially set to a non-zero value)
-    computerHardware.getTapeRecorderHardware().setCounterOffset(
-      Parameters.systemClockSource.getSystemClock());
-
-
     // set the model and reset all stateful hardware
     computerHardware.setModel(this, UserPreferences.getModel());
 
