@@ -84,12 +84,13 @@ public class WAV extends TapeProcessor {
 
     // calculate array size
     final long tapeLength = tape.lastKey() + tape.get(tape.lastKey()) + 1;
-    final long silenceLength =
+    final int silenceLength =
       Math.round(OUTPUT_SILENCE_LENGTH * OUTPUT_SAMPLE_RATE);
-    final long soundLength = Math.round(
-      ((tapeLength / tapeRecorderInterface.tapeSampleRate) + 2) *
+    final int tapeSampleRate = tapeRecorderInterface.tapeSampleRate;
+    final int soundLength = Math.round(
+      ((tapeLength / tapeSampleRate) + 2) *
       OUTPUT_SAMPLE_RATE);
-    final long totalLength = soundLength + silenceLength;
+    final int totalLength = soundLength + silenceLength;
     final long dataChunkLength = totalLength * 4;
     final long riffChunkLength = dataChunkLength + 36;
     if (riffChunkLength > 0xffffffffL) {
@@ -99,14 +100,22 @@ public class WAV extends TapeProcessor {
   
     // fill in data
     final short[] buffer = new short[(int)totalLength];
-    for (int l = 0; l < soundLength; l++) {
-      buffer[l] = (l < silenceLength) ? 0 : Short.MIN_VALUE;
+    for (int i = 0; i < soundLength; i++) {
+      buffer[i] = (i < silenceLength) ? 0 : Short.MIN_VALUE;
     }
+    int last = -1;
     for (long start: tape.keySet()) {
-      final long end = ((start + tape.get(start)) * soundLength) / tapeLength;
-      for (int i = (int)((start * soundLength) / tapeLength); i < end; i++) {
-	buffer[(int)(i + silenceLength)] = Short.MAX_VALUE;
+      final int end =
+	Math.round(((start + tape.get(start)) * OUTPUT_SAMPLE_RATE) / tapeSampleRate);
+      for (int i = Math.round((start * OUTPUT_SAMPLE_RATE) / tapeSampleRate);
+	   i < end;
+	   i++) {
+	last = i + silenceLength;
+	buffer[last] = Short.MAX_VALUE;
       }
+    }
+    for (int i = last + 1; i < totalLength; i++) {
+      buffer[i] = 0;
     }
    
     // write the byte array to file (the Java implementation is broken)
