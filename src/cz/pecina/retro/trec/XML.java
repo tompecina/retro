@@ -179,6 +179,6 @@ public class XML extends TapeProcessor {
       log.fine("Error, parsing failed, exception: " + exception);
       throw Application.createError(this, "parsing");
     }
-    log.fine("Reading completed, with info: number: 0");
+    log.fine("Reading completed");
   }    
 }

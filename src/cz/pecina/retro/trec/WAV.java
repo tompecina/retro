@@ -21,6 +21,8 @@
 package cz.pecina.retro.trec;
 
 import java.util.logging.Logger;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
@@ -28,6 +30,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import cz.pecina.retro.common.Application;
 
 /**
@@ -46,7 +49,7 @@ public class WAV extends TapeProcessor {
   private static final float OUTPUT_SAMPLE_RATE = 44100;
   
   // length of initial silence, in seconds
-  private static final float OUTPUT_SILENCE_LENGTH = 1;
+  private static final float OUTPUT_SILENCE_LENGTH = 0.5f;
   
   // the tape recorder interface
   private TapeRecorderInterface tapeRecorderInterface;
@@ -127,71 +130,46 @@ public class WAV extends TapeProcessor {
   }
 
   /**
-   * Reads the tape from n WAV file.
+   * Reads the tape from a WAV file.
    *
    * @param file input file
    */
   public void read(final File file) {
     log.fine("Reading tape data from an WAV file, file: " + file);
-    // try {
-    //   SchemaFactory.newInstance(WAVConstants.W3C_WAV_SCHEMA_NS_URI)
-    // 	.newSchema(new StreamSource(getClass()
-    // 	.getResourceAsStream("tape-" + TAPE_WAV_FILE_VERSION + ".xsd")))
-    // 	.newValidator().validate(new StreamSource(file));
-    // } catch (Exception exception) {
-    //   log.fine("Error, validation failed, exception: " + exception);
-    //   throw Application.createError(this, "validation");
-    // }
-    // Document doc;
-    // try {
-    //   doc = new SAXBuilder().build(file);
-    // } catch (JDOMException exception) {
-    //   log.fine("Error, parsing failed, exception: " + exception);
-    //   throw Application.createError(this, "parsing");
-    // } catch (Exception exception) {
-    //   log.fine("Error, reading failed, exception: " + exception);
-    //   throw Application.createError(this, "WAVRead");
-    // }
-    // Element tag;
-    // try {
-    //   tag = doc.getRootElement();
-    // } catch (Exception exception) {
-    //   log.fine("Error, parsing failed, exception: " + exception);
-    //   throw Application.createError(this, "parsing");
-    // }
-    // if (!tag.getName().equals("tape")) {
-    //   log.fine("Error, parsing failed, no <tape> tag");
-    //   throw Application.createError(this, "noTape");
-    // }
-    // if (!TAPE_WAV_FILE_VERSION.equals(tag.getAttributeValue("version"))) {
-    //   log.fine("Version mismatch");
-    //   throw Application.createError(this, "version");
-    // }
-    // if (!"per sec".equals(tag.getAttributeValue("unit"))) {
-    //   log.fine("Unsupported sample rate");
-    //   throw Application.createError(this, "WAVSampleRate");
-    // }
-    // tape.clear();
-    // try {
-    //   long currPos = -1;
-    //   for (Element pulse: tag.getChildren("pulse")) {
-    // 	final long start = Long.parseLong(pulse.getAttributeValue("start"));
-    // 	final long duration =
-    // 	  Long.parseLong(pulse.getAttributeValue("duration"));
-    // 	if ((start <= currPos) ||
-    // 	    (duration <= 0) ||
-    // 	    ((start + duration) > tapeRecorderInterface.getMaxTapeLength())) {
-    // 	  log.fine("Error in WAV file");
-    // 	  throw Application.createError(this, "WAV");
-    // 	}
-    // 	tape.put(start, duration);
-    // 	log.finest(String.format("Read: (%d, %d)", start, duration));
-    // 	currPos = start;
-    //   }
-    // } catch (Exception exception) {
-    //   log.fine("Error, parsing failed, exception: " + exception);
-    //   throw Application.createError(this, "parsing");
-    // }
-    log.fine("Reading completed, with info: number: 0");
+
+    // read data and format information
+    AudioFileFormat fileFormat = null;
+    AudioFormat format = null;
+    int bytesPerFrame = 0;
+    final List<byte[]> buffer = new ArrayList<>();
+    try (AudioInputStream stream = AudioSystem.getAudioInputStream(file)) {
+      fileFormat = AudioSystem.getAudioFileFormat(file);
+      format = stream.getFormat();
+      bytesPerFrame = format.getFrameSize();
+      if (bytesPerFrame == AudioSystem.NOT_SPECIFIED) {
+	bytesPerFrame = 1;
+      }
+      byte[] b;
+      for (;;) {
+	b = new byte[bytesPerFrame];
+	if (stream.read(b) != bytesPerFrame) {
+	  break;
+	}
+	buffer.add(b);
+      }
+    } catch (final UnsupportedAudioFileException | IOException exception) {
+      log.fine("Error, reading failed, exception: " + exception);
+      throw Application.createError(this, "WAVRead");
+    }
+
+    // check encoding
+    final AudioFormat.Encoding encoding = format.getEncoding();
+    if ((encoding != AudioFormat.Encoding.PCM_SIGNED) &&
+	(encoding != AudioFormat.Encoding.PCM_UNSIGNED)) {
+      log.fine("Error, unsupported encoding, exception: " + encoding);
+      throw Application.createError(this, "WAVRead");
+    }
+
+    log.fine("Reading completed");
   }    
 }
