@@ -64,21 +64,34 @@ public final class PMDUtil {
   }
 
   /**
+   * Decodes Manchester encoded tape.
+   *
+   * @param  tape the tape to be processed
+   * @return      a <code>TreeMap</code> of decoded pulses      
+   */
+  public static TreeMap<Long,Long> decodeMachester(final Tape tape) {
+    for (long start: tape.keySet()) {
+      final long duration = tape.get(start);
+      
+  }
+
+  /**
    * Splits a tape into bytes.
    *
    * @param  tape the tape to be processed
-   * @return      a <code>TreeMap</code> tree of bytes and positions      
+   * @return      a <code>TreeMap</code> of bytes and positions      
    */
   public static TreeMap<Long,Byte> splitTape(final Tape tape) {
     log.fine("Splitting tape into bytes");
+    if (tape.isEmpty()) {
+      log.fine("Empty tape");
+      return map;
+    }
     final TreeMap<Long,Byte> map = new TreeMap<>();
     final Iterator<Long> keys = tape.keySet().iterator();
     int state = 0, bit = 0, buffer = 0;
     boolean inPulse = false;
     long start = 0, pos = 0, remains = 0;
-    if (!keys.hasNext()) {
-      return map;  // empty tape
-    }
     long nextPulse = keys.next();
     for (;;) {
       switch (state) {
