@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioFileFormat;
@@ -76,57 +78,67 @@ public class WAV extends TapeProcessor {
   public void write(final File file) {
     log.fine("Writing tape data to an WAV file, file: " + file);
     assert !tape.isEmpty();
-    
+
+    // calculate array size
     final long tapeLength = tape.lastKey() + tape.get(tape.lastKey()) + 1;
-    final int silenceLength =
+    final long silenceLength =
       Math.round(OUTPUT_SILENCE_LENGTH * OUTPUT_SAMPLE_RATE);
-    final int soundLength = Math.round(
+    final long soundLength = Math.round(
       ((tapeLength / tapeRecorderInterface.tapeSampleRate) + 2) *
       OUTPUT_SAMPLE_RATE);
-
-    final short[] buffer = new short[soundLength + silenceLength];
+    final long totalLength = soundLength + silenceLength;
+    final long dataChunkLength = totalLength * 4;
+    final long riffChunkLength = dataChunkLength + 36;
+    if (riffChunkLength > 0xffffffffL) {
+      log.fine("Error, tape too long");
+      throw Application.createError(this, "tooLong");
+    }
+  
+    // fill in data
+    final short[] buffer = new short[(int)totalLength];
     for (int l = 0; l < soundLength; l++) {
       buffer[l] = (l < silenceLength) ? 0 : Short.MIN_VALUE;
     }
     for (long start: tape.keySet()) {
       final long end = ((start + tape.get(start)) * soundLength) / tapeLength;
-      for (int l = (int)((start * soundLength) / tapeLength); l < end; l++) {
-	buffer[l + silenceLength] = Short.MAX_VALUE;
+      for (int i = (int)((start * soundLength) / tapeLength); i < end; i++) {
+	buffer[(int)(i + silenceLength)] = Short.MAX_VALUE;
       }
     }
-
-    final AudioFormat format =
-      new AudioFormat(OUTPUT_SAMPLE_RATE, 16, 2, true, false);
-    try (AudioInputStream stream =
-	 new AudioInputStream(new WavStream(buffer), format, 2 * tapeLength)) {
-      AudioSystem.write(stream, AudioFileFormat.Type.WAVE, file);
+   
+    // write the byte array to file (the Java implementation is broken)
+    try (FileOutputStream outputStream = new FileOutputStream(file)) {
+      outputStream.write(new byte[]
+	{(byte)0x52, (byte)0x49, (byte)0x46, (byte)0x46});
+      outputStream.write((byte)(riffChunkLength & 0xff));
+      outputStream.write((byte)((riffChunkLength >> 8) & 0xff));
+      outputStream.write((byte)((riffChunkLength >> 16) & 0xff));
+      outputStream.write((byte)((riffChunkLength >> 24) & 0xff));
+      outputStream.write(new byte[]
+	{(byte)0x57, (byte)0x41, (byte)0x56, (byte)0x45,
+	 (byte)0x66, (byte)0x6d, (byte)0x74, (byte)0x20,
+	 (byte)0x10, (byte)0x00, (byte)0x00, (byte)0x00,
+	 (byte)0x01, (byte)0x00, (byte)0x02, (byte)0x00,
+	 (byte)0x44, (byte)0xac, (byte)0x00, (byte)0x00,
+	 (byte)0x10, (byte)0xb1, (byte)0x02, (byte)0x00,
+	 (byte)0x04, (byte)0x00, (byte)0x10, (byte)0x00,
+	 (byte)0x64, (byte)0x61, (byte)0x74, (byte)0x61});
+      outputStream.write((byte)(dataChunkLength & 0xff));
+      outputStream.write((byte)((dataChunkLength >> 8) & 0xff));
+      outputStream.write((byte)((dataChunkLength >> 16) & 0xff));
+      outputStream.write((byte)((dataChunkLength >> 24) & 0xff));
+      for (int i = 0; i < totalLength; i++) {
+	outputStream.write((byte)(buffer[i] & 0xff));
+	outputStream.write((byte)(buffer[i] >> 8));
+	outputStream.write((byte)(buffer[i] & 0xff));
+	outputStream.write((byte)(buffer[i] >> 8));
+      }
     } catch (final IOException exception) {
-      log.fine("Error, writing failed, exception: " + exception);
+      log.fine("Error, writing to file failed, exception: " + exception);
       throw Application.createError(this, "WAVWrite");
     }
     
     log.fine("Writing completed");
-  }
-
-  // WAV stream
-  private class WavStream extends InputStream {
-    private short[] buffer;
-    private int index = -1;
-    
-    public WavStream(final short[] buffer) {
-      this.buffer = buffer;
-    }
-
-    // for description see InputStream
-    @Override
-    public int read() {
-      if ((++index >> 2) >= buffer.length) {
-	return -1;
-      }
-      return ((index & 1) == 0) ?
-	     (buffer[index >> 2] & 0xff) :
-	     (buffer[index >> 2] >> 8);
-    }
   }
 
   /**
