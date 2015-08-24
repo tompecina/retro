@@ -78,7 +78,7 @@ public class MappedMemory extends SimpleMemory {
   /**
    * Sets the read listener.
    *
-   * @param readListner the read listener or <code>null</code> if none
+   * @param readListener the read listener or <code>null</code> if none
    */
   public void setReadListener(final ReadListener readListener) {
     this.readListener = readListener;
@@ -96,7 +96,7 @@ public class MappedMemory extends SimpleMemory {
   /**
    * Sets the write listener.
    *
-   * @param writeListner the write listener or <code>null</code> if none
+   * @param writeListener the write listener or <code>null</code> if none
    */
   public void setWriteListener(final WriteListener writeListener) {
     this.writeListener = writeListener;

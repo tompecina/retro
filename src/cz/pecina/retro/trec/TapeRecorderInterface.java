@@ -58,13 +58,4 @@ public class TapeRecorderInterface {
    * VU-meter sensitivity constant for replay.
    */
   public double vuPlayConstant;
-
-  /**
-   * Get maximum tape length, in samples/CPU cycles.
-   *
-   * @return maximum tape length, in samples/CPU cycles
-   */
-  public long getMaxTapeLength() {
-    return (long)(Tape.MAX_TAPE_LENGTH_IN_SEC) * (long)tapeSampleRate;
-  }
 }

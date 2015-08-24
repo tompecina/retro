@@ -160,9 +160,9 @@ public final class Application {
   /**
    * Gets a localized text resource.
    *
-   * @param  bundle the <code>Class</code> identifying the resource bundle
-   * @param  key    the key for the desired string
-   * @return        the string for the given key
+   * @param  cl  the <code>Class</code> identifying the resource bundle
+   * @param  key the key for the desired string
+   * @return     the string for the given key
    */
   public static String getString(final Class cl, final String key) {
     log.finest("Text resource requested: " + key);

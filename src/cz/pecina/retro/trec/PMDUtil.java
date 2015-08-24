@@ -46,6 +46,10 @@ public final class PMDUtil {
    */
   public static final long SLOT = 0x6ab;
 
+  // halves of slot
+  private static final long FIRST_HALFSLOT = SLOT / 2;
+  private static final long SECOND_HALFSLOT = SLOT - (SLOT / 2);
+  
   /**
    * Calculates a plain one-byte checksum over a part of a list.
    *
@@ -287,30 +291,31 @@ public final class PMDUtil {
 
   /**
    * Writes a pause to the tape.
+   * <p>
+   * The duration of the pause is rounded up to an integer number of slots.
    *
    * @param     tape          the tape
    * @param     start         the starting position
-   * @param     ifc           the tape recorder interface object
    * @param     length        the pause duration in system clock cycles
    * @return                  the new position
    * @exception TapeException if tape full
    */
   public static long pause(final Tape tape,
-			   final long start,
-			   final TapeRecorderInterface ifc,
+			   long start,
 			   final long length
 			   ) throws TapeException {
     log.fine("Writing pause of length: " + length);
-    final long p = start + ((length * ifc.tapeSampleRate) / 1000); 
-    if (p > ifc.getMaxTapeLength()) {
-      throw new TapeException(Application.getString(PMDUtil.class,
-						    "error.tapeFull"));
+    for (long i = (length + SLOT - 1) / SLOT; i >= 0; i--) {
+      tape.put(start, FIRST_HALFSLOT);
+      start += SLOT;
     }
-    return p;
+    return start;
   }
   
   /**
    * Writes a long pause (2500ms) to the tape.
+   * <p>
+   * The duration of the pause is rounded up to an integer number of slots.
    *
    * @param     tape          the tape
    * @param     start         the starting position
@@ -323,11 +328,13 @@ public final class PMDUtil {
 			       final TapeRecorderInterface ifc
 			       ) throws TapeException {
     log.fine("Writing long pause");
-    return pause(tape, start, ifc, 2500);
+    return pause(tape, start, (2500L * ifc.tapeSampleRate) / 1000L);
   }
   
   /**
    * Writes a short pause (500ms) to the tape.
+   * <p>
+   * The duration of the pause is rounded up to an integer number of slots.
    *
    * @param     tape          the tape
    * @param     start         the starting position
@@ -340,7 +347,7 @@ public final class PMDUtil {
 				final TapeRecorderInterface ifc
 				) throws TapeException {
     log.fine("Writing short pause");
-    return pause(tape, start, ifc, 500);
+    return pause(tape, start, (500L * ifc.tapeSampleRate) / 1000L);
   }
   
   /**
@@ -348,43 +355,38 @@ public final class PMDUtil {
    *
    * @param     tape          the tape
    * @param     start         the starting position
-   * @param     ifc           the tape recorder interface object
    * @param     bytes         list of bytes to be written
    * @return                  the new position
    * @exception TapeException on error in data
    */
   public static long write(final Tape tape,
-			   final long start,
-			   final TapeRecorderInterface ifc,
+			   long start,
 			   final List<Byte> bytes
 			   ) throws TapeException {
     log.fine("Writing " + bytes.size() + " byte(s) to tape");
-    long pos = start, p = 0;
+    long p = 0, lastPulse = -1;
     for (byte b: bytes) {
       log.finest(String.format("Writing byte: 0x%02x", b));
-      if ((pos + (11 * SLOT)) > ifc.getMaxTapeLength()) {
-	throw new TapeException(Application.getString(PMDUtil.class,
-						      "error.tapeFull"));
-      }
       int s = ((b & 0xff) | 0x0300) << 1;
-      int l = 1, ctr = 0;
       while (s != 0) {
-	final int n = s & 1;
-	if (n != l) {
-	  if (n == 0) {
-	    p = pos;
-	  } else {
-	    tape.put(p, ctr * SLOT);
+	if ((s & 1) == 0) {
+	  if (lastPulse != -1) {
+	    tape.put(lastPulse, SECOND_HALFSLOT);
 	  }
-	  ctr = 0;
-	  l = n;
+	  lastPulse = start + FIRST_HALFSLOT;
+	} else {
+	  if (lastPulse != -1) {
+	    tape.put(lastPulse, SLOT);
+	  } else {
+	    tape.put(start, FIRST_HALFSLOT);
+	  }
+	  lastPulse = -1;
 	}
-	pos += SLOT;
-	ctr++;
+	start += SLOT;
 	s >>= 1;
       }
     }
-    return pos;
+    return start;
   }
 
   /**

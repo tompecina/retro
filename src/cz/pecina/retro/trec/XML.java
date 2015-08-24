@@ -96,9 +96,7 @@ public class XML extends TapeProcessor {
       for (long start: tape.navigableKeySet()) {
 	final long duration = tape.get(start);
 	log.finest(String.format("Fetched: (%d, %d)", start, duration));
-	if ((start > currPos) &&
-	    (duration > 0) &&
-	    ((start + duration) <= tapeRecorderInterface.getMaxTapeLength())) {
+	if ((start > currPos) && (duration > 0)) {
 	  final Element pulse = new Element("pulse");
 	  pulse.setAttribute("start", String.valueOf(start));
 	  pulse.setAttribute("duration", String.valueOf(duration));
@@ -173,9 +171,7 @@ public class XML extends TapeProcessor {
 	final long start = Long.parseLong(pulse.getAttributeValue("start"));
 	final long duration =
 	  Long.parseLong(pulse.getAttributeValue("duration"));
-	if ((start <= currPos) ||
-	    (duration <= 0) ||
-	    ((start + duration) > tapeRecorderInterface.getMaxTapeLength())) {
+	if ((start <= currPos) || (duration <= 0)) {
 	  log.fine("Error in XML file");
 	  throw Application.createError(this, "XML");
 	}

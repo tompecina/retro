@@ -189,8 +189,8 @@ public class TapeRecorderHardware implements CPUEventOwner {
    * Resets the tape position and counter.
    */
   public void resetTape() {
+    offset -= position;
     position = 0;
-    offset = 0;
   }
 
   /**

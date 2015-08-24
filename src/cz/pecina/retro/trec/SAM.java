@@ -81,8 +81,7 @@ public class SAM extends TapeProcessor {
       for (long start: tape.navigableKeySet()) {
 	final long duration =
 	  tape.get(start) - tapeRecorderInterface.holdOffPeriod;
-	if ((start > currPos) && (duration > 0) &&
-	    ((start + duration) <= tapeRecorderInterface.getMaxTapeLength())) {
+	if ((start > currPos) && (duration > 0)) {
 	  for (; currPos < start; currPos++) {
 	    if ((currPos % SAM_DIVISOR) == 0) {
 	      oStream.write(0xff);

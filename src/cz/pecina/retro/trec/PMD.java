@@ -150,13 +150,8 @@ public class PMD extends TapeProcessor {
       try {
 	log.finer("Writing header for block " + header.getFileNumber() +
 		  ", name: '" + header.getFileName() + "'");
-	currPosition = PMDUtil.longPause(tape,
-					 currPosition,
-					 tapeRecorderInterface);
-	currPosition = PMDUtil.write(tape,
-				     currPosition,
-				     tapeRecorderInterface,
-				     header.getBytes());
+	currPosition = PMDUtil.longPause(tape, currPosition, tapeRecorderInterface);
+	currPosition = PMDUtil.write(tape, currPosition, header.getBytes());
 	pointer += 63;
 	log.finer("New pointer: " + pointer);
       } catch (final TapeException exception) {
@@ -188,12 +183,9 @@ public class PMD extends TapeProcessor {
       try {
 	log.finer("Writing block " + header.getFileNumber() +
 		  ", name: '" + header.getFileName() + "'");
-	currPosition = PMDUtil.shortPause(tape,
-					  currPosition,
-					  tapeRecorderInterface);
+	currPosition = PMDUtil.shortPause(tape, currPosition, tapeRecorderInterface);
 	currPosition = PMDUtil.write(tape,
 				     currPosition,
-				     tapeRecorderInterface,
 				     list.subList(pointer, pointer + blockLength));
 	pointer += blockLength;
 	log.finer("New pointer: " + pointer);
@@ -208,12 +200,9 @@ public class PMD extends TapeProcessor {
     if (pointer < list.size()) {
       try {
 	log.finer("Writing custom block");
-	currPosition = PMDUtil.shortPause(tape,
-					  currPosition,
-					  tapeRecorderInterface);
+	currPosition = PMDUtil.shortPause(tape, currPosition, tapeRecorderInterface);
 	currPosition = PMDUtil.write(tape,
 				     currPosition,
-				     tapeRecorderInterface,
 				     list.subList(pointer, list.size()));
 	log.finer("Custom block written");
       } catch (final TapeException exception) {

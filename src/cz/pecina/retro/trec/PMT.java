@@ -79,8 +79,7 @@ public class PMT extends TapeProcessor {
       dStream.writeInt(tapeRecorderInterface.tapeSampleRate);
       for (long start: tape.navigableKeySet()) {
 	final long duration = tape.get(start);
-	if ((start > currPos) && (duration > 0) &&
-	    ((start + duration) <= tapeRecorderInterface.getMaxTapeLength())) {
+	if ((start > currPos) && (duration > 0)) {
 	  dStream.writeLongCompressed(start);
 	  dStream.writeLongCompressed(duration);
 	  currPos = start + duration;
@@ -115,9 +114,7 @@ public class PMT extends TapeProcessor {
 	while (true) {
 	  final long start = dStream.readLongCompressed(); 
 	  final long duration = dStream.readLongCompressed();
-	  if ((start <= currPos) ||
-	      (duration <= 0) ||
-	      ((start + duration) > tapeRecorderInterface.getMaxTapeLength())) {
+	  if ((start <= currPos) || (duration <= 0)) {
 	    throw Application.createError(this, "PMT");
 	  }
 	  tape.put(start, duration);

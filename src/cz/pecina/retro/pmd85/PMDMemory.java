@@ -271,7 +271,7 @@ public class PMDMemory
   /**
    * Sets the size of the ROM module.
    *
-   * @param sizeRAM the size of the ROM module (in KiB)
+   * @param sizeRMM the size of the ROM module (in KiB)
    */
   public void setSizeRMM(final int sizeRMM) {
     assert (sizeRMM >= 0) && (sizeRAM <= 32);

@@ -75,9 +75,7 @@ public class PMITAPE extends TapeProcessor {
     try (final FileWriter writer = new FileWriter(file)) {
       for (long start: tape.navigableKeySet()) {
 	final long duration = tape.get(start);
-	if ((start > currPos) &&
-	    (duration > 0) &&
-	    ((start + duration) <= tapeRecorderInterface.getMaxTapeLength())) {
+	if ((start > currPos) && (duration > 0)) {
 	  writer.write((currPos < 0) ? "[" : ",");
 	  final long gap = start - ((currPos < 0) ? 0 : currPos);
 	  writer.write(gap + "," + duration);
@@ -107,9 +105,7 @@ public class PMITAPE extends TapeProcessor {
       while (scanner.hasNextLong()) {
 	final long start = scanner.nextLong();
 	final long duration = scanner.nextLong();
-	if ((duration <= 0) ||
-	    ((currPos + start + duration) >
-	     tapeRecorderInterface.getMaxTapeLength())) {
+	if (duration <= 0) {
 	  log.fine("Error, reading failed");
 	  throw Application.createError(this, "PMITAPE");
 	}

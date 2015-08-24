@@ -30,7 +30,7 @@ import javax.swing.JComponent;
 import javax.swing.BorderFactory;
 
 /**
- * Square fixed-size swatch.
+ * Square fixed-size color swatch.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -50,7 +50,7 @@ public class Swatch extends JComponent {
   /**
    * Creates a swatch,
    *
-   * @param type  type of the element
+   * @param size  size of the element
    * @param color color of the element
    */
   public Swatch(final int size, final Color color) {

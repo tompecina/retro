@@ -67,7 +67,7 @@ public class ComputerPanel extends BackgroundFixedPane {
    * Creates the layered panel containing the elements of the main
    * control panel.
    *
-   * @param computerFram     the enclosing frame
+   * @param computerFrame    the enclosing frame
    * @param computer         the computer control object
    * @param displayHardware  the display hardware to operate on
    * @param keyboardHardware the keyboard hardware to operate on

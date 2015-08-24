@@ -41,8 +41,9 @@ import cz.pecina.retro.common.Application;
  * <p>
  * PTP is a proprietary binary format developed by Roman and Martin Bórik
  * for their Tesla PMD 85 emulator.  The format is described on the website
- * of their project at {@link http://pmd85.borik.net/wiki/PTP}.  PTP is less
- * versatile than the internal format of PMD85, which can only be truly 
+ * of their project at
+ *  <a href="http://pmd85.borik.net/wiki/PTP">http://pmd85.borik.net/wiki/PTP</a>.
+ * PTP is less versatile than the internal format of PMD85, which can only be truly 
  * represented in XML and PMT formats.  Therefore, all PTP files can be imported
  * into the PMD85 emulator, export is limited to those tapes that have blocks
  * separated by gaps of at least 100ms.  No check is made on the correctness
@@ -176,13 +177,8 @@ public class PTP extends TapeProcessor {
 	try {
 	  log.finer("Writing header for block " + header.getFileNumber() +
 		    ", name: '" + header.getFileName() + "'");
-	  currPosition = PMDUtil.longPause(tape,
-					   currPosition,
-					   tapeRecorderInterface);
-	  currPosition = PMDUtil.write(tape,
-				       currPosition,
-				       tapeRecorderInterface,
-				       header.getBytes());
+	  currPosition = PMDUtil.longPause(tape, currPosition, tapeRecorderInterface);
+	  currPosition = PMDUtil.write(tape, currPosition, header.getBytes());
 	  log.finer("New pointer: " + pointer);
 	} catch (final TapeException exception) {
 	  log.fine("Failed, exception: " + exception.getMessage());
@@ -229,13 +225,8 @@ public class PTP extends TapeProcessor {
 	try {
 	  log.finer("Writing block " + header.getFileNumber() +
 		    ", name: '" + header.getFileName() + "'");
-	  currPosition = PMDUtil.shortPause(tape,
-					    currPosition,
-					    tapeRecorderInterface);
-	  currPosition = PMDUtil.write(tape,
-				       currPosition,
-				       tapeRecorderInterface,
-				       list);
+	  currPosition = PMDUtil.shortPause(tape, currPosition, tapeRecorderInterface);
+	  currPosition = PMDUtil.write(tape, currPosition, list);
 	  log.finer("New pointer: " + pointer);
 	} catch (final TapeException exception) {
 	  log.fine("Failed, exception: " + exception.getMessage());
@@ -248,13 +239,8 @@ public class PTP extends TapeProcessor {
 	// write custom type block
 	try {
 	  log.finer("Writing custom type block");
-	  currPosition = PMDUtil.longPause(tape,
-					   currPosition,
-					   tapeRecorderInterface);
-	  currPosition = PMDUtil.write(tape,
-				       currPosition,
-				       tapeRecorderInterface,
-				       list);
+	  currPosition = PMDUtil.longPause(tape, currPosition, tapeRecorderInterface);
+	  currPosition = PMDUtil.write(tape, currPosition, list);
 	  log.finer("New pointer: " + pointer);
 	} catch (final TapeException exception) {
 	  log.fine("Failed, exception: " + exception.getMessage());
