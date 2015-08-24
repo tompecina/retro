@@ -48,6 +48,9 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
   // period of 1/2 tape recorder clock, in CPU clock units
   private static final long SAMPLING_DELAY_RESET = 853;
 
+  // number of 0's before inverting signal
+  private static final int ZERO_LIMIT = 25;
+
   // input level
   private int input;
 
@@ -212,7 +215,7 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
     if (data == 1) {
       trigger = 0;
     }
-    if (trigger == 25) {
+    if (trigger == ZERO_LIMIT) {
       log.finer("Too many 0's, inverting");
       trigger = 0;
       scheduler.addScheduledEvent(

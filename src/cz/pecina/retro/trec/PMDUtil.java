@@ -63,18 +63,19 @@ public final class PMDUtil {
     return s;
   }
 
-  /**
-   * Decodes Manchester encoded tape.
-   *
-   * @param  tape the tape to be processed
-   * @return      a <code>TreeMap</code> of decoded pulses      
-   */
-  public static TreeMap<Long,Long> decodeMachester(final Tape tape) {
-    for (long start: tape.keySet()) {
-      final long duration = tape.get(start);
-      
-  }
 
+  // process pulse
+  //  0 = short, 1 = long, 2 = too long
+  private static byte procPulse(final long d) {
+    if (d < 1280) {
+      return (byte)0;
+    } else if (d < 2133) {
+      return (byte)1;
+    } else {
+      return (byte)2;
+    }
+  }
+      
   /**
    * Splits a tape into bytes.
    *
@@ -83,90 +84,115 @@ public final class PMDUtil {
    */
   public static TreeMap<Long,Byte> splitTape(final Tape tape) {
     log.fine("Splitting tape into bytes");
+    final TreeMap<Long,Byte> map = new TreeMap<>();
     if (tape.isEmpty()) {
       log.fine("Empty tape");
       return map;
     }
-    final TreeMap<Long,Byte> map = new TreeMap<>();
-    final Iterator<Long> keys = tape.keySet().iterator();
-    int state = 0, bit = 0, buffer = 0;
-    boolean inPulse = false;
-    long start = 0, pos = 0, remains = 0;
-    long nextPulse = keys.next();
-    for (;;) {
-      switch (state) {
-	case 0:  // start-bit
-	  start = nextPulse;
-	  remains = tape.get(nextPulse) - (SLOT / 2);
-	  if (remains < 0) {
-	    log.fine("Start-bit too short, failed");
-	    return null;  // start-bit too short
+
+    // convert tape into a map of short/long pulses
+    final TreeMap<Long,Byte> pulseMap = new TreeMap<>();
+    long lastPulse = -1;
+    for (long start: tape.keySet()) {
+      if (lastPulse != -1) {
+	pulseMap.put(lastPulse, procPulse(start - lastPulse));
+      }
+      final long duration = tape.get(start);
+      pulseMap.put(start, procPulse(duration));
+      lastPulse = start + duration;
+    }
+    log.finer("Pulse map populated");
+
+
+    // convert pulses into levels
+    final TreeMap<Long,Boolean> levelMap = new TreeMap<>();
+    int counter = 0;
+    boolean level = true, lastShort = false;
+    for (long start: pulseMap.keySet()) {
+      switch (pulseMap.get(start)) {
+	case 0:
+	  log.finest("Short pulse at: " + start);
+	  if (lastShort) {
+	    log.finest("Putting level: " + level + " at: " + start);
+	    levelMap.put(start, level);
+	    lastShort = false;
+	  } else {
+	    lastShort = true;
 	  }
-	  log.finer("Start-bit detected at: " + start);
-	  inPulse = true;
-	  pos = nextPulse + SLOT + (SLOT / 2);
-	  remains -= SLOT;
-	  bit = buffer = 0;
-	  state++;
 	  break;
-	case 1:  // data bits
-	  buffer |= (inPulse ? 0 : 1) << bit;
-	  log.finest(String.format("Data-bit, bit: %d, buffer: %02x", bit, buffer));
-	  pos += SLOT;
-	  remains -= SLOT;
-	  if (++bit == 8) {
-	    log.finer(String.format("Writing byte, start: %d, value: %02x", start, buffer));
-	    map.put(start, (byte)buffer);
+	case 1:
+	  log.finest("Long pulse at: " + start);
+	  level = !level;
+	  log.finest("Putting level: " + level + " at: " + start);
+	  levelMap.put(start, level);
+	  lastShort = false;
+	  break;
+	case 2:
+	  log.finer("Excessively long pulse, resetting at: " + start);
+	  level = true;
+	  lastShort = false;
+	  break;
+      }
+      if (level) {
+	counter = 0;
+      } else {
+	if (++counter == 50) {
+	  level = !level;
+	}
+      }
+    }
+    log.finer("Level map populated");
+      
+    // process the level map
+    final Iterator<Long> keys = levelMap.keySet().iterator();
+    int state = 0, bit = 0, buffer = 0;
+    for (;;) {
+      if (!keys.hasNext()) {
+	return map;
+      }
+      final long start = keys.next();
+      level = levelMap.get(start);
+      switch (state) {
+	case 0:  // searching for start-bit
+	  if (!level) {
+	    log.finer("Start-bit detected at: " + start);
+	    bit = buffer = 0;
 	    state++;
 	  }
 	  break;
-	case 2:  // stop-bit 1
-	  log.finest("Testing stop-bit 1");
-	  if (inPulse) {
-	    log.fine("Framing error, failed");
-	    return null;  // framing error
+	case 1:  // data
+	  buffer |= (level ? 1 : 0) << bit;
+	  log.finest(String.format(
+	    "Data-bit, bit: %d, buffer: %02x", bit, buffer));
+	  if (++bit == 8) {
+	    state++;
 	  }
-	  pos += SLOT;
-	  remains -= SLOT;
+	  break;
+	case 2:  // stop bit 1
+	  log.finest("Testing stop-bit 1");
+	  if (!level) {
+	    log.finest("Framing error at stop-bit 1");
+	    state += 2;
+	  }
 	  state++;
 	  break;
-	case 3:  // stop-bit 2
+	case 3:  // stop bit 2
 	  log.finest("Testing stop-bit 2");
-	  if (inPulse) {
-	    log.fine("Framing error, failed");
-	    return null;  // framing error
+	  if (!level) {
+	    log.finest("Framing error at stop-bit 2");
+	    state++;
 	  }
-	  if (remains > (Long.MAX_VALUE / 2)) {
-	    log.fine("Finished, success");
-	    return map;  // done
-	  }
+	  log.finer(String.format(
+	    "Writing byte, start: %d, value: %02x", start, buffer));
+	  map.put(start, (byte)buffer);
 	  state = 0;
 	  break;
-      }
-      log.finest(String.format("Next slot, inPulse: %s, pos: %d, remains: %d",
-			       inPulse, pos, remains));
-      if (remains <= 0) {
-	if (inPulse) {
-	  if (keys.hasNext()) {
-	    nextPulse = keys.next();
-	    remains = nextPulse - pos;
-	    log.finest(String.format("Next pulse read, starting at: %d, remains: %d",
-				     nextPulse, remains));
-	    if (remains <= 0) {
-	      log.fine("Pulses too close together, failed");
-	      return null;  // pulses too close together
-	    }
-	  } else {
-	    remains = Long.MAX_VALUE;
+	case 4:  // recovering from framing error
+	  log.finest("Recovering from framing error");
+	  if (level) {
+	    state = 0;
 	  }
-	} else {
-	  remains = tape.get(nextPulse) - pos + nextPulse;
-	  if (remains <= 0) {
-	    log.fine("Pulse too short, failed");
-	    return null;  // pulse to short
-	  }
-	}
-	inPulse = !inPulse;
+	  break;
       }
     }
   }
