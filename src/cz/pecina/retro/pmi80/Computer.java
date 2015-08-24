@@ -155,6 +155,8 @@ public class Computer {
 
   // timer listener
   private class TimerListener implements ActionListener {
+
+    // for description see ActionListener
     @Override
     public void actionPerformed(final ActionEvent event) {
       run();

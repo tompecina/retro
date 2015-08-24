@@ -35,14 +35,18 @@ import java.net.URISyntaxException;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.common.Util;
+import cz.pecina.retro.common.Sound;
 
 import cz.pecina.retro.cpu.IONode;
 import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.Intel8080A;
 import cz.pecina.retro.cpu.Intel8255A;
 import cz.pecina.retro.cpu.Intel8251A;
+import cz.pecina.retro.cpu.Invertor;
+import cz.pecina.retro.cpu.NAND;
 import cz.pecina.retro.cpu.XOR;
 import cz.pecina.retro.cpu.FrequencyGenerator;
+import cz.pecina.retro.cpu.FrequencyDivider;
 import cz.pecina.retro.cpu.LowPin;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.IONode;
@@ -90,6 +94,16 @@ public class ComputerHardware {
 
   // the tape recorder frequency generator (freq = phi2/0x6ab = ca 1199.77Hz)
   private FrequencyGenerator gen;
+
+  // the fixed frequency generator (freq = 4000Hz)
+  private FrequencyGenerator gen4k;
+
+  // the 1:4 frequency divider
+  private FrequencyDivider div;
+
+  // the speaker & yellow LED logic
+  private NAND pc0nand, pc1nand, speakerNand;
+  private Invertor pc2inv;
 
   // the tape recorder Manchester decoder
   private ManchesterDecoder decoder;
@@ -199,18 +213,6 @@ public class ComputerHardware {
     new IONode()
       .add(systemPIO.getPin(8 + 6))
       .add(keyboardHardware.getStopPin());
-    new IONode()
-      .add(systemPIO.getPin(16 + 2))
-      .add(keyboardHardware.getYellowLEDPin())
-      .add(yellowLEDPin);
-    new IONode()
-      .add(systemPIO.getPin(16 + 3))
-      .add(keyboardHardware.getRedLEDPin())
-      .add(redLEDPin);
-    new IONode()
-      .add(new LowPin())
-      .add(keyboardHardware.getGreenLEDPin())
-      .add(greenLEDPin);
     
     // set up the ROM module hardware
     romModuleHardware = new ROMModuleHardware(this);
@@ -233,7 +235,7 @@ public class ComputerHardware {
     xor = new XOR("XOR", 2);
 
     // set up the frequency generator
-    gen = new FrequencyGenerator("FREQUENCY_GENERATOR", 854, 853);
+    gen = new FrequencyGenerator("TREC_GENERATOR", 854, 853);
     hardware.add(gen);
 
     // set up the Manchester decoder
@@ -264,6 +266,58 @@ public class ComputerHardware {
     new IONode()
       .add(decoder.getDataPin())
       .add(usart.getRxdPin());
+
+    // set up the sound interface
+    Parameters.sound = new Sound(16000, 2);
+
+    // set up fixed frequency source and related logic
+    gen4k = new FrequencyGenerator("FREQUENCY_GENERATOR_4K", 0x100, 0x100);  // 4000Hz
+    hardware.add(gen4k);
+    div = new FrequencyDivider("FREQUNCY_DIVIDER", 4, false);
+    hardware.add(div);
+    pc0nand = new NAND("NAND_PC0", 2);
+    pc1nand = new NAND("NAND_PC1", 2);
+    pc2inv = new Invertor("INVERTOR_PC2");
+    speakerNand = new NAND("SPEAKER_NAND", 3);
+    
+    // connect speaker and LEDs
+    new IONode()
+      .add(gen4k.getOutPin())
+      .add(pc1nand.getInPin(1))
+      .add(div.getInPin());
+    new IONode()
+      .add(systemPIO.getPin(16 + 1))
+      .add(pc1nand.getInPin(0));
+    new IONode()
+      .add(div.getOutPin())
+      .add(pc0nand.getInPin(1));
+    new IONode()
+      .add(systemPIO.getPin(16))
+      .add(pc0nand.getInPin(0));
+    new IONode()
+      .add(systemPIO.getPin(16 + 2))
+      .add(pc2inv.getInPin());
+    new IONode()
+      .add(pc0nand.getOutPin())
+      .add(speakerNand.getInPin(0));
+    new IONode()
+      .add(pc1nand.getOutPin())
+      .add(speakerNand.getInPin(2));
+    new IONode()
+      .add(pc2inv.getOutPin())
+      .add(speakerNand.getInPin(1));
+    new IONode()
+      .add(speakerNand.getOutPin())
+      .add(keyboardHardware.getYellowLEDPin())
+      .add(yellowLEDPin);
+    new IONode()
+      .add(systemPIO.getPin(16 + 3))
+      .add(keyboardHardware.getRedLEDPin())
+      .add(redLEDPin);
+    new IONode()
+      .add(new LowPin())
+      .add(keyboardHardware.getGreenLEDPin())
+      .add(greenLEDPin);
 
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);

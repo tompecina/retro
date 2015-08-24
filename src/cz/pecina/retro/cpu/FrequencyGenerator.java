@@ -55,6 +55,8 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
 
   // output pin
   private class OutPin extends IOPin {
+
+    // for description see IOPin
     @Override
     public int query() {
       return output;
@@ -64,7 +66,7 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
   /**
    * Gets the output pin.
    *
-   * @return the output
+   * @return the output pin
    */
   public IOPin getOutPin() {
     return outPin;
@@ -97,11 +99,11 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
     super(name);
     log = Logger.getLogger(getClass().getName() + "." + name);
     log.fine(String.format(
-      "New frequency generator started, name: %s, off: %d, on: %d",
+      "New frequency generator creation started, name: %s, off: %d, on: %d",
       name,
       offPeriod, onPeriod));
-    assert offPeriod > 0L;
-    assert onPeriod > 0L;
+    assert offPeriod > 0;
+    assert onPeriod > 0;
 
     this.offPeriod = offPeriod;
     this.onPeriod = onPeriod;

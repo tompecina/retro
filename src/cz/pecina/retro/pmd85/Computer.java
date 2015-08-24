@@ -110,7 +110,7 @@ public class Computer {
    */
   public Computer() {
     log.fine("New Computer creation started");
-
+    
     // set up the computer hardware
     computerHardware = new ComputerHardware();
 
@@ -161,6 +161,8 @@ public class Computer {
 
   // timer listener
   private class TimerListener implements ActionListener {
+
+    // for description see ActionListener
     @Override
     public void actionPerformed(final ActionEvent event) {
       run();

@@ -1,0 +1,196 @@
+/* Sound.java
+ *
+ * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
+ *
+ * This file is part of cz.pecina.retro, retro 8-bit computer emulators.
+ *
+ * This application is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.         
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package cz.pecina.retro.common;
+
+import java.util.logging.Logger;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import javax.swing.Timer;
+
+import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.BooleanControl;
+import javax.sound.sampled.LineUnavailableException;
+
+/**
+ * The common sound interface of the emulator.
+ *
+ * @author @AUTHOR@
+ * @version @VERSION@
+ */
+public class Sound {
+
+  // static logger
+  private static final Logger log =
+    Logger.getLogger(Sound.class.getName());
+
+  // timer period in milliseconds
+  private static final int TIMER_PERIOD = 50;
+
+  // buffer size in bytes
+  private static final int BUFFER_SIZE = 0x10000;  // 64KiB
+  
+  // singleton lock
+  private static boolean lock;
+
+  // sample rate
+  private float sampleRate;
+
+  // average number of samples per tick
+  private int samplesPerTick;
+
+  // number of sound channels
+  private int numberChannels;
+
+  // sound lines
+  private SourceDataLine[] lines;
+
+  // gain controls and limits
+  private FloatControl[] gainControls;
+  private float[] gainMinima, gainMaxima;
+  
+  // mute controls
+  private BooleanControl[] muteControls;
+    
+  // number of bytes written to a channel
+  private long[] bytesWritten;
+
+  // initial CPU clock
+  private long initialCPUClock;
+  
+  // initial time in nanoseconds
+  private long initialNanoTime;
+
+  // audio buffers
+  private byte[] buffer = new byte[BUFFER_SIZE];
+  
+  // get system clock
+  private long getTime() {
+    return Parameters.systemClockSource.getSystemClock();
+  }
+
+  /**
+   * Creates an instance of the emulator.
+   * <p>
+   * The emulator is always 16-bit signed PCR, monoaural type; only
+   * the sample rate and number of mixer channels is user-selectable.
+   *
+   * @param sampleRate     the sample rate in sampler per second
+   * @param numberChannels number of channels to be mixed
+   */
+  public Sound(final float sampleRate, final int numberChannels) {
+    log.fine("New Sound creation started");
+    assert sampleRate > 1000;
+    assert numberChannels > 0;
+    
+    if (lock) {
+      log.fine("Error, Sound is a singleton");
+      throw Application.createError(this, "sound.exists");
+     }
+    lock = true;
+
+    this.sampleRate = sampleRate;
+    this.numberChannels = numberChannels;
+
+    samplesPerTick = Math.round((sampleRate * TIMER_PERIOD) / 1000);
+    
+    AudioFormat format = new AudioFormat(sampleRate, 16, 1, true, false);
+    final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+    if (!AudioSystem.isLineSupported(info)) {
+      log.fine("Sound hardware is not available");
+      return;
+    }
+    lines = new SourceDataLine[numberChannels];
+    gainControls = new FloatControl[numberChannels];
+    gainMinima = new float[numberChannels];
+    gainMaxima = new float[numberChannels];
+    muteControls = new BooleanControl[numberChannels];
+    bytesWritten = new long[numberChannels];
+    try {
+      for (int channel = 0; channel < numberChannels; channel++) {
+	final SourceDataLine line = (SourceDataLine)AudioSystem.getLine(info);
+	line.open(format, 80 * samplesPerTick);
+	lines[channel] = line;
+	if (!line.isControlSupported(FloatControl.Type.MASTER_GAIN) ||
+	    !line.isControlSupported(BooleanControl.Type.MUTE)) {
+	  log.fine("Required control not supported on one of the lines");
+	  throw new LineUnavailableException("Required control not supported");
+	}
+	gainControls[channel] =
+	  (FloatControl)line.getControl(FloatControl.Type.MASTER_GAIN);
+	gainMinima[channel] = gainControls[channel].getMinimum();
+	gainMaxima[channel] = gainControls[channel].getMaximum();
+	muteControls[channel] =
+	  (BooleanControl)line.getControl(BooleanControl.Type.MUTE);
+      }
+    } catch (final LineUnavailableException exception) {
+      log.fine("Failed to open audio lines, no sound available");
+      lines = null;
+      return;
+    }
+    log.finer("Audio lines set up");
+    
+    for (int channel = 0; channel < numberChannels; channel++) {
+      bytesWritten[channel] +=
+	lines[channel].write(buffer, 0, 4 * samplesPerTick);
+    }
+    initialCPUClock = getTime();
+    initialNanoTime = System.nanoTime();
+    for (int channel = 0; channel < numberChannels; channel++) {
+      lines[channel].start();
+    }
+    log.finer("Line fed with data (silence) and started");
+    
+    new Timer(TIMER_PERIOD, new TimerListener()).start();
+    
+    log.finer("New Sound creation completed");
+  }
+
+  // timer listener
+  private class TimerListener implements ActionListener {
+
+    // for description see ActionListener
+    @Override
+    public void actionPerformed(final ActionEvent event) {
+      log.finest("Timer fired");
+
+      final long totalSamplesNeeded =
+	Math.round((sampleRate / 1e9) * (System.nanoTime() - initialNanoTime));
+      for (int channel = 0; channel < numberChannels; channel++) {
+	int newSamplesNeeded =
+	  (int)(samplesPerTick + totalSamplesNeeded - (bytesWritten[channel] / 2));
+	final int available = lines[channel].available();
+	if (newSamplesNeeded > (available / 2)) {
+	  newSamplesNeeded = available / 2;
+	}
+	if (newSamplesNeeded > 0) {
+	  bytesWritten[channel] +=
+	    lines[channel].write(buffer, 0, 2 * newSamplesNeeded);
+	}
+      }
+    }
+  }
+}

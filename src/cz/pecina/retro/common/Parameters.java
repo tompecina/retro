@@ -94,4 +94,9 @@ public final class Parameters {
 
   // default constructor disabled
   private Parameters() {};
+
+  /**
+   * The Sound object.
+   */
+  public static Sound sound;
 }

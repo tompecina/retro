@@ -73,7 +73,7 @@ public class SpeakerPanel extends PeripheralFrame {
     volumeLabel.setLabelFor(volume);
     volume.setMajorTickSpacing(25);
     volume.setPaintTicks(true);
-    Hashtable<Integer, JLabel> volumeLabelTable = new Hashtable<>();
+    Hashtable<Integer,JLabel> volumeLabelTable = new Hashtable<>();
     volumeLabelTable.put(
       new Integer(0),
       new JLabel(Emulator.textResources.getString("speaker.mute")));
