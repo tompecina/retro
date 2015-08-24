@@ -22,6 +22,10 @@ package cz.pecina.retro.common;
 
 import java.util.logging.Logger;
 
+import java.util.TreeMap;
+import java.util.List;
+import java.util.ArrayList;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -50,14 +54,17 @@ public class Sound {
   // timer period in milliseconds
   private static final int TIMER_PERIOD = 50;
 
-  // buffer size in bytes
-  private static final int BUFFER_SIZE = 0x10000;  // 64KiB
+  // buffer length in bytes
+  private static final int BUFFER_LENGTH = 0x10000;  // 64KiB
   
   // singleton lock
   private static boolean lock;
 
   // sample rate
   private float sampleRate;
+
+  // number of samples per one CPU clock
+  private double samplesPerCPUClock;
 
   // average number of samples per tick
   private int samplesPerTick;
@@ -78,14 +85,20 @@ public class Sound {
   // number of bytes written to a channel
   private long[] bytesWritten;
 
-  // initial CPU clock
-  private long initialCPUClock;
-  
   // initial time in nanoseconds
   private long initialNanoTime;
 
-  // audio buffers
-  private byte[] buffer = new byte[BUFFER_SIZE];
+  // last CPU clock
+  private long lastCPUClock;
+  
+  // last levels, per channel
+  private boolean[] levels;
+
+  // queues of values, per channel
+  private List<TreeMap<Long,Boolean>> queues = new ArrayList<>();
+  
+  // audio buffer
+  private byte[] buffer = new byte[BUFFER_LENGTH];
   
   // get system clock
   private long getTime() {
@@ -116,6 +129,7 @@ public class Sound {
     this.numberChannels = numberChannels;
 
     samplesPerTick = Math.round((sampleRate * TIMER_PERIOD) / 1000);
+    samplesPerCPUClock = Parameters.CPUFrequency / sampleRate;
     
     AudioFormat format = new AudioFormat(sampleRate, 16, 1, true, false);
     final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
@@ -129,6 +143,7 @@ public class Sound {
     gainMaxima = new float[numberChannels];
     muteControls = new BooleanControl[numberChannels];
     bytesWritten = new long[numberChannels];
+    levels = new boolean[numberChannels];
     try {
       for (int channel = 0; channel < numberChannels; channel++) {
 	final SourceDataLine line = (SourceDataLine)AudioSystem.getLine(info);
@@ -145,6 +160,7 @@ public class Sound {
 	gainMaxima[channel] = gainControls[channel].getMaximum();
 	muteControls[channel] =
 	  (BooleanControl)line.getControl(BooleanControl.Type.MUTE);
+	queues.add(new TreeMap<>());
       }
     } catch (final LineUnavailableException exception) {
       log.fine("Failed to open audio lines, no sound available");
@@ -157,7 +173,7 @@ public class Sound {
       bytesWritten[channel] +=
 	lines[channel].write(buffer, 0, 4 * samplesPerTick);
     }
-    initialCPUClock = getTime();
+    lastCPUClock = getTime();
     initialNanoTime = System.nanoTime();
     for (int channel = 0; channel < numberChannels; channel++) {
       lines[channel].start();
@@ -176,7 +192,7 @@ public class Sound {
     @Override
     public void actionPerformed(final ActionEvent event) {
       log.finest("Timer fired");
-
+           
       final long totalSamplesNeeded =
 	Math.round((sampleRate / 1e9) * (System.nanoTime() - initialNanoTime));
       for (int channel = 0; channel < numberChannels; channel++) {
@@ -186,10 +202,29 @@ public class Sound {
 	if (newSamplesNeeded > (available / 2)) {
 	  newSamplesNeeded = available / 2;
 	}
-	if (newSamplesNeeded > 0) {
-	  bytesWritten[channel] +=
-	    lines[channel].write(buffer, 0, 2 * newSamplesNeeded);
+	final TreeMap<Long,Boolean> queue = queues.get(channel);
+	boolean level = levels[channel];
+	final long time = getTime();
+	int i = 0;
+	for (long pos: queue.keySet()) {
+	  int addr = (int)Math.round((pos - lastCPUClock) * samplesPerCPUClock);
+	  if (addr >= (BUFFER_LENGTH / 2)) {
+	    addr = (BUFFER_LENGTH / 2) - 1;
+	  }
+	  while (i < (addr - 1)) {
+	    buffer[i * 2] = (byte)(level ? 0xff : 0x00);
+	    buffer[(i++ * 2) + 1] = (byte)(level ? 0x7f : 0x80);
+	  }
+	  level = queue.get(pos);
 	}
+	while (i < newSamplesNeeded) {
+	    buffer[i * 2] = (byte)(level ? 0xff : 0x00);
+	    buffer[(i++ * 2) + 1] = (byte)(level ? 0x7f : 0x80);
+	}
+	queue.clear();
+	lastCPUClock = time;
+	levels[channel] = level;
+	lines[channel].write(buffer, 0, 2 * newSamplesNeeded);
       }
     }
   }
