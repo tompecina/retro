@@ -46,8 +46,8 @@ public class PMDValidBlock extends PMDBlock {
    * Constructs a new PMD 85 valid block (i.e., a block with
    * a correct check sum).
    *
-   * @param     list          list of input data
-   * @exception TapeException on error in data
+   * @param  list          list of input data
+   * @throws TapeException on error in data
    */
   public PMDValidBlock(final List<Byte> list) throws TapeException {
     super(list);

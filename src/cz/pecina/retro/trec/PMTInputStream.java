@@ -35,13 +35,13 @@ public class PMTInputStream extends DataInputStream {
   /**
    * Create PMT format input stream.
    * <p>
-   * It is based on <code>DataInputStream</code>, using the following
+   * It is based on {@code DataInputStream}, using the following
    * format for storing non-negative long integers: The values are stored
-   * as one or two <code>Integers</code>. If the value is less than
-   * <code>Integer.MAX_VALUE</code>, it is stored as one <code>Integer</code>.
-   * If it is greater, two <code>Integer</code>s are used, the first
+   * as one or two {@code Integers}. If the value is less than
+   * {@code Integer.MAX_VALUE}, it is stored as one {@code Integer}.
+   * If it is greater, two {@code Integer}s are used, the first
    * storing the higher half with the sign inverted, the second the lower half.
-   * The stream cannot hold negative values, <code>IOException</code> is
+   * The stream cannot hold negative values, {@code IOException} is
    * thrown if an attempt is made to store a negative value.
    *
    * @param in the specified input stream
@@ -51,14 +51,14 @@ public class PMTInputStream extends DataInputStream {
   }
 
   /**
-   * Reads the next <code>long</code> stored in compressed format.
+   * Reads the next {@code long} stored in compressed format.
    *
-   * @return                 the next <code>long</code>
-   * @exception EOFException if this input stream reaches the end before
-   *                         reading the value
-   * @exception IOException  the stream has been closed and the contained
-   *                         input stream does not support reading after
-   *                         close, or another I/O error occurs
+   * @return              the next {@code long}
+   * @throws EOFException if this input stream reaches the end before
+   *                      reading the value
+   * @throws IOException  the stream has been closed and the contained
+   *                      input stream does not support reading after
+   *                      close, or another I/O error occurs
    */
   public long readLongCompressed() throws IOException {
     final int firstInt = readInt();

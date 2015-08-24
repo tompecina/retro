@@ -51,7 +51,7 @@ public class SignESD extends ESD {
   public static final int NUMBER_STATES = 1 << NUMBER_SEGMENTS;
 
   /**
-   * Creates an instance of SignESD, initially set to <code>0</code> (blank).
+   * Creates an instance of SignESD, initially set to {@code 0} (blank).
    *
    * @param type  type of the element
    * @param color color of the element

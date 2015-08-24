@@ -37,7 +37,7 @@ public class HexSiSD extends SiSD {
 
   /**
    * Creates an instance of HexSiSD, initially set to
-   * <code>' '</code> (blank).
+   * {@code ' '} (blank).
    *
    * @param type  type of the element
    * @param color color of the element

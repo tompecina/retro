@@ -35,13 +35,13 @@ public class PMTOutputStream extends DataOutputStream {
   /**
    * Create PMT format output stream.
    * <p>
-   * It is based on <code>DataInputStream</code>, using the following
+   * It is based on {@code DataInputStream}, using the following
    * format for storing non-negative long integers: The values are stored
-   * as one or two <code>Integers</code>. If the value is less than
-   * <code>Integer.MAX_VALUE</code>, it is stored as one <code>Integer</code>.
-   * If it is greater, two <code>Integer</code>s are used, the first
+   * as one or two {@code Integers}. If the value is less than
+   * {@code Integer.MAX_VALUE}, it is stored as one {@code Integer}.
+   * If it is greater, two {@code Integer}s are used, the first
    * storing the higher half with the sign inverted, the second the lower half.
-   * The stream cannot hold negative values, <code>IOException</code> is
+   * The stream cannot hold negative values, {@code IOException} is
    * thrown if an attempt is made to store a negative value.
    *
    * @param out the underlying output stream
@@ -51,10 +51,10 @@ public class PMTOutputStream extends DataOutputStream {
   }
 
   /**
-   * Writes the next <code>long</code> in compressed format.
+   * Writes the next {@code long} in compressed format.
    *
-   * @param     v           a <code>long</code> to be written
-   * @exception IOException if an I/O error occurs
+   * @param  v           a {@code long} to be written
+   * @throws IOException if an I/O error occurs
    */
   public void writeLongCompressed(final long v) throws IOException {
     assert v >= 0;

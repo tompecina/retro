@@ -95,7 +95,7 @@ public class SiSD extends JComponent implements Resizeable {
   private final Icon segmentIcon[] = new Icon[NUMBER_SEGMENTS];
 
   /**
-   * Creates an instance of SiSD, initially set to <code>' '</code> (blank).
+   * Creates an instance of SiSD, initially set to {@code ' '} (blank).
    *
    * @param type  type of the element
    * @param color color of the element
@@ -122,7 +122,7 @@ public class SiSD extends JComponent implements Resizeable {
   /**
    * Sets the state of the element.
    *
-   * @param ch new state of the element, as <code>char</code>
+   * @param ch new state of the element, as {@code char}
    */
   public void setState(final char ch) {
     setState((int)ch);
@@ -132,7 +132,7 @@ public class SiSD extends JComponent implements Resizeable {
   /**
    * Sets the state of the element.
    *
-   * @param n new state of the element, as <code>int</code>
+   * @param n new state of the element, as {@code int}
    */
   public void setState(final int n) {
     assert (n >= MIN_VALUE) && (n <= MAX_VALUE);

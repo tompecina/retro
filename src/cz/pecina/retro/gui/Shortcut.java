@@ -117,7 +117,7 @@ public class Shortcut {
   /**
    * Gets the location of the key.
    *
-   * @return the location of the key (<code>-1</code>
+   * @return the location of the key ({@code -1}
    *          means any location)
    */
   public int getKeyLocation() {

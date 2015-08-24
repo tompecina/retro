@@ -84,7 +84,7 @@ public class Digit extends JComponent implements Resizeable {
   /**
    * Set the state of the digit.
    *
-   * @param state digit state (<code>0.0</code> - <code>10.0</code>}
+   * @param state digit state ({@code 0.0} - {@code 10.0}}
    */
   public void setState(double state) {
     state = Util.limit(state, 0.0, 10.0);

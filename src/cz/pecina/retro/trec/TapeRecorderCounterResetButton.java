@@ -47,7 +47,7 @@ public class TapeRecorderCounterResetButton
   /**
    * Creates an instance of the button.
    *
-   * @param toolTipResource tool-tip for the button (<code>null</code> if none)
+   * @param toolTipResource tool-tip for the button ({@code null} if none)
    */
   public TapeRecorderCounterResetButton(final String toolTipResource) {
     super("gui/CounterResetButton/basic-gray-%d-%s.png", null,

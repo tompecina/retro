@@ -34,7 +34,7 @@ import cz.pecina.retro.common.Application;
  * <p>
  * PMT is a binary format developed by @AUTHOR@ for this application.
  * After an 8-byte preamble, it stores pulse positions and durations
- * as pairs of <code>Long</code>s, using a compression format described
+ * as pairs of {@code Long}s, using a compression format described
  * in {@link PMTInputStream} and {@link PMTOutputStream}.
  *
  * @author @AUTHOR@

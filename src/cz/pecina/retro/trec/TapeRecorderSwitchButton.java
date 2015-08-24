@@ -52,7 +52,7 @@ public class TapeRecorderSwitchButton
    *
    * @param id              text identification of the button
    *                        (used when fetching the icons)
-   * @param toolTipResource tool-tip for the button (<code>null</code> if none)
+   * @param toolTipResource tool-tip for the button ({@code null} if none)
    */
   public TapeRecorderSwitchButton(final String id,
 				  final String toolTipResource) {

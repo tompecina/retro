@@ -25,15 +25,15 @@ import java.util.logging.Logger;
 /**
  * Blinking pattern.
  * <p>
- * The pattern consists of two fileds, <code>timeOn</code> and
- * <code>timeOn</code>.  Both are expressed in milliseconds and may
- * not be negative.  If both <code>timeOn</code> and <code>timeOff</code>
- * are zero, the element is off.  If <code>timeOn</code> is zero and
- * <code>timeOff</code> is non-zero, the element is on.  If
- * <code>timeOn</code> is non-zero and <code>timeOff</code> is zero,
- * the element generates an on-pulse <code>timeOn</code> milliseconds
- * long and then goes off.  If both <code>timeOn</code> and
- * <code>timeOn</code> and non-zero, the element blinks according
+ * The pattern consists of two fileds, {@code timeOn} and
+ * {@code timeOn}.  Both are expressed in milliseconds and may
+ * not be negative.  If both {@code timeOn} and {@code timeOff}
+ * are zero, the element is off.  If {@code timeOn} is zero and
+ * {@code timeOff} is non-zero, the element is on.  If
+ * {@code timeOn} is non-zero and {@code timeOff} is zero,
+ * the element generates an on-pulse {@code timeOn} milliseconds
+ * long and then goes off.  If both {@code timeOn} and
+ * {@code timeOn} and non-zero, the element blinks according
  * to the pattern.
  *
  * @author @AUTHOR@

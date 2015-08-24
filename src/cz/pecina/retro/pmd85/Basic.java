@@ -211,13 +211,13 @@ public class Basic {
   /**
    * Encodes BASIC-G program in text to RAM.
    *
-   * @param     reader         the program as text
-   * @param     ram            the RAM
-   * @param     startAddress   the starting address
-   * @param     endAddress     the ending address beyond which the program 
-   *                           may not be written
-   * @exception IOException    on I/O exception
-   * @exception BasicException on error during processing
+   * @param  reader         the program as text
+   * @param  ram            the RAM
+   * @param  startAddress   the starting address
+   * @param  endAddress     the ending address beyond which the program 
+   *                        may not be written
+   * @throws IOException    on I/O exception
+   * @throws BasicException on error during processing
    */
   public static void encode(final BufferedReader reader,
 			    final byte[] ram,
@@ -342,13 +342,13 @@ public class Basic {
   /**
    * Decodes BASIC-G program in RAM to text.
    *
-   * @param     ram            the RAM
-   * @param     writer         the program as text
-   * @param     startAddress   the starting address
-   * @param     endAddress     the ending address beyond which the program 
-   *                           may not be read
-   * @exception IOException    on I/O exception
-   * @exception BasicException on error during processing
+   * @param  ram            the RAM
+   * @param  writer         the program as text
+   * @param  startAddress   the starting address
+   * @param  endAddress     the ending address beyond which the program 
+   *                        may not be read
+   * @throws IOException    on I/O exception
+   * @throws BasicException on error during processing
    */
   public static void decode(final byte[] ram,
 			    final PrintWriter writer,

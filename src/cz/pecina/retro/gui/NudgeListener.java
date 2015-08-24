@@ -56,9 +56,9 @@ public class NudgeListener extends MouseAdapter {
    *
    * @param block     the block the listener is connected to
    * @param position  relative position of the controlled element
-   *                  (<code>0</code> means the right-most element)
-   * @param increment increment of the nudge button (<code>-1</code>
-   *                  or <code>+1</code>)
+   *                  ({@code 0} means the right-most element)
+   * @param increment increment of the nudge button ({@code -1}
+   *                  or {@code +1})
    */
   public NudgeListener(final SiSDBlock block,
 		       final int position,

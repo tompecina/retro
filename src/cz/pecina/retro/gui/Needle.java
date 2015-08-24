@@ -80,12 +80,12 @@ public class Needle extends JComponent implements Resizeable {
    * @param length       length of the needle, in base-size pixels
    * @param thickness    thickness of the needle, in base-size pixels
    * @param ratio        ratio of the inner segment, between
-   *                     <code>0.0</code> (no inner segment)
-   *                     and <code>1.0</code> (no outer segment)
-   * @param innerColor   <code>Color</code> of the inner segment
-   * @param outerColor   <code>Color</code> of the outer segment
+   *                     {@code 0.0} (no inner segment)
+   *                     and {@code 1.0} (no outer segment)
+   * @param innerColor   {@code Color} of the inner segment
+   * @param outerColor   {@code Color} of the outer segment
    * @param initialAngle initial angle of the needle, in degrees, CW;
-   *                     <code>0.0</code> means upright position
+   *                     {@code 0.0} means upright position
    */
   public Needle(final int width,
 		final int height,

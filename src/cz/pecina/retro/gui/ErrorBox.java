@@ -38,16 +38,15 @@ public final class ErrorBox {
   /**
    * Displays a modal error dialog box.
    *
-   * @param     parentComponent   determines the <code>Frame</code> in which
-   *                              the dialog is displayed; if
-   *                              <code>null</code>, or if the
-   *                              <code>parentComponent</code> has no
-   *                              <code>Frame</code>, a default
-   *                              <code>Frame</code> is used
-   * @param     message           the <code>Object</code> to display
-   * @exception HeadlessException if
-   *                              <code>GraphicsEnvironment.isHeadless</code>
-   *                              returns <code>true</code>
+   * @param  parentComponent   determines the {@code Frame} in which
+   *                           the dialog is displayed; if
+   *                           {@code null}, or if the
+   *                           {@code parentComponent} has no
+   *                           {@code Frame}, a default {@code Frame}
+   *                           is used
+   * @param  message           the {@code Object} to display
+   * @throws HeadlessException if {@code GraphicsEnvironment.isHeadless}
+   *                           returns {@code true}
    */
   public static void display(final Component parentComponent,
 			     final Object message

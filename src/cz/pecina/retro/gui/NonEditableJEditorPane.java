@@ -29,7 +29,7 @@ import javax.swing.JEditorPane;
 import java.io.IOException;
 
 /**
- * <code>JEditorPane</code> with editing disabled.
+ * {@code JEditorPane} with editing disabled.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -41,7 +41,7 @@ public class NonEditableJEditorPane extends JEditorPane {
     Logger.getLogger(NonEditableJEditorPane.class.getName());
 
   /**
-   * Creates an instance of <code>JEditorPane</code> with editing disabled.
+   * Creates an instance of {@code JEditorPane} with editing disabled.
    */
   public NonEditableJEditorPane() {
     super();
@@ -50,11 +50,11 @@ public class NonEditableJEditorPane extends JEditorPane {
   }
 
   /**
-   * Creates an instance of <code>JEditorPane</code> with editing disabled.
+   * Creates an instance of {@code JEditorPane} with editing disabled.
    *
-   * @param     initialPage the URL
-   * @exception IOException if the URL is <code>null</code> or cannot
-   *                        be accessed
+   * @param  initialPage the URL
+   * @throws IOException if the URL is {@code null} or cannot
+   *                     be accessed
    */
   public NonEditableJEditorPane(final URL initialPage) throws IOException {
     super(initialPage);
@@ -63,11 +63,11 @@ public class NonEditableJEditorPane extends JEditorPane {
   }
 
   /**
-   * Creates an instance of <code>JEditorPane</code> with editing disabled.
+   * Creates an instance of {@code JEditorPane} with editing disabled.
    *
-   * @param     url         the URL
-   * @exception IOException if the URL is <code>null</code> or cannot
-   *                        be accessed
+   * @param  url         the URL
+   * @throws IOException if the URL is {@code null} or cannot
+   *                     be accessed
    */
   public NonEditableJEditorPane(final String url) throws IOException {
     super(url);
@@ -76,14 +76,14 @@ public class NonEditableJEditorPane extends JEditorPane {
   }
 
   /**
-   * Creates an instance of <code>JEditorPane</code> with
+   * Creates an instance of {@code JEditorPane} with
    * editing disabled.
    *
-   * @param     type                 mime type of the given text
-   * @param     text                 the text to initialize with;
-   *                                 may be <code>null</code>
-   * @exception NullPointerException if the type parameter is
-   *                                 <code>null</code>
+   * @param  type                 mime type of the given text
+   * @param  text                 the text to initialize with;
+   *                              may be {@code null}
+   * @throws NullPointerException if the type parameter is
+   *                              {@code null}
    */
   public NonEditableJEditorPane(final String type, final String text) {
     super(type, text);

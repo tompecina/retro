@@ -46,12 +46,12 @@ public class PushOnlyButton extends GenericButton {
   /**
    * Creates an instance of a button.
    *
-   * @param template the icon template string (if <code>null</code>,
+   * @param template the icon template string (if {@code null},
    *                 a dummy button without a graphical representation
    *                 is created)
-   * @param shortcut keyboard shortcut for the button (<code>-1</code>
+   * @param shortcut keyboard shortcut for the button ({@code -1}
    *                 if none)
-   * @param toolTip  tool-tip for the button (<code>null</code> if none)
+   * @param toolTip  tool-tip for the button ({@code null} if none)
    */
   public PushOnlyButton(final String template,
 			final Shortcut shortcut,
@@ -78,9 +78,9 @@ public class PushOnlyButton extends GenericButton {
   }
 
   /**
-   * Creates a new <code>KeyPressedAction</code> object.
+   * Creates a new {@code KeyPressedAction} object.
    *
-   * @return the new <code>KeyPressedAction</code> object
+   * @return the new {@code KeyPressedAction} object
    */
   public KeyPressedAction keyPressedAction() {
     return new KeyPressedAction();

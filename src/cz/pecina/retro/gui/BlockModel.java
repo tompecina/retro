@@ -68,42 +68,42 @@ public class BlockModel {
   /**
    * Horizontal offset of the 0-th element measured from the reference
    * point of the block, i.e., the value used in the block's
-   * <code>place</code> method.
+   * {@code place} method.
    */
   public int elementOffsetX;
 
   /**
    * Vertical offset of the 0-th element measured from the reference
    * point of the block, i.e., the value used in the block's
-   * <code>place</code> method.
+   * {@code place} method.
    */
   public int elementOffsetY;
 
   /**
    * Horizontal offset of the 0-th element's increment button measured
    * from the reference point of the block, i.e., the value used in
-   * the block's <code>place</code> method.
+   * the block's {@code place} method.
    */
   public int incrementButtonOffsetX;
 
   /**
    * Vertical offset of the 0-th element's increment button measured
    * from the reference point of the block, i.e., the value used in
-   * the block's <code>place</code> method.
+   * the block's {@code place} method.
    */
   public int incrementButtonOffsetY;
 
   /**
    * Horizontal offset of the 0-th element's decrement button measured
    * from the reference point of the block, i.e., the value used in
-   * the block's <code>place</code> method.
+   * the block's {@code place} method.
    */
   public int decrementButtonOffsetX;
 
   /**
    * Vertical offset of the 0-th element's decrement button measured
    * from the reference point of the block, i.e., the value used in
-   * the block's <code>place</code> method.
+   * the block's {@code place} method.
    */
   public int decrementButtonOffsetY;
 }

@@ -141,7 +141,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
   /**
    * Gets the tape recorder interface object.
    *
-   * @return <code>TapeRecorderInterface</code> object
+   * @return {@code TapeRecorderInterface} object
    */
   public TapeRecorderInterface getTapeRecorderInterface() {
     return tapeRecorderInterface;

@@ -74,9 +74,9 @@ public class ShortcutDialog extends JDialog {
    *
    * @param  frame             enclosing frame
    * @param  currentShortcut   shortcut curently assigned to this key or
-   *                           <code>null</code> if none
+   *                           {@code null} if none
    * @param  assignedShortcuts list of shortcuts already assigned
-   * @return                   the shortcut or <code>null</code> if aborted
+   * @return                   the shortcut or {@code null} if aborted
    */
   public static Shortcut getShortcut(
       final Frame frame,

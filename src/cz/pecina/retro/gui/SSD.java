@@ -68,7 +68,7 @@ public class SSD extends JComponent implements Resizeable {
   private final Icon segmentIcon[] = new Icon[NUMBER_SEGMENTS];
 
   /**
-   * Creates an instance of SSD, initially set to <code>0</code> (blank).
+   * Creates an instance of SSD, initially set to {@code 0} (blank).
    *
    * @param type  type of the element
    * @param color color of the element

@@ -43,7 +43,7 @@ public class HexESD extends ESD {
 
   /**
    * Creates an instance of HexESD, initially set to
-   * <code>' '</code> (blank).
+   * {@code ' '} (blank).
    *
    * @param type  type of the element
    * @param color color of the element
@@ -56,8 +56,8 @@ public class HexESD extends ESD {
   /**
    * Gets the state of the decimal point.
    *
-   * @return state of the decimal point (<code>true</code> = on,
-   *         <code>false</code> = off)
+   * @return state of the decimal point ({@code true} = on,
+   *         {@code false} = off)
    */
   public boolean getDecimalPoint() {
     return (super.getState() & 0x80) != 0;
@@ -67,8 +67,8 @@ public class HexESD extends ESD {
    * Sets the state of the decimal points.  The segments
    * remain unchanged.
    *
-   * @param dp new state of the decimal point (<code>true</code> = on,
-   *           <code>false</code> = off)
+   * @param dp new state of the decimal point ({@code true} = on,
+   *           {@code false} = off)
    */
   public void setDecimalPoint(final boolean dp) {
     setState(getState(), dp);
@@ -77,8 +77,8 @@ public class HexESD extends ESD {
   /**
    * Gets the state of the segments.
    *
-   * @return state of the segments (<code>-1</code> - <code>15</code>;
-   *         <code>-1</code> means blank)
+   * @return state of the segments ({@code -1} - {@code 15};
+   *         {@code -1} means blank)
    */
   @Override
   public int getState() {
@@ -94,10 +94,10 @@ public class HexESD extends ESD {
   /**
    * Sets the state of the element.
    *
-   * @param n  new state of the segments (<code>-1</code> - <code>15</code>;
-   *           <code>-1</code> means blank)
-   * @param dp new state of the decimal point (<code>true</code> = on,
-   *           <code>false</code> = off)
+   * @param n  new state of the segments ({@code -1} - {@code 15};
+   *           {@code -1} means blank)
+   * @param dp new state of the decimal point ({@code true} = on,
+   *           {@code false} = off)
    */
   public void setState(final int n, final boolean dp) {
     assert (n >= -1) && (n <= 15);
@@ -108,8 +108,8 @@ public class HexESD extends ESD {
   /**
    * Sets the state of the segments.  The decimal point remains unchanged.
    *
-   * @param n new state of the segments (<code>-1</code> - <code>15</code>;
-   *          <code>-1</code> means blank)
+   * @param n new state of the segments ({@code -1} - {@code 15};
+   *          {@code -1} means blank)
    */
   @Override
   public void setState(final int n) {

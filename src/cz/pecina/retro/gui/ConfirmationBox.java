@@ -39,18 +39,17 @@ public final class ConfirmationBox {
   /**
    * Displays a modal Yes/No confirmation dialog box.
    *
-   * @param     parentComponent   determines the <code>Frame</code> in which
-   *                              the dialog is displayed; if
-   *                              <code>null</code>, or if the
-   *                              <code>parentComponent</code> has no
-   *                              <code>Frame</code>, a default
-   *                              <code>Frame</code> is used
-   * @param     message           the <code>Object</code> to display
-   * @return                      an <code>int</code> indicating the option
-   *                              selected by the user
-   * @exception HeadlessException if
-   *                              <code>GraphicsEnvironment.isHeadless</code>
-   *                              returns <code>true</code>
+   * @param  parentComponent   determines the {@code Frame} in which
+   *                           the dialog is displayed; if
+   *                           {@code null}, or if the
+   *                           {@code parentComponent} has no
+   *                           {@code Frame}, a default {@code Frame}
+   *                           is used
+   * @param  message           the {@code Object} to display
+   * @return                   an {@code int} indicating the option
+   *                           selected by the user
+   * @throws HeadlessException if {@code GraphicsEnvironment.isHeadless}
+   *                           returns {@code true}
    */
   public static int display(final Component parentComponent,
 			    final Object message

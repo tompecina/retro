@@ -69,8 +69,8 @@ public class DisplayPlane extends JComponent implements Resizeable {
   /**
    * Writes one byte of memory-mapped data.
    *
-   * @param row        the row, <code>0-0xff</code>
-   * @param column     the column, <code>0-0x2f</code>
+   * @param row        the row, {@code 0-0xff}
+   * @param column     the column, {@code 0-0x2f}
    * @param pixels     the pixel data; bit 0 is the leftmost, bit 5 the rightmost,
    *                   bits 6 and 7 should be 0
    * @param color      the color to apply

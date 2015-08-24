@@ -72,7 +72,7 @@ public class PMDMemory
   protected final byte[] ram;
 
   /**
-   * ROM module as an array of bytes or <code>null</code> if not present.
+   * ROM module as an array of bytes or {@code null} if not present.
    */
   protected final byte[] rmm;
 
@@ -215,7 +215,7 @@ public class PMDMemory
   /**
    * Gets the ROM module.
    *
-   * @return the ROM module as a byte array or <code>null</code> if not present
+   * @return the ROM module as a byte array or {@code null} if not present
    */
   public byte[] getRMM() {
     return rmm;

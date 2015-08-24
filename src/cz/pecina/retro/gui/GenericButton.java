@@ -46,8 +46,8 @@ public abstract class GenericButton
     Logger.getLogger(GenericButton.class.getName());
     
   /**
-   * State of the button.  <code>true</code> = pressed/down,
-   *                       <code>false</code> = not pressed/up.
+   * State of the button.  {@code true} = pressed/down,
+   *                       {@code false} = not pressed/up.
    */
   protected boolean pressed;
 
@@ -78,12 +78,12 @@ public abstract class GenericButton
   /**
    * Creates an instance of a button.
    *
-   * @param template the icon template string (if <code>null</code>,
+   * @param template the icon template string (if {@code null},
    *                 a dummy button without a graphical representation
    *                 is created)
-   * @param shortcut keyboard shortcut for the button (<code>null</code>
+   * @param shortcut keyboard shortcut for the button ({@code null}
    *                 if none)
-   * @param toolTip  tool-tip for the button (<code>null</code> if none)
+   * @param toolTip  tool-tip for the button ({@code null} if none)
    */
   public GenericButton(final String template,
 		       final Shortcut shortcut,
@@ -145,11 +145,11 @@ public abstract class GenericButton
   }
 
   /**
-   * Sets the state of the button (<code>true</code> = pressed/down,
-   * <code>false</code> = not pressed/up).
+   * Sets the state of the button ({@code true} = pressed/down,
+   * {@code false} = not pressed/up).
    *
-   * @param b state of the button, <code>true</code> if pressed (down),
-   *          <code>false</code> otherwise
+   * @param b state of the button, {@code true} if pressed (down),
+   *          {@code false} otherwise
    */
   public void setPressed(final boolean b) {
     if (b != pressed) {
@@ -160,11 +160,11 @@ public abstract class GenericButton
   }
 
   /**
-   * The state of the button.  <code>true</code> if the button is pressed
-   * (down), <code>false</code> otherwise.
+   * The state of the button.  {@code true} if the button is pressed
+   * (down), {@code false} otherwise.
    *
-   * @return state of the button, <code>true</code> if pressed (down),
-   *         <code>false</code> otherwise
+   * @return state of the button, {@code true} if pressed (down),
+   *         {@code false} otherwise
    */
   public boolean isPressed() {
     return pressed;
@@ -174,7 +174,7 @@ public abstract class GenericButton
    * Sets the keyboard shortcut associated with the button.
    *
    * @param shortcut the keyboard shortcut associated with the button
-   *                 or <code>null</code> if none
+   *                 or {@code null} if none
 
    */
   public void setShortcut(final Shortcut shortcut) {
@@ -185,7 +185,7 @@ public abstract class GenericButton
    * Gets the keyboard shortcut associated with the button.
    *
    * @return the keyboard shortcut associated with the button
-   *         or <code>null</code> if none
+   *         or {@code null} if none
    */
   public Shortcut getShortcut() {
     return shortcut;
@@ -224,7 +224,7 @@ public abstract class GenericButton
   }
 
   /**
-   * Adds a <code>ChangeListener</code> to the button.
+   * Adds a {@code ChangeListener} to the button.
    *
    * @param l the listener to be added
    */
@@ -236,7 +236,7 @@ public abstract class GenericButton
   }
 	
   /**
-   * Removes a <code>ChangeListener</code> from the button.
+   * Removes a {@code ChangeListener} from the button.
    *
    * @param l the listener to be removed
    */

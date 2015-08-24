@@ -76,7 +76,7 @@ public class ESD extends JComponent implements Resizeable {
   protected final Icon segmentIcon[] = new Icon[NUMBER_SEGMENTS];
 
   /**
-   * Creates an instance of ESD, initially set to <code>0</code> (blank).
+   * Creates an instance of ESD, initially set to {@code 0} (blank).
    *
    * @param type  type of the element
    * @param color color of the element

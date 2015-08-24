@@ -33,8 +33,8 @@ import cz.pecina.retro.common.Application;
  * <p>
  * SAM is a legacy binary format used in an older MS Windows-based
  * Tesla PMI-80 emulator. It stores samples of the tape recorder interface
- * line as bytes, <code>0xff</code> meaning the quiescent state,
- * <code>0x00</code> the active state.  The sampling rate was determined
+ * line as bytes, {@code 0xff} meaning the quiescent state,
+ * {@code 0x00} the active state.  The sampling rate was determined
  * experimentally to be 1/23 of the CPU frequency, i.e., one sample is
  * taken every 20.7us.  Due to a lack of any compression, SAM files are
  * rather bulky even for short recordings.

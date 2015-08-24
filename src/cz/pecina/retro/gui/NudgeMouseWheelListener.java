@@ -53,7 +53,7 @@ public class NudgeMouseWheelListener implements MouseWheelListener {
    *
    * @param block     the block the listener is connected to
    * @param position  relative position of the controlled element
-   *                  (<code>0</code> means the right-most element)
+   *                  ({@code 0} means the right-most element)
    */
   public NudgeMouseWheelListener(final SiSDBlock block, final int position) {
     log.fine("New NudgeMouseWheelListener creation started, position: " +

@@ -31,7 +31,7 @@ import javax.swing.BoundedRangeModel;
 import cz.pecina.retro.common.Util;
 
 /**
- * <code>JSlider</code> responding to mouse wheel movement.
+ * {@code JSlider} responding to mouse wheel movement.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -55,12 +55,12 @@ public class WheelSlider extends JSlider {
   /**
    * Creates a slider using the specified orientation with the
    * range {@code 0} to {@code 100} and an initial value of {@code 50}.
-   * The orientation can be either <code>SwingConstants.VERTICAL</code>
-   * or <code>SwingConstants.HORIZONTAL</code>.
+   * The orientation can be either {@code SwingConstants.VERTICAL}
+   * or {@code SwingConstants.HORIZONTAL}.
    *
-   * @param     orientation              the orientation of the slider
-   * @exception IllegalArgumentException if orientation is not one of
-   *                                     {@code VERTICAL}, {@code HORIZONTAL}
+   * @param  orientation              the orientation of the slider
+   * @throws IllegalArgumentException if orientation is not one of
+   *                                  {@code VERTICAL}, {@code HORIZONTAL}
    */
   public WheelSlider(final int orientation) {
     super(orientation);
@@ -72,7 +72,7 @@ public class WheelSlider extends JSlider {
    * Creates a horizontal slider using the specified min and max
    * with an initial value equal to the average of the min plus max.
    * <p>
-   * The <code>BoundedRangeModel</code> that holds the slider's data
+   * The {@code BoundedRangeModel} that holds the slider's data
    * handles any issues that may arise from improperly setting the
    * minimum and maximum values on the slider.  See the
    * {@code BoundedRangeModel} documentation for details.
@@ -89,7 +89,7 @@ public class WheelSlider extends JSlider {
   /**
    * Creates a horizontal slider using the specified min, max and value.
    * <p>
-   * The <code>BoundedRangeModel</code> that holds the slider's data
+   * The {@code BoundedRangeModel} that holds the slider's data
    * handles any issues that may arise from improperly setting the
    * minimum, initial, and maximum values on the slider.  See the
    * {@code BoundedRangeModel} documentation for details.
@@ -107,20 +107,20 @@ public class WheelSlider extends JSlider {
   /**
    * Creates a slider with the specified orientation and the
    * specified minimum, maximum, and initial values.
-   * The orientation can be either <code>SwingConstants.VERTICAL</code>
-   * or <code>SwingConstants.HORIZONTAL</code>.
+   * The orientation can be either {@code SwingConstants.VERTICAL}
+   * or {@code SwingConstants.HORIZONTAL}.
    * <p>
-   * The <code>BoundedRangeModel</code> that holds the slider's data
+   * The {@code BoundedRangeModel} that holds the slider's data
    * handles any issues that may arise from improperly setting the
    * minimum, initial, and maximum values on the slider.  See the
    * {@code BoundedRangeModel} documentation for details.
    *
-   * @param     orientation              the orientation of the slider
-   * @param     min                      the minimum value of the slider
-   * @param     max                      the maximum value of the slider
-   * @param     value                    the initial value of the slider
-   * @exception IllegalArgumentException if orientation is not one of
-   *                                     {@code VERTICAL}, {@code HORIZONTAL}
+   * @param  orientation              the orientation of the slider
+   * @param  min                      the minimum value of the slider
+   * @param  max                      the maximum value of the slider
+   * @param  value                    the initial value of the slider
+   * @throws IllegalArgumentException if orientation is not one of
+   *                                  {@code VERTICAL}, {@code HORIZONTAL}
    */
   public WheelSlider(final int orientation,
 		     final int min,
@@ -133,14 +133,14 @@ public class WheelSlider extends JSlider {
 
   /**
    * Creates a horizontal slider using the specified
-   * <code>BoundedRangeModel</code>.
+   * {@code BoundedRangeModel}.
    * <p>
-   * The <code>BoundedRangeModel</code> that holds the slider's data
+   * The {@code BoundedRangeModel} that holds the slider's data
    * handles any issues that may arise from improperly setting the
    * minimum, initial, and maximum values on the slider.  See the
    * {@code BoundedRangeModel} documentation for details.
    *
-   * @param brm the <code>BoundedRangeModel</code> for the slider
+   * @param brm the {@code BoundedRangeModel} for the slider
    */
   public WheelSlider(final BoundedRangeModel brm) {
     super(brm);

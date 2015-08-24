@@ -88,8 +88,8 @@ public class HexField extends JTextField {
   /**
    * Gets the value of the field.
    *
-   * @return    numeric value of the field
-   * @exception NumberFormatException if the field is empty or invalid
+   * @return                       numeric value of the field
+   * @throws NumberFormatException if the field is empty or invalid
    */
   public int getValue() throws NumberFormatException {
     return Integer.parseInt(getText(), 16);

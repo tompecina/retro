@@ -61,16 +61,16 @@ public class Knob extends GenericIndicator {
 
   /**
    * Creates an instance of a knob, initially set to the minimum
-   * limit or <code>0</code> if no minimum limit is set.
+   * limit or {@code 0} if no minimum limit is set.
    * <p>
-   * Note: If no limits are set, both <code>minState</code> and
-   * <code>maxState</code> must be equal to <code>-1</code>.
+   * Note: If no limits are set, both {@code minState} and
+   * {@code maxState} must be equal to {@code -1}.
    *
    * @param type         type of the element
    * @param color        color of the element
    * @param numberStates number of states (including non-settable ones)
-   * @param minState     minimum state (<code>-1</code> if none)
-   * @param maxState     maximum state (<code>-1</code> if none)
+   * @param minState     minimum state ({@code -1} if none)
+   * @param maxState     maximum state ({@code -1} if none)
    */
   public Knob(final String type,
 	      final String color,
@@ -101,9 +101,9 @@ public class Knob extends GenericIndicator {
   /**
    * Sets the state of the knob.
    *
-   * @param n new state of the knob (<code>minState</code> to
-   *        <code>maxState</code> or <code>0</code> to
-   *        <code>numberStates - 1</code> if limits not set)
+   * @param n new state of the knob ({@code minState} to
+   *        {@code maxState} or {@code 0} to
+   *        {@code numberStates - 1} if limits not set)
    */
   @Override
   public void setState(final int n) {
@@ -184,7 +184,7 @@ public class Knob extends GenericIndicator {
   }
 
   /**
-   * Adds a <code>ChangeListener</code> to the knob.
+   * Adds a {@code ChangeListener} to the knob.
    *
    * @param l the listener to be added
    */
@@ -196,7 +196,7 @@ public class Knob extends GenericIndicator {
   }
 	
   /**
-   * Removes a <code>ChangeListener</code> from the knob.
+   * Removes a {@code ChangeListener} from the knob.
    *
    * @param l the listener to be removed
    */

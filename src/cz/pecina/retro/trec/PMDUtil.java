@@ -84,7 +84,7 @@ public final class PMDUtil {
    * Splits a tape into bytes.
    *
    * @param  tape the tape to be processed
-   * @return      a <code>TreeMap</code> of bytes and positions      
+   * @return      a {@code TreeMap} of bytes and positions      
    */
   public static TreeMap<Long,Byte> splitTape(final Tape tape) {
     log.fine("Splitting tape into bytes");
@@ -204,7 +204,7 @@ public final class PMDUtil {
   /**
    * Splits a list of bytes into PMD 85 blocks.
    *
-   * @param  map a <code>TreeMap</code> of bytes to be processed
+   * @param  map a {@code TreeMap} of bytes to be processed
    * @param  ifc the tape recorder interface object
    * @return     a list of PMD 85 blocks
    */
@@ -294,11 +294,11 @@ public final class PMDUtil {
    * <p>
    * The duration of the pause is rounded up to an integer number of slots.
    *
-   * @param     tape          the tape
-   * @param     start         the starting position
-   * @param     length        the pause duration in system clock cycles
-   * @return                  the new position
-   * @exception TapeException if tape full
+   * @param  tape          the tape
+   * @param  start         the starting position
+   * @param  length        the pause duration in system clock cycles
+   * @return               the new position
+   * @throws TapeException if tape full
    */
   public static long pause(final Tape tape,
 			   long start,
@@ -317,11 +317,11 @@ public final class PMDUtil {
    * <p>
    * The duration of the pause is rounded up to an integer number of slots.
    *
-   * @param     tape          the tape
-   * @param     start         the starting position
-   * @param     ifc           the tape recorder interface object
-   * @return                  the new position
-   * @exception TapeException if tape full
+   * @param  tape          the tape
+   * @param  start         the starting position
+   * @param  ifc           the tape recorder interface object
+   * @return               the new position
+   * @throws TapeException if tape full
    */
   public static long longPause(final Tape tape,
 			       final long start,
@@ -336,11 +336,11 @@ public final class PMDUtil {
    * <p>
    * The duration of the pause is rounded up to an integer number of slots.
    *
-   * @param     tape          the tape
-   * @param     start         the starting position
-   * @param     ifc           the tape recorder interface object
-   * @return                  the new position
-   * @exception TapeException if tape full
+   * @param  tape          the tape
+   * @param  start         the starting position
+   * @param  ifc           the tape recorder interface object
+   * @return               the new position
+   * @throws TapeException if tape full
    */
   public static long shortPause(final Tape tape,
 				final long start,
@@ -353,11 +353,11 @@ public final class PMDUtil {
   /**
    * Writes a list of bytes to the tape.
    *
-   * @param     tape          the tape
-   * @param     start         the starting position
-   * @param     bytes         list of bytes to be written
-   * @return                  the new position
-   * @exception TapeException on error in data
+   * @param  tape          the tape
+   * @param  start         the starting position
+   * @param  bytes         list of bytes to be written
+   * @return               the new position
+   * @throws TapeException on error in data
    */
   public static long write(final Tape tape,
 			   long start,
@@ -392,8 +392,8 @@ public final class PMDUtil {
   /**
    * Factory method for creating a PMD 85 tape block of appropriate type.
    *
-   * @param     list          list of input data
-   * @exception TapeException on error in data
+   * @param  list          list of input data
+   * @throws TapeException on error in data
    */
   public static PMDBlock createBlock(final List<Byte> list
 				     ) throws TapeException {

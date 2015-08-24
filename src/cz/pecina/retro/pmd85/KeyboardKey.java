@@ -68,9 +68,9 @@ public class KeyboardKey extends LockableButton {
    * @param offsetX          x-offset of the key in 1/2s of the base key width
    * @param offsetY          y-offset of the key in 1/2s of the base key height
    * @param matrixRow        position of the key in the hardware matrix
-   *                         (row) or <code>-1</code> if not connected
+   *                         (row) or {@code -1} if not connected
    * @param matrixColumn     position of the key in the hardware matrix
-   *                         (column) or <code>-1</code> if not connected
+   *                         (column) or {@code -1} if not connected
    */
   public KeyboardKey(final KeyboardHardware keyboardHardware,
 		     final String cap,

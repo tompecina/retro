@@ -152,7 +152,7 @@ public final class UserPreferences extends GeneralUserPreferences {
    *
    * @param keyboardLayout the keyboard layout
    * @param number         the internal key number
-   * @param shortcut       the new keyboard shortcut or <code>null</code>
+   * @param shortcut       the new keyboard shortcut or {@code null}
    *                       if none
    */
   public static void setShortcut(final KeyboardLayout keyboardLayout,
@@ -175,7 +175,7 @@ public final class UserPreferences extends GeneralUserPreferences {
    * Gets the keyboard shortcut.
    *
    * @param  number   the internal key number
-   * @return shortcut the keyboard shortcut or <code>null</code>
+   * @return shortcut the keyboard shortcut or {@code null}
    *                  if none
    */
   public static Shortcut getShortcut(final int number) {

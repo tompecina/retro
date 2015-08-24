@@ -71,8 +71,8 @@ public class SiSDBlock {
    *
    * @param model    model for the block
    * @param size     number of elements (max. 15 for hexadecimal blocks)
-   * @param alpha    if <code>true</code>, an alphanumeric block will
-   *                 be created, if <code>false</code>, a hexadecimal one
+   * @param alpha    if {@code true}, an alphanumeric block will
+   *                 be created, if {@code false}, a hexadecimal one
    * @param settable determines if the block is user adjustable; only
    *                 non-alphanumeric blocks can be created with this option
    */
@@ -165,8 +165,8 @@ public class SiSDBlock {
   /**
    * Determines if the block is alphanumeric.
    *
-   * @return <code>true</code> if the block is alphanumeric,
-   *         <code>false</code> otherwise
+   * @return {@code true} if the block is alphanumeric,
+   *         {@code false} otherwise
    */
   public boolean isAlpha() {
     return alpha;
@@ -183,8 +183,8 @@ public class SiSDBlock {
   /**
    * Determines whether the hexadecimal block is blank.
    *
-   * @return <code>true</code> if the block is blank,
-   *         <code>false</code> otherwise
+   * @return {@code true} if the block is blank,
+   *         {@code false} otherwise
    */
   public boolean isBlank() {
     assert !alpha;
@@ -193,7 +193,7 @@ public class SiSDBlock {
 
   /**
    * Gets the state of the block.  For alphanumeric blocks, this is
-   * a <code>String</code> object, and a <code>Long</code> object for
+   * a {@code String} object, and a {@code Long} object for
    * hexadecimal blocks.
    *
    * @return the state of the block
@@ -258,7 +258,7 @@ public class SiSDBlock {
   }
 
   /**
-   * Adds a <code>ChangeListener</code> to the block.
+   * Adds a {@code ChangeListener} to the block.
    *
    * @param l the listener to be added
    */
@@ -270,7 +270,7 @@ public class SiSDBlock {
   }
 	
   /**
-   * Removes a <code>ChangeListener</code> from the block.
+   * Removes a {@code ChangeListener} from the block.
    *
    * @param l the listener to be removed
    */

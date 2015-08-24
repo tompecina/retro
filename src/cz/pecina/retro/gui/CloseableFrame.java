@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
- * <code>JFrame</code> with close support.
+ * {@code JFrame} with close support.
  *
  * @author @AUTHOR@
  * @version @VERSION@

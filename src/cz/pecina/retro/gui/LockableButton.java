@@ -42,8 +42,8 @@ public class LockableButton extends GenericButton {
     Logger.getLogger(LockableButton.class.getName());
     
   /**
-   * State of the button.  <code>true</code> = permanently pressed/locked,
-   * <code>false</code> otherwise (may be pressed, but not locked).
+   * State of the button.  {@code true} = permanently pressed/locked,
+   * {@code false} otherwise (may be pressed, but not locked).
    */
   protected boolean locked;
 
@@ -55,12 +55,12 @@ public class LockableButton extends GenericButton {
   /**
    * Creates an instance of a lockable button.
    *
-   * @param template the icon template string (if <code>null</code>,
+   * @param template the icon template string (if {@code null},
    *                 a dummy button without a graphical representation
    *                 is created)
-   * @param shortcut keyboard shortcut for the button (<code>null</code>
+   * @param shortcut keyboard shortcut for the button ({@code null}
    *                 if none)
-   * @param toolTip  tool-tip for the button (<code>null</code> if none)
+   * @param toolTip  tool-tip for the button ({@code null} if none)
    */
   public LockableButton(final String template,
 			final Shortcut shortcut,
@@ -114,11 +114,11 @@ public class LockableButton extends GenericButton {
   }
 
   /**
-   * Sets the state of the button (<code>true</code> = pressed/down,
-   * <code>false</code> = not pressed/up).
+   * Sets the state of the button ({@code true} = pressed/down,
+   * {@code false} = not pressed/up).
    *
-   * @param b state of the button, <code>true</code> if pressed (down),
-   *          <code>false</code> otherwise
+   * @param b state of the button, {@code true} if pressed (down),
+   *          {@code false} otherwise
    */
   @Override
   public void setPressed(final boolean b) {
@@ -135,23 +135,23 @@ public class LockableButton extends GenericButton {
   }
 
   /**
-   * The lock state of the button.  <code>true</code> if the button is
-   * permanently pressed (locked), <code>false</code> otherwise (may
+   * The lock state of the button.  {@code true} if the button is
+   * permanently pressed (locked), {@code false} otherwise (may
    * be pressed, but not locked).
    *
-   * @return state of the button, <code>true</code> if locked,
-   *         <code>false</code> otherwise (may be pressed, but not locked)
+   * @return state of the button, {@code true} if locked,
+   *         {@code false} otherwise (may be pressed, but not locked)
    */
   public boolean isLocked() {
     return locked;
   }
 
   /**
-   * Sets the lock state of the button (<code>true</code> = locked,
-   * <code>false</code> = not locked).
+   * Sets the lock state of the button ({@code true} = locked,
+   * {@code false} = not locked).
    *
-   * @param b state of the button, <code>true</code> if locked,
-   *          <code>false</code> otherwise
+   * @param b state of the button, {@code true} if locked,
+   *          {@code false} otherwise
    */
   public void setLocked(final boolean b) {
     if (b != locked) {
@@ -205,18 +205,18 @@ public class LockableButton extends GenericButton {
   }
 
   /**
-   * Creates a new <code>KeyPressedAction</code> object.
+   * Creates a new {@code KeyPressedAction} object.
    *
-   * @return the new <code>KeyPressedAction</code> object
+   * @return the new {@code KeyPressedAction} object
    */
   public KeyPressedAction keyPressedAction() {
     return new KeyPressedAction();
   }
 
   /**
-   * Creates a new <code>KeyReleasedAction</code> object.
+   * Creates a new {@code KeyReleasedAction} object.
    *
-   * @return the new <code>KeyReleasedAction</code> object
+   * @return the new {@code KeyReleasedAction} object
    */
   public KeyReleasedAction keyReleasedAction() {
     return new KeyReleasedAction();

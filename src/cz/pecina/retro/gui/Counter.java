@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import cz.pecina.retro.common.Util;
 
 /**
- * Counter consisting of several <code>Digit</code>s.
+ * Counter consisting of several {@code Digit}s.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -107,8 +107,8 @@ public class Counter {
   /**
    * Gets one digit of the counter.
    *
-   * @param n the digit number (<code>0</code> is the rightmost digit)
-   * @return the <code>Digit</code> object
+   * @param n the digit number ({@code 0} is the rightmost digit)
+   * @return the {@code Digit} object
    */
   public Digit getDigit(final int n) {
     assert (n >= 0) && (n < numberDigits);

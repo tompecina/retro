@@ -101,7 +101,7 @@ public class PMDColor {
    * Creates a color object,
    *
    * @param color     color of the pixels
-   * @param blinkFlag <code>true</code> if blinking
+   * @param blinkFlag {@code true} if blinking
    */
   public PMDColor(final Color color, final boolean blinkFlag) {
     assert color != null;
@@ -131,7 +131,7 @@ public class PMDColor {
   /**
    * Sets the blinking flag.
    *
-   * @param blinkFlag <code>true</code> if blinking
+   * @param blinkFlag {@code true} if blinking
    */
   public void setBlinkFlag(final boolean blinkFlag) {
     this.blinkFlag = blinkFlag;
@@ -140,7 +140,7 @@ public class PMDColor {
   /**
    * Gets the blinking flag.
    *
-   * @return <code>true</code> if blinking
+   * @return {@code true} if blinking
    */
   public boolean getBlinkFlag() {
     return blinkFlag;

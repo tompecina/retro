@@ -100,7 +100,7 @@ public class TapeRecorderButtonsLayout {
   }
 
   /**
-   * Gets the button in position <code>column</code>.
+   * Gets the button in position {@code column}.
    *
    * @param  column position of the button
    * @return the button in position column

@@ -62,7 +62,7 @@ public abstract class GenericIndicator
 
   /**
    * Creates an instance of a generic indicator, with a state initially
-   * set to <code>0</code>.
+   * set to {@code 0}.
    *
    * @param prefix       template prefix for the indicator
    * @param numberStates number of states
@@ -79,8 +79,8 @@ public abstract class GenericIndicator
   /**
    * Gets the state of the indicator.
    *
-   * @return state of the indicator (<code>0</code> to
-   *         <code>numberStates - 1</code>)
+   * @return state of the indicator ({@code 0} to
+   *         {@code numberStates - 1})
    */
   public int getState() {
     return state;
@@ -89,8 +89,8 @@ public abstract class GenericIndicator
   /**
    * Sets the state of the indicator.
    *
-   * @param n new state of the indicator (<code>0</code> to
-   *          <code>numberStates - 1</code>)
+   * @param n new state of the indicator ({@code 0} to
+   *          {@code numberStates - 1})
    */
   public void setState(final int n) {
     assert (n >= 0) && (n < numberStates);
