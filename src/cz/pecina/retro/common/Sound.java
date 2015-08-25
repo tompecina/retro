@@ -51,15 +51,17 @@ public class Sound {
   private static final Logger log =
     Logger.getLogger(Sound.class.getName());
 
+  /**
+   * The channel assigned to the tape recorder.
+   */
+  public static final int TAPE_RECORDER_CHANNEL = 0;
+
   // timer period in milliseconds
   private static final int TIMER_PERIOD = 50;
 
   // buffer length in bytes
   private static final int BUFFER_LENGTH = 0x10000;  // 64KiB
   
-  // singleton lock
-  private static boolean lock;
-
   // sample rate
   private float sampleRate;
 
@@ -106,10 +108,10 @@ public class Sound {
   }
 
   /**
-   * Creates an instance of the emulator.
+   * Creates an instance of an audio interface.
    * <p>
-   * The emulator is always 16-bit signed PCR, monoaural type; only
-   * the sample rate and number of mixer channels is user-selectable.
+   * The audio is always 16-bit signed PCR, monoaural type; only
+   * the sample rate and the number of mixer channels are user-selectable.
    *
    * @param sampleRate     the sample rate in sampler per second
    * @param numberChannels number of channels to be mixed
@@ -119,17 +121,19 @@ public class Sound {
     assert sampleRate > 1000;
     assert numberChannels > 0;
     
-    if (lock) {
-      log.fine("Error, Sound is a singleton");
+    if (Parameters.sound != null) {
+      log.fine("Error, Sound already exists");
       throw Application.createError(this, "sound.exists");
      }
-    lock = true;
+    Parameters.sound = this;
 
     this.sampleRate = sampleRate;
     this.numberChannels = numberChannels;
-
+    
     samplesPerTick = Math.round((sampleRate * TIMER_PERIOD) / 1000);
+    log.fine("Samples per tick: " + samplesPerTick);
     samplesPerCPUClock = Parameters.CPUFrequency / sampleRate;
+    log.fine("Samples per CPU clock: " + samplesPerCPUClock);
     
     AudioFormat format = new AudioFormat(sampleRate, 16, 1, true, false);
     final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
@@ -167,7 +171,7 @@ public class Sound {
       lines = null;
       return;
     }
-    log.finer("Audio lines set up");
+    log.fine("Audio lines set up");
     
     for (int channel = 0; channel < numberChannels; channel++) {
       bytesWritten[channel] +=
@@ -178,11 +182,12 @@ public class Sound {
     for (int channel = 0; channel < numberChannels; channel++) {
       lines[channel].start();
     }
-    log.finer("Line fed with data (silence) and started");
+    log.fine("Audio line fed with data (silence) and started");
     
     new Timer(TIMER_PERIOD, new TimerListener()).start();
+    log.fine("Timer running, period: " + TIMER_PERIOD);
     
-    log.finer("New Sound creation completed");
+    log.fine("New Sound creation completed");
   }
 
   // timer listener
@@ -191,19 +196,22 @@ public class Sound {
     // for description see ActionListener
     @Override
     public void actionPerformed(final ActionEvent event) {
-      log.finest("Timer fired");
+      log.finer("Timer event started");
            
       final long totalSamplesNeeded =
 	Math.round((sampleRate / 1e9) * (System.nanoTime() - initialNanoTime));
       for (int channel = 0; channel < numberChannels; channel++) {
+	log.finer("Processing channel: " + channel);
 	int newSamplesNeeded =
 	  (int)(samplesPerTick + totalSamplesNeeded - (bytesWritten[channel] / 2));
 	final int available = lines[channel].available();
 	if (newSamplesNeeded > (available / 2)) {
 	  newSamplesNeeded = available / 2;
 	}
+	log.finer("New samples needed: " + newSamplesNeeded);
 	final TreeMap<Long,Boolean> queue = queues.get(channel);
 	boolean level = levels[channel];
+	log.finer("Last level: " + level);
 	final long time = getTime();
 	int i = 0;
 	for (long pos: queue.keySet()) {
@@ -224,8 +232,21 @@ public class Sound {
 	queue.clear();
 	lastCPUClock = time;
 	levels[channel] = level;
-	lines[channel].write(buffer, 0, 2 * newSamplesNeeded);
+	bytesWritten[channel] +=
+	  lines[channel].write(buffer, 0, 2 * newSamplesNeeded);
       }
     }
+  }
+
+  /**
+   * Writes a level to the sound interface.
+   *
+   * @param channel the channel number
+   * @param level   the level valid for the current CPU time
+   */
+  public void write(final int channel, final boolean level) {
+    log.finest("Writing to channel: " + channel + ", level: " + level);
+    assert (channel >= 0) && (channel < numberChannels);
+    queues.get(channel).put(getTime(), level);
   }
 }

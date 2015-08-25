@@ -268,7 +268,7 @@ public class ComputerHardware {
       .add(usart.getRxdPin());
 
     // set up the sound interface
-    Parameters.sound = new Sound(16000, 2);
+    new Sound(16000, 2);
 
     // set up fixed frequency source and related logic
     gen4k = new FrequencyGenerator("FREQUENCY_GENERATOR_4K", 0x100, 0x100);  // 4000Hz

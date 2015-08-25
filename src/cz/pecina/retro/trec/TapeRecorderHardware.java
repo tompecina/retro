@@ -28,6 +28,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import cz.pecina.retro.common.Parameters;
+import cz.pecina.retro.common.Sound;
 
 import cz.pecina.retro.cpu.IONode;
 import cz.pecina.retro.cpu.IOPin;
@@ -288,6 +289,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
 	  }
 	}
 	outPulseCount++;
+	Parameters.sound.write(Sound.TAPE_RECORDER_CHANNEL, newLevel == 1);
       }
       level = newLevel;
     }
