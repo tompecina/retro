@@ -25,10 +25,12 @@ import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
 
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
-import javax.swing.Timer;
 
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
@@ -44,7 +46,7 @@ import cz.pecina.retro.gui.GUI;
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class Computer {
+public class Computer implements Runnable {
 
   // static logger
   private static final Logger log =
@@ -153,21 +155,19 @@ public class Computer {
     // set the model and reset all stateful hardware
     computerHardware.setModel(this, UserPreferences.getModel());
 
+    // start audio
+    Parameters.sound.start();
+    
     // start emulation
-    new Timer(Constants.TIMER_PERIOD, new TimerListener()).start();
-
+    final ScheduledExecutorService scheduler =
+      Executors.newScheduledThreadPool(1);
+    scheduler.scheduleAtFixedRate(this,
+				  Parameters.timerPeriod,
+				  Parameters.timerPeriod,
+				  TimeUnit.MICROSECONDS);
+    
     log.fine("New Computer created");
   }
-
-  // timer listener
-  private class TimerListener implements ActionListener {
-
-    // for description see ActionListener
-    @Override
-    public void actionPerformed(final ActionEvent event) {
-      run();
-    }
-  };
 
   /**
    * Gets the computer hardware.
@@ -219,11 +219,13 @@ public class Computer {
     debuggerState = DebuggerState.HIDDEN;
   }
 
-  // the main emulation method
-  private void run() {
+  // for description see Runnable
+  @Override
+  public void run() {
 	
     if (busy) {
       log.fine("Processing took too long, timer event dismissed");
+      Parameters.sound.update();
       return;
     }
     busy = true;
@@ -369,6 +371,7 @@ public class Computer {
     	break;
     }
     computerHardware.getTapeRecorderHardware().process();
+    Parameters.sound.update();
     computerHardware.getKeyboardHardware().updateBuffer();
     computerHardware.getDisplayHardware().repaint();
 	

@@ -26,10 +26,9 @@ import java.util.TreeMap;
 import java.util.List;
 import java.util.ArrayList;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
-import javax.swing.Timer;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.AudioFormat;
@@ -60,9 +59,6 @@ public class Sound {
    * The channel assigned to the internal speaker.
    */
   public static final int SPEAKER_CHANNEL = 1;
-
-  // timer period in milliseconds
-  private static final int TIMER_PERIOD = 100;
 
   // buffer length in bytes
   private static final int BUFFER_LENGTH = 0x10000;
@@ -125,6 +121,7 @@ public class Sound {
     log.fine("New Sound creation started");
     assert sampleRate > 1000;
     assert numberChannels > 0;
+    assert Parameters.timerPeriod > 0;
     
     if (Parameters.sound != null) {
       log.fine("Error, Sound already exists");
@@ -135,7 +132,7 @@ public class Sound {
     this.sampleRate = sampleRate;
     this.numberChannels = numberChannels;
     
-    samplesPerTick = Math.round((sampleRate * TIMER_PERIOD) / 1000);
+    samplesPerTick = Math.round((sampleRate * Parameters.timerPeriod) / 1000);
     log.fine("Samples per tick: " + samplesPerTick);
     clockTicksPerSample = sampleRate / Parameters.CPUFrequency;
     log.fine("Samples per CPU clock: " + clockTicksPerSample);
@@ -177,80 +174,82 @@ public class Sound {
       return;
     }
     log.fine("Audio lines set up");
-    
+
     for (int channel = 0; channel < numberChannels; channel++) {
       bytesWritten[channel] +=
 	lines[channel].write(buffer, 0, 4 * samplesPerTick);
     }
+    log.fine("Silence written to audio lines");
+
+    log.fine("New Sound creation completed");
+  }
+
+  /**
+   * Starts the audio system.
+   */ 
+  public void start() {
     lastCPUClock = getTime();
     initialNanoTime = System.nanoTime();
     for (int channel = 0; channel < numberChannels; channel++) {
       lines[channel].start();
     }
-    log.fine("Audio line fed with data (silence) and started");
-    
-    new Timer(TIMER_PERIOD, new TimerListener()).start();
-    log.fine("Timer running, period: " + TIMER_PERIOD);
-    
-    log.fine("New Sound creation completed");
+    log.fine("Audio lines started");
   }
-
-  // timer listener
-  private class TimerListener implements ActionListener {
-
-    // for description see ActionListener
-    @Override
-    public void actionPerformed(final ActionEvent event) {
-      log.finer("Timer event started");
-           
-      final long totalSamplesNeeded =
-	Math.round((sampleRate / 1e9) * (System.nanoTime() - initialNanoTime));
-      for (int channel = 0; channel < numberChannels; channel++) {
-	log.finer("Processing channel: " + channel);
-	int newSamplesNeeded =
-	  (int)(samplesPerTick + totalSamplesNeeded - (bytesWritten[channel] / 2));
-	final int available = lines[channel].available();
-	if (newSamplesNeeded > (available / 2)) {
-	  newSamplesNeeded = available / 2;
-	}
-	log.finer("New samples needed: " + newSamplesNeeded);
-	final TreeMap<Long,Boolean> queue = queues.get(channel);
-	boolean level = levels[channel];
-	log.finer("Last level: " + level);
-	int i = 0;
-	for (long pos: queue.keySet()) {
-	  int addr = (int)Math.round((pos - lastCPUClock) * clockTicksPerSample);
-	  log.finest("Address: " + addr);
-	  if (addr >= (BUFFER_LENGTH / 2)) {
-	    addr = (BUFFER_LENGTH / 2) - 1;
-	  }
-	  while (i < (addr - 1)) {
-	    buffer[i * 2] = (byte)(level ? 0xff : 0x00);
-	    buffer[(i++ * 2) + 1] = (byte)(level ? 0x7f : 0x80);
-	  }
-	  level = queue.get(pos);
-	}
-	while ((i < newSamplesNeeded) && (i < (BUFFER_LENGTH / 2))) {
-	    buffer[i * 2] = (byte)(level ? 0xff : 0x00);
-	    buffer[(i++ * 2) + 1] = (byte)(level ? 0x7f : 0x80);
-	}
-	queue.clear();
-	levels[channel] = level;
-	bytesWritten[channel] +=
-	  lines[channel].write(buffer, 0, 2 * i);
-	while (i < newSamplesNeeded) {
-	  log.finer("Buffer too small, writing more data");
-	  int j = newSamplesNeeded - i;
-	  if (j >= (BUFFER_LENGTH / 2)) {
-	    j = BUFFER_LENGTH / 2;
-	  }
-	  bytesWritten[channel] +=
-	    lines[channel].write(buffer, 0, 2 * j);
-	  i += j;
-	}
+  
+  /**
+   * Updates the audio system.
+   */ 
+  public void update() {
+    log.finer("Timer event started");
+    System.out.println("Time: " + ((System.nanoTime()- initialNanoTime)/1000000000.0));
+    
+    final long totalSamplesNeeded =
+      Math.round((sampleRate / 1e9) * (System.nanoTime() - initialNanoTime));
+    for (int channel = 0; channel < numberChannels; channel++) {
+      log.finer("Processing channel: " + channel);
+      int newSamplesNeeded =
+	(int)(samplesPerTick + totalSamplesNeeded - (bytesWritten[channel] / 2));
+      final int available = lines[channel].available();
+      if (newSamplesNeeded > (available / 2)) {
+	newSamplesNeeded = available / 2;
       }
-      lastCPUClock = getTime();
+      log.finer("New samples needed: " + newSamplesNeeded);
+      final TreeMap<Long,Boolean> queue = queues.get(channel);
+      boolean level = levels[channel];
+      log.finer("Last level: " + level);
+      int i = 0;
+      for (long pos: queue.keySet()) {
+	int addr = (int)Math.round((pos - lastCPUClock) * clockTicksPerSample);
+	log.finest("Address: " + addr);
+	if (addr >= (BUFFER_LENGTH / 2)) {
+	  addr = (BUFFER_LENGTH / 2) - 1;
+	}
+	while (i < (addr - 1)) {
+	  buffer[i * 2] = (byte)(level ? 0xff : 0x00);
+	  buffer[(i++ * 2) + 1] = (byte)(level ? 0x7f : 0x80);
+	}
+	level = queue.get(pos);
+      }
+      while ((i < newSamplesNeeded) && (i < (BUFFER_LENGTH / 2))) {
+	buffer[i * 2] = (byte)(level ? 0xff : 0x00);
+	buffer[(i++ * 2) + 1] = (byte)(level ? 0x7f : 0x80);
+      }
+      queue.clear();
+      levels[channel] = level;
+      bytesWritten[channel] +=
+	lines[channel].write(buffer, 0, 2 * i);
+      while (i < newSamplesNeeded) {
+	log.finer("Buffer too small, writing more data");
+	int j = newSamplesNeeded - i;
+	if (j >= (BUFFER_LENGTH / 2)) {
+	  j = BUFFER_LENGTH / 2;
+	}
+	bytesWritten[channel] +=
+	  lines[channel].write(buffer, 0, 2 * j);
+	i += j;
+      }
     }
+    lastCPUClock = getTime();
   }
 
   /**

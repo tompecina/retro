@@ -53,7 +53,7 @@ public final class Parameters {
 
   /**
    * Duration of emulator timer period, in cycles.  Unless suspended or
-   * in debug mode, the emulated CPU performs that may processor cycles.
+   * in debug mode, the emulated CPU performs that many processor cycles.
    */
   public static long timerCycles;
 
