@@ -56,17 +56,22 @@ public class Sound {
    */
   public static final int TAPE_RECORDER_CHANNEL = 0;
 
+  /**
+   * The channel assigned to the internal speaker.
+   */
+  public static final int SPEAKER_CHANNEL = 1;
+
   // timer period in milliseconds
-  private static final int TIMER_PERIOD = 50;
+  private static final int TIMER_PERIOD = 100;
 
   // buffer length in bytes
-  private static final int BUFFER_LENGTH = 0x10000;  // 64KiB
+  private static final int BUFFER_LENGTH = 0x10000;
   
   // sample rate
   private float sampleRate;
 
-  // number of samples per one CPU clock
-  private double samplesPerCPUClock;
+  // number of CPU clock tickss per sample
+  private double clockTicksPerSample;
 
   // average number of samples per tick
   private int samplesPerTick;
@@ -132,8 +137,8 @@ public class Sound {
     
     samplesPerTick = Math.round((sampleRate * TIMER_PERIOD) / 1000);
     log.fine("Samples per tick: " + samplesPerTick);
-    samplesPerCPUClock = Parameters.CPUFrequency / sampleRate;
-    log.fine("Samples per CPU clock: " + samplesPerCPUClock);
+    clockTicksPerSample = sampleRate / Parameters.CPUFrequency;
+    log.fine("Samples per CPU clock: " + clockTicksPerSample);
     
     AudioFormat format = new AudioFormat(sampleRate, 16, 1, true, false);
     final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
@@ -212,10 +217,10 @@ public class Sound {
 	final TreeMap<Long,Boolean> queue = queues.get(channel);
 	boolean level = levels[channel];
 	log.finer("Last level: " + level);
-	final long time = getTime();
 	int i = 0;
 	for (long pos: queue.keySet()) {
-	  int addr = (int)Math.round((pos - lastCPUClock) * samplesPerCPUClock);
+	  int addr = (int)Math.round((pos - lastCPUClock) * clockTicksPerSample);
+	  log.finest("Address: " + addr);
 	  if (addr >= (BUFFER_LENGTH / 2)) {
 	    addr = (BUFFER_LENGTH / 2) - 1;
 	  }
@@ -225,16 +230,26 @@ public class Sound {
 	  }
 	  level = queue.get(pos);
 	}
-	while (i < newSamplesNeeded) {
+	while ((i < newSamplesNeeded) && (i < (BUFFER_LENGTH / 2))) {
 	    buffer[i * 2] = (byte)(level ? 0xff : 0x00);
 	    buffer[(i++ * 2) + 1] = (byte)(level ? 0x7f : 0x80);
 	}
 	queue.clear();
-	lastCPUClock = time;
 	levels[channel] = level;
 	bytesWritten[channel] +=
-	  lines[channel].write(buffer, 0, 2 * newSamplesNeeded);
+	  lines[channel].write(buffer, 0, 2 * i);
+	while (i < newSamplesNeeded) {
+	  log.finer("Buffer too small, writing more data");
+	  int j = newSamplesNeeded - i;
+	  if (j >= (BUFFER_LENGTH / 2)) {
+	    j = BUFFER_LENGTH / 2;
+	  }
+	  bytesWritten[channel] +=
+	    lines[channel].write(buffer, 0, 2 * j);
+	  i += j;
+	}
       }
+      lastCPUClock = getTime();
     }
   }
 
