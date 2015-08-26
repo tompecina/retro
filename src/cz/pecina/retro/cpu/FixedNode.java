@@ -1,4 +1,4 @@
-/* LowPin.java
+/* FixedNode.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -21,17 +21,47 @@
 package cz.pecina.retro.cpu;
 
 /**
- * I/O pin with fixed low signal level (mainly for debugging).
+ * I/O node with settable fixed signal level.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class LowPin extends FixedPin {
+public class FixedNode extends IONode {
+  
+  // the signal level of the pin
+  private int level;
 
   /**
-   * Main constructor.
+   * The main constructor.
+   *
+   * @param level the level level
    */
-  public LowPin() {
-    super(0);
+  public FixedNode(final int level) {
+    this.level = level;
+  }
+  
+  // for description see IONode
+  @Override
+  public int query() {
+    return level;
+  }
+
+  /**
+   * Sets the level on the node.
+   *
+   * @param level the new level
+   */
+  public void setLevel(final int level) {
+    this.level = level;
+    notifyChange();
+  }
+
+  /**
+   * Gets the level on the node.
+   *
+   * @return the level on the node
+   */
+  public int setLevel() {
+    return level;
   }
 }

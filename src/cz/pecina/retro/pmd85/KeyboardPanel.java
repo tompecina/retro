@@ -116,7 +116,6 @@ public class KeyboardPanel extends BackgroundFixedPane {
     keyboardHardware.getGreenLED().place(this,
 					 GREEN_LED_OFFSET_X,
 					 GREEN_LED_OFFSET_Y);
-    keyboardHardware.getGreenLED().setState(1);
     log.finer("LEDs set up");
 
     log.fine("Keyboard panel set up");

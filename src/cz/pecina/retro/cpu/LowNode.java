@@ -1,4 +1,4 @@
-/* HighPin.java
+/* LowNode.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -21,17 +21,17 @@
 package cz.pecina.retro.cpu;
 
 /**
- * I/O pin with fixed low signal level (mainly for debugging).
+ * I/O node settable signal level, initially set to low.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class HighPin extends FixedPin {
-
+public class LowNode extends FixedNode {
+  
   /**
-   * Main constructor.
+   * The main constructor.
    */
-  public HighPin() {
-    super(1);
+  public LowNode() {
+    super(0);
   }
 }

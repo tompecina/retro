@@ -307,6 +307,7 @@ public class KeyboardHardware {
 
   // LED pins
   private class LEDPin extends IOPin {
+
     private LED led;
 
     private LEDPin(final LED led) {
@@ -315,6 +316,7 @@ public class KeyboardHardware {
       this.led = led;
     }
 
+    // for description see IOPin
     @Override
     public void notifyChange() {
       led.setState(IONode.normalize(queryNode()) == 1);

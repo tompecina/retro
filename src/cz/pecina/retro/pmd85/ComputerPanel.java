@@ -108,7 +108,6 @@ public class ComputerPanel extends BackgroundFixedPane {
     computerHardware.getGreenLED().place(this,
 					 LED_OFFSET_X + (2 * LED_GRID_X),
 					 LED_OFFSET_Y);
-    computerHardware.getGreenLED().setState(1);
     log.finer("LEDs set up");
 
     // set up brand marking

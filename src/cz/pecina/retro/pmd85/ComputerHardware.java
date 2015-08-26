@@ -47,9 +47,9 @@ import cz.pecina.retro.cpu.NAND;
 import cz.pecina.retro.cpu.XOR;
 import cz.pecina.retro.cpu.FrequencyGenerator;
 import cz.pecina.retro.cpu.FrequencyDivider;
-import cz.pecina.retro.cpu.LowPin;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.IONode;
+import cz.pecina.retro.cpu.HighNode;
 
 import cz.pecina.retro.trec.TapeRecorderInterface;
 import cz.pecina.retro.trec.TapeRecorderHardware;
@@ -329,11 +329,10 @@ public class ComputerHardware {
       .add(systemPIO.getPin(16 + 3))
       .add(keyboardHardware.getRedLEDPin())
       .add(redLEDPin);
-    new IONode()
-      .add(new LowPin())
+    new HighNode()
       .add(keyboardHardware.getGreenLEDPin())
       .add(greenLEDPin);
-
+      
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);
 

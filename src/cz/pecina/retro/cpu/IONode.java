@@ -59,6 +59,7 @@ public class IONode {
     assert !pins.contains(pin);
     pins.add(pin);
     pin.setNode(this);
+    notifyChange();
     return this;
   }
 
@@ -71,6 +72,7 @@ public class IONode {
   public IONode remove(final IOPin pin) {
     assert pins.contains(pin);
     pins.remove(pin);
+    notifyChange();
     return this;
   }
 

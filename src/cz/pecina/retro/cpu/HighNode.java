@@ -1,4 +1,4 @@
-/* FixedPin.java
+/* HighNode.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -21,28 +21,17 @@
 package cz.pecina.retro.cpu;
 
 /**
- * I/O pin with fixed signal level (mainly for debugging).
+ * I/O node settable signal level, initially set to high.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class FixedPin extends IOPin {
-
-  // the signal level of the pin
-  private int level;
+public class HighNode extends FixedNode {
   
   /**
-   * Main constructor.
-   *
-   * @param level the fixed level
+   * The main constructor.
    */
-  public FixedPin(final int level) {
-    this.level = level;
-  }
-
-  // for description see IOPin
-  @Override
-  public int query() {
-    return level;
+  public HighNode() {
+    super(1);
   }
 }
