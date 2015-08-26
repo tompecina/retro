@@ -164,59 +164,9 @@ public class Computer implements Runnable {
     scheduler.scheduleAtFixedRate(this,
 				  Parameters.timerPeriod,
 				  Parameters.timerPeriod,
-				  TimeUnit.MICROSECONDS);
+				  TimeUnit.MILLISECONDS);
     
     log.fine("New Computer created");
-  }
-
-  /**
-   * Gets the computer hardware.
-   *
-   * @return the computer hardware
-   */
-  public ComputerHardware getComputerHardware() {
-    return computerHardware;
-  }
-
-  /**
-   * Gets the icon layout.
-   *
-   * @return the icon layout
-   */
-  public IconLayout getIconLayout() {
-    return iconLayout;
-  }
-
-  /**
-   * Gets the computer frame.
-   *
-   * @return the computer frame
-   */
-  public ComputerFrame getComputerFrame() {
-    return computerFrame;
-  }
-
-  /**
-   * Gets the keyboard frame.
-   *
-   * @return the keyboard frame
-   */
-  public KeyboardFrame getKeyboardFrame() {
-    return keyboardFrame;
-  }
-
-  /**
-   * Stops the debugger.
-   */
-  public void debuggerStop() {
-    debuggerState = DebuggerState.STOPPED;
-  }
-
-  /**
-   * Hides the debugger.
-   */
-  public void debuggerHide() {
-    debuggerState = DebuggerState.HIDDEN;
   }
 
   // for description see Runnable
@@ -376,5 +326,55 @@ public class Computer implements Runnable {
     computerHardware.getDisplayHardware().repaint();
 	
     busy = false;
+  }
+
+  /**
+   * Gets the computer hardware.
+   *
+   * @return the computer hardware
+   */
+  public ComputerHardware getComputerHardware() {
+    return computerHardware;
+  }
+
+  /**
+   * Gets the icon layout.
+   *
+   * @return the icon layout
+   */
+  public IconLayout getIconLayout() {
+    return iconLayout;
+  }
+
+  /**
+   * Gets the computer frame.
+   *
+   * @return the computer frame
+   */
+  public ComputerFrame getComputerFrame() {
+    return computerFrame;
+  }
+
+  /**
+   * Gets the keyboard frame.
+   *
+   * @return the keyboard frame
+   */
+  public KeyboardFrame getKeyboardFrame() {
+    return keyboardFrame;
+  }
+
+  /**
+   * Stops the debugger.
+   */
+  public void debuggerStop() {
+    debuggerState = DebuggerState.STOPPED;
+  }
+
+  /**
+   * Hides the debugger.
+   */
+  public void debuggerHide() {
+    debuggerState = DebuggerState.HIDDEN;
   }
 }
