@@ -328,6 +328,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
   public void performScheduledEvent(final int parameter) {
     output = parameter;
     outPin.notifyChangeNode();
+    Parameters.sound.write(Sound.TAPE_RECORDER_CHANNEL, parameter == 1);
     if ((tapeRecorderState == TapeRecorderState.PLAY) &&
 	!pauseButton.isPressed() &&
 	(parameter == 0)) {
