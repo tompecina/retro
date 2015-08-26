@@ -101,6 +101,9 @@ public class ComputerHardware {
   // the 1:4 frequency divider
   private FrequencyDivider div;
 
+  // the speaker
+  private Speaker speaker;
+
   // the speaker & yellow LED logic
   private NAND pc0nand, pc1nand, speakerNand;
   private Invertor pc2inv;
@@ -279,7 +282,7 @@ public class ComputerHardware {
       UserPreferences.isSpeakerMute());
     
     // set up fixed frequency source and related logic
-    gen4k = new FrequencyGenerator("FREQUENCY_GENERATOR_4K", 0x100, 0x100);  // 4000Hz
+    gen4k = new FrequencyGenerator("FREQUENCY_GENERATOR_4KHz", 0x100, 0x100);
     hardware.add(gen4k);
     div = new FrequencyDivider("FREQUNCY_DIVIDER", 4, false);
     hardware.add(div);
@@ -288,6 +291,9 @@ public class ComputerHardware {
     pc2inv = new Invertor("INVERTOR_PC2");
     speakerNand = new NAND("SPEAKER_NAND", 3);
     
+    // set up the speaker
+    speaker = new Speaker("SPEAKER");
+
     // connect speaker and LEDs
     new IONode()
       .add(gen4k.getOutPin())
@@ -317,7 +323,8 @@ public class ComputerHardware {
     new IONode()
       .add(speakerNand.getOutPin())
       .add(keyboardHardware.getYellowLEDPin())
-      .add(yellowLEDPin);
+      .add(yellowLEDPin)
+      .add(speaker.getInPin());
     new IONode()
       .add(systemPIO.getPin(16 + 3))
       .add(keyboardHardware.getRedLEDPin())
