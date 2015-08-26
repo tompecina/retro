@@ -271,7 +271,7 @@ public class ComputerHardware {
       .add(usart.getRxdPin());
 
     // set up the sound interface
-    new Sound(16000, 2);
+    new Sound(Constants.SOUND_SAMPLING_RATE, 2);
     Parameters.sound.setVolume(Sound.TAPE_RECORDER_CHANNEL,
       UserPreferences.getTapeRecorderVolume() / 100f);
     Parameters.sound.setMute(Sound.TAPE_RECORDER_CHANNEL,

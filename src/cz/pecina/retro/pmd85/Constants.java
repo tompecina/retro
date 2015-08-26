@@ -43,6 +43,13 @@ public final class Constants {
    * The default model.
    */
   public static final int DEFAULT_MODEL = 3;  // PMD 85-3
+
+
+  /**
+   * The sound sampling rate.
+   */
+  public static int SOUND_SAMPLING_RATE = 16000;
+
   public static final double CPU_FREQUENCY = 2.048e6;
   public static final int TIMER_PERIOD = 50;  // in msec
   public static final long TIMER_CYCLES =

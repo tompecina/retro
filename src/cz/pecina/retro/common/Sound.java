@@ -65,7 +65,7 @@ public class Sound {
   private static final float OVERLAP = 1;
   
   // sample rate
-  private float sampleRate;
+  private float samplingRate;
 
   // number of samples per emulator period
   private int samplesPerPeriod;
@@ -118,16 +118,16 @@ public class Sound {
    * The audio is always 8-bit signed PCR, monoaural type; only
    * the sample rate and the number of mixer channels are user-selectable.
    *
-   * @param sampleRate     the sample rate in sampler per second
+   * @param samplingRate   the sample rate in sampler per second
    * @param numberChannels number of channels to be mixed
    */
-  public Sound(final int sampleRate, final int numberChannels) {
+  public Sound(final int samplingRate, final int numberChannels) {
     log.fine("New Sound creation started");
-    assert sampleRate > 1000;
+    assert samplingRate > 1000;
     assert numberChannels > 0;
     assert Parameters.timerPeriod > 0;
     assert Parameters.timerCycles > 0;
-    assert ((sampleRate * Parameters.timerPeriod) % 1000) == 0;
+    assert ((samplingRate * Parameters.timerPeriod) % 1000) == 0;
     
     // check for existence of Sound object
     if (Parameters.sound != null) {
@@ -137,17 +137,17 @@ public class Sound {
     Parameters.sound = this;
 
     // update fields
-    this.sampleRate = sampleRate;
+    this.samplingRate = samplingRate;
     this.numberChannels = numberChannels;
     
     // calculate sizes
-    samplesPerPeriod = (sampleRate * Parameters.timerPeriod) / 1000;
+    samplesPerPeriod = (samplingRate * Parameters.timerPeriod) / 1000;
     log.fine("Samples per period: " + samplesPerPeriod);
     overlap = Math.round(samplesPerPeriod * OVERLAP);
     log.fine("Overlap: " + overlap);
     
     // set up audio format
-    final AudioFormat format = new AudioFormat(sampleRate, 8, 1, true, false);
+    final AudioFormat format = new AudioFormat(samplingRate, 8, 1, true, false);
     final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
     if (!AudioSystem.isLineSupported(info)) {
       log.fine("Sound hardware is not available");
@@ -265,12 +265,12 @@ public class Sound {
 	    samplesPerPeriod - 1);
 	  log.finest("Address: " + address + ", level: " + level);
 	  while (i < (address - 1)) {
-	    buffer[i++] = (byte)(level ? 0x7f : 0x80);
+	    buffer[i++] = (byte)(level ? 0x7f : 0x00);
 	  }
 	  level = queue.get(position);
 	}
 	while (i < samplesPerPeriod) {
-	  buffer[i++] = (byte)(level ? 0x7f : 0x80);
+	  buffer[i++] = (byte)(level ? 0x7f : 0x00);
 	}
 
 	// remove queued data
