@@ -23,6 +23,7 @@ package cz.pecina.retro.pmd85;
 import java.util.logging.Logger;
 
 import java.util.Locale;
+import java.util.Arrays;
 
 import java.util.prefs.Preferences;
 import java.util.prefs.BackingStoreException;
@@ -74,11 +75,7 @@ public final class UserPreferences extends GeneralUserPreferences {
   // tests if a key is in Parameters.preferences
   private static boolean hasKey(final String key) {
     try {
-      for (String key2: Parameters.preferences.keys()) {
-	if (key.equals(key2)) {
-	  return true;
-	}
-      }
+      return Arrays.asList(Parameters.preferences.keys()).contains(key);
     } catch (final BackingStoreException exception) {
       log.fine("Backing store exception: " + exception.getMessage());
     }
