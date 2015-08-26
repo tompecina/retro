@@ -69,14 +69,11 @@ public class Sound {
   // sample rate
   private float sampleRate;
 
-  // average number of samples per emulator period
+  // number of samples per emulator period
   private int samplesPerPeriod;
 
   // overlap in number of samples
   private int overlap;
-
-  // buffer length is number of samples
-  private int bufferLength;
 
   // number of sound channels
   private int numberChannels;
@@ -94,9 +91,6 @@ public class Sound {
   // last CPU clock
   private long lastCPUClock;
   
-  // last frame positions
-  private long[] framePositions;
-
   // last levels, per channel
   private boolean[] lastLevels;
 
@@ -123,12 +117,13 @@ public class Sound {
    * @param sampleRate     the sample rate in sampler per second
    * @param numberChannels number of channels to be mixed
    */
-  public Sound(final float sampleRate, final int numberChannels) {
+  public Sound(final int sampleRate, final int numberChannels) {
     log.fine("New Sound creation started");
     assert sampleRate > 1000;
     assert numberChannels > 0;
     assert Parameters.timerPeriod > 0;
     assert Parameters.timerCycles > 0;
+    assert ((sampleRate * Parameters.timerPeriod) % 1000) == 0;
     
     // check for existence of Sound object
     if (Parameters.sound != null) {
@@ -141,12 +136,10 @@ public class Sound {
     this.numberChannels = numberChannels;
     
     // calculate sizes
-    samplesPerPeriod = Math.round((sampleRate * Parameters.timerPeriod) / 1000);
+    samplesPerPeriod = (sampleRate * Parameters.timerPeriod) / 1000;
     log.fine("Samples per period: " + samplesPerPeriod);
     overlap = Math.round(samplesPerPeriod * OVERLAP);
     log.fine("Overlap: " + overlap);
-    bufferLength = samplesPerPeriod + overlap;
-    log.fine("Buffer length: " + bufferLength);
     
     // set up audio format
     final AudioFormat format = new AudioFormat(sampleRate, 16, 1, true, false);
@@ -162,10 +155,9 @@ public class Sound {
     gainMinima = new float[numberChannels];
     gainMaxima = new float[numberChannels];
     muteControls = new BooleanControl[numberChannels];
-    framePositions = new long[numberChannels];
     lastLevels = new boolean[numberChannels];
-    buffer = new byte[bufferLength * FRAME_SIZE];
-    silence = new byte[bufferLength * FRAME_SIZE];
+    buffer = new byte[samplesPerPeriod * FRAME_SIZE];
+    silence = new byte[(samplesPerPeriod + overlap) * FRAME_SIZE];
 
     // get audio lines and controls
     try {
@@ -194,7 +186,7 @@ public class Sound {
 
     // write silence
     for (int channel = 0; channel < numberChannels; channel++) {
-      lines[channel].write(silence, 0, bufferLength * FRAME_SIZE);
+      lines[channel].write(silence, 0, (samplesPerPeriod + overlap) * FRAME_SIZE);
     }
     log.fine("Silence fed into audio lines");
 
@@ -244,32 +236,21 @@ public class Sound {
     for (int channel = 0; channel < numberChannels; channel++) {
       log.finer("Processing channel: " + channel);
 
-      // get number of frames needed
-      final long framePosition = lines[channel].getLongFramePosition();
-      long framesNeeded = samplesPerPeriod;
-      framePositions[channel] = framePosition;
-
-      // if more than buffer size, feed silence
-      while (framesNeeded > bufferLength) {
-	final int excess = (int)Math.max(framesNeeded - bufferLength, bufferLength);
-	lines[channel].write(silence, 0, excess * FRAME_SIZE);
-	framesNeeded -= excess;
-      }
-
       if (running) {   // if running, supply data
 	
 	// get per-channel parameters
 	final TreeMap<Long,Boolean> queue = queues.get(channel);
 	boolean level = lastLevels[channel];
 	log.finer("Last level: " + level);
-	final float samplesPerCPUClock = (float)framesNeeded / (float)ticks;
+	final float samplesPerCPUClock = (float)samplesPerPeriod / (float)ticks;
 	log.finer("Samples per CPU clock tick: " + samplesPerCPUClock);
 
 	// create samples
 	int i = 0;
 	for (long position: queue.keySet()) {
-	  int address =
-	    Math.round((position - lastCPUClock) * samplesPerCPUClock);
+	  int address = Math.min(
+	    Math.round((position - lastCPUClock) * samplesPerCPUClock),
+	    samplesPerPeriod - 1);
 	  log.finest("Address: " + address);
 	  while (i < (address - 1)) {
 	    buffer[i * FRAME_SIZE] = (byte)(level ? 0xff : 0x00);
@@ -277,7 +258,7 @@ public class Sound {
 	  }
 	  level = queue.get(position);
 	}
-	while (i < framesNeeded) {
+	while (i < samplesPerPeriod) {
 	  buffer[i * FRAME_SIZE] = (byte)(level ? 0xff : 0x00);
 	  buffer[(i++ * FRAME_SIZE) + 1] = (byte)(level ? 0x7f : 0x80);
 	}
@@ -286,13 +267,13 @@ public class Sound {
 	queue.clear();
 
 	// write buffer
-	lines[channel].write(buffer, 0, (int)framesNeeded * FRAME_SIZE);
+	lines[channel].write(buffer, 0, samplesPerPeriod * FRAME_SIZE);
 
 	// set last level
 	lastLevels[channel] = level;
 	
       } else {  // if not running, feed silence
-	lines[channel].write(silence, 0, (int)framesNeeded * FRAME_SIZE);
+	lines[channel].write(silence, 0, samplesPerPeriod * FRAME_SIZE);
 	log.finest("Silence fed to line");
       }
     }
