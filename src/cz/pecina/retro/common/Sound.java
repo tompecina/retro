@@ -64,9 +64,6 @@ public class Sound {
   // overlap factor
   private static final float OVERLAP = 1;
   
-  // size of frame in number of bytes
-  private static final int FRAME_SIZE = 2;
-
   // sample rate
   private float sampleRate;
 
@@ -118,7 +115,7 @@ public class Sound {
   /**
    * Creates an instance of an audio interface.
    * <p>
-   * The audio is always 16-bit signed PCR, monoaural type; only
+   * The audio is always 8-bit signed PCR, monoaural type; only
    * the sample rate and the number of mixer channels are user-selectable.
    *
    * @param sampleRate     the sample rate in sampler per second
@@ -150,7 +147,7 @@ public class Sound {
     log.fine("Overlap: " + overlap);
     
     // set up audio format
-    final AudioFormat format = new AudioFormat(sampleRate, 16, 1, true, false);
+    final AudioFormat format = new AudioFormat(sampleRate, 8, 1, true, false);
     final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
     if (!AudioSystem.isLineSupported(info)) {
       log.fine("Sound hardware is not available");
@@ -164,8 +161,8 @@ public class Sound {
     gainMaxima = new float[numberChannels];
     muteControls = new BooleanControl[numberChannels];
     lastLevels = new boolean[numberChannels];
-    buffer = new byte[samplesPerPeriod * FRAME_SIZE];
-    silence = new byte[(samplesPerPeriod + overlap) * FRAME_SIZE];
+    buffer = new byte[samplesPerPeriod];
+    silence = new byte[samplesPerPeriod + overlap];
 
     // get audio lines and controls
     try {
@@ -195,7 +192,7 @@ public class Sound {
 
     // write silence
     for (int channel = 0; channel < numberChannels; channel++) {
-      lines[channel].write(silence, 0, (samplesPerPeriod + overlap) * FRAME_SIZE);
+      lines[channel].write(silence, 0, samplesPerPeriod + overlap);
     }
     log.fine("Silence fed into audio lines");
 
@@ -268,14 +265,12 @@ public class Sound {
 	    samplesPerPeriod - 1);
 	  log.finest("Address: " + address + ", level: " + level);
 	  while (i < (address - 1)) {
-	    buffer[i * FRAME_SIZE] = (byte)(level ? 0xff : 0x00);
-	    buffer[(i++ * FRAME_SIZE) + 1] = (byte)(level ? 0x7f : 0x80);
+	    buffer[i++] = (byte)(level ? 0x7f : 0x80);
 	  }
 	  level = queue.get(position);
 	}
 	while (i < samplesPerPeriod) {
-	  buffer[i * FRAME_SIZE] = (byte)(level ? 0xff : 0x00);
-	  buffer[(i++ * FRAME_SIZE) + 1] = (byte)(level ? 0x7f : 0x80);
+	  buffer[i++] = (byte)(level ? 0x7f : 0x80);
 	}
 
 	// remove queued data
@@ -283,21 +278,18 @@ public class Sound {
 
 	// log buffer
 	if (log.isLoggable(Level.FINEST)) {
-	  final byte buffer0 = buffer[0], buffer1 = buffer[1];
+	  final byte buffer0 = buffer[0];
 	  for (i = 1; i < samplesPerPeriod; i++) {
-	    if ((buffer[i * 2] != buffer0) ||
-		(buffer[(i * 2) + 1] != buffer1)) {
+	    if (buffer[i] != buffer0) {
 	      break;
 	    }
 	  }
 	  if (i == samplesPerPeriod) {
-	    log.finest(String.format("Buffer: (repeated) %02x%02x",
-				     buffer1, buffer0));
+	    log.finest(String.format("Buffer: (repeated) %02x", buffer0));
 	  } else {
 	      StringBuilder s = new StringBuilder();
 	      for (i = 0; i < samplesPerPeriod; i++) {
-		s.append(String.format("%02x%02x ",
-				       buffer[(i * 2) + 1], buffer[i * 2]));
+		s.append(String.format("%02x ", buffer[i]));
 	      }
 	      log.finest("Buffer: " + s.toString());
 	  }
@@ -313,7 +305,7 @@ public class Sound {
 	    ", frame position: " + lines[channel].getLongFramePosition());
 
 	  // write buffer
-	  lines[channel].write(buffer, 0, samplesPerPeriod * FRAME_SIZE);
+	  lines[channel].write(buffer, 0, samplesPerPeriod);
 	  log.finest("Buffer fed to line");
 	}
 
@@ -322,7 +314,7 @@ public class Sound {
 	
       } else {  // if not running, feed silence
 	if (stable) {
-	  lines[channel].write(silence, 0, samplesPerPeriod * FRAME_SIZE);
+	  lines[channel].write(silence, 0, samplesPerPeriod);
 	  log.finest("Silence fed to line");
 	}
       }
