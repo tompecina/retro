@@ -21,6 +21,7 @@
 package cz.pecina.retro.common;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.util.TreeMap;
 import java.util.List;
@@ -102,6 +103,12 @@ public class Sound {
 
   // silence buffer
   private byte[] silence;
+
+  // stabilization flag
+  private boolean stable;
+  
+  // stabilization counter
+  private long counter;
   
   // get system clock
   private long getTime() {
@@ -225,6 +232,14 @@ public class Sound {
       return;
     }
 
+    // make 10 dry runs to let JVM stabilize
+    log.finer("Counter: " + counter);
+    if (++counter == 10) {
+      log.finer("Audio stable");
+      start();
+      stable = true;
+    }
+    
     // check if emulated CPU running
     final long clock = getTime();
     final int ticks = (int)(clock - lastCPUClock);
@@ -251,7 +266,7 @@ public class Sound {
 	  int address = Math.min(
 	    Math.round((position - lastCPUClock) * samplesPerCPUClock),
 	    samplesPerPeriod - 1);
-	  log.finest("Address: " + address);
+	  log.finest("Address: " + address + ", level: " + level);
 	  while (i < (address - 1)) {
 	    buffer[i * FRAME_SIZE] = (byte)(level ? 0xff : 0x00);
 	    buffer[(i++ * FRAME_SIZE) + 1] = (byte)(level ? 0x7f : 0x80);
@@ -266,15 +281,50 @@ public class Sound {
 	// remove queued data
 	queue.clear();
 
+	// log buffer
+	if (log.isLoggable(Level.FINEST)) {
+	  final byte buffer0 = buffer[0], buffer1 = buffer[1];
+	  for (i = 1; i < samplesPerPeriod; i++) {
+	    if ((buffer[i * 2] != buffer0) ||
+		(buffer[(i * 2) + 1] != buffer1)) {
+	      break;
+	    }
+	  }
+	  if (i == samplesPerPeriod) {
+	    log.finest(String.format("Buffer: (repeated) %02x%02x",
+				     buffer1, buffer0));
+	  } else {
+	      StringBuilder s = new StringBuilder();
+	      for (i = 0; i < samplesPerPeriod; i++) {
+		s.append(String.format("%02x%02x ",
+				       buffer[(i * 2) + 1], buffer[i * 2]));
+	      }
+	      log.finest("Buffer: " + s.toString());
+	  }
+	}
+	
 	// write buffer
-	lines[channel].write(buffer, 0, samplesPerPeriod * FRAME_SIZE);
+	if (stable) {
+
+	  // log line state
+	  log.finest("Line is " +
+	    (lines[channel].isRunning() ? "running" : "stopped"));
+	  log.finest("Line available: " + lines[channel].available() +
+	    ", frame position: " + lines[channel].getLongFramePosition());
+
+	  // write buffer
+	  lines[channel].write(buffer, 0, samplesPerPeriod * FRAME_SIZE);
+	  log.finest("Buffer fed to line");
+	}
 
 	// set last level
 	lastLevels[channel] = level;
 	
       } else {  // if not running, feed silence
-	lines[channel].write(silence, 0, samplesPerPeriod * FRAME_SIZE);
-	log.finest("Silence fed to line");
+	if (stable) {
+	  lines[channel].write(silence, 0, samplesPerPeriod * FRAME_SIZE);
+	  log.finest("Silence fed to line");
+	}
       }
     }
 
@@ -289,9 +339,10 @@ public class Sound {
    * @param level   the level valid for the current CPU time
    */
   public void write(final int channel, final boolean level) {
-    log.finest("Writing to channel: " + channel + ", level: " + level);
+    final long time = getTime();
+    log.finest("Writing to channel: " + channel + ", level: " + level + ", at: " + time);
     assert (channel >= 0) && (channel < numberChannels);
-    queues.get(channel).put(getTime(), level);
+    queues.get(channel).put(time, level);
   }
 
   /**

@@ -153,9 +153,6 @@ public class Computer implements Runnable {
     // set the model and reset all stateful hardware
     computerHardware.setModel(this, UserPreferences.getModel());
 
-    // start audio
-    Parameters.sound.start();
-    
     // start emulation
     new Timer(Parameters.timerPeriod, new TimerListener()).start();
 

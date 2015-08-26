@@ -79,7 +79,9 @@ public class Speaker {
 
   // input pin class
   private class InPin extends IOPin {
-	
+
+    private boolean level;
+    
     // main constructor
     private InPin() {
       super();
@@ -89,7 +91,11 @@ public class Speaker {
     // for description see IOPin
     @Override
     public void notifyChange() {
-      Parameters.sound.write(Sound.SPEAKER_CHANNEL, queryNode() != 0);
+      final boolean newLevel = (queryNode() != 0);
+      if (newLevel != level) {
+	Parameters.sound.write(Sound.SPEAKER_CHANNEL, newLevel);
+	level = newLevel;
+      }
     }
   }
 }
