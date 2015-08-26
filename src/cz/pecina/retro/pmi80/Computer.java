@@ -25,10 +25,10 @@ import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
 
-import javax.swing.Timer;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import javax.swing.Timer;
 
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;

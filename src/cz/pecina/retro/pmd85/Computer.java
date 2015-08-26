@@ -25,12 +25,10 @@ import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import javax.swing.Timer;
 
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Application;
@@ -159,18 +157,22 @@ public class Computer implements Runnable {
     Parameters.sound.start();
     
     // start emulation
-    final ScheduledExecutorService scheduler =
-      Executors.newScheduledThreadPool(1);
-    scheduler.scheduleAtFixedRate(this,
-				  Parameters.timerPeriod,
-				  Parameters.timerPeriod,
-				  TimeUnit.MILLISECONDS);
-    
+    new Timer(Parameters.timerPeriod, new TimerListener()).start();
+
     log.fine("New Computer created");
   }
 
-  // for description see Runnable
-  @Override
+  // timer listener
+  private class TimerListener implements ActionListener {
+
+    // for description see ActionListener
+    @Override
+    public void actionPerformed(final ActionEvent event) {
+      run();
+    }
+  };
+
+  // the main emulation method
   public void run() {
 	
     if (busy) {
