@@ -85,7 +85,7 @@ public class SettingsViewPanel extends JPanel {
       new WheelSlider(JSlider.HORIZONTAL,
 		      1,
 		      GeneralConstants.PIXEL_SIZES.length,
-		      UserPreferences.getPixelSize());
+		      1);
     pixelSizeLabel.setLabelFor(pixelSize);
     pixelSize.setMajorTickSpacing(1);
     pixelSize.setPaintTicks(true);

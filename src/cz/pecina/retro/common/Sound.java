@@ -61,7 +61,7 @@ public class Sound {
   public static final int SPEAKER_CHANNEL = 1;
 
   // overlap factor
-  private static final float OVERLAP = 1.0f;
+  private static final float OVERLAP = 1;
   
   // size of frame in number of bytes
   private static final int FRAME_SIZE = 2;
@@ -130,6 +130,7 @@ public class Sound {
       log.fine("Error, Sound already exists");
       throw Application.createError(this, "sound.exists");
      }
+    Parameters.sound = this;
 
     // update fields
     this.sampleRate = sampleRate;
@@ -179,6 +180,7 @@ public class Sound {
 	queues.add(new TreeMap<>());
       }
     } catch (final LineUnavailableException exception) {
+      lines = null;
       log.fine("Failed to open audio lines, no sound available");
       return;
     }
@@ -190,8 +192,6 @@ public class Sound {
     }
     log.fine("Silence fed into audio lines");
 
-    Parameters.sound = this;
-
     log.fine("New Sound creation completed");
   }
 
@@ -201,7 +201,7 @@ public class Sound {
   public void start() {
 
     // check if audio supported by hardware
-    if (Parameters.sound == null) {
+    if (lines == null) {
       log.fine("Audio not supported by hardware");
       return;
     }
@@ -220,7 +220,7 @@ public class Sound {
     log.finer("Timer event started");
 
     // check if audio supported by hardware
-    if (Parameters.sound == null) {
+    if (lines == null) {
       log.finer("Audio not supported by hardware");
       return;
     }
@@ -293,4 +293,53 @@ public class Sound {
     assert (channel >= 0) && (channel < numberChannels);
     queues.get(channel).put(getTime(), level);
   }
+
+  /**
+   * Sets the mute control.
+   *
+   * @param channel the channel number
+   * @param mute    the new mute setting for the channel
+   */
+  public void setMute(final int channel, final boolean mute) {
+    muteControls[channel].setValue(mute);
+    log.fine("Mute on channel " + channel + " set to: " + mute);
+  }
+
+  /**
+   * Gets the mute control.
+   *
+   * @param  channel the channel number
+   * @return         the mute setting for the channel
+   */
+  public boolean getMute(final int channel) {
+    final boolean mute = muteControls[channel].getValue();
+    log.finer("Mute on channel " + channel + " is: " + mute);
+    return mute;
+  }
+
+  /**
+   * Sets the volume (gain) control.
+   *
+   * @param channel the channel number
+   * @param mute    the new volume (gain) setting for the channel, 0.0-1.0
+   */
+  public void setVolume(final int channel, final float volume) {
+    gainControls[channel].setValue(gainMinima[channel] +
+      (volume * (gainMaxima[channel] - gainMinima[channel])));
+    log.fine("Volume on channel " + channel + " set to: " + volume);
+  }
+
+  /**
+   * Gets the volume (gain) control.
+   *
+   * @param  channel the channel number
+   * @return         the volume (gain) setting for the channel
+   */
+  public float getVolume(final int channel) {
+    final float volume = gainMinima[channel] + (gainControls[channel].getValue() *
+      (gainMaxima[channel] - gainMinima[channel]));
+    log.finer("Volume on channel " + channel + " is: " + volume);
+    return volume;
+  }
+
 }

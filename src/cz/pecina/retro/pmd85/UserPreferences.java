@@ -25,12 +25,14 @@ import java.util.logging.Logger;
 import java.util.Locale;
 
 import java.util.prefs.Preferences;
+import java.util.prefs.BackingStoreException;
 
 import java.awt.Color;
 
 import cz.pecina.retro.common.GeneralUserPreferences;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.common.Parameters;
+import cz.pecina.retro.common.Sound;
 
 import cz.pecina.retro.gui.Shortcut;
 
@@ -46,8 +48,15 @@ public final class UserPreferences extends GeneralUserPreferences {
   private static final Logger log =
     Logger.getLogger(UserPreferences.class.getName());
 
+  // default volume
+  private static final int DEFAULT_VOLUME = 67;
+  
   // true if preferences already retrieved
   private static boolean retrieved;
+  
+  // sound mixer parameters
+  private static boolean tapeRecorderMute, speakerMute;
+  private static int tapeRecorderVolume, speakerVolume;
   
   // the computer model
   private static int model;
@@ -62,6 +71,20 @@ public final class UserPreferences extends GeneralUserPreferences {
   // the custom colors
   private static PMDColor[] customColors = new PMDColor[4];
 
+  // tests if a key is in Parameters.preferences
+  private static boolean hasKey(final String key) {
+    try {
+      for (String key2: Parameters.preferences.keys()) {
+	if (key.equals(key2)) {
+	  return true;
+	}
+      }
+    } catch (final BackingStoreException exception) {
+      log.fine("Backing store exception: " + exception.getMessage());
+    }
+    return false;
+  }
+  
   /**
    * Gets preferences from the backing store.
    */
@@ -72,6 +95,27 @@ public final class UserPreferences extends GeneralUserPreferences {
         GeneralUserPreferences.getLocale()));
       Application.addModule(UserPreferences.class);
 
+      if (hasKey("tapeRecorder.mute")) {
+	tapeRecorderMute = Parameters.preferences.getBoolean("tapeRecorder.mute", false);
+      } else {
+	Parameters.preferences.putBoolean("tapeRecorder.mute", false);
+      }
+      tapeRecorderVolume = Parameters.preferences.getInt("tapeRecorder.volume", -1);
+      if (tapeRecorderVolume == -1) {
+	tapeRecorderVolume = DEFAULT_VOLUME;
+	Parameters.preferences.putInt("tapeRecorder.volume", tapeRecorderVolume);
+      }
+      if (hasKey("speaker.mute")) {
+	speakerMute = Parameters.preferences.getBoolean("speaker.mute", false);
+      } else {
+	Parameters.preferences.putBoolean("speaker.mute", false);
+      }
+      speakerVolume = Parameters.preferences.getInt("speaker.volume", -1);
+      if (speakerVolume == -1) {
+	speakerVolume = DEFAULT_VOLUME;
+	Parameters.preferences.putInt("speaker.volume", speakerVolume);
+      }
+      
       model = Parameters.preferences.getInt("model", -1);
       if (model == -1) {
 	model = Constants.DEFAULT_MODEL;
@@ -118,6 +162,108 @@ public final class UserPreferences extends GeneralUserPreferences {
       retrieved = true;
     }
     log.finer("User preferences retrieved");
+  }
+
+  /**
+   * Sets the tape recorder mute setting.
+   *
+   * @param mute {@code true} if the sound from the tape recorder is to be muted
+   */
+  public static void setTapeRecorderMute(final boolean mute) {
+    getPreferences();
+    tapeRecorderMute = mute;
+    Parameters.preferences.putBoolean("tapeRecorder.mute", mute);
+    Parameters.sound.setMute(Sound.TAPE_RECORDER_CHANNEL, mute);
+    log.fine("Tape recorder mute set to: " + mute);
+  }
+
+  /**
+   * Tests the tape recorder mute setting.
+   *
+   * @return {@code true} if the sound from the tape recorder is muted
+   */
+  public static boolean isTapeRecorderMute() {
+    getPreferences();
+    log.finer("Tape recorder mute retrieved from user preferences: " +
+	      tapeRecorderMute);
+    return tapeRecorderMute;
+  }
+
+  /**
+   * Sets the tape recorder volume setting.
+   *
+   * @param volume the volume setting for the sound from the tape recorder
+   */
+  public static void setTapeRecorderVolume(final int volume) {
+    assert (volume >= 0) && (volume <= 100);
+    getPreferences();
+    tapeRecorderVolume = volume;
+    Parameters.preferences.putInt("tapeRecorder.volume", volume);
+    Parameters.sound.setVolume(Sound.TAPE_RECORDER_CHANNEL, volume / 100f);
+    log.fine("Tape recorder volume set to: " + volume);
+  }
+
+  /**
+   * Gets the tape recorder volume setting.
+   *
+   * @return the volume setting for the sound from the tape recorder
+   */
+  public static int getTapeRecorderVolume() {
+    getPreferences();
+    log.finer("Tape recorder volume retrieved from user preferences: " +
+	      tapeRecorderVolume);
+    return tapeRecorderVolume;
+  }
+
+  /**
+   * Sets the speaker mute setting.
+   *
+   * @param mute {@code true} if the sound from the speaker is to be muted
+   */
+  public static void setSpeakerMute(final boolean mute) {
+    getPreferences();
+    speakerMute = mute;
+    Parameters.preferences.putBoolean("speaker.mute", mute);
+    Parameters.sound.setMute(Sound.SPEAKER_CHANNEL, mute);
+    log.fine("Speaker mute set to: " + mute);
+  }
+
+  /**
+   * Tests the speaker mute setting.
+   *
+   * @return {@code true} if the sound from the speaker is muted
+   */
+  public static boolean isSpeakerMute() {
+    getPreferences();
+    log.finer("Speaker mute retrieved from user preferences: " +
+	      speakerMute);
+    return speakerMute;
+  }
+
+  /**
+   * Sets the speaker volume setting.
+   *
+   * @param volume the volume setting for the sound from the speaker
+   */
+  public static void setSpeakerVolume(final int volume) {
+    assert (volume >= 0) && (volume <= 100);
+    getPreferences();
+    speakerVolume = volume;
+    Parameters.preferences.putInt("speaker.volume", volume);
+    Parameters.sound.setVolume(Sound.SPEAKER_CHANNEL, volume / 100f);
+    log.fine("Speaker volume set to: " + volume);
+  }
+
+  /**
+   * Gets the speaker volume setting.
+   *
+   * @return the volume setting for the sound from the speaker
+   */
+  public static int getSpeakerVolume() {
+    getPreferences();
+    log.finer("Speaker volume retrieved from user preferences: " +
+	      speakerVolume);
+    return speakerVolume;
   }
 
   /**

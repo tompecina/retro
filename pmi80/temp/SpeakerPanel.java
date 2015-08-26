@@ -21,16 +21,21 @@
 package cz.pecina.retro.pmi80;
 
 import java.util.Hashtable;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
+
 import javax.swing.border.Border;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+
 import cz.pecina.retro.gui.WheelSlider;
 
 public class SpeakerPanel extends PeripheralFrame {
@@ -73,7 +78,7 @@ public class SpeakerPanel extends PeripheralFrame {
     volumeLabel.setLabelFor(volume);
     volume.setMajorTickSpacing(25);
     volume.setPaintTicks(true);
-    Hashtable<Integer,JLabel> volumeLabelTable = new Hashtable<>();
+    final Hashtable<Integer,JLabel> volumeLabelTable = new Hashtable<>();
     volumeLabelTable.put(
       new Integer(0),
       new JLabel(Emulator.textResources.getString("speaker.mute")));

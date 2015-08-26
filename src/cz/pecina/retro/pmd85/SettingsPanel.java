@@ -54,6 +54,7 @@ public class SettingsPanel extends JPanel {
 
   // computer-related panels
   private SettingsViewPanel viewPanel;
+  private SettingsSoundPanel soundPanel;
   private SettingsModelPanel modelPanel;
   private SettingsKeyboardPanel keyboardPanel;
   private SettingsDisplayPanel displayPanel;
@@ -84,6 +85,11 @@ public class SettingsPanel extends JPanel {
     JPanel tempPanel = new JPanel(new BorderLayout());
     tempPanel.add(viewPanel, BorderLayout.PAGE_START);
     tabbedPanel.addTab(Application.getString(this, "settings.view"), tempPanel);
+
+    soundPanel = new SettingsSoundPanel();
+    tempPanel = new JPanel(new BorderLayout());
+    tempPanel.add(soundPanel, BorderLayout.PAGE_START);
+    tabbedPanel.addTab(Application.getString(this, "settings.sound"), tempPanel);
 
     modelPanel = new SettingsModelPanel(computer);
     tempPanel = new JPanel(new BorderLayout());
@@ -120,6 +126,7 @@ public class SettingsPanel extends JPanel {
     frame.getRootPane().setDefaultButton(setButton);
     setButton.addActionListener(new SetListener());
     setButton.addActionListener(viewPanel.createSetListener());
+    setButton.addActionListener(soundPanel.createSetListener());
     setButton.addActionListener(modelPanel.createSetListener());
     setButton.addActionListener(keyboardPanel.createSetListener());
     setButton.addActionListener(displayPanel.createSetListener());
@@ -127,6 +134,7 @@ public class SettingsPanel extends JPanel {
     final JButton cancelButton =
       new JButton(Application.getString(this, "settings.button.cancel"));
     cancelButton.addActionListener(new CloseListener());
+    cancelButton.addActionListener(soundPanel.createCancelListener());
     buttonsPanel.add(cancelButton);
 	
     add(buttonsPanel, BorderLayout.PAGE_END);
@@ -145,6 +153,7 @@ public class SettingsPanel extends JPanel {
    */
   public void setUp() {
     viewPanel.setUp();
+    soundPanel.setUp();
     modelPanel.setUp();
     keyboardPanel.setUp();
     displayPanel.setUp();

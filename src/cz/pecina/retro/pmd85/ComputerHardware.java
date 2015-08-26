@@ -269,7 +269,15 @@ public class ComputerHardware {
 
     // set up the sound interface
     new Sound(16000, 2);
-
+    Parameters.sound.setVolume(Sound.TAPE_RECORDER_CHANNEL,
+      UserPreferences.getTapeRecorderVolume() / 100f);
+    Parameters.sound.setMute(Sound.TAPE_RECORDER_CHANNEL,
+      UserPreferences.isTapeRecorderMute());
+    Parameters.sound.setVolume(Sound.SPEAKER_CHANNEL,
+      UserPreferences.getSpeakerVolume() / 100f);
+    Parameters.sound.setMute(Sound.SPEAKER_CHANNEL,
+      UserPreferences.isSpeakerMute());
+    
     // set up fixed frequency source and related logic
     gen4k = new FrequencyGenerator("FREQUENCY_GENERATOR_4K", 0x100, 0x100);  // 4000Hz
     hardware.add(gen4k);
