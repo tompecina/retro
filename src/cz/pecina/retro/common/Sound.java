@@ -289,7 +289,7 @@ public class Sound {
 	  if (i == samplesPerPeriod) {
 	    log.finest(String.format("Buffer: (repeated) %02x", buffer0));
 	  } else {
-	      StringBuilder s = new StringBuilder();
+	      final StringBuilder s = new StringBuilder();
 	      for (i = 0; i < samplesPerPeriod; i++) {
 		s.append(String.format("%02x ", buffer[i]));
 	      }
@@ -301,10 +301,14 @@ public class Sound {
 	if (stable) {
 
 	  // log line state
-	  log.finest("Line is " +
-	    (lines[channel].isRunning() ? "running" : "stopped"));
-	  log.finest("Line available: " + lines[channel].available() +
-	    ", frame position: " + lines[channel].getLongFramePosition());
+	  final int available = lines[channel].available();
+	  if (log.isLoggable(Level.FINEST)) {
+	    log.finest("Line is " + (lines[channel].isRunning() ?
+				     "running" :
+				     "stopped"));
+	    log.finest("Line available: " + available + ", frame position: " +
+		       lines[channel].getLongFramePosition());
+	  }
 
 	  // write buffer
 	  lines[channel].write(buffer, 0, samplesPerPeriod);
