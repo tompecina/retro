@@ -26,6 +26,8 @@ import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Sound;
 
 import cz.pecina.retro.cpu.IOPin;
+import cz.pecina.retro.cpu.CPUEventOwner;
+import cz.pecina.retro.cpu.CPUScheduler;
 
 /**
  * The PMD 85 built-in speaker.
@@ -38,6 +40,9 @@ public class Speaker {
   // static logger
   private static final Logger log =
     Logger.getLogger(Speaker.class.getName());
+
+  // limit preventing too long true output level
+  private static final long LIMIT = 1000;
 
   // name of the device
   private String name;
@@ -78,9 +83,11 @@ public class Speaker {
   }
 
   // input pin class
-  private class InPin extends IOPin {
+  private class InPin extends IOPin implements CPUEventOwner {
 
     private boolean level;
+    private long counter;
+    private final CPUScheduler scheduler = Parameters.cpu.getCPUScheduler();
     
     // main constructor
     private InPin() {
@@ -95,7 +102,23 @@ public class Speaker {
       if (newLevel != level) {
 	Parameters.sound.write(Sound.SPEAKER_CHANNEL, newLevel);
 	level = newLevel;
+	scheduler.removeAllScheduledEvents(this);
+	if (level) {
+	  scheduler.addScheduledEvent(
+	    this,
+	    Parameters.systemClockSource.getSystemClock() + LIMIT,
+	    0);
+	} else {
+	  counter = 0;
+	}
       }
+    }
+
+    // for description see CPUEventOwner
+    @Override
+    public void performScheduledEvent(final int parameter) {
+      Parameters.sound.write(Sound.SPEAKER_CHANNEL, false);
+      log.finer("Too long true, sound interface reset");
     }
   }
 }

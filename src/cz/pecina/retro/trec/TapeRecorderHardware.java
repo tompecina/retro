@@ -368,6 +368,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
       rewindButton.setPressed(false);
       ffButton.setPressed(false);
       recordingLED.setState(false);
+      Parameters.sound.write(Sound.TAPE_RECORDER_CHANNEL, false);
       tapeRecorderState = TapeRecorderState.STOPPED;
       log.finer("Tape recorder stopped");
     }

@@ -104,9 +104,9 @@ public class Sound {
   // stabilization flag
   private boolean stable;
   
-  // stabilization counter
+  // update cycle counter
   private long counter;
-  
+
   // get system clock
   private long getTime() {
     return Parameters.systemClockSource.getSystemClock();
@@ -263,14 +263,16 @@ public class Sound {
 	  int address = Math.min(
 	    Math.round((position - lastCPUClock) * samplesPerCPUClock),
 	    samplesPerPeriod - 1);
-	  log.finest("Address: " + address + ", level: " + level);
+	  if (log.isLoggable(Level.FINEST)) {
+	    log.finest("Address: " + address + ", level: " + level);
+	  }
 	  while (i < (address - 1)) {
-	    buffer[i++] = (byte)(level ? 0x7f : 0x00);
+	    buffer[i++] = (byte)(level ? 0x7f : 0);
 	  }
 	  level = queue.get(position);
 	}
 	while (i < samplesPerPeriod) {
-	  buffer[i++] = (byte)(level ? 0x7f : 0x00);
+	  buffer[i++] = (byte)0;
 	}
 
 	// remove queued data
@@ -309,7 +311,7 @@ public class Sound {
 	  log.finest("Buffer fed to line");
 	}
 
-	// set last level
+	// set last level and counter
 	lastLevels[channel] = level;
 	
       } else {  // if not running, feed silence
