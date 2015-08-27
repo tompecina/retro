@@ -85,6 +85,7 @@ public class CPUScheduler {
       owner, Parameters.systemClockSource.getSystemClock() + time, parameter));
     if (log.isLoggable(Level.FINER)) {
       log.finer("New event added for (relative time): " + time +
+		", owner: " + owner.getClass().getName() +
 		", parameter: " + parameter);
     }
   }
@@ -104,8 +105,11 @@ public class CPUScheduler {
     assert owner != null;
     assert time > 0;
     schedule.add(new CPUScheduledEvent(owner, time, parameter));
-    log.finer("New event added for: " + time +
-	       ", parameter: " + parameter);
+    if (log.isLoggable(Level.FINER)) {
+      log.finer("New event added for: " + time +
+		", owner: " + owner.getClass().getName() +
+		", parameter: " + parameter);
+    }
   }
 
   /**
@@ -115,6 +119,10 @@ public class CPUScheduler {
    *              the schedule
    */
   public void removeAllScheduledEvents(final CPUEventOwner owner) {
+    if (log.isLoggable(Level.FINER)) {
+      log.finer("Removing all scheduled events for owner: " +
+		owner.getClass().getName());
+    }
     for (Iterator<CPUScheduledEvent> iter =
 	   schedule.iterator(); iter.hasNext();) {
       if (iter.next().getOwner().equals(owner)) {
@@ -140,7 +148,8 @@ public class CPUScheduler {
       }
     }
     if (log.isLoggable(Level.FINER)) {
-      log.finer("Remaining time: " + r + " at: " + time);
+      log.finer("Remaining time: " + r + " at: " + time +
+		", owner: " + owner.getClass().getName());
     }
     return r;
   }

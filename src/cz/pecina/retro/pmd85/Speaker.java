@@ -42,7 +42,7 @@ public class Speaker implements CPUEventOwner {
     Logger.getLogger(Speaker.class.getName());
 
   // limit preventing too long true output level
-  private static final long LIMIT = 1000;
+  private static final int LIMIT = 100000;
 
   // name of the device
   private String name;
@@ -86,7 +86,6 @@ public class Speaker implements CPUEventOwner {
   private class InPin extends IOPin {
 
     private boolean level;
-    private long counter;
     private final CPUScheduler scheduler = Parameters.cpu.getCPUScheduler();
     
     // main constructor
@@ -102,14 +101,10 @@ public class Speaker implements CPUEventOwner {
       if (newLevel != level) {
 	Parameters.sound.write(Sound.SPEAKER_CHANNEL, newLevel);
 	level = newLevel;
-	scheduler.removeAllScheduledEvents(Speaker.this);
 	if (level) {
-	  scheduler.addScheduledEvent(
-	    Speaker.this,
-	    Parameters.systemClockSource.getSystemClock() + LIMIT,
-	    0);
+	  scheduler.addScheduledEvent(Speaker.this, LIMIT, 0);
 	} else {
-	  counter = 0;
+	  scheduler.removeAllScheduledEvents(Speaker.this);
 	}
       }
     }
