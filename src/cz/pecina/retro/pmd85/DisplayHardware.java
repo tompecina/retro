@@ -55,9 +55,9 @@ public class DisplayHardware {
   }
 
   /**
-   * Repaints the display.
+   * Refreshes the display.
    */
-  public void repaint() {
-    display.repaint();
+  public void refresh() {
+    display.refresh();
   }
 }

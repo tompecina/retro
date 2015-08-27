@@ -322,7 +322,7 @@ public class Computer implements Runnable {
     computerHardware.getTapeRecorderHardware().process();
     Parameters.sound.update();
     computerHardware.getKeyboardHardware().updateBuffer();
-    computerHardware.getDisplayHardware().repaint();
+    computerHardware.getDisplayHardware().refresh();
 	
     busy = false;
   }

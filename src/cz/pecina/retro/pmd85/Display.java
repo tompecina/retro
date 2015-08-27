@@ -21,6 +21,7 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -59,22 +60,31 @@ public class Display extends Timer {
   public static final int DISPLAY_WIDTH_CELLS = DISPLAY_WIDTH / 6;
 
   /**
+   * Number of display stripes.
+   */
+  public static final int NUMBER_STRIPES = 16;
+
+  /**
+   * Height of the display stripe.
+   */
+  public static final int STRIPE_HEIGHT = 16;
+
+  /**
    * Start of the video RAM.
    */
   public static final int START_VIDEO = 0xc000;
 
+  /**
+   * Static blinking flag.
+   */
+  public static boolean blink;
+  
   // blinking period in msec
   private static final int BLINK_PERIOD = 500;
 
   // the computer hardware object
   private ComputerHardware computerHardware;
 
-  // pixels
-  private byte[][] pixels;
-  
-  // attributes
-  private byte[][] attributes;
-  
   // the color mode
   private int colorMode;
 
@@ -84,11 +94,8 @@ public class Display extends Timer {
   // active colors
   private PMDColor[] colors;
 
-  // the display planes
-  private DisplayPlane plane[] = new DisplayPlane[2];
-
-  // the display plane switch
-  private int planeSwitch;
+  // display stripes
+  private DisplayStripe[] stripes = new DisplayStripe[NUMBER_STRIPES];
   
   // set the active colors
   private void setActiveColors() {
@@ -111,7 +118,7 @@ public class Display extends Timer {
 	colors = PMDColor.DEFAULT_COLORS;
 	break;
       default:
-	  colors = customColors;
+	colors = customColors;
     }
   }
   
@@ -125,10 +132,9 @@ public class Display extends Timer {
     log.fine("Display creation started");
     assert computerHardware != null;
     this.computerHardware = computerHardware;
-    plane[0] = new DisplayPlane();
-    plane[1] = new DisplayPlane();
-    pixels = new byte[DISPLAY_HEIGHT][DISPLAY_WIDTH_CELLS];
-    attributes = new byte[DISPLAY_HEIGHT][DISPLAY_WIDTH_CELLS];
+    for (int stripe = 0; stripe < NUMBER_STRIPES; stripe++) {
+      stripes[stripe] = new DisplayStripe();
+    }
     colorMode = UserPreferences.getColorMode();
     customColors = UserPreferences.getCustomColors();
     setActiveColors();
@@ -141,12 +147,22 @@ public class Display extends Timer {
   private class BlinkListener implements ActionListener {
     @Override
     public void actionPerformed(final ActionEvent event) {
-      log.finest("Switching display planes: " + planeSwitch);
-      plane[planeSwitch].setVisible(false);
-      planeSwitch = 1 - planeSwitch;
-      plane[planeSwitch].setVisible(true);
-      plane[planeSwitch].repaint();
+      log.finest("Blink listener running");
+      blink = !blink;
+      for (int stripe = 0; stripe < NUMBER_STRIPES; stripe++) {
+	stripes[stripe].refreshBlink();
+      }
     }
+  }
+
+  /**
+   * Repaints any changed stripes.
+   */
+  public void refresh() {
+    for (int stripe = 0; stripe < NUMBER_STRIPES; stripe++) {
+	stripes[stripe].refresh();
+    }
+    log.finest("Display refreshed");
   }
 
   /**
@@ -156,23 +172,19 @@ public class Display extends Timer {
    * @param data    the byte to be written
    */
   public void setByte(final int address, final int data) {
-    assert (address >= 0xc000) & (address < 0x10000);
-    final int row = (address - 0xc000) / 0x40;
-    final int column = address % 0x40;
+    assert (address >= 0xc000) && (address < 0x10000);
+    final int stripe = (address >> 10) & 0x0f;
+    final int row = (address >> 6) & 0x0f;
+    final int column = address & 0x3f;
     if (column < 0x30) {
-      log.finest(String.format(
-        "Writing byte, address: 0x%04x, data: 0x%02x", address, data));
+      if (log.isLoggable(Level.FINEST)) {
+	log.finest(String.format(
+          "Writing byte, address: 0x%04x, data: 0x%02x", address, data));
+      }
       final byte p = (byte)(data & 0x3f);
       final byte a = (byte)(data >> 6);
-      if ((pixels[row][column] != p) || (attributes[row][column] != a)) {
-	pixels[row][column] = p;
-	attributes[row][column] = a;
-	final Color color = colors[a].getColor();
-	plane[0].setByte(row, column, p, color);
-	plane[1].setByte(row, column,
-			 (colors[a].getBlinkFlag() ? 0 : p),
-			 color);
-      }
+      final Color color = colors[a].getColor();
+      stripes[stripe].setByte(row, column, p, color, colors[a].getBlinkFlag());
     }
   }
 
@@ -231,16 +243,11 @@ public class Display extends Timer {
     assert container != null;
     log.fine("Placing display, position: (" +
 	      positionX + "," + positionY + ")");
-    plane[0].place(container, positionX, positionY);
-    plane[1].place(container, positionX, positionY);
+    for (int stripe = 0; stripe < NUMBER_STRIPES; stripe++) {
+      stripes[stripe].place(container,
+			    positionX,
+			    positionY + (STRIPE_HEIGHT * stripe));
+    }
     log.finer("Display placed");
-  }
-
-  /**
-   * Repaints the display planes.
-   */
-  public void repaint() {
-    plane[0].repaint();
-    plane[1].repaint();
   }
 }

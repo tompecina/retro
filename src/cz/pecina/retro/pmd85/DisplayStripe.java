@@ -1,4 +1,4 @@
-/* DisplayPlane.java
+/* DisplayStripe.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -21,6 +21,7 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -32,38 +33,48 @@ import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.gui.Resizeable;
 
 /**
- * Display plane object.  These planes are two in PMD 85 and switching between
- * them implements the effect of blinking pixels.
+ * Display stripe object.  These stripes are 16 pixels high and make up the
+ * display.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class DisplayPlane extends JComponent implements Resizeable {
+public class DisplayStripe extends JComponent implements Resizeable {
 
   // static logger
   private static final Logger log =
-    Logger.getLogger(DisplayPlane.class.getName());
+    Logger.getLogger(DisplayStripe.class.getName());
+
+  // changed flag
+  private boolean changed;
+  
+  // number of blinking cells
+  private int numberBlinking;
 
   // pixel data
   private byte[][] pixels =
-    new byte[Display.DISPLAY_HEIGHT][Display.DISPLAY_WIDTH_CELLS];
+    new byte[Display.STRIPE_HEIGHT][Display.DISPLAY_WIDTH_CELLS];
 
   // colors
   private Color[][] colors =
-    new Color[Display.DISPLAY_HEIGHT][Display.DISPLAY_WIDTH_CELLS];
+    new Color[Display.STRIPE_HEIGHT][Display.DISPLAY_WIDTH_CELLS];
+
+  // blinking atribute
+  private boolean[][] blinks =
+    new boolean[Display.STRIPE_HEIGHT][Display.DISPLAY_WIDTH_CELLS];
 
   /**
-   * Creates an instance of a display plane.
+   * Creates an instance of a display stripe.
    */
-  public DisplayPlane() {
-    for (int row = 0; row < Display.DISPLAY_HEIGHT; row++) {
+  public DisplayStripe() {
+    for (int row = 0; row < Display.STRIPE_HEIGHT; row++) {
       for (int column = 0; column < Display.DISPLAY_WIDTH_CELLS; column++) {
 	colors[row][column] = Color.BLACK;
       }
     }
     redrawOnPixelResize();
     GUI.addResizeable(this);
-    log.fine("New display plane  created");
+    log.fine("New display stripe created");
   }
 
   /**
@@ -74,29 +85,44 @@ public class DisplayPlane extends JComponent implements Resizeable {
    * @param pixels     the pixel data; bit 0 is the leftmost, bit 5 the rightmost,
    *                   bits 6 and 7 should be 0
    * @param color      the color to apply
+   * @param blinks     {@code true} if the cell blinks
    */
   public void setByte(final int row,
 		      final int column,
 		      final int pixels,
-		      final Color color) {
-    log.finest(String.format("Setting byte at (%d,%d) to 0x%02x, color: %s",
-			     row, column,
-			     pixels,
-			     color));
-    assert (row >= 0) & (row < 0x100);
-    assert (column >= 0) & (column < 0x30);
+		      final Color color,
+		      final boolean blinks) {
+    assert (row >= 0) & (row < Display.STRIPE_HEIGHT);
+    assert (column >= 0) & (column < Display.DISPLAY_WIDTH_CELLS);
+    assert (pixels & 0xc0) == 0;
+    assert color != null;
+    if (log.isLoggable(Level.FINEST)) {
+      log.finest(String.format(
+        "Setting cell at (%d,%d) to 0x%02x, color: %s, blinks: %s",
+	row, column,
+	pixels,
+	color,
+	blinks));
+    }
     if ((this.pixels[row][column] != (byte)pixels) ||
 	!colors[row][column].equals(color)) {
-      log.finest(String.format(
-        "Writing byte, position (%d,%d), data: 0x%02x", row, column, pixels));
+      if (log.isLoggable(Level.FINER)) {
+	log.finer(String.format(
+          "Writing byte, position (%d,%d), data: 0x%02x",
+	  row, column, pixels));
+      }
       this.pixels[row][column] = (byte)pixels;
       colors[row][column] = color;
-      paintCell(row, column, getGraphics());
+      changed = true;
+    }
+    if (this.blinks[row][column] != blinks) {
+      numberBlinking += (this.blinks[row][column] ? -1 : 0) + (blinks ? 1 : 0);
+      this.blinks[row][column] = blinks;
     }
   }
 
   /**
-   * Places the display plane on the panel.
+   * Places the display stripe on the panel.
    *
    * @param container container where the bitmap will be placed
    * @param positionX x-coordinate, in base-size pixels
@@ -106,40 +132,52 @@ public class DisplayPlane extends JComponent implements Resizeable {
 		    final int positionX,
 		    final int positionY) {
     assert container != null;
-    log.fine("Placing display plane, position: (" +
+    log.fine("Placing display stripe, position: (" +
 	      positionX + "," + positionY + ")");
 
     final int pixelSize = GUI.getPixelSize();
     setBounds(positionX * pixelSize,
 	      positionY * pixelSize,
 	      Display.DISPLAY_WIDTH * pixelSize,
-	      Display.DISPLAY_HEIGHT * pixelSize);
+	      Display.STRIPE_HEIGHT * pixelSize);
     final Dimension dim =
       new Dimension(Display.DISPLAY_WIDTH * pixelSize,
-		    Display.DISPLAY_HEIGHT * pixelSize);
+		    Display.STRIPE_HEIGHT * pixelSize);
     setPreferredSize(dim);
     setMaximumSize(dim);
     setMinimumSize(dim);
     container.add(this);
-    setVisible(false);
-    log.finer("Display plane placed");
+    log.finer("Display stripe placed");
   }
 
   // paint one cell
   private void paintCell(final int row,
 			 final int column,
 			 final Graphics graphics) {
-    log.finest("Painting cell at (" + row + "," + column + ")");
+    assert (row >= 0) & (row < Display.STRIPE_HEIGHT);
+    assert (column >= 0) & (column < Display.DISPLAY_WIDTH_CELLS);
+    assert graphics != null;
+    if (log.isLoggable(Level.FINER)) {
+      log.finer("Painting cell at (" + row + "," + column + ")");
+    }
     final int pixelSize = GUI.getPixelSize();
-    int p = pixels[row][column];
-    final Color c = colors[row][column];
-    for (int i = 0; i < 6; i++) {
-      graphics.setColor(((p & 1) == 1) ? c : Color.BLACK);
-      graphics.fillRect(pixelSize * ((column * 6) + i),
+    if (blinks[row][column] && Display.blink) {
+      graphics.setColor(Color.BLACK);
+      graphics.fillRect(pixelSize * column * 6,
 			pixelSize * row,
-			pixelSize,
+			pixelSize * 6,
 			pixelSize);
-      p >>= 1;
+    } else {
+      int p = pixels[row][column];
+      final Color c = colors[row][column];
+      for (int i = 0; i < 6; i++) {
+	graphics.setColor(((p & 1) == 1) ? c : Color.BLACK);
+	graphics.fillRect(pixelSize * ((column * 6) + i),
+			  pixelSize * row,
+			  pixelSize,
+			  pixelSize);
+	p >>= 1;
+      }
     }
     log.finest("Cell repainted");
   }
@@ -147,26 +185,50 @@ public class DisplayPlane extends JComponent implements Resizeable {
   // for description see JComponent
   @Override
   protected void paintComponent(final Graphics graphics) {
-    log.finest("Repainting display plane");
-    for (int row = 0; row < Display.DISPLAY_HEIGHT; row++) {
+    log.finest("Repainting display stripe");
+    for (int row = 0; row < Display.STRIPE_HEIGHT; row++) {
       for (int column = 0; column < Display.DISPLAY_WIDTH_CELLS; column++) {
 	paintCell(row, column, graphics);
       }
     }
-    log.finest("Display plane repainted");
+    log.finest("Display stripe repainted");
   }
 
+  /**
+   * Repaints the stripe only if it has changed.
+   */
+  public void refresh() {
+    if (changed) {
+      log.fine("Display stripe will be repainted due to change");
+      repaint();
+      changed = false;
+    }
+    log.finest("Display stripe refreshed");
+  }
+  
+  /**
+   * Repaints the stripe only if it has at least one blinking pixel.
+   */
+  public void refreshBlink() {
+    if (numberBlinking > 0) {
+      log.fine("Display stripe will be repainted due to " +
+	       "the presence of blinking pixels");
+      repaint();
+    }
+    log.finest("Display stripe refreshed on blink");
+  }
+  
   // for description see Resizeable
   @Override
   public void redrawOnPixelResize() {
-    log.finest("Display plane redraw started");
+    log.finest("Display stripe redraw started");
     final int pixelSize = GUI.getPixelSize();
     final Dimension dim =
       new Dimension(Display.DISPLAY_WIDTH * pixelSize,
-		    Display.DISPLAY_HEIGHT * pixelSize);
+		    Display.STRIPE_HEIGHT * pixelSize);
     setMinimumSize(dim);
     setPreferredSize(dim);
     setMaximumSize(dim);
-    log.finest("Display plane redraw completed");
+    log.finest("Display stripe redraw completed");
   }
 }
