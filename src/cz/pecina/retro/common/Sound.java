@@ -338,7 +338,10 @@ public class Sound {
    */
   public void write(final int channel, final boolean level) {
     final long time = getTime();
-    log.finest("Writing to channel: " + channel + ", level: " + level + ", at: " + time);
+    if (log.isLoggable(Level.FINEST)) {
+      log.finest("Writing to channel: " + channel + ", level: " + level +
+		 ", at: " + time);
+    }
     assert (channel >= 0) && (channel < numberChannels);
     queues.get(channel).put(time, level);
   }

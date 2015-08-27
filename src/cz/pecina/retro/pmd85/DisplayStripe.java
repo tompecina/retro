@@ -161,7 +161,7 @@ public class DisplayStripe extends JComponent implements Resizeable {
       log.finer("Painting cell at (" + row + "," + column + ")");
     }
     final int pixelSize = GUI.getPixelSize();
-    if (blinks[row][column] && Display.blink) {
+    if (Display.blink && blinks[row][column]) {
       graphics.setColor(Color.BLACK);
       graphics.fillRect(pixelSize * column * 6,
 			pixelSize * row,
