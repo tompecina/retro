@@ -35,7 +35,7 @@ import cz.pecina.retro.cpu.CPUScheduler;
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class Speaker {
+public class Speaker implements CPUEventOwner {
 
   // static logger
   private static final Logger log =
@@ -83,7 +83,7 @@ public class Speaker {
   }
 
   // input pin class
-  private class InPin extends IOPin implements CPUEventOwner {
+  private class InPin extends IOPin {
 
     private boolean level;
     private long counter;
@@ -102,10 +102,10 @@ public class Speaker {
       if (newLevel != level) {
 	Parameters.sound.write(Sound.SPEAKER_CHANNEL, newLevel);
 	level = newLevel;
-	scheduler.removeAllScheduledEvents(this);
+	scheduler.removeAllScheduledEvents(Speaker.this);
 	if (level) {
 	  scheduler.addScheduledEvent(
-	    this,
+	    Speaker.this,
 	    Parameters.systemClockSource.getSystemClock() + LIMIT,
 	    0);
 	} else {
@@ -113,12 +113,12 @@ public class Speaker {
 	}
       }
     }
+  }
 
-    // for description see CPUEventOwner
-    @Override
-    public void performScheduledEvent(final int parameter) {
-      Parameters.sound.write(Sound.SPEAKER_CHANNEL, false);
-      log.finer("Too long true, sound interface reset");
-    }
+  // for description see CPUEventOwner
+  @Override
+  public void performScheduledEvent(final int parameter) {
+    Parameters.sound.write(Sound.SPEAKER_CHANNEL, false);
+    log.finer("Too long true, sound interface reset");
   }
 }
