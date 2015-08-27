@@ -21,6 +21,7 @@
 package cz.pecina.retro.cpu;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * NOR element.
@@ -97,7 +98,7 @@ public class NOR {
     this.numberInPins = numberInPins;
     inPins = new InPin[numberInPins];
     for (int i = 0; i < numberInPins; i++) {
-      inPins[i] = new InPin();
+      inPins[i] = new InPin(i);
     }
     outPin = new OutPin();
     log.fine("New NOR creation completed: " + name);
@@ -105,23 +106,32 @@ public class NOR {
 
   // input pin class
   private class InPin extends IOPin {
-	
+
+    private int number;
+    
     // main constructor
-    private InPin() {
+    private InPin(final int number) {
       super();
+      assert (number >= 0) && (number < numberInPins);
+      this.number = number;
       log.finer("New NOR input pin created");
     }
 
     // for description see IOPin
     @Override
     public void notifyChange() {
-      outPin.notifyChangeNode();
+      if (log.isLoggable(Level.FINEST)) {
+	log.finest("Input " + number + " of NOR '" + name + "' notified");
+      }
+      outPin.query();
     }
   }
 
   // output pin class
   private class OutPin extends IOPin {
 	
+    private int output;
+
     // main constructor
     private OutPin() {
       super();
@@ -131,12 +141,20 @@ public class NOR {
     // for description see IOPin
     @Override
     public int query() {
+      int newOutput = 1;
       for (IOPin pin: inPins) {
 	if (pin.queryNode() == 1) {
-	  return 0;
+	  newOutput = 0;
 	}
       }
-      return 1;
+      if (newOutput != output) {
+	output = newOutput;
+	notifyChangeNode();
+	if (log.isLoggable(Level.FINER)) {
+	  log.finer("Changed output of NOR '" + name + "': " + output);
+	}
+      }
+      return output;
     }
   }
 }

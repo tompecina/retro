@@ -55,8 +55,7 @@ public class FrequencyDivider extends Device {
   
   // output pin
   private final OutPin outPin = new OutPin();
-  
-
+ 
   // input pin
   private class InPin extends IOPin {
 	

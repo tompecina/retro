@@ -21,6 +21,7 @@
 package cz.pecina.retro.cpu;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.util.TreeSet;
 import java.util.SortedSet;
@@ -50,6 +51,8 @@ public class CPUScheduler {
   // event comparator
   private class CPUScheduledEventComparator
     implements Comparator<CPUScheduledEvent> {
+
+    // for description see Comparator
     @Override
     public int compare(final CPUScheduledEvent event1,
 		       final CPUScheduledEvent event2) {
@@ -80,8 +83,10 @@ public class CPUScheduler {
     assert time >= 0;
     schedule.add(new CPUScheduledEvent(
       owner, Parameters.systemClockSource.getSystemClock() + time, parameter));
-    log.finer("New event added for: time (relative): " + time +
-	       ", parameter: " + parameter);
+    if (log.isLoggable(Level.FINER)) {
+      log.finer("New event added for (relative time): " + time +
+		", parameter: " + parameter);
+    }
   }
 
   /**
@@ -99,7 +104,7 @@ public class CPUScheduler {
     assert owner != null;
     assert time > 0;
     schedule.add(new CPUScheduledEvent(owner, time, parameter));
-    log.finer("New event added for: time: " + time +
+    log.finer("New event added for: " + time +
 	       ", parameter: " + parameter);
   }
 
@@ -112,7 +117,7 @@ public class CPUScheduler {
   public void removeAllScheduledEvents(final CPUEventOwner owner) {
     for (Iterator<CPUScheduledEvent> iter =
 	   schedule.iterator(); iter.hasNext();) {
-      if (iter.next().getOwner() == owner) {
+      if (iter.next().getOwner().equals(owner)) {
 	iter.remove();
       }
     }
@@ -129,12 +134,14 @@ public class CPUScheduler {
   public long getRemainingTime(final CPUEventOwner owner, final long time) {
     long r = -1;
     for (CPUScheduledEvent event: schedule) {
-      if (event.getOwner() == owner) {
+      if (event.getOwner().equals(owner)) {
 	r = event.getTime() - time;
 	break;
       }
     }
-    log.finer("Remaining time: " + r + " at: " + time);
+    if (log.isLoggable(Level.FINER)) {
+      log.finer("Remaining time: " + r + " at: " + time);
+    }
     return r;
   }
 
@@ -148,11 +155,15 @@ public class CPUScheduler {
    *
    * @param time the current system clock
    */
-  void runSchedule(final long time) {
-    log.finest("Running schedule at: " + time);
-    CPUScheduledEvent event;
-    while (!schedule.isEmpty() && (schedule.first().getTime() <= time)) {
-      event = schedule.first();
+  public void runSchedule(final long time) {
+    if (log.isLoggable(Level.FINEST)) {
+      log.finest("Running schedule at: " + time);
+    }
+    while (!schedule.isEmpty()) {
+      final CPUScheduledEvent event = schedule.first();
+      if (event.getTime() > time) {
+	break;
+      }
       schedule.remove(event);
       event.getOwner().performScheduledEvent(event.getParameter());
     }

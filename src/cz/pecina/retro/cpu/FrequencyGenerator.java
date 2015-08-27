@@ -21,6 +21,7 @@
 package cz.pecina.retro.cpu;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import cz.pecina.retro.common.Parameters;
 
@@ -108,52 +109,52 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
     this.offPeriod = offPeriod;
     this.onPeriod = onPeriod;
     
-    add(new Register("OFF") {
-	@Override
-	public String getValue() {
-	  return String.valueOf(offPeriod);
-	}
-	@Override
-	public void processValue(final String value) {
-	  FrequencyGenerator.this.offPeriod = Long.parseLong(value);
-	  log.finer("Off period set to: " + FrequencyGenerator.this.offPeriod);
-	}
-      });
-    add(new Register("ON") {
-	@Override
-	public String getValue() {
-	  return String.valueOf(onPeriod);
-	}
-	@Override
-	public void processValue(final String value) {
-	  FrequencyGenerator.this.onPeriod = Long.parseLong(value);
-	  log.finer("On period set to: " + FrequencyGenerator.this.onPeriod);
-	}
-      });
-    add(new Register("COUNTER") {
-	@Override
-	public String getValue() {
-	  return String.valueOf(scheduler.getRemainingTime(
-	    FrequencyGenerator.this,
-	    Parameters.systemClockSource.getSystemClock()));
-	}
-	@Override
-	public void processValue(final String value) {
-	  counter = Long.parseLong(value);
-	  log.finer("Counter set to: " + counter);
-	}
-      });
-    add(new Register("OUTPUT") {
-	@Override
-	public String getValue() {
-	  return String.valueOf(output);
-	}
-	@Override
-	public void processValue(final String value) {
-	  output = Integer.parseInt(value);
-	  log.finer("Output set to: " + output);
-	}
-      });
+    // add(new Register("OFF") {
+    // 	@Override
+    // 	public String getValue() {
+    // 	  return String.valueOf(offPeriod);
+    // 	}
+    // 	@Override
+    // 	public void processValue(final String value) {
+    // 	  FrequencyGenerator.this.offPeriod = Long.parseLong(value);
+    // 	  log.finer("Off period set to: " + FrequencyGenerator.this.offPeriod);
+    // 	}
+    //   });
+    // add(new Register("ON") {
+    // 	@Override
+    // 	public String getValue() {
+    // 	  return String.valueOf(onPeriod);
+    // 	}
+    // 	@Override
+    // 	public void processValue(final String value) {
+    // 	  FrequencyGenerator.this.onPeriod = Long.parseLong(value);
+    // 	  log.finer("On period set to: " + FrequencyGenerator.this.onPeriod);
+    // 	}
+    //   });
+    // add(new Register("COUNTER") {
+    // 	@Override
+    // 	public String getValue() {
+    // 	  return String.valueOf(scheduler.getRemainingTime(
+    // 	    FrequencyGenerator.this,
+    // 	    Parameters.systemClockSource.getSystemClock()));
+    // 	}
+    // 	@Override
+    // 	public void processValue(final String value) {
+    // 	  counter = Long.parseLong(value);
+    // 	  log.finer("Counter set to: " + counter);
+    // 	}
+    //   });
+    // add(new Register("OUTPUT") {
+    // 	@Override
+    // 	public String getValue() {
+    // 	  return String.valueOf(output);
+    // 	}
+    // 	@Override
+    // 	public void processValue(final String value) {
+    // 	  output = Integer.parseInt(value);
+    // 	  log.finer("Output set to: " + output);
+    // 	}
+    //   });
 
     reset();
     log.fine("New frequency counter creation completed, name: " + name);
@@ -176,10 +177,13 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
   public void performScheduledEvent(final int parameter) {
     output = 1 - output;
     outPin.notifyChangeNode();
-    final long currentTime = Parameters.systemClockSource.getSystemClock();
-    final long delay = currentTime - nextEvent;
-    nextEvent = currentTime + ((output == 0) ? offPeriod : onPeriod) - delay;
+    nextEvent += ((output == 0) ? offPeriod : onPeriod);
     scheduler.addScheduledEvent(this, nextEvent, 0);
-    log.finer("Event performed, output is now: " + output);
+    if (log.isLoggable(Level.FINEST)) {
+      log.finest(
+        "Event performed at " + Parameters.systemClockSource.getSystemClock() +
+	", parameter: " + parameter + ", output is now: " + output);
+      log.finest("New event scheduled for: " + nextEvent);
+    }
   }
 }

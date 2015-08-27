@@ -21,7 +21,7 @@
 package cz.pecina.retro.cpu;
 
 /**
- * Owner of the CPU scheduler event.
+ * The owner of the CPU scheduler event.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -31,7 +31,7 @@ public interface CPUEventOwner {
   /**
    * Performs the scheduled event.
    *
-   * @param parameter numeric parameter provided by the event owner
+   * @param parameter the numeric parameter provided by the event owner
    */
-  public abstract void performScheduledEvent(int parameter);
+  public void performScheduledEvent(int parameter);
 }

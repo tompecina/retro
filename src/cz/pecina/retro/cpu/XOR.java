@@ -21,6 +21,7 @@
 package cz.pecina.retro.cpu;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * XOR element.
@@ -97,7 +98,7 @@ public class XOR {
     this.numberInPins = numberInPins;
     inPins = new InPin[numberInPins];
     for (int i = 0; i < numberInPins; i++) {
-      inPins[i] = new InPin();
+      inPins[i] = new InPin(i);
     }
     outPin = new OutPin();
     log.fine("New XOR creation completed: " + name);
@@ -105,23 +106,33 @@ public class XOR {
 
   // input pin class
   private class InPin extends IOPin {
-	
+
+    private int number;
+    
     // main constructor
-    private InPin() {
+    private InPin(final int number) {
       super();
+      assert (number >= 0) && (number < numberInPins);
+      this.number = number;
       log.finer("New XOR input pin created");
     }
 
     // for description see IOPin
     @Override
     public void notifyChange() {
-      outPin.notifyChangeNode();
+      if (log.isLoggable(Level.FINEST)) {
+	log.finest("Input " + number + " of XOR '" + name + "' notified");
+      }
+      outPin.query();
     }
   }
 
   // output pin class
   private class OutPin extends IOPin {
 	
+	
+    private int output;
+
     // main constructor
     private OutPin() {
       super();
@@ -131,11 +142,18 @@ public class XOR {
     // for description see IOPin
     @Override
     public int query() {
-      int r = 0;
+      int newOutput = 0;
       for (IOPin pin: inPins) {
-	r ^= IONode.normalize(pin.queryNode());
+	newOutput ^= IONode.normalize(pin.queryNode());
       }
-      return r;
+      if (newOutput != output) {
+	output = newOutput;
+	notifyChangeNode();
+	if (log.isLoggable(Level.FINER)) {
+	  log.finer("Changed output of XOR '" + name + "': " + output);
+	}
+      }
+      return output;
     }
   }
 }

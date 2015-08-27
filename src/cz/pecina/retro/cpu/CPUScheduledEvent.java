@@ -21,6 +21,7 @@
 package cz.pecina.retro.cpu;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * The CPU scheduler event.
@@ -52,14 +53,16 @@ class CPUScheduledEvent {
    *                  clock units
    * @param parameter numeric parameter the event will provide to the owner
    */
-  CPUScheduledEvent(final CPUEventOwner owner,
-		    final long time,
-		    final int parameter) {
+  public CPUScheduledEvent(final CPUEventOwner owner,
+			   final long time,
+			   final int parameter) {
     this.owner = owner;
     this.time = time;
     this.parameter = parameter;
-    log.fine("New CPUSCheduledEvent created, time: " + time +
-	     ", parameter: " + parameter);
+    if (log.isLoggable(Level.FINEST)) {
+      log.finest("New CPUSCheduledEvent created, time: " + time +
+		 ", owner: " + owner + ", parameter: " + parameter);
+    }
   }
     
   /**
@@ -67,7 +70,7 @@ class CPUScheduledEvent {
    *
    * @return the event owner
    */
-  CPUEventOwner getOwner() {
+  public CPUEventOwner getOwner() {
     return owner;
   }
     
@@ -76,16 +79,16 @@ class CPUScheduledEvent {
    *
    * @return the time of the event
    */
-  long getTime() {
+  public long getTime() {
     return time;
   }
     
   /**
    * Gets the event parameter.
    *
-   * @return the parameter supplied by the owner on
+   * @return the parameter supplied by the event owner
    */
-  int getParameter() {
+  public int getParameter() {
     return parameter;
   }
 }
