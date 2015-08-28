@@ -55,6 +55,8 @@ public class LED extends GenericBitmap implements Resizeable {
    * @param color color of the LED
    */
   public LED(final String type, final String color) {
+    assert type != null;
+    assert color != null;
     this.type = type;
     this.color = color;
     GUI.addResizeable(this);
@@ -99,6 +101,8 @@ public class LED extends GenericBitmap implements Resizeable {
   // for description see Resizeable
   @Override
   public void redrawOnPixelResize() {
+    log.finest("VariableLED redraw started for: " + type + ", " + color +
+	       ", " + state);
     final String template = "gui/LED/" + type + "-" + color +
       "-" + GUI.getPixelSize() + "-%d.png";
     for (int state = 0; state < 2; state++) {

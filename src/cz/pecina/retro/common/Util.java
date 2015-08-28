@@ -85,8 +85,8 @@ public final class Util {
    * @param  value the value
    * @param  min   the lower limit
    * @param  max   the upper limit
-   * @return       <code>value</code> such that <code>min</code> &lt;=
-   *               <code>value</code> &lt;= <code>max</code>
+   * @return       {@code value} such that {@code min} &lt;=
+   *               {@code value} &lt;= {@code max}
    */
   public static int limit(final int value,
 			  final int min,
@@ -106,8 +106,8 @@ public final class Util {
    * @param  value the value
    * @param  min   the lower limit
    * @param  max   the upper limit
-   * @return       <code>value</code> such that <code>min</code> &lt;=
-   *               <code>value</code> &lt;= <code>max</code>
+   * @return       {@code value} such that {@code min} &lt;=
+   *               {@code value} &lt;= {@code max}
    */
   public static long limit(final long value,
 			   final long min,
@@ -127,8 +127,8 @@ public final class Util {
    * @param  value the value
    * @param  min   the lower limit
    * @param  max   the upper limit
-   * @return       <code>value</code> such that <code>min</code> &lt;=
-   *               <code>value</code> &lt;= <code>max</code>
+   * @return       {@code value} such that {@code min} &lt;=
+   *               {@code value} &lt;= {@code max}
    */
   public static float limit(final float value,
 			    final float min,
@@ -148,8 +148,8 @@ public final class Util {
    * @param  value the value
    * @param  min   the lower limit
    * @param  max   the upper limit
-   * @return       <code>value</code> such that <code>min</code> &lt;=
-   *               <code>value</code> &lt;= <code>max</code>
+   * @return       {@code value} such that {@code min} &lt;=
+   *               {@code value} &lt;= {@code max}
    */
   public static double limit(final double value,
 			     final double min,

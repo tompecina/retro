@@ -120,7 +120,7 @@ public class ComputerPanel extends BackgroundFixedPane {
       icon.place(this, icon.getPositionX(), icon.getPositionY());
     }
     log.finer("Icons set up");
-
+    
     log.fine("Computer control panel set up");
   }
 
