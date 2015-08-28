@@ -86,7 +86,7 @@ public class Computer implements Runnable {
   // the reset button
   private KeyboardKey resetKey;
 
-  // the shift buttons
+  // the shift keys
   private KeyboardKey leftShiftKey, rightShiftKey;
 
   // debugger states

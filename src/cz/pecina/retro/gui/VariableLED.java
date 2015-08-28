@@ -21,6 +21,7 @@
 package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -45,7 +46,7 @@ public class VariableLED extends JComponent implements Resizeable {
     Logger.getLogger(VariableLED.class.getName());
 
   // gamma correction exponent
-  private static final double LED_GAMMA = 0.5;
+  private static final double LED_GAMMA = 0.2;
 
   // state of the LED
   private float state;
@@ -90,12 +91,21 @@ public class VariableLED extends JComponent implements Resizeable {
    * @param state new state of the LED, {@code 0.0-1.0}
    */
   public void setState(float state) {
-    log.finer("Setting VariableLED state to: " + state);
+    if (log.isLoggable(Level.FINEST)) {
+      log.finest("Setting VariableLED state to: " + state);
+    }
     state = Util.limit(state, 0f, 1f);
     if (state != this.state) {
       this.state = state;
       repaint();
-      log.finer("VariableLED state changed to: " + state);
+      if (log.isLoggable(Level.FINER)) {
+	final String m = "VariableLED state changed to: " + state;
+	if (state > 0) {
+	  log.finer(m);
+	} else {
+	  log.finest(m);
+	}
+      }
     }
   }
 

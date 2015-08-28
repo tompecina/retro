@@ -37,18 +37,15 @@ public class ProportionMeter extends Device {
   // dynamic logger, per device
   private Logger log;
 
-  // counter
-  private long counter;
+  // counters
+  private long offCounter, onCounter;
 
-  // reset time
-  private long resetTime;
-
-  // last level
+  // current level
   private boolean level;
 
-  // time of the last rising edge
-  private long risingEdgeTime;
-  
+  // time of last edge
+  private long lastEdgeTime;
+
   // input pin
   private final InPin inPin = new InPin();
 
@@ -69,49 +66,22 @@ public class ProportionMeter extends Device {
   public ProportionMeter(final String name) {
     super(name);
     log = Logger.getLogger(getClass().getName() + "." + name);
-    log.fine("New ProportionMeter creation started: " + name);
+    log.fine("New proportion meter creation started: " + name);
     reset();
-    log.fine("New ProportionMeter creation completed: " + name);
+    log.fine("New proportion meter creation completed: " + name);
   }
 
   /**
    * Resets the measurement.
    */
   public void reset() {
-    resetTime = Parameters.systemClockSource.getSystemClock();
-    counter = 0;
-    level = (IONode.normalize(inPin.queryNode()) == 1);
-    if (level) {
-      risingEdgeTime = resetTime;
-    }
-    if (log.isLoggable(Level.FINER)) {
-      log.finer("Proportion meter '" + name  + "' reset at: " + resetTime); 
-    }
-  }
-
-  /**
-   * Gets the current proportion.
-   *
-   * @return the current proportion, calculated as {@code onTime / totalTime},
-   *         or {@code -1.0} if {@code totalTime == 0} 
-   */
-  public double getProportion() {
     final long time = Parameters.systemClockSource.getSystemClock();
-    final long totalTime = time - resetTime;
-    if (totalTime == 0) {
-      if (log.isLoggable(Level.FINER)) {
-	log.finer("Proportion meter '" + name  +
-		  "' provided state -1.0 at: " + resetTime);
-      }
-      return -1.0;
-    }
-    final double r =
-      (counter + (level ? (time - risingEdgeTime) : 0)) / totalTime;
+    offCounter = onCounter = 0;
+    lastEdgeTime = time;
+    level = (IONode.normalize(inPin.queryNode()) == 1);
     if (log.isLoggable(Level.FINER)) {
-      log.finer("Proportion meter '" + name  +
-		"' provided state: " + r + " at: " + resetTime);
+      log.finer("Proportion meter '" + name  + "' reset at: " + time); 
     }
-    return r;
   }
 
   /**
@@ -121,7 +91,26 @@ public class ProportionMeter extends Device {
    *         or {@code -1.0} if {@code totalTime == 0} 
    */
   public double getProportionAndReset() {
-    final double r = getProportion();
+    
+    final long time = Parameters.systemClockSource.getSystemClock();
+    if (level) {
+      onCounter += time - lastEdgeTime;
+    } else {
+      offCounter += time - lastEdgeTime;
+    }
+    final long totalTime = offCounter + onCounter;
+    if (totalTime == 0) {
+      if (log.isLoggable(Level.FINER)) {
+	log.finer("Proportion meter '" + name  +
+		  "' provided state -1.0 at: " + time);
+      }
+      return -1.0;
+    }
+    final double r = (double)onCounter / (double)totalTime;
+    if (log.isLoggable(Level.FINER)) {
+      log.finer("Proportion meter '" + name  +
+		"' provided state: " + r + " at: " + time);
+    }
     reset();
     return r;
   }
@@ -136,14 +125,15 @@ public class ProportionMeter extends Device {
       if (newLevel != level) {
 	level = newLevel;
 	final long time = Parameters.systemClockSource.getSystemClock();
+	if (level) {
+	  onCounter += time - lastEdgeTime;
+	} else {
+	  offCounter += time - lastEdgeTime;
+	}
+	lastEdgeTime = time;
 	if (log.isLoggable(Level.FINEST)) {
 	  log.finer("Change on '" + name  + "', new level: " + level +
 		    " at: " + time); 
-	}
-	if (level) {
-	  risingEdgeTime = time;
-	} else {
-	  counter += time - risingEdgeTime;
 	}
       }
     }
