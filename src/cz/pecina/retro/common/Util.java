@@ -183,5 +183,5 @@ public final class Util {
   }
 
   // default constructor disabled
-  private Util() {};
+  private Util() {}
 }

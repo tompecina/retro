@@ -109,52 +109,52 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
     this.offPeriod = offPeriod;
     this.onPeriod = onPeriod;
     
-    // add(new Register("OFF") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  return String.valueOf(offPeriod);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  FrequencyGenerator.this.offPeriod = Long.parseLong(value);
-    // 	  log.finer("Off period set to: " + FrequencyGenerator.this.offPeriod);
-    // 	}
-    //   });
-    // add(new Register("ON") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  return String.valueOf(onPeriod);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  FrequencyGenerator.this.onPeriod = Long.parseLong(value);
-    // 	  log.finer("On period set to: " + FrequencyGenerator.this.onPeriod);
-    // 	}
-    //   });
-    // add(new Register("COUNTER") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  return String.valueOf(scheduler.getRemainingTime(
-    // 	    FrequencyGenerator.this,
-    // 	    Parameters.systemClockSource.getSystemClock()));
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  counter = Long.parseLong(value);
-    // 	  log.finer("Counter set to: " + counter);
-    // 	}
-    //   });
-    // add(new Register("OUTPUT") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  return String.valueOf(output);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  output = Integer.parseInt(value);
-    // 	  log.finer("Output set to: " + output);
-    // 	}
-    //   });
+    add(new Register("OFF") {
+    	@Override
+    	public String getValue() {
+    	  return String.valueOf(offPeriod);
+    	}
+    	@Override
+    	public void processValue(final String value) {
+    	  FrequencyGenerator.this.offPeriod = Long.parseLong(value);
+    	  log.finer("Off period set to: " + FrequencyGenerator.this.offPeriod);
+    	}
+      });
+    add(new Register("ON") {
+    	@Override
+    	public String getValue() {
+    	  return String.valueOf(onPeriod);
+    	}
+    	@Override
+    	public void processValue(final String value) {
+    	  FrequencyGenerator.this.onPeriod = Long.parseLong(value);
+    	  log.finer("On period set to: " + FrequencyGenerator.this.onPeriod);
+    	}
+      });
+    add(new Register("COUNTER") {
+    	@Override
+    	public String getValue() {
+    	  return String.valueOf(scheduler.getRemainingTime(
+    	    FrequencyGenerator.this,
+    	    Parameters.systemClockSource.getSystemClock()));
+    	}
+    	@Override
+    	public void processValue(final String value) {
+    	  counter = Long.parseLong(value);
+    	  log.finer("Counter set to: " + counter);
+    	}
+      });
+    add(new Register("OUTPUT") {
+    	@Override
+    	public String getValue() {
+    	  return String.valueOf(output);
+    	}
+    	@Override
+    	public void processValue(final String value) {
+    	  output = Integer.parseInt(value);
+    	  log.finer("Output set to: " + output);
+    	}
+      });
 
     reset();
     log.fine("New frequency counter creation completed, name: " + name);

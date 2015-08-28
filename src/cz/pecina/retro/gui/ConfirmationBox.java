@@ -62,5 +62,5 @@ public final class ConfirmationBox {
   }
 
   // default constructor disabled
-  private ConfirmationBox() {};
+  private ConfirmationBox() {}
 }

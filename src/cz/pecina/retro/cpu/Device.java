@@ -216,10 +216,4 @@ public abstract class Device extends ArrayList<Descriptor> {
    */
   public void reset() {
   }
-
-  // // for description see Object
-  // @Override
-  // public boolean equals(final Object obj) {
-  //   return (obj != null) && (obj instanceof Device) && (this == obj);
-  // }
 }

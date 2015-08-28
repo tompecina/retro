@@ -43,5 +43,5 @@ public final class GeneralConstants {
   public static final int TOOL_TIP_RESHOW_DELAY = 0;
 
   // default constructor disabled
-  private GeneralConstants() {};
+  private GeneralConstants() {}
 }

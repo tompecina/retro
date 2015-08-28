@@ -71,5 +71,5 @@ public final class IconCache {
   }
     
   // default constructor disabled
-  private IconCache() {};
+  private IconCache() {}
 }

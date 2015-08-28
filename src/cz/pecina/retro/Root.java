@@ -29,5 +29,5 @@ package cz.pecina.retro;
 public final class Root {
 
   // default constructor disabled
-  private Root() {};
+  private Root() {}
 }

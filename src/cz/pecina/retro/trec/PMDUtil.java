@@ -412,5 +412,5 @@ public final class PMDUtil {
   }
     
   // default constructor disabled
-  private PMDUtil () {};
+  private PMDUtil () {}
 }

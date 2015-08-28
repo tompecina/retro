@@ -59,5 +59,5 @@ public final class ErrorBox {
   }
 
   // default constructor disabled
-  private ErrorBox() {};
+  private ErrorBox() {}
 }

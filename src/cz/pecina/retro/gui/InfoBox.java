@@ -59,5 +59,5 @@ public final class InfoBox {
   }
 
   // default constructor disabled
-  private InfoBox() {};
+  private InfoBox() {}
 }

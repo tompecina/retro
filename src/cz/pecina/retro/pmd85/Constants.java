@@ -60,5 +60,5 @@ public final class Constants {
   public static final int TAPE_SAMPLE_RATE = 2048000;
 
   // default constructor disabled
-  private Constants() {};
+  private Constants() {}
 }

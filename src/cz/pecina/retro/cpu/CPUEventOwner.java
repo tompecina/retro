@@ -34,4 +34,11 @@ public interface CPUEventOwner {
    * @param parameter the numeric parameter provided by the event owner
    */
   public void performScheduledEvent(int parameter);
+
+  /**
+   * Get descriptive information on the owner.
+   */
+  public default String getString() {
+    return String.format("%s(%08x)", getClass().getName(), hashCode());
+  }
 }

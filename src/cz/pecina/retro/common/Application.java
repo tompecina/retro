@@ -209,5 +209,5 @@ public final class Application {
   }
 
   // default constructor disabled
-  private Application() {};
+  private Application() {}
 }

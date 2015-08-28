@@ -109,5 +109,5 @@ public final class Constants {
     SERVO_PWM_LED_BASE_OFFSET_Y;
 
   // default constructor disabled
-  private Constants() {};
+  private Constants() {}
 }

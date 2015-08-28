@@ -56,7 +56,12 @@ public class CPUScheduler {
     @Override
     public int compare(final CPUScheduledEvent event1,
 		       final CPUScheduledEvent event2) {
-      return Long.compare(event1.getTime(), event2.getTime());
+      final int tc = Long.compare(event1.getTime(), event2.getTime());
+      if (tc != 0) {
+	return tc;
+      } else {
+	return Integer.compare(event1.getOwner().hashCode(), event2.getOwner().hashCode());
+      }
     }
   }
 
@@ -85,8 +90,7 @@ public class CPUScheduler {
       owner, Parameters.systemClockSource.getSystemClock() + time, parameter));
     if (log.isLoggable(Level.FINER)) {
       log.finer("New event added for (relative time): " + time +
-		", owner: " + owner.getClass().getName() +
-		", parameter: " + parameter);
+		", owner: " + owner.getString() + ", parameter: " + parameter);
     }
   }
 
@@ -107,8 +111,7 @@ public class CPUScheduler {
     schedule.add(new CPUScheduledEvent(owner, time, parameter));
     if (log.isLoggable(Level.FINER)) {
       log.finer("New event added for: " + time +
-		", owner: " + owner.getClass().getName() +
-		", parameter: " + parameter);
+		", owner: " + owner.getString() + ", parameter: " + parameter);
     }
   }
 
@@ -120,12 +123,11 @@ public class CPUScheduler {
    */
   public void removeAllScheduledEvents(final CPUEventOwner owner) {
     if (log.isLoggable(Level.FINER)) {
-      log.finer("Removing all scheduled events for owner: " +
-		owner.getClass().getName());
+      log.finer("Removing all scheduled events for owner: " + owner.getString());
     }
     for (Iterator<CPUScheduledEvent> iter =
 	   schedule.iterator(); iter.hasNext();) {
-      if (iter.next().getOwner().equals(owner)) {
+      if (iter.next().getOwner() == owner) {
 	iter.remove();
       }
     }
@@ -142,14 +144,14 @@ public class CPUScheduler {
   public long getRemainingTime(final CPUEventOwner owner, final long time) {
     long r = -1;
     for (CPUScheduledEvent event: schedule) {
-      if (event.getOwner().equals(owner)) {
+      if (event.getOwner() == owner) {
 	r = event.getTime() - time;
 	break;
       }
     }
     if (log.isLoggable(Level.FINER)) {
       log.finer("Remaining time: " + r + " at: " + time +
-		", owner: " + owner.getClass().getName());
+		", owner: " + owner.getString());
     }
     return r;
   }

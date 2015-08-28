@@ -92,11 +92,11 @@ public final class Parameters {
    */
   public static boolean openGL = true;
 
-  // default constructor disabled
-  private Parameters() {};
-
   /**
    * The Sound object.
    */
   public static Sound sound;
+
+  // default constructor disabled
+  private Parameters() {}
 }

@@ -222,5 +222,5 @@ public final class UserPreferences extends GeneralUserPreferences {
   }
 
   // default constructor disabled
-  private UserPreferences() {};
+  private UserPreferences() {}
 }
