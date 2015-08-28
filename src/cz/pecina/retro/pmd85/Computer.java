@@ -323,7 +323,19 @@ public class Computer implements Runnable {
     Parameters.sound.update();
     computerHardware.getKeyboardHardware().updateBuffer();
     computerHardware.getDisplayHardware().refresh();
-	
+
+    // update LEDs
+    final float yellowLEDState =
+      (float)computerHardware.getYellowLEDMeter().getProportionAndReset();
+    computerHardware.getYellowLED().setState(yellowLEDState);
+    computerHardware.getKeyboardHardware().getYellowLED()
+      .setState(yellowLEDState);
+    final float redLEDState =
+      (float)computerHardware.getRedLEDMeter().getProportionAndReset();
+    computerHardware.getRedLED().setState(redLEDState);
+    computerHardware.getKeyboardHardware().getRedLED()
+      .setState(redLEDState);
+    
     busy = false;
   }
 

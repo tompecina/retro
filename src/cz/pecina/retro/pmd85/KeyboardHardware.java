@@ -31,7 +31,7 @@ import javax.swing.event.ChangeEvent;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.IONode;
 
-import cz.pecina.retro.gui.LED;
+import cz.pecina.retro.gui.VariableLED;
 
 /**
  * Keyboard of the Tesla PMD 85 computer.
@@ -81,16 +81,10 @@ public class KeyboardHardware {
     new KeyboardKey[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
 
   // LEDs
-  private final LED yellowLED = new LED("small", "yellow");
-  private final LED redLED = new LED("small", "red");
-  private final LED greenLED = new LED("small", "green");
+  private final VariableLED yellowLED = new VariableLED("small", "yellow");
+  private final VariableLED redLED = new VariableLED("small", "red");
 
-  // LED pins
-  private final LEDPin yellowLEDPin = new LEDPin(yellowLED);
-  private final LEDPin redLEDPin = new LEDPin(redLED);
-  private final LEDPin greenLEDPin = new LEDPin(greenLED);
-  
-  // leyout of buttons
+  // layout of keys
   private KeyboardLayout keyboardLayout;
 
   /**
@@ -283,7 +277,7 @@ public class KeyboardHardware {
    *
    * @return the yellow LED
    */
-  public LED getYellowLED() {
+  public VariableLED getYellowLED() {
     return yellowLED;
   }
 
@@ -292,61 +286,7 @@ public class KeyboardHardware {
    *
    * @return the red LED
    */
-  public LED getRedLED() {
+  public VariableLED getRedLED() {
     return redLED;
-  }
-
-  /**
-   * Gets the green LED.
-   *
-   * @return the green LED
-   */
-  public LED getGreenLED() {
-    return greenLED;
-  }
-
-  // LED pins
-  private class LEDPin extends IOPin {
-
-    private LED led;
-
-    private LEDPin(final LED led) {
-      super();
-      assert (led != null);
-      this.led = led;
-    }
-
-    // for description see IOPin
-    @Override
-    public void notifyChange() {
-      led.setState(IONode.normalize(queryNode()) == 1);
-    }
-  }
-
-  /**
-   * Gets the yellow LED pin.
-   *
-   * @return the yellow LED pin
-   */
-  public IOPin getYellowLEDPin() {
-    return yellowLEDPin;
-  }
-
-  /**
-   * Gets the red LED pin.
-   *
-   * @return the red LED pin
-   */
-  public IOPin getRedLEDPin() {
-    return redLEDPin;
-  }
-
-  /**
-   * Gets the green LED pin.
-   *
-   * @return the green LED pin
-   */
-  public IOPin getGreenLEDPin() {
-    return greenLEDPin;
   }
 }

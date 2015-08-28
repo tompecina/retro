@@ -60,7 +60,7 @@ public class KeyboardHardware {
   private final KeyboardButton[][] buttons =
     new KeyboardButton[NUMBER_MATRIX_COLUMNS][NUMBER_MATRIX_ROWS];
 
-  // leyout of buttons
+  // layout of buttons
   private KeyboardLayout keyboardLayout;
 
   // the display hardware object

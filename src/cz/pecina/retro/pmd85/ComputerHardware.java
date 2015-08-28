@@ -47,16 +47,15 @@ import cz.pecina.retro.cpu.NAND;
 import cz.pecina.retro.cpu.XOR;
 import cz.pecina.retro.cpu.FrequencyGenerator;
 import cz.pecina.retro.cpu.FrequencyDivider;
+import cz.pecina.retro.cpu.ProportionMeter;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.IONode;
-import cz.pecina.retro.cpu.HighNode;
 
 import cz.pecina.retro.trec.TapeRecorderInterface;
 import cz.pecina.retro.trec.TapeRecorderHardware;
 
 import cz.pecina.retro.debug.DebuggerHardware;
 
-import cz.pecina.retro.gui.LED;
 import cz.pecina.retro.gui.VariableLED;
 import cz.pecina.retro.gui.Marking;
 
@@ -132,11 +131,10 @@ public class ComputerHardware {
     new VariableLED("small", "yellow");
   private final VariableLED redLED =
     new VariableLED("small", "red");
-  private final LED greenLED = new LED("small", "green");
 
-  // LED pins
-  private final LEDPin yellowLEDPin = new LEDPin(yellowLED);
-  private final LEDPin redLEDPin = new LEDPin(redLED);
+  // LED meters
+  private final ProportionMeter yellowLEDMeter;
+  private final ProportionMeter redLEDMeter;
 
   // the marking
   private final Marking marking =
@@ -292,6 +290,10 @@ public class ComputerHardware {
     pc1nand = new NAND("NAND_PC1", 2);
     pc2inv = new Invertor("INVERTOR_PC2");
     speakerNand = new NAND("SPEAKER_NAND", 3);
+
+    // set up LEDs
+    yellowLEDMeter = new ProportionMeter("YELLOW_LED");
+    redLEDMeter = new ProportionMeter("RED_LED");
     
     // set up the speaker
     speaker = new Speaker("SPEAKER");
@@ -324,16 +326,11 @@ public class ComputerHardware {
       .add(speakerNand.getInPin(1));
     new IONode()
       .add(speakerNand.getOutPin())
-      .add(keyboardHardware.getYellowLEDPin())
-      .add(yellowLEDPin)
+      .add(yellowLEDMeter.getInPin())
       .add(speaker.getInPin());
     new IONode()
       .add(systemPIO.getPin(16 + 3))
-      .add(keyboardHardware.getRedLEDPin())
-      .add(redLEDPin);
-    new HighNode()
-      .add(keyboardHardware.getGreenLEDPin())
-      .add(greenLEDPin);
+      .add(redLEDMeter.getInPin());
       
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);
@@ -506,28 +503,12 @@ public class ComputerHardware {
     return debuggerHardware;
   }
 
-  // LED pins
-  private class LEDPin extends IOPin {
-    private LED led;
-
-    private LEDPin(final LED led) {
-      super();
-      assert (led != null);
-      this.led = led;
-    }
-
-    @Override
-    public void notifyChange() {
-      led.setState(IONode.normalize(queryNode()));
-    }
-  }
-
   /**
    * Gets the yellow LED.
    *
    * @return the yellow LED
    */
-  public LED getYellowLED() {
+  public VariableLED getYellowLED() {
     return yellowLED;
   }
 
@@ -536,17 +517,26 @@ public class ComputerHardware {
    *
    * @return the red LED
    */
-  public LED getRedLED() {
+  public VariableLED getRedLED() {
     return redLED;
   }
 
   /**
-   * Gets the green LED.
+   * Gets the yellow LED meter.
    *
-   * @return the green LED
+   * @return the yellow LED meter
    */
-  public LED getGreenLED() {
-    return greenLED;
+  public ProportionMeter getYellowLEDMeter() {
+    return yellowLEDMeter;
+  }
+
+  /**
+   * Gets the red LED meter.
+   *
+   * @return the red LED meter
+   */
+  public ProportionMeter getRedLEDMeter() {
+    return redLEDMeter;
   }
 
   /**

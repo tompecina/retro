@@ -28,6 +28,7 @@ import java.awt.event.KeyEvent;
 import cz.pecina.retro.gui.BackgroundFixedPane;
 import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.gui.Shortcut;
+import cz.pecina.retro.gui.LED;
 
 /**
  * Main control panel of the computer.
@@ -105,9 +106,11 @@ public class ComputerPanel extends BackgroundFixedPane {
     computerHardware.getRedLED().place(this,
 				       LED_OFFSET_X + LED_GRID_X,
 				       LED_OFFSET_Y);
-    computerHardware.getGreenLED().place(this,
-					 LED_OFFSET_X + (2 * LED_GRID_X),
-					 LED_OFFSET_Y);
+    final LED greenLED = new LED("small", "green");
+    greenLED.place(this,
+		   LED_OFFSET_X + (2 * LED_GRID_X),
+		   LED_OFFSET_Y);
+    greenLED.setState(true);
     log.finer("LEDs set up");
 
     // set up brand marking

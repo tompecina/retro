@@ -27,7 +27,7 @@ import java.awt.event.KeyEvent;
 import cz.pecina.retro.gui.Shortcut;
 
 /**
- * PC keyboard leyout.
+ * PC keyboard layout.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -603,7 +603,7 @@ public class PCKeyboardLayout {
 	new Shortcut(KeyEvent.VK_SEPARATOR),
 	new Shortcut(KeyEvent.VK_DELETE)}
 			)};
-    log.fine("New PC keyboard leyout set up");
+    log.fine("New PC keyboard layout set up");
   }
     
   /**

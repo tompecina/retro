@@ -31,6 +31,8 @@ import javax.swing.JFrame;
 
 import cz.pecina.retro.gui.BackgroundFixedPane;
 import cz.pecina.retro.gui.Shortcut;
+import cz.pecina.retro.gui.LED;
+import cz.pecina.retro.gui.VariableLED;
 
 /**
  * The PMD 85 keyboard panel.
@@ -113,9 +115,9 @@ public class KeyboardPanel extends BackgroundFixedPane {
     keyboardHardware.getRedLED().place(this,
 				       RED_LED_OFFSET_X,
 				       RED_LED_OFFSET_Y);
-    keyboardHardware.getGreenLED().place(this,
-					 GREEN_LED_OFFSET_X,
-					 GREEN_LED_OFFSET_Y);
+    final LED greenLED = new LED("small", "green");
+    greenLED.place(this, GREEN_LED_OFFSET_X, GREEN_LED_OFFSET_Y);
+    greenLED.setState(true);
     log.finer("LEDs set up");
 
     log.fine("Keyboard panel set up");
