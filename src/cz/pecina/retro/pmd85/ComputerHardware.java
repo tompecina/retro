@@ -57,6 +57,7 @@ import cz.pecina.retro.trec.TapeRecorderHardware;
 import cz.pecina.retro.debug.DebuggerHardware;
 
 import cz.pecina.retro.gui.LED;
+import cz.pecina.retro.gui.VariableLED;
 import cz.pecina.retro.gui.Marking;
 
 /**
@@ -127,14 +128,15 @@ public class ComputerHardware {
   private DebuggerHardware debuggerHardware;
 
   // LEDs
-  private final LED yellowLED = new LED("small", "yellow");
-  private final LED redLED = new LED("small", "red");
+  private final VariableLED yellowLED =
+    new VariableLED("small", "yellow");
+  private final VariableLED redLED =
+    new VariableLED("small", "red");
   private final LED greenLED = new LED("small", "green");
 
   // LED pins
   private final LEDPin yellowLEDPin = new LEDPin(yellowLED);
   private final LEDPin redLEDPin = new LEDPin(redLED);
-  private final LEDPin greenLEDPin = new LEDPin(greenLED);
 
   // the marking
   private final Marking marking =
@@ -516,7 +518,7 @@ public class ComputerHardware {
 
     @Override
     public void notifyChange() {
-      led.setState(IONode.normalize(queryNode()) == 1);
+      led.setState(IONode.normalize(queryNode()));
     }
   }
 

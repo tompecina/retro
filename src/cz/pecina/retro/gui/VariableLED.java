@@ -44,6 +44,9 @@ public class VariableLED extends JComponent implements Resizeable {
   private static final Logger log =
     Logger.getLogger(VariableLED.class.getName());
 
+  // gamma correction exponent
+  private static final double LED_GAMMA = 0.5;
+
   // state of the LED
   private float state;
 
@@ -122,8 +125,8 @@ public class VariableLED extends JComponent implements Resizeable {
     log.finest("Repainting VariableLED");
     final Graphics2D graphics2D = (Graphics2D)graphics;
     offIcon.paintIcon(this, graphics2D, 0, 0);
-    graphics2D.setComposite(
-      AlphaComposite.getInstance(AlphaComposite.SRC_OVER, state));
+    graphics2D.setComposite(AlphaComposite.getInstance(
+      AlphaComposite.SRC_OVER, (float)Math.pow(state, LED_GAMMA)));
     onIcon.paintIcon(this, graphics2D, 0, 0);
     log.finest("VariableLED repainted");
   }
