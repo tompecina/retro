@@ -334,7 +334,7 @@ public class ComputerHardware {
       
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);
-
+    
     log.fine("New Computer hardware object created");
   }
     

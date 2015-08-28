@@ -350,6 +350,19 @@ public class PMDMemory
     return allROMPin;
   }
 
+  /**
+   * Refreshes the Video RAM.  This is only required on a change
+   * of the color scheme.
+   */
+  public void refreshVideoRAM() {
+    for (int address = 0xc000; address < 0x10000; address++) {
+      if ((address & 0x3f) < 0x30) {
+	setByte(address, getByte(address));
+      }
+    }
+    log.fine("Video RAM refreshed");
+  }
+
   // for description see AbstractMemory
   @Override
   public int getByte(final int address) {

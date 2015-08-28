@@ -362,6 +362,7 @@ public final class UserPreferences extends GeneralUserPreferences {
     Parameters.preferences.putInt("colorMode", colorMode);
     computer.getComputerHardware().getDisplayHardware().getDisplay()
       .setColorMode(colorMode);
+    computer.getComputerHardware().getMemory().refreshVideoRAM();
     log.fine("Color mode in user preferences set to: " + colorMode);
   }
 
@@ -396,6 +397,7 @@ public final class UserPreferences extends GeneralUserPreferences {
     }
     computer.getComputerHardware().getDisplayHardware().getDisplay()
       .setCustomColors(customColors);
+    computer.getComputerHardware().getMemory().refreshVideoRAM();
     log.fine("Custom colors in user preferences set");
   }
 
