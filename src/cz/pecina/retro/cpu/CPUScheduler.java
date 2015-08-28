@@ -60,7 +60,7 @@ public class CPUScheduler {
       if (tc != 0) {
 	return tc;
       } else {
-	return Integer.compare(event1.getOwner().hashCode(), event2.getOwner().hashCode());
+	return Integer.compare(event1.hashCode(), event2.hashCode());
       }
     }
   }
