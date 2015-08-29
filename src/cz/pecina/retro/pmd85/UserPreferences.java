@@ -63,8 +63,7 @@ public final class UserPreferences extends GeneralUserPreferences {
   private static int model;
 
   // keyboard shortcuts
-  private static Shortcut[] shortcuts =
-    new Shortcut[KeyboardLayout.NUMBER_KEYS];
+  private static Shortcuts shortcuts = new Shortcuts();
 
   // the color mode
   private static int colorMode;
@@ -118,25 +117,26 @@ public final class UserPreferences extends GeneralUserPreferences {
 	model = Constants.DEFAULT_MODEL;
 	Parameters.preferences.putInt("model", model);
       }
-      
-      for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
-	final String shortcutString =
-	  Parameters.preferences.get("shortcut." + i, null);
-	Shortcut shortcut;
-	if (shortcutString == null) {
-	  shortcut = getDefaultShortcut(i);
-	} else if (shortcutString.equals(NULL_STRING)) {
-	  shortcut = null;
-	} else {
-	  shortcut = new Shortcut(shortcutString);
+
+      boolean shortcutsDefined;
+      for (String key:  Parameters.preferences.keys()) {
+	if (key.startsWith("shortcut.")) {
+	  final String id = key.substring(9);
+	  final String listString = Parameters.preferences.get(key, null);
+	  if (listString != null) {
+	    shortutsDefined = true;
+	    final List<Integer> list = new ArrayList<>();
+	    for (String buttonString: string.split(",")) {
+	      list.add(Integer.parseInt(buttonString));
+	    }
+	    shortcuts.put(new Shortcut(id) list);
+	  }
 	}
-	shortcuts[i] = shortcut;
-	Parameters.preferences.put("shortcut." + i,
-				   (shortcut != null) ?
-				   shortcut.getID() :
-				   NULL_STRING);
       }
-      
+      if (!shortcutsDefined) {
+	
+      }
+	    
       colorMode = Parameters.preferences.getInt("colorMode", -1);
       if (colorMode == -1) {
 	colorMode = PMDColor.DEFAULT_COLOR_MODE;
@@ -291,53 +291,37 @@ public final class UserPreferences extends GeneralUserPreferences {
   }
 
   /**
-   * Sets the keyboard shortcut.
-   *
-   * @param keyboardLayout the keyboard layout
-   * @param number         the internal key number
-   * @param shortcut       the new keyboard shortcut or {@code null}
-   *                       if none
+   * Update the keyboard shortcuts.
    */
-  public static void setShortcut(final KeyboardLayout keyboardLayout,
-				 final int number,
-				 final Shortcut shortcut) {
-    assert (number >= 0) && (number < KeyboardLayout.NUMBER_KEYS);
-    getPreferences();
-    shortcuts[number] = shortcut;
-    Parameters.preferences.put("shortcut." + number,
-			       (shortcut != null) ?
-			       shortcut.getID() :
-			       NULL_STRING);
-    keyboardLayout.getKey(number).setShortcut(shortcut);
-    log.fine("Shortcut for key " + number +
-	     " in user preferences set to: " +
-	     ((shortcut != null) ? shortcut.getID() : "none"));
+  public static void updateShortcuts() {
+    for (Shortcut shortcut: shortcuts.keySet()) {
+      StringBuilder sb = new StringBuilder;
+      boolean next;
+      for (int i: shortcuts.get(shortcut)) {
+	if (next) {
+	  sb.append(",");
+	} else {
+	  next = true;
+	}
+	sb.append(Inte
+	
   }
 
   /**
-   * Gets the keyboard shortcut.
+   * Gets the keyboard shortcuts.
    *
-   * @param  number   the internal key number
-   * @return shortcut the keyboard shortcut or {@code null}
-   *                  if none
+   * @return the keyboard shortcuts object
    */
-  public static Shortcut getShortcut(final int number) {
-    assert (number >= 0) && (number < KeyboardLayout.NUMBER_KEYS);
-    getPreferences();
-    final Shortcut shortcut = shortcuts[number];
-    log.fine("Shortcut for key " + number +
-	     " retrieved from user preferences: " +
-	     ((shortcut != null) ? shortcut.getID() : "none"));
-    return shortcut;
+  public static Shortcuts getShortcuts() {
+    return shortcuts;
   }
 
   /**
    * Gets the default keyboard shortcut.
    *
-   * @param  number   the internal key number
-   * @return shortcut the default keyboard shortcut
+   * @return shortcuts the default keyboard shortcuts object
    */
-  public static Shortcut getDefaultShortcut(final int number) {
+  public static Shortcut getDefaultShortcuts(final int number) {
     assert (number >= 0) && (number < KeyboardLayout.NUMBER_KEYS);
     final String shortcutString = Application.getString(
       UserPreferences.class,
