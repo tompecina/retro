@@ -97,8 +97,9 @@ public class GUI {
    */
   public static void addResizeable(final Resizeable item) {
     resizeables.add(item);
-    if (item instanceof JFrame)
+    if (item instanceof JFrame) {
       ((JFrame)item).setResizable(false);
+    }
     log.finer("Resizeable added: " + item);
   }
 
@@ -118,8 +119,10 @@ public class GUI {
    * on pixel size change.
    */
   public static void redrawAllResizeables() {
-    for (Resizeable item: resizeables)
+    for (Resizeable item: resizeables) {
+      log.finest("Redrawing: " + item);
       item.redrawOnPixelResize();
+    }
     log.finer("All resizeables redrawn");
   }
 

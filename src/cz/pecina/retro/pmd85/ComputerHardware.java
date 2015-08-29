@@ -86,6 +86,12 @@ public class ComputerHardware {
   // the system 8255A (PIO)
   private Intel8255A systemPIO;
 
+  // the general-purpose 8255A (PIO)
+  private Intel8255A gPIO;
+
+  // the IMS-2 8255A (PIO)
+  private Intel8255A imsPIO;
+
   // the 8251A (USART)
   private Intel8251A usart;
 
@@ -178,6 +184,22 @@ public class ComputerHardware {
     for (int port: Util.portIterator(0x84, 0x8c)) {
       cpu.addIOInput(port, systemPIO);
       cpu.addIOOutput(port, systemPIO);
+    }
+
+    // set up the general-purpose PIO
+    gPIO = new Intel8255A("GENERAL_PURPOSE_PIO");
+    hardware.add(gPIO);
+    for (int port: Util.portIterator(0x4c, 0x8c)) {
+      cpu.addIOInput(port, gPIO);
+      cpu.addIOOutput(port, gPIO);
+    }
+
+    // set up the IMS-2 (HPIB) PIO
+    imsPIO = new Intel8255A("IMS_2_PIO");
+    hardware.add(imsPIO);
+    for (int port: Util.portIterator(0x7c, 0x8c)) {
+      cpu.addIOInput(port, imsPIO);
+      cpu.addIOOutput(port, imsPIO);
     }
 
     // set up the keyboard hardware
@@ -481,6 +503,24 @@ public class ComputerHardware {
    */
   public Intel8255A getSystemPIO() {
     return systemPIO;
+  }
+
+  /**
+   * Gets the general-purpose PIO.
+   *
+   * @return the general-purpose PIO
+   */
+  public Intel8255A getGPIO() {
+    return gPIO;
+  }
+
+  /**
+   * Gets the IMS-2 (HPIB) PIO.
+   *
+   * @return the IMS-2 (HPIB) PIO
+   */
+  public Intel8255A getImsPIO() {
+    return imsPIO;
   }
 
   /**
