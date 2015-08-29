@@ -24,8 +24,6 @@ import java.util.logging.Logger;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 
@@ -146,37 +144,7 @@ public class KeyboardPanel extends BackgroundFixedPane {
    */
   public void setShortcuts() {
     log.finer("Setting up keyboard shortcuts");
-    frame.addKeyListener(new ShortcutListener());
+    frame.addKeyListener(new ShortcutListener(keyboardHardware));
     log.finer("Keyboard shortcuts set up");
-  }
-
-  // shortcut listener
-  private class ShortcutListener extends KeyAdapter {
-    @Override
-    public void keyPressed(final KeyEvent event) {
-      final Shortcut shortcut  =
-	new Shortcut(event.getExtendedKeyCode(), event.getKeyLocation());
-      for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
-	final KeyboardKey key =
-	  keyboardHardware.getKeyboardLayout().getKey(i);
-	if (shortcut.equals(key.getShortcut())) {
-	  key.setPressed(true);
-	  break;
-	}
-      }
-    }
-    @Override
-    public void keyReleased(final KeyEvent event) {
-      final Shortcut shortcut  =
-	new Shortcut(event.getExtendedKeyCode(), event.getKeyLocation());
-      for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
-	final KeyboardKey key =
-	  keyboardHardware.getKeyboardLayout().getKey(i);
-	if (shortcut.equals(key.getShortcut())) {
-	  key.setPressed(false);
-	  break;
-	}
-      }
-    }
   }
 }

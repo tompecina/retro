@@ -22,9 +22,6 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
 import cz.pecina.retro.gui.BackgroundFixedPane;
 import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.gui.Shortcut;
@@ -124,7 +121,7 @@ public class ComputerPanel extends BackgroundFixedPane {
     }
     log.finer("Icons set up");
     
-    log.fine("Computer control panel set up");
+    log.finer("Computer control panel set up");
   }
 
   /**
@@ -132,37 +129,7 @@ public class ComputerPanel extends BackgroundFixedPane {
    */
   public void setShortcuts() {
     log.finer("Setting up keyboard shortcuts");
-    computerFrame.addKeyListener(new ShortcutListener());
+    computerFrame.addKeyListener(new ShortcutListener(keyboardHardware));
     log.finer("Keyboard shortcuts set up");
-  }
-
-  // shortcut listener
-  private class ShortcutListener extends KeyAdapter {
-    @Override
-    public void keyPressed(final KeyEvent event) {
-      final Shortcut shortcut  =
-	new Shortcut(event.getExtendedKeyCode(), event.getKeyLocation());
-      for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
-	final KeyboardKey key =
-	  keyboardHardware.getKeyboardLayout().getKey(i);
-	if (shortcut.equals(key.getShortcut())) {
-	  key.setPressed(true);
-	  break;
-	}
-      }
-    }
-    @Override
-    public void keyReleased(final KeyEvent event) {
-      final Shortcut shortcut  =
-	new Shortcut(event.getExtendedKeyCode(), event.getKeyLocation());
-      for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
-	final KeyboardKey key =
-	  keyboardHardware.getKeyboardLayout().getKey(i);
-	if (shortcut.equals(key.getShortcut())) {
-	  key.setPressed(false);
-	  break;
-	}
-      }
-    }
   }
 }

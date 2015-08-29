@@ -39,17 +39,19 @@ public class Shortcuts extends TreeMap<Shortcut,List<Integer>> {
     Logger.getLogger(Shortcuts.class.getName());
 
   // shortcut comparator
-  private class ShortcutComparator
+  private static class ShortcutComparator
     implements Comparator<Shortcut> {
 
     // for description see Comparator
     @Override
     public int compare(final Shortcut shortcut1, final Shortcut shortcut2) {
-      final int kc = Integer.compare(shortcut1.getID(), shortcut2.getID());
+      final int kc = Integer.compare(shortcut1.getKeyCode(),
+				     shortcut2.getKeyCode());
       if (kc != 0) {
 	return kc;
       } else {
-	return  Integer.compare(shortcut1.getLocation(), shortcut2.getLocation());
+	return Integer.compare(shortcut1.getKeyLocation(),
+			       shortcut2.getKeyLocation());
       }
     }
   }

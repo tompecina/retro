@@ -117,7 +117,7 @@ public class ComputerPanel extends BackgroundFixedPane {
     }
     log.finer("Icons set up");
 
-    log.fine("Computer control panel set up");
+    log.finer("Computer control panel set up");
   }
 
   /**

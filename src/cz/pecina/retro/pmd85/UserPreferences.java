@@ -24,6 +24,9 @@ import java.util.logging.Logger;
 
 import java.util.Locale;
 import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import java.util.prefs.Preferences;
 import java.util.prefs.BackingStoreException;
@@ -35,6 +38,7 @@ import cz.pecina.retro.common.Application;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Sound;
 
+import cz.pecina.retro.gui.Shortcuts;
 import cz.pecina.retro.gui.Shortcut;
 
 /**
@@ -52,6 +56,12 @@ public final class UserPreferences extends GeneralUserPreferences {
   // default volume
   private static final int DEFAULT_VOLUME = 67;
   
+  // shortcuts prefixes
+  private static final String SHORTCUT_PREFIX =
+    "keyboard.shortcut.";
+  private static final String DEFAULT_SHORTCUT_PREFIX =
+    "keyboard.default.shortcut.";
+  
   // true if preferences already retrieved
   private static boolean retrieved;
   
@@ -63,7 +73,7 @@ public final class UserPreferences extends GeneralUserPreferences {
   private static int model;
 
   // keyboard shortcuts
-  private static Shortcuts shortcuts = new Shortcuts();
+  private static Shortcuts shortcuts;
 
   // the color mode
   private static int colorMode;
@@ -118,23 +128,28 @@ public final class UserPreferences extends GeneralUserPreferences {
 	Parameters.preferences.putInt("model", model);
       }
 
-      boolean shortcutsDefined;
-      for (String key:  Parameters.preferences.keys()) {
-	if (key.startsWith("shortcut.")) {
-	  final String id = key.substring(9);
-	  final String listString = Parameters.preferences.get(key, null);
-	  if (listString != null) {
-	    shortutsDefined = true;
-	    final List<Integer> list = new ArrayList<>();
-	    for (String buttonString: string.split(",")) {
-	      list.add(Integer.parseInt(buttonString));
+      try {
+	for (String key:  Parameters.preferences.keys()) {
+	  if (key.startsWith(SHORTCUT_PREFIX)) {
+	    if (shortcuts == null) {
+	      shortcuts = new Shortcuts();
 	    }
-	    shortcuts.put(new Shortcut(id) list);
+	    final String id = key.substring(SHORTCUT_PREFIX.length());
+	    final String listString = Parameters.preferences.get(key, null);
+	    if ((listString != null) && !listString.isEmpty()) {
+	      final List<Integer> list = new ArrayList<>();
+	      for (String buttonString: listString.split(",")) {
+		list.add(Integer.parseInt(buttonString));
+	      }
+	      shortcuts.put(new Shortcut(id), list);
+	    }
 	  }
 	}
+      } catch (final BackingStoreException exception) {
+	log.fine("Backing store exception: " + exception.getMessage());
       }
-      if (!shortcutsDefined) {
-	
+      if (shortcuts == null) {
+	shortcuts = getDefaultShortcuts();
       }
 	    
       colorMode = Parameters.preferences.getInt("colorMode", -1);
@@ -295,16 +310,18 @@ public final class UserPreferences extends GeneralUserPreferences {
    */
   public static void updateShortcuts() {
     for (Shortcut shortcut: shortcuts.keySet()) {
-      StringBuilder sb = new StringBuilder;
-      boolean next;
+      StringBuilder sb = new StringBuilder();
+      boolean first = true;;
       for (int i: shortcuts.get(shortcut)) {
-	if (next) {
-	  sb.append(",");
+	if (first) {
+	  first = false;
 	} else {
-	  next = true;
+	  sb.append(",");
 	}
-	sb.append(Inte
-	
+	sb.append(String.valueOf(i));
+      }
+      Parameters.preferences.put(SHORTCUT_PREFIX + shortcut, sb.toString());
+    }
   }
 
   /**
@@ -313,22 +330,32 @@ public final class UserPreferences extends GeneralUserPreferences {
    * @return the keyboard shortcuts object
    */
   public static Shortcuts getShortcuts() {
+    getPreferences();
     return shortcuts;
   }
 
   /**
-   * Gets the default keyboard shortcut.
+   * Gets the default keyboard shortcuts.
    *
    * @return shortcuts the default keyboard shortcuts object
    */
-  public static Shortcut getDefaultShortcuts(final int number) {
-    assert (number >= 0) && (number < KeyboardLayout.NUMBER_KEYS);
-    final String shortcutString = Application.getString(
-      UserPreferences.class,
-      "keyboard.default.shortcut." + number);
-    return shortcutString.equals(NULL_STRING) ?
-           null :
-           new Shortcut(shortcutString);
+  public static Shortcuts getDefaultShortcuts() {
+    final Shortcuts shortcuts = new Shortcuts();
+    final ResourceBundle bundle =
+      Application.getTextResources().get(UserPreferences.class.getPackage());
+    for (String key: bundle.keySet()) {
+      if (key.startsWith(DEFAULT_SHORTCUT_PREFIX)) {
+	final String listString = bundle.getString(key);
+	if ((listString != null) && !listString.isEmpty()) {
+	  final List<Integer> list = new ArrayList<>();
+	  for (String buttonString: listString.split(",")) {
+	    list.add(Integer.parseInt(buttonString));
+	  }
+	  shortcuts.put(new Shortcut(key), list);
+	}
+      }
+    }
+    return shortcuts;
   }
 
   /**

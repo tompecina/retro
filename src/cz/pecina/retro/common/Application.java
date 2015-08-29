@@ -52,7 +52,7 @@ public final class Application {
   private static Locale locale;
 
   // map of localized modules
-  private static final Map<Package, ResourceBundle> textResources =
+  private static final Map<Package,ResourceBundle> textResources =
     new HashMap<>();
 
   // list of objects that must be redrawn on a locale change
@@ -206,6 +206,16 @@ public final class Application {
     final String message =
       textResources.get(cl.getPackage()).getString("error." + errorKey);
     return new RuntimeException(String.format(message, varargs));
+  }
+
+  /**
+   * Gets the text resources.
+   *
+   * @return the text resources
+   */
+  public static Map<Package,ResourceBundle> getTextResources() {
+    log.finest("Text resources requested");
+    return textResources;
   }
 
   // default constructor disabled
