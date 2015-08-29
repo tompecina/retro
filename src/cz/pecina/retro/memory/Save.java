@@ -474,6 +474,8 @@ public class Save extends MemoryTab {
 
   // save listener
   private class SaveListener implements ActionListener {
+
+    // for description see ActionListener
     @Override
     public void actionPerformed(final ActionEvent event) {
       log.finer("Save listener action started");

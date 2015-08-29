@@ -1,4 +1,4 @@
-/* MemoryFrame.java
+/* ResetFrame.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -27,75 +27,57 @@ import cz.pecina.retro.common.Application;
 
 import cz.pecina.retro.cpu.Hardware;
 
-import cz.pecina.retro.memory.MemoryPanel;
-import cz.pecina.retro.memory.MemoryPlugin;
-
 /**
- * The Memory frame.
+ * The Reset frame.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class MemoryFrame extends HidingFrame {
+public class ResetFrame extends HidingFrame {
 
   // static logger
   private static final Logger log =
-    Logger.getLogger(MemoryFrame.class.getName());
+    Logger.getLogger(ResetFrame.class.getName());
 
   // the computer hardware object
   private Computer computer;
 
-  // memory panel
-  private MemoryPanel memoryPanel;
+  // reset panel
+  private ResetPanel resetPanel;
 
   // hardware object to operate on
   private Hardware hardware;
 
-  // plugins
-  private MemoryPlugin[] saveMemoryPlugins, loadMemoryPlugins;
-
   /**
-   * Creates the Memory frame.
+   * Creates the Reset frame.
    *
    * @param computer the computer control object
    * @param hardware the hardware object to operate on
    */
-  public MemoryFrame(final Computer computer, final Hardware hardware) {
-    super(Application.getString(MemoryFrame.class, "memory.frameTitle"),
-	  computer.getIconLayout().getIcon(IconLayout.ICON_POSITION_MEM));
-    log.fine("New MemoryFrame creation started");
+  public ResetFrame(final Computer computer, final Hardware hardware) {
+    super(Application.getString(ResetFrame.class, "reset.frameTitle"),
+	  computer.getIconLayout().getIcon(IconLayout.ICON_POSITION_RESET));
+    log.fine("New ResetFrame creation started");
     assert computer != null;
     assert hardware != null;
     this.computer = computer;
     this.hardware = hardware;
 
-    saveMemoryPlugins = new MemoryPlugin[] {
-      new BasicMemoryPlugin(),
-      new ScreenShotMemoryPlugin(computer.getComputerHardware())};
-    loadMemoryPlugins = new MemoryPlugin[] {
-      new BasicMemoryPlugin()};
-    
-    memoryPanel = new MemoryPanel(this,
-				  hardware,
-				  saveMemoryPlugins,
-				  loadMemoryPlugins);
-    add(memoryPanel);
+    resetPanel = new ResetPanel(this, computer.getComputerHardware());
+    add(resetPanel);
     pack();
-    log.fine("MemoryFrame set up");
+    log.fine("ResetFrame set up");
   }
 
   // redraw frame
   private void redraw() {
-    log.fine("MemoryFrame redraw started");
-    super.setTitle(Application.getString(this, "memory.frameTitle"));
-    remove(memoryPanel);
-    memoryPanel = new MemoryPanel(this,
-				  hardware,
-				  saveMemoryPlugins,
-				  loadMemoryPlugins);
-    add(memoryPanel);
+    log.fine("ResetFrame redraw started");
+    super.setTitle(Application.getString(this, "reset.frameTitle"));
+    remove(resetPanel);
+    resetPanel = new ResetPanel(this, computer.getComputerHardware());
+    add(resetPanel);
     pack();
-    log.fine("MemoryFrame redraw completed");
+    log.fine("ResetFrame redraw completed");
   }
 
   // for description see Localized

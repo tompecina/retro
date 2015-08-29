@@ -45,39 +45,39 @@ public class IconLayout {
   public static final int ICON_POSITION_WHEEL = 0;
 
   /**
+   * Position of the "reset" icon.
+   */
+  public static final int ICON_POSITION_RESET = 1;
+
+  /**
    * Position of the "memory" icon.
    */
-  public static final int ICON_POSITION_MEM = 1;
+  public static final int ICON_POSITION_MEM = 2;
 
   /**
    * Position of the "keyboard" icon.
    */
-  public static final int ICON_POSITION_KEYBOARD = 2;
+  public static final int ICON_POSITION_KEYBOARD = 3;
 
   /**
    * Position of the "cassette" icon.
    */
-  public static final int ICON_POSITION_CASSETTE = 3;
+  public static final int ICON_POSITION_CASSETTE = 4;
 
   /**
    * Position of the "cable" icon.
    */
-  public static final int ICON_POSITION_CABLE = 4;
+  public static final int ICON_POSITION_CABLE = 5;
 
   /**
    * Position of the "debugger" icon.
    */
-  public static final int ICON_POSITION_DEBUG = 5;
+  public static final int ICON_POSITION_DEBUG = 6;
 
   /**
    * Position of the "info" icon.
    */
-  public static final int ICON_POSITION_INFO = 6;
-
-  /**
-   * Position of the "power" icon.
-   */
-  public static final int ICON_POSITION_POWER = 7;
+  public static final int ICON_POSITION_INFO = 7;
 
   // the icons
   public IconButton[] icons;
@@ -91,14 +91,14 @@ public class IconLayout {
     log.fine("New IconLayout creation started");
     assert computer != null;
     icons = new IconButton[] {
-      new IconButton(computer, "wheel", 311, 10, "toolTip.settings"),
-      new IconButton(computer, "mem", 311, 45, "toolTip.memory"),
-      new IconButton(computer, "keyboard", 312, 77, "toolTip.keyboard"),
-      new IconButton(computer, "cassette", 312, 110, "toolTip.tapeRecorder"),
-      new IconButton(computer, "cable", 311, 141, "toolTip.peripherals"),
-      new IconButton(computer, "debug", 311, 174, "toolTip.debugger"),
-      new IconButton(computer, "info", 311, 204, "toolTip.about"),
-      new IconButton(computer, "power", 314, 261, "toolTip.power")
+      new IconButton(computer, "wheel", 312, 10, "toolTip.settings"),
+      new IconButton(computer, "reset", 313, 44, "toolTip.reset"),
+      new IconButton(computer, "mem", 311, 78, "toolTip.memory"),
+      new IconButton(computer, "keyboard", 312, 112, "toolTip.keyboard"),
+      new IconButton(computer, "cassette", 312, 147, "toolTip.tapeRecorder"),
+      new IconButton(computer, "cable", 311, 180, "toolTip.peripherals"),
+      new IconButton(computer, "debug", 312, 214, "toolTip.debugger"),
+      new IconButton(computer, "info", 312, 245, "toolTip.about")
     };
     log.fine("New IconLayout creation completed");
   }

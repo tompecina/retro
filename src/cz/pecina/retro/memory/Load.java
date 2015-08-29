@@ -348,6 +348,8 @@ public class Load extends MemoryTab {
 
   // load listener
   private class LoadListener implements ActionListener {
+
+    // for description see ActionListener
     @Override
     public void actionPerformed(final ActionEvent event) {
       log.finer("Load listener action started");

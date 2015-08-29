@@ -68,6 +68,10 @@ public class MemoryPanel extends JTabbedPane {
 		     final MemoryPlugin[] loadPlugins) {
     super();
     log.fine("New MemoryPanel creation started");
+    assert frame != null;
+    assert hardware != null;
+    assert savePlugins != null;
+    assert loadPlugins != null;
     this.frame = frame;
     this.hardware = hardware;
 

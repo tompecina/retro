@@ -42,6 +42,9 @@ public class Hardware extends ArrayList<Device> {
   // name of the hardware set
   private String name;
 
+  // suspension level
+  private int suspension;
+
   /**
    * Creates a new set of <code>Device</code> objects.
    *
@@ -112,8 +115,10 @@ public class Hardware extends ArrayList<Device> {
    * Suspends operation of all <code>Device</code>s.
    */
   public void suspend() {
-    for (Device device: this) {
-      device.suspend();
+    if (suspension++ == 0) {
+      for (Device device: this) {
+	device.suspend();
+      }
     }
   }
 
@@ -121,8 +126,13 @@ public class Hardware extends ArrayList<Device> {
    * Resumes operation of all <code>Device</code>s.
    */
   public void resume() {
-    for (Device device: this) {
-      device.resume();
+    if (suspension > 0) {
+      suspension--;
+    }
+    if (suspension == 0) {
+      for (Device device: this) {
+	device.resume();
+      }
     }
   }
 

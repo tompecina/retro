@@ -62,6 +62,9 @@ public class Computer implements Runnable {
   // the settings frame
   private SettingsFrame settingsFrame;
 
+  // the reset frame
+  private ResetFrame resetFrame;
+
   // the memory frame
   private MemoryFrame memoryFrame;
 
@@ -133,6 +136,7 @@ public class Computer implements Runnable {
       computerHardware.getDebuggerHardware());
     peripheralsFrame = new PeripheralsFrame(this, computerHardware);
     settingsFrame = new SettingsFrame(this, peripheralsFrame.getPeripherals());
+    resetFrame = new ResetFrame(this, computerHardware.getHardware());
     // aboutFrame = new AboutFrame(this);
 
     // find reset and shift keys
