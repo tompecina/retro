@@ -22,8 +22,6 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 
-import java.util.Arrays;
-
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
@@ -140,8 +138,7 @@ public class ResetPanel extends JPanel {
       }
       final PMDMemory memory = computerHardware.getMemory();
       if (clearRAMButton.isSelected()) {
-	Arrays.fill(memory.getRAM(), (byte)0);
-	computerHardware.getDisplayHardware().refresh();
+	computerHardware.clearRAM();
       }
       if (restoreROMButton.isSelected()) {
 	computerHardware.loadROM();

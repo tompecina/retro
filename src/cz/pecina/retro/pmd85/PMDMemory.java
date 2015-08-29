@@ -357,7 +357,7 @@ public class PMDMemory
   public void refreshVideoRAM() {
     for (int address = 0xc000; address < 0x10000; address++) {
       if ((address & 0x3f) < 0x30) {
-	setByte(address, getByte(address));
+	setByte(address, ram[address]);
       }
     }
     log.fine("Video RAM refreshed");

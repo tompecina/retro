@@ -412,6 +412,14 @@ public class ComputerHardware {
   }
 
   /**
+   * Clears the RAM.
+   */
+  public void clearRAM() {
+    Arrays.fill(memory.getRAM(), (byte)0);
+    displayHardware.refresh();
+  }
+  
+  /**
    * Sets the model.
    *
    * @param computer the computer control object
@@ -426,6 +434,7 @@ public class ComputerHardware {
       .getKeyboardLayout().modify(model);
     computer.getKeyboardFrame().getKeyboardPanel().replaceKeys();
     memory.setModel(model);
+    clearRAM();
     loadROM();
     loadRMM();
     reset();
