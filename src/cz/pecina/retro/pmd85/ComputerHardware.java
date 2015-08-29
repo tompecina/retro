@@ -338,52 +338,77 @@ public class ComputerHardware {
     log.fine("New Computer hardware object created");
   }
     
-  // loads monitor
-  private void loadMonitor() {
+  /**
+   * Loads the ROM contents.
+   */
+  public void loadROM() {
     try {
-      final byte buffer[] = Files.readAllBytes(Paths.get(getClass()
-         .getResource("ROM/monitor-" + model + ".bin").toURI()));
+      byte buffer[];
+      if (CommandLineProcessor.fileNameROM == null) {
+	buffer = Files.readAllBytes(Paths.get(getClass()
+          .getResource("ROM/monitor-" + model + ".bin").toURI()));
+      } else {
+	buffer =
+	  Files.readAllBytes(Paths.get(CommandLineProcessor.fileNameROM));
+      }
       final int size = buffer.length;
-      if (size != ((model < 3) ? 0x1000 : 0x2000)) {
+      if (size == 0) {
+	log.fine("Empty ROM contents");
+	return;
+      }
+      final int modelSize = ((model < 3) ? 0x1000 : 0x2000);
+      if (size > modelSize) {
 	throw new IOException("Wrong size");
       }
       final byte[] memoryArray =
 	Parameters.memoryDevice.getBlockByName("ROM").getMemory();
-      for (int addr = 0; addr < size; addr++) {
-	memoryArray[addr] = buffer[addr];
+      for (int addr = 0; addr < modelSize; addr++) {
+	memoryArray[addr] = ((addr < size) ? buffer[addr] : (byte)0xff);
       }
+      log.fine(String.format("ROM contents read, size: 0x%04x", size));
     } catch (final NullPointerException |
 	     URISyntaxException |
 	     IOException |
 	     IndexOutOfBoundsException exception) {
-      log.fine("Error reading monitor, exception: " + exception);
-      throw Application.createError(this, "monitorLoad");
+      log.fine("Error reading ROM, exception: " + exception.getMessage());
+      throw Application.createError(this, "ROMLoad");
     }
-    log.fine("Monitor read");
   }
 
-  // loads Basic
-  private void loadBasic() {
+  /**
+   * Loads the ROM module.
+   */
+  public void loadRMM() {
     try {
-      final byte buffer[] = Files.readAllBytes(Paths.get(getClass()
-        .getResource("ROM/basic-" + model + ".bin").toURI()));
+      byte buffer[];
+      if (CommandLineProcessor.fileNameRMM == null) {
+	buffer = Files.readAllBytes(Paths.get(getClass()
+          .getResource("ROM/basic-" + model + ".bin").toURI()));
+      } else {
+	buffer =
+	  Files.readAllBytes(Paths.get(CommandLineProcessor.fileNameRMM));
+      }
       final int size = buffer.length;
-      if (size != ((model < 3) ? (9 * 0x400) : (10 * 0x400))) {
+      if (size == 0) {
+	log.fine("Empty RMM contents");
+	return;
+      }
+      if (size > 0x8000) {
 	throw new IOException("Wrong size");
       }
       final byte[] memoryArray =
 	Parameters.memoryDevice.getBlockByName("RMM").getMemory();
       for (int addr = 0; addr < 0x8000; addr++) {
-	memoryArray[addr] = (addr < size) ? buffer[addr] : (byte)0xff;
+	memoryArray[addr] = ((addr < size) ? buffer[addr] : (byte)0xff);
       }
+      log.fine(String.format("RMM contents read, size: 0x%04x", size));
     } catch (final NullPointerException |
 	     URISyntaxException |
 	     IOException |
 	     IndexOutOfBoundsException exception) {
-      log.fine("Error reading Basic, exception: " + exception);
-      throw Application.createError(this, "basicLoad");
+      log.fine("Error reading RMM, exception: " + exception.getMessage());
+      throw Application.createError(this, "RMMLoad");
     }
-    log.fine("Basic read");
   }
 
   /**
@@ -401,8 +426,8 @@ public class ComputerHardware {
       .getKeyboardLayout().modify(model);
     computer.getKeyboardFrame().getKeyboardPanel().replaceKeys();
     memory.setModel(model);
-    loadMonitor();
-    loadBasic();
+    loadROM();
+    loadRMM();
     reset();
   }
 

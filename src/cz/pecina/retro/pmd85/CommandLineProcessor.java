@@ -70,6 +70,16 @@ public class CommandLineProcessor {
   // hardware object to operate on
   private Hardware hardware;
 
+  /**
+   * The name of the file containing the initial ROM contents.
+   */
+  public static String fileNameROM;
+  
+  /**
+   * The name of the file containing the initial ROM module contents.
+   */
+  public static String fileNameRMM;
+  
   // prints usage information
   private void usage() {
     final HelpFormatter usage = new HelpFormatter();
@@ -123,6 +133,20 @@ public class CommandLineProcessor {
       .hasArg()
       .argName("ADDR")
       .desc(Application.getString(this, "option.address"))
+      .build());
+    options.addOption(
+      Option.builder("o")
+      .longOpt("ROM-file")
+      .hasArg()
+      .argName("FILE")
+      .desc(Application.getString(this, "option.ROM"))
+      .build());
+    options.addOption(
+      Option.builder("m")
+      .longOpt("RMM-file")
+      .hasArg()
+      .argName("FILE")
+      .desc(Application.getString(this, "option.RMM"))
       .build());
     options.addOption(
       Option.builder("b")
@@ -269,6 +293,14 @@ public class CommandLineProcessor {
 	      error();
 	    }
 	    UserPreferences.setPixelSize(pixelSize);
+	    break;
+	  case "o":
+	    log.finer("Processing -o");
+	    fileNameROM = option.getValue();
+	    break;
+	  case "m":
+	    log.finer("Processing -m");
+	    fileNameRMM = option.getValue();
 	    break;
 	  case "a":
 	    log.finer("Processing -a");
