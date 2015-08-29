@@ -111,14 +111,15 @@ public class ResetPanel extends JPanel {
 
     final JPanel executePanel = new JPanel();
     executePanel.setLayout(new BoxLayout(executePanel, BoxLayout.PAGE_AXIS));
-    executePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 16, 0));
+    executePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 12, 0));
 
     executePanel.add(new JSeparator());
-    executePanel.add(filler());
+    executePanel.add(Box.createRigidArea(new Dimension(0, 11)));
     
     final JButton executeButton =
       new JButton(Application.getString(this, "reset.button.execute"));
     executeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+    executeButton.addActionListener(new ExecuteListener());
     executePanel.add(executeButton);
    
     add(executePanel, BorderLayout.PAGE_END);
@@ -126,28 +127,25 @@ public class ResetPanel extends JPanel {
     log.fine("Reset panel set up");
   }
 
-  // // reset button listener
-  // private class ResetListener implements ActionListener {
-
-  //   // for description see ActionListener
-  //   @Override
-  //   public void actionPerformed(final ActionEvent event) {
-  //     clearRAMButton.setSelected(true);
-  //   }
-  // }
-  
-  // close the frame
-  private void closeFrame() {
-    frame.close();
-  }
-
-  // close listener
-  private class CloseListener implements ActionListener {
+  // execute button listener
+  private class ExecuteListener implements ActionListener {
 
     // for description see ActionListener
     @Override
     public void actionPerformed(final ActionEvent event) {
+      if (resetButton.isSelected()) {
+	computerHardware.reset();
+      }
+      final PMDMemory memory = computerHardware.getMemory();
+      if (clearRAMbutton.isSelected()) {
+	
+      }
       closeFrame();
     }
+  }
+  
+  // close the frame
+  private void closeFrame() {
+    frame.close();
   }
 }
