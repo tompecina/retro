@@ -142,6 +142,15 @@ public class KeyboardKey extends LockableButton {
   }
 
   /**
+   * Gets the cap of the key.
+   *
+   * @return the cap of the key
+   */
+  public String getCap() {
+    return cap;
+  }
+
+  /**
    * Sets the x-offset of the key.
    *
    * @param offsetX x-offset of the key in 1/2s of the base key width

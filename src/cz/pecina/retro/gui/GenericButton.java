@@ -145,6 +145,42 @@ public abstract class GenericButton
   }
 
   /**
+   * Sets the on icon.
+   *
+   * @param onIcon the on icon
+   */
+  public void setOnIcon(final Icon onIcon) {
+    this.onIcon = onIcon;
+  }
+
+  /**
+   * Gets the on icon.
+   *
+   * @return the on icon
+   */
+  public Icon getOnIcon() {
+    return onIcon;
+  }
+
+  /**
+   * Sets the off icon.
+   *
+   * @param offIcon the off icon
+   */
+  public void setOffIcon(final Icon offIcon) {
+    this.offIcon = offIcon;
+  }
+
+  /**
+   * Gets the off icon.
+   *
+   * @return the off icon
+   */
+  public Icon getOffIcon() {
+    return offIcon;
+  }
+
+  /**
    * Sets the state of the button ({@code true} = pressed/down,
    * {@code false} = not pressed/up).
    *

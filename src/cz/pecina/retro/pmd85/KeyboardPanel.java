@@ -1,4 +1,4 @@
-/* TapeRecorderPanel.java
+/* KeyboardPanel.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -91,7 +91,7 @@ public class KeyboardPanel extends BackgroundFixedPane {
   private KeyboardHardware keyboardHardware;
 
   /**
-   * Creates the layered panel containing the keyboard.
+   * Creates a layered panel containing the keyboard.
    *
    * @param frame            enclosing frame
    * @param keyboardHardware hardware to operate on
@@ -124,7 +124,7 @@ public class KeyboardPanel extends BackgroundFixedPane {
   }
 
   /**
-   * Get the enclosing frame.
+   * Gets the enclosing frame.
    *
    * @return the enclosing frame
    */
@@ -133,7 +133,7 @@ public class KeyboardPanel extends BackgroundFixedPane {
   }
 
   /**
-   * Get the keyboard hardware object.
+   * Gets the keyboard hardware object.
    *
    * @return the keyboard hardware object
    */

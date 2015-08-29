@@ -98,8 +98,7 @@ public class ShortcutDialog extends JDialog {
 
     final JPanel dialogPanel = new JPanel(new BorderLayout());
 
-    final JPanel promptPanel =
-      new JPanel();
+    final JPanel promptPanel = new JPanel();
     promptPanel.setLayout(new BoxLayout(promptPanel, BoxLayout.PAGE_AXIS));
     promptPanel.setBorder(BorderFactory.createEmptyBorder(35, 5, 35, 5));
 
@@ -138,6 +137,7 @@ public class ShortcutDialog extends JDialog {
     addKeyListener(new ShortcutListener(currentShortcut, assignedShortcuts));
     pack();
     setVisible(true);
+    log.fine("ShortcutDialog set up");
   }
 
   // shortcut listener
@@ -172,6 +172,8 @@ public class ShortcutDialog extends JDialog {
 
   // set button listener
   private class SetListener implements ActionListener {
+
+    // for description see ActionListener
     @Override
     public void actionPerformed(final ActionEvent event) {
       log.finer("Set button event detected");
@@ -182,6 +184,8 @@ public class ShortcutDialog extends JDialog {
   
   // cancel button listener
   private class CancelListener implements ActionListener {
+
+    // for description see ActionListener
     @Override
     public void actionPerformed(final ActionEvent event) {
       log.finer("Cancel button event detected");

@@ -47,7 +47,7 @@ public class SwitchButton extends GenericButton {
    * @param template the icon template string (if {@code null},
    *                 a dummy button without a graphical representation
    *                 is created)
-   * @param shortcut keyboard shortcut for the button ({@code -1}
+   * @param shortcut keyboard shortcut for the button ({@code null}
    *                 if none)
    * @param toolTip  tool-tip for the button ({@code null} if none)
    */

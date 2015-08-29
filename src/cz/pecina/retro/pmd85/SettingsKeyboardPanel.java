@@ -90,6 +90,16 @@ public class SettingsKeyboardPanel extends JScrollPane {
   public SettingsKeyboardPanel(final Frame frame, final Computer computer) {
     super(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 	  ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+
+
+
+    new KeyChooserDialog(frame, computer, new ArrayList<Integer>());
+
+
+
+
+
     log.fine("New Settings/Keyboard panel creation started");
     assert frame != null;
     assert computer != null;
