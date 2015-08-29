@@ -203,10 +203,9 @@ public class KeyboardKey extends LockableButton {
   }
 
   /**
-   * Indicates whether the key is connected to the RESET signal
-   * of the processor.
+   * Tests if the key is connected to the RESET signal of the processor.
    *
-   * @return true if the key is connected to the RESET signal
+   * @return {@code true} if the key is connected to the RESET signal
    *         of the processor
    */
   public boolean isReset() {
@@ -221,9 +220,9 @@ public class KeyboardKey extends LockableButton {
   }
 
   /**
-   * Indicates whether the key is a shift.
+   * Tests if the key is a shift.
    *
-   * @return true if the key is a shilf
+   * @return {@code true} if the key is a shift
    */
   public boolean isShift() {
     return shift;
@@ -237,9 +236,9 @@ public class KeyboardKey extends LockableButton {
   }
 
   /**
-   * Indicates whether the key is STOP.
+   * Tests if the key is STOP.
    *
-   * @return true if the key is STOP
+   * @return {@code true} if the key is STOP
    */
   public boolean isStop() {
     return stop;
