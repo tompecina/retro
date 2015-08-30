@@ -88,9 +88,6 @@ public class SettingsKeyboardPanel extends JPanel {
   // the scroll pane containing the current shortcuts
   final JScrollPane shortcutsScrollPane;
 
-  // dynamically updated shortcuts pane
-  private JPanel shortcutsPane = new JPanel();
-  
   /**
    * Creates the Settings/Keyboard panel.
    *
@@ -113,7 +110,6 @@ public class SettingsKeyboardPanel extends JPanel {
     shortcutsScrollPane.setViewportBorder(BorderFactory
       .createEmptyBorder(5, 8, 5, 8));
     shortcutsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-    shortcutsScrollPane.setViewportView(shortcutsPane);
     shortcutsScrollPane.setPreferredSize(new Dimension(0, 300));
     add(shortcutsScrollPane);
 
@@ -167,13 +163,9 @@ public class SettingsKeyboardPanel extends JPanel {
   private void updateShortcutsPane() {
     log.fine("Updating shortcuts pane");
     
-    if (shortcuts.isEmpty()) {
+    final JPanel shortpane = new JPanel(new GridBagLayout());
 
-      shortcutsPane = new JPanel();
-
-    } else {
-
-      final JPanel shortpane = new JPanel(new GridBagLayout());
+    if (!shortcuts.isEmpty()) {
 
       int line = 0;
       
@@ -224,9 +216,8 @@ public class SettingsKeyboardPanel extends JPanel {
       
 	line++;
       }
-      this.shortcutsPane = shortcutsPane;
     }
-    shortcutsScrollPane.setViewportView(this.shortcutsPane);
+    shortcutsScrollPane.setViewportView(shortcutsPane);
     
     log.finer("New shortcuts pane updated");
   }
