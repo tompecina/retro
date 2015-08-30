@@ -134,12 +134,12 @@ public class DebuggerPanel extends BackgroundFixedPane {
       final Shortcut shortcut = button.getShortcut();
       if (shortcut != null) {
 	getInputMap().put(
-	  KeyStroke.getKeyStroke(shortcut.getKeyCode(), 0, false),
+	  KeyStroke.getKeyStroke(shortcut.getExtendedKeyCode(), 0, false),
 	  "KeyPressedAction_" + shortcut.getId());
 	getActionMap().put("KeyPressedAction_" + shortcut.getId(),
 			   button.keyPressedAction());
 	getInputMap().put(KeyStroke.getKeyStroke(
-	  shortcut.getKeyCode(), 0, true),
+	  shortcut.getExtendedKeyCode(), 0, true),
 	  "KeyReleasedAction_" + shortcut.getId());
 	getActionMap().put("KeyReleasedAction_" + shortcut.getId(),
 			   button.keyReleasedAction());

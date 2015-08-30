@@ -31,7 +31,7 @@ import cz.pecina.retro.gui.Shortcut;
 import cz.pecina.retro.gui.LED;
 
 /**
- * Keyboard shorcut listener.
+ * Keyboard shortcut listener.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -57,7 +57,7 @@ public class ShortcutListener extends KeyAdapter {
 
     this.keyboardHardware = keyboardHardware;
 
-    log.finer("Computer control panel set up");
+    log.finer("ShortcutListener set up");
   }
 
   // process key event
@@ -65,20 +65,11 @@ public class ShortcutListener extends KeyAdapter {
     final Shortcut shortcut =
       new Shortcut(event.getExtendedKeyCode(), event.getKeyLocation());
     if (UserPreferences.getShortcuts().containsKey(shortcut)) {
-      if (action) {
-	for (int key: UserPreferences.getShortcuts().get(shortcut)) {
-	  keyboardHardware.pushKey(keyboardHardware.getKeyboardLayout()
-	    .getButton(key), true);
-	}
-      } else {
-	for (int key:
-	       UserPreferences.getShortcuts().get(shortcut).descendingSet()) {
-	  keyboardHardware.pushKey(keyboardHardware.getKeyboardLayout()
-	    .getButton(key), false);
-	}
+      for (int key: UserPreferences.getShortcuts().get(shortcut)) {
+	keyboardHardware.getKeyboardLayout().getButton(key).setPressed(action);
       }
       event.consume();
-   }
+    }
   }
 
   // for description see KeyListener

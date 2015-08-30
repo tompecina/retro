@@ -89,9 +89,8 @@ public class KeyboardHardware {
   // keyboard layout
   private KeyboardLayout keyboardLayout;
 
-  // keyboard shortcut queues
-  private Deque<KeyboardKey> presses = new ArrayDeque<>();
-  private Deque<KeyboardKey> releases = new ArrayDeque<>();
+  // keyboard queue
+  private Deque<ShortcutEvent> queue = new ArrayDeque<>();
   
   /**
    * Creates the keyboard hardware object.
@@ -212,35 +211,25 @@ public class KeyboardHardware {
 
 
   /**
-   * Put a keyboard shortcut action in the queue.
+   * Put a keyboard shortcut event in the queue.
    *
-   * @param key    the key object
-   * @param action {@code true} if pressed, {@code false} if released
+   * @param event the keyboard shortcut event
    */
-  public void pushKey(final KeyboardKey key, final boolean action) {
-    log.finer("Pushing key: " + key +
-	      ", action: " + (action ? "press" : "release"));
-    assert key != null;
-    if (action) {
-      presses.push(key);
-    } else {
-      releases.push(key);
-    }
+  public void pushShortcutEvent(final ShortcutEvent event) {
+    log.finer("Pushing key: " + event.getKey() +
+	      ", action: " + (event.getAction() ? "press" : "release"));
+    assert event != null;
+    queue.push(event);
   }
   
   /**
    * Performs periodic keyboard update.
    */
   public void update() {
-    final KeyboardKey press = presses.pollLast();
-    if (press != null) {
-      press.setPressed(true);
-    } else {
-      final KeyboardKey release = releases.pollLast();
-      if (release != null) {
-	release.setPressed(false);
-      }
-    }      
+    final ShortcutEvent event = queue.pollLast();
+    if (event != null) {
+      event.getKey().setPressed(event.getAction());
+    }
     updateBuffer();
   }
 

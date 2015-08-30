@@ -1,4 +1,4 @@
-/* Shortcuts.java
+/* ShortcutEvent.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -18,49 +18,60 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.pecina.retro.gui;
+package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 
-import java.util.TreeMap;
-import java.util.NavigableSet;
-import java.util.Comparator;
-
 /**
- * All defined keyboard shortcuts as one object.
+ * Keyboard shortcut event.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class Shortcuts extends TreeMap<Shortcut,NavigableSet<Integer>> {
+public class ShortcutEvent {
 
   // static logger
   private static final Logger log =
-    Logger.getLogger(Shortcuts.class.getName());
+    Logger.getLogger(ShortcutEvent.class.getName());
 
-  // shortcut comparator
-  private static class ShortcutComparator
-    implements Comparator<Shortcut> {
+  // the key
+  private KeyboardKey key;
 
-    // for description see Comparator
-    @Override
-    public int compare(final Shortcut shortcut1, final Shortcut shortcut2) {
-      final int kc = Integer.compare(shortcut1.getExtendedKeyCode(),
-				     shortcut2.getExtendedKeyCode());
-      if (kc != 0) {
-	return kc;
-      } else {
-	return Integer.compare(shortcut1.getKeyLocation(),
-			       shortcut2.getKeyLocation());
-      }
-    }
+  // true if pressed, false if released
+  private boolean action;
+  
+  /**
+   * Creates a keyboard shortcut event.
+   *
+   * @param key    the key object
+   * @param action {@code true} if pressed, {@code false} if released
+   */
+  public ShortcutEvent(final KeyboardKey key, final boolean action) {
+    assert key != null;
+    log.fine("New ShortcutEvent creation started");
+
+    this.key = key;
+    this.action = action;
+
+    log.finer("Shortcut event set up");
   }
 
   /**
-   * Creates an instance of keyboard shortcuts.
+   * Gets the key.
+   *
+   * @return the key object
    */
-  public Shortcuts() {
-    super(new ShortcutComparator());
-    log.fine("New Shortcuts created");
+  public KeyboardKey getKey() {
+    return key;
+  }
+
+
+  /**
+   * Gets the action.
+   *
+   * @return {@code true} if pressed, {@code false} if released
+   */
+  public boolean getAction() {
+    return action;
   }
 }

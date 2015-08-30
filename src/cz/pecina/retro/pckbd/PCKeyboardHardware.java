@@ -232,7 +232,7 @@ public class PCKeyboardHardware implements IOElement, CPUEventOwner {
     private void listener(final KeyEvent event, final boolean released) {
       for (PCKeyboardKey key: layout.getKeys()) {
 	for (Shortcut shortcut: key.getShortcuts()) {
-	  if ((event.getExtendedKeyCode() == shortcut.getKeyCode()) &&
+	  if ((event.getExtendedKeyCode() == shortcut.getExtendedKeyCode()) &&
 	      ((shortcut.getKeyLocation() == -1) ||
 	       (event.getKeyLocation() == shortcut.getKeyLocation()))) {
 	    key.setPressed(!released);

@@ -22,6 +22,10 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 
+import java.util.Set;
+import java.util.NavigableSet;
+import java.util.HashSet;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -31,7 +35,7 @@ import cz.pecina.retro.gui.Shortcut;
 import cz.pecina.retro.gui.LED;
 
 /**
- * Keyboard shorcut listener.
+ * Keyboard shortcut listener.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -41,6 +45,9 @@ public class ShortcutListener extends KeyAdapter {
   // static logger
   private static final Logger log =
     Logger.getLogger(ShortcutListener.class.getName());
+
+  // set of pressed shortcuts
+  private Set<Shortcut> pressedShortcuts = new HashSet<>();
     
   // keyboard hardware
   private KeyboardHardware keyboardHardware;
@@ -57,28 +64,48 @@ public class ShortcutListener extends KeyAdapter {
 
     this.keyboardHardware = keyboardHardware;
 
-    log.finer("Computer control panel set up");
+    log.finer("ShortcutListener set up");
   }
 
   // process key event
   private void processKey(final KeyEvent event, final boolean action) {
+    log.finer("Processing key event: " + event + ", action: " + action);
     final Shortcut shortcut =
       new Shortcut(event.getExtendedKeyCode(), event.getKeyLocation());
     if (UserPreferences.getShortcuts().containsKey(shortcut)) {
-      if (action) {
-	for (int key: UserPreferences.getShortcuts().get(shortcut)) {
-	  keyboardHardware.pushKey(keyboardHardware.getKeyboardLayout()
-	    .getKey(key), true);
-	}
+      final NavigableSet<Integer> keys =
+	UserPreferences.getShortcuts().get(shortcut);
+      if (keys.size() == 1) {
+	keyboardHardware.getKeyboardLayout().getKey(keys.first())
+	  .setPressed(action);
       } else {
-	for (int key:
-	       UserPreferences.getShortcuts().get(shortcut).descendingSet()) {
-	  keyboardHardware.pushKey(keyboardHardware.getKeyboardLayout()
-	    .getKey(key), false);
+	if (action) {
+	  for (Shortcut x: pressedShortcuts) {
+	    System.out.println(": " + x + " : " + x.equals(shortcut) + " : " + shortcut.equals(x) + " : " + pressedShortcuts.contains(shortcut) + " : " + pressedShortcuts.contains(x));
+	  }
+	  if (!pressedShortcuts.contains(shortcut)) {
+	    pressedShortcuts.add(shortcut);
+	    log.finest("pressedShortcuts.size(): " + pressedShortcuts.size());
+	    log.finest("Shortcut: " + shortcut.getDesc() +
+		       " added to pressedShortcuts");
+	    for (int key: keys) {
+	      keyboardHardware.pushShortcutEvent(new ShortcutEvent(
+		keyboardHardware.getKeyboardLayout().getKey(key), true));
+	    }
+	  }
+	} else {
+	  log.finest("pressedShortcuts.size(): " + pressedShortcuts.size());
+	  log.finest("Shortcut: " + shortcut.getDesc() +
+		     " removed from pressedShortcuts");
+	  pressedShortcuts.remove(shortcut);
+	  for (int key: keys.descendingSet()) {
+	    keyboardHardware.pushShortcutEvent(new ShortcutEvent(
+	      keyboardHardware.getKeyboardLayout().getKey(key), false));
+	  }
 	}
       }
       event.consume();
-   }
+    }
   }
 
   // for description see KeyListener

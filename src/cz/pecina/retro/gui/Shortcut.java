@@ -36,8 +36,8 @@ public class Shortcut {
   private static final Logger log =
     Logger.getLogger(Shortcut.class.getName());
 
-  // code of the key
-  private int keyCode;
+  // the extended code of the key
+  private int extendedKeyCode;
 
   // location of the key (-1 = any)
   private int keyLocation;
@@ -55,24 +55,24 @@ public class Shortcut {
   /**
    * Creates an instance of a keyboard shortcut object.
    *
-   * @param keyCode extended code of the key
+   * @param extendedKeyCode the extended code of the key
    */
-  public Shortcut(final int keyCode) {
-    this(keyCode, -1);
+  public Shortcut(final int extendedKeyCode) {
+    this(extendedKeyCode, -1);
   }
 
   /**
    * Creates an instance of a keyboard shortcut object.
    *
-   * @param keyCode     extended code of the key
-   * @param keyLocation location of the key
+   * @param extendedKeyCode the extended code of the key
+   * @param keyLocation     the location of the key
    */
-  public Shortcut(final int keyCode, final int keyLocation) {
-    assert keyCode >= 0;
+  public Shortcut(final int extendedKeyCode, final int keyLocation) {
+    assert extendedKeyCode >= 0;
     assert keyLocation >= -1;
-    this.keyCode = keyCode;
+    this.extendedKeyCode = extendedKeyCode;
     this.keyLocation = keyLocation;
-    log.fine("New Shortcut created, key code: " + keyCode +
+    log.fine("New Shortcut created, extended key code: " + extendedKeyCode +
 	     ", location: " + keyLocation);
   }
 
@@ -102,16 +102,16 @@ public class Shortcut {
 	keyLocation = -1;
 	break;
     }
-    keyCode = Integer.parseInt(id.substring(1));
+    extendedKeyCode = Integer.parseInt(id.substring(1));
   }
   
   /**
-   * Gets the code of the key.
+   * Gets the extended code of the key.
    *
-   * @return the code of the key
+   * @return the extended code of the key
    */
-  public int getKeyCode() {
-    return keyCode;
+  public int getExtendedKeyCode() {
+    return extendedKeyCode;
   }
 
   /**
@@ -144,7 +144,7 @@ public class Shortcut {
     } else {
       location = "A";
     }
-    return location + keyCode;
+    return location + extendedKeyCode;
   }
 
   /**
@@ -164,7 +164,7 @@ public class Shortcut {
     } else if (keyLocation == KeyEvent.KEY_LOCATION_NUMPAD) {
       location = "/N";
     }
-    return KeyEvent.getKeyText(keyCode) + location;
+    return KeyEvent.getKeyText(extendedKeyCode) + location;
   }
 
   // for description see Object
@@ -173,7 +173,7 @@ public class Shortcut {
     log.finest("Comparing to: " + o);
     return (o != null) &&
            (o instanceof Shortcut) &&
-           (((Shortcut)o).keyCode == keyCode) &&
+           (((Shortcut)o).extendedKeyCode == extendedKeyCode) &&
            (((Shortcut)o).keyLocation == keyLocation);
   }
 }
