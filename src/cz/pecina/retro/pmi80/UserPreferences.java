@@ -23,8 +23,13 @@ package cz.pecina.retro.pmi80;
 import java.util.logging.Logger;
 
 import java.util.Locale;
+import java.util.Arrays;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.ResourceBundle;
 
 import java.util.prefs.Preferences;
+import java.util.prefs.BackingStoreException;
 
 import cz.pecina.retro.common.GeneralUserPreferences;
 import cz.pecina.retro.common.Application;
@@ -33,6 +38,7 @@ import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.cpu.SimpleMemory;
 
 import cz.pecina.retro.gui.Shortcut;
+import cz.pecina.retro.gui.Shortcuts;
 
 /**
  * Static user preferences to be imported on start-up (emulator specific).
@@ -46,6 +52,12 @@ public final class UserPreferences extends GeneralUserPreferences {
   private static final Logger log =
     Logger.getLogger(UserPreferences.class.getName());
 
+  // shortcuts prefixes
+  private static final String SHORTCUT_PREFIX =
+    "keyboard.shortcut.";
+  private static final String DEFAULT_SHORTCUT_PREFIX =
+    "keyboard.default.shortcut.";
+  
   // true if preferences already retrieved
   private static boolean retrieved;
   
@@ -53,10 +65,18 @@ public final class UserPreferences extends GeneralUserPreferences {
   private static int startROM, startRAM;
 
   // keyboard shortcuts
-  private static Shortcut[][] shortcuts =
-    new Shortcut[KeyboardLayout.NUMBER_BUTTON_ROWS]
-                [KeyboardLayout.NUMBER_BUTTON_COLUMNS];
+  private static Shortcuts shortcuts;
 
+  // tests if a key is in Parameters.preferences
+  private static boolean hasKey(final String key) {
+    try {
+      return Arrays.asList(Parameters.preferences.keys()).contains(key);
+    } catch (final BackingStoreException exception) {
+      log.fine("Backing store exception: " + exception.getMessage());
+    }
+    return false;
+  }
+  
   /**
    * Gets preferences from the backing store.
    */
@@ -79,27 +99,30 @@ public final class UserPreferences extends GeneralUserPreferences {
 	Parameters.preferences.putInt("startRAM", startRAM);
       }
 
-      for (int row = 0; row < KeyboardLayout.NUMBER_BUTTON_ROWS; row++) {
-	for (int column = 0;
-	     column < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
-	     column++) {
-	  final String shortcutString =
-	    Parameters.preferences.get("shortcut." + row + "." + column, null);
-	  Shortcut shortcut;
-	  if (shortcutString == null) {
-	    shortcut = getDefaultShortcut(row, column);
-	  } else if (shortcutString.equals(NULL_STRING)) {
-	    shortcut = null;
-	  } else {
-	    shortcut = new Shortcut(shortcutString);
+      try {
+	for (String key:  Parameters.preferences.keys()) {
+	  if (key.startsWith(SHORTCUT_PREFIX)) {
+	    if (shortcuts == null) {
+	      shortcuts = new Shortcuts();
+	    }
+	    final String id = key.substring(SHORTCUT_PREFIX.length());
+	    final String listString = Parameters.preferences.get(key, null);
+	    if ((listString != null) && !listString.isEmpty()) {
+	      final SortedSet<Integer> list = new TreeSet<>();
+	      for (String buttonString: listString.split(",")) {
+		list.add(Integer.parseInt(buttonString));
+	      }
+	      shortcuts.put(new Shortcut(id), list);
+	    }
 	  }
-	  shortcuts[row][column] = shortcut;
-	  Parameters.preferences.put("shortcut." + row + "." + column,
-				     (shortcut != null) ?
-				     shortcut.getId() :
-				     NULL_STRING);
 	}
+      } catch (final BackingStoreException exception) {
+	log.fine("Backing store exception: " + exception.getMessage());
       }
+      if (shortcuts == null) {
+	shortcuts = getDefaultShortcuts();
+      }
+
       retrieved = true;
     }
     log.finer("User preferences retrieved");
@@ -156,69 +179,80 @@ public final class UserPreferences extends GeneralUserPreferences {
   }
 
   /**
-   * Sets the keyboard shortcut.
-   *
-   * @param keyboardLayout the keyboard layout
-   * @param row            the row
-   * @param column         the column
-   * @param shortcut       the new keyboard shortcut or {@code null}
-   *                       if none
+   * Update the keyboard shortcuts.
    */
-  public static void setShortcut(final KeyboardLayout keyboardLayout,
-				 final int row,
-				 final int column,
-				 final Shortcut shortcut) {
-    assert (row >= 0) && (row < KeyboardLayout.NUMBER_BUTTON_ROWS);
-    assert (column >= 0) && (column < KeyboardLayout.NUMBER_BUTTON_COLUMNS);
-    getPreferences();
-    shortcuts[row][column] = shortcut;
-    Parameters.preferences.put("shortcut." + row + "." + column,
-			       (shortcut != null) ?
-			       shortcut.getId() :
-			       NULL_STRING);
-    keyboardLayout.getButton(row, column).setShortcut(shortcut);
-    log.fine("Shortcut for button (" + row + "," + column +
-	     ") in user preferences set to: " +
-	     ((shortcut != null) ? shortcut.getId() : "none"));
+  public static void updateShortcuts() {
+    log.fine("Updating keyboard shortcuts");
+    try {
+      for (String key:  Parameters.preferences.keys()) {
+	if (key.startsWith(SHORTCUT_PREFIX)) {
+	  Parameters.preferences.remove(key);
+	}
+      }
+    } catch (final BackingStoreException exception) {
+      log.fine("Backing store exception: " + exception.getMessage());
+    }
+    for (Shortcut shortcut: shortcuts.keySet()) {
+      StringBuilder sb = new StringBuilder();
+      boolean first = true;;
+      for (int i: shortcuts.get(shortcut)) {
+	if (first) {
+	  first = false;
+	} else {
+	  sb.append(",");
+	}
+	sb.append(String.valueOf(i));
+      }
+      Parameters.preferences.put(SHORTCUT_PREFIX + shortcut.getId(),
+				 sb.toString());
+    }
   }
 
   /**
-   * Gets the keyboard shortcut.
+   * Sets the keyboard shortcuts.
    *
-   * @param  row      the row
-   * @param  column   the column
-   * @return shortcut the keyboard shortcut or {@code null}
-   *                  if none
+   * @param shortcuts the keyboard shortcuts object
    */
-  public static Shortcut getShortcut(final int row,
-				     final int column) {
-    assert (row >= 0) && (row < KeyboardLayout.NUMBER_BUTTON_ROWS);
-    assert (column >= 0) && (column < KeyboardLayout.NUMBER_BUTTON_COLUMNS);
+  public static void setShortcuts(final Shortcuts shortcuts) {
+    assert shortcuts != null;
     getPreferences();
-    final Shortcut shortcut = shortcuts[row][column];
-    log.fine("Shortcut for button (" + row + "," + column +
-	     ") retrieved from user preferences: " +
-	     ((shortcut != null) ? shortcut.getId() : "none"));
-    return shortcut;
+    UserPreferences.shortcuts = shortcuts;
+    updateShortcuts();
+    log.finer("Shortcuts in user preferences set");
   }
 
   /**
-   * Gets the default keyboard shortcut.
+   * Gets the keyboard shortcuts.
    *
-   * @param  row      the row
-   * @param  column   the column
-   * @return shortcut the default keyboard shortcut
+   * @return the keyboard shortcuts object
    */
-  public static Shortcut getDefaultShortcut(final int row,
-					    final int column) {
-    assert (row >= 0) && (row < KeyboardLayout.NUMBER_BUTTON_ROWS);
-    assert (column >= 0) && (column < KeyboardLayout.NUMBER_BUTTON_COLUMNS);
-    final String shortcutString = Application.getString(
-      UserPreferences.class,
-      "keyboard.default.shortcut." + row + "." + column);
-    return shortcutString.equals(NULL_STRING) ?
-           null :
-           new Shortcut(shortcutString);
+  public static Shortcuts getShortcuts() {
+    getPreferences();
+    return shortcuts;
+  }
+
+  /**
+   * Gets the default keyboard shortcuts.
+   *
+   * @return shortcuts the default keyboard shortcuts object
+   */
+  public static Shortcuts getDefaultShortcuts() {
+    final Shortcuts shortcuts = new Shortcuts();
+    final ResourceBundle bundle =
+      Application.getTextResources().get(UserPreferences.class.getPackage());
+    for (String key: bundle.keySet()) {
+      if (key.startsWith(DEFAULT_SHORTCUT_PREFIX)) {
+	final String listString = bundle.getString(key);
+	if ((listString != null) && !listString.isEmpty()) {
+	  final SortedSet<Integer> list = new TreeSet<>();
+	  for (String buttonString: listString.split(",")) {
+	    list.add(Integer.parseInt(buttonString));
+	  }
+	  shortcuts.put(new Shortcut(key), list);
+	}
+      }
+    }
+    return shortcuts;
   }
 
   // default constructor disabled

@@ -244,7 +244,6 @@ public class KeyboardHardware {
     updateBuffer();
   }
 
-
   /**
    * Updates the matrix of keyboard presses.
    */

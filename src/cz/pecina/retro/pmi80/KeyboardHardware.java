@@ -22,6 +22,9 @@ package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
 
+import java.util.Deque;
+import java.util.ArrayDeque;
+
 import cz.pecina.retro.cpu.IOPin;
 
 /**
@@ -66,6 +69,10 @@ public class KeyboardHardware {
   // the display hardware object
   private DisplayHardware displayHardware;
 
+  // keyboard shortcut queues
+  private Deque<KeyboardButton> presses = new ArrayDeque<>();
+  private Deque<KeyboardButton> releases = new ArrayDeque<>();
+  
   /**
    * Creates the keyboard hardware object.
    *
@@ -130,6 +137,39 @@ public class KeyboardHardware {
   public IOPin getScanPin(final int n) {
     assert (n >= 0) && (n < NUMBER_MATRIX_ROWS);
     return scanPins[n];
+  }
+
+  /**
+   * Put a keyboard shortcut action in the queue.
+   *
+   * @param key    the key object
+   * @param action {@code true} if pressed, {@code false} if released
+   */
+  public void pushKey(final KeyboardButton key, final boolean action) {
+    log.finer("Pushing key: " + key +
+	      ", action: " + (action ? "press" : "release"));
+    assert key != null;
+    if (action) {
+      presses.push(key);
+    } else {
+      releases.push(key);
+    }
+  }
+  
+  /**
+   * Performs periodic keyboard update.
+   */
+  public void update() {
+    final KeyboardButton press = presses.pollLast();
+    if (press != null) {
+      press.setPressed(true);
+    } else {
+      final KeyboardButton release = releases.pollLast();
+      if (release != null) {
+	release.setPressed(false);
+      }
+    }      
+    updateBuffer();
   }
 
   /**

@@ -213,7 +213,7 @@ public class Computer {
     }
     busy = true;
 
-    computerHardware.getKeyboardHardware().updateBuffer();
+    computerHardware.getKeyboardHardware().update();
 
     switch (debuggerState) {
       case HIDDEN:

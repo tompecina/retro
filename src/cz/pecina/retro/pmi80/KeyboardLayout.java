@@ -49,6 +49,12 @@ public class KeyboardLayout {
    */
   public static final int NUMBER_BUTTON_COLUMNS = 5;
 
+  /**
+   * Number of buttons.
+   */
+  public static final int NUMBER_BUTTONS =
+    NUMBER_BUTTON_ROWS * NUMBER_BUTTON_COLUMNS;
+
   // matrix of buttons
   private final KeyboardButton[][] buttons =
     new KeyboardButton[NUMBER_BUTTON_ROWS][NUMBER_BUTTON_COLUMNS];
@@ -115,12 +121,6 @@ public class KeyboardLayout {
     buttons[4][4] =
       new KeyboardButton(keyboardHardware, "EQ", 8, 0, "toolTip.EQ");
 
-    for (int row = 0; row < NUMBER_BUTTON_ROWS; row++) {
-      for (int column = 0; column < NUMBER_BUTTON_COLUMNS; column++) {
-	buttons[row][column].setShortcut(
-	  UserPreferences.getShortcut(row, column));
-      }
-    }
     log.fine("New keyboard layout created and populated");
   }
   
@@ -135,5 +135,31 @@ public class KeyboardLayout {
     assert (row >= 0) && (row < NUMBER_BUTTON_ROWS);
     assert (column >= 0) && (column < NUMBER_BUTTON_COLUMNS);
     return buttons[row][column];
+  }
+
+  /**
+   * Gets the button.
+   *
+   * @param  number the number of the button,
+   *                {@code (row * NUMBER_COLUMNS) + column}
+   * @return        the button
+   */
+  public KeyboardButton getButton(final int number) {
+    assert (number >= 0) && (number < NUMBER_BUTTONS);
+    return buttons[number / NUMBER_BUTTON_COLUMNS]
+                  [number % NUMBER_BUTTON_COLUMNS];
+  }
+
+  /**
+   * Gets the button number.
+   *
+   * @param  row    the row
+   * @param  column the column
+   * @return        the button number
+   */
+  public static int getButtonNumber(final int row, final int column) {
+    assert (row >= 0) && (row < NUMBER_BUTTON_ROWS);
+    assert (column >= 0) && (column < NUMBER_BUTTON_COLUMNS);
+    return (row * NUMBER_BUTTON_COLUMNS) + column;
   }
 }

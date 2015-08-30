@@ -131,6 +131,15 @@ public class KeyboardButton extends LockableButton implements Localized {
   }
 
   /**
+   * Gets the identification string of the button.
+   *
+   * @return the identification string of the button
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
    * Indicates whether the button is connected to the RESET signal
    * of the processor.
    *

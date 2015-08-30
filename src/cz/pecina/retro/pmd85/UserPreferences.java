@@ -38,8 +38,8 @@ import cz.pecina.retro.common.Application;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.Sound;
 
-import cz.pecina.retro.gui.Shortcuts;
 import cz.pecina.retro.gui.Shortcut;
+import cz.pecina.retro.gui.Shortcuts;
 
 /**
  * Static user preferences to be imported on start-up (emulator specific).
@@ -174,6 +174,7 @@ public final class UserPreferences extends GeneralUserPreferences {
 	Parameters.preferences.putBoolean("customColors.blink." + i,
 					  customColors[i].getBlinkFlag());
       }
+
       retrieved = true;
     }
     log.finer("User preferences retrieved");
