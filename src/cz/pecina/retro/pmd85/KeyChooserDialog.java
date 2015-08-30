@@ -92,7 +92,7 @@ public class KeyChooserDialog extends JDialog {
     dialogPanel.add(keyChooserPanel);
 
     final JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.TRAILING));
-    buttonsPanel.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
+    buttonsPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
     final JButton setButton =
       new JButton(Application.getString(KeyChooserDialog.class,
 					"settings.keyboard.keyChooser.button.set"));
@@ -139,5 +139,4 @@ public class KeyChooserDialog extends JDialog {
       dispose();
     }
   }
-
 }

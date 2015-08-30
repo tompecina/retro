@@ -22,8 +22,8 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import java.awt.Frame;
 import java.awt.GridBagLayout;
@@ -94,7 +94,7 @@ public class SettingsKeyboardPanel extends JScrollPane {
 
 
 
-    // new KeyChooserDialog(frame, computer, new ArrayList<Integer>());
+    new KeyChooserDialog(frame, computer, new TreeSet<Integer>());
 
 
 
@@ -238,25 +238,25 @@ public class SettingsKeyboardPanel extends JScrollPane {
 
     @Override
     public void actionPerformed(final ActionEvent event) {
-      log.finer("Change button event detected");
-      final List<Shortcut> list = new ArrayList<>();
-      for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
-	if (shortcuts[i] != null) {
-	  list.add(shortcuts[i]);
-	}
-      }
-      final Shortcut shortcut =
-	ShortcutDialog.getShortcut(frame, shortcuts[number], list);
-      if (shortcut != null) {
-	for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
-	  if (number == i) {
-	    shortcuts[i] = shortcut;
-	  } else if (shortcut.equals(shortcuts[i])) {
-	    shortcuts[i] = null;
-	  }
-	  shortcutLabels[i].setText(shortcutToText(shortcuts[i]));
-	}
-      }
+      // log.finer("Change button event detected");
+      // final List<Shortcut> list = new ArrayList<>();
+      // for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
+      // 	if (shortcuts[i] != null) {
+      // 	  list.add(shortcuts[i]);
+      // 	}
+      // }
+      // final Shortcut shortcut =
+      // 	ShortcutDialog.getShortcut(frame, shortcuts[number], list);
+      // if (shortcut != null) {
+      // 	for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
+      // 	  if (number == i) {
+      // 	    shortcuts[i] = shortcut;
+      // 	  } else if (shortcut.equals(shortcuts[i])) {
+      // 	    shortcuts[i] = null;
+      // 	  }
+      // 	  shortcutLabels[i].setText(shortcutToText(shortcuts[i]));
+      // 	}
+      // }
     }
   }
   
