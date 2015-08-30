@@ -129,7 +129,7 @@ public class Shortcut {
    *
    * @return the ID of the shortcut
    */
-  public String getID() {
+  public String getId() {
     String location;
     if (keyLocation == KeyEvent.KEY_LOCATION_STANDARD) {
       location = "S";
@@ -151,7 +151,7 @@ public class Shortcut {
    * Gets a textual description of the shortcut.  As there is no
    * distinction between "standard", "unknown" and "any" locations, the
    * information is incomplete and should never be used for shortcut
-   * identification or serialization.  Use {@code #getID} instead.
+   * identification or serialization.  Use {@code #getId} instead.
    *
    * @return the long description of the shortcut
    */

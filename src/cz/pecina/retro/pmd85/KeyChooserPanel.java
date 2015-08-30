@@ -67,7 +67,7 @@ public class KeyChooserPanel extends BackgroundFixedPane {
   public KeyChooserPanel(final Frame frame,
 			 final int model,
 			 final KeyboardLayout keyboardLayout) {
-    super("pmd85/KeyboardPanel/" + ((model ==  1) ? "longmask" : "shortmask"),
+    super("pmd85/KeyboardPanel/" + ((model ==  0) ? "longmask" : "shortmask"),
 	  "plastic",
 	  "gray");
     log.fine("New KeyChooserPanel creation started");

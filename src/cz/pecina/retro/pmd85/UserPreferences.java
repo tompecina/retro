@@ -312,6 +312,16 @@ public final class UserPreferences extends GeneralUserPreferences {
    * Update the keyboard shortcuts.
    */
   public static void updateShortcuts() {
+    log.fine("Updating keyboard shortcuts");
+    try {
+      for (String key:  Parameters.preferences.keys()) {
+	if (key.startsWith(SHORTCUT_PREFIX)) {
+	  Parameters.preferences.remove(key);
+	}
+      }
+    } catch (final BackingStoreException exception) {
+      log.fine("Backing store exception: " + exception.getMessage());
+    }
     for (Shortcut shortcut: shortcuts.keySet()) {
       StringBuilder sb = new StringBuilder();
       boolean first = true;;
@@ -323,7 +333,8 @@ public final class UserPreferences extends GeneralUserPreferences {
 	}
 	sb.append(String.valueOf(i));
       }
-      Parameters.preferences.put(SHORTCUT_PREFIX + shortcut, sb.toString());
+      Parameters.preferences.put(SHORTCUT_PREFIX + shortcut.getId(),
+				 sb.toString());
     }
   }
 
@@ -336,6 +347,7 @@ public final class UserPreferences extends GeneralUserPreferences {
     assert shortcuts != null;
     getPreferences();
     UserPreferences.shortcuts = shortcuts;
+    updateShortcuts();
     log.finer("Shortcuts in user preferences set");
   }
 

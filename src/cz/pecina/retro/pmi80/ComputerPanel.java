@@ -138,14 +138,14 @@ public class ComputerPanel extends BackgroundFixedPane {
     	  getInputMap().put(KeyStroke.getKeyStroke(shortcut.getKeyCode(),
 						   0,
 						   false),
-    			    "KeyPressedAction_" + shortcut.getID());
-    	  getActionMap().put("KeyPressedAction_" + shortcut.getID(),
+    			    "KeyPressedAction_" + shortcut.getId());
+    	  getActionMap().put("KeyPressedAction_" + shortcut.getId(),
     			     button.keyPressedAction());
     	  getInputMap().put(KeyStroke.getKeyStroke(shortcut.getKeyCode(),
 						   0,
 						   true),
-    			    "KeyReleasedAction_" + shortcut.getID());
-    	  getActionMap().put("KeyReleasedAction_" + shortcut.getID(),
+    			    "KeyReleasedAction_" + shortcut.getId());
+    	  getActionMap().put("KeyReleasedAction_" + shortcut.getId(),
     			     button.keyReleasedAction());
 	  log.finest("Shortcut for button '" + button +
 		     "' set to: " + shortcut);

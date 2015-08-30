@@ -96,7 +96,7 @@ public final class UserPreferences extends GeneralUserPreferences {
 	  shortcuts[row][column] = shortcut;
 	  Parameters.preferences.put("shortcut." + row + "." + column,
 				     (shortcut != null) ?
-				     shortcut.getID() :
+				     shortcut.getId() :
 				     NULL_STRING);
 	}
       }
@@ -174,12 +174,12 @@ public final class UserPreferences extends GeneralUserPreferences {
     shortcuts[row][column] = shortcut;
     Parameters.preferences.put("shortcut." + row + "." + column,
 			       (shortcut != null) ?
-			       shortcut.getID() :
+			       shortcut.getId() :
 			       NULL_STRING);
     keyboardLayout.getButton(row, column).setShortcut(shortcut);
     log.fine("Shortcut for button (" + row + "," + column +
 	     ") in user preferences set to: " +
-	     ((shortcut != null) ? shortcut.getID() : "none"));
+	     ((shortcut != null) ? shortcut.getId() : "none"));
   }
 
   /**
@@ -198,7 +198,7 @@ public final class UserPreferences extends GeneralUserPreferences {
     final Shortcut shortcut = shortcuts[row][column];
     log.fine("Shortcut for button (" + row + "," + column +
 	     ") retrieved from user preferences: " +
-	     ((shortcut != null) ? shortcut.getID() : "none"));
+	     ((shortcut != null) ? shortcut.getId() : "none"));
     return shortcut;
   }
 
