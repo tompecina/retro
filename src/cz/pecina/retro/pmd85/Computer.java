@@ -326,7 +326,7 @@ public class Computer implements Runnable {
     }
     computerHardware.getTapeRecorderHardware().process();
     Parameters.sound.update();
-    computerHardware.getKeyboardHardware().updateBuffer();
+    computerHardware.getKeyboardHardware().update();
     computerHardware.getDisplayHardware().refresh();
 
     // update LEDs

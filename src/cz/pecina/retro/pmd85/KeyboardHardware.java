@@ -24,6 +24,8 @@ import java.util.logging.Logger;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
@@ -84,9 +86,13 @@ public class KeyboardHardware {
   private final VariableLED yellowLED = new VariableLED("small", "yellow");
   private final VariableLED redLED = new VariableLED("small", "red");
 
-  // layout of keys
+  // keyboard layout
   private KeyboardLayout keyboardLayout;
 
+  // keyboard shortcut queues
+  private Deque<KeyboardKey> presses = new ArrayDeque<>();
+  private Deque<KeyboardKey> releases = new ArrayDeque<>();
+  
   /**
    * Creates the keyboard hardware object.
    */
@@ -203,6 +209,41 @@ public class KeyboardHardware {
     assert (n >= 0) && (n < NUMBER_MATRIX_ROWS);
     return scanPins[n];
   }
+
+
+  /**
+   * Put a keyboard shortcut action in the queue.
+   *
+   * @param key    the key object
+   * @param action {@code true} if pressed, {@code false} if released
+   */
+  public void pushKey(final KeyboardKey key, final boolean action) {
+    log.finer("Pushing key: " + key +
+	      ", action: " + (action ? "press" : "release"));
+    assert key != null;
+    if (action) {
+      presses.push(key);
+    } else {
+      releases.push(key);
+    }
+  }
+  
+  /**
+   * Performs periodic keyboard update.
+   */
+  public void update() {
+    final KeyboardKey press = presses.pollLast();
+    if (press != null) {
+      press.setPressed(true);
+    } else {
+      final KeyboardKey release = releases.pollLast();
+      if (release != null) {
+	release.setPressed(false);
+      }
+    }      
+    updateBuffer();
+  }
+
 
   /**
    * Updates the matrix of keyboard presses.

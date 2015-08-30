@@ -247,36 +247,36 @@ public class SettingsKeyboardPanel extends JScrollPane {
 
     @Override
     public void actionPerformed(final ActionEvent event) {
-      log.finer("Change button event detected");
-      final List<Shortcut> list = new ArrayList<>();
-      for (int row2 = 0; row2 < KeyboardLayout.NUMBER_BUTTON_ROWS; row2++) {
-	for (int column2 = 0;
-	     column2 < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
-	     column2++) {
-	  if (shortcuts[row2][column2] != null) {
-	    list.add(shortcuts[row2][column2]);
-	  }
-	}
-      }
-      final Shortcut shortcut =
-	ShortcutDialog.getShortcut(frame,
-				   shortcuts[row][column],
-				   list);
-      if (shortcut != null) {
-	for (int row2 = 0; row2 < KeyboardLayout.NUMBER_BUTTON_ROWS; row2++) {
-	  for (int column2 = 0;
-	       column2 < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
-	       column2++) {
-	    if ((row == row2) && (column == column2)) {
-	      shortcuts[row2][column2] = shortcut;
-	    } else if (shortcut.equals(shortcuts[row2][column2])) {
-	      shortcuts[row2][column2] = null;
-	    }
-	    shortcutLabels[row2][column2]
-	      .setText(shortcutToText(shortcuts[row2][column2]));
-	  }
-	}
-      }
+      // log.finer("Change button event detected");
+      // final List<Shortcut> list = new ArrayList<>();
+      // for (int row2 = 0; row2 < KeyboardLayout.NUMBER_BUTTON_ROWS; row2++) {
+      // 	for (int column2 = 0;
+      // 	     column2 < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
+      // 	     column2++) {
+      // 	  if (shortcuts[row2][column2] != null) {
+      // 	    list.add(shortcuts[row2][column2]);
+      // 	  }
+      // 	}
+      // }
+      // final Shortcut shortcut =
+      // 	ShortcutDialog.getShortcut(frame,
+      // 				   shortcuts[row][column],
+      // 				   list);
+      // if (shortcut != null) {
+      // 	for (int row2 = 0; row2 < KeyboardLayout.NUMBER_BUTTON_ROWS; row2++) {
+      // 	  for (int column2 = 0;
+      // 	       column2 < KeyboardLayout.NUMBER_BUTTON_COLUMNS;
+      // 	       column2++) {
+      // 	    if ((row == row2) && (column == column2)) {
+      // 	      shortcuts[row2][column2] = shortcut;
+      // 	    } else if (shortcut.equals(shortcuts[row2][column2])) {
+      // 	      shortcuts[row2][column2] = null;
+      // 	    }
+      // 	    shortcutLabels[row2][column2]
+      // 	      .setText(shortcutToText(shortcuts[row2][column2]));
+      // 	  }
+      // 	}
+      // }
     }
   }
   

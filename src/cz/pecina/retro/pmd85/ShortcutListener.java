@@ -66,7 +66,8 @@ public class ShortcutListener extends KeyAdapter {
       new Shortcut(event.getExtendedKeyCode(), event.getKeyLocation());
     if (UserPreferences.getShortcuts().containsKey(shortcut)) {
       for (int key: UserPreferences.getShortcuts().get(shortcut)) {
-	keyboardHardware.getKeyboardLayout().getKey(key).setPressed(action);
+	keyboardHardware.pushKey(keyboardHardware.getKeyboardLayout()
+	  .getKey(key), action);
       }
       event.consume();
    }
