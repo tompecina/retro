@@ -22,6 +22,9 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import java.awt.Frame;
 
 import java.awt.event.MouseAdapter;
@@ -51,6 +54,9 @@ public class KeyChooserPanel extends BackgroundFixedPane {
   // enclosing frame
   private Frame frame;
 
+  // keys on the emulated keyboard
+  private ToggleButton buttons[] = new ToggleButton[KeyboardLayout.NUMBER_KEYS];
+  
   /**
    * Creates a panel containing the mock-up keyboard.
    *
@@ -81,8 +87,24 @@ public class KeyChooserPanel extends BackgroundFixedPane {
       button.place(this,
 		   key.getOffsetX() * BASE_WIDTH,
 		   key.getOffsetY() * BASE_HEIGHT);
+      buttons[n] = button;
       log.finest("Button for key '" + key + "' placed");
     }
     log.fine("KeyChooserPanel set up");
+  }
+
+  /**
+   * Returns a set of all selected keys.
+   *
+   * @return a set of all selected keys
+   */
+  public SortedSet<Integer> getKeys() {
+    final SortedSet<Integer> set = new TreeSet<>();
+    for (int n = 0; n < KeyboardLayout.NUMBER_KEYS; n++) {
+      if (buttons[n].isPressed()) {
+	set.add(n);
+      }
+    }
+    return set;
   }
 }

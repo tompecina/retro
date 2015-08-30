@@ -40,6 +40,7 @@ import cz.pecina.retro.common.Application;
 
 import cz.pecina.retro.gui.Resizeable;
 import cz.pecina.retro.gui.GUI;
+import cz.pecina.retro.gui.InfoBox;
 
 /**
  * The key chooser frame.
@@ -115,7 +116,7 @@ public class KeyChooserDialog extends JDialog {
 
   // get selected keys
   private SortedSet<Integer> getKeys() {
-    return null;
+    return keyChooserPanel.getKeys();
   }
 
   // set button listener
@@ -125,7 +126,12 @@ public class KeyChooserDialog extends JDialog {
     @Override
     public void actionPerformed(final ActionEvent event) {
       log.finer("Set button event detected");
-      dispose();
+      if (getKeys().isEmpty()) {
+	InfoBox.display(keyChooserPanel, Application.getString(
+          KeyChooserDialog.this, "settings.keyboard.keyChooser.noKey"));
+      } else {
+	dispose();
+      }
     }
   }
   
