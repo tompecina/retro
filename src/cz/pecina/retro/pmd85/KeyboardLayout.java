@@ -173,17 +173,17 @@ public class KeyboardLayout {
   public void modify( final int model) {
     log.fine("Modifying keyboard layout for: " + model);
     if (model == 0) {
-      getKey(27).setCap("blank");
-      getKey(41).setCap("bigat");
-      getKey(57).setCap("revbracket");
-      getKey(76).setCap("longspace");
-      getKey(76).setOffsetX(13);
+      getKey(20).setCap("blank");
+      getKey(21).setCap("bigat");
+      getKey(25).setCap("revbracket");
+      getKey(18).setCap("longspace");
+      getKey(18).setOffsetX(13);
     } else {
-      getKey(27).setCap("brace");
-      getKey(41).setCap("at");
-      getKey(57).setCap("bracket");
-      getKey(76).setCap("shortspace");
-      getKey(76).setOffsetX(15);
+      getKey(20).setCap("brace");
+      getKey(21).setCap("at");
+      getKey(25).setCap("bracket");
+      getKey(18).setCap("shortspace");
+      getKey(18).setOffsetX(15);
     }
     log.finer("Keyboard layout modified");
   }

@@ -63,26 +63,30 @@ public class KeyChooserDialog extends JDialog {
    *
    * @param  frame    enclosing frame
    * @param  computer the computer control object
+   * @param  title    the title of the dialog window
    * @param  keys     set of key numbers curently assigned to this shortcut
    * @return          new set of key numbers assigned to this shortcut
    */
   public static SortedSet<Integer> getKeys(final Frame frame,
 					   final Computer computer,
+					   final String title,
 					   final Set<Integer> keys) {
     log.fine("New KeyChooserDialog creation started");
+    assert frame != null;
+    assert computer != null;
+    assert title != null;
+    assert keys != null;
     final KeyChooserDialog dialog =
-      new KeyChooserDialog(frame, computer, keys);
+      new KeyChooserDialog(frame, computer, title, keys);
     return dialog.getKeys();
   }
 
   // private constructor
   public KeyChooserDialog(final Frame frame,
 			  final Computer computer,
+			  final String title,
 			  final Set<Integer> keys) {
-    super(frame,
-	  Application.getString(KeyChooserDialog.class,
-	    "settings.keyboard.keyChooser.frameTitle"),
-	  true);
+    super(frame, title, true);
     log.fine("New KeyChooserDialog creation started");
 
     final JPanel dialogPanel = new JPanel(new BorderLayout());
