@@ -22,7 +22,7 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 
-import java.util.List;
+import java.util.SortedSet;
 
 import java.awt.Frame;
 import java.awt.BorderLayout;
@@ -61,12 +61,12 @@ public class KeyChooserDialog extends JDialog {
    *
    * @param  frame    enclosing frame
    * @param  computer the computer control object
-   * @param  keys     list of key numbers curently assigned to this shortcut
-   * @return          new list of key numbers assigned to this shortcut
+   * @param  keys     set of key numbers curently assigned to this shortcut
+   * @return          new set of key numbers assigned to this shortcut
    */
-  public static List<Integer> getKeys(final Frame frame,
-				      final Computer computer,
-				      final List<Integer> keys) {
+  public static SortedSet<Integer> getKeys(final Frame frame,
+					   final Computer computer,
+					   final SortedSet<Integer> keys) {
     log.fine("New KeyChooserDialog creation started");
     final KeyChooserDialog dialog =
       new KeyChooserDialog(frame, computer, keys);
@@ -76,7 +76,7 @@ public class KeyChooserDialog extends JDialog {
   // private constructor
   public KeyChooserDialog(final Frame frame,
 			  final Computer computer,
-			  final List<Integer> keys) {
+			  final SortedSet<Integer> keys) {
     super(frame,
 	  Application.getString(KeyChooserDialog.class,
 	    "settings.keyboard.keyChooser.frameTitle"),
@@ -114,7 +114,7 @@ public class KeyChooserDialog extends JDialog {
   }
 
   // get selected keys
-  private List<Integer> getKeys() {
+  private SortedSet<Integer> getKeys() {
     return null;
   }
 

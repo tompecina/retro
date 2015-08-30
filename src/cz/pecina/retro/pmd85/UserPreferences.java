@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 
 import java.util.Locale;
 import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.ResourceBundle;
 
 import java.util.prefs.Preferences;
@@ -137,7 +137,7 @@ public final class UserPreferences extends GeneralUserPreferences {
 	    final String id = key.substring(SHORTCUT_PREFIX.length());
 	    final String listString = Parameters.preferences.get(key, null);
 	    if ((listString != null) && !listString.isEmpty()) {
-	      final List<Integer> list = new ArrayList<>();
+	      final SortedSet<Integer> list = new TreeSet<>();
 	      for (String buttonString: listString.split(",")) {
 		list.add(Integer.parseInt(buttonString));
 	      }
@@ -347,7 +347,7 @@ public final class UserPreferences extends GeneralUserPreferences {
       if (key.startsWith(DEFAULT_SHORTCUT_PREFIX)) {
 	final String listString = bundle.getString(key);
 	if ((listString != null) && !listString.isEmpty()) {
-	  final List<Integer> list = new ArrayList<>();
+	  final SortedSet<Integer> list = new TreeSet<>();
 	  for (String buttonString: listString.split(",")) {
 	    list.add(Integer.parseInt(buttonString));
 	  }

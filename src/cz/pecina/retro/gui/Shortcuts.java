@@ -23,7 +23,7 @@ package cz.pecina.retro.gui;
 import java.util.logging.Logger;
 
 import java.util.TreeMap;
-import java.util.List;
+import java.util.SortedSet;
 import java.util.Comparator;
 
 /**
@@ -32,7 +32,7 @@ import java.util.Comparator;
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class Shortcuts extends TreeMap<Shortcut,List<Integer>> {
+public class Shortcuts extends TreeMap<Shortcut,SortedSet<Integer>> {
 
   // static logger
   private static final Logger log =
