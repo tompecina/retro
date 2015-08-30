@@ -22,8 +22,10 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.HashSet;
 
 import java.awt.Frame;
 import java.awt.GridBagLayout;
@@ -46,6 +48,7 @@ import cz.pecina.retro.common.Application;
 
 import cz.pecina.retro.gui.IconCache;
 import cz.pecina.retro.gui.Shortcut;
+import cz.pecina.retro.gui.Shortcuts;
 import cz.pecina.retro.gui.ShortcutDialog;
 
 /**
@@ -67,19 +70,18 @@ public class SettingsKeyboardPanel extends JScrollPane {
   private Computer computer;
 
   // tentative map of shortcuts
-  private Shortcut[] shortcuts =
-    new Shortcut[KeyboardLayout.NUMBER_KEYS];
+  private Shortcuts shortcuts;
 
-  // dynamically updated labels
-  private JLabel[] shortcutLabels =
-    new JLabel[KeyboardLayout.NUMBER_KEYS];
+  // // dynamically updated labels
+  // private JLabel[] shortcutLabels =
+  //   new JLabel[KeyboardLayout.NUMBER_KEYS];
 
-  // convert shortcut to text description
-  private String shortcutToText(final Shortcut shortcut) {
-    return (shortcut != null) ?
-            shortcut.getDesc() :
-            Application.getString(this, "settings.keyboard.noShortcut");
-  }
+  // // convert shortcut to text description
+  // private String shortcutToText(final Shortcut shortcut) {
+  //   return (shortcut != null) ?
+  //           shortcut.getDesc() :
+  //           Application.getString(this, "settings.keyboard.noShortcut");
+  // }
   
   /**
    * Creates the Settings/Keyboard panel.
@@ -91,45 +93,39 @@ public class SettingsKeyboardPanel extends JScrollPane {
     super(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 	  ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-
-
-
-    new KeyChooserDialog(frame, computer, new TreeSet<Integer>());
-
-
-
-
-
-    // log.fine("New Settings/Keyboard panel creation started");
-    // assert frame != null;
-    // assert computer != null;
+    log.fine("New Settings/Keyboard panel creation started");
+    assert frame != null;
+    assert computer != null;
     
-    // this.frame = frame;
-    // this.computer = computer;
+    this.frame = frame;
+    this.computer = computer;
 
-    // final JPanel shortcutsPane = new JPanel(new GridBagLayout());
+    final JPanel shortcutsPane = new JPanel(new GridBagLayout());
 
-    // setViewportBorder(BorderFactory.createEmptyBorder(5, 8, 0, 8));
-  
-    // final GridBagConstraints restorePaneConstraints =
-    //   new GridBagConstraints();
-    // final JButton restoreButton = new JButton(Application
-    //   .getString(this, "settings.keyboard.button.restore"));
-    // restorePaneConstraints.gridx = 0;
-    // restorePaneConstraints.gridy = 0;
-    // restorePaneConstraints.gridwidth = GridBagConstraints.REMAINDER;
-    // restorePaneConstraints.insets = new Insets(15, 0, 10, 0);
-    // restorePaneConstraints.anchor = GridBagConstraints.CENTER;
-    // restorePaneConstraints.weightx = 0.0;
-    // restorePaneConstraints.weighty = 0.0;
-    // final JPanel restorePane = new JPanel(new BorderLayout());
-    // restoreButton.setPreferredSize(new Dimension(440, 35));
-    // restorePane.add(restoreButton);
-    // shortcutsPane.add(restorePane, restorePaneConstraints);
-    // restoreButton.addActionListener(new RestoreListener());
+    setViewportBorder(BorderFactory.createEmptyBorder(5, 8, 0, 8));
 
+    int line = 0;
+    
+    final GridBagConstraints restorePaneConstraints =
+      new GridBagConstraints();
+    final JButton restoreButton = new JButton(Application
+      .getString(this, "settings.keyboard.button.restore"));
+    restorePaneConstraints.gridx = 0;
+    restorePaneConstraints.gridy = line;
+    restorePaneConstraints.gridwidth = GridBagConstraints.REMAINDER;
+    restorePaneConstraints.insets = new Insets(15, 0, 10, 0);
+    restorePaneConstraints.anchor = GridBagConstraints.CENTER;
+    restorePaneConstraints.weightx = 0.0;
+    restorePaneConstraints.weighty = 0.0;
+    final JPanel restorePane = new JPanel(new BorderLayout());
+    restoreButton.setPreferredSize(new Dimension(440, 35));
+    restorePane.add(restoreButton);
+    shortcutsPane.add(restorePane, restorePaneConstraints);
+    restoreButton.addActionListener(new RestoreListener());
+
+    line++;
+    
     // for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
-    //   final int line = i + 1;
     //   final KeyboardKey key = computer.getComputerHardware()
     // 	.getKeyboardHardware().getKeyboardLayout().getKey(i);
 
@@ -181,24 +177,41 @@ public class SettingsKeyboardPanel extends JScrollPane {
     //   clearButtonConstraints.weighty = 0.0;
     //   shortcutsPane.add(clearButton, clearButtonConstraints);
     //   clearButton.addActionListener(new ClearListener(i));
+    //
+    //   line++;
     // }
 
-    // getVerticalScrollBar().setUnitIncrement(16);
-    // setViewportView(shortcutsPane);
-    // setPreferredSize(new Dimension(0, 300));
+      
+    final GridBagConstraints addPaneConstraints =
+      new GridBagConstraints();
+    final JButton addButton = new JButton(Application
+      .getString(this, "settings.keyboard.button.add"));
+    addPaneConstraints.gridx = 0;
+    addPaneConstraints.gridy = line;
+    addPaneConstraints.gridwidth = GridBagConstraints.REMAINDER;
+    addPaneConstraints.insets = new Insets(15, 0, 10, 0);
+    addPaneConstraints.anchor = GridBagConstraints.CENTER;
+    addPaneConstraints.weightx = 0.0;
+    addPaneConstraints.weighty = 0.0;
+    final JPanel addPane = new JPanel(new BorderLayout());
+    addButton.setPreferredSize(new Dimension(440, 35));
+    addPane.add(addButton);
+    shortcutsPane.add(addPane, addPaneConstraints);
+    addButton.addActionListener(new AddListener());
+
+    getVerticalScrollBar().setUnitIncrement(16);
+    setViewportView(shortcutsPane);
+    setPreferredSize(new Dimension(0, 300));
     
-    // log.fine("Settings/Keyboard panel set up");
+    log.fine("Settings/Keyboard panel set up");
   }
 
   /**
    * Initialize widgets.
    */
   public void setUp() {
-    // for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
-    //   shortcuts[i] = UserPreferences.getShortcut(i);
-    //   shortcutLabels[i].setText(shortcutToText(shortcuts[i]));
-    // }
-    // log.fine("Widgets initialized");
+    shortcuts = (Shortcuts)(UserPreferences.getShortcuts().clone());
+    log.fine("Widgets initialized");
   }
 
   // partial set listener
@@ -270,21 +283,31 @@ public class SettingsKeyboardPanel extends JScrollPane {
 
     @Override
     public void actionPerformed(final ActionEvent event) {
-      log.finer("Clear button event detected");
-      shortcuts[number] = null;
-      shortcutLabels[number].setText(shortcutToText(null));
+      // log.finer("Clear button event detected");
+      // shortcuts[number] = null;
+      // shortcutLabels[number].setText(shortcutToText(null));
+    }
+  }
+
+  // add button listener
+  private class AddListener implements ActionListener {
+
+    // for description see ActionListener
+    @Override
+    public void actionPerformed(final ActionEvent event) {
+      log.finer("Add button event detected");
+      ShortcutDialog.getShortcut(frame, shortcuts.keySet());
     }
   }
 
   // restore button listener
   private class RestoreListener implements ActionListener {
+
+    // for description see ActionListener
     @Override
     public void actionPerformed(final ActionEvent event) {
-      // log.finer("Restore button event detected");
-      // for (int i = 0; i < KeyboardLayout.NUMBER_KEYS; i++) {
-      // 	shortcuts[i] = UserPreferences.getDefaultShortcut(i);
-      // 	shortcutLabels[i].setText(shortcutToText(shortcuts[i]));
-      // }
+      log.finer("Restore button event detected");
+      UserPreferences.setShortcuts(UserPreferences.getDefaultShortcuts());
     }
   }
 }

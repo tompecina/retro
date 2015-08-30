@@ -22,6 +22,7 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 
+import java.util.Set;
 import java.util.SortedSet;
 
 import java.awt.Frame;
@@ -67,7 +68,7 @@ public class KeyChooserDialog extends JDialog {
    */
   public static SortedSet<Integer> getKeys(final Frame frame,
 					   final Computer computer,
-					   final SortedSet<Integer> keys) {
+					   final Set<Integer> keys) {
     log.fine("New KeyChooserDialog creation started");
     final KeyChooserDialog dialog =
       new KeyChooserDialog(frame, computer, keys);
@@ -77,7 +78,7 @@ public class KeyChooserDialog extends JDialog {
   // private constructor
   public KeyChooserDialog(final Frame frame,
 			  final Computer computer,
-			  final SortedSet<Integer> keys) {
+			  final Set<Integer> keys) {
     super(frame,
 	  Application.getString(KeyChooserDialog.class,
 	    "settings.keyboard.keyChooser.frameTitle"),

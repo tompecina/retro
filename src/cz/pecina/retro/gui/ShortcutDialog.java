@@ -22,7 +22,7 @@ package cz.pecina.retro.gui;
 
 import java.util.logging.Logger;
 
-import java.util.List;
+import java.util.Set;
 
 import java.awt.Frame;
 import java.awt.Component;
@@ -73,25 +73,21 @@ public class ShortcutDialog extends JDialog {
    * Displays a shortcut selection dialog and returns the result.
    *
    * @param  frame             enclosing frame
-   * @param  currentShortcut   shortcut curently assigned to this key or
-   *                           {@code null} if none
-   * @param  assignedShortcuts list of shortcuts already assigned
+   * @param  assignedShortcuts set of shortcuts already assigned
    * @return                   the shortcut or {@code null} if aborted
    */
   public static Shortcut getShortcut(
       final Frame frame,
-      final Shortcut currentShortcut,
-      final List<Shortcut> assignedShortcuts) {
+      final Set<Shortcut> assignedShortcuts) {
     log.fine("New ShortcutDialog creation started");
     final ShortcutDialog dialog =
-      new ShortcutDialog(frame, currentShortcut, assignedShortcuts);
+      new ShortcutDialog(frame, assignedShortcuts);
     return dialog.newShortcut;
   }
 
   // private constructor
   private ShortcutDialog(final Frame frame,
-			 final Shortcut currentShortcut,
-			 final List<Shortcut> assignedShortcuts) {
+			 final Set<Shortcut> assignedShortcuts) {
     super(frame,
 	  Application.getString(ShortcutDialog.class, "shortcutDialog.title"),
 	  true);
@@ -134,7 +130,7 @@ public class ShortcutDialog extends JDialog {
     setMinimumSize(new Dimension(480, 110));
     setLocationRelativeTo(frame);
     setFocusable(true);
-    addKeyListener(new ShortcutListener(currentShortcut, assignedShortcuts));
+    addKeyListener(new ShortcutListener(assignedShortcuts));
     pack();
     setVisible(true);
     log.fine("ShortcutDialog set up");
@@ -142,8 +138,9 @@ public class ShortcutDialog extends JDialog {
 
   // shortcut listener
   private class ShortcutListener extends KeyAdapter {
-    private Shortcut currentShortcut;
-    private List<Shortcut> assignedShortcuts;
+    private Set<Shortcut> assignedShortcuts;
+
+    // for description see KeyListener
     @Override
     public void keyPressed(final KeyEvent event) {
       log.finer("Key event detected:" + event);
@@ -151,23 +148,19 @@ public class ShortcutDialog extends JDialog {
 	new Shortcut(event.getExtendedKeyCode(), event.getKeyLocation());
       shortcutLabel.setText(shortcut.getDesc());
       String promptKey;
-      if ((currentShortcut != null) && currentShortcut.equals(shortcut)) {
-	promptKey = "current";
-      } else if (assignedShortcuts.contains(shortcut)) {
+      if (assignedShortcuts.contains(shortcut)) {
 	promptKey = "assigned";
       } else {
 	promptKey = "available";
       }
       promptLabel.setText(Application.getString(ShortcutDialog.class,
 						"shortcutDialog." + promptKey));
-      setButton.setEnabled((currentShortcut == null) ||
-			   !currentShortcut.equals(shortcut));
+      setButton.setEnabled(true);
       event.consume();
     }
-	private ShortcutListener(final Shortcut currentShortcut,
-				 final List<Shortcut> assignedShortcuts) {
+    
+    private ShortcutListener(final Set<Shortcut> assignedShortcuts) {
       this.assignedShortcuts = assignedShortcuts;
-      this.currentShortcut = currentShortcut;
     }
   }
 

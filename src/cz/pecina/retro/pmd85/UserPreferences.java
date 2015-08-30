@@ -328,6 +328,18 @@ public final class UserPreferences extends GeneralUserPreferences {
   }
 
   /**
+   * Sets the keyboard shortcuts.
+   *
+   * @param shortcuts the keyboard shortcuts object
+   */
+  public static void setShortcuts(final Shortcuts shortcuts) {
+    assert shortcuts != null;
+    getPreferences();
+    UserPreferences.shortcuts = shortcuts;
+    log.finer("Shortcuts in user preferences set");
+  }
+
+  /**
    * Gets the keyboard shortcuts.
    *
    * @return the keyboard shortcuts object
