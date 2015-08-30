@@ -163,9 +163,21 @@ public class SettingsKeyboardPanel extends JPanel {
   private void updateShortcutsPane() {
     log.fine("Updating shortcuts pane");
     
-    final JPanel shortcutsPane = new JPanel(new GridBagLayout());
+    JPanel shortcutsPane;
 
-    if (!shortcuts.isEmpty()) {
+    if (shortcuts.isEmpty()) {
+
+      shortcutsPane = new JPanel();
+      final JLabel noShortcutsLabel =
+	new JLabel(Application.getString(this,
+					 "settings.keyboard.noShortcuts"));
+      shortcutsPane.add(noShortcutsLabel);
+      
+    } else {
+
+      shortcutsPane = new JPanel(new BorderLayout());
+      final JPanel innerPane = new JPanel(new GridBagLayout());
+      shortcutsPane.add(innerPane, BorderLayout.PAGE_START);
 
       int line = 0;
       
@@ -180,7 +192,7 @@ public class SettingsKeyboardPanel extends JPanel {
 	shortcutConstraints.anchor = GridBagConstraints.LINE_END;
 	shortcutConstraints.weightx = 0.5;
 	shortcutConstraints.weighty = 0.0;
-	shortcutsPane.add(shortcutLabel, shortcutConstraints);
+	innerPane.add(shortcutLabel, shortcutConstraints);
 
 	final JPanel keysPane =
 	  new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
@@ -199,7 +211,7 @@ public class SettingsKeyboardPanel extends JPanel {
 	keysPaneConstraints.anchor = GridBagConstraints.CENTER;
 	keysPaneConstraints.weightx = 0.0;
 	keysPaneConstraints.weighty = 0.0;
-	shortcutsPane.add(keysPane, keysPaneConstraints);
+	innerPane.add(keysPane, keysPaneConstraints);
 	
 	final GridBagConstraints removeButtonConstraints =
 	  new GridBagConstraints();
@@ -212,7 +224,7 @@ public class SettingsKeyboardPanel extends JPanel {
 	removeButtonConstraints.weightx = 0.5;
 	removeButtonConstraints.weighty = 0.0;
 	// removeButton.addActionListener(new RemoveListener(shortcut));
-	shortcutsPane.add(removeButton, removeButtonConstraints);
+	innerPane.add(removeButton, removeButtonConstraints);
       
 	line++;
       }
