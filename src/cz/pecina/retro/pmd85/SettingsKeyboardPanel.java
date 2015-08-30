@@ -234,6 +234,8 @@ public class SettingsKeyboardPanel extends JPanel {
 
   // partial set listener
   private class SetListener implements ActionListener {
+
+    // for description see ActionListener
     @Override
     public void actionPerformed(final ActionEvent event) {
       log.finer("Set button event detected");
