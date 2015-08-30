@@ -163,11 +163,10 @@ public class SettingsKeyboardPanel extends JPanel {
   private void updateShortcutsPane() {
     log.fine("Updating shortcuts pane");
     
-    JPanel shortcutsPane;
+    final JPanel shortcutsPane = new JPanel(new BorderLayout());
 
     if (shortcuts.isEmpty()) {
 
-      shortcutsPane = new JPanel();
       final JLabel noShortcutsLabel =
 	new JLabel(Application.getString(this,
 					 "settings.keyboard.noShortcuts"));
@@ -175,9 +174,7 @@ public class SettingsKeyboardPanel extends JPanel {
       
     } else {
 
-      shortcutsPane = new JPanel(new BorderLayout());
       final JPanel innerPane = new JPanel(new GridBagLayout());
-      shortcutsPane.add(innerPane, BorderLayout.PAGE_START);
 
       int line = 0;
       
@@ -228,6 +225,7 @@ public class SettingsKeyboardPanel extends JPanel {
       
 	line++;
       }
+      shortcutsPane.add(innerPane, BorderLayout.PAGE_START);
     }
     shortcutsScrollPane.setViewportView(shortcutsPane);
     
