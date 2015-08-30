@@ -92,13 +92,13 @@ public class IconLayout {
     assert computer != null;
     icons = new IconButton[] {
       new IconButton(computer, "wheel", 312, 10, "toolTip.settings"),
-      new IconButton(computer, "reset", 313, 44, "toolTip.reset"),
-      new IconButton(computer, "mem", 311, 78, "toolTip.memory"),
-      new IconButton(computer, "keyboard", 312, 112, "toolTip.keyboard"),
-      new IconButton(computer, "cassette", 312, 147, "toolTip.tapeRecorder"),
-      new IconButton(computer, "cable", 311, 180, "toolTip.peripherals"),
-      new IconButton(computer, "debug", 312, 214, "toolTip.debugger"),
-      new IconButton(computer, "info", 312, 265, "toolTip.about")
+      new IconButton(computer, "reset", 313, 46, "toolTip.reset"),
+      new IconButton(computer, "mem", 311, 83, "toolTip.memory"),
+      new IconButton(computer, "keyboard", 312, 118, "toolTip.keyboard"),
+      new IconButton(computer, "cassette", 312, 156, "toolTip.tapeRecorder"),
+      new IconButton(computer, "cable", 311, 192, "toolTip.peripherals"),
+      new IconButton(computer, "debug", 312, 230, "toolTip.debugger"),
+      new IconButton(computer, "info", 313, 264, "toolTip.about")
     };
     log.fine("New IconLayout creation completed");
   }
