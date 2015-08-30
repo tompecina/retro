@@ -98,7 +98,7 @@ public class IconLayout {
       new IconButton(computer, "cassette", 312, 147, "toolTip.tapeRecorder"),
       new IconButton(computer, "cable", 311, 180, "toolTip.peripherals"),
       new IconButton(computer, "debug", 312, 214, "toolTip.debugger"),
-      new IconButton(computer, "info", 312, 245, "toolTip.about")
+      new IconButton(computer, "info", 312, 265, "toolTip.about")
     };
     log.fine("New IconLayout creation completed");
   }
