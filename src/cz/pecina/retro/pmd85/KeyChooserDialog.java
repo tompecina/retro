@@ -23,7 +23,7 @@ package cz.pecina.retro.pmd85;
 import java.util.logging.Logger;
 
 import java.util.Set;
-import java.util.SortedSet;
+import java.util.NavigableSet;
 
 import java.awt.Frame;
 import java.awt.BorderLayout;
@@ -67,7 +67,7 @@ public class KeyChooserDialog extends JDialog {
    * @param  keys     set of key numbers curently assigned to this shortcut
    * @return          new set of key numbers assigned to this shortcut
    */
-  public static SortedSet<Integer> getKeys(final Frame frame,
+  public static NavigableSet<Integer> getKeys(final Frame frame,
 					   final Computer computer,
 					   final String title,
 					   final Set<Integer> keys) {
@@ -120,7 +120,7 @@ public class KeyChooserDialog extends JDialog {
   }
 
   // get selected keys
-  private SortedSet<Integer> getKeys() {
+  private NavigableSet<Integer> getKeys() {
     return keyChooserPanel.getKeys();
   }
 

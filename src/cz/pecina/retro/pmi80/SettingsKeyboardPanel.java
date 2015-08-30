@@ -23,7 +23,7 @@ package cz.pecina.retro.pmi80;
 import java.util.logging.Logger;
 
 import java.util.Set;
-import java.util.SortedSet;
+import java.util.NavigableSet;
 import java.util.TreeSet;
 import java.util.HashSet;
 
@@ -281,7 +281,7 @@ public class SettingsKeyboardPanel extends JPanel {
       log.finer("Add button event detected");
       final Shortcut shortcut =
 	ShortcutDialog.getShortcut(frame, shortcuts.keySet());
-      final SortedSet<Integer> keys = KeyChooserDialog.getKeys(
+      final NavigableSet<Integer> keys = KeyChooserDialog.getKeys(
         frame,
 	computer,
 	String.format(Application.getString(SettingsKeyboardPanel.class,

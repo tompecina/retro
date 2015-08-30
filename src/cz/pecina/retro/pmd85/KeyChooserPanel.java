@@ -22,7 +22,7 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 
-import java.util.SortedSet;
+import java.util.NavigableSet;
 import java.util.TreeSet;
 
 import java.awt.Frame;
@@ -98,8 +98,8 @@ public class KeyChooserPanel extends BackgroundFixedPane {
    *
    * @return a set of all selected keys
    */
-  public SortedSet<Integer> getKeys() {
-    final SortedSet<Integer> set = new TreeSet<>();
+  public NavigableSet<Integer> getKeys() {
+    final NavigableSet<Integer> set = new TreeSet<>();
     for (int n = 0; n < KeyboardLayout.NUMBER_KEYS; n++) {
       if (buttons[n].isPressed()) {
 	set.add(n);

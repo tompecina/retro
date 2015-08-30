@@ -65,9 +65,17 @@ public class ShortcutListener extends KeyAdapter {
     final Shortcut shortcut =
       new Shortcut(event.getExtendedKeyCode(), event.getKeyLocation());
     if (UserPreferences.getShortcuts().containsKey(shortcut)) {
-      for (int key: UserPreferences.getShortcuts().get(shortcut)) {
-	keyboardHardware.pushKey(keyboardHardware.getKeyboardLayout()
-	  .getButton(key), action);
+      if (action) {
+	for (int key: UserPreferences.getShortcuts().get(shortcut)) {
+	  keyboardHardware.pushKey(keyboardHardware.getKeyboardLayout()
+	    .getButton(key), true);
+	}
+      } else {
+	for (int key:
+	       UserPreferences.getShortcuts().get(shortcut).descendingSet()) {
+	  keyboardHardware.pushKey(keyboardHardware.getKeyboardLayout()
+	    .getButton(key), false);
+	}
       }
       event.consume();
    }
