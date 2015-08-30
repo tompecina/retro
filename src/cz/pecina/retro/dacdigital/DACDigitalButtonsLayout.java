@@ -23,7 +23,7 @@ package cz.pecina.retro.dacdigital;
 import java.util.logging.Logger;
 
 import cz.pecina.retro.gui.GenericButton;
-import cz.pecina.retro.gui.SwitchButton;
+import cz.pecina.retro.gui.ToggleButton;
 import cz.pecina.retro.gui.PushButton;
 import cz.pecina.retro.gui.PushOnlyButton;
 
@@ -117,7 +117,7 @@ public class DACDigitalButtonsLayout {
    */
   public DACDigitalButtonsLayout() {
     buttons[BUTTON_POSITION_AUTO] =
-      new SwitchButton("gui/UniversalButton/round-gray-%d-%s.png",
+      new ToggleButton("gui/UniversalButton/round-gray-%d-%s.png",
 		       null,
 		       null);
     buttons[BUTTON_POSITION_MAN] =
@@ -137,7 +137,7 @@ public class DACDigitalButtonsLayout {
 			 null,
 			 null);
     buttons[BUTTON_POSITION_AC] =
-      new SwitchButton("gui/UniversalButton/round-black-%d-%s.png",
+      new ToggleButton("gui/UniversalButton/round-black-%d-%s.png",
 		       null,
 		       null);
     buttons[BUTTON_POSITION_0_2] =

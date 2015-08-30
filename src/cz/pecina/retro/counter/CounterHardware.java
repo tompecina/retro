@@ -44,7 +44,7 @@ import cz.pecina.retro.gui.HexESD;
 import cz.pecina.retro.gui.LED;
 import cz.pecina.retro.gui.BlinkLED;
 import cz.pecina.retro.gui.GenericButton;
-import cz.pecina.retro.gui.SwitchButton;
+import cz.pecina.retro.gui.ToggleButton;
 import cz.pecina.retro.gui.Knob;
 
 /**
@@ -172,7 +172,7 @@ public class CounterHardware implements IOElement, CPUEventOwner {
     gateLED = new BlinkLED("small", "lime");
 
     // set up buttons
-    autoButton = new SwitchButton("gui/UniversalButton/round-gray-%d-%s.png",
+    autoButton = new ToggleButton("gui/UniversalButton/round-gray-%d-%s.png",
 				  null,
 				  null);
     autoButton.addChangeListener(
@@ -184,7 +184,7 @@ public class CounterHardware implements IOElement, CPUEventOwner {
 	  }
 	}
       });
-    manButton = new SwitchButton("gui/UniversalButton/round-gray-%d-%s.png",
+    manButton = new ToggleButton("gui/UniversalButton/round-gray-%d-%s.png",
 				 null,
 				 null);
     manButton.addChangeListener(

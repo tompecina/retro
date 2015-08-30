@@ -28,7 +28,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import cz.pecina.retro.gui.BackgroundFixedPane;
-import cz.pecina.retro.gui.SwitchButton;
+import cz.pecina.retro.gui.ToggleButton;
 import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.gui.IconCache;
 
@@ -71,8 +71,8 @@ public class KeyChooserPanel extends BackgroundFixedPane {
     final int pixelSize = GUI.getPixelSize();
     for (int n = 0; n < KeyboardLayout.NUMBER_KEYS; n++) {
       final KeyboardKey key = keyboardLayout.getKeys()[n];
-      final SwitchButton button =
-	new SwitchButton("pmd85/KeyboardKey/" + key.getCap() + "-%d-%s.png",
+      final ToggleButton button =
+	new ToggleButton("pmd85/KeyboardKey/" + key.getCap() + "-%d-%s.png",
 			 null,
 			 null);
       button.setOnIcon(IconCache.get(String.format(button.getTemplate(),

@@ -94,7 +94,7 @@ public class TapeRecorderButtonsLayout {
     buttons[BUTTON_POSITION_STOP] =
       new TapeRecorderPushButton("stop", "toolTip.stop");
     buttons[BUTTON_POSITION_PAUSE] =
-      new TapeRecorderSwitchButton("pause", "toolTip.pause");
+      new TapeRecorderToggleButton("pause", "toolTip.pause");
     buttons[BUTTON_POSITION_EJECT] =
       new TapeRecorderPushButton("eject", "toolTip.eject");
   }

@@ -1,4 +1,4 @@
-/* SwitchButton.java
+/* ToggleButton.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -35,14 +35,14 @@ import javax.swing.AbstractAction;
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class SwitchButton extends GenericButton {
+public class ToggleButton extends GenericButton {
 
   // static logger
   private static final Logger log =
-    Logger.getLogger(SwitchButton.class.getName());
+    Logger.getLogger(ToggleButton.class.getName());
 
   /**
-   * Creates an instance of a button.
+   * Creates an instance of a toggle button.
    *
    * @param template the icon template string (if {@code null},
    *                 a dummy button without a graphical representation
@@ -51,12 +51,12 @@ public class SwitchButton extends GenericButton {
    *                 if none)
    * @param toolTip  tool-tip for the button ({@code null} if none)
    */
-  public SwitchButton(final String template,
+  public ToggleButton(final String template,
 		      final Shortcut shortcut,
 		      final String toolTip) {
     super(template, shortcut, toolTip);
     addMouseListener(new SwitchMouseListener());
-    log.fine("New SwitchButton created");
+    log.fine("New ToggleButton created");
   }
 
   // mouse listener

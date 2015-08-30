@@ -1,4 +1,4 @@
-/* TapeRecorderSwitchButton.java
+/* TapeRecorderToggleButton.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -25,21 +25,21 @@ import java.util.logging.Logger;
 import cz.pecina.retro.common.Localized;
 import cz.pecina.retro.common.Application;
 
-import cz.pecina.retro.gui.SwitchButton;
+import cz.pecina.retro.gui.ToggleButton;
 
 /**
- * Wrapper class for localized SwitchButton.
+ * Wrapper class for localized ToggleButton.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class TapeRecorderSwitchButton
-  extends SwitchButton
+public class TapeRecorderToggleButton
+  extends ToggleButton
   implements Localized {
 
   // static logger
   private static final Logger log =
-    Logger.getLogger(TapeRecorderSwitchButton.class.getName());
+    Logger.getLogger(TapeRecorderToggleButton.class.getName());
 
   // text identification of the button
   private String id;
@@ -54,15 +54,15 @@ public class TapeRecorderSwitchButton
    *                        (used when fetching the icons)
    * @param toolTipResource tool-tip for the button ({@code null} if none)
    */
-  public TapeRecorderSwitchButton(final String id,
+  public TapeRecorderToggleButton(final String id,
 				  final String toolTipResource) {
     super("trec/TapeRecorderButton/" + id + "-%d-%s.png", null,
       (toolTipResource == null) ? null : Application
-      .getString(TapeRecorderSwitchButton.class, toolTipResource));
+      .getString(TapeRecorderToggleButton.class, toolTipResource));
     this.id = id;
     this.toolTipResource = toolTipResource;
     Application.addLocalized(this);
-    log.fine("New TapeRecorderSwitchButton created: " + id);
+    log.fine("New TapeRecorderToggleButton created: " + id);
   }
 
   // for description see Object
