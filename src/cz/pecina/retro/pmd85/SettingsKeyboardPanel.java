@@ -163,7 +163,7 @@ public class SettingsKeyboardPanel extends JPanel {
   private void updateShortcutsPane() {
     log.fine("Updating shortcuts pane");
     
-    final JPanel shortpane = new JPanel(new GridBagLayout());
+    final JPanel shortcutsPane = new JPanel(new GridBagLayout());
 
     if (!shortcuts.isEmpty()) {
 
