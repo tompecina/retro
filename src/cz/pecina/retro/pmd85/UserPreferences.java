@@ -102,14 +102,17 @@ public final class UserPreferences extends GeneralUserPreferences {
       Application.addModule(UserPreferences.class);
 
       if (hasKey("tapeRecorder.mute")) {
-	tapeRecorderMute = Parameters.preferences.getBoolean("tapeRecorder.mute", false);
+	tapeRecorderMute =
+	  Parameters.preferences.getBoolean("tapeRecorder.mute", false);
       } else {
 	Parameters.preferences.putBoolean("tapeRecorder.mute", false);
       }
-      tapeRecorderVolume = Parameters.preferences.getInt("tapeRecorder.volume", -1);
+      tapeRecorderVolume =
+	Parameters.preferences.getInt("tapeRecorder.volume", -1);
       if (tapeRecorderVolume == -1) {
 	tapeRecorderVolume = DEFAULT_VOLUME;
-	Parameters.preferences.putInt("tapeRecorder.volume", tapeRecorderVolume);
+	Parameters.preferences.putInt("tapeRecorder.volume",
+				      tapeRecorderVolume);
       }
       if (hasKey("speaker.mute")) {
 	speakerMute = Parameters.preferences.getBoolean("speaker.mute", false);

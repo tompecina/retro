@@ -82,8 +82,8 @@ public class DisplayStripe extends JComponent implements Resizeable {
    *
    * @param row        the row, {@code 0-0xff}
    * @param column     the column, {@code 0-0x2f}
-   * @param pixels     the pixel data; bit 0 is the leftmost, bit 5 the rightmost,
-   *                   bits 6 and 7 should be 0
+   * @param pixels     the pixel data; bit 0 is the leftmost, bit 5
+   *                   the rightmost, bits 6 and 7 should be 0
    * @param color      the color to apply
    * @param blinks     {@code true} if the cell blinks
    */

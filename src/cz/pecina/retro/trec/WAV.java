@@ -106,7 +106,8 @@ public class WAV extends TapeProcessor {
     int last = -1;
     for (long start: tape.keySet()) {
       final int end =
-	Math.round(((start + tape.get(start)) * OUTPUT_SAMPLE_RATE) / tapeSampleRate);
+	Math.round(((start + tape.get(start)) * OUTPUT_SAMPLE_RATE)
+		   / tapeSampleRate);
       for (int i = Math.round((start * OUTPUT_SAMPLE_RATE) / tapeSampleRate);
 	   i < end;
 	   i++) {
@@ -206,7 +207,8 @@ public class WAV extends TapeProcessor {
     final float sampleRate = format.getSampleRate();
     final boolean bigEndian = format.isBigEndian();
     log.finer(String.format(
-      "Encoding: %s, sample size: %d, channels: %d, sample rate: %g, big-endian: %s",
+      "Encoding: %s, sample size: %d, channels: %d," +
+      " sample rate: %g, big-endian: %s",
       encoding, sampleSize, channels, sampleRate, bigEndian));
 
     // convert data to a float sum over all channels
@@ -222,9 +224,11 @@ public class WAV extends TapeProcessor {
 	if (sampleSize == 8) {
 	  value = sample[channel];
 	} else if (bigEndian) {
-	  value = ((sample[channel * 2] & 0xff) << 8) | ((sample[(channel * 2) + 1]) & 0xff);
+	  value = ((sample[channel * 2] & 0xff) << 8) |
+	    ((sample[(channel * 2) + 1]) & 0xff);
 	} else {
-	  value = ((sample[(channel * 2) + 1] & 0xff) << 8) | ((sample[channel * 2]) & 0xff);
+	  value = ((sample[(channel * 2) + 1] & 0xff) << 8) |
+	    ((sample[channel * 2]) & 0xff);
 	}
 	if (encoding == AudioFormat.Encoding.PCM_SIGNED) {
 	  if (sampleSize == 8) {

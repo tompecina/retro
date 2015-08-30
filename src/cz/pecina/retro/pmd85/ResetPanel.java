@@ -58,7 +58,8 @@ public class ResetPanel extends JPanel {
   private ComputerHardware computerHardware;
 
   // action buttons
-  private JToggleButton resetButton, clearRAMButton, restoreROMButton, restoreRMMButton;
+  private JToggleButton resetButton, clearRAMButton, restoreROMButton,
+    restoreRMMButton;
 
   // vertical filler between buttons
   private Component filler() {

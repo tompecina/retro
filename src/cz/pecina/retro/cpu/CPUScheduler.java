@@ -123,7 +123,8 @@ public class CPUScheduler {
    */
   public void removeAllScheduledEvents(final CPUEventOwner owner) {
     if (log.isLoggable(Level.FINER)) {
-      log.finer("Removing all scheduled events for owner: " + owner.getString());
+      log.finer("Removing all scheduled events for owner: " +
+		owner.getString());
     }
     for (Iterator<CPUScheduledEvent> iter =
 	   schedule.iterator(); iter.hasNext();) {

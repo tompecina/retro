@@ -61,8 +61,8 @@ public class ScreenShotMemoryPlugin implements MemoryPlugin {
 
   // PNG extension filter
   private static FileNameExtensionFilter pngFilter =
-    new FileNameExtensionFilter(Application.getString(ScreenShotMemoryPlugin.class,
-						      "fileFilter.PNG"), "png");
+    new FileNameExtensionFilter(Application.getString(ScreenShotMemoryPlugin
+      .class, "fileFilter.PNG"), "png");
   
   // for description see MemoryPlugin
   @Override

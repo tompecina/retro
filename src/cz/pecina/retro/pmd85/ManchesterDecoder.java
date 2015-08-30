@@ -165,9 +165,10 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
     add(new Register("COUNTER") {
 	@Override
 	public String getValue() {
-	  return String.valueOf(ManchesterDecoder.this.scheduler.getRemainingTime(
-	    ManchesterDecoder.this,
-	    Parameters.systemClockSource.getSystemClock()));
+	  return String.valueOf(
+	    ManchesterDecoder.this.scheduler.getRemainingTime(
+	      ManchesterDecoder.this,
+	      Parameters.systemClockSource.getSystemClock()));
 	}
 	@Override
 	public void processValue(final String value) {

@@ -95,13 +95,13 @@ public class KeyChooserDialog extends JDialog {
     final JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.TRAILING));
     buttonsPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
     final JButton setButton =
-      new JButton(Application.getString(KeyChooserDialog.class,
-					"settings.keyboard.keyChooser.button.set"));
+      new JButton(Application.getString(
+        KeyChooserDialog.class, "settings.keyboard.keyChooser.button.set"));
     setButton.addActionListener(new SetListener());
     buttonsPanel.add(setButton);
     final JButton cancelButton =
-      new JButton(Application.getString(KeyChooserDialog.class,
-					"settings.keyboard.keyChooser.button.cancel"));
+      new JButton(Application.getString(
+        KeyChooserDialog.class, "settings.keyboard.keyChooser.button.cancel"));
     cancelButton.addActionListener(new CancelListener());
     buttonsPanel.add(cancelButton);
     dialogPanel.add(buttonsPanel, BorderLayout.PAGE_END);

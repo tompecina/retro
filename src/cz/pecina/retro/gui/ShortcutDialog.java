@@ -160,7 +160,8 @@ public class ShortcutDialog extends JDialog {
       }
       promptLabel.setText(Application.getString(ShortcutDialog.class,
 						"shortcutDialog." + promptKey));
-      setButton.setEnabled((currentShortcut == null) || !currentShortcut.equals(shortcut));
+      setButton.setEnabled((currentShortcut == null) ||
+			   !currentShortcut.equals(shortcut));
       event.consume();
     }
 	private ShortcutListener(final Shortcut currentShortcut,

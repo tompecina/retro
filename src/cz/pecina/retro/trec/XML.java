@@ -89,7 +89,8 @@ public class XML extends TapeProcessor {
     tag.setAttribute("noNamespaceSchemaLocation", Application.XSD_PREFIX +
 		     "tape-" + TAPE_XML_FILE_VERSION + ".xsd", namespace);
     tag.setAttribute("version", TAPE_XML_FILE_VERSION);
-    tag.setAttribute("rate", String.valueOf(tapeRecorderInterface.tapeSampleRate));
+    tag.setAttribute("rate",
+		     String.valueOf(tapeRecorderInterface.tapeSampleRate));
     tag.setAttribute("unit", "per sec");
     try {
       long currPos = -1;

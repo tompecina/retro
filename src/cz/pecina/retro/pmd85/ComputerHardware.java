@@ -210,8 +210,8 @@ public class ComputerHardware {
       new TapeRecorderInterface();
     tapeRecorderInterface.tapeSampleRate = Constants.TAPE_SAMPLE_RATE;
     tapeRecorderInterface.timerPeriod = Constants.TIMER_PERIOD;
-    tapeRecorderInterface.tapeFormats =
-      Arrays.asList(new String[] {"XML", "PMT", "PTP", "PMD", "PMDTAPE", "WAV"});
+    tapeRecorderInterface.tapeFormats = Arrays.asList(new String[]
+      {"XML", "PMT", "PTP", "PMD", "PMDTAPE", "WAV"});
     tapeRecorderInterface.vuRecConstant = 150.0;
     tapeRecorderInterface.vuPlayConstant = 80.0;
     tapeRecorderHardware = new TapeRecorderHardware(tapeRecorderInterface);

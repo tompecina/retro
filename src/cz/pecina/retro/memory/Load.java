@@ -129,7 +129,8 @@ public class Load extends MemoryTab {
 
       final ButtonGroup destinationBankGroup = new ButtonGroup();
       for (Block bank: banks) {
-	final JRadioButton destinationBankRadioButton = new JRadioButton(bank.getName());
+	final JRadioButton destinationBankRadioButton =
+	  new JRadioButton(bank.getName());
 	destinationBankRadioButtons.add(destinationBankRadioButton);
 	destinationBankPanel.add(destinationBankRadioButton);
 	destinationBankGroup.add(destinationBankRadioButton);
@@ -357,7 +358,8 @@ public class Load extends MemoryTab {
 	for (JRadioButton button: destinationBankRadioButtons) {
 	  if (button.isSelected()) {
 	    sourceMemoryBank = destinationMemoryBank = button.getText();
-	    log.fine("Destination memory bank selected: " + destinationMemoryBank);
+	    log.fine("Destination memory bank selected: " +
+		     destinationMemoryBank);
 	    break;
 	  }
 	}
@@ -439,7 +441,8 @@ public class Load extends MemoryTab {
 	    panel,
 	    String.format(Application.getString(this, "loaded"), number));
 	} else {
-	  InfoBox.display(panel, plugins[pluginIndex].getSuccessfulLoadString());
+	  InfoBox.display(panel,
+			  plugins[pluginIndex].getSuccessfulLoadString());
 	}
       }
     }

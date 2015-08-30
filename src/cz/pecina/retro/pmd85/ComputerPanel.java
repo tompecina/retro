@@ -111,7 +111,8 @@ public class ComputerPanel extends BackgroundFixedPane {
     log.finer("LEDs set up");
 
     // set up brand marking
-    computerHardware.getMarking().place(this, MARKING_OFFSET_X, MARKING_OFFSET_Y);
+    computerHardware.getMarking().place(this,
+					MARKING_OFFSET_X, MARKING_OFFSET_Y);
     log.finer("Brand marking set up");
 	
     // set up icons

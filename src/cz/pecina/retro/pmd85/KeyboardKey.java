@@ -104,8 +104,8 @@ public class KeyboardKey extends LockableButton {
     
   /**
    * Creates an instance of a dummy key.  Such key exists only as a contact
-   * in the matrix with no physical switch provided.  It should never be displayed
-   * or activated.
+   * in the matrix with no physical switch provided.  It should never be
+   * displayed or activated.
    *
    * @param matrixRow    position of the key in the hardware matrix (row)
    * @param matrixColumn position of the key in the hardware matrix (column)

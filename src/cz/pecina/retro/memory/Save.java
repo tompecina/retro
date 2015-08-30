@@ -130,7 +130,8 @@ public class Save extends MemoryTab {
 
       final ButtonGroup sourceBankGroup = new ButtonGroup();
       for (Block bank: banks) {
-	final JRadioButton sourceBankRadioButton = new JRadioButton(bank.getName());
+	final JRadioButton sourceBankRadioButton =
+	  new JRadioButton(bank.getName());
 	sourceBankRadioButtons.add(sourceBankRadioButton);
 	sourceBankPanel.add(sourceBankRadioButton);
 	sourceBankGroup.add(sourceBankRadioButton);
@@ -575,7 +576,8 @@ public class Save extends MemoryTab {
 	  InfoBox.display(panel,
 			  Application.getString(this, "saved"));
 	} else {
-	  InfoBox.display(panel, plugins[pluginIndex].getSuccessfulSaveString());
+	  InfoBox.display(panel,
+			  plugins[pluginIndex].getSuccessfulSaveString());
 	}
       }
     }

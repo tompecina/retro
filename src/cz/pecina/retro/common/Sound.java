@@ -388,8 +388,9 @@ public class Sound {
    * @return         the volume (gain) setting for the channel
    */
   public float getVolume(final int channel) {
-    final float volume = gainMinima[channel] + (gainControls[channel].getValue() *
-      (gainMaxima[channel] - gainMinima[channel]));
+    final float volume = gainMinima[channel] +
+      (gainControls[channel].getValue() * (gainMaxima[channel] -
+      gainMinima[channel]));
     log.finer("Volume on channel " + channel + " is: " + volume);
     return volume;
   }

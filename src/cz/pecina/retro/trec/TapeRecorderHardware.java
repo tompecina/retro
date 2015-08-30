@@ -171,7 +171,8 @@ public class TapeRecorderHardware implements CPUEventOwner {
    *
    * @param tapeRecorderInterface the tape recorder interface
    */
-  public TapeRecorderHardware(final TapeRecorderInterface tapeRecorderInterface) {
+  public TapeRecorderHardware(
+      final TapeRecorderInterface tapeRecorderInterface) {
     log.fine("New TapeRecorderHardware creation started");
 
     this.tapeRecorderInterface = tapeRecorderInterface;
@@ -508,7 +509,8 @@ public class TapeRecorderHardware implements CPUEventOwner {
       }
       vumeter.setState(i);
     } else
-    if ((tapeRecorderState == TapeRecorderState.PLAY) && !pauseButton.isPressed()) {
+    if ((tapeRecorderState == TapeRecorderState.PLAY) &&
+	!pauseButton.isPressed()) {
       int i;
       for (i = 0; i < VUMeter.VUMETER_MAX; i++) {
   	if (inPulseCount < (tapeRecorderInterface.vuPlayConstant * i)) {

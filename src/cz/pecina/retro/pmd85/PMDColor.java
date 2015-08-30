@@ -107,7 +107,8 @@ public class PMDColor {
     assert color != null;
     this.color = color;
     this.blinkFlag = blinkFlag;
-    log.fine("New PMD color created, color: " + color + ", blink: " + blinkFlag);
+    log.fine("New PMD color created, color: " + color +
+	     ", blink: " + blinkFlag);
   }
 
   /**

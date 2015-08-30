@@ -97,7 +97,8 @@ public class Marking extends GenericBitmap implements Resizeable {
   @Override
   public void redrawOnPixelResize() {
     for (int state = 0; state < numberStates; state++) {
-      icons[state] = IconCache.get(String.format(template, GUI.getPixelSize(), state));
+      icons[state] =
+	IconCache.get(String.format(template, GUI.getPixelSize(), state));
     }
     setIcon(icons[state]);
   }

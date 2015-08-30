@@ -111,7 +111,8 @@ public class CopyFillCompare extends MemoryTab {
 
       final ButtonGroup sourceBankGroup = new ButtonGroup();
       for (Block bank: banks) {
-	final JRadioButton sourceBankRadioButton = new JRadioButton(bank.getName());
+	final JRadioButton sourceBankRadioButton =
+	  new JRadioButton(bank.getName());
 	sourceBankRadioButtons.add(sourceBankRadioButton);
 	sourceBankPanel.add(sourceBankRadioButton);
 	sourceBankGroup.add(sourceBankRadioButton);
@@ -146,7 +147,8 @@ public class CopyFillCompare extends MemoryTab {
 
       final ButtonGroup destinationBankGroup = new ButtonGroup();
       for (Block bank: banks) {
-	final JRadioButton destinationBankRadioButton = new JRadioButton(bank.getName());
+	final JRadioButton destinationBankRadioButton =
+	  new JRadioButton(bank.getName());
 	destinationBankRadioButtons.add(destinationBankRadioButton);
 	destinationBankPanel.add(destinationBankRadioButton);
 	destinationBankGroup.add(destinationBankRadioButton);
@@ -469,7 +471,8 @@ public class CopyFillCompare extends MemoryTab {
 	for (JRadioButton button: destinationBankRadioButtons) {
 	  if (button.isSelected()) {
 	    destinationMemoryBank = button.getText();
-	    log.fine("Destination memory bank selected: " + destinationMemoryBank);
+	    log.fine("Destination memory bank selected: " +
+		     destinationMemoryBank);
 	    break;
 	  }
 	}

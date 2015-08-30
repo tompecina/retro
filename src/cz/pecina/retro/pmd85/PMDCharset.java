@@ -37,7 +37,7 @@ import java.nio.charset.CoderResult;
  * The charset used by Tesla PMD 85.
  * <p>
  * It is a subset of KOI8-CS enhanced with some extra characters (five Greek
- * letters, integral sign, selected block characters).
+ * letters, the integral sign, selected block characters).
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -80,9 +80,12 @@ public class PMDCharset extends Charset {
       /* 0xda */ 'ž',
       /* 0xdb */ '\u258c',  // left half block
       /* 0xdc */ '\u2590',  // right half block
-      /* 0xdd */ '\u2599',  // quadrant upper left and lower left and lower right
-      /* 0xde */ '\u259b',  // quadrant upper left and upper right and lower left
-      /* 0xdf */ '\u259c',  // quadrant upper left and upper right and lower right
+      /* 0xdd */ '\u2599',
+        // quadrant upper left and lower left and lower right
+      /* 0xde */ '\u259b',
+        // quadrant upper left and upper right and lower left
+      /* 0xdf */ '\u259c',
+        // quadrant upper left and upper right and lower right
       /* 0xe0 */ '\u03c0',  // pi
       /* 0xe1 */ 'Á',
       /* 0xe2 */ '\u03b3',  // gamma
@@ -112,7 +115,8 @@ public class PMDCharset extends Charset {
       /* 0xfa */ 'Ž',
       /* 0xfb */ '\u259d',  // quadrant upper right
       /* 0xfc */ '\u2597',  // quadrant lower right
-      /* 0xfd */ '\u259f',  // quadrant upper right and lower left and lower right
+      /* 0xfd */ '\u259f',
+        // quadrant upper right and lower left and lower right
       /* 0xfe */ '\u2596',  // quadrant lower left
       /* 0xff */ '\u2598'   // quadrant upper left
   });

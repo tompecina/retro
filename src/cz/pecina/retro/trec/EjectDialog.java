@@ -126,7 +126,8 @@ public class EjectDialog extends JDialog {
       new JRadioButton(Application.getString(this, "ejectDialog.XML"));
     group.add(formatXML);
     formatsPanel.add(formatXML);
-    formatXML.setSelected(true);  // XML is the default format, cannot be suppressed
+    formatXML.setSelected(true);
+      // XML is the default format, cannot be suppressed
 
     formatPMT =
       new JRadioButton(Application.getString(this, "ejectDialog.PMT"));

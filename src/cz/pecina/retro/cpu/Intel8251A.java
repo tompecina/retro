@@ -1216,7 +1216,8 @@ public class Intel8251A extends Device implements IOElement {
 		    ((ep == 0) ? " (odd)" : " (even)"));
 	  if (mode == 1) {
 	    brf = (data & 0x03) - 1;
-	    log.finer("Baud rate factor set to: " + brf + " (" + BRM[brf] + "x)");
+	    log.finer("Baud rate factor set to: " + brf +
+		      " (" + BRM[brf] + "x)");
 	    sbits = (data >> 6) & 0x03;
 	    if (sbits == 0) {
 	      log.fine("Illegal number of stop bits");

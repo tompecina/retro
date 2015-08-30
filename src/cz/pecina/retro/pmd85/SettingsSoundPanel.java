@@ -76,8 +76,8 @@ public class SettingsSoundPanel extends JPanel {
     final GridBagConstraints tapeRecorderLabelConstraints =
       new GridBagConstraints();
     final JLabel tapeRecorderLabel =
-      new JLabel(Application.getString(this, "settings.sound.tapeRecorder.label") +
-		 ":");
+      new JLabel(Application.getString(
+        this, "settings.sound.tapeRecorder.label") + ":");
     tapeRecorderLabelConstraints.gridx = 0;
     tapeRecorderLabelConstraints.gridy = line;
     tapeRecorderLabelConstraints.insets = new Insets(5, 0, 0, 10);
@@ -92,7 +92,8 @@ public class SettingsSoundPanel extends JPanel {
       new WheelSlider(JSlider.HORIZONTAL, 0, 100, 0);
     tapeRecorderVolume.setMajorTickSpacing(25);
     tapeRecorderVolume.setPaintTicks(true);
-    final Hashtable<Integer,JLabel> tapeRecorderVolumeLabelTable = new Hashtable<>();
+    final Hashtable<Integer,JLabel> tapeRecorderVolumeLabelTable =
+      new Hashtable<>();
     tapeRecorderVolumeLabelTable.put(
       new Integer(0),
       new JLabel(Application.getString(this, "settings.sound.min")));
@@ -199,7 +200,9 @@ public class SettingsSoundPanel extends JPanel {
     // for description see ChangeListener
     @Override
     public void stateChanged(final ChangeEvent event) {
-      Parameters.sound.setVolume(channel, ((JSlider)(event.getSource())).getValue() / 100f);
+      Parameters.sound.setVolume(
+        channel,
+	((JSlider)(event.getSource())).getValue() / 100f);
     }
   }
 
@@ -216,7 +219,8 @@ public class SettingsSoundPanel extends JPanel {
     // for description see ChangeListener
     @Override
     public void stateChanged(final ChangeEvent event) {
-      Parameters.sound.setMute(channel, ((JCheckBox)(event.getSource())).isSelected());
+      Parameters.sound.setMute(channel,
+			       ((JCheckBox)(event.getSource())).isSelected());
     }
   }
 

@@ -84,17 +84,20 @@ public class SettingsPanel extends JPanel {
     viewPanel = new SettingsViewPanel();
     JPanel tempPanel = new JPanel(new BorderLayout());
     tempPanel.add(viewPanel, BorderLayout.PAGE_START);
-    tabbedPanel.addTab(Application.getString(this, "settings.view"), tempPanel);
+    tabbedPanel.addTab(Application.getString(this, "settings.view"),
+		       tempPanel);
 
     soundPanel = new SettingsSoundPanel();
     tempPanel = new JPanel(new BorderLayout());
     tempPanel.add(soundPanel, BorderLayout.PAGE_START);
-    tabbedPanel.addTab(Application.getString(this, "settings.sound"), tempPanel);
+    tabbedPanel.addTab(Application.getString(this, "settings.sound"),
+		       tempPanel);
 
     modelPanel = new SettingsModelPanel(computer);
     tempPanel = new JPanel(new BorderLayout());
     tempPanel.add(modelPanel, BorderLayout.PAGE_START);
-    tabbedPanel.addTab(Application.getString(this, "settings.model"), tempPanel);
+    tabbedPanel.addTab(Application.getString(this, "settings.model"),
+		       tempPanel);
 
     keyboardPanel = new SettingsKeyboardPanel(frame, computer);
     tempPanel = new JPanel(new BorderLayout());

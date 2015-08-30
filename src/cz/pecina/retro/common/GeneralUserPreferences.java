@@ -83,7 +83,8 @@ public abstract class GeneralUserPreferences {
       try {
 	Parameters.preferences.sync();
       } catch (final BackingStoreException | IllegalStateException exception) {
-	throw Application.createError(GeneralUserPreferences.class, "backingStore");
+	throw Application.createError(GeneralUserPreferences.class,
+				      "backingStore");
       }
       pixelSize = Parameters.preferences.getInt("pixelSize", 0);
       if (pixelSize == 0) {
@@ -99,7 +100,8 @@ public abstract class GeneralUserPreferences {
 	    pixelSize = i;
 	  }
 	if (pixelSize == 0) {  // no size fits
-	  throw Application.createError(GeneralUserPreferences.class, "smallScreen");
+	  throw Application.createError(GeneralUserPreferences.class,
+					"smallScreen");
 	}
 	Parameters.preferences.putInt("pixelSize", pixelSize);
       }
@@ -109,7 +111,8 @@ public abstract class GeneralUserPreferences {
 	locale = Locale.getDefault().toLanguageTag();
 	if (!Arrays.asList(GeneralConstants.SUPPORTED_LOCALES)
 	    .contains(locale)) {
-	  locale = GeneralConstants.SUPPORTED_LOCALES[0];  // use the default locale
+	  locale =
+	    GeneralConstants.SUPPORTED_LOCALES[0];  // use the default locale
 	}
 	Parameters.preferences.put("locale", locale);
       }

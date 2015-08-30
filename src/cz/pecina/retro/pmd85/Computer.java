@@ -127,7 +127,8 @@ public class Computer implements Runnable {
     			computerHardware.getKeyboardHardware()
 			);
     memoryFrame = new MemoryFrame(this, computerHardware.getHardware());
-    keyboardFrame = new KeyboardFrame(this, computerHardware.getKeyboardHardware());
+    keyboardFrame =
+      new KeyboardFrame(this, computerHardware.getKeyboardHardware());
     tapeRecorderFrame = new TapeRecorderFrame(
       this,
       computerHardware.getTapeRecorderHardware());
