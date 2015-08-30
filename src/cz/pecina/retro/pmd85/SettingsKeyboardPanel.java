@@ -100,7 +100,7 @@ public class SettingsKeyboardPanel extends JPanel {
     shortcutsScrollPane.setViewportBorder(BorderFactory
       .createEmptyBorder(5, 8, 5, 8));
     shortcutsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-    shortcutsScrollPane.setPreferredSize(new Dimension(0, 300));
+    shortcutsScrollPane.setPreferredSize(new Dimension(500, 400));
     add(shortcutsScrollPane);
 
     final JPanel buttonPanel = new JPanel(new GridBagLayout());
