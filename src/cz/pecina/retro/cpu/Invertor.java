@@ -36,7 +36,7 @@ public class Invertor extends NAND {
   /**
    * Gets input pin.
    *
-   * @return <code>IOPin</code> object
+   * @return {@code IOPin} object
    */
   public IOPin getInPin() {
     return super.getInPin(0);

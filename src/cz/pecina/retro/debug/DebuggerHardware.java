@@ -298,9 +298,9 @@ public class DebuggerHardware {
   }
 
   /**
-   * Gets the breakpoins as a <code>List</code>.
+   * Gets the breakpoins as a {@code List}.
    *
-   * @return <code>List</code> of breakpoints
+   * @return {@code List} of breakpoints
    */
   public List<Integer> getBreakpointValues() {
     return breakpointValues;

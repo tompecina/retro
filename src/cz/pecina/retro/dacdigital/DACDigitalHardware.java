@@ -290,7 +290,7 @@ public class DACDigitalHardware implements IOElement {
    * Gets the voltmeter display element.
    *
    * @param  n the position of the element, zero-based, right to left
-   * @return the <code>n</code>-th display element
+   * @return the {@code n}-th display element
    */
   public ESD getElement(int n) {
     assert (n >= 0) && (n < NUMBER_DISPLAY_ELEMENTS);
@@ -310,7 +310,7 @@ public class DACDigitalHardware implements IOElement {
    * Gets the voltmeter button.
    *
    * @param  n the position of the button in the layout
-   * @return the <code>n</code>-th button
+   * @return the {@code n}-th button
    */
   public GenericButton getButton(int n) {
     assert (n >= 0) && (n < DACDigitalButtonsLayout.NUMBER_BUTTONS);

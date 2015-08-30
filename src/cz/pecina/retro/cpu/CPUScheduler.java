@@ -138,7 +138,7 @@ public class CPUScheduler {
    *
    * @param  owner the owner whose events will be evaluated
    * @param  time  the current system clock
-   * @return       the remaining time in clock cycles or <code>-1</code>
+   * @return       the remaining time in clock cycles or {@code -1}
    *               if no event scheduled
    */
   public long getRemainingTime(final CPUEventOwner owner, final long time) {

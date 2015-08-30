@@ -25,8 +25,8 @@ import java.util.logging.Logger;
 import org.jdom2.Element;
 
 /**
- * <code>Device</code> descriptor, may be <code>Register</code>
- * or <code>Block</code>.
+ * {@code Device} descriptor, may be {@code Register}
+ * or {@code Block}.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -38,21 +38,21 @@ public abstract class Descriptor {
     Logger.getLogger(Descriptor.class.getName());
 
   /**
-   *  Name of the <code>Descriptor</code>.
+   *  Name of the {@code Descriptor}.
    */
   protected String name;
 
   /**
-   * Name of the XML tag representing the <code>Descriptor</code>.
+   * Name of the XML tag representing the {@code Descriptor}.
    */
   protected String tagName;
 
   /**
-   * Creates an instance of <code>Descriptor</code>.
+   * Creates an instance of {@code Descriptor}.
    *
-   * @param name    name of the <code>Descriptor</code>
+   * @param name    name of the {@code Descriptor}
    * @param tagName name of the XML tag representing
-   *                the <code>Descriptor</code>
+   *                the {@code Descriptor}
    */
   public Descriptor(final String name, final String tagName) {
     this.name = name;
@@ -61,27 +61,27 @@ public abstract class Descriptor {
   }
 
   /**
-   * Gets the name of the <code>Descriptor</code>.
+   * Gets the name of the {@code Descriptor}.
    *
-   * @return name of the <code>Descriptor</code>
+   * @return name of the {@code Descriptor}
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Gets a representation of the <code>Descriptor</code> in
-   * a JDOM <code>Element</code>.
+   * Gets a representation of the {@code Descriptor} in
+   * a JDOM {@code Element}.
    *
-   * @return <code>Element</code> representing the <code>Descriptor</code>
+   * @return {@code Element} representing the {@code Descriptor}
    */
   public abstract Element marshal();
 
   /**
-   * Loads a representation of the <code>Descriptor</code> from
-   * a JDOM <code>Element</code>.
+   * Loads a representation of the {@code Descriptor} from
+   * a JDOM {@code Element}.
    *
-   * @param descriptor <code>Element</code> to be loaded
+   * @param descriptor {@code Element} to be loaded
    */
   public abstract void unmarshal(Element descriptor);
 }

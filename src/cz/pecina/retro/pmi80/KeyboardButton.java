@@ -64,10 +64,10 @@ public class KeyboardButton extends LockableButton implements Localized {
    * @param id               text identification of the button (used
    *                         when fetching the icons)
    * @param matrixColumn     position of the key in the hardware matrix
-   *                         (column) or <code>-1</code> if not connected
+   *                         (column) or {@code -1} if not connected
    * @param matrixRow        position of the key in the hardware matrix
-   *                         (row) or <code>-1</code> if not connected
-   * @param toolTipResource  tool-tip for the button (<code>null</code> if none)
+   *                         (row) or {@code -1} if not connected
+   * @param toolTipResource  tool-tip for the button ({@code null} if none)
    */
   public KeyboardButton(final KeyboardHardware keyboardHardware,
 			final String id,

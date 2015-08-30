@@ -56,7 +56,7 @@ public class SimpleMemory extends Device implements AbstractMemory {
 
   /**
    * Constructor of zero-filled memory block.  The area between
-   * <code>startROM</code> and <code>startRAM - 1</code> is non-writeable
+   * {@code startROM} and {@code startRAM - 1} is non-writeable
    * (all writes are ignored).
    *
    * @param name     device name

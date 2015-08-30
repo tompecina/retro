@@ -373,7 +373,7 @@ public class Sound {
    * Sets the volume (gain) control.
    *
    * @param channel the channel number
-   * @param mute    the new volume (gain) setting for the channel, 0.0-1.0
+   * @param volume  the new volume (gain) setting for the channel, 0.0-1.0
    */
   public void setVolume(final int channel, final float volume) {
     gainControls[channel].setValue(gainMinima[channel] +

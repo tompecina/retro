@@ -244,7 +244,7 @@ public class CounterHardware implements IOElement, CPUEventOwner {
    * Gets the display element.
    *
    * @param  n the position of the element, zero-based, right to left
-   * @return the <code>n</code>-th display element
+   * @return the {@code n}-th display element
    */
   public ESD getElement(int n) {
     assert (n >= 0) && (n < NUMBER_DISPLAY_ELEMENTS);

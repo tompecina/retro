@@ -90,7 +90,7 @@ public class Intel8255A extends Device implements IOElement {
    * Gets I/O pin.
    *
    * @param  n pin number
-   * @return <code>IOPin</code> object
+   * @return {@code IOPin} object
    */
   public IOPin getPin(final int n) {
     assert (n >= 0) && (n < 24);

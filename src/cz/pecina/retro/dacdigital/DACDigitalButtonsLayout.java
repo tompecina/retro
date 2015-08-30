@@ -163,10 +163,10 @@ public class DACDigitalButtonsLayout {
   }
 
   /**
-   * Gets the <code>n</code>th button
+   * Gets the {@code n}th button
    *
    * @param  n position of the button
-   * @return the <code>n</code>th button
+   * @return the {@code n}th button
    */
   public GenericButton getButton(final int n) {
     assert (n >= 0) && (n < NUMBER_BUTTONS);

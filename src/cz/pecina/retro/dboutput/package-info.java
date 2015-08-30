@@ -19,7 +19,7 @@
  */
 
 /**
- * Debug output from a port to <code>System.out</code>.
+ * Debug output from a port to {@code System.out}.
  *
  * @author @AUTHOR@
  * @version @VERSION@

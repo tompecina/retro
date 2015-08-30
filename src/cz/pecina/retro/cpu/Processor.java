@@ -131,10 +131,10 @@ public interface Processor {
   public abstract void clearIOOutput(int port);
 
   /**
-   * Returns <code>true</code> if interrupt is enabled.
+   * Returns {@code true} if interrupt is enabled.
    *
-   * @return <code>true</code> if interrupt is enabled,
-   *         <code>false</code> otherwise
+   * @return {@code true} if interrupt is enabled,
+   *         {@code false} otherwise
    */
   public abstract boolean isIE();
 
@@ -195,9 +195,9 @@ public interface Processor {
   public abstract void resume();
 
   /**
-   * Returns <code>true</code> if the element is suspended.
+   * Returns {@code true} if the element is suspended.
    *
-   * @return <code>true</code> if the element is suspended
+   * @return {@code true} if the element is suspended
    */
   public abstract boolean isSuspended();
 

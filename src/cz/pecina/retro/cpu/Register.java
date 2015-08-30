@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.jdom2.Element;
 
 /**
- * String-based <code>Device</code> descriptor.
+ * String-based {@code Device} descriptor.
  *
  * @author @AUTHOR@
  * @version @VERSION@

@@ -240,9 +240,9 @@ public class IOPanelElement extends GenericBitmap implements Resizeable {
   }
 
   /**
-   * Gets the <code>IOPin</code> object connected to the element.
+   * Gets the {@code IOPin} object connected to the element.
    *
-   * @return the <code>IOPin</code> object connected to the element
+   * @return the {@code IOPin} object connected to the element
    */
   public IOPin getPin() {
     return pin;

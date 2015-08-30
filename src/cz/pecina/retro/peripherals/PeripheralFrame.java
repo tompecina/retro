@@ -51,7 +51,7 @@ public abstract class PeripheralFrame extends JFrame implements Localized {
   private String title;
 
   /**
-   * Creates an instance of a peripheral <code>JFrame</code>.
+   * Creates an instance of a peripheral {@code JFrame}.
    *
    * @param peripheral linked peripheral
    */

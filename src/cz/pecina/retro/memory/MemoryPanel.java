@@ -102,9 +102,9 @@ public class MemoryPanel extends JTabbedPane {
   }
 
   /**
-   * Gets the <code>Hardware</code> object.
+   * Gets the {@code Hardware} object.
    *
-   * @return the <code>Hardware</code> object
+   * @return the {@code Hardware} object
    */
   public Hardware getHardware() {
     return hardware;

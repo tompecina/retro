@@ -723,9 +723,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Returns <code>true</code> if the sign (S) flag is set.
+   * Returns {@code true} if the sign (S) flag is set.
    *
-   * @return <code>true</code> if flag set, <code>false</code> otherwise
+   * @return {@code true} if flag set, {@code false} otherwise
    */
   public boolean isSF() {
     return SFSET();
@@ -745,9 +745,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Returns <code>true</code> if the zero (Z) flag is set.
+   * Returns {@code true} if the zero (Z) flag is set.
    *
-   * @return <code>true</code> if flag set, <code>false</code> otherwise
+   * @return {@code true} if flag set, {@code false} otherwise
    */
   public boolean isZF() {
     return ZFSET();
@@ -767,9 +767,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Returns <code>true</code> if the auxiliary carry (AC) flag is set.
+   * Returns {@code true} if the auxiliary carry (AC) flag is set.
    *
-   * @return <code>true</code> if flag set, <code>false</code> otherwise
+   * @return {@code true} if flag set, {@code false} otherwise
    */
   public boolean isACF() {
     return ACFSET();
@@ -789,9 +789,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Returns <code>true</code> if the parity (P) flag is set.
+   * Returns {@code true} if the parity (P) flag is set.
    *
-   * @return <code>true</code> if flag set, <code>false</code> otherwise
+   * @return {@code true} if flag set, {@code false} otherwise
    */
   public boolean isPF() {
     return PFSET();
@@ -811,9 +811,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Returns <code>true</code> if the carry (C) flag is set.
+   * Returns {@code true} if the carry (C) flag is set.
    *
-   * @return <code>true</code> if flag set, <code>false</code> otherwise
+   * @return {@code true} if flag set, {@code false} otherwise
    */
   public boolean isCF() {
     return CFSET();
@@ -841,7 +841,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   /**
    * Enables/disables interrupts.
    *
-   * @param b if <code>true</code>, interrupts will be enabled
+   * @param b if {@code true}, interrupts will be enabled
    */
   public void setIE(final boolean b) {
     IE = b;
@@ -4878,8 +4878,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   /**
    * Gets Opcode.
    *
-   * @param  n first byte of <code>Opcode</code>
-   * @return <code>Opcode</code> value
+   * @param  n first byte of {@code Opcode}
+   * @return {@code Opcode} value
    */
   public Opcode getOpcode(final int n) {
     assert (n >= 0) && (n < 0x100);

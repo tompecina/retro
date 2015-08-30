@@ -137,7 +137,7 @@ public class IntelHEX extends MemoryProcessor {
    * Reads Intel HEX data from a file and stores it in memory.
    *
    * @param  file               input file
-   * @param  destinationAddress destination address (<code>-1</code> = none)
+   * @param  destinationAddress destination address ({@code -1} = none)
    * @return info               info record
    */
   public Info read(final File file, int destinationAddress) {

@@ -165,7 +165,7 @@ public class MemoryProcessor {
    * @param  endAddress         end address
    * @param  destinationAddress destination address
    * @return                    address of the first mismatch or
-   *                            <code>-1</code> if equal
+   *                            {@code -1} if equal
    */
   public int compare(final int startAddress,
 		     final int endAddress,

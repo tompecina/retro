@@ -56,7 +56,7 @@ public class Counter extends BasePortPeripheral {
   protected static final int DEFAULT_BASE_PORT = 0xc0;
 
   /**
-   * The default trigger bit (<code>=1</code> = any port write).
+   * The default trigger bit ({@code =1} = any port write).
    */
   protected static final int DEFAULT_BIT = -1;
 

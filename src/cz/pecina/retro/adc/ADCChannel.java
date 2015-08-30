@@ -108,8 +108,8 @@ public class ADCChannel extends JLabel implements Resizeable {
   /**
    * Gets the state of the channel.
    *
-   * @return state of the channel, between <code>0.0</code>
-   *         and <code>1.0</code>
+   * @return state of the channel, between {@code 0.0}
+   *         and {@code 1.0}
    */
   public double getState() {
     return state;

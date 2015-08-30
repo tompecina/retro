@@ -68,7 +68,7 @@ public class NOR {
    * Gets input pin.
    *
    * @param  n pin number
-   * @return <code>IOPin</code> object
+   * @return {@code IOPin} object
    */
   public IOPin getInPin(final int n) {
     return inPins[n];
@@ -77,7 +77,7 @@ public class NOR {
   /**
    * Gets output pin.
    *
-   * @return <code>IOPin</code> object
+   * @return {@code IOPin} object
    */
   public IOPin getOutPin() {
     return outPin;

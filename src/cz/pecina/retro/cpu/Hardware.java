@@ -28,7 +28,7 @@ import org.jdom2.Element;
 
 /**
  * Collection of statful hardware elements (represented by
- * <code>Device</code> objects).
+ * {@code Device} objects).
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -46,7 +46,7 @@ public class Hardware extends ArrayList<Device> {
   private int suspension;
 
   /**
-   * Creates a new set of <code>Device</code> objects.
+   * Creates a new set of {@code Device} objects.
    *
    * @param name name of the hardware set
    */
@@ -65,10 +65,10 @@ public class Hardware extends ArrayList<Device> {
   }
 
   /**
-   * Gets the <code>Device</code> object identified by name.
+   * Gets the {@code Device} object identified by name.
    *
    * @param  name name of the Device object
-   * @return      the <code>Device</code> object or <code>null</code>
+   * @return      the {@code Device} object or {@code null}
    *              if not found
    */
   public Device getDeviceByName(final String name) {
@@ -84,11 +84,11 @@ public class Hardware extends ArrayList<Device> {
   }
 
   /**
-   * Gets a representation of the <code>Hardware</code> object in 
-   * a JDOM <code>Element</code>.
+   * Gets a representation of the {@code Hardware} object in 
+   * a JDOM {@code Element}.
    *
-   * @param hardware <code>Element</code> representing the
-   * <code>Hardware</code> object
+   * @param hardware {@code Element} representing the
+   * {@code Hardware} object
    */
   public void marshal(final Element hardware) {
     log.fine("Marshalling hardware");
@@ -99,10 +99,10 @@ public class Hardware extends ArrayList<Device> {
   }
 
   /**
-   * Loads a representation of the <code>Hardware</code> object from
-   * a JDOM <code>Element</code>.
+   * Loads a representation of the {@code Hardware} object from
+   * a JDOM {@code Element}.
    *
-   * @param hardware <code>Element</code> to be loaded
+   * @param hardware {@code Element} to be loaded
    */
   public void unmarshal(final Element hardware) {
     log.fine("Unmarshalling hardware");
@@ -112,7 +112,7 @@ public class Hardware extends ArrayList<Device> {
   }
 
   /**
-   * Suspends operation of all <code>Device</code>s.
+   * Suspends operation of all {@code Device}s.
    */
   public void suspend() {
     if (suspension++ == 0) {
@@ -123,7 +123,7 @@ public class Hardware extends ArrayList<Device> {
   }
 
   /**
-   * Resumes operation of all <code>Device</code>s.
+   * Resumes operation of all {@code Device}s.
    */
   public void resume() {
     if (suspension > 0) {
@@ -137,7 +137,7 @@ public class Hardware extends ArrayList<Device> {
   }
 
   /**
-   * Resets all <code>Device</code>s.
+   * Resets all {@code Device}s.
    */
   public void reset() {
     for (Device device: this) {

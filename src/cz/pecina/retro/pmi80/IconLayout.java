@@ -95,7 +95,7 @@ public class IconLayout {
    * Gets the icon.
    *
    * @param  n position of the icon, from left, zero-based
-   * @return the <code>n</code>-th icon
+   * @return the {@code n}-th icon
    */
   public IconButton getIcon(final int n) {
     return icons[n];

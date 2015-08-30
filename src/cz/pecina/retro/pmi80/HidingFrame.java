@@ -31,7 +31,7 @@ import cz.pecina.retro.gui.CloseableFrame;
 import cz.pecina.retro.gui.GUI;
 
 /**
- * Icon-controlled <code>JFrame</code>.
+ * Icon-controlled {@code JFrame}.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -49,7 +49,7 @@ public abstract class HidingFrame extends CloseableFrame implements Localized {
   private IconButton icon;
 
   /**
-   * Creates an instance of an icon-controlled <code>JFrame</code>.
+   * Creates an instance of an icon-controlled {@code JFrame}.
    *
    * @param title title of the frame
    * @param icon  icon controlling the frame
@@ -79,14 +79,14 @@ public abstract class HidingFrame extends CloseableFrame implements Localized {
   }
 
   /**
-   * Method invoked after the <code>HidingFrame</code> is shown.
+   * Method invoked after the {@code HidingFrame} is shown.
    * Placeholder method expected to be overridden by subclasses.
    */
   protected void setUp() {
   }
 
   /**
-   * Method invoked before the <code>HidingFrame</code> is hidden.
+   * Method invoked before the {@code HidingFrame} is hidden.
    * Placeholder method expected to be overridden by subclasses.
    */
   protected void tearDown() {

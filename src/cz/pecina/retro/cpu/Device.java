@@ -29,7 +29,7 @@ import org.jdom2.Element;
 
 /**
  * Abstract stateful hardware element.  It is identified by
- * a unique name and contains a set of <code>Descriptor</code>s
+ * a unique name and contains a set of {@code Descriptor}s
  * to be preserved in snapshots.
  *
  * @author @AUTHOR@
@@ -82,10 +82,10 @@ public abstract class Device extends ArrayList<Descriptor> {
   }
 
   /**
-   * Gets the <code>Block</code> object identified by name.
+   * Gets the {@code Block} object identified by name.
    *
-   * @param  name name of the <code>Block</code> object
-   * @return      the <code>Block</code> object or null if not found
+   * @param  name name of the {@code Block} object
+   * @return      the {@code Block} object or null if not found
    */
   public Block getBlockByName(final String name) {
     log.finer("Requesting Block '" + name + "' from Device '" +
@@ -101,9 +101,9 @@ public abstract class Device extends ArrayList<Descriptor> {
   }
 
   /**
-   * Gets a list of all <code>Block</code> objects.
+   * Gets a list of all {@code Block} objects.
    *
-   * @return the list of all <code>Block</code> objects
+   * @return the list of all {@code Block} objects
    */
   public List<Block> getBlocks() {
     log.finer("Requesting list of all blocks from Device '" + this.name + "'");
@@ -117,10 +117,10 @@ public abstract class Device extends ArrayList<Descriptor> {
   }
 
   /**
-   * Gets a representation of the <code>Device</code> in 
-   * a JDOM <code>Element</code>.
+   * Gets a representation of the {@code Device} in 
+   * a JDOM {@code Element}.
    *
-   * @return <code>Element</code> representing the <code>Device</code>
+   * @return {@code Element} representing the {@code Device}
    */
   public Element marshal() {
     log.fine("Marshalling device: " + name);
@@ -147,14 +147,14 @@ public abstract class Device extends ArrayList<Descriptor> {
   }
 
   /**
-   * Loads a representation of the <code>Device</code> from 
-   * a JDOM <code>Element</code>.
+   * Loads a representation of the {@code Device} from 
+   * a JDOM {@code Element}.
    * <p>
    * Note: The current implementation ignores devices the computer
    * does not have.  This is a controversial design decision, which
    * may be revised in the future.
    *
-   * @param hardware <code>Element</code> to be loaded
+   * @param hardware {@code Element} to be loaded
    */
   public void unmarshal(final Element hardware) {
     log.fine("Unmarshalling device: " + name);
@@ -203,9 +203,9 @@ public abstract class Device extends ArrayList<Descriptor> {
   }
 
   /**
-   * Returns <code>true</code> if the element is suspended.
+   * Returns {@code true} if the element is suspended.
    *
-   * @return <code>true</code> if the element is suspended
+   * @return {@code true} if the element is suspended
    */
   public boolean isSuspended() {
     return suspended;

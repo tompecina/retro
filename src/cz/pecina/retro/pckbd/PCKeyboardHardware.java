@@ -267,8 +267,8 @@ public class PCKeyboardHardware implements IOElement, CPUEventOwner {
    * Schedules the key's press or release scan code for transmission.
    *
    * @param scanCode the scan code of the key
-   * @param released <code>false</code> if pressed,
-   *                 <code>true</code> if released
+   * @param released {@code false} if pressed,
+   *                 {@code true} if released
    */
   public void sendScanCode(int scanCode, final boolean released) {
     assert scanCode > 0;

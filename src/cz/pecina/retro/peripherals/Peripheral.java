@@ -85,8 +85,8 @@ public abstract class Peripheral {
   /**
    * Gets the activity state of the peripheral.
    *
-   * @return <code>true</code> if the peripheral is active,
-   *         <code>false</code> otherwise
+   * @return {@code true} if the peripheral is active,
+   *         {@code false} otherwise
    */
   public boolean isActive() {
     return active;
@@ -122,8 +122,8 @@ public abstract class Peripheral {
   /**
    * Creates the settings panel for the peripheral.
    *
-   * @return a <code>JPanel</code> object with the settings widgets of the
-   *         peripheral or <code>null</code> if no settings are available
+   * @return a {@code JPanel} object with the settings widgets of the
+   *         peripheral or {@code null} if no settings are available
    */
   public JPanel createSettingsPanel() {
     log.fine("Peripheral panel not created for: " + name);

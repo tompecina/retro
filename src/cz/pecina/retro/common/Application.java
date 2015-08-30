@@ -160,7 +160,7 @@ public final class Application {
   /**
    * Gets a localized text resource.
    *
-   * @param  cl  the <code>Class</code> identifying the resource bundle
+   * @param  cl  the {@code Class} identifying the resource bundle
    * @param  key the key for the desired string
    * @return     the string for the given key
    */
@@ -188,11 +188,11 @@ public final class Application {
    * Gets a localized error exception.
    *
    * @param  bundle   the object identifying the resource bundle
-   *                  (normally <code>this</code> or a <code>Class</code>
+   *                  (normally {@code this} or a {@code Class}
    *                  object for static references)
    * @param  errorKey the key of the error message
    * @param  varargs  additional arguments for the message string
-   * @return          the <code>RuntimeException</code> corresponding
+   * @return          the {@code RuntimeException} corresponding
    *                  to the key
    */
   public static RuntimeException createError(final Object bundle,

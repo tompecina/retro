@@ -27,7 +27,7 @@ import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.cpu.IOElement;
 
 /**
- * Debug output from a port to <code>System.out</code> hardware.
+ * Debug output from a port to {@code System.out} hardware.
  *
  * @author @AUTHOR@
  * @version @VERSION@

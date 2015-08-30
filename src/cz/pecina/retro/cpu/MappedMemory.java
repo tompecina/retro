@@ -46,7 +46,7 @@ public class MappedMemory extends SimpleMemory {
   
   /**
    * Constructor of zero-filled memory block.  The area between
-   * <code>startROM</code> and <code>startRAM - 1</code> is non-writeable
+   * {@code startROM} and {@code startRAM - 1} is non-writeable
    * (all writes are ignored).
    *
    * @param name          device name
@@ -69,7 +69,7 @@ public class MappedMemory extends SimpleMemory {
   /**
    * Gets the read listener.
    *
-   * @return the read listener or <code>null</code> if none
+   * @return the read listener or {@code null} if none
    */
   public ReadListener getReadListiner() {
     return readListener;
@@ -78,7 +78,7 @@ public class MappedMemory extends SimpleMemory {
   /**
    * Sets the read listener.
    *
-   * @param readListener the read listener or <code>null</code> if none
+   * @param readListener the read listener or {@code null} if none
    */
   public void setReadListener(final ReadListener readListener) {
     this.readListener = readListener;
@@ -87,7 +87,7 @@ public class MappedMemory extends SimpleMemory {
   /**
    * Gets the write listener.
    *
-   * @return the write listener or <code>null</code> if none
+   * @return the write listener or {@code null} if none
    */
   public WriteListener getWriteListiner() {
     return writeListener;
@@ -96,7 +96,7 @@ public class MappedMemory extends SimpleMemory {
   /**
    * Sets the write listener.
    *
-   * @param writeListener the write listener or <code>null</code> if none
+   * @param writeListener the write listener or {@code null} if none
    */
   public void setWriteListener(final WriteListener writeListener) {
     this.writeListener = writeListener;

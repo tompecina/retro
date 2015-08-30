@@ -144,7 +144,7 @@ public class XML extends MemoryProcessor {
    * Reads XML data from a file and stores it in memory.
    *
    * @param  file               input file
-   * @param  destinationAddress destination address (<code>-1</code> = none)
+   * @param  destinationAddress destination address ({@code -1} = none)
    * @return info record
    */
   public Info read(final File file, final int destinationAddress) {

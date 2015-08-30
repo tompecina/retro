@@ -69,7 +69,7 @@ public class Snapshot extends MemoryProcessor {
   private static final int COUNT_LIMIT = 7;
 
   /**
-   * Creates an instance of <code>Snapshot</code> reader/writer.
+   * Creates an instance of {@code Snapshot} reader/writer.
    *
    * @param hardware hardware set
    */
@@ -233,7 +233,7 @@ public class Snapshot extends MemoryProcessor {
    *
    * @param  memory             memory array
    * @param  tag                tag to process
-   * @param  destinationAddress destination address (<code>-1</code> = none)
+   * @param  destinationAddress destination address ({@code -1} = none)
    * @return info               info record
    */
   public static Info processBlockElement(final byte[] memory,

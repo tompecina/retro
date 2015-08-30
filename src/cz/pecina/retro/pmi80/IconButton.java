@@ -69,7 +69,7 @@ public class IconButton extends GenericButton implements Localized {
    *                        (x-coordinate)
    * @param positionY       position of the icon on the control panel
    *                        (y-coordinate)
-   * @param toolTipResource tool-tip for the button (<code>null</code> if none)
+   * @param toolTipResource tool-tip for the button ({@code null} if none)
    */
   public IconButton(final Computer computer,
 		    final String id,

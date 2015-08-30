@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.jdom2.Element;
 
 /**
- * Block-based <code>Device</code> descriptor.
+ * Block-based {@code Device} descriptor.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -74,14 +74,14 @@ public abstract class Block extends Descriptor {
   /**
    * Gets block data in XML.
    *
-   * @param block the <code>Element</code> tag
+   * @param block the {@code Element} tag
    */
   public abstract void getContent(Element block);
     
   /**
    * Processes block data in XML.
    *
-   * @param block the <code>Element</code> tag
+   * @param block the {@code Element} tag
    */
   public abstract void processContent(Element block);
 }

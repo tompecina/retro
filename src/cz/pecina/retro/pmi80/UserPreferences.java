@@ -161,7 +161,7 @@ public final class UserPreferences extends GeneralUserPreferences {
    * @param keyboardLayout the keyboard layout
    * @param row            the row
    * @param column         the column
-   * @param shortcut       the new keyboard shortcut or <code>null</code>
+   * @param shortcut       the new keyboard shortcut or {@code null}
    *                       if none
    */
   public static void setShortcut(final KeyboardLayout keyboardLayout,
@@ -187,7 +187,7 @@ public final class UserPreferences extends GeneralUserPreferences {
    *
    * @param  row      the row
    * @param  column   the column
-   * @return shortcut the keyboard shortcut or <code>null</code>
+   * @return shortcut the keyboard shortcut or {@code null}
    *                  if none
    */
   public static Shortcut getShortcut(final int row,
