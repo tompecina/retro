@@ -22,6 +22,7 @@ package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
 
+import java.util.Set;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 
@@ -65,9 +66,11 @@ public class KeyChooserPanel extends FixedPane {
    *
    * @param frame          enclosing frame
    * @param keyboardLayout the keyboard layout
+   * @param keys           set of key numbers curently assigned to this shortcut
    */
   public KeyChooserPanel(final Frame frame,
-			 final KeyboardLayout keyboardLayout) {
+			 final KeyboardLayout keyboardLayout,
+			 final Set<Integer> keys) {
     super("pmi80/ComputerPanel/buttonchooser-mask");
     log.fine("New KeyChooserPanel creation started");
     this.frame = frame;
@@ -87,6 +90,8 @@ public class KeyChooserPanel extends FixedPane {
       button.setOnIcon(IconCache.get(String.format(button.getTemplate(),
 						   pixelSize,
 						   "l")));
+      button.setPressed(keys.contains(KeyboardLayout
+        .getButtonNumber(row, column)));
       button.place(this,
 		   (column * BUTTON_GRID_X) + BUTTON_OFFSET_X,
 		   (row * BUTTON_GRID_Y) + BUTTON_OFFSET_Y);

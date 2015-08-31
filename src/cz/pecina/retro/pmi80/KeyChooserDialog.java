@@ -93,7 +93,8 @@ public class KeyChooserDialog extends JDialog {
     
     keyChooserPanel = new KeyChooserPanel(
       frame,
-      computer.getComputerHardware().getKeyboardHardware().getKeyboardLayout());
+      computer.getComputerHardware().getKeyboardHardware().getKeyboardLayout(),
+      keys);
     dialogPanel.add(keyChooserPanel);
 
     final JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.TRAILING));

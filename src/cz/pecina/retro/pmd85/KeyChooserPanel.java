@@ -22,6 +22,7 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 
+import java.util.Set;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 
@@ -63,10 +64,12 @@ public class KeyChooserPanel extends BackgroundFixedPane {
    * @param frame          enclosing frame
    * @param model          the computer model
    * @param keyboardLayout the keyboard layout
+   * @param keys           set of key numbers curently assigned to this shortcut
    */
   public KeyChooserPanel(final Frame frame,
 			 final int model,
-			 final KeyboardLayout keyboardLayout) {
+			 final KeyboardLayout keyboardLayout,
+			 final Set<Integer> keys) {
     super("pmd85/KeyboardPanel/" + ((model ==  0) ? "longmask" : "shortmask"),
 	  "plastic",
 	  "gray");
@@ -84,6 +87,7 @@ public class KeyChooserPanel extends BackgroundFixedPane {
       button.setOnIcon(IconCache.get(String.format(button.getTemplate(),
 						   pixelSize,
 						   "l")));
+      button.setPressed(keys.contains(n));
       button.place(this,
 		   key.getOffsetX() * BASE_WIDTH,
 		   key.getOffsetY() * BASE_HEIGHT);

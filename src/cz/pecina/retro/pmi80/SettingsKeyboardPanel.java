@@ -100,7 +100,7 @@ public class SettingsKeyboardPanel extends JPanel {
     shortcutsScrollPane.setViewportBorder(BorderFactory
       .createEmptyBorder(5, 8, 5, 8));
     shortcutsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-    shortcutsScrollPane.setPreferredSize(new Dimension(500, 400));
+    shortcutsScrollPane.setPreferredSize(new Dimension(600, 400));
     add(shortcutsScrollPane);
 
     final JPanel buttonPanel = new JPanel(new GridBagLayout());
@@ -201,11 +201,24 @@ public class SettingsKeyboardPanel extends JPanel {
 	keysPaneConstraints.weighty = 0.0;
 	innerPane.add(keysPane, keysPaneConstraints);
 	
+	final GridBagConstraints changeButtonConstraints =
+	  new GridBagConstraints();
+	final JButton changeButton = new JButton(Application
+    	  .getString(this, "settings.keyboard.button.change"));
+	changeButtonConstraints.gridx = 2;
+	changeButtonConstraints.gridy = line;
+	changeButtonConstraints.insets = new Insets(5, 5, 5, 5);
+	changeButtonConstraints.anchor = GridBagConstraints.LINE_START;
+	changeButtonConstraints.weightx = 0.0;
+	changeButtonConstraints.weighty = 0.0;
+	changeButton.addActionListener(new ChangeListener(shortcut));
+	innerPane.add(changeButton, changeButtonConstraints);
+      
 	final GridBagConstraints removeButtonConstraints =
 	  new GridBagConstraints();
 	final JButton removeButton = new JButton(Application
     	  .getString(this, "settings.keyboard.button.remove"));
-	removeButtonConstraints.gridx = 2;
+	removeButtonConstraints.gridx = 3;
 	removeButtonConstraints.gridy = line;
 	removeButtonConstraints.insets = new Insets(5, 5, 5, 5);
 	removeButtonConstraints.anchor = GridBagConstraints.LINE_START;
@@ -252,6 +265,33 @@ public class SettingsKeyboardPanel extends JPanel {
   public SetListener createSetListener() {
     log.finer("Partial set listener created");
     return new SetListener();
+  }
+
+  // change button listener
+  private class ChangeListener implements ActionListener {
+    private Shortcut shortcut;
+
+    private ChangeListener(final Shortcut shortcut) {
+      this.shortcut = shortcut;
+    }
+
+    // for description see ActionListener
+    @Override
+    public void actionPerformed(final ActionEvent event) {
+      log.finer("Change button event detected");
+      final NavigableSet<Integer> keys = KeyChooserDialog.getKeys(
+        frame,
+	computer,
+	String.format(Application.getString(SettingsKeyboardPanel.class,
+	  "settings.keyboard.keyChooser.frameTitle"),
+	  shortcut.getDesc()),
+	shortcuts.get(shortcut));
+      if ((keys != null) && !keys.isEmpty()) {
+	shortcuts.put(shortcut, keys);
+	updateShortcutsPane();
+	log.fine("Shortcut '" + shortcut.getDesc() + "' changed");
+      }
+    }
   }
 
   // remove button listener

@@ -1,0 +1,22 @@
+BUGS/FEATURES
+=============
+
+* Incorrect colors for model 3.
+
+* Strange null pointer exception in Settings/Keyboard.
+
+* Support for synchronous 8251A reception missing.
+
+* Composite shortcuts not working with autorepeat algorighm.
+
+* Keyboard support for PMI-80 needs review.
+
+* Sound must be reviewed and probably redone.
+
+* Replace 1200Hz generator with 8253.
+
+* About for PMD 85 missing.
+
+* Implement command-line option for model selection.
+
+* Update PMI-80 tape formats PMITAPE & SAM.
