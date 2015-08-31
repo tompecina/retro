@@ -24,8 +24,6 @@ import java.util.logging.Logger;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.ArrayDeque;
 
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
@@ -93,9 +91,6 @@ public class KeyboardHardware {
   // keyboard layout
   private KeyboardLayout keyboardLayout;
 
-  // keyboard queue
-  private Deque<ShortcutEvent> queue = new ArrayDeque<>();
-  
   /**
    * Creates the keyboard hardware object.
    */
@@ -262,30 +257,10 @@ public class KeyboardHardware {
     return scanPins[n];
   }
 
-
-  /**
-   * Put a keyboard shortcut event in the queue.
-   *
-   * @param event the keyboard shortcut event
-   */
-  public void pushShortcutEvent(final ShortcutEvent event) {
-    log.finer("Pushing key: " + event.getKey() +
-	      ", action: " + (event.getAction() ? "press" : "release"));
-    assert event != null;
-    queue.push(event);
-  }
-  
   /**
    * Performs periodic keyboard update.
    */
   public void update() {
-    final ShortcutEvent event = queue.pollLast();
-    if (event != null) {
-      final KeyboardKey button = event.getKey();
-      if (!button.isLocked()) {
-	button.setPressed(event.getAction());
-      }
-    }
     updateBuffer();
   }
 

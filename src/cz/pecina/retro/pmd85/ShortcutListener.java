@@ -22,9 +22,7 @@ package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
 
-import java.util.Set;
 import java.util.NavigableSet;
-import java.util.HashSet;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -46,9 +44,6 @@ public class ShortcutListener extends KeyAdapter {
   private static final Logger log =
     Logger.getLogger(ShortcutListener.class.getName());
 
-  // set of pressed shortcuts
-  private Set<Shortcut> pressedShortcuts = new HashSet<>();
-    
   // keyboard hardware
   private KeyboardHardware keyboardHardware;
   
@@ -76,9 +71,6 @@ public class ShortcutListener extends KeyAdapter {
     if (UserPreferences.getShortcuts().containsKey(shortcut)) {
       final NavigableSet<Integer> keys =
 	UserPreferences.getShortcuts().get(shortcut);
-
-
-
       for (int key: keys) {
 	final KeyboardKey button = layout.getKey(key);
 	log.finest("Processing key: " + key + ", button: " + button.getCap());
@@ -86,56 +78,6 @@ public class ShortcutListener extends KeyAdapter {
 	  button.setPressed(action);
 	}
       }
-      
-
-
-
-
-
-      // if (keys.size() == 1) {
-      // 	final KeyboardKey button = layout.getKey(keys.first());
-      // 	if (!button.isLocked()) {
-      // 	  button.setPressed(action);
-      // 	}
-      // } else {
-      // 	if (action) {
-      // 	  if (!pressedShortcuts.contains(shortcut)) {
-      // 	    pressedShortcuts.add(shortcut);
-      // 	    log.finest("Shortcut: " + shortcut.getDesc() +
-      // 		       " added to pressedShortcuts");
-      // 	    boolean first = true;
-      // 	    for (int key: keys) {
-      // 	      final KeyboardKey button = layout.getKey(key);
-      // 	      if (first) {
-      // 		if (!button.isLocked()) {
-      // 		  button.setPressed(true);
-      // 		}
-      // 		first = false;
-      // 	      } else {
-      // 		keyboardHardware.pushShortcutEvent(new ShortcutEvent(
-      // 		  button, true));
-      // 	      }
-      // 	    }
-      // 	  }
-      // 	} else {
-      // 	  log.finest("Shortcut: " + shortcut.getDesc() +
-      // 		     " removed from pressedShortcuts");
-      // 	  pressedShortcuts.remove(shortcut);
-      // 	  boolean first = true;
-      // 	  for (int key: keys.descendingSet()) {
-      // 	    final KeyboardKey button = layout.getKey(key);
-      // 	    if (first) {
-      // 	      if (!button.isLocked()) {
-      // 		button.setPressed(false);
-      // 	      }
-      // 	      first = false;
-      // 	    } else {
-      // 	      keyboardHardware.pushShortcutEvent(new ShortcutEvent(
-      // 	        button, false));
-      // 	    }
-      // 	  }
-      // 	}
-      // }
       event.consume();
     }
   }
