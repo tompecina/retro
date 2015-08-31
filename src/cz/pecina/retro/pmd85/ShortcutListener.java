@@ -70,40 +70,72 @@ public class ShortcutListener extends KeyAdapter {
   // process key event
   private void processKey(final KeyEvent event, final boolean action) {
     log.finer("Processing key event: " + event + ", action: " + action);
+    final KeyboardLayout layout = keyboardHardware.getKeyboardLayout();
     final Shortcut shortcut =
       new Shortcut(event.getExtendedKeyCode(), event.getKeyLocation());
     if (UserPreferences.getShortcuts().containsKey(shortcut)) {
       final NavigableSet<Integer> keys =
 	UserPreferences.getShortcuts().get(shortcut);
-      if (keys.size() == 1) {
-	keyboardHardware.getKeyboardLayout().getKey(keys.first())
-	  .setPressed(action);
-      } else {
-	if (action) {
-	  for (Shortcut x: pressedShortcuts) {
-	    System.out.println(": " + x + " : " + x.equals(shortcut) + " : " + shortcut.equals(x) + " : " + pressedShortcuts.contains(shortcut) + " : " + pressedShortcuts.contains(x));
-	  }
-	  if (!pressedShortcuts.contains(shortcut)) {
-	    pressedShortcuts.add(shortcut);
-	    log.finest("pressedShortcuts.size(): " + pressedShortcuts.size());
-	    log.finest("Shortcut: " + shortcut.getDesc() +
-		       " added to pressedShortcuts");
-	    for (int key: keys) {
-	      keyboardHardware.pushShortcutEvent(new ShortcutEvent(
-		keyboardHardware.getKeyboardLayout().getKey(key), true));
-	    }
-	  }
-	} else {
-	  log.finest("pressedShortcuts.size(): " + pressedShortcuts.size());
-	  log.finest("Shortcut: " + shortcut.getDesc() +
-		     " removed from pressedShortcuts");
-	  pressedShortcuts.remove(shortcut);
-	  for (int key: keys.descendingSet()) {
-	    keyboardHardware.pushShortcutEvent(new ShortcutEvent(
-	      keyboardHardware.getKeyboardLayout().getKey(key), false));
-	  }
+
+
+
+      for (int key: keys) {
+	final KeyboardKey button = layout.getKey(key);
+	log.finest("Processing key: " + key + ", button: " + button.getCap());
+	if (!button.isLocked() && (button.isPressed() != action)) {
+	  button.setPressed(action);
 	}
       }
+      
+
+
+
+
+
+      // if (keys.size() == 1) {
+      // 	final KeyboardKey button = layout.getKey(keys.first());
+      // 	if (!button.isLocked()) {
+      // 	  button.setPressed(action);
+      // 	}
+      // } else {
+      // 	if (action) {
+      // 	  if (!pressedShortcuts.contains(shortcut)) {
+      // 	    pressedShortcuts.add(shortcut);
+      // 	    log.finest("Shortcut: " + shortcut.getDesc() +
+      // 		       " added to pressedShortcuts");
+      // 	    boolean first = true;
+      // 	    for (int key: keys) {
+      // 	      final KeyboardKey button = layout.getKey(key);
+      // 	      if (first) {
+      // 		if (!button.isLocked()) {
+      // 		  button.setPressed(true);
+      // 		}
+      // 		first = false;
+      // 	      } else {
+      // 		keyboardHardware.pushShortcutEvent(new ShortcutEvent(
+      // 		  button, true));
+      // 	      }
+      // 	    }
+      // 	  }
+      // 	} else {
+      // 	  log.finest("Shortcut: " + shortcut.getDesc() +
+      // 		     " removed from pressedShortcuts");
+      // 	  pressedShortcuts.remove(shortcut);
+      // 	  boolean first = true;
+      // 	  for (int key: keys.descendingSet()) {
+      // 	    final KeyboardKey button = layout.getKey(key);
+      // 	    if (first) {
+      // 	      if (!button.isLocked()) {
+      // 		button.setPressed(false);
+      // 	      }
+      // 	      first = false;
+      // 	    } else {
+      // 	      keyboardHardware.pushShortcutEvent(new ShortcutEvent(
+      // 	        button, false));
+      // 	    }
+      // 	  }
+      // 	}
+      // }
       event.consume();
     }
   }

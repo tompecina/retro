@@ -169,6 +169,12 @@ public class Shortcut {
 
   // for description see Object
   @Override
+  public int hashCode() {
+    return extendedKeyCode ^ (keyLocation << 24);
+  }
+
+  // for description see Object
+  @Override
   public boolean equals(final Object o) {
     log.finest("Comparing to: " + o);
     return (o != null) &&

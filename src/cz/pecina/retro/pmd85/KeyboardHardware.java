@@ -64,20 +64,24 @@ public class KeyboardHardware {
   private final ScanPin[] scanPins = new ScanPin[NUMBER_MATRIX_ROWS];
 
   // shift pin & stop pin
-  private final KeyPin shiftPin = new KeyPin();
-  private final KeyPin stopPin = new KeyPin();
+  private final ShiftPin shiftPin = new ShiftPin();
+  private final StopPin stopPin = new StopPin();
 
   // currently selected column
   private int select;
 
   // matrices of key presses
-  private final boolean[][] matrix =
+  private final boolean[][] current =
     new boolean[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
   private final boolean[][] next =
     new boolean[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
   private final boolean[][] buffer =
     new boolean[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
 
+  // keypresses of shift and stop keys
+  private boolean shiftBuffer, shiftCurrent, shiftNext;
+  private boolean stopBuffer, stopCurrent, stopNext;
+  
   // matrix of keys
   private final KeyboardKey[][] keys =
     new KeyboardKey[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
@@ -103,10 +107,10 @@ public class KeyboardHardware {
 	keys[key.getMatrixRow()][key.getMatrixColumn()] = key;
       }
       if (key.isShift()) {
-	shiftPin.addKey(key);
+	key.addChangeListener(new ShiftListener(key));
       }
       if (key.isStop()) {
-	stopPin.addKey(key);
+	key.addChangeListener(new StopListener(key));
       }
     }
     for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {
@@ -130,22 +134,69 @@ public class KeyboardHardware {
 
   // key listener
   private class KeyListener implements ChangeListener {
+
     private int row, column;
 
     public KeyListener(final int row, final int column) {
+      super();
       assert (row >= 0) && (row < NUMBER_MATRIX_ROWS);
       assert (column >= 0) && (column < NUMBER_MATRIX_COLUMNS);
       this.row = row;
       this.column = column;
     }
 
+    // for description see ChangeListener
     @Override
     public void stateChanged(final ChangeEvent event) {
       log.finer("Key listener called for (" + row + "," + column + ")");
       final boolean pressed = keys[row][column].isPressed();
       log.finest("Pressed: " + pressed);
-      matrix[row][column] = pressed;
+      current[row][column] = pressed;
       next[row][column] = next[row][column] || pressed;
+    }
+  }
+
+  // shift listener
+  private class ShiftListener implements ChangeListener {
+
+    private KeyboardKey key;
+    
+    public ShiftListener(final KeyboardKey key) {
+      super();
+      assert key != null;
+      this.key = key;
+    }
+
+    // for description see ChangeListener
+    @Override
+    public void stateChanged(final ChangeEvent event) {
+      log.finer("Shift listener called");
+      final boolean pressed = key.isPressed();
+      log.finest("Pressed: " + pressed);
+      shiftCurrent = pressed;
+      shiftNext = shiftNext || pressed;
+    }
+  }
+
+  // stop listener
+  private class StopListener implements ChangeListener {
+
+    private KeyboardKey key;
+    
+    public StopListener(final KeyboardKey key) {
+      super();
+      assert key != null;
+      this.key = key;
+    }
+
+    // for description see ChangeListener
+    @Override
+    public void stateChanged(final ChangeEvent event) {
+      log.finer("Stop listener called");
+      final boolean pressed = key.isPressed();
+      log.finest("Pressed: " + pressed);
+      stopCurrent = pressed;
+      stopNext = stopNext || pressed;
     }
   }
 
@@ -160,6 +211,7 @@ public class KeyboardHardware {
       mask = 1 << number;
     }
 
+    // for description see IOPin
     @Override
     public void notifyChange() {
       if ((select & mask) != (IONode.normalize(queryNode()) << number)) {
@@ -189,6 +241,7 @@ public class KeyboardHardware {
       number = n;
     }
 
+    // for description see IOPin
     @Override
     public int query() {
       final int selectedColumn = (select < NUMBER_MATRIX_COLUMNS) ? select : -1;
@@ -228,7 +281,10 @@ public class KeyboardHardware {
   public void update() {
     final ShortcutEvent event = queue.pollLast();
     if (event != null) {
-      event.getKey().setPressed(event.getAction());
+      final KeyboardKey button = event.getKey();
+      if (!button.isLocked()) {
+	button.setPressed(event.getAction());
+      }
     }
     updateBuffer();
   }
@@ -240,37 +296,32 @@ public class KeyboardHardware {
     for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {
       for (int column = 0; column < NUMBER_MATRIX_COLUMNS; column++) {
 	buffer[row][column] = next[row][column];
-	next[row][column] = matrix[row][column];
+	next[row][column] = current[row][column];
       }
     }
+    shiftBuffer = shiftNext;
+    shiftNext = shiftCurrent;
+    stopBuffer = stopNext;
+    stopNext = stopCurrent;
   }
 	
-  // adds matrix of keypresses to buffer
-  private void addMatrixToBuffer() {
-    for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {
-      for (int column = 0; column < NUMBER_MATRIX_COLUMNS; column++) {
-	buffer[row][column] |= matrix[row][column];
-      }
+  // shift pin
+  private class ShiftPin extends IOPin {
+
+    // for description see IOPin
+    @Override
+    public int query() {
+      return shiftBuffer ? 0 : 1;
     }
   }
 
-  // shift & stop pins
-  private class KeyPin extends IOPin {
-    private List<KeyboardKey> keys = new ArrayList<>();
+  // stop pin
+  private class StopPin extends IOPin {
 
-    public void addKey(final KeyboardKey key) {
-      assert key != null;
-      keys.add(key);
-    }
-    
+    // for description see IOPin
     @Override
     public int query() {
-      for (KeyboardKey key: keys) {
-	if (key.isPressed()) {
-	  return 0;
-	}
-      }
-      return 1;
+      return stopBuffer ? 0 : 1;
     }
   }
 
