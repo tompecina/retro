@@ -242,13 +242,14 @@ public final class UserPreferences extends GeneralUserPreferences {
       Application.getTextResources().get(UserPreferences.class.getPackage());
     for (String key: bundle.keySet()) {
       if (key.startsWith(DEFAULT_SHORTCUT_PREFIX)) {
+	final String id = key.substring(DEFAULT_SHORTCUT_PREFIX.length());
 	final String listString = bundle.getString(key);
 	if ((listString != null) && !listString.isEmpty()) {
 	  final NavigableSet<Integer> list = new TreeSet<>();
 	  for (String buttonString: listString.split(",")) {
 	    list.add(Integer.parseInt(buttonString));
 	  }
-	  shortcuts.put(new Shortcut(key), list);
+	  shortcuts.put(new Shortcut(id), list);
 	}
       }
     }
