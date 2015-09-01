@@ -50,10 +50,10 @@ mon1	equ	803eh
 romin	equ	8c00h
 	
 ; ROM module loader
-	org	0000h
+	org	2000h - 9
 
 	call	romin
-	dw	0, 6 * 400h, 0
+	dw	9, 6 * 400h, 2000h
 
 begin:	jmp	start
 
