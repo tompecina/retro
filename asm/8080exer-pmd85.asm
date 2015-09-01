@@ -1042,7 +1042,8 @@ crclp:	ldax	d
 	pop	psw
 	ret
 
-initcrc:push	psw
+initcrc:
+	push	psw
 	push	b
 	push	h
 	lxi	h,crcval
