@@ -15,7 +15,7 @@ hs_err_pid*
 *~
 \#*
 
-# Temporary files
+# Temporary and other non-source files
 *.log
 *.hex
 *.bin
@@ -24,6 +24,13 @@ hs_err_pid*
 *.o
 *.out
 *.s
+*.pmd
+*.ptp
+*.wav
+*,pmt
+*.pmitape
+*.pmdtape
+*.sam
 
 # Working directories
 */build

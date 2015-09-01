@@ -974,7 +974,8 @@ outstr:	ldax	d
 	jmp	outstr
 
 msg1:	db	"8080 instruction exerciser",10,13,'$'
-msg2:	db	"Tests complete",10,13,'$'
+;; msg2:	db	"Tests complete",10,13,'$'
+msg2:	db	"Tests complete$"
 okmsg:	db	"  OK",10,13,'$'
 ermsg1:	db	"  ERROR **** crc expected:$"
 ermsg2:	db	" found:$"
@@ -1511,13 +1512,13 @@ pmd_stack:
 pmd_radsir:
 	dw	240h
 pmd_iiroll:
-	db	0eah
+	db	0eah + 9
 pmd_poroll:
-	dw	0fab0h
+	dw	0fab0h + (9 * 40h)
 pmd_rsirrad:
 	db	9
 pmd_currol:
-	dw	0fd00h
+	dw	0fd00h + (9 * 40h)
 pmd_cursor:
 	dw	0c4c0h
 pmd_vyska:
