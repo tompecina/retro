@@ -114,6 +114,7 @@ spbt:	ds	2
 
 	
 start:	lxi	sp, 8000h
+	call	pmd_erase
 	;; mvi	a, 08h
 	;; out	0f7h
 	;; lhld	6
