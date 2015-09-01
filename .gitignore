@@ -18,6 +18,7 @@ hs_err_pid*
 # Temporary files
 *.log
 *.hex
+*.bin
 *.lst
 *.p
 *.o
