@@ -440,8 +440,8 @@ public class DumpEdit extends MemoryTab {
 
       for (int i = 0; i < NUMBER_DIS_LINES; i++) {
 	
-
-	final Disassembly disassembly = Parameters.cpu.getDisassembly(address);
+	final Disassembly disassembly =
+	  Parameters.cpu.getDisassembly(sourceBank, address);
 	final int[] bytes = disassembly.getBytes();
 	final int length = disassembly.getLength();
 	String hexString = "";
@@ -520,12 +520,12 @@ public class DumpEdit extends MemoryTab {
 	}
 
 	final String parameters =
-	  disassembly.getParameters(true, "%02x", "%04x", false);
+	  disassembly.getParameters(false, "%02x", "%04x", false);
 
 	final GridBagConstraints disMnemoConstraints =
 	  new GridBagConstraints();
 	final JLabel disMnemo =
-	  new JLabel(disassembly.getMnemo(true));
+	  new JLabel(disassembly.getMnemo(false));
 	disMnemo.setFont(FONT_MONOSPACED);
 	disMnemoConstraints.gridx = 4;
 	disMnemoConstraints.gridy = line;

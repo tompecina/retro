@@ -4891,13 +4891,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     private Opcode opcode;
 
     // main constructor
-    private Intel8080ADisassembly(final int address) {
-      assert (address >= 0) && (address < 0x10000);
-      opcode = opcodes[memory.getByte(address)];	    
-      bytes = new int[opcode.getLength()];
-      for (int i = 0; i < getLength(); i++) {
-	bytes[i] = memory.getByte((address + i) & 0xffff);
-      }
+    private Intel8080ADisassembly(final int[] bytes) {
+      assert bytes != null;
+      this.bytes = bytes;
+      opcode = opcodes[bytes[0]];	    
     }
 
     // for description see Disassembly
@@ -4975,7 +4972,26 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   @Override
   public Disassembly getDisassembly(final int address) {
     assert (address >= 0) && (address < 0x10000);
-    return new Intel8080ADisassembly(address);
+    final int[] bytes = new int[opcodes[memory.getByte(address)].getLength()];
+    for (int i = 0; i < bytes.length; i++) {
+      bytes[i] = memory.getByte((address + i) & 0xffff);
+    }
+    return new Intel8080ADisassembly(bytes);
+  }
+
+  // for description see Processor
+  @Override
+  public Disassembly getDisassembly(final byte[] bytes, final int address) {
+    assert bytes != null;
+    assert (address >= 0) && (address < 0x10000);
+    final int bytesLength = bytes.length;
+    final Opcode opcode = opcodes[bytes[address % bytesLength] & 0xff];
+    final int length = opcode.getLength();
+    final int[] newBytes = new int[length];
+    for (int i = 0; i < length; i++) {
+      newBytes[i] = bytes[(address + i) % bytesLength] & 0xff;
+    }
+    return new Intel8080ADisassembly(newBytes);
   }
 
   /**

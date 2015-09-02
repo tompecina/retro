@@ -177,12 +177,21 @@ public interface Processor {
   public abstract void interrupt(int vector);
 
   /**
-   * Gets Disassembly object.
+   * Gets {@code Disassembly} object.
    *
    * @param  address address of the first byte
-   * @return Disassembly object for the instruction
+   * @return         {@code Disassembly} object for the instruction
    */
   public abstract Disassembly getDisassembly(int address);
+
+  /**
+   * Gets {@code Disassembly} object.
+   *
+   * @param  bytes   byte array to be disassembled
+   * @param  address address of the first byte
+   * @return         {@code Disassembly} object for the instruction
+   */
+  public abstract Disassembly getDisassembly(byte[] bytes, int address);
 
   /**
    * Stops the element for maintenance tasks such as snapshot loading.
