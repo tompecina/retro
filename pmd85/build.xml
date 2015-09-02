@@ -748,7 +748,8 @@
 	  description="Generate Javadoc">
     <javadoc sourcepath="${build.src.filtered.dir}"
 	     destdir="${build.src.doc.dir}"
-	     classpathref="base.path"/>
+	     classpathref="base.path"
+	     charset="UTF-8"/>
   </target>
 
   <!-- jar -->

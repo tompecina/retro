@@ -233,7 +233,7 @@ public class SettingsKeyboardPanel extends JPanel {
     }
     shortcutsScrollPane.setViewportView(shortcutsPane);
     
-    log.finer("New shortcuts pane updated");
+    log.finer("Shortcuts pane updated");
   }
 
   /**
