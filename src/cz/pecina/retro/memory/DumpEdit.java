@@ -586,7 +586,7 @@ public class DumpEdit extends MemoryTab {
     public void actionPerformed(final ActionEvent event) {
       log.finer("Dump/edit listener action started");
 
-      final String text = editBlockField.getText().trim();
+      final String text = editDataField.getText().trim();
       if (text.isEmpty()) {
   	log.finer("No data to process");
   	return;
@@ -607,24 +607,24 @@ public class DumpEdit extends MemoryTab {
 
       final String syntaxError = Application.getString(this, "error.editLine.syntax");
       
-      final List<Integer> data = new ArrayList<>();
+      final List<Byte> data = new ArrayList<>();
       
       for (String chunk: text.split("[ ,;]")) {
 
-	if (chunk.length < 3) {
+	if (chunk.length() < 3) {
 	  try {
-	    data.add(Integer.parseInt(chunk, 16));
+	    data.add((byte)(Integer.parseInt(chunk, 16)));
 	  } catch (final NumberFormatException exception) {
 	    ErrorBox.display(panel, syntaxError);
 	    return;
 	  }
-	} else if ((chunk.length % 1) == 1) {
+	} else if ((chunk.length() % 1) == 1) {
 	    ErrorBox.display(panel, syntaxError);
 	    return;
 	} else {
-	  for (int i = 0; i < chunk.length; i += 2) {
+	  for (int i = 0; i < chunk.length(); i += 2) {
 	    try {
-	      data.add(Integer.parseInt(chunk.substring(i, i + 2), 16));
+	      data.add((byte)(Integer.parseInt(chunk.substring(i, i + 2), 16)));
 	    } catch (final NumberFormatException exception) {
 	      ErrorBox.display(panel, syntaxError);
 	      return;
@@ -637,8 +637,8 @@ public class DumpEdit extends MemoryTab {
       for (int i = 0; i < data.size(); i++) {
 	destinationBank[(address + i) % destinationBank.length] = data.get(i);
       }
-      editAddressField.clear();
-      editDataField.clear();
+      editAddressField.setText("");
+      editDataField.setText("");
       updateDumpDataPane();
     }
   }
