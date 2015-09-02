@@ -77,10 +77,12 @@ public class MemoryPanel extends JTabbedPane {
 
     tabs = new MemoryTab[] {new Save(this, savePlugins),
 			    new Load(this, loadPlugins),
-			    new CopyFillCompare(this)};
+			    new CopyFillCompare(this),
+			    new DumpEdit(this)};
     addTab(Application.getString(this, "save"), tabs[0]);
     addTab(Application.getString(this, "load"), tabs[1]);
     addTab(Application.getString(this, "copyFillCompare"), tabs[2]);
+    addTab(Application.getString(this, "dumpEdit"), tabs[3]);
     frame.getRootPane().setDefaultButton(tabs[0].getDefaultButton());
     addChangeListener(
       new ChangeListener() {

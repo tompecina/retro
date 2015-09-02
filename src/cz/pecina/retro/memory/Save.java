@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import java.io.File;
 
+import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.FlowLayout;
@@ -105,24 +106,36 @@ public class Save extends MemoryTab {
 
     if (numberBanks > 1) {
 
+      final GridBagConstraints bankPaneConstraints =
+	new GridBagConstraints();
+      final JPanel bankPane =
+	new JPanel(new GridBagLayout());
+      bankPaneConstraints.gridx = 0;
+      bankPaneConstraints.gridy = line;
+      bankPaneConstraints.insets = new Insets(0, 3, 0, 0);
+      bankPaneConstraints.gridwidth = GridBagConstraints.REMAINDER;
+      bankPaneConstraints.anchor = GridBagConstraints.LINE_START;
+      bankPaneConstraints.weightx = 0.0;
+      bankPaneConstraints.weighty = 0.0;
+      
       final GridBagConstraints sourceBankLabelConstraints =
 	new GridBagConstraints();
       final JLabel sourceBankLabel =
-	new JLabel(Application.getString(this, "bank.source") + ":");
+	new JLabel(Application.getString(this, "bank") + ":");
       sourceBankLabelConstraints.gridx = 0;
-      sourceBankLabelConstraints.gridy = line;
+      sourceBankLabelConstraints.gridy = 0;
       sourceBankLabelConstraints.insets = new Insets(0, 3, 0, 0);
       sourceBankLabelConstraints.anchor = GridBagConstraints.LINE_END;
       sourceBankLabelConstraints.weightx = 0.0;
       sourceBankLabelConstraints.weighty = 0.0;
-      add(sourceBankLabel, sourceBankLabelConstraints);
+      bankPane.add(sourceBankLabel, sourceBankLabelConstraints);
 
       final GridBagConstraints sourceBankPanelConstraints =
 	new GridBagConstraints();
       final JPanel sourceBankPanel =
 	new JPanel(new FlowLayout(FlowLayout.LEADING, 3, 0));
       sourceBankPanelConstraints.gridx = 1;
-      sourceBankPanelConstraints.gridy = line;
+      sourceBankPanelConstraints.gridy = 0;
       sourceBankPanelConstraints.gridwidth = GridBagConstraints.REMAINDER;
       sourceBankPanelConstraints.anchor = GridBagConstraints.LINE_START;
       sourceBankPanelConstraints.weightx = 0.0;
@@ -138,7 +151,9 @@ public class Save extends MemoryTab {
       }
       sourceBankRadioButtons.get(0).setSelected(true);
       
-      add(sourceBankPanel, sourceBankPanelConstraints);
+      bankPane.add(sourceBankPanel, sourceBankPanelConstraints);
+
+      add(bankPane, bankPaneConstraints);
       line++;
     }
     

@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
 
+import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.FlowLayout;
@@ -86,24 +87,36 @@ public class CopyFillCompare extends MemoryTab {
 
     if (numberBanks > 1) {
 
+      final GridBagConstraints banksPaneConstraints =
+	new GridBagConstraints();
+      final JPanel banksPane =
+	new JPanel(new GridBagLayout());
+      banksPaneConstraints.gridx = 0;
+      banksPaneConstraints.gridy = line;
+      banksPaneConstraints.insets = new Insets(0, 3, 0, 0);
+      banksPaneConstraints.gridwidth = GridBagConstraints.REMAINDER;
+      banksPaneConstraints.anchor = GridBagConstraints.LINE_START;
+      banksPaneConstraints.weightx = 0.0;
+      banksPaneConstraints.weighty = 0.0;
+      
       final GridBagConstraints sourceBankLabelConstraints =
 	new GridBagConstraints();
       final JLabel sourceBankLabel =
 	new JLabel(Application.getString(this, "bank.source") + ":");
       sourceBankLabelConstraints.gridx = 0;
-      sourceBankLabelConstraints.gridy = line;
+      sourceBankLabelConstraints.gridy = 0;
       sourceBankLabelConstraints.insets = new Insets(0, 3, 0, 0);
       sourceBankLabelConstraints.anchor = GridBagConstraints.LINE_END;
       sourceBankLabelConstraints.weightx = 0.0;
       sourceBankLabelConstraints.weighty = 0.0;
-      add(sourceBankLabel, sourceBankLabelConstraints);
+      banksPane.add(sourceBankLabel, sourceBankLabelConstraints);
 
       final GridBagConstraints sourceBankPanelConstraints =
 	new GridBagConstraints();
       final JPanel sourceBankPanel =
 	new JPanel(new FlowLayout(FlowLayout.LEADING, 3, 0));
       sourceBankPanelConstraints.gridx = 1;
-      sourceBankPanelConstraints.gridy = line;
+      sourceBankPanelConstraints.gridy = 0;
       sourceBankPanelConstraints.gridwidth = GridBagConstraints.REMAINDER;
       sourceBankPanelConstraints.anchor = GridBagConstraints.LINE_START;
       sourceBankPanelConstraints.weightx = 0.0;
@@ -119,27 +132,26 @@ public class CopyFillCompare extends MemoryTab {
       }
       sourceBankRadioButtons.get(0).setSelected(true);
 
-      add(sourceBankPanel, sourceBankPanelConstraints);
-      line++;
+      banksPane.add(sourceBankPanel, sourceBankPanelConstraints);
 
       final GridBagConstraints destinationBankLabelConstraints =
 	new GridBagConstraints();
       final JLabel destinationBankLabel =
 	new JLabel(Application.getString(this, "bank.destination") + ":");
       destinationBankLabelConstraints.gridx = 0;
-      destinationBankLabelConstraints.gridy = line;
+      destinationBankLabelConstraints.gridy = 1;
       destinationBankLabelConstraints.insets = new Insets(0, 3, 0, 0);
       destinationBankLabelConstraints.anchor = GridBagConstraints.LINE_END;
       destinationBankLabelConstraints.weightx = 0.0;
       destinationBankLabelConstraints.weighty = 0.0;
-      add(destinationBankLabel, destinationBankLabelConstraints);
+      banksPane.add(destinationBankLabel, destinationBankLabelConstraints);
 
       final GridBagConstraints destinationBankPanelConstraints =
 	new GridBagConstraints();
       final JPanel destinationBankPanel =
 	new JPanel(new FlowLayout(FlowLayout.LEADING, 3, 0));
       destinationBankPanelConstraints.gridx = 1;
-      destinationBankPanelConstraints.gridy = line;
+      destinationBankPanelConstraints.gridy = 1;
       destinationBankPanelConstraints.gridwidth = GridBagConstraints.REMAINDER;
       destinationBankPanelConstraints.anchor = GridBagConstraints.LINE_START;
       destinationBankPanelConstraints.weightx = 0.0;
@@ -154,7 +166,9 @@ public class CopyFillCompare extends MemoryTab {
 	destinationBankGroup.add(destinationBankRadioButton);
       }
       destinationBankRadioButtons.get(0).setSelected(true);
-      add(destinationBankPanel, destinationBankPanelConstraints);
+      banksPane.add(destinationBankPanel, destinationBankPanelConstraints);
+
+      add(banksPane, banksPaneConstraints);
       line++;
     }
     

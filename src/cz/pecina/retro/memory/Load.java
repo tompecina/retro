@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import java.io.File;
 
+import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.FlowLayout;
@@ -104,24 +105,36 @@ public class Load extends MemoryTab {
 
     if (numberBanks > 1) {
 
+      final GridBagConstraints bankPaneConstraints =
+	new GridBagConstraints();
+      final JPanel bankPane =
+	new JPanel(new GridBagLayout());
+      bankPaneConstraints.gridx = 0;
+      bankPaneConstraints.gridy = line;
+      bankPaneConstraints.insets = new Insets(0, 3, 0, 0);
+      bankPaneConstraints.gridwidth = GridBagConstraints.REMAINDER;
+      bankPaneConstraints.anchor = GridBagConstraints.LINE_START;
+      bankPaneConstraints.weightx = 0.0;
+      bankPaneConstraints.weighty = 0.0;
+      
       final GridBagConstraints destinationBankLabelConstraints =
 	new GridBagConstraints();
       final JLabel destinationBankLabel =
-	new JLabel(Application.getString(this, "bank.destination") + ":");
+	new JLabel(Application.getString(this, "bank") + ":");
       destinationBankLabelConstraints.gridx = 0;
-      destinationBankLabelConstraints.gridy = line;
+      destinationBankLabelConstraints.gridy = 0;
       destinationBankLabelConstraints.insets = new Insets(0, 3, 0, 0);
       destinationBankLabelConstraints.anchor = GridBagConstraints.LINE_END;
       destinationBankLabelConstraints.weightx = 0.0;
       destinationBankLabelConstraints.weighty = 0.0;
-      add(destinationBankLabel, destinationBankLabelConstraints);
+      bankPane.add(destinationBankLabel, destinationBankLabelConstraints);
 
       final GridBagConstraints destinationBankPanelConstraints =
 	new GridBagConstraints();
       final JPanel destinationBankPanel =
 	new JPanel(new FlowLayout(FlowLayout.LEADING, 3, 0));
       destinationBankPanelConstraints.gridx = 1;
-      destinationBankPanelConstraints.gridy = line;
+      destinationBankPanelConstraints.gridy = 0;
       destinationBankPanelConstraints.gridwidth = GridBagConstraints.REMAINDER;
       destinationBankPanelConstraints.anchor = GridBagConstraints.LINE_START;
       destinationBankPanelConstraints.weightx = 0.0;
@@ -137,7 +150,9 @@ public class Load extends MemoryTab {
       }
       destinationBankRadioButtons.get(0).setSelected(true);
       
-      add(destinationBankPanel, destinationBankPanelConstraints);
+      bankPane.add(destinationBankPanel, destinationBankPanelConstraints);
+
+      add(bankPane, bankPaneConstraints);
       line++;
     }
     
