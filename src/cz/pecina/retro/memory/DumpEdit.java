@@ -36,6 +36,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Component;
+import java.awt.Color;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -531,14 +533,29 @@ public class DumpEdit extends MemoryTab {
       
     // for description see MouseListener
     @Override
-    public void mouseClicked(final MouseEvent event) {
+    public void mousePressed(final MouseEvent event) {
       log.fine(String.format(
-        "Address listener action detected, address: 0x%04x", address));
+        "Address listener action detected (pressed), address: 0x%04x", address));
       editAddressField.setText(String.format("%04x", address));
+      final Component source = event.getComponent();
+      if (source instanceof JLabel) {
+	((JLabel)source).setForeground(Color.RED);
+      }
+    }
+
+    // for description see MouseListener
+    @Override
+    public void mouseReleased(final MouseEvent event) {
+      log.fine(String.format(
+        "Address listener action detected (released), address: 0x%04x", address));
+      final Component source = event.getComponent();
+      if (source instanceof JLabel) {
+	((JLabel)source).setForeground(Color.BLACK);
+      }
     }
   }
 
-  // focus listener
+  // component listener
   private class ComponentListener extends ComponentAdapter {
       
     // for description see ComponentListener
