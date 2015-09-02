@@ -108,7 +108,7 @@ public class PMDCharset extends Charset {
       /* 0xf3 */ 'Š',
       /* 0xf4 */ 'Ť',
       /* 0xf5 */ 'Ú',
-      /* 0xf6 */ '\u03b4',  //delta
+      /* 0xf6 */ '\u03b4',  // delta
       /* 0xf7 */ 'É',
       /* 0xf8 */ 'À',
       /* 0xf9 */ 'Ý',
@@ -148,9 +148,13 @@ public class PMDCharset extends Charset {
   
   // decoder
   private class Decoder extends CharsetDecoder {
+
+    // main constructor
     public Decoder() {
       super(PMDCharset.this, 1.0f, 1.0f);
     }
+
+    // for description see CharsetDecoder
     @Override
     public CoderResult decodeLoop(ByteBuffer in, CharBuffer out) {
       log.finer("Decoder called");
@@ -184,9 +188,13 @@ public class PMDCharset extends Charset {
   
   // encoder
   private class Encoder extends CharsetEncoder {
+
+    // main constructor
     public Encoder() {
       super(PMDCharset.this, 1.0f, 1.0f);
     }
+
+    // for description see CharsetEncoder
     @Override
     public CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
       log.finer("Encoder called");

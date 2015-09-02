@@ -22,6 +22,8 @@ package cz.pecina.retro.common;
 
 import java.util.prefs.Preferences;
 
+import java.nio.charset.Charset;
+
 import cz.pecina.retro.cpu.SystemClockSource;
 import cz.pecina.retro.cpu.Processor;
 import cz.pecina.retro.cpu.Device;
@@ -96,6 +98,11 @@ public final class Parameters {
    * The Sound object.
    */
   public static Sound sound;
+
+  /**
+   * The charset used by the emulated computer.
+   */
+  public static Charset charset;
 
   // default constructor disabled
   private Parameters() {}

@@ -65,6 +65,7 @@ public class Emulator {
     Parameters.CPUFrequency = Constants.CPU_FREQUENCY;
     Parameters.timerPeriod = Constants.TIMER_PERIOD;
     Parameters.timerCycles = Constants.TIMER_CYCLES;
+    Parameters.charset = new PMDCharset();
 
     // initialize application
     GeneralUserPreferences.setNodeClass(UserPreferences.class);

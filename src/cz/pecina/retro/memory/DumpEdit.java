@@ -25,6 +25,12 @@ import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
 
+import java.nio.ByteBuffer;
+
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
+import java.nio.charset.CharacterCodingException;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -50,6 +56,7 @@ import javax.swing.border.Border;
 
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.common.Parameters;
+import cz.pecina.retro.common.GeneralConstants;
 
 import cz.pecina.retro.cpu.Block;
 
@@ -76,8 +83,11 @@ public class DumpEdit extends MemoryTab {
 
   // monospaced font
   private static final Font FONT_MONOSPACED =
-    new Font(Font.MONOSPACED, Font.PLAIN, 12);
+    new Font(Font.MONOSPACED, Font.PLAIN, 13);
 
+  // placeholder for unrepresentable character
+  private static final String PLACEHOLDER = ".";
+  
   // components holding values used by listeners
   private JRadioButton dumpTypeHexRadio, dumpTypeDisRadio;
   private HexField dumpAddressField, editAddressField;
@@ -369,7 +379,14 @@ public class DumpEdit extends MemoryTab {
 	}
       }
     }
-
+    final byte[] sourceBank =
+      Parameters.memoryDevice.getBlockByName(sourceMemoryBank).getMemory();
+    
+    final CharsetDecoder decoder = Parameters.charset.newDecoder();
+    decoder.replaceWith(PLACEHOLDER);
+    decoder.onMalformedInput(CodingErrorAction.REPLACE);
+    decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
+      
     final JPanel dumpDataPane = new JPanel(new GridBagLayout());
     int line = 0;
 
@@ -394,9 +411,8 @@ public class DumpEdit extends MemoryTab {
 	final GridBagConstraints dumpDataByteConstraints =
 	  new GridBagConstraints();
 	final int byteAddress = address + j;
-	final JLabel dumpDataByte = new JLabel(String.format("%02x",
-	  Parameters.memoryDevice.getBlockByName(sourceMemoryBank).getMemory()
-	  [byteAddress]));
+	final JLabel dumpDataByte =
+	  new JLabel(String.format("%02x", sourceBank[byteAddress]));
 	dumpDataByte.setFont(FONT_MONOSPACED);
 	dumpDataByteConstraints.gridx = j + 1;
 	dumpDataByteConstraints.gridy = line;
@@ -406,6 +422,34 @@ public class DumpEdit extends MemoryTab {
 	dumpDataByteConstraints.weighty = 0.0;
 	dumpDataByte.addMouseListener(new AddressListener(byteAddress));
 	dumpDataPane.add(dumpDataByte, dumpDataByteConstraints);
+      }
+
+      for (int j = 0; j < NUMBER_HEX_BYTES; j++) {
+
+	final GridBagConstraints dumpDataCharConstraints =
+	  new GridBagConstraints();
+	final int byteAddress = address + j;
+	final ByteBuffer bb = ByteBuffer.allocate(1);
+	bb.put(sourceBank[byteAddress]);
+	String ch;
+	try {
+	  ch = decoder.decode(bb).toString();
+	} catch (final CharacterCodingException exception) {
+	  ch = PLACEHOLDER;
+	}	  
+	if ((ch.length() == 0) || !GeneralConstants.SAFE_CHARACTERS.contains(ch.charAt(0))) {
+	  ch = PLACEHOLDER;
+	}
+	final JLabel dumpDataChar = new JLabel(ch);
+	dumpDataChar.setFont(FONT_MONOSPACED);
+	dumpDataCharConstraints.gridx = NUMBER_HEX_BYTES + j + 1;
+	dumpDataCharConstraints.gridy = line;
+	dumpDataCharConstraints.insets = new Insets(0, 3, 0, 0);
+	dumpDataCharConstraints.anchor = GridBagConstraints.LINE_START;
+	dumpDataCharConstraints.weightx = 0.0;
+	dumpDataCharConstraints.weighty = 0.0;
+	dumpDataChar.addMouseListener(new AddressListener(byteAddress));
+	dumpDataPane.add(dumpDataChar, dumpDataCharConstraints);
       }
       line++;
     }
