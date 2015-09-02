@@ -97,7 +97,6 @@ public class DumpEdit extends MemoryTab {
   
   // lists of bank selection radio buttons
   private List<JRadioButton> sourceBankRadioButtons = new ArrayList<>();
-  private List<JRadioButton> destinationBankRadioButtons = new ArrayList<>();
       
   // mutable inner pane
   private JPanel dumpDataPane;
@@ -144,6 +143,7 @@ public class DumpEdit extends MemoryTab {
       for (Block bank: banks) {
 	final JRadioButton sourceBankRadioButton =
 	  new JRadioButton(bank.getName());
+	sourceBankRadioButton.addActionListener(new RefreshListener());
 	sourceBankRadioButtons.add(sourceBankRadioButton);
 	sourceBankPanel.add(sourceBankRadioButton);
 	sourceBankGroup.add(sourceBankRadioButton);
@@ -188,7 +188,7 @@ public class DumpEdit extends MemoryTab {
     dumpAddressFieldConstraints.anchor = GridBagConstraints.LINE_START;
     dumpAddressFieldConstraints.weightx = 0.0;
     dumpAddressFieldConstraints.weighty = 0.0;
-    dumpAddressField.setText("0");
+    dumpAddressField.setText("0000");
     dumpAddressPane.add(dumpAddressField, dumpAddressFieldConstraints);
       
     final GridBagConstraints dumpRefreshButtonConstraints =
