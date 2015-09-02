@@ -552,6 +552,7 @@ public class DumpEdit extends MemoryTab {
       if (source instanceof JLabel) {
 	((JLabel)source).setForeground(Color.BLACK);
       }
+      editDataField.requestFocusInWindow();
     }
   }
 
