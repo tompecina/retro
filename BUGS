@@ -1,5 +1,5 @@
-BUGS/FEATURES
-=============
+KNOWN BUGS AND ESSENTIAL NEW FEATURES
+=====================================
 
 * Incorrect colors for model 3.
 
@@ -22,3 +22,5 @@ BUGS/FEATURES
 * Update PMI-80 tape formats PMITAPE & SAM.
 
 * Icon size in some implementations limited to 128x128.
+
+* Memory panel: implement wrapping or check the upper limit.

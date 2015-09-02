@@ -35,6 +35,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
@@ -47,6 +49,7 @@ import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 
 import cz.pecina.retro.common.Application;
+import cz.pecina.retro.common.Parameters;
 
 import cz.pecina.retro.cpu.Block;
 
@@ -348,11 +351,24 @@ public class DumpEdit extends MemoryTab {
     dumpEditButtonsPanel.add(dumpEditCloseButton);
     add(dumpEditButtonsPanel, dumpEditButtonsConstraints);
 
+    panel.getFrame().addComponentListener(new ComponentListener());
+
     log.fine("Memory/DumpEdit panel set up");
   }
 
   // update dump data pane
   private void updateDumpDataPane() {
+
+    // find source memory bank
+    if (numberBanks > 1) {
+      for (JRadioButton button: sourceBankRadioButtons) {
+	if (button.isSelected()) {
+	  sourceMemoryBank = button.getText();
+	  log.finer("Source memory bank selected: " + sourceMemoryBank);
+	  break;
+	}
+      }
+    }
 
     final JPanel dumpDataPane = new JPanel(new GridBagLayout());
     int line = 0;
@@ -372,22 +388,27 @@ public class DumpEdit extends MemoryTab {
       dumpDataAddressConstraints.weighty = 0.0;
       dumpDataAddress.addMouseListener(new AddressListener(address));
       dumpDataPane.add(dumpDataAddress, dumpDataAddressConstraints);
+
+      for (int j = 0; j < NUMBER_HEX_BYTES; j++) {
+
+	final GridBagConstraints dumpDataByteConstraints =
+	  new GridBagConstraints();
+	final int byteAddress = address + j;
+	final JLabel dumpDataByte = new JLabel(String.format("%02x",
+	  Parameters.memoryDevice.getBlockByName(sourceMemoryBank).getMemory()
+	  [byteAddress]));
+	dumpDataByte.setFont(FONT_MONOSPACED);
+	dumpDataByteConstraints.gridx = j + 1;
+	dumpDataByteConstraints.gridy = line;
+	dumpDataByteConstraints.insets = new Insets(0, 3, 0, 0);
+	dumpDataByteConstraints.anchor = GridBagConstraints.LINE_START;
+	dumpDataByteConstraints.weightx = 0.0;
+	dumpDataByteConstraints.weighty = 0.0;
+	dumpDataByte.addMouseListener(new AddressListener(byteAddress));
+	dumpDataPane.add(dumpDataByte, dumpDataByteConstraints);
+      }
       line++;
     }
-
-    final GridBagConstraints hexLegendConstraints =
-      new GridBagConstraints();
-    final JLabel hexLegend =
-      new JLabel(Application.getString(this, "dumpEdit.hex.legend"));
-    hexLegendConstraints.gridx = 0;
-    hexLegendConstraints.gridy = line;
-    hexLegendConstraints.insets = new Insets(0, 3, 0, 0);
-    hexLegendConstraints.gridwidth = GridBagConstraints.REMAINDER;
-    hexLegendConstraints.anchor = GridBagConstraints.LINE_START;
-    hexLegendConstraints.weightx = 0.0;
-    hexLegendConstraints.weighty = 0.0;
-    dumpDataPane.add(hexLegend, hexLegendConstraints);
-
     if (this.dumpDataPane != null) {
       remove(this.dumpDataPane);
     }
@@ -505,6 +526,17 @@ public class DumpEdit extends MemoryTab {
       log.fine(String.format(
         "Address listener action detected, address: 0x%04x", address));
       editAddressField.setText(String.format("%04x", address));
+    }
+  }
+
+  // focus listener
+  private class ComponentListener extends ComponentAdapter {
+      
+    // for description see ComponentListener
+    @Override
+    public void componentShown(final ComponentEvent event) {
+      log.finer("Component listener action detected");
+      updateDumpDataPane();
     }
   }
 }

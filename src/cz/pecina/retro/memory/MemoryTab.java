@@ -114,6 +114,7 @@ public abstract class MemoryTab extends JPanel {
    */
   public MemoryTab(final MemoryPanel panel) {
     super(new GridBagLayout());
+    assert panel != null;
     this.panel = panel;
     banks = Parameters.memoryDevice.getBlocks();
     numberBanks = banks.size();

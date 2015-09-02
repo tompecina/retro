@@ -104,6 +104,13 @@ public class MemoryPanel extends JTabbedPane {
   }
 
   /**
+   * Gets the enclosing frame.
+   */
+  public CloseableFrame getFrame() {
+    return frame;
+  }
+
+  /**
    * Gets the {@code Hardware} object.
    *
    * @return the {@code Hardware} object
