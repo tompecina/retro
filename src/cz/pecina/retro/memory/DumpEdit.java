@@ -64,7 +64,7 @@ import cz.pecina.retro.cpu.Block;
 import cz.pecina.retro.cpu.Disassembly;
 
 import cz.pecina.retro.gui.HexField;
-import cz.pecina.retro.gui.InfoBox;
+import cz.pecina.retro.gui.ErrorBox;
 
 /**
  * Memory/DumpEdit panel.
@@ -335,7 +335,7 @@ public class DumpEdit extends MemoryTab {
     final JButton editButton = new JButton(Application.getString(
       this, "dumpEdit.button.edit"));
     defaultButton = editButton;
-    // editButton.addActionListener(new EditListener());
+    editButton.addActionListener(new EditListener());
     dumpEditButtonsPanel.add(editButton);
     final JButton dumpEditCloseButton = new JButton(
       Application.getString(this, "dumpEdit.button.close"));
@@ -578,91 +578,70 @@ public class DumpEdit extends MemoryTab {
     }
   }
   
-  // // edit listener
-  // private class EditListener implements ActionListener {
+  // edit listener
+  private class EditListener implements ActionListener {
 
-  //   // for description see ActionListener
-  //   @Override
-  //   public void actionPerformed(final ActionEvent event) {
-  //     log.finer("Dump/edit listener action started");
+    // for description see ActionListener
+    @Override
+    public void actionPerformed(final ActionEvent event) {
+      log.finer("Dump/edit listener action started");
 
-  //     final String text = editBlockField.getText().trim();
-  //     if (text.isEmpty()) {
-  // 	log.finer("No data to process");
-  // 	return;
-  //     }
+      final String text = editBlockField.getText().trim();
+      if (text.isEmpty()) {
+  	log.finer("No data to process");
+  	return;
+      }
       
-  //     // find memory bank
-  //     if (numberBanks > 1) {
-  // 	for (JRadioButton button: sourceBankRadioButtons) {
-  // 	  if (button.isSelected()) {
-  // 	    destionationMemoryBank = button.getText();
-  // 	    log.finer("Destination memory bank selected: " + destinationMemoryBank);
-  // 	    break;
-  // 	  }
-  // 	}
-  //     }
-  //     final byte[] destinationBank =
-  // 	Parameters.memoryDevice.getBlockByName(destinationMemoryBank).getMemory();
+      // find memory bank (source bank is used for both targets)
+      if (numberBanks > 1) {
+  	for (JRadioButton button: sourceBankRadioButtons) {
+  	  if (button.isSelected()) {
+  	    destinationMemoryBank = button.getText();
+  	    log.finer("Destination memory bank selected: " + destinationMemoryBank);
+  	    break;
+  	  }
+  	}
+      }
+      final byte[] destinationBank =
+  	Parameters.memoryDevice.getBlockByName(destinationMemoryBank).getMemory();
+
+      final String syntaxError = Application.getString(this, "error.editLine.syntax");
       
-
-
-
-
+      final List<Integer> data = new ArrayList<>();
       
-  //     int start = 0, end = 0, destination = 0, data = 0, number = 0;
-  //     try {
-  // 	if (copyRadio.isSelected()) {
-  // 	  start = copyStartField.getValue();
-  // 	  end = copyEndField.getValue();
-  // 	  destination = copyDestinationField.getValue();
-  // 	} else if (fillRadio.isSelected()) {
-  // 	  start = fillStartField.getValue();
-  // 	  end = fillEndField.getValue();
-  // 	  data = fillDataField.getValue();
-  // 	} else {	    
-  // 	  start = compareStartField.getValue();
-  // 	  end = compareEndField.getValue();
-  // 	  destination = compareDestinationField.getValue();
-  // 	}
-  //     } catch (NumberFormatException exception) {
-  // 	InfoBox.display(panel, Application.getString(this, "incompleteForm"));
-  // 	return;
-  //     }
-  //     if (copyRadio.isSelected()) {
-  // 	number = new MemoryProcessor(
-  //         panel.getHardware(),
-  // 	  sourceMemoryBank,
-  // 	  destinationMemoryBank).copy(start, end, destination);
-  // 	InfoBox.display(
-  // 	  panel,
-  // 	  String.format(Application.getString(this, "copied"), number));
-  //     } else if (fillRadio.isSelected()) {
-  // 	number = new MemoryProcessor(
-  // 	  panel.getHardware(),
-  // 	  sourceMemoryBank,
-  // 	  destinationMemoryBank).fill(start, end, data);
-  // 	InfoBox.display(
-  // 	  panel,
-  // 	  String.format(Application.getString(this, "filled"), number));
-  //     } else {
-  // 	int result = new MemoryProcessor(
-  // 	  panel.getHardware(),
-  // 	  sourceMemoryBank,
-  // 	  destinationMemoryBank).compare(start, end, destination);
-  // 	if (result == -1) {
-  // 	  InfoBox.display(
-  // 	    panel,
-  // 	    Application.getString(this, "compared.identical"));
-  // 	} else {
-  // 	  InfoBox.display(
-  // 	    panel,
-  // 	    String.format(Application.getString(this, "compared.different"),
-  // 			  result));
-  // 	}
-  //     }
-  //   }
-  // }
+      for (String chunk: text.split("[ ,;]")) {
+
+	if (chunk.length < 3) {
+	  try {
+	    data.add(Integer.parseInt(chunk, 16));
+	  } catch (final NumberFormatException exception) {
+	    ErrorBox.display(panel, syntaxError);
+	    return;
+	  }
+	} else if ((chunk.length % 1) == 1) {
+	    ErrorBox.display(panel, syntaxError);
+	    return;
+	} else {
+	  for (int i = 0; i < chunk.length; i += 2) {
+	    try {
+	      data.add(Integer.parseInt(chunk.substring(i, i + 2), 16));
+	    } catch (final NumberFormatException exception) {
+	      ErrorBox.display(panel, syntaxError);
+	      return;
+	    }
+	  }
+	}
+      }
+      final int address = editAddressField.getValue();
+      
+      for (int i = 0; i < data.size(); i++) {
+	destinationBank[(address + i) % destinationBank.length] = data.get(i);
+      }
+      editAddressField.clear();
+      editDataField.clear();
+      updateDumpDataPane();
+    }
+  }
 
   // address listener
   private class AddressListener extends MouseAdapter {
