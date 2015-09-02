@@ -119,7 +119,7 @@ public class DumpEdit extends MemoryTab {
       final GridBagConstraints sourceBankLabelConstraints =
 	new GridBagConstraints();
       final JLabel sourceBankLabel =
-	new JLabel(Application.getString(this, "dumpEdit.bank.dump") + ":");
+	new JLabel(Application.getString(this, "bank") + ":");
       sourceBankLabelConstraints.gridx = 0;
       sourceBankLabelConstraints.gridy = line;
       sourceBankLabelConstraints.insets = new Insets(0, 3, 0, 0);
@@ -149,40 +149,6 @@ public class DumpEdit extends MemoryTab {
       sourceBankRadioButtons.get(0).setSelected(true);
 
       add(sourceBankPanel, sourceBankPanelConstraints);
-      line++;
-
-      final GridBagConstraints destinationBankLabelConstraints =
-	new GridBagConstraints();
-      final JLabel destinationBankLabel =
-	new JLabel(Application.getString(this, "dumpEdit.bank.edit") + ":");
-      destinationBankLabelConstraints.gridx = 0;
-      destinationBankLabelConstraints.gridy = line;
-      destinationBankLabelConstraints.insets = new Insets(0, 3, 0, 0);
-      destinationBankLabelConstraints.anchor = GridBagConstraints.LINE_END;
-      destinationBankLabelConstraints.weightx = 0.0;
-      destinationBankLabelConstraints.weighty = 0.0;
-      add(destinationBankLabel, destinationBankLabelConstraints);
-
-      final GridBagConstraints destinationBankPanelConstraints =
-	new GridBagConstraints();
-      final JPanel destinationBankPanel =
-	new JPanel(new FlowLayout(FlowLayout.LEADING, 3, 0));
-      destinationBankPanelConstraints.gridx = 1;
-      destinationBankPanelConstraints.gridy = line;
-      destinationBankPanelConstraints.anchor = GridBagConstraints.LINE_START;
-      destinationBankPanelConstraints.weightx = 1.0;
-      destinationBankPanelConstraints.weighty = 0.0;
-
-      final ButtonGroup destinationBankGroup = new ButtonGroup();
-      for (Block bank: banks) {
-	final JRadioButton destinationBankRadioButton =
-	  new JRadioButton(bank.getName());
-	destinationBankRadioButtons.add(destinationBankRadioButton);
-	destinationBankPanel.add(destinationBankRadioButton);
-	destinationBankGroup.add(destinationBankRadioButton);
-      }
-      destinationBankRadioButtons.get(0).setSelected(true);
-      add(destinationBankPanel, destinationBankPanelConstraints);
       line++;
     }
     
