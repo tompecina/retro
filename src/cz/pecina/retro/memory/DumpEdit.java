@@ -429,8 +429,7 @@ public class DumpEdit extends MemoryTab {
 	final GridBagConstraints dumpDataCharConstraints =
 	  new GridBagConstraints();
 	final int byteAddress = address + j;
-	final ByteBuffer bb = ByteBuffer.allocate(1);
-	bb.put(sourceBank[byteAddress]);
+	final ByteBuffer bb = ByteBuffer.wrap(new byte[] {(byte)sourceBank[byteAddress]});
 	String ch;
 	try {
 	  ch = decoder.decode(bb).toString();
