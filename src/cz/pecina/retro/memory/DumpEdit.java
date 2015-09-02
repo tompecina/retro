@@ -84,8 +84,9 @@ public class DumpEdit extends MemoryTab {
   private List<JRadioButton> sourceBankRadioButtons = new ArrayList<>();
   private List<JRadioButton> destinationBankRadioButtons = new ArrayList<>();
       
-  // updated inner pane
-  private JPanel dumpDataPane = new JPanel(new GridBagLayout());
+  // mutable inner pane
+  private JPanel dumpDataPane;
+  private GridBagConstraints dumpDataPaneConstraints;
   
   /**
    * Creates Memory/DumpEdit panel.
@@ -250,8 +251,7 @@ public class DumpEdit extends MemoryTab {
     add(dumpAddressPane, dumpAddressPaneConstraints);
     line++;
 
-    final GridBagConstraints dumpDataPaneConstraints =
-      new GridBagConstraints();
+    dumpDataPaneConstraints = new GridBagConstraints();
     dumpDataPaneConstraints.gridx = 0;
     dumpDataPaneConstraints.gridy = line;
     dumpDataPaneConstraints.insets = new Insets(0, 3, 0, 0);
@@ -261,7 +261,6 @@ public class DumpEdit extends MemoryTab {
     dumpDataPaneConstraints.weighty = 0.0;
     
     updateDumpDataPane();
-    add(dumpDataPane, dumpDataPaneConstraints);
     line++;
 
     final GridBagConstraints editPaneConstraints =
@@ -355,7 +354,7 @@ public class DumpEdit extends MemoryTab {
   // update dump data pane
   private void updateDumpDataPane() {
 
-    dumpDataPane = new JPanel(new GridBagLayout());
+    final JPanel dumpDataPane = new JPanel(new GridBagLayout());
     int line = 0;
 
     for (int i = 0; i < NUMBER_HEX_LINES; i++) {
@@ -388,6 +387,13 @@ public class DumpEdit extends MemoryTab {
     hexLegendConstraints.weightx = 0.0;
     hexLegendConstraints.weighty = 0.0;
     dumpDataPane.add(hexLegend, hexLegendConstraints);
+
+    if (this.dumpDataPane != null) {
+      remove(this.dumpDataPane);
+    }
+    add(dumpDataPane, dumpDataPaneConstraints);
+    revalidate();
+    this.dumpDataPane = dumpDataPane;
   }
 
   // refresh listener
@@ -397,7 +403,7 @@ public class DumpEdit extends MemoryTab {
     @Override
     public void actionPerformed(final ActionEvent event) {
       log.finer("Refresh listener action detected");
-      refreshDumpDataPane();
+      updateDumpDataPane();
     }
   }
   
