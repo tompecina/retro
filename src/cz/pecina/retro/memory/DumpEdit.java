@@ -436,9 +436,10 @@ public class DumpEdit extends MemoryTab {
       
     } else {
 
+      int address = dumpAddressField.getValue();
+
       for (int i = 0; i < NUMBER_DIS_LINES; i++) {
 	
-	final int address = dumpAddressField.getValue() + (i * NUMBER_HEX_BYTES);
 
 	final Disassembly disassembly = Parameters.cpu.getDisassembly(address);
 	final int[] bytes = disassembly.getBytes();
@@ -517,10 +518,44 @@ public class DumpEdit extends MemoryTab {
 	  disByte2.addMouseListener(new AddressListener(address, hexString));
 	  dumpDataPane.add(disByte2, disByte2Constraints);
 	}
-	
+
+	final String parameters =
+	  disassembly.getParameters(true, "%02x", "%04x", false);
+
+	final GridBagConstraints disMnemoConstraints =
+	  new GridBagConstraints();
+	final JLabel disMnemo =
+	  new JLabel(disassembly.getMnemo(true));
+	disMnemo.setFont(FONT_MONOSPACED);
+	disMnemoConstraints.gridx = 4;
+	disMnemoConstraints.gridy = line;
+	disMnemoConstraints.insets = new Insets(0, 3, 0, 0);
+	if (parameters.isEmpty()) {
+	  disMnemoConstraints.gridwidth = GridBagConstraints.REMAINDER;
+	}
+	disMnemoConstraints.anchor = GridBagConstraints.LINE_START;
+	disMnemoConstraints.weightx = 0.0;
+	disMnemoConstraints.weighty = 0.0;
+	disMnemo.addMouseListener(new AddressListener(address, hexString));
+	dumpDataPane.add(disMnemo, disMnemoConstraints);
+
+	if (!parameters.isEmpty()) {
+	  final GridBagConstraints disParametersConstraints =
+	    new GridBagConstraints();
+	  final JLabel disParameters = new JLabel(parameters);
+	  disParameters.setFont(FONT_MONOSPACED);
+	  disParametersConstraints.gridx = 5;
+	  disParametersConstraints.gridy = line;
+	  disParametersConstraints.insets = new Insets(0, 3, 0, 0);
+	  disParametersConstraints.anchor = GridBagConstraints.LINE_START;
+	  disParametersConstraints.weightx = 0.0;
+	  disParametersConstraints.weighty = 0.0;
+	  disParameters.addMouseListener(new AddressListener(address, hexString));
+	  dumpDataPane.add(disParameters, disParametersConstraints);
+	}
+	address += length;
 	line++;
       }
-      
     }
     
     if (this.dumpDataPane != null) {

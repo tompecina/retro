@@ -4908,29 +4908,43 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 
     // for description see Disassembly
     @Override
-    public String getMnemo() {
-      return opcode.getMnemo();
+    public String getMnemo(final boolean upperCase) {
+      return upperCase ?
+	     opcode.getMnemo().toUpperCase() :
+	     opcode.getMnemo().toLowerCase();
     }
 
     // for description see Disassembly
     @Override
-    public String getParameters() {
+    public String getParameters(final boolean upperCase,
+				final String template1,
+				final String template2,
+				final boolean prependZero) {
+      final String parameters =
+	(upperCase ?
+	 opcode.getParameters().toUpperCase() :
+	 opcode.getParameters().toLowerCase());
       switch (getLength()) {
 	case 1:
-	  return opcode.getParameters();
-	case 2:
-	  return String.format("%s%s%02XH",
-			       opcode.getParameters(),
-			       ((bytes[1] > 0x9f) ? "0" : ""),
-			       bytes[1]);
-	default:
-	  return String.format("%s%s%04XH",
-			       opcode.getParameters(),
-			       ((bytes[2] > 0x9f) ? "0" : ""),
-			       (bytes[2] << 8) + bytes[1]);
+	  return parameters;
+	case 2: {
+	  String value = String.format(template1, bytes[1]);
+	  if (prependZero && !Character.isDigit(value.charAt(0))) {
+	    value = "0" + value;
+	  }
+	  return parameters + value;
+	}
+	default: {
+	  String value =
+	    String.format(template2, (bytes[2] << 8) + bytes[1]);
+	  if (prependZero && !Character.isDigit(value.charAt(0))) {
+	    value = "0" + value;
+	  }
+	  return parameters + value;
+	}
       }
     }
-
+    
     // for description see Disassembly
     @Override
     public String getSimplified() {

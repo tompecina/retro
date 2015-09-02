@@ -61,16 +61,49 @@ public abstract class Disassembly {
   /**
    * Gets mnemo code of the instruction (without parameters).
    *
+   * @param   upperCase if {@code true}, uppercase version is generated
+   * @return            mnemo code of the instruction
+   */
+  public abstract String getMnemo(boolean upperCase);
+
+  /**
+   * Gets mnemo code of the instruction (without parameters), using
+   * the default format.
+   *
    * @return mnemo code of the instruction
    */
-  public abstract String getMnemo();
+  public String getMnemo() {
+    return getMnemo(true);
+  }
 
   /**
    * Gets parameter string of the instruction, in hex.
    *
+   * @param  upperCase   if {@code true}, uppercase version is generated
+   *                     (this only applies to register names, hexadecimal
+   *                     values are generated according to their respective
+   *                     templates supplied by the invoker)
+   * @param  template1   template for one-byte hexadecimal values, e.g.,
+   *                     {@code "0x%02x"}
+   * @param  template2   template for two-byte hexadecimal values, e.g.,
+   *                     {@code "0x%04x"}
+   * @param  prependZero if {@code true}, zero is prepended to values whose
+   *                     representation starts with a non-digit 
+   * @return             parameter string of the instruction
+   */
+  public abstract String getParameters(boolean upperCase,
+				       String template1,
+				       String template2,
+				       boolean prependZero);
+
+  /**
+   * Gets parameter string of the instruction, in hex, using the default format.
+   *
    * @return parameter string of the instruction
    */
-  public abstract String getParameters();
+  public String getParameters() {
+    return getParameters(true, "%02XH", "%04XH", true);
+  }
 
   /**
    * Gets simplified string representation of the instruction.
