@@ -61,6 +61,7 @@ import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.GeneralConstants;
 
 import cz.pecina.retro.cpu.Block;
+import cz.pecina.retro.cpu.Disassembly;
 
 import cz.pecina.retro.gui.HexField;
 import cz.pecina.retro.gui.InfoBox;
@@ -83,6 +84,9 @@ public class DumpEdit extends MemoryTab {
   // number of bytes per line
   private static final int NUMBER_HEX_BYTES = 16;
 
+  // number of disassembly lines
+  private static final int NUMBER_DIS_LINES = 16;
+  
   // monospaced font
   private static final Font FONT_MONOSPACED =
     new Font(Font.MONOSPACED, Font.PLAIN, 13);
@@ -101,6 +105,14 @@ public class DumpEdit extends MemoryTab {
   // mutable inner pane
   private JPanel dumpDataPane;
   private GridBagConstraints dumpDataPaneConstraints;
+
+  // internal charset decoder
+  final CharsetDecoder decoder = Parameters.charset.newDecoder();
+  {
+    decoder.replaceWith(PLACEHOLDER);
+    decoder.onMalformedInput(CodingErrorAction.REPLACE);
+    decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
+  }
   
   /**
    * Creates Memory/DumpEdit panel.
@@ -110,7 +122,7 @@ public class DumpEdit extends MemoryTab {
   public DumpEdit(final MemoryPanel panel) {
     super(panel);
     log.fine("New Memory/DumpEdit creation started");
- 
+       
     setBorder(BorderFactory.createEmptyBorder(5, 8, 0, 8));
     final ButtonGroup dumpTypeGroup = new ButtonGroup();
     int line = 0;
@@ -213,6 +225,7 @@ public class DumpEdit extends MemoryTab {
     dumpTypeHexRadioConstraints.anchor = GridBagConstraints.LINE_START;
     dumpTypeHexRadioConstraints.weightx = 0.0;
     dumpTypeHexRadioConstraints.weighty = 0.0;
+    dumpTypeHexRadio.addActionListener(new RefreshListener());
     dumpTypeGroup.add(dumpTypeHexRadio);
     dumpAddressPane.add(dumpTypeHexRadio, dumpTypeHexRadioConstraints);
 
@@ -226,6 +239,7 @@ public class DumpEdit extends MemoryTab {
     dumpTypeDisRadioConstraints.anchor = GridBagConstraints.LINE_START;
     dumpTypeDisRadioConstraints.weightx = 0.0;
     dumpTypeDisRadioConstraints.weighty = 0.0;
+    dumpTypeDisRadio.addActionListener(new RefreshListener());
     dumpTypeGroup.add(dumpTypeDisRadio);
     dumpAddressPane.add(dumpTypeDisRadio, dumpTypeDisRadioConstraints);
 
@@ -337,7 +351,7 @@ public class DumpEdit extends MemoryTab {
   // update dump data pane
   private void updateDumpDataPane() {
 
-    // find source memory bank
+    // find memory bank
     if (numberBanks > 1) {
       for (JRadioButton button: sourceBankRadioButtons) {
 	if (button.isSelected()) {
@@ -350,81 +364,171 @@ public class DumpEdit extends MemoryTab {
     final byte[] sourceBank =
       Parameters.memoryDevice.getBlockByName(sourceMemoryBank).getMemory();
     
-    final CharsetDecoder decoder = Parameters.charset.newDecoder();
-    decoder.replaceWith(PLACEHOLDER);
-    decoder.onMalformedInput(CodingErrorAction.REPLACE);
-    decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
-      
     final JPanel dumpDataPane = new JPanel(new GridBagLayout());
     int line = 0;
+      
+    if (dumpTypeHexRadio.isSelected()) {
 
-    for (int i = 0; i < NUMBER_HEX_LINES; i++) {
-
-      final GridBagConstraints dumpDataAddressConstraints =
-	new GridBagConstraints();
-      final int address = dumpAddressField.getValue() + (i * NUMBER_HEX_BYTES);
-      final JLabel dumpDataAddress = new JLabel(String.format("%04x", address));
-      dumpDataAddress.setFont(FONT_MONOSPACED);
-      dumpDataAddressConstraints.gridx = 0;
-      dumpDataAddressConstraints.gridy = line;
-      dumpDataAddressConstraints.insets = new Insets(0, 3, 0, 0);
-      dumpDataAddressConstraints.anchor = GridBagConstraints.LINE_START;
-      dumpDataAddressConstraints.weightx = 0.0;
-      dumpDataAddressConstraints.weighty = 0.0;
-      dumpDataAddress.addMouseListener(new AddressListener(address));
-      dumpDataPane.add(dumpDataAddress, dumpDataAddressConstraints);
-
-      for (int j = 0; j < NUMBER_HEX_BYTES; j++) {
-
-	final GridBagConstraints dumpDataByteConstraints =
+      for (int i = 0; i < NUMBER_HEX_LINES; i++) {
+	
+	final GridBagConstraints dumpDataAddressConstraints =
 	  new GridBagConstraints();
-	final int byteAddress = address + j;
-	final JLabel dumpDataByte =
-	  new JLabel(String.format("%02x", sourceBank[byteAddress]));
-	dumpDataByte.setFont(FONT_MONOSPACED);
-	dumpDataByteConstraints.gridx = j + 1;
-	dumpDataByteConstraints.gridy = line;
-	dumpDataByteConstraints.insets = new Insets(0, 3, 0, 0);
-	dumpDataByteConstraints.anchor = GridBagConstraints.LINE_START;
-	dumpDataByteConstraints.weightx = 0.0;
-	dumpDataByteConstraints.weighty = 0.0;
-	dumpDataByte.addMouseListener(new AddressListener(byteAddress));
-	dumpDataPane.add(dumpDataByte, dumpDataByteConstraints);
-      }
+	final int address = dumpAddressField.getValue() + (i * NUMBER_HEX_BYTES);
+	final JLabel dumpDataAddress =
+	  new JLabel(String.format("%04x", address));
+	dumpDataAddress.setFont(FONT_MONOSPACED);
+	dumpDataAddressConstraints.gridx = 0;
+	dumpDataAddressConstraints.gridy = line;
+	dumpDataAddressConstraints.insets = new Insets(0, 3, 0, 0);
+	dumpDataAddressConstraints.anchor = GridBagConstraints.LINE_START;
+	dumpDataAddressConstraints.weightx = 0.0;
+	dumpDataAddressConstraints.weighty = 0.0;
+	dumpDataAddress.addMouseListener(new AddressListener(address));
+	dumpDataPane.add(dumpDataAddress, dumpDataAddressConstraints);
 
-      for (int j = 0; j < NUMBER_HEX_BYTES; j++) {
-
-	final GridBagConstraints dumpDataCharConstraints =
-	  new GridBagConstraints();
-	final int byteAddress = address + j;
-	final ByteBuffer bb = ByteBuffer.wrap(new byte[] {(byte)sourceBank[byteAddress]});
-	String ch;
-	try {
-	  ch = decoder.decode(bb).toString();
-	} catch (final CharacterCodingException exception) {
-	  ch = PLACEHOLDER;
-	}	  
-	if ((ch.length() == 0) || !GeneralConstants.SAFE_CHARACTERS.contains(ch.charAt(0))) {
-	  ch = PLACEHOLDER;
+	for (int j = 0; j < NUMBER_HEX_BYTES; j++) {
+	  
+	  final GridBagConstraints dumpDataByteConstraints =
+	    new GridBagConstraints();
+	  final int byteAddress = address + j;
+	  final JLabel dumpDataByte =
+	    new JLabel(String.format("%02x", sourceBank[byteAddress]));
+	  dumpDataByte.setFont(FONT_MONOSPACED);
+	  dumpDataByteConstraints.gridx = j + 1;
+	  dumpDataByteConstraints.gridy = line;
+	  dumpDataByteConstraints.insets = new Insets(0, 3, 0, 0);
+	  dumpDataByteConstraints.anchor = GridBagConstraints.LINE_START;
+	  dumpDataByteConstraints.weightx = 0.0;
+	  dumpDataByteConstraints.weighty = 0.0;
+	  dumpDataByte.addMouseListener(new AddressListener(byteAddress));
+	  dumpDataPane.add(dumpDataByte, dumpDataByteConstraints);
 	}
-	final JLabel dumpDataChar = new JLabel(ch);
-	dumpDataChar.setFont(FONT_MONOSPACED);
-	dumpDataCharConstraints.gridx = NUMBER_HEX_BYTES + j + 1;
-	dumpDataCharConstraints.gridy = line;
-	dumpDataCharConstraints.insets = new Insets(0, 3, 0, 0);
-	dumpDataCharConstraints.anchor = GridBagConstraints.LINE_START;
-	dumpDataCharConstraints.weightx = 0.0;
-	dumpDataCharConstraints.weighty = 0.0;
-	dumpDataChar.addMouseListener(new AddressListener(byteAddress));
-	dumpDataPane.add(dumpDataChar, dumpDataCharConstraints);
+	
+	for (int j = 0; j < NUMBER_HEX_BYTES; j++) {
+	  
+	  final GridBagConstraints dumpDataCharConstraints =
+	    new GridBagConstraints();
+	  final int byteAddress = address + j;
+	  final ByteBuffer bb =
+	    ByteBuffer.wrap(new byte[] {(byte)sourceBank[byteAddress]});
+	  String ch;
+	  try {
+	    ch = decoder.decode(bb).toString();
+	  } catch (final CharacterCodingException exception) {
+	    ch = PLACEHOLDER;
+	  }	  
+	  if (!GeneralConstants.SAFE_CHARACTERS.contains(ch.charAt(0))) {
+	    ch = PLACEHOLDER;
+	  }
+	  final JLabel dumpDataChar = new JLabel(ch);
+	  dumpDataChar.setFont(FONT_MONOSPACED);
+	  dumpDataCharConstraints.gridx = NUMBER_HEX_BYTES + j + 1;
+	  dumpDataCharConstraints.gridy = line;
+	  dumpDataCharConstraints.insets = new Insets(0, 3, 0, 0);
+	  dumpDataCharConstraints.anchor = GridBagConstraints.LINE_START;
+	  dumpDataCharConstraints.weightx = 0.0;
+	  dumpDataCharConstraints.weighty = 0.0;
+	  dumpDataChar.addMouseListener(new AddressListener(byteAddress));
+	  dumpDataPane.add(dumpDataChar, dumpDataCharConstraints);
+	}
+	line++;
       }
-      line++;
+      
+    } else {
+
+      for (int i = 0; i < NUMBER_DIS_LINES; i++) {
+	
+	final int address = dumpAddressField.getValue() + (i * NUMBER_HEX_BYTES);
+
+	final Disassembly disassembly = Parameters.cpu.getDisassembly(address);
+	final int[] bytes = disassembly.getBytes();
+	final int length = disassembly.getLength();
+	String hexString = "";
+	for (int j = 0; j < length; j++) {
+	  hexString += String.format(" %02x", bytes[j]);
+	}
+	hexString = hexString.substring(1);
+	    
+	final GridBagConstraints disAddressConstraints =
+	  new GridBagConstraints();
+	final JLabel disAddress =
+	  new JLabel(String.format("%04x", address));
+	disAddress.setFont(FONT_MONOSPACED);
+	disAddressConstraints.gridx = 0;
+	disAddressConstraints.gridy = line;
+	disAddressConstraints.insets = new Insets(0, 3, 0, 0);
+	disAddressConstraints.anchor = GridBagConstraints.LINE_START;
+	disAddressConstraints.weightx = 0.0;
+	disAddressConstraints.weighty = 0.0;
+	disAddress.addMouseListener(new AddressListener(address, hexString));
+	dumpDataPane.add(disAddress, disAddressConstraints);
+
+	final GridBagConstraints disByte0Constraints =
+	  new GridBagConstraints();
+	final JLabel disByte0 =
+	  new JLabel(String.format("%02x", bytes[0]));
+	disByte0.setFont(FONT_MONOSPACED);
+	disByte0Constraints.gridx = 1;
+	disByte0Constraints.gridy = line;
+	disByte0Constraints.insets = new Insets(0, 3, 0, 0);
+	if (length == 1) {
+	  disByte0Constraints.gridwidth = 3;
+	}
+	disByte0Constraints.anchor = GridBagConstraints.LINE_START;
+	disByte0Constraints.weightx = 0.0;
+	disByte0Constraints.weighty = 0.0;
+	disByte0.addMouseListener(new AddressListener(address, hexString));
+	dumpDataPane.add(disByte0, disByte0Constraints);
+	
+	if (length > 1) {
+	  final GridBagConstraints disByte1Constraints =
+	    new GridBagConstraints();
+	  final JLabel disByte1 =
+	    new JLabel(String.format("%02x", bytes[1]));
+	  disByte1.setFont(FONT_MONOSPACED);
+	  disByte1Constraints.gridx = 2;
+	  disByte1Constraints.gridy = line;
+	  disByte1Constraints.insets = new Insets(0, 3, 0, 0);
+	  if (length == 2) {
+	    disByte1Constraints.gridwidth = 2;
+	  }
+	  disByte1Constraints.anchor = GridBagConstraints.LINE_START;
+	  disByte1Constraints.weightx = 0.0;
+	  disByte1Constraints.weighty = 0.0;
+	  disByte1.addMouseListener(new AddressListener(address, hexString));
+	  dumpDataPane.add(disByte1, disByte1Constraints);
+	}
+	
+	if (length > 2) {
+	  final GridBagConstraints disByte2Constraints =
+	    new GridBagConstraints();
+	  final JLabel disByte2 =
+	    new JLabel(String.format("%02x", bytes[2]));
+	  disByte2.setFont(FONT_MONOSPACED);
+	  disByte2Constraints.gridx = 3;
+	  disByte2Constraints.gridy = line;
+	  disByte2Constraints.insets = new Insets(0, 3, 0, 0);
+	  if (length == 2) {
+	    disByte2Constraints.gridwidth = 2;
+	  }
+	  disByte2Constraints.anchor = GridBagConstraints.LINE_START;
+	  disByte2Constraints.weightx = 0.0;
+	  disByte2Constraints.weighty = 0.0;
+	  disByte2.addMouseListener(new AddressListener(address, hexString));
+	  dumpDataPane.add(disByte2, disByte2Constraints);
+	}
+	
+	line++;
+      }
+      
     }
+    
     if (this.dumpDataPane != null) {
       remove(this.dumpDataPane);
     }
     add(dumpDataPane, dumpDataPaneConstraints);
     revalidate();
+    repaint();
     this.dumpDataPane = dumpDataPane;
   }
 
@@ -445,24 +549,32 @@ public class DumpEdit extends MemoryTab {
   //   // for description see ActionListener
   //   @Override
   //   public void actionPerformed(final ActionEvent event) {
-  //     log.finer("Copy/fill/compare listener action started");
+  //     log.finer("Dump/edit listener action started");
+
+  //     final String text = editBlockField.getText().trim();
+  //     if (text.isEmpty()) {
+  // 	log.finer("No data to process");
+  // 	return;
+  //     }
+      
+  //     // find memory bank
   //     if (numberBanks > 1) {
   // 	for (JRadioButton button: sourceBankRadioButtons) {
   // 	  if (button.isSelected()) {
-  // 	    sourceMemoryBank = button.getText();
-  // 	    log.fine("Source memory bank selected: " + sourceMemoryBank);
-  // 	    break;
-  // 	  }
-  // 	}
-  // 	for (JRadioButton button: destinationBankRadioButtons) {
-  // 	  if (button.isSelected()) {
-  // 	    destinationMemoryBank = button.getText();
-  // 	    log.fine("Destination memory bank selected: " +
-  // 		     destinationMemoryBank);
+  // 	    destionationMemoryBank = button.getText();
+  // 	    log.finer("Destination memory bank selected: " + destinationMemoryBank);
   // 	    break;
   // 	  }
   // 	}
   //     }
+  //     final byte[] destinationBank =
+  // 	Parameters.memoryDevice.getBlockByName(destinationMemoryBank).getMemory();
+      
+
+
+
+
+      
   //     int start = 0, end = 0, destination = 0, data = 0, number = 0;
   //     try {
   // 	if (copyRadio.isSelected()) {
@@ -521,14 +633,22 @@ public class DumpEdit extends MemoryTab {
   private class AddressListener extends MouseAdapter {
 
     private int address;
+    private String editString;
 
     // main constructor
-    public AddressListener(final int address) {
+    public AddressListener(final int address, final String editString) {
       super();
       log.finest(String.format(
-        "Address listener created, address: 0x%04x", address));
+        "Address listener created, address: 0x%04x, string: %s",
+	address, editString));
       assert (address >= 0) && (address < 0x10000);
       this.address = address;
+      this.editString = editString;
+    }
+
+    // simplified constructor
+    public AddressListener(final int address) {
+      this(address, null);
     }
       
     // for description see MouseListener
@@ -537,6 +657,9 @@ public class DumpEdit extends MemoryTab {
       log.fine(String.format(
         "Address listener action detected (pressed), address: 0x%04x", address));
       editAddressField.setText(String.format("%04x", address));
+      if (editString != null) {
+	editDataField.setText(editString);
+      }
       final Component source = event.getComponent();
       if (source instanceof JLabel) {
 	((JLabel)source).setForeground(Color.RED);

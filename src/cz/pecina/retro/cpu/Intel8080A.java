@@ -4890,6 +4890,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   private class Intel8080ADisassembly extends Disassembly {
     private Opcode opcode;
 
+    // main constructor
     private Intel8080ADisassembly(final int address) {
       assert (address >= 0) && (address < 0x10000);
       opcode = opcodes[memory.getByte(address)];	    
