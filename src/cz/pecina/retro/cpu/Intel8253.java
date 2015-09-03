@@ -1,4 +1,4 @@
-/* Intel8255A.java
+/* Intel8253.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -23,68 +23,28 @@ package cz.pecina.retro.cpu;
 import java.util.logging.Logger;
 
 /**
- * Intel 8255A Programmable Peripheral Interface.
+ * Intel 8253 Programmable Interval Timer.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class Intel8255A extends Device implements IOElement {
+public class Intel8253 extends Device implements IOElement {
 
   // dynamic logger, per device
   private Logger log;
 
-  // ports
-  private static final int PORT_A = 0;
-  private static final int PORT_B = 1;
-  private static final int PORT_C = 2;
-  private static final int CONTROL_PORT = 3;
-
-  // Port C pins
-  private static final int PC0 = 16;
-  private static final int PC1 = 17;
-  private static final int PC2 = 18;
-  private static final int PC3 = 19;
-  private static final int PC4 = 20;
-  private static final int PC5 = 21;
-  private static final int PC6 = 22;
-  private static final int PC7 = 23;
-
-  // Mode 1 control signals
-  private static final int IN_INTR_A = PC3;
-  private static final int IN_IBF_A = PC5;
-  private static final int IN_nSTB_A = PC4;
-  private static final int IN_INTE_A = PC4;
-  private static final int IN_INTR_B = PC0;
-  private static final int IN_IBF_B = PC1;
-  private static final int IN_nSTB_B = PC2;
-  private static final int IN_INTE_B = PC2;
-  private static final int OUT_INTR_A = PC3;
-  private static final int OUT_nACK_A = PC6;
-  private static final int OUT_INTE_A = PC6;
-  private static final int OUT_nOBF_A = PC7;
-  private static final int OUT_INTR_B = PC0;
-  private static final int OUT_nACK_B = PC2;
-  private static final int OUT_INTE_B = PC2;
-  private static final int OUT_nOBF_B = PC1;
-
-  // Mode 2 control signals
-  private static final int BD_IBF_A = PC5;
-  private static final int BD_nSTB_A = PC4;
-  private static final int BD_INTE2 = PC4;
-  private static final int BD_nACK_A = PC6;
-  private static final int BD_INTE1 = PC6;
-  private static final int BD_nOBF_A = PC7;
-  private static final int BD_INTR_A = PC3;
+  // Read/Load values
+  private static final int RL_LATCH = 0;
+  private static final int RL_LSB = 1;
+  private static final int RL_MSB = 2;
+  private static final int RL_LSB_MSB = 3;
+      
+  // counters
+  private final Counter[] counters = new Counter[3];
 
   // internal registers
-  private int modeA, modeB;
-  private int directionA, directionB, directionCL, directionCH;
-  private int strobeA, strobeB, acknowledgeA, acknowledgeB;
-  private final int[] outputBuffer = new int[24];
-  private final int[] inputLatch = new int[16];
 
   // pins
-  private final Pin[] pins = new Pin[24];
 
   /**
    * Gets I/O pin.
@@ -115,10 +75,7 @@ public class Intel8255A extends Device implements IOElement {
     }
   }
 
-  /**
-   * Resets the device.  All I/O pins are configured as inputs, Mode 0
-   * is activated on both A and B.
-   */
+  // for description see Device
   @Override
   public void reset() {
     modeA = modeB = 0;
@@ -133,10 +90,10 @@ public class Intel8255A extends Device implements IOElement {
    *
    * @param name device name
    */
-  public Intel8255A(final String name) {
+  public Intel8253(final String name) {
     super(name);
     log = Logger.getLogger(getClass().getName() + "." + name);
-    log.fine("New Intel 8255A creation started, name: " + name);
+    log.fine("New Intel 8253 creation started, name: " + name);
 
     add(new Register("MODE_A") {
 	@Override
@@ -289,8 +246,8 @@ public class Intel8255A extends Device implements IOElement {
 	}
       });
 
-    for (int i = 0; i < 24; i++) {
-      pins[i] = new Pin(i);
+    for (int i = 0; i < 3; i++) {
+      counter[i] = new Counter();
     }
     reset();
     log.fine("New Intel 8255A creation completed, name: " + name);
@@ -310,6 +267,35 @@ public class Intel8255A extends Device implements IOElement {
     return (ts == 0) ? 0 : 1;
   }
 
+  /**
+   * Sets the counter connection type.
+   *
+   * @param number the counter number
+   * @param type   if {@code true}, the counter's clock is connected to system
+   *               clock and the clock pin is disabled, if {@code false}, the clock
+   *               pin is enabled
+   */
+  public void setConnection(final int number, final boolean type) {
+    log.finer("Counter: " + number + ", connection type: " +
+	      (type ? "CPU clock" : "normal"));
+    assert (number >= 0) && (number < 3);
+    counters[number].setConnecton(type);
+  }
+
+  // counter class
+  private class Counter {
+
+    // state of the counter
+    //  0 = uninitialized
+    //  1 = initialized, waiting for first byte
+    //  2 = initialized, waiting for second byte
+    //  3 = operational
+    public int state;
+    
+    public boolean type, bcd;
+    public int rl, mode;
+  }
+  
   // I/O pin
   private class Pin extends IOPin {
     private int pinNumber;
@@ -654,12 +640,42 @@ public class Intel8255A extends Device implements IOElement {
     return d;
   }
 
-  // direction to string conversion array
-  private static final String[] d2s = new String[] {"out", "in"};
-
   // for description see IOElement
   @Override
   public void portOutput(final int port, int data) {
+    assert (port >= 0) && (port < 0x100);
+    assert (data >= 0) && (data < 0x100);
+    
+    if ((port & 0x03) == 0x03) {  // control port
+      
+      final int number = data >> 6;
+      if (number == 3) {  // illegal counter number, ignore
+	log.finer("Illegal counter number in Control Word ignored");
+	return;
+      }
+      final Counter counter = counters[number];
+
+      final int rl = (data >> 4) & 0x03;
+
+      if (rl == 0) {
+	
+	counter.latch();
+
+      } else {
+	     
+	counter.rl = el;
+
+	counter.mode = (data >> 1) & 0x07;
+	if (counter.mode > 5) {
+	  counter.mode -= 4;
+	}
+      
+	counter.bcd = ((data & 1) == 1);
+
+      }
+      
+
+      
     switch (port & 0x03) {
       case PORT_A:
 	log.finer(String.format("%s: 0x%02x -> PA", name, data));
