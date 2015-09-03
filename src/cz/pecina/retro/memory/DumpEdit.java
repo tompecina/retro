@@ -629,16 +629,16 @@ public class DumpEdit extends MemoryTab {
   	for (JRadioButton button: sourceBankRadioButtons) {
   	  if (button.isSelected()) {
   	    destinationMemoryBank = button.getText();
-  	    log.finer("Destination memory bank selected: " + destinationMemoryBank);
+  	    log.finer("Destination memory bank selected: " +
+		      destinationMemoryBank);
   	    break;
   	  }
   	}
       }
-      final byte[] destinationBank =
-  	Parameters.memoryDevice.getBlockByName(destinationMemoryBank).getMemory();
-
-      final String syntaxError = Application.getString(this, "error.editLine.syntax");
-      
+      final byte[] destinationBank = Parameters.memoryDevice.getBlockByName(
+        destinationMemoryBank).getMemory();
+      final String syntaxError =
+	Application.getString(this, "error.editLine.syntax");
       final List<Byte> data = new ArrayList<>();
       
       for (String chunk: text.split("[ ,;]")) {
@@ -701,7 +701,8 @@ public class DumpEdit extends MemoryTab {
     @Override
     public void mousePressed(final MouseEvent event) {
       log.fine(String.format(
-        "Address listener action detected (pressed), address: 0x%04x", address));
+        "Address listener action detected (pressed), address: 0x%04x",
+	address));
       editAddressField.setText(String.format("%04x", address));
       if (editString != null) {
 	editDataField.setText(editString);
@@ -716,7 +717,8 @@ public class DumpEdit extends MemoryTab {
     @Override
     public void mouseReleased(final MouseEvent event) {
       log.fine(String.format(
-        "Address listener action detected (released), address: 0x%04x", address));
+        "Address listener action detected (released), address: 0x%04x",
+	address));
       final Component source = event.getComponent();
       if (source instanceof JLabel) {
 	((JLabel)source).setForeground(Color.BLACK);
