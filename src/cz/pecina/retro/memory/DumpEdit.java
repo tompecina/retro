@@ -56,8 +56,6 @@ import javax.swing.JPanel;
 import javax.swing.ButtonGroup;
 import javax.swing.BorderFactory;
 
-import javax.swing.border.Border;
-
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.GeneralConstants;
@@ -141,7 +139,7 @@ public class DumpEdit extends MemoryTab {
 	new JLabel(Application.getString(this, "bank") + ":");
       sourceBankLabelConstraints.gridx = 0;
       sourceBankLabelConstraints.gridy = line;
-      sourceBankLabelConstraints.insets = new Insets(0, 3, 2, 0);
+      sourceBankLabelConstraints.insets = new Insets(0, 6, 5, 0);
       sourceBankLabelConstraints.anchor = GridBagConstraints.LINE_END;
       sourceBankLabelConstraints.weightx = 0.0;
       sourceBankLabelConstraints.weighty = 0.0;
@@ -153,7 +151,7 @@ public class DumpEdit extends MemoryTab {
 	new JPanel(new FlowLayout(FlowLayout.LEADING, 3, 0));
       sourceBankPanelConstraints.gridx = 1;
       sourceBankPanelConstraints.gridy = line;
-      sourceBankPanelConstraints.insets = new Insets(0, 0, 2, 0);
+      sourceBankPanelConstraints.insets = new Insets(0, 0, 5, 0);
       sourceBankPanelConstraints.anchor = GridBagConstraints.LINE_START;
       sourceBankPanelConstraints.weightx = 1.0;
       sourceBankPanelConstraints.weighty = 0.0;
@@ -261,6 +259,7 @@ public class DumpEdit extends MemoryTab {
     dumpDataPaneConstraints.insets = new Insets(10, 3, 15, 0);
     dumpDataPaneConstraints.gridwidth = GridBagConstraints.REMAINDER;
     dumpDataPaneConstraints.anchor = GridBagConstraints.LINE_START;
+    dumpDataPaneConstraints.fill = GridBagConstraints.HORIZONTAL;
     dumpDataPaneConstraints.weightx = 0.0;
     dumpDataPaneConstraints.weighty = 0.0;
     
@@ -441,7 +440,8 @@ public class DumpEdit extends MemoryTab {
 	  dumpDataCharConstraints.insets =
 	    new Insets(1, (((j % 8) == 0) ? 10 : 1), 0, 1);
 	  dumpDataCharConstraints.anchor = GridBagConstraints.LINE_START;
-	  dumpDataCharConstraints.weightx = 0.0;
+	  dumpDataCharConstraints.weightx =
+	    ((j == (NUMBER_HEX_BYTES - 1)) ? 1.0 : 0.0);
 	  dumpDataCharConstraints.weighty = 0.0;
 	  dumpDataChar.addMouseListener(new AddressListener(byteAddress));
 	  dumpDataPane.add(dumpDataChar, dumpDataCharConstraints);
@@ -562,7 +562,7 @@ public class DumpEdit extends MemoryTab {
 	  disMnemoConstraints.gridwidth = GridBagConstraints.REMAINDER;
 	}
 	disMnemoConstraints.anchor = GridBagConstraints.LINE_START;
-	disMnemoConstraints.weightx = 0.0;
+	disMnemoConstraints.weightx = (parameters.isEmpty() ? 1.0 : 0.0);
 	disMnemoConstraints.weighty = 0.0;
 	disMnemo.addMouseListener(new AddressListener(address, hexString));
 	dumpDataPane.add(disMnemo, disMnemoConstraints);
@@ -576,7 +576,7 @@ public class DumpEdit extends MemoryTab {
 	  disParametersConstraints.gridy = line;
 	  disParametersConstraints.insets = new Insets(1, 15, 0, 0);
 	  disParametersConstraints.anchor = GridBagConstraints.LINE_START;
-	  disParametersConstraints.weightx = 0.0;
+	  disParametersConstraints.weightx = 1.0;
 	  disParametersConstraints.weighty = 0.0;
 	  disParameters.addMouseListener(
 	    new AddressListener(address, hexString));

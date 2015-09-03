@@ -40,8 +40,6 @@ import javax.swing.JPanel;
 import javax.swing.ButtonGroup;
 import javax.swing.BorderFactory;
 
-import javax.swing.border.Border;
-
 import cz.pecina.retro.common.Application;
 
 import cz.pecina.retro.cpu.Block;
@@ -178,6 +176,7 @@ public class CopyFillCompare extends MemoryTab {
     copyRadio.setSelected(true);
     copyRadioConstraints.gridx = 0;
     copyRadioConstraints.gridy = line;
+    copyRadioConstraints.insets = new Insets(2, 0, 0, 0);
     copyRadioConstraints.anchor = GridBagConstraints.LINE_START;
     copyRadioConstraints.weightx = 0.0;
     copyRadioConstraints.weighty = 0.0;
@@ -190,7 +189,7 @@ public class CopyFillCompare extends MemoryTab {
       new JLabel(Application.getString(this, "copy.start") + ":");
     copyStartConstraints.gridx = 1;
     copyStartConstraints.gridy = line;
-    copyStartConstraints.insets = new Insets(0, 10, 0, 0);
+    copyStartConstraints.insets = new Insets(2, 10, 0, 0);
     copyStartConstraints.anchor = GridBagConstraints.LINE_END;
     copyStartConstraints.weightx = 0.0;
     copyStartConstraints.weighty = 0.0;
@@ -203,7 +202,7 @@ public class CopyFillCompare extends MemoryTab {
     copyStartField.addMouseListener(new RadioClick(copyRadio));
     copyStartFieldConstraints.gridx = 2;
     copyStartFieldConstraints.gridy = line;
-    copyStartFieldConstraints.insets = new Insets(0, 3, 0, 10);
+    copyStartFieldConstraints.insets = new Insets(2, 3, 0, 10);
     copyStartFieldConstraints.anchor = GridBagConstraints.LINE_START;
     copyStartFieldConstraints.weightx = 0.0;
     copyStartFieldConstraints.weighty = 0.0;
@@ -215,7 +214,7 @@ public class CopyFillCompare extends MemoryTab {
       new JLabel(Application.getString(this, "copy.end") + ":");
     copyEndConstraints.gridx = 3;
     copyEndConstraints.gridy = line;
-    copyEndConstraints.insets = new Insets(0, 10, 0, 0);
+    copyEndConstraints.insets = new Insets(2, 10, 0, 0);
     copyEndConstraints.anchor = GridBagConstraints.LINE_END;
     copyEndConstraints.weightx = 0.0;
     copyEndConstraints.weighty = 0.0;
@@ -228,7 +227,7 @@ public class CopyFillCompare extends MemoryTab {
     copyEndField.addMouseListener(new RadioClick(copyRadio));
     copyEndFieldConstraints.gridx = 4;
     copyEndFieldConstraints.gridy = line;
-    copyEndFieldConstraints.insets = new Insets(0, 3, 0, 10);
+    copyEndFieldConstraints.insets = new Insets(2, 3, 0, 10);
     copyEndFieldConstraints.anchor = GridBagConstraints.LINE_START;
     copyEndFieldConstraints.weightx = 0.0;
     copyEndFieldConstraints.weighty = 0.0;
@@ -241,7 +240,7 @@ public class CopyFillCompare extends MemoryTab {
     copyDestinationConstraints.gridx = 5;
     copyDestinationConstraints.gridy = line;
     copyDestinationConstraints.gridwidth = 2;
-    copyDestinationConstraints.insets = new Insets(0, 10, 0, 0);
+    copyDestinationConstraints.insets = new Insets(2, 10, 0, 0);
     copyDestinationConstraints.anchor = GridBagConstraints.LINE_END;
     copyDestinationConstraints.weightx = 0.0;
     copyDestinationConstraints.weighty = 0.0;
@@ -255,7 +254,7 @@ public class CopyFillCompare extends MemoryTab {
     copyDestinationFieldConstraints.gridx = 7;
     copyDestinationFieldConstraints.gridy = line;
     copyDestinationFieldConstraints.gridwidth = GridBagConstraints.REMAINDER;
-    copyDestinationFieldConstraints.insets = new Insets(0, 3, 0, 0);
+    copyDestinationFieldConstraints.insets = new Insets(2, 3, 0, 0);
     copyDestinationFieldConstraints.anchor = GridBagConstraints.LINE_START;
     copyDestinationFieldConstraints.weightx = 1.0;
     copyDestinationFieldConstraints.weighty = 0.0;

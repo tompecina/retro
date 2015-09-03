@@ -43,8 +43,6 @@ import javax.swing.JPanel;
 import javax.swing.ButtonGroup;
 import javax.swing.BorderFactory;
 
-import javax.swing.border.Border;
-
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import cz.pecina.retro.common.Application;
