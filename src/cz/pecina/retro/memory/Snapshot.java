@@ -137,7 +137,7 @@ public class Snapshot extends MemoryProcessor {
     try {
       snapshot = doc.getRootElement();
     } catch (final Exception exception) {
-      log.fine("Error, parsing failed, exception: " + exception.getMessge());
+      log.fine("Error, parsing failed, exception: " + exception.getMessage());
       throw Application.createError(this, "parsing");
     }
     if (!snapshot.getName().equals("snapshot")) {

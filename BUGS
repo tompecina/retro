@@ -7,7 +7,7 @@ KNOWN BUGS AND ESSENTIAL NEW FEATURES
 
 * Support for synchronous 8251A reception missing.
 
-* Composite shortcuts not working with autorepeat algorighm.
+* Composite shortcuts not working with autorepeat algorithm.
 
 * Keyboard support for PMI-80 needs review.
 

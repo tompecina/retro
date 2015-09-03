@@ -151,7 +151,7 @@ public class XML extends TapeProcessor {
     try {
       tag = doc.getRootElement();
     } catch (final Exception exception) {
-      log.fine("Error, parsing failed, exception: " + exception.getMessge());
+      log.fine("Error, parsing failed, exception: " + exception.getMessage());
       throw Application.createError(this, "parsing");
     }
     if (!tag.getName().equals("tape")) {
