@@ -99,8 +99,8 @@ public class SAM extends TapeProcessor {
       for (int i = 0; i < SAM_TRAILER_LENGTH; i++) {
 	oStream.write(0xff);
       }
-    } catch (Exception exception) {
-      log.fine("Error, writing failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, writing failed, exception: " + exception.getMessage());
       throw Application.createError(this, "SAMWrite");
     }
     log.fine("Writing completed");
@@ -134,8 +134,8 @@ public class SAM extends TapeProcessor {
       if (pulseStart != -1) {
 	tape.put(pulseStart, pulseLast - pulseStart);
       }
-    } catch (Exception exception) {
-      log.fine("Error, reading failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, reading failed, exception: " + exception.getMessage());
       throw Application.createError(this, "SAMRead");
     }
     log.fine("Reading completed");

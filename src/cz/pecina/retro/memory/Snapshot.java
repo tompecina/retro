@@ -99,8 +99,8 @@ public class Snapshot extends MemoryProcessor {
     final Document doc = new Document(snapshot);
     try (final PrintWriter writer = new PrintWriter(file)) {
       new XMLOutputter(Format.getPrettyFormat()).output(doc, writer);
-    } catch (Exception exception) {
-      log.fine("Error, writing failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, writing failed, exception: " + exception.getMessage());
       throw Application.createError(this, "XMLWrite");
     }
     log.fine("Writing completed");
@@ -118,25 +118,26 @@ public class Snapshot extends MemoryProcessor {
 	.newSchema(new StreamSource(getClass()
 	.getResourceAsStream("snapshot-" + SNAPSHOT_XML_FILE_VERSION + ".xsd")))
 	.newValidator().validate(new StreamSource(file));
-    } catch (Exception exception) {
-      log.fine("Error, validation failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, validation failed, exception: " +
+	       exception.getMessage());
       throw Application.createError(this, "validation");
     }
     Document doc;
     Element snapshot;
     try {
       doc = new SAXBuilder().build(file);
-    } catch (JDOMException exception) {
-      log.fine("Error, parsing failed, exception: " + exception);
+    } catch (final JDOMException exception) {
+      log.fine("Error, parsing failed, exception: " + exception.getMessage());
       throw Application.createError(this, "parsing");
-    } catch (Exception exception) {
-      log.fine("Error, reading failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, reading failed, exception: " + exception.getMessage());
       throw Application.createError(this, "XMLRead");
     }
     try {
       snapshot = doc.getRootElement();
-    } catch (Exception exception) {
-      log.fine("Error, parsing failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, parsing failed, exception: " + exception.getMessge());
       throw Application.createError(this, "parsing");
     }
     if (!snapshot.getName().equals("snapshot")) {
@@ -169,17 +170,18 @@ public class Snapshot extends MemoryProcessor {
       " number of bytes: %d",
       startAddress,
       number));
+    final int size = memory.length;
     boolean inSequence = false;
     StringBuilder data = new StringBuilder();
     Element bytes;
     for (int i = 0, j = 0; i < number;) {
-      final int memoryI = memory[(startAddress + i) & 0xffff] & 0xff;
+      final int memoryI = memory[(startAddress + i) % size] & 0xff;
       final int remain = number - i;	
       boolean compress = false;
       if (remain >= COUNT_LIMIT) {
 	compress = true;
 	for (j = 0; j < COUNT_LIMIT; j++) {
-	  if (memoryI != (memory[(startAddress + i + j) & 0xffff] & 0xff)) {
+	  if (memoryI != (memory[(startAddress + i + j) % size] & 0xff)) {
 	    compress = false;
 	    break;
 	  }
@@ -187,7 +189,7 @@ public class Snapshot extends MemoryProcessor {
       }
       if (compress) {
 	for (; j < remain; j++) {
-	  if (memoryI != (memory[(startAddress + i + j) & 0xffff] & 0xff)) {
+	  if (memoryI != (memory[(startAddress + i + j) % size] & 0xff)) {
 	    break;
 	  }
 	}
@@ -243,13 +245,15 @@ public class Snapshot extends MemoryProcessor {
       "Method processMemoryElement called: destination address: %04x",
       destinationAddress));
     assert (destinationAddress >= -1) && (destinationAddress <= 0xffff);
+    final int size = memory.length;
     final Info info = new Info();
     int startAddress = 0;
     if (destinationAddress == -1) {
       try {
 	startAddress = Integer.parseInt(tag.getAttributeValue("start"), 16);
-      } catch (Exception exception) {
-	log.fine("Error in starting address, exception: " + exception);
+      } catch (final Exception exception) {
+	log.fine("Error in starting address, exception: " +
+		 exception.getMessage());
 	throw Application.createError(Snapshot.class, "parsing");
       }
       log.finer(String.format("Starting address: %04x", startAddress));
@@ -264,8 +268,9 @@ public class Snapshot extends MemoryProcessor {
       if ((string = bytes.getAttributeValue("count")) != null) {
 	try {
 	  count = Integer.parseInt(string);
-	} catch (Exception exception) {
-	  log.fine("Error in count, exception: " + exception);
+	} catch (final Exception exception) {
+	  log.fine("Error in count, exception: " +
+		   exception.getMessage());
 	  throw Application.createError(Snapshot.class, "parsing");
 	}
       } else {
@@ -284,7 +289,7 @@ public class Snapshot extends MemoryProcessor {
 	    }
 	    final int dataByte = Integer.parseInt(
 	      string.substring(i * 2, (i + 1) * 2), 16);
-	    memory[startAddress] = (byte)dataByte;
+	    memory[startAddress % size] = (byte)dataByte;
 	    log.finest(String.format("Read: %02x -> (%04x)",
 				     dataByte,
 				     startAddress));
@@ -292,8 +297,9 @@ public class Snapshot extends MemoryProcessor {
 	    info.number++;
 	  }
 	}
-      } catch (Exception exception) {
-	log.fine("Error, parsing failed, exception: " + exception);
+      } catch (final Exception exception) {
+	log.fine("Error, parsing failed, exception: " +
+		 exception.getMessage());
 	throw Application.createError(Snapshot.class, "parsing");
       }
     }

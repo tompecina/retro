@@ -115,10 +115,12 @@ public class MemoryProcessor {
       startAddress,
       endAddress,
       destinationAddress));
-    final int number = ((endAddress - startAddress) & 0xffff) + 1;
+    final int sourceSize = sourceMemory.length;
+    final int destinationSize = destinationMemory.length;
+    final int number = endAddress - startAddress + 1;
     for (int i = 0; i < number; i++) {
-      final int sourceAddress = (startAddress + i) & 0xffff;
-      final int targetAddress = (destinationAddress + i) & 0xffff;
+      final int sourceAddress = (startAddress + i) % sourceSize;
+      final int targetAddress = (destinationAddress + i) % destinationSize;
       final int data = sourceMemory[sourceAddress] & 0xff;
       destinationMemory[targetAddress] = (byte)data;
       log.finest(String.format("Copying one byte: (%04x) -> %02x -> (%04x)",
@@ -146,9 +148,10 @@ public class MemoryProcessor {
       endAddress,
       data));
     assert (data >= 0) && (data < 0x100);
-    final int number = ((endAddress - startAddress) & 0xffff) + 1;
+    final int destinationSize = destinationMemory.length;
+    final int number = endAddress - startAddress + 1;
     for (int i = 0; i < number; i++) {
-      final int targetAddress = (startAddress + i) & 0xffff;
+      final int targetAddress = (startAddress + i) % destinationSize;
       destinationMemory[targetAddress] = (byte)data;
       log.finest(String.format("Writing one byte: %02x -> (%04x)",
 			       data,
@@ -176,10 +179,12 @@ public class MemoryProcessor {
       startAddress,
       endAddress,
       destinationAddress));
-    final int number = ((endAddress - startAddress) & 0xffff) + 1;
+    final int sourceSize = sourceMemory.length;
+    final int destinationSize = destinationMemory.length;
+    final int number = endAddress - startAddress + 1;
     for (int i = 0; i < number; i++) {
-      final int sourceAddress = (startAddress + i) & 0xffff;
-      final int targetAddress = (destinationAddress + i) & 0xffff;
+      final int sourceAddress = (startAddress + i) % sourceSize;
+      final int targetAddress = (destinationAddress + i) % destinationSize;
       final byte sourceData = sourceMemory[sourceAddress];
       final byte targetData = destinationMemory[targetAddress];
       log.finest(String.format(
@@ -189,7 +194,7 @@ public class MemoryProcessor {
 	targetAddress,
 	targetData));
       if (sourceData != targetData) {
-	log.fine(String.format("First mismatched at: %04x", sourceAddress));
+	log.fine(String.format("First mismatch at: %04x", sourceAddress));
 	return sourceAddress;
       }
     }

@@ -63,7 +63,7 @@ public class AboutLicense extends JPanel {
     try {
       editorPane =
 	new NonEditableJEditorPane(getClass().getResource("License/gpl.txt"));
-    } catch (Exception exception) {
+    } catch (final Exception exception) {
       log.fine("Error reading license");
       throw Application.createError(this, "licenseRead");
     }

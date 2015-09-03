@@ -394,7 +394,7 @@ public class Load extends MemoryTab {
 	    destination = loadXMLDestinationField.getValue();
 	  }
 	}		    
-      } catch (NumberFormatException exception) {
+      } catch (final NumberFormatException exception) {
 	InfoBox.display(panel,
 			Application.getString(this, "incompleteForm"));
 	return;
@@ -442,7 +442,7 @@ public class Load extends MemoryTab {
 	  } else {
 	    plugins[pluginIndex].read(panel.getHardware(), file);
 	  }
-	} catch (RuntimeException exception) {
+	} catch (final RuntimeException exception) {
 	  errorBox(exception);
 	  return;
 	}

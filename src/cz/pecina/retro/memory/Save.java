@@ -524,7 +524,7 @@ public class Save extends MemoryTab {
 	    destination = saveXMLDestinationField.getValue();
 	  }
 	}		    
-      } catch (NumberFormatException exception) {
+      } catch (final NumberFormatException exception) {
 	InfoBox.display(panel, Application.getString(this, "incompleteForm"));
 	return;
       }
@@ -557,28 +557,28 @@ public class Save extends MemoryTab {
 	      sourceMemoryBank,
 	      destinationMemoryBank).write(file,
 					   start,
-					   ((end - start) & 0xffff) + 1);
+					   end - start + 1);
 	  } else if (saveRadioHEX.isSelected()) {
 	    new IntelHEX(
 	      panel.getHardware(),
 	      sourceMemoryBank,
 	      destinationMemoryBank).write(file,
 					   start,
-					   ((end - start) & 0xffff) + 1,
+					   end - start + 1,
 					   destination);
 	  } else if (saveRadioXML.isSelected()) {
 	    new XML(panel.getHardware(),
 		    sourceMemoryBank,
 		    destinationMemoryBank).write(file,
 						 start,
-						 ((end - start) & 0xffff) + 1,
+						 end - start + 1,
 						 destination);
 	  } else if (saveRadioSnapshot.isSelected()) {
 	    new Snapshot(panel.getHardware()).write(file);
 	  } else {
 	    plugins[pluginIndex].write(panel.getHardware(), file);
 	  }
-	} catch (RuntimeException exception) {
+	} catch (final RuntimeException exception) {
 	  errorBox(exception);
 	  return;
 	}

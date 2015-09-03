@@ -198,7 +198,7 @@ public class CommandLineProcessor {
     CommandLine line = null;
     try {
       line = parser.parse(options, Parameters.arguments);
-    } catch (Exception exception) {
+    } catch (final Exception exception) {
       usage();
       error();
     }
@@ -211,7 +211,7 @@ public class CommandLineProcessor {
       if (defaultSnapshot.canRead()) {
 	try {
 	  new Snapshot(hardware).read(defaultSnapshot);
-	} catch (Exception exception) {
+	} catch (final Exception exception) {
 	  log.fine("Error reading default snapshot");
 	  System.out.println(
 	    Application.getString(this, "error.errorDefaultShapshot"));
@@ -229,7 +229,7 @@ public class CommandLineProcessor {
 	if (defaultSnapshot.canRead()) {
 	  try {
 	    new Snapshot(hardware).read(defaultSnapshot);
-	  } catch (RuntimeException exception) {
+	  } catch (final RuntimeException exception) {
 	    log.fine("Error reading default snapshot");
 	    System.out.println(
 	      Application.getString(this, "error.errorDefaultShapshot"));
@@ -364,7 +364,7 @@ public class CommandLineProcessor {
 	    break;
 	}
       }
-    } catch (Exception exception) {
+    } catch (final Exception exception) {
       usage();
       error();
     }

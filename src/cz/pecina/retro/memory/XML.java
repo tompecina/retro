@@ -122,8 +122,8 @@ public class XML extends MemoryProcessor {
     final Document doc = new Document(tag);
     try (final PrintWriter writer = new PrintWriter(file)) {
       new XMLOutputter(Format.getPrettyFormat()).output(doc, writer);
-    } catch (Exception exception) {
-      log.fine("Error, writing failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, writing failed, exception: " + exception.getMessage());
       throw Application.createError(this, "XMLWrite");
     }
     log.fine("Writing completed");
@@ -157,25 +157,29 @@ public class XML extends MemoryProcessor {
 	.newSchema(new StreamSource(getClass()
 	.getResourceAsStream("memory-" + MEMORY_XML_FILE_VERSION + ".xsd")))
 	.newValidator().validate(new StreamSource(file));
-    } catch (Exception exception) {
-      log.fine("Error, validation failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, validation failed, exception: " +
+	       exception.getMessage());
       throw Application.createError(this, "validation");
     }
     Document doc;
     try {
       doc = new SAXBuilder().build(file);
-    } catch (JDOMException exception) {
-      log.fine("Error, parsing failed, exception: " + exception);
+    } catch (final JDOMException exception) {
+      log.fine("Error, parsing failed, exception: " +
+	       exception.getMessage());
       throw Application.createError(this, "parsing");
-    } catch (Exception exception) {
-      log.fine("Error, reading failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, reading failed, exception: " +
+	       exception.getMessage());
       throw Application.createError(this, "XMLRead");
     }
     Element tag;
     try {
       tag = doc.getRootElement();
-    } catch (Exception exception) {
-      log.fine("Error, parsing failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, parsing failed, exception: " +
+	       exception.getMessage());
       throw Application.createError(this, "parsing");
     }
     if (!tag.getName().equals("memory")) {

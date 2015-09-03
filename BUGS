@@ -19,8 +19,6 @@ KNOWN BUGS AND ESSENTIAL NEW FEATURES
 
 * Implement command-line option for model selection.
 
-* Update PMI-80 tape formats PMITAPE & SAM.
+* Update PMI-80 tape formats PMITAPE & SAM (and modify HW as needed).
 
 * Icon size in some implementations limited to 128x128.
-
-* Memory panel: implement wrapping or check the upper limit.

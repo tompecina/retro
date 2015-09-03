@@ -86,8 +86,8 @@ public class PMT extends TapeProcessor {
 	}
 	log.finest(String.format("Write: (%d, %d)", start, duration));
       }
-    } catch (Exception exception) {
-      log.fine("Error, writing failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, writing failed, exception: " + exception.getMessage());
       throw Application.createError(this, "PMTWrite");
     }
     log.fine("Writing completed");
@@ -121,11 +121,12 @@ public class PMT extends TapeProcessor {
 	  currPos = start;
 	  log.finest(String.format("Read: (%d, %d)", start, duration));
 	}
-      } catch (EOFException exception) {
+      } catch (final EOFException exception) {
 	log.finer("EOF encountered");
       }
-    } catch (Exception exception) {
-      log.fine("Error, reading failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, reading failed, exception: " +
+	       exception.getMessage());
       throw Application.createError(this, "PMTRead");
     }
     log.fine("Reading completed");

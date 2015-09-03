@@ -74,15 +74,16 @@ public class Raw extends MemoryProcessor {
       file.getName(),
       startAddress,
       number));
+    final int sourceSize = sourceMemory.length;
     try (final OutputStream outputStream = new FileOutputStream(file)) {
       for (int i = 0; i < number; i++) {
-	final int address = (startAddress + i) & 0xffff;
+	final int address = (startAddress + i) % sourceSize;
 	final int data = sourceMemory[address] & 0xff;
 	outputStream.write(data);
 	log.finest(String.format("Write: %04x -> %02x", address, data));
       }
-    } catch (Exception exception) {
-      log.fine("Error, writing failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, writing failed, exception: " + exception.getMessage());
       throw Application.createError(this, "rawWrite");
     }
     log.fine("Raw data write completed");
@@ -100,11 +101,12 @@ public class Raw extends MemoryProcessor {
       "Reading raw data from a file, file: %s, destination address: %04x",
       file.getName(),
       destinationAddress));
+    final int destinationSize = destinationMemory.length;
     final Info info = new Info();
     try (final InputStream inputStream = new FileInputStream(file)) {
       int data;
       while ((data = inputStream.read()) != -1) {
-	destinationAddress &= 0xffff;
+	destinationAddress %= destinationSize;
 	if (destinationAddress < info.minAddress) {
 	  info.minAddress = destinationAddress;
 	}
@@ -118,8 +120,8 @@ public class Raw extends MemoryProcessor {
 	destinationAddress++;
 	info.number++;
       }
-    } catch (Exception exception) {
-      log.fine("Error, reading failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, reading failed, exception: " + exception.getMessage());
       throw Application.createError(this, "rawRead");
     }
     if (info.number == 0) {

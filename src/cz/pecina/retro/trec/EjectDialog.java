@@ -280,7 +280,7 @@ public class EjectDialog extends JDialog {
 	    new WAV(tapeRecorderHardware.getTape(),
 	      tapeRecorderHardware.getTapeRecorderInterface()).write(file);
 	  }
-	} catch (RuntimeException exception) {
+	} catch (final RuntimeException exception) {
 	  errorBox(exception);
 	  return;
 	}
@@ -331,7 +331,7 @@ public class EjectDialog extends JDialog {
 	      new WAV(tapeRecorderHardware.getTape(),
 	        tapeRecorderHardware.getTapeRecorderInterface()).read(file);
 	    }
-	  } catch (RuntimeException exception) {
+	  } catch (final RuntimeException exception) {
 	    errorBox(exception);
 	    return;
 	  }

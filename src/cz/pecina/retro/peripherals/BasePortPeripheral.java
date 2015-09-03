@@ -74,7 +74,7 @@ public abstract class BasePortPeripheral extends Peripheral {
   protected void getPreferences() {
     try {
       preferences.sync();
-    } catch (Exception exception) {
+    } catch (final Exception exception) {
       throw Application.createError(this, "backingStore");
     }
     basePort = preferences.getInt("basePort", defaultBasePort);

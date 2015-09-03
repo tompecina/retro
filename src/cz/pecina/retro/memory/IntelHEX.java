@@ -97,6 +97,7 @@ public class IntelHEX extends MemoryProcessor {
       startAddress,
       number,
       destinationAddress));
+    final int sourceSize = sourceMemory.length;
     try (final PrintWriter writer = new PrintWriter(file)) {
       for (int i = number, address = destinationAddress, count;
 	   i > 0;
@@ -105,18 +106,19 @@ public class IntelHEX extends MemoryProcessor {
 	writer.printf(":%02X%04X%02X", count, address, DATA_RECORD);
 	int checkSum = count + (address & 0xff) + (address >> 8);
 	for (int j = 0; j < count; j++) {
-	  final int dataByte = sourceMemory[address] & 0xff;
+	  final int dataByte = sourceMemory[address % sourceSize] & 0xff;
 	  checkSum += dataByte;
 	  writer.printf("%02X", dataByte);
-	  address = (address + 1) & 0xffff;
+	  address++;
 	}
 	writer.printf("%02X%n", (-checkSum) & 0xff);
 	log.finest("One data record written, length: " + count);
       }
       writer.printf(":000000%02XFF%n", END_RECORD);
       log.finer("End record written");
-    } catch (Exception exception) {
-      log.fine("Error, writing failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, writing failed, exception: " +
+	       exception.getMessage());
       throw Application.createError(this, "HEXWrite");
     }
     log.fine("Intel HEX data write completed");
@@ -146,6 +148,7 @@ public class IntelHEX extends MemoryProcessor {
       ", destination address: %04x",
       file.getName(),
       destinationAddress));
+    final int destinationSize = destinationMemory.length;
     final Info info = new Info();
     int number = 0;
     try (final BufferedReader reader =
@@ -207,7 +210,7 @@ public class IntelHEX extends MemoryProcessor {
 	  if (address > info.maxAddress) {
 	    info.maxAddress = address;
 	  }
-	  destinationMemory[address] = (byte)data;
+	  destinationMemory[address % destinationSize] = (byte)data;
 	  log.finest(String.format("Read: %02x -> (%04x)", data, address));
 	  number++;
 	}
@@ -216,11 +219,13 @@ public class IntelHEX extends MemoryProcessor {
 	  throw Application.createError(this, "HEX");
 	}
       } while (recordType != END_RECORD);
-    } catch (NumberFormatException exception) {
-      log.fine("Error, bad number format, exception: " + exception);
+    } catch (final NumberFormatException exception) {
+      log.fine("Error, bad number format, exception: " +
+	       exception.getMessage());
       throw Application.createError(this, "HEX");
-    } catch (Exception exception) {
-      log.fine("Error, reading failed, exception: " + exception);
+    } catch (final Exception exception) {
+      log.fine("Error, reading failed, exception: " +
+	       exception.getMessage());
       throw Application.createError(this, "HEXRead");
     }
     info.number = number;

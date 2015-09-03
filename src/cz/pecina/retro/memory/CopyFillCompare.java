@@ -505,7 +505,7 @@ public class CopyFillCompare extends MemoryTab {
 	  end = compareEndField.getValue();
 	  destination = compareDestinationField.getValue();
 	}
-      } catch (NumberFormatException exception) {
+      } catch (final NumberFormatException exception) {
 	InfoBox.display(panel, Application.getString(this, "incompleteForm"));
 	return;
       }

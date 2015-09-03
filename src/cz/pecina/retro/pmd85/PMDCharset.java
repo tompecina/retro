@@ -151,7 +151,7 @@ public class PMDCharset extends Charset {
 
     // main constructor
     public Decoder() {
-      super(PMDCharset.this, 1.0f, 1.0f);
+      super(PMDCharset.this, 1f, 1f);
     }
 
     // for description see CharsetDecoder
