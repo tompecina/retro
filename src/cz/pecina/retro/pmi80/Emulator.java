@@ -22,6 +22,8 @@ package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
 
+import java.nio.charset.Charset;
+
 import javax.swing.ToolTipManager;
 
 import cz.pecina.retro.common.GeneralConstants;
@@ -66,6 +68,7 @@ public class Emulator {
     Parameters.CPUFrequency = Constants.CPU_FREQUENCY;
     Parameters.timerPeriod = Constants.TIMER_PERIOD;
     Parameters.timerCycles = Constants.TIMER_CYCLES;
+    Parameters.charset = Charset.forName("US-ASCII");
 
     // initialize application
     GeneralUserPreferences.setNodeClass(UserPreferences.class);

@@ -169,7 +169,7 @@ public class PMDCharset extends Charset {
 	  } else if ((cp >= 0xc0) && (cp <= 0xff)) {
 	    ch = SPECIAL_CHARACTERS.get(cp - 0xc0);
 	  } else if ((cp < 0x20) || ((cp >= 0x80) & (cp < 0xc0))) {
-	    return CoderResult.unmappableForLength(1);
+	    return CoderResult.malformedForLength(1);
 	  } else {
 	    ch = (char)cp;
 	  }
