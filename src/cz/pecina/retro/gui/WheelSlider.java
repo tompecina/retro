@@ -161,7 +161,7 @@ public class WheelSlider extends JSlider {
 				      getMinimum(),
 				      getMaximum());
       setValue(newValue);
-      log.finer("WheelListener set to: " + newValue);
+      log.finer("WheelSlider set to: " + newValue);
     }
   }
 }

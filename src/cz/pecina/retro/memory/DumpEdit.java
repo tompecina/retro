@@ -43,6 +43,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelListener;
+import java.awt.event.MouseWheelEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -59,6 +61,7 @@ import javax.swing.border.Border;
 import cz.pecina.retro.common.Application;
 import cz.pecina.retro.common.Parameters;
 import cz.pecina.retro.common.GeneralConstants;
+import cz.pecina.retro.common.Util;
 
 import cz.pecina.retro.cpu.Block;
 import cz.pecina.retro.cpu.Disassembly;
@@ -106,6 +109,9 @@ public class DumpEdit extends MemoryTab {
   private JPanel dumpDataPane;
   private GridBagConstraints dumpDataPaneConstraints;
 
+  // the size of the current memory bank
+  private int size;
+  
   // internal charset decoder
   final CharsetDecoder decoder = Parameters.charset.newDecoder();
   {
@@ -365,18 +371,22 @@ public class DumpEdit extends MemoryTab {
     }
     final byte[] sourceBank =
       Parameters.memoryDevice.getBlockByName(sourceMemoryBank).getMemory();
-    final int size = sourceBank.length;
+    size = sourceBank.length;
     
     final JPanel dumpDataPane = new JPanel(new GridBagLayout());
-    int line = 0;
-      
+    int increment = 0, decrement = 0, line = 0;
+
+    final int startAddress = dumpAddressField.getValue();
+
     if (dumpTypeHexRadio.isSelected()) {
 
       for (int i = 0; i < NUMBER_HEX_LINES; i++) {
 	
-	final GridBagConstraints dumpDataAddressConstraints =
+	final int address =
+	  (startAddress + (i * NUMBER_HEX_BYTES)) % size;
+
+      final GridBagConstraints dumpDataAddressConstraints =
 	  new GridBagConstraints();
-	final int address = (dumpAddressField.getValue() + (i * NUMBER_HEX_BYTES)) % size;
 	final JLabel dumpDataAddress =
 	  new JLabel(String.format("%04x", address));
 	dumpDataAddress.setFont(FONT_MONOSPACED);
@@ -438,7 +448,14 @@ public class DumpEdit extends MemoryTab {
 	}
 	line++;
       }
-      
+      increment = decrement = NUMBER_HEX_LINES * NUMBER_HEX_BYTES;
+      if ((startAddress + increment) >= size) {
+	increment = size - startAddress - increment;
+      }
+      if ((startAddress - decrement) < 0) {
+	decrement = startAddress;
+      }
+        
     } else {
 
       int address = dumpAddressField.getValue() % size;
@@ -449,6 +466,12 @@ public class DumpEdit extends MemoryTab {
 	  Parameters.cpu.getDisassembly(sourceBank, address);
 	final int[] bytes = disassembly.getBytes();
 	final int length = disassembly.getLength();
+	if (increment == 0) {
+	  increment = length;
+	  if ((startAddress + increment) >= size) {
+	    increment -= size;
+	  }
+	}
 	String hexString = "";
 	for (int j = 0; j < length; j++) {
 	  hexString += String.format(" %02x", bytes[j]);
@@ -555,14 +578,18 @@ public class DumpEdit extends MemoryTab {
 	  disParametersConstraints.anchor = GridBagConstraints.LINE_START;
 	  disParametersConstraints.weightx = 0.0;
 	  disParametersConstraints.weighty = 0.0;
-	  disParameters.addMouseListener(new AddressListener(address, hexString));
+	  disParameters.addMouseListener(
+	    new AddressListener(address, hexString));
 	  dumpDataPane.add(disParameters, disParametersConstraints);
 	}
-	address += length;
+	address = (address + length) % size;
 	line++;
       }
+      decrement = ((startAddress != 0) ? 1 : 0);
     }
     
+    dumpDataPane.addMouseWheelListener(new WheelListener(increment, decrement));
+
     if (this.dumpDataPane != null) {
       remove(this.dumpDataPane);
     }
@@ -705,6 +732,34 @@ public class DumpEdit extends MemoryTab {
     @Override
     public void componentShown(final ComponentEvent event) {
       log.finer("Component listener action detected");
+      updateDumpDataPane();
+    }
+  }
+
+  // mouse wheel listener
+  private class WheelListener implements MouseWheelListener {
+
+    private int increment, decrement;
+    
+    // main constructor
+    public WheelListener(final int increment, final int decrement) {
+      this.increment = increment;
+      this.decrement = decrement;
+    }
+
+    // for decription see MouseWheelListener
+    @Override
+    public void mouseWheelMoved(final MouseWheelEvent event) {
+      final int rotation = event.getWheelRotation();
+      log.finest("WheelListener mouse wheel event detected, rotation: " +
+        rotation);
+      int address = dumpAddressField.getValue();
+      if (rotation > 0) {
+	address += increment;
+      } else {
+	address -= decrement;
+      }
+      dumpAddressField.setText(String.format("%04x", (address % size)));
       updateDumpDataPane();
     }
   }

@@ -164,6 +164,42 @@ public final class Util {
   }
 
   /**
+   * Returns the signum function of the argument; zero if the argument is
+   * zero, 1 if the argument is greater than zero, -1 if the argument is
+   * less than zero.
+   *
+   * @param  n the integer value whose signum is to be returned
+   * @return   the signum function of the argument
+   */
+  public static int signum(final int n) {
+    if (n > 0) {
+      return 1;
+    } else if (n < 0) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+  
+  /**
+   * Returns the signum function of the argument; zero if the argument is
+   * zero, 1 if the argument is greater than zero, -1 if the argument is
+   * less than zero.
+   *
+   * @param  n the long value whose signum is to be returned
+   * @return   the signum function of the argument
+   */
+  public static long signum(final long n) {
+    if (n > 0) {
+      return 1;
+    } else if (n < 0) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+  
+  /**
    * Creates an iterable covering ports addresses according to
    * a value/mask pair.
    *
