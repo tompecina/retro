@@ -91,7 +91,7 @@ public class DumpEdit extends MemoryTab {
   private static final Font FONT_MONOSPACED =
     new Font(Font.MONOSPACED, Font.PLAIN, 13);
 
-  // placeholder for unrepresentable character
+  // placeholder for character without safe representation
   private static final String PLACEHOLDER = ".";
   
   // components holding values used by listeners
@@ -135,7 +135,7 @@ public class DumpEdit extends MemoryTab {
 	new JLabel(Application.getString(this, "bank") + ":");
       sourceBankLabelConstraints.gridx = 0;
       sourceBankLabelConstraints.gridy = line;
-      sourceBankLabelConstraints.insets = new Insets(0, 3, 0, 0);
+      sourceBankLabelConstraints.insets = new Insets(0, 3, 2, 0);
       sourceBankLabelConstraints.anchor = GridBagConstraints.LINE_END;
       sourceBankLabelConstraints.weightx = 0.0;
       sourceBankLabelConstraints.weighty = 0.0;
@@ -147,6 +147,7 @@ public class DumpEdit extends MemoryTab {
 	new JPanel(new FlowLayout(FlowLayout.LEADING, 3, 0));
       sourceBankPanelConstraints.gridx = 1;
       sourceBankPanelConstraints.gridy = line;
+      sourceBankPanelConstraints.insets = new Insets(0, 0, 2, 0);
       sourceBankPanelConstraints.anchor = GridBagConstraints.LINE_START;
       sourceBankPanelConstraints.weightx = 1.0;
       sourceBankPanelConstraints.weighty = 0.0;
@@ -213,6 +214,7 @@ public class DumpEdit extends MemoryTab {
     dumpRefreshButtonConstraints.weightx = 0.0;
     dumpRefreshButtonConstraints.weighty = 1.0;
     dumpRefreshButton.addActionListener(new RefreshListener());
+    defaultButton = dumpRefreshButton;
     dumpAddressPane.add(dumpRefreshButton, dumpRefreshButtonConstraints);
 
     final GridBagConstraints dumpTypeHexRadioConstraints =
@@ -222,6 +224,7 @@ public class DumpEdit extends MemoryTab {
     dumpTypeHexRadio.setSelected(true);
     dumpTypeHexRadioConstraints.gridx = 3;
     dumpTypeHexRadioConstraints.gridy = 0;
+    dumpTypeHexRadioConstraints.insets = new Insets(0, 15, 0, 0);
     dumpTypeHexRadioConstraints.anchor = GridBagConstraints.LINE_START;
     dumpTypeHexRadioConstraints.weightx = 0.0;
     dumpTypeHexRadioConstraints.weighty = 0.0;
@@ -249,7 +252,7 @@ public class DumpEdit extends MemoryTab {
     dumpDataPaneConstraints = new GridBagConstraints();
     dumpDataPaneConstraints.gridx = 0;
     dumpDataPaneConstraints.gridy = line;
-    dumpDataPaneConstraints.insets = new Insets(0, 3, 0, 0);
+    dumpDataPaneConstraints.insets = new Insets(10, 3, 15, 0);
     dumpDataPaneConstraints.gridwidth = GridBagConstraints.REMAINDER;
     dumpDataPaneConstraints.anchor = GridBagConstraints.LINE_START;
     dumpDataPaneConstraints.weightx = 0.0;
@@ -264,7 +267,7 @@ public class DumpEdit extends MemoryTab {
       new JPanel(new GridBagLayout());
     editPaneConstraints.gridx = 0;
     editPaneConstraints.gridy = line;
-    editPaneConstraints.insets = new Insets(0, 3, 0, 0);
+    editPaneConstraints.insets = new Insets(0, 3, 3, 0);
     editPaneConstraints.gridwidth = GridBagConstraints.REMAINDER;
     editPaneConstraints.anchor = GridBagConstraints.LINE_START;
     editPaneConstraints.weightx = 0.0;
@@ -334,7 +337,6 @@ public class DumpEdit extends MemoryTab {
     dumpEditButtonsConstraints.weighty = 1.0;
     final JButton editButton = new JButton(Application.getString(
       this, "dumpEdit.button.edit"));
-    defaultButton = editButton;
     editButton.addActionListener(new EditListener());
     dumpEditButtonsPanel.add(editButton);
     final JButton dumpEditCloseButton = new JButton(
@@ -363,6 +365,7 @@ public class DumpEdit extends MemoryTab {
     }
     final byte[] sourceBank =
       Parameters.memoryDevice.getBlockByName(sourceMemoryBank).getMemory();
+    final int size = sourceBank.length;
     
     final JPanel dumpDataPane = new JPanel(new GridBagLayout());
     int line = 0;
@@ -373,13 +376,13 @@ public class DumpEdit extends MemoryTab {
 	
 	final GridBagConstraints dumpDataAddressConstraints =
 	  new GridBagConstraints();
-	final int address = dumpAddressField.getValue() + (i * NUMBER_HEX_BYTES);
+	final int address = (dumpAddressField.getValue() + (i * NUMBER_HEX_BYTES)) % size;
 	final JLabel dumpDataAddress =
 	  new JLabel(String.format("%04x", address));
 	dumpDataAddress.setFont(FONT_MONOSPACED);
 	dumpDataAddressConstraints.gridx = 0;
 	dumpDataAddressConstraints.gridy = line;
-	dumpDataAddressConstraints.insets = new Insets(0, 3, 0, 0);
+	dumpDataAddressConstraints.insets = new Insets(1, 12, 0, 1);
 	dumpDataAddressConstraints.anchor = GridBagConstraints.LINE_START;
 	dumpDataAddressConstraints.weightx = 0.0;
 	dumpDataAddressConstraints.weighty = 0.0;
@@ -390,13 +393,14 @@ public class DumpEdit extends MemoryTab {
 	  
 	  final GridBagConstraints dumpDataByteConstraints =
 	    new GridBagConstraints();
-	  final int byteAddress = address + j;
+	  final int byteAddress = (address + j) % size;
 	  final JLabel dumpDataByte =
 	    new JLabel(String.format("%02x", sourceBank[byteAddress]));
 	  dumpDataByte.setFont(FONT_MONOSPACED);
 	  dumpDataByteConstraints.gridx = j + 1;
 	  dumpDataByteConstraints.gridy = line;
-	  dumpDataByteConstraints.insets = new Insets(0, 3, 0, 0);
+	  dumpDataByteConstraints.insets =
+	    new Insets(1, (((j % 8) == 0) ? 10 : 4), 0, 1);
 	  dumpDataByteConstraints.anchor = GridBagConstraints.LINE_START;
 	  dumpDataByteConstraints.weightx = 0.0;
 	  dumpDataByteConstraints.weighty = 0.0;
@@ -424,7 +428,8 @@ public class DumpEdit extends MemoryTab {
 	  dumpDataChar.setFont(FONT_MONOSPACED);
 	  dumpDataCharConstraints.gridx = NUMBER_HEX_BYTES + j + 1;
 	  dumpDataCharConstraints.gridy = line;
-	  dumpDataCharConstraints.insets = new Insets(0, 3, 0, 0);
+	  dumpDataCharConstraints.insets =
+	    new Insets(1, (((j % 8) == 0) ? 10 : 1), 0, 1);
 	  dumpDataCharConstraints.anchor = GridBagConstraints.LINE_START;
 	  dumpDataCharConstraints.weightx = 0.0;
 	  dumpDataCharConstraints.weighty = 0.0;
@@ -436,7 +441,7 @@ public class DumpEdit extends MemoryTab {
       
     } else {
 
-      int address = dumpAddressField.getValue();
+      int address = dumpAddressField.getValue() % size;
 
       for (int i = 0; i < NUMBER_DIS_LINES; i++) {
 	
@@ -457,7 +462,7 @@ public class DumpEdit extends MemoryTab {
 	disAddress.setFont(FONT_MONOSPACED);
 	disAddressConstraints.gridx = 0;
 	disAddressConstraints.gridy = line;
-	disAddressConstraints.insets = new Insets(0, 3, 0, 0);
+	disAddressConstraints.insets = new Insets(1, 12, 0, 3);
 	disAddressConstraints.anchor = GridBagConstraints.LINE_START;
 	disAddressConstraints.weightx = 0.0;
 	disAddressConstraints.weighty = 0.0;
@@ -471,7 +476,7 @@ public class DumpEdit extends MemoryTab {
 	disByte0.setFont(FONT_MONOSPACED);
 	disByte0Constraints.gridx = 1;
 	disByte0Constraints.gridy = line;
-	disByte0Constraints.insets = new Insets(0, 3, 0, 0);
+	disByte0Constraints.insets = new Insets(1, 4, 0, 0);
 	if (length == 1) {
 	  disByte0Constraints.gridwidth = 3;
 	}
@@ -489,7 +494,7 @@ public class DumpEdit extends MemoryTab {
 	  disByte1.setFont(FONT_MONOSPACED);
 	  disByte1Constraints.gridx = 2;
 	  disByte1Constraints.gridy = line;
-	  disByte1Constraints.insets = new Insets(0, 3, 0, 0);
+	  disByte1Constraints.insets = new Insets(1, 4, 0, 0);
 	  if (length == 2) {
 	    disByte1Constraints.gridwidth = 2;
 	  }
@@ -508,7 +513,7 @@ public class DumpEdit extends MemoryTab {
 	  disByte2.setFont(FONT_MONOSPACED);
 	  disByte2Constraints.gridx = 3;
 	  disByte2Constraints.gridy = line;
-	  disByte2Constraints.insets = new Insets(0, 3, 0, 0);
+	  disByte2Constraints.insets = new Insets(1, 4, 0, 0);
 	  if (length == 2) {
 	    disByte2Constraints.gridwidth = 2;
 	  }
@@ -529,7 +534,7 @@ public class DumpEdit extends MemoryTab {
 	disMnemo.setFont(FONT_MONOSPACED);
 	disMnemoConstraints.gridx = 4;
 	disMnemoConstraints.gridy = line;
-	disMnemoConstraints.insets = new Insets(0, 3, 0, 0);
+	disMnemoConstraints.insets = new Insets(1, 25, 0, 0);
 	if (parameters.isEmpty()) {
 	  disMnemoConstraints.gridwidth = GridBagConstraints.REMAINDER;
 	}
@@ -546,7 +551,7 @@ public class DumpEdit extends MemoryTab {
 	  disParameters.setFont(FONT_MONOSPACED);
 	  disParametersConstraints.gridx = 5;
 	  disParametersConstraints.gridy = line;
-	  disParametersConstraints.insets = new Insets(0, 3, 0, 0);
+	  disParametersConstraints.insets = new Insets(1, 15, 0, 0);
 	  disParametersConstraints.anchor = GridBagConstraints.LINE_START;
 	  disParametersConstraints.weightx = 0.0;
 	  disParametersConstraints.weighty = 0.0;
