@@ -42,6 +42,7 @@ import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.Intel8080A;
 import cz.pecina.retro.cpu.Intel8255A;
 import cz.pecina.retro.cpu.Intel8251A;
+import cz.pecina.retro.cpu.Intel8253;
 import cz.pecina.retro.cpu.Invertor;
 import cz.pecina.retro.cpu.NAND;
 import cz.pecina.retro.cpu.XOR;
@@ -94,6 +95,9 @@ public class ComputerHardware {
 
   // the 8251A (USART)
   private Intel8251A usart;
+
+  // the 8252 (PIT)
+  private Intel8253 pit;
 
   // the tape recorder XOR
   private XOR xor;
@@ -258,6 +262,14 @@ public class ComputerHardware {
 
     // set up the tape recorder XOR
     xor = new XOR("XOR", 2);
+
+    // set up the PIT
+    pit = new Intel8253("PIT");
+    hardware.add(pit);
+    for (int port: Util.portIterator(0x5c, 0xfc)) {
+      cpu.addIOInput(port, pit);
+      cpu.addIOOutput(port, pit);
+    }
 
     // set up the frequency generator
     gen = new FrequencyGenerator("TREC_GENERATOR", 854, 853);

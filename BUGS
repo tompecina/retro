@@ -22,3 +22,7 @@ KNOWN BUGS AND ESSENTIAL NEW FEATURES
 * Update PMI-80 tape formats PMITAPE & SAM (and modify HW as needed).
 
 * Icon size in some implementations limited to 128x128.
+
+* Allow for different CPU frequency of PMD 85-3: + changes to trec/XML, trec/PMT.
+
+* Add simple searching facility to CopyFillCompare.
