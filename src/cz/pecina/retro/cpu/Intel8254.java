@@ -99,9 +99,6 @@ public class Intel8254 extends Device implements IOElement {
     // state of the counter
     private int state;
 
-    // state of the latch register
-    private boolean latched;
-
     // true if reading in progress. i.e., LSB read, MSB will follow
     private boolean reading;
 
@@ -114,30 +111,45 @@ public class Intel8254 extends Device implements IOElement {
     //       sent to 8253.
 
     // the current count
-    private int count;
+    private int countingElement;
 
-    // the current preset
-    private int preset;
+    // the current initial count
+    private int initialCount;
 
-    // the new preset
-    private int newPreset;
+    // the new initial count
+    private int newInitialCount;
 
-    // the latch register
-    private int latch;
+    // the output latch
+    private int outputLatch;
     
+    // state of the output latch
+    private boolean outputLatched;
+
+    // state of the status latch
+    private boolean statusLatched;
+
+    // gate pin trigger detection flag
+    private boolean trigger;
+
+    // clock pulse detection flag
+    private boolean pulse;
+
     // binary/BCD mode
     //  false - binary
     //  true - BCD
     public boolean bcd;
 
-    // RL register - 1
-    //  0 - only LSB
-    //  1 - only MSB
-    //  2 - LSB, then MSB
-    public int rl;
+    // RW register
+    //  1 - only LSB
+    //  2 - only MSB
+    //  3 - LSB, then MSB
+    public int rw;
 
     // counter mode, 0-5
     public int mode;
+
+    // the null count flag
+    private boolean nullCount = true;
 
     // the clock pin
     public ClockPin clockPin = new ClockPin();
@@ -150,16 +162,16 @@ public class Intel8254 extends Device implements IOElement {
 
     // set LSB
     private void setLsb(final int data) {
-      newPreset = (bcd ?
-		   (newPreset - (newPreset % 100) + data) :
-		   ((newPreset & 0xff00) | data));
+      newInitialCount = (bcd ?
+			 (newInitialCount - (newInitialCount % 100) + data) :
+			 ((newInitialCount & 0xff00) | data));
     }
 
     // set MSB
     private void setMsb(final int data) {
-      newPreset = (bcd ?
-		   ((newPreset / 100) + (data * 100)) :
-		   ((newPreset & 0xff) | (data << 8)));
+      newInitialCount = (bcd ?
+			 ((newInitialCount / 100) + (data * 100)) :
+			 ((newInitialCount & 0xff) | (data << 8)));
     }
 
     // get LSB
@@ -178,21 +190,22 @@ public class Intel8254 extends Device implements IOElement {
       clockPin.reset();
       gatePin.reset();
       outPin.reset();
-      latched = reading = writing = false;
-      newPreset = 0;
+      outputLatched = statusLatched = reading = writing = trigger = pulse = false;
+      nullCount = true;
+      newInitialCount = 0;
       log.finer("Counter reset");
     }
 
     // write one byte to the counter
     public void write(final int data) {
-      switch (rl) {
-	case 0:
+      switch (rw) {
+	case 1:
 	  setLsb(data);
 	  break;
-	case 1:
+	case 2:
 	  setMsb(data);
 	  break;
-	case 2:
+	case 3:
 	  if (writing) {
 	    setMsb(data);
 	  } else {
@@ -202,39 +215,44 @@ public class Intel8254 extends Device implements IOElement {
 	  break;
       }
       if (!writing) {
-	preset = newPreset;
-	if (preset == 0) {
-	  preset = (bcd ? 10000 : 0x10000);
-	} else if (((mode == 2) || (mode == 3)) && (preset == 1)) {
-	  preset = (bcd ? 10001 : 0x10001);
+	initialCount = newInitialCount;
+	if (initialCount == 0) {
+	  initialCount = (bcd ? 10000 : 0x10000);
+	} else if (((mode == 2) || (mode == 3)) && (initialCount == 1)) {
+	  initialCount = (bcd ? 10001 : 0x10001);
 	  
-	  // Note: Preset == 1 is illegal in Mode 1 so we are free
+	  // Note: initialCount == 1 is illegal in Mode 1 so we are free
 	  //       to do this.
 	  
 	}
+	nullCount = true;
       }
     }
 
     // read one byte from the counter
     public int read() {
+      if (statusLatched) {
+	log.finer(String.format("Outputting status: %02x", statusLatch));
+	statusLatched = false;
+      }
       int data = 0, value;
-      if (latched) {
-	value = latch;
-	if (reading || (rl != 2)) {
-	  latched = false;
+      if (outputLatched) {
+	value = outputLatch;
+	if (reading || (rw != 3)) {
+	  outputLatched = false;
 	}
       } else {
-	value = count;
+	value = countingElement;
       }
-      switch (rl) {
-	case 0:
-	  data = getLsb(count);
-	  break;
+      switch (rw) {
 	case 1:
-	  data = getMsb(count);
+	  data = getLsb(countingElement);
 	  break;
 	case 2:
-	  data = (reading ? getMsb(count) : getLsb(count));
+	  data = getMsb(countingElement);
+	  break;
+	case 3:
+	  data = (reading ? getMsb(countingElement) : getLsb(countingElement));
 	  reading = !reading;
 	  break;
       }
@@ -243,10 +261,29 @@ public class Intel8254 extends Device implements IOElement {
     }
 
     // latch the counter value
-    public void latch() {
-      latch = count;
-      latched = true;
-      log.finer(String.format("Counter latched, value: 0x%02x", latch));
+    public void latchOutput() {
+      if (!outputLatched) {
+	outputLatch = countingElement;
+	outputLatched = true;
+	log.finer(String.format("Counter latched, value: 0x%02x", outputLatch));
+      } else {
+	log.finer("Duplicate output latch command ignored");
+      }
+    }
+
+    // latch status
+    public void latchStatus() {
+      if (!statusLatched) {
+	statusLatch = (outPin.query() << 7) |
+	              (nullCount << 6) |
+	              (rw << 4) |
+	              (mode << 1) |
+	              (bcd ? 1 : 0);
+	statustLatched = true;
+	log.finer(String.format("Status latched, value: 0x%02x", statusLatch));
+      } else {
+	log.finer("Duplicate status latch command ignored");
+      }
     }
 
     // the clock pin
@@ -268,8 +305,13 @@ public class Intel8254 extends Device implements IOElement {
 	    level = newLevel;
 	    if (level) {
 	      risingClock();
+	      pulse = true;
 	    } else {
 	      fallingClock();
+	      if (pulse) {
+		pulseClock();
+		pulse = false;
+	      }
 	    }
 	  }
 	}
@@ -285,6 +327,18 @@ public class Intel8254 extends Device implements IOElement {
       public void reset() {
 	level = (IONode.normalize(queryNode()) == 1);
       }
+
+      // for description see IOPin
+      @Override
+      public void notifyChange() {
+	final boolean newLevel = (IONode.normalize(queryNode()) == 1);
+	if (newLevel != level) {
+	  level = newLevel;
+	  if (level) {
+	    trigger = true;
+	  }
+	}
+      }      
     }
 
     // the out pin
@@ -361,13 +415,14 @@ public class Intel8254 extends Device implements IOElement {
       log.finer(String.format("Counter %d write: 0x%02x", number, data));
       return data;
     } else {
-      return status;
+      log.finer("Attempt to read from non-existent register");
+      return 0xff;
     }
   }
 
   // for description see IOElement
   @Override
-  public void portOutput(final int port, int data) {
+  public void portOutput(final int port, final int data) {
     assert (port >= 0) && (port < 0x100);
     assert (data >= 0) && (data < 0x100);
 
@@ -376,15 +431,30 @@ public class Intel8254 extends Device implements IOElement {
     if (number == 0x03) {  // control port
       
       number = data >> 6;
-      if (number == 3) {  // illegal counter number, ignore
-	log.fine("Illegal counter number in Control Word ignored");
-	return;
+      if (number == 3) {  // read-back
+	if ((data & 1) == 1) {
+	  log.fine("Illegal read-back command, ignored");
+	} else {
+	  int p = data;
+	  for (int i = 0; i < 3; i++) {
+	    p >>= 1;
+	    if ((p & 1) == 1) {
+	      if (((data >> 5) & 1) == 1) {
+		counter[i].latchOutput();
+	      }
+	      if (((data >> 4) & 1) == 1) {
+		counter[i].latchStatus();
+	      }	      
+	    }
+	  log.fine("Read-back command processed");
+	  }
+	}
       }
       final Counter counter = counters[number];
 
-      int rl = (data >> 4) & 0x03;
+      int rw = (data >> 4) & 0x03;
 
-      if (rl == 0) {
+      if (rw == 0) {
 
 	log.finer("Counter " + number + " latched");
 	counter.latch();
@@ -393,7 +463,7 @@ public class Intel8254 extends Device implements IOElement {
 
 	counter.reset();
 	
-	counter.rl = --rl;
+	counter.rw = rw;
 
 	counter.mode = (data >> 1) & 0x07;
 	if (counter.mode > 5) {
@@ -402,8 +472,8 @@ public class Intel8254 extends Device implements IOElement {
       
 	counter.bcd = ((data & 1) == 1);
 
-	log.fine("Counter " + number + " programmed: RL: " +
-		 (new String[] {"LSB", "MSB", "LSB/MSB"})[rl] +
+	log.fine("Counter " + number + " programmed: RW: " +
+		 (new String[] {"LSB", "MSB", "LSB/MSB"})[rw - 1] +
 		 ", mode: " + counter.mode + ", bcd: " + counter.bcd);
       }
     } else {

@@ -50,12 +50,11 @@ public class Intel8253 extends Intel8254 {
 
   // for description see IOElement
   @Override
-  public int portInput(final int port) {
-    if ((port & 0x03) == 3) {
-      log.finer("Attempting to read status register, but 8253 has none");
-      return 0xff;
+  public void portOutput(final int port, int data) {
+    if (((port & 0x03) == 3) && ((data >> 6) == 0x03)) {
+      log.fine("Illegal counter number in Control Word for 8253, ignored");
     } else {
-      return super.portInput(port);
+      super.portOutput(port, data);
     }
   }
 }
