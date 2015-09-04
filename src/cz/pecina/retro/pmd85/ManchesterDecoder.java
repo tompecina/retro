@@ -75,9 +75,6 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
   // data pin
   private DataPin dataPin = new DataPin();
   
-  // CPU scheduler
-  private final CPUScheduler scheduler = Parameters.cpu.getCPUScheduler();
-
   /**
    * Gets the input pin.
    * @return the input pin
@@ -108,7 +105,7 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
    */
   @Override
   public void reset() {
-    scheduler.removeAllScheduledEvents(this);
+    CPUScheduler.removeAllScheduledEvents(this);
     counter = 0;
     trigger = 0;
     clock = 0;
@@ -166,7 +163,7 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
 	@Override
 	public String getValue() {
 	  return String.valueOf(
-	    ManchesterDecoder.this.scheduler.getRemainingTime(
+	    CPUScheduler.getRemainingTime(
 	      ManchesterDecoder.this,
 	      Parameters.systemClockSource.getSystemClock()));
 	}
@@ -195,8 +192,8 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
   // for description see Device
   @Override
   public void postUnmarshal() {
-    scheduler.removeAllScheduledEvents(this);
-    scheduler.addScheduledEvent(
+    CPUScheduler.removeAllScheduledEvents(this);
+    CPUScheduler.addScheduledEvent(
       this,
       Parameters.systemClockSource.getSystemClock() + counter,
       0);
@@ -219,7 +216,7 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
     if (trigger == ZERO_LIMIT) {
       log.finer("Too many 0's, inverting");
       trigger = 0;
-      scheduler.addScheduledEvent(
+      CPUScheduler.addScheduledEvent(
         this,
 	Parameters.systemClockSource.getSystemClock() +	SAMPLING_DELAY_RESET,
 	0);
@@ -236,13 +233,13 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
       if (newInput != input) {
 	log.finest("Change on input pin, new level: " + newInput);
 	input = newInput;
-	if (scheduler.getRemainingTime(
+	if (CPUScheduler.getRemainingTime(
 	      ManchesterDecoder.this,
 	      Parameters.systemClockSource.getSystemClock()) == -1) {
 	  log.finest("Pulse ended, edge processed");
 	  clock = 1;
 	  clockPin.notifyChangeNode();
-	  scheduler.addScheduledEvent(
+	  CPUScheduler.addScheduledEvent(
 	    ManchesterDecoder.this,
 	    Parameters.systemClockSource.getSystemClock() + SAMPLING_DELAY,
 	    0);

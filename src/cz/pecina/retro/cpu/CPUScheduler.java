@@ -37,19 +37,19 @@ import cz.pecina.retro.common.Parameters;
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class CPUScheduler {
+public final class CPUScheduler {
 
   // static logger
   private static final Logger log =
     Logger.getLogger(CPUScheduler.class.getName());
 
   // event schedule, held in a synchronized TreeSet
-  private final SortedSet<CPUScheduledEvent> schedule =
+  private static final SortedSet<CPUScheduledEvent> schedule =
     Collections.synchronizedSortedSet(
       new TreeSet<>(new CPUScheduledEventComparator()));
 
   // event comparator
-  private class CPUScheduledEventComparator
+  private static class CPUScheduledEventComparator
     implements Comparator<CPUScheduledEvent> {
 
     // for description see Comparator
@@ -66,13 +66,6 @@ public class CPUScheduler {
   }
 
   /**
-   * Creates a new CPU scheduler.
-   */
-  public CPUScheduler() {
-    log.fine("New CPU scheduler created");
-  }
-
-  /**
    * Schedules a new event.
    *
    * @param owner     the owner of the event, i.e., the object that
@@ -81,9 +74,9 @@ public class CPUScheduler {
    *                  clock units, added to the current time
    * @param parameter numeric parameter the event will provide to the owner
    */
-  public void addScheduledEvent(final CPUEventOwner owner,
-				final int time,
-				final int parameter) {
+  public static void addScheduledEvent(final CPUEventOwner owner,
+				       final int time,
+				       final int parameter) {
     assert owner != null;
     assert time >= 0;
     schedule.add(new CPUScheduledEvent(
@@ -103,9 +96,9 @@ public class CPUScheduler {
    *                  clock units
    * @param parameter numeric parameter the event will provide to the owner
    */
-  public void addScheduledEvent(final CPUEventOwner owner,
-				final long time,
-				final int parameter) {
+  public static void addScheduledEvent(final CPUEventOwner owner,
+				       final long time,
+				       final int parameter) {
     assert owner != null;
     assert time > 0;
     schedule.add(new CPUScheduledEvent(owner, time, parameter));
@@ -121,7 +114,7 @@ public class CPUScheduler {
    * @param owner the owner whose events will be removed from
    *              the schedule
    */
-  public void removeAllScheduledEvents(final CPUEventOwner owner) {
+  public static void removeAllScheduledEvents(final CPUEventOwner owner) {
     if (log.isLoggable(Level.FINER)) {
       log.finer("Removing all scheduled events for owner: " +
 		owner.getString());
@@ -142,7 +135,8 @@ public class CPUScheduler {
    * @return       the remaining time in clock cycles or {@code -1}
    *               if no event scheduled
    */
-  public long getRemainingTime(final CPUEventOwner owner, final long time) {
+  public static long getRemainingTime(final CPUEventOwner owner,
+				      final long time) {
     long r = -1;
     for (CPUScheduledEvent event: schedule) {
       if (event.getOwner() == owner) {
@@ -167,7 +161,7 @@ public class CPUScheduler {
    *
    * @param time the current system clock
    */
-  public void runSchedule(final long time) {
+  public static void runSchedule(final long time) {
     if (log.isLoggable(Level.FINEST)) {
       log.finest("Running schedule at: " + time);
     }
@@ -180,4 +174,7 @@ public class CPUScheduler {
       event.getOwner().performScheduledEvent(event.getParameter());
     }
   }
+
+  // default constructor disabled
+  private CPUScheduler() {}
 }

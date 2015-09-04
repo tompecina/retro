@@ -86,7 +86,6 @@ public class Speaker implements CPUEventOwner {
   private class InPin extends IOPin {
 
     private boolean level;
-    private final CPUScheduler scheduler = Parameters.cpu.getCPUScheduler();
     
     // main constructor
     private InPin() {
@@ -102,9 +101,9 @@ public class Speaker implements CPUEventOwner {
 	Parameters.sound.write(Sound.SPEAKER_CHANNEL, newLevel);
 	level = newLevel;
 	if (level) {
-	  scheduler.addScheduledEvent(Speaker.this, LIMIT, 0);
+	  CPUScheduler.addScheduledEvent(Speaker.this, LIMIT, 0);
 	} else {
-	  scheduler.removeAllScheduledEvents(Speaker.this);
+	  CPUScheduler.removeAllScheduledEvents(Speaker.this);
 	}
       }
     }

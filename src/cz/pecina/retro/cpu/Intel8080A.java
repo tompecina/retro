@@ -64,9 +64,6 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   // CPU cycle counter
   private long cycleCounter;
 
-  // CPU-clock driven scheduler
-  private final CPUScheduler scheduler = new CPUScheduler();
-
   // aux flags
   private boolean resetPending;
   private int interruptPending = -1;
@@ -284,12 +281,6 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   public void clearIOOutput(final int port) {
     assert (port >= 0) && (port < 0x100);
     outputPorts.get(port).clear();
-  }
-
-  // for description see Processor
-  @Override
-  public CPUScheduler getCPUScheduler() {
-    return scheduler;
   }
 
   /**
@@ -5070,7 +5061,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     final long endCycleCounter = cycleCounter + minCycles;
 
     while (!suspended) {
-      scheduler.runSchedule(cycleCounter);
+      CPUScheduler.runSchedule(cycleCounter);
       if (resetPending) {
 	reset();
 	break;

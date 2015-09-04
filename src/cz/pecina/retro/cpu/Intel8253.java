@@ -42,10 +42,6 @@ public class Intel8253 extends Device implements IOElement {
   // counters
   private final Counter[] counters = new Counter[3];
 
-  // internal registers
-
-  // pins
-
   // for description see Device
   @Override
   public void reset() {
@@ -58,13 +54,18 @@ public class Intel8253 extends Device implements IOElement {
   /**
    * Main constructor.
    *
-   * @param name device name
+   * @param name  device name
+   * @param types  array of counter connection types: if {@code true},
+   *               the counter's clock is connected to system clock and
+   *               the regular clock pin is disabled, if {@code false},
+   *               the clock pin is enabled
    */
-  public Intel8253(final String name) {
+  public Intel8253(final String name, final boolean[] types) {
     super(name);
     log = Logger.getLogger(getClass().getName() + "." + name);
     log.fine("New Intel 8253 creation started, name: " + name);
-
+    assert types.length == 3;
+    
     // add(new Register("MODE_A") {
     // 	@Override
     // 	public String getValue() {
@@ -76,148 +77,12 @@ public class Intel8253 extends Device implements IOElement {
     // 	  log.finer("Mode A set to: " + modeA);
     // 	}
     //   });
-    // add(new Register("MODE_B") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  return String.valueOf(modeB);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  modeB = Integer.parseInt(value);
-    // 	  log.finer("Mode B set to: " + modeB);
-    // 	}
-    //   });
-    // add(new Register("DIR_A") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  return String.valueOf(directionA);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  directionA = Integer.parseInt(value);
-    // 	  log.finer("Direction A set to: " + directionA);
-    // 	}
-    //   });
-    // add(new Register("DIR_B") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  return String.valueOf(directionB);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  directionB = Integer.parseInt(value);
-    // 	  log.finer("Direction B set to: " + directionB);
-    // 	}
-    //   });
-    // add(new Register("DIR_CL") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  return String.valueOf(directionCL);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  directionCL = Integer.parseInt(value);
-    // 	  log.finer("Direction CL set to: " + directionCL);
-    // 	}
-    //   });
-    // add(new Register("DIR_CH") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  return String.valueOf(directionCH);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  directionCH = Integer.parseInt(value);
-    // 	  log.finer("Direction CH set to: " + directionCH);
-    // 	}
-    //   });
-    // add(new Register("IN") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  int n = 0;
-    // 	  for (int i = 0, r = 1; i < 16; i++, r <<= 1) {
-    // 	    if (inputLatch[i] != 0) {
-    // 	      n |= r;
-    // 	    }
-    // 	  }
-    // 	  return String.format("%04x", n);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  for (int i = 0, n = Integer.parseInt(value, 16);
-    // 	       i < 16; i++, n >>= 1) {
-    // 	    inputLatch[i] = n;
-    // 	  }
-    // 	  log.finer("Input latch registers set");
-    // 	}
-    //   });
-    // add(new Register("OUT") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  int n = 0;
-    // 	  for (int i = 0, r = 1; i < 24; i++, r <<= 1) {
-    // 	    if (outputBuffer[i] != 0) {
-    // 	      n |= r;
-    // 	    }
-    // 	  }
-    // 	  return String.format("%06x", n);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  for (int i = 0, n = Integer.parseInt(value, 16);
-    // 	       i < 24; i++, n >>= 1) {
-    // 	    outputBuffer[i] = n & 1;
-    // 	  }
-    // 	  log.finer("Output buffers set");
-    // 	}
-    //   });
-    // add(new Register("STB_A") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  return String.valueOf(strobeA);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  strobeA = Integer.parseInt(value);
-    // 	  log.finer("Strobe A set to: " + strobeA);
-    // 	}
-    //   });
-    // add(new Register("STB_B") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  return String.valueOf(strobeB);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  strobeB = Integer.parseInt(value);
-    // 	  log.finer("Strobe B set to: " + strobeB);
-    // 	}
-    //   });
-    // add(new Register("ACK_A") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  return String.valueOf(acknowledgeA);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  acknowledgeA = Integer.parseInt(value);
-    // 	  log.finer("Acknowledge A set to: " + acknowledgeA);
-    // 	}
-    //   });
-    // add(new Register("ACK_B") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  return String.valueOf(acknowledgeB);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  acknowledgeB = Integer.parseInt(value);
-    // 	  log.finer("Acknowledge B set to: " + acknowledgeB);
-    // 	}
-    //   });
 
     for (int i = 0; i < 3; i++) {
       counters[i] = new Counter();
+      log.finer("Setting up counter: " + i + ", connection type: " +
+		(types[i] ? "CPU clock" : "normal"));
+      counters[i].type = types[i];
     }
     reset();
     log.fine("New Intel 8253 creation completed, name: " + name);
@@ -229,21 +94,6 @@ public class Intel8253 extends Device implements IOElement {
     log.fine("Post-unmarshal on 8253 completed");
   }
 
-  /**
-   * Sets the counter connection type.
-   *
-   * @param number the counter number
-   * @param type   if {@code true}, the counter's clock is connected to system
-   *               clock and the clock pin is disabled, if {@code false}, the clock
-   *               pin is enabled
-   */
-  public void setConnection(final int number, final boolean type) {
-    log.finer("Counter: " + number + ", connection type: " +
-	      (type ? "CPU clock" : "normal"));
-    assert (number >= 0) && (number < 3);
-    counters[number].type = type;
-  }
-
   // counter
   private class Counter implements CPUEventOwner {
 
@@ -253,16 +103,19 @@ public class Intel8253 extends Device implements IOElement {
     public boolean type;
 
     // state of the counter
-    public int state;
+    private int state;
 
     // state of the latch register
     private boolean latched;
 
-    // if true, reading in progress. i.e., LSB read, MSB will follow
-    private boolean readInProgress;
+    // true if reading in progress. i.e., LSB read, MSB will follow
+    private boolean reading;
 
     // the current count
-    public int count;
+    private int count;
+
+    // the latch register
+    private int latch;
     
     // binary/BCD mode
     //  false - binary
@@ -273,22 +126,38 @@ public class Intel8253 extends Device implements IOElement {
     //  0 - only LSB
     //  1 - only MSB
     //  2 - LSB, then MSB
-    public int rl, mode;
+    public int rl;
+
+    // counter mode, 0-5
+    public int mode;
+
+    // the clock pin
+    public ClockPin clockPin = new ClockPin();
+
+    // the gate pin
+    public GatePin gatePin = new GatePin();
+
+    // the out pin
+    public OutPin outPin = new OutPin();
 
     // get LSB
-    public int lsb(final int data) {
+    private int lsb(final int data) {
       return (bcd ? (data % 100) : (data & 0xff));
     }
     
     // get MSB
-    public int msb(final int data) {
+    private int msb(final int data) {
       return (bcd ? (data / 100) : (data >> 8));
     }
     
     // reset counter
     public void reset() {
+      CPUScheduler.removeAllScheduledEvents(this);
+      clockPin.reset();
+      gatePin.reset();
+      outPin.reset();
+      latched = false;
       log.finer("Counter reset");
-      latchState = 0;
     }
 
     // write one byte to the counter
@@ -300,19 +169,19 @@ public class Intel8253 extends Device implements IOElement {
       int data = 0, value;
       if (latched) {
 	value = latch;
-	if (readInProgress || (rl != 2)) {
+	if (reading || (rl != 2)) {
 	  latched = false;
 	}
       } else {
 	value = count;
       }
-      if (readInProgress) {
-	readInProgress = false;
+      if (reading) {
+	reading = false;
 	data = msb(count);
       } else {
 	switch (rl) {
 	  case 2:
-	    readInProgress = true;
+	    reading = true;
 	  case 0:
 	    data = lsb(count);
 	    break;
@@ -321,7 +190,6 @@ public class Intel8253 extends Device implements IOElement {
 	    break;
 	}
       }
-	
       log.finer(String.format("Counter read, value: 0x%02x", data));
       return data;
     }
@@ -329,14 +197,83 @@ public class Intel8253 extends Device implements IOElement {
     // latch the counter value
     public void latch() {
       latch = count;
-      latchState = 1;
+      latched = true;
       log.finer(String.format("Counter latched, value: 0x%02x", latch));
+    }
+
+    // the clock pin
+    private class ClockPin extends IOPin {
+
+      private boolean level;
+
+      // reset pin
+      public void reset() {
+	level = (IONode.normalize(queryNode()) == 1);
+      }
+    }
+
+    // the gate pin
+    private class GatePin extends IOPin {
+
+      private boolean level;
+
+      // reset pin
+      public void reset() {
+	level = (IONode.normalize(queryNode()) == 1);
+      }
+    }
+
+    // the out pin
+    private class OutPin extends IOPin {
+
+      private boolean output;
+      
+      // reset pin
+      public void reset() {
+	output = (mode != 0);
+	notifyChangeNode();
+      }
+
+      // for description see IOPin
+      public int query() {
+	return (output ? 1 : 0);
+      }
     }
 
     // for description see CPUEventOwner
     @Override
     public void performScheduledEvent(final int parameter) {
     }
+  }
+
+  /**
+   * Gets the clock pin.
+   *
+   * @param  number the counter number
+   * @return        the clock pin of counter {@code number}
+   */
+  public IOPin getClockPin(final int number) {
+    return counters[number].clockPin;
+  }
+  
+  /**
+   * Gets the gate pin.
+   *
+   * @param  number the counter number
+   * @return        the gate pin of counter {@code number}
+   */
+  public IOPin getGatePin(final int number) {
+    return counters[number].gatePin;
+  }
+  
+  /**
+   * Gets the out pin.
+   *
+   * @param  number the counter number
+   * @return        the out pin of counter {@code number}
+   */
+  public IOPin getOutPin(final int number) {
+    return counters[number].outPin;
   }
   
   // for description see IOElement
@@ -372,7 +309,7 @@ public class Intel8253 extends Device implements IOElement {
       }
       final Counter counter = counters[number];
 
-      final int rl = (data >> 4) & 0x03;
+      int rl = (data >> 4) & 0x03;
 
       if (rl == 0) {
 
@@ -381,6 +318,8 @@ public class Intel8253 extends Device implements IOElement {
 
       } else {
 
+	counter.reset();
+	
 	counter.rl = --rl;
 
 	counter.mode = (data >> 1) & 0x07;

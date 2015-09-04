@@ -153,13 +153,6 @@ public interface Processor {
   public abstract void setPC(int n);
 
   /**
-   * Gets CPU scheduler operating on the CPU.
-   *
-   * @return CPU scheduler
-   */
-  public abstract CPUScheduler getCPUScheduler();
-
-  /**
    * Requests interrupt.  If enabled, it will be activated before
    * the next instruction is executed.
    *

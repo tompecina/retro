@@ -54,14 +54,14 @@ public class IOPin {
    *
    * @return state (signal level) of the node
    */
-  public int queryNode() {
+  public final int queryNode() {
     return (node == null) ? IONode.HIGH_IMPEDANCE : node.query();
   }
 
   /**
    * Notify the node of the possibly changed state (signal level).
    */
-  public void notifyChangeNode() {
+  public final void notifyChangeNode() {
     if (node != null)
       node.notifyChange();
   }

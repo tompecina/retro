@@ -81,9 +81,6 @@ public class TapeRecorderHardware implements CPUEventOwner {
   // pulse counters for VU-meter
   private int outPulseCount, inPulseCount;
 
-  // CPU scheduler
-  private final CPUScheduler scheduler = Parameters.cpu.getCPUScheduler();
-
   // input pin
   private final InPin inPin = new InPin();
 
@@ -192,6 +189,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
    */
   public void resetTape() {
     offset -= position;
+    CPUScheduler.removeAllScheduledEvents(this);
     position = 0;
   }
 
@@ -311,11 +309,11 @@ public class TapeRecorderHardware implements CPUEventOwner {
     update();
     final Map.Entry<Long,Long> entry = tape.ceilingEntry(position + 1);
     if (entry != null) {
-      scheduler.addScheduledEvent(
+      CPUScheduler.addScheduledEvent(
         this,
 	time + entry.getKey() - position,
 	1);
-      scheduler.addScheduledEvent(
+      CPUScheduler.addScheduledEvent(
         this,
 	time + entry.getKey() + entry.getValue() - position,
 	0);
@@ -371,6 +369,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
       recordingLED.setState(false);
       Parameters.sound.write(Sound.TAPE_RECORDER_CHANNEL, false);
       tapeRecorderState = TapeRecorderState.STOPPED;
+      CPUScheduler.removeAllScheduledEvents(this);
       log.finer("Tape recorder stopped");
     }
   }

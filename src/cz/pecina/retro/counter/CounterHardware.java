@@ -106,9 +106,6 @@ public class CounterHardware implements IOElement, CPUEventOwner {
   private static final double DURATION_TIME_1 = 1.0;
   private static final double DURATION_TIME_10 = 10.0;
 
-  // CPU scheduler
-  private final CPUScheduler scheduler = Parameters.cpu.getCPUScheduler();
-
   // base port
   private int basePort;
 
@@ -209,7 +206,7 @@ public class CounterHardware implements IOElement, CPUEventOwner {
       new ChangeListener() {
 	@Override
 	public void stateChanged(final ChangeEvent event) {
-	  scheduler.removeAllScheduledEvents(CounterHardware.this);
+	  CPUScheduler.removeAllScheduledEvents(CounterHardware.this);
 	  holdTimer.stop();
 	  state = State.IDLE;
 	  buffer = counter = 0;
@@ -344,7 +341,7 @@ public class CounterHardware implements IOElement, CPUEventOwner {
    */
   public void deactivate() {
     disconnect();
-    scheduler.removeAllScheduledEvents(this);
+    CPUScheduler.removeAllScheduledEvents(this);
     updateTimer.stop();
     holdTimer.stop();
     for (HexESD element: display) {
@@ -375,30 +372,30 @@ public class CounterHardware implements IOElement, CPUEventOwner {
   // start measurement
   private synchronized void startMeasurement() {
     gateLED.setState(true);
-    scheduler.removeAllScheduledEvents(this);
+    CPUScheduler.removeAllScheduledEvents(this);
     counter = 0;
     state = State.MEASURE;
     switch (gateTimeKnob.getState()) {
       case TIME_0_01:
-	scheduler.addScheduledEvent(
+	CPUScheduler.addScheduledEvent(
 	  this,
 	  (int)Math.round(DURATION_TIME_0_01 * Parameters.CPUFrequency),
 	  0);
 	break;
       case TIME_0_1:
-	scheduler.addScheduledEvent(
+	CPUScheduler.addScheduledEvent(
 	  this,
 	  (int)Math.round(DURATION_TIME_0_1 * Parameters.CPUFrequency),
 	  0);
 	break;
       case TIME_1:
-	scheduler.addScheduledEvent(
+	CPUScheduler.addScheduledEvent(
 	  this,
 	  (int)Math.round(DURATION_TIME_1 * Parameters.CPUFrequency),
 	  0);
 	break;
       case TIME_10:
-	scheduler.addScheduledEvent(
+	CPUScheduler.addScheduledEvent(
 	  this,
 	  (int)Math.round(DURATION_TIME_10 * Parameters.CPUFrequency),
 	  0);

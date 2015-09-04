@@ -48,9 +48,6 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
   // output pin
   private final OutPin outPin = new OutPin();
   
-  // CPU scheduler
-  private final CPUScheduler scheduler = Parameters.cpu.getCPUScheduler();
-
   // time of next event
   private long nextEvent;
 
@@ -78,12 +75,12 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
    */
   @Override
   public void reset() {
-    scheduler.removeAllScheduledEvents(this);
+    CPUScheduler.removeAllScheduledEvents(this);
     counter = 0;
     output = 0;
     outPin.notifyChangeNode();
     nextEvent = Parameters.systemClockSource.getSystemClock() + offPeriod;
-    scheduler.addScheduledEvent(this, nextEvent, 0);
+    CPUScheduler.addScheduledEvent(this, nextEvent, 0);
     log.finer("Frequency generator reset");
   }
 
@@ -134,7 +131,7 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
     add(new Register("COUNTER") {
     	@Override
     	public String getValue() {
-    	  return String.valueOf(scheduler.getRemainingTime(
+    	  return String.valueOf(CPUScheduler.getRemainingTime(
     	    FrequencyGenerator.this,
     	    Parameters.systemClockSource.getSystemClock()));
     	}
@@ -163,8 +160,8 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
   // for description see Device
   @Override
   public void postUnmarshal() {
-    scheduler.removeAllScheduledEvents(this);
-    scheduler.addScheduledEvent(
+    CPUScheduler.removeAllScheduledEvents(this);
+    CPUScheduler.addScheduledEvent(
       this,
       Parameters.systemClockSource.getSystemClock() + counter,
       0);
@@ -178,7 +175,7 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
     output = 1 - output;
     outPin.notifyChangeNode();
     nextEvent += ((output == 0) ? offPeriod : onPeriod);
-    scheduler.addScheduledEvent(this, nextEvent, 0);
+    CPUScheduler.addScheduledEvent(this, nextEvent, 0);
     if (log.isLoggable(Level.FINEST)) {
       log.finest(
         "Event performed at " + Parameters.systemClockSource.getSystemClock() +
