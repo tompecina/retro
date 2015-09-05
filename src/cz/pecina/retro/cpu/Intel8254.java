@@ -22,8 +22,6 @@ package cz.pecina.retro.cpu;
 
 import java.util.logging.Logger;
 
-import cz.pecina.retro.common.Util;
-
 /**
  * Intel 8254 Programmable Interval Timer.
  *
@@ -351,9 +349,11 @@ public class Intel8254 extends Device implements IOElement {
 	    gatePin.notifyChange();
 	    gate = gatePin.level;
 	    if (gate && !writing) {
-	      countingElement = Util.modulo(base - ((int)delay), base);
 	      outPin.level = true;
 	      outPin.notifyChangeNode();
+	      countingElement = base - ((int)delay);
+	      System.out.println("delay: " + delay + ", reloaded with: " + (countingElement + 1));
+	      CPUScheduler.addScheduledEvent(this, countingElement + 1, 0);
 	      log.finest("Output level: true");
 	    }
 	    break;
