@@ -163,9 +163,7 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
 	@Override
 	public String getValue() {
 	  return String.valueOf(
-	    CPUScheduler.getRemainingTime(
-	      ManchesterDecoder.this,
-	      Parameters.systemClockSource.getSystemClock()));
+	    CPUScheduler.getRemainingTime(ManchesterDecoder.this));
 	}
 	@Override
 	public void processValue(final String value) {
@@ -205,7 +203,7 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
 
   // for description see CPUEventOwner
   @Override
-  public void performScheduledEvent(final int parameter) {
+  public void performScheduledEvent(final int parameter, final long delay) {
     clock = 0;
     clockPin.notifyChangeNode();
     data = input;
@@ -233,9 +231,7 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
       if (newInput != input) {
 	log.finest("Change on input pin, new level: " + newInput);
 	input = newInput;
-	if (CPUScheduler.getRemainingTime(
-	      ManchesterDecoder.this,
-	      Parameters.systemClockSource.getSystemClock()) == -1) {
+	if (CPUScheduler.getRemainingTime(ManchesterDecoder.this) == -1) {
 	  log.finest("Pulse ended, edge processed");
 	  clock = 1;
 	  clockPin.notifyChangeNode();

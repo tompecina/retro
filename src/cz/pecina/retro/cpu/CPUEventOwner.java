@@ -32,8 +32,10 @@ public interface CPUEventOwner {
    * Performs the scheduled event.
    *
    * @param parameter the numeric parameter provided by the event owner
+   * @param delay     the difference between the actual and scheduled time
+   *                  in system clock units
    */
-  public void performScheduledEvent(int parameter);
+  public void performScheduledEvent(int parameter, long delay);
 
   /**
    * Get descriptive information on the owner.

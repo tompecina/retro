@@ -111,7 +111,7 @@ public class Speaker implements CPUEventOwner {
 
   // for description see CPUEventOwner
   @Override
-  public void performScheduledEvent(final int parameter) {
+  public void performScheduledEvent(final int parameter, final long delay) {
     Parameters.sound.write(Sound.SPEAKER_CHANNEL, false);
     log.finer("Too long true, sound interface reset");
   }

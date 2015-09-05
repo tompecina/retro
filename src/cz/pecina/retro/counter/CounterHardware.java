@@ -406,7 +406,7 @@ public class CounterHardware implements IOElement, CPUEventOwner {
 
   // for description see CPUScheduler
   @Override
-  public void performScheduledEvent(final int parameter) {
+  public void performScheduledEvent(final int parameter, final long delay) {
     // state = State.IDLE;
     gateLED.setState(GATE_LED_DELAY);
     buffer = counter;

@@ -43,7 +43,7 @@ public class Intel8253 extends Intel8254 {
    *               the clock pin is enabled
    */
   public Intel8253(final String name, final boolean[] types) {
-    super(name);
+    super(name, types);
     log = Logger.getLogger(getClass().getName() + "." + name);
     log.fine("New Intel 8253 creation completed, name: " + name);
   }

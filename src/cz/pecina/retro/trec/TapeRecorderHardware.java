@@ -324,7 +324,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
 
   // for description see CPUEventOwner
   @Override
-  public void performScheduledEvent(final int parameter) {
+  public void performScheduledEvent(final int parameter, final long delay) {
     output = parameter;
     outPin.notifyChangeNode();
     Parameters.sound.write(Sound.TAPE_RECORDER_CHANNEL, parameter == 1);

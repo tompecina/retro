@@ -132,8 +132,7 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
     	@Override
     	public String getValue() {
     	  return String.valueOf(CPUScheduler.getRemainingTime(
-    	    FrequencyGenerator.this,
-    	    Parameters.systemClockSource.getSystemClock()));
+	    FrequencyGenerator.this));
     	}
     	@Override
     	public void processValue(final String value) {
@@ -171,7 +170,7 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
 
   // for description see CPUEventOwner
   @Override
-  public void performScheduledEvent(final int parameter) {
+  public void performScheduledEvent(final int parameter, final long delay) {
     output = 1 - output;
     outPin.notifyChangeNode();
     nextEvent += ((output == 0) ? offPeriod : onPeriod);

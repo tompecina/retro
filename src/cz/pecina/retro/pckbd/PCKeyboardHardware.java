@@ -305,7 +305,7 @@ public class PCKeyboardHardware implements IOElement, CPUEventOwner {
 
   // for description see CPUEventOwner
   @Override
-  public void performScheduledEvent(final int parameter) {
+  public void performScheduledEvent(final int parameter, final long delay) {
     portData = parameter;
     log.finer(String.format("Output data set to %02x", parameter));
     if (((parameter & BITMASK_CLOCK) == 0) && interruptMask) {

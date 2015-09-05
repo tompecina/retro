@@ -131,12 +131,11 @@ public final class CPUScheduler {
    * Gets time remaining to the next event scheduled by a particular owner.
    *
    * @param  owner the owner whose events will be evaluated
-   * @param  time  the current system clock
    * @return       the remaining time in clock cycles or {@code -1}
    *               if no event scheduled
    */
-  public static long getRemainingTime(final CPUEventOwner owner,
-				      final long time) {
+  public static long getRemainingTime(final CPUEventOwner owner) {
+    final long time = Parameters.systemClockSource.getSystemClock();
     long r = -1;
     for (CPUScheduledEvent event: schedule) {
       if (event.getOwner() == owner) {
@@ -155,9 +154,11 @@ public final class CPUScheduler {
    * Runs the schedule.
    * <p>
    * This method should be called by the CPU object as often
-   * as possible, no less than before/after every instruction 
+   * as possible, no less than before every instruction 
    * executed.  During long instructions such as block transfers, 
-   * the schedule should be run before/after each step.
+   * the schedule should be run before each step.  It is critical
+   * that the schedule is run BEFORE the instruction as peripheral
+   * devices such as 8253/4 rely on this for precise timing.
    *
    * @param time the current system clock
    */
@@ -167,11 +168,13 @@ public final class CPUScheduler {
     }
     while (!schedule.isEmpty()) {
       final CPUScheduledEvent event = schedule.first();
-      if (event.getTime() > time) {
+      final long scheduledTime = event.getTime();
+      if (scheduledTime > time) {
 	break;
       }
       schedule.remove(event);
-      event.getOwner().performScheduledEvent(event.getParameter());
+      event.getOwner().performScheduledEvent(event.getParameter(),
+					     time - scheduledTime);
     }
   }
 

@@ -105,6 +105,9 @@ public class ComputerHardware {
   // the tape recorder frequency generator (freq = phi2/0x6ab = ca 1199.77Hz)
   private FrequencyGenerator gen;
 
+  // the 1Hz frequency generator
+  private FrequencyGenerator rtcGenerator;
+
   // the fixed frequency generator (freq = 4000Hz)
   private FrequencyGenerator gen4k;
 
@@ -271,6 +274,10 @@ public class ComputerHardware {
       cpu.addIOOutput(port, pit);
     }
 
+    // set up the 1Hz frequency generator connected to Counter 2
+    rtcGenerator = new FrequencyGenerator("RTC_GENERATOR", 1024000, 1024000);
+    hardware.add(rtcGenerator);
+
     // set up the frequency generator
     gen = new FrequencyGenerator("TREC_GENERATOR", 854, 853);
     hardware.add(gen);
@@ -325,6 +332,11 @@ public class ComputerHardware {
     pc2inv = new Invertor("INVERTOR_PC2");
     speakerNand = new NAND("SPEAKER_NAND", 3);
 
+    // connect the 1Hz generator to Counter 2
+    new IONode()
+      .add(rtcGenerator.getOutPin())
+      .add(pit.getClockPin(2));
+
     // set up LEDs
     yellowLEDMeter = new ProportionMeter("YELLOW_LED");
     redLEDMeter = new ProportionMeter("RED_LED");
@@ -332,6 +344,15 @@ public class ComputerHardware {
     // set up the speaker
     speaker = new Speaker("SPEAKER");
 
+    // DEBUG
+    final Intel8253 testpit =
+      new Intel8253("TEST", new boolean[] {false, false, false});
+    hardware.add(testpit);
+    for (int port: Util.portIterator(0x0c, 0xfc)) {
+      cpu.addIOInput(port, testpit);
+      cpu.addIOOutput(port, testpit);
+    }
+    
     // connect speaker and LEDs
     new IONode()
       .add(gen4k.getOutPin())
@@ -364,6 +385,7 @@ public class ComputerHardware {
       .add(speaker.getInPin());
     new IONode()
       .add(systemPIO.getPin(16 + 3))
+      .add(testpit.getClockPin(0))    // DEBUG
       .add(redLEDMeter.getInPin());
       
     // load any startup images and snapshots
