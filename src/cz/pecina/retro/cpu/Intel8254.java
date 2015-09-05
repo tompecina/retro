@@ -150,7 +150,7 @@ public class Intel8254 extends Device implements IOElement {
     public boolean bcd;
 
     // counting base according to bcd
-    private long base;
+    private int base;
 
     // RW register
     //  1 - only LSB
@@ -209,10 +209,10 @@ public class Intel8254 extends Device implements IOElement {
 	  if (gate && !writing) {
 	    return 0;
 	  } else {
-	    return countingElement;
+	    return countingElement % base;
 	  }
 	} else {
-	  return (int)remains;
+	  return ((int)remains) % base;
 	}
       } else {
 	return -1;
@@ -256,50 +256,18 @@ public class Intel8254 extends Device implements IOElement {
 	  break;
 	case 3:
 	  if (writing) {
-	    newCounterRegister =
-	      (bcd ?
-	       ((newCounterRegister / 100) + (data * 100)) :
-	       ((newCounterRegister & 0xff) | (data << 8)));
+	    newCounterRegister += data * (bcd ? 100 : 0x100);
 	  } else {
-	    newCounterRegister =
-	      (bcd ?
-	       (newCounterRegister - (newCounterRegister % 100) + data) :
-	       ((newCounterRegister & 0xff00) | data));
+	    newCounterRegister = data;
 	  }
 	  writing = !writing;
 	  break;
       }
-      if (!writing) {
-	counterRegister = newCounterRegister;
-	if (counterRegister == 0) {
-	  counterRegister = (bcd ? 10000 : 0x10000);
-	} else if (((mode == 2) || (mode == 3)) && (counterRegister == 1)) {
-	  counterRegister = (int)base + 1;
-	  
-	  // Note: counterRegister == 1 is illegal in Mode 1 so we are free
-	  //       to do this.
-	  
-	}
-	nullCount = true;
-	switch (mode) {
-	  case 0:
-	    outPin.level = false;
-	    outPin.notifyChangeNode();
-	    log.finest("Output level: false");
-	    gatePin.notifyChange();
-	    if (type) {
-	      countingElement = counterRegister;
-	      if (gatePin.level) {
-		CPUScheduler.removeAllScheduledEvents(this);
-		nullCount = false;
-		CPUScheduler.addScheduledEvent(this, countingElement + 1, 0);
-	      }
-	    } else {
-	      load = true;
-	    }
-	    break;
-	}
-      } else {
+      if (writing) {
+	log.finest("First byte written to counter");
+	outPin.level = false;
+	outPin.notifyChangeNode();
+	log.finest("Output level: false");
 	switch (mode) {
 	  case 0:
 	    if (type) {
@@ -311,13 +279,38 @@ public class Intel8254 extends Device implements IOElement {
 	    }
 	    break;
 	}
+      } else {
+	log.finest("Last byte written to counter");
+	counterRegister = newCounterRegister;
+	if (counterRegister == 0) {
+	  counterRegister = base;
+	} else if (((mode == 2) || (mode == 3)) && (counterRegister == 1)) {
+	  counterRegister = base + 1;
+	}
+	nullCount = true;
+	switch (mode) {
+	  case 0:
+	    if (type) {
+	      countingElement = counterRegister;
+	      gatePin.notifyChange();
+	      if (gatePin.level) {
+		CPUScheduler.removeAllScheduledEvents(this);
+		nullCount = false;
+		CPUScheduler.addScheduledEvent(this, countingElement + 1, 0);
+		log.finest("Counter started, remains: " + (countingElement + 1));
+	      }
+	    } else {
+	      load = true;
+	    }
+	    break;
+	}
       }
     }
 
     // read one byte from the counter
     public int read() {
       if (statusLatched) {
-	log.finer(String.format("Outputting (latched) status: %02x", statusLatch));
+	log.finer(String.format("Outputting (latched) status: 0x%02x", statusLatch));
 	statusLatched = false;
 	return statusLatch;
       }
@@ -348,7 +341,6 @@ public class Intel8254 extends Device implements IOElement {
       return data;
     }
 
-
     // for description see CPUEventOwner
     @Override
     public void performScheduledEvent(final int parameter, final long delay) {
@@ -359,7 +351,7 @@ public class Intel8254 extends Device implements IOElement {
 	    gatePin.notifyChange();
 	    gate = gatePin.level;
 	    if (gate && !writing) {
-	      countingElement = (int)(Util.modulo(base - delay, base));
+	      countingElement = Util.modulo(base - ((int)delay), base);
 	      outPin.level = true;
 	      outPin.notifyChangeNode();
 	      log.finest("Output level: true");
@@ -404,7 +396,7 @@ public class Intel8254 extends Device implements IOElement {
 		outPin.notifyChangeNode();
 		log.finest("Output level: true");
 	      } else if (countingElement < 0) {
-		countingElement = (int)(base - 1);
+		countingElement = base - 1;
 	      }
 	      break;
 	    }
@@ -560,6 +552,7 @@ public class Intel8254 extends Device implements IOElement {
 
 	} else {
 
+	  log.fine(String.format("Read-back command: 0x%02x", data));
 	  int p = data;
 	  for (int i = 0; i < 3; i++) {
 	    p >>= 1;
@@ -571,7 +564,6 @@ public class Intel8254 extends Device implements IOElement {
 		counters[i].latchStatus();
 	      }	      
 	    }
-	  log.fine("Read-back command processed");
 	  }
 	}
       } else {
@@ -605,8 +597,8 @@ public class Intel8254 extends Device implements IOElement {
       }
     } else {
 
-      counters[port & 0x03].write(data);
       log.finer(String.format("Counter %d write: 0x%02x", number, data));
+      counters[port & 0x03].write(data);
     }
   }
 }
