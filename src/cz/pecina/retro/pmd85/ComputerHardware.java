@@ -345,8 +345,8 @@ public class ComputerHardware {
     speaker = new Speaker("SPEAKER");
 
     // DEBUG
-    final Intel8253 testpit =
-      new Intel8253("TEST", new boolean[] {false, false, false});
+    final cz.pecina.retro.cpu.Intel8254 testpit =
+      new cz.pecina.retro.cpu.Intel8254("TEST", new boolean[] {true, false, false});
     hardware.add(testpit);
     for (int port: Util.portIterator(0x0c, 0xfc)) {
       cpu.addIOInput(port, testpit);
@@ -382,10 +382,11 @@ public class ComputerHardware {
     new IONode()
       .add(speakerNand.getOutPin())
       .add(yellowLEDMeter.getInPin())
+      .add(testpit.getGatePin(0))    // DEBUG
       .add(speaker.getInPin());
     new IONode()
       .add(systemPIO.getPin(16 + 3))
-      .add(testpit.getClockPin(0))    // DEBUG
+      // .add(testpit.getClockPin(0))    // DEBUG
       .add(redLEDMeter.getInPin());
       
     // load any startup images and snapshots

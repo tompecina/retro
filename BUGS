@@ -28,3 +28,7 @@ KNOWN BUGS AND ESSENTIAL NEW FEATURES
 * Add simple searching facility to CopyFillCompare.
 
 * When entering data in the editing field of Memory/DumpEdit, the default button should be Write.
+
+* Add syntax checking of BASIC programs, at the very least that the line numbers are valid and ascending.
+
+* Check for presence of the BASIC interpreter, at least tentatively, before loading a program.

@@ -135,6 +135,9 @@ public class Intel8254 extends Device implements IOElement {
     // state of the status latch
     private boolean statusLatched;
 
+    // gate pin level detection flag
+    private boolean gate;
+
     // gate pin trigger detection flag
     private boolean trigger;
 
@@ -159,13 +162,10 @@ public class Intel8254 extends Device implements IOElement {
     public int mode;
 
     // the null count flag
-    private boolean nullCount = true;
+    private boolean nullCount;
 
     // if true counter will be loaded on the next clock pulse
     private boolean load;
-
-    // state of the counting element
-    private boolean counting;
 
     // the clock pin
     public ClockPin clockPin = new ClockPin();
@@ -176,29 +176,13 @@ public class Intel8254 extends Device implements IOElement {
     // the out pin
     public OutPin outPin = new OutPin();
 
-    // set LSB
-    private void setLsb(final int data) {
-      newCounterRegister =
-	(bcd ?
-	 (newCounterRegister - (newCounterRegister % 100) + data) :
-	 ((newCounterRegister & 0xff00) | data));
-    }
-
-    // set MSB
-    private void setMsb(final int data) {
-      newCounterRegister =
-	(bcd ?
-	 ((newCounterRegister / 100) + (data * 100)) :
-	 ((newCounterRegister & 0xff) | (data << 8)));
-    }
-
     // get LSB
-    private int getLsb(final int data) {
+    private int lsb(final int data) {
       return (bcd ? (data % 100) : (data & 0xff));
     }
     
     // get MSB
-    private int getMsb(final int data) {
+    private int msb(final int data) {
       return (bcd ? ((data / 100) % 100) : ((data >> 8) & 0xff));
     }
     
@@ -209,17 +193,36 @@ public class Intel8254 extends Device implements IOElement {
       gatePin.reset();
       outPin.reset();
       outputLatched = statusLatched = reading = writing =
-	trigger = pulse = counting = load = false;
-      nullCount = true;
+	trigger = pulse = load = false;
+      nullCount = gate = true;
       newCounterRegister = 0;
       base = (bcd ? 10000 : 0x10000);
       log.finer("Counter reset");
     }
 
+    // get approximate current count in 'type' mode
+    private int getCount() {
+      assert type;
+      if (type) {
+	final long remains = CPUScheduler.getRemainingTime(this);
+	if (remains != -1) {
+	  if (gate && !writing) {
+	    return 0;
+	  } else {
+	    return countingElement;
+	  }
+	} else {
+	  return (int)remains;
+	}
+      } else {
+	return -1;
+      }
+    }
+
     // latch the counter value
     public void latchOutput() {
       if (!outputLatched) {
-	outputLatch = countingElement;
+	outputLatch = getCount();
 	outputLatched = true;
 	log.finer(String.format("Counter latched, value: 0x%02x", outputLatch));
       } else {
@@ -246,16 +249,22 @@ public class Intel8254 extends Device implements IOElement {
     public void write(final int data) {
       switch (rw) {
 	case 1:
-	  setLsb(data);
+	  newCounterRegister = data;
 	  break;
 	case 2:
-	  setMsb(data);
+	  newCounterRegister = data * (bcd ? 100 : 0x100); 
 	  break;
 	case 3:
 	  if (writing) {
-	    setMsb(data);
+	    newCounterRegister =
+	      (bcd ?
+	       ((newCounterRegister / 100) + (data * 100)) :
+	       ((newCounterRegister & 0xff) | (data << 8)));
 	  } else {
-	    setLsb(data);
+	    newCounterRegister =
+	      (bcd ?
+	       (newCounterRegister - (newCounterRegister % 100) + data) :
+	       ((newCounterRegister & 0xff00) | data));
 	  }
 	  writing = !writing;
 	  break;
@@ -265,7 +274,7 @@ public class Intel8254 extends Device implements IOElement {
 	if (counterRegister == 0) {
 	  counterRegister = (bcd ? 10000 : 0x10000);
 	} else if (((mode == 2) || (mode == 3)) && (counterRegister == 1)) {
-	  counterRegister = (bcd ? 10001 : 0x10001);
+	  counterRegister = (int)base + 1;
 	  
 	  // Note: counterRegister == 1 is illegal in Mode 1 so we are free
 	  //       to do this.
@@ -276,12 +285,12 @@ public class Intel8254 extends Device implements IOElement {
 	  case 0:
 	    outPin.level = false;
 	    outPin.notifyChangeNode();
+	    log.finest("Output level: false");
 	    gatePin.notifyChange();
 	    if (type) {
 	      countingElement = counterRegister;
 	      if (gatePin.level) {
 		CPUScheduler.removeAllScheduledEvents(this);
-		counting = true;
 		nullCount = false;
 		CPUScheduler.addScheduledEvent(this, countingElement + 1, 0);
 	      }
@@ -321,17 +330,17 @@ public class Intel8254 extends Device implements IOElement {
 	}
       } else {
 	log.finest("Outputting immediate counter value");
-	value = countingElement;
+	value = getCount();
       }
       switch (rw) {
 	case 1:
-	  data = getLsb(countingElement);
+	  data = lsb(countingElement);
 	  break;
 	case 2:
-	  data = getMsb(countingElement);
+	  data = msb(countingElement);
 	  break;
 	case 3:
-	  data = (reading ? getMsb(countingElement) : getLsb(countingElement));
+	  data = (reading ? msb(countingElement) : lsb(countingElement));
 	  reading = !reading;
 	  break;
       }
@@ -347,10 +356,13 @@ public class Intel8254 extends Device implements IOElement {
       if (type) {
 	switch (mode) {
 	  case 0:
-	    if (counting) {
+	    gatePin.notifyChange();
+	    gate = gatePin.level;
+	    if (gate && !writing) {
 	      countingElement = (int)(Util.modulo(base - delay, base));
 	      outPin.level = true;
 	      outPin.notifyChangeNode();
+	      log.finest("Output level: true");
 	    }
 	    break;
 	}
@@ -362,14 +374,13 @@ public class Intel8254 extends Device implements IOElement {
       log.finest("Rising clock edge detected");
       assert !type;
       if (!type) {
+	gatePin.notifyChange();
+	gate = gatePin.level;
+	log.finest("Gate level: " + gate);
 	switch (mode) {
 	  case 0:
-	    if (counting) {
-	      gatePin.notifyChange();
-	      if (!gatePin.level) {
-		counting = false;
-	      }
-	    }
+	    gatePin.notifyChange();
+	    gate = gatePin.level;
 	    break;
 	}
       }
@@ -385,9 +396,13 @@ public class Intel8254 extends Device implements IOElement {
 	    if (load) {
 	      countingElement = counterRegister;
 	      load = false;
-	    } else {
+	      nullCount = false;
+	    } else if (gate && !writing) {
 	      countingElement--;
 	      if (countingElement == 0) {
+		outPin.level = true;
+		outPin.notifyChangeNode();
+		log.finest("Output level: true");
 	      } else if (countingElement < 0) {
 		countingElement = (int)(base - 1);
 	      }
@@ -538,49 +553,55 @@ public class Intel8254 extends Device implements IOElement {
       
       number = data >> 6;
       if (number == 3) {  // read-back
+
 	if ((data & 1) == 1) {
+
 	  log.fine("Illegal read-back command, ignored");
+
 	} else {
+
 	  int p = data;
 	  for (int i = 0; i < 3; i++) {
 	    p >>= 1;
 	    if ((p & 1) == 1) {
-	      if (((data >> 5) & 1) == 1) {
+	      if (((data >> 5) & 1) == 0) {
 		counters[i].latchOutput();
 	      }
-	      if (((data >> 4) & 1) == 1) {
+	      if (((data >> 4) & 1) == 0) {
 		counters[i].latchStatus();
 	      }	      
 	    }
 	  log.fine("Read-back command processed");
 	  }
 	}
-      }
-      final Counter counter = counters[number];
-
-      int rw = (data >> 4) & 0x03;
-
-      if (rw == 0) {
-
-	log.finer("Counter " + number + " latched");
-	counter.latchOutput();
-
       } else {
 
-	counter.reset();
+	final Counter counter = counters[number];
+
+	int rw = (data >> 4) & 0x03;
+
+	if (rw == 0) {
+
+	  log.finer("Counter " + number + " latched");
+	  counter.latchOutput();
+	  
+	} else {
+	  
+	  counter.reset();
 	
-	counter.rw = rw;
+	  counter.rw = rw;
 
-	counter.mode = (data >> 1) & 0x07;
-	if (counter.mode > 5) {
-	  counter.mode -= 4;
-	}
+	  counter.mode = (data >> 1) & 0x07;
+	  if (counter.mode > 5) {
+	    counter.mode -= 4;
+	  }
       
-	counter.bcd = ((data & 1) == 1);
+	  counter.bcd = ((data & 1) == 1);
 
-	log.fine("Counter " + number + " programmed: RW: " +
-		 (new String[] {"LSB", "MSB", "LSB/MSB"})[rw - 1] +
-		 ", mode: " + counter.mode + ", bcd: " + counter.bcd);
+	  log.fine("Counter " + number + " programmed: RW: " +
+		   (new String[] {"LSB", "MSB", "LSB/MSB"})[rw - 1] +
+		   ", mode: " + counter.mode + ", bcd: " + counter.bcd);
+	}
       }
     } else {
 
