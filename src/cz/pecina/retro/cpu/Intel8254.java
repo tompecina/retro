@@ -198,13 +198,12 @@ public class Intel8254 extends Device implements IOElement {
       log.finer("Counter reset");
     }
 
-    // get approximate current count in 'type' mode
+    // get current count
     private int getCount() {
-      assert type;
       if (type) {
 	final long remains = CPUScheduler.getRemainingTime(this);
 	if (remains != -1) {
-	  if (gate && !writing) {
+	  if (!gate || writing) {
 	    return 0;
 	  } else {
 	    return countingElement % base;
@@ -213,7 +212,7 @@ public class Intel8254 extends Device implements IOElement {
 	  return ((int)remains) % base;
 	}
       } else {
-	return -1;
+	return countingElement;
       }
     }
 
@@ -325,13 +324,13 @@ public class Intel8254 extends Device implements IOElement {
       }
       switch (rw) {
 	case 1:
-	  data = lsb(countingElement);
+	  data = lsb(value);
 	  break;
 	case 2:
-	  data = msb(countingElement);
+	  data = msb(value);
 	  break;
 	case 3:
-	  data = (reading ? msb(countingElement) : lsb(countingElement));
+	  data = (reading ? msb(value) : lsb(value));
 	  reading = !reading;
 	  break;
       }
@@ -352,7 +351,6 @@ public class Intel8254 extends Device implements IOElement {
 	      outPin.level = true;
 	      outPin.notifyChangeNode();
 	      countingElement = base - ((int)delay);
-	      System.out.println("delay: " + delay + ", reloaded with: " + (countingElement + 1));
 	      CPUScheduler.addScheduledEvent(this, countingElement + 1, 0);
 	      log.finest("Output level: true");
 	    }
