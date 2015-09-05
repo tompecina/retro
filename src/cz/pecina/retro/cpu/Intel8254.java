@@ -202,8 +202,9 @@ public class Intel8254 extends Device implements IOElement {
     private int getCount() {
       if (type) {
 	final long remains = CPUScheduler.getRemainingTime(this);
-	if (remains != -1) {
-	  if (!gate || writing) {
+	log.finest("Getting counter state, remains: " + remains);
+	if (remains < 0) {
+	  if (gate && !writing) {
 	    return 0;
 	  } else {
 	    return countingElement % base;
@@ -212,12 +213,12 @@ public class Intel8254 extends Device implements IOElement {
 	  return ((int)remains) % base;
 	}
       } else {
-	return countingElement;
+	return countingElement % base;
       }
     }
 
     // latch the counter value
-    public void latchOutput() {
+    public void latchCounter() {
       if (!outputLatched) {
 	outputLatch = getCount();
 	outputLatched = true;
@@ -313,14 +314,14 @@ public class Intel8254 extends Device implements IOElement {
       }
       int data = 0, value;
       if (outputLatched) {
-	log.finest("Outputting latched counter value");
 	value = outputLatch;
+	log.finest("Outputting latched counter value: " + value);
 	if (reading || (rw != 3)) {
 	  outputLatched = false;
 	}
       } else {
-	log.finest("Outputting immediate counter value");
 	value = getCount();
+	log.finest("Outputting immediate counter value: " + value);
       }
       switch (rw) {
 	case 1:
@@ -453,6 +454,34 @@ public class Intel8254 extends Device implements IOElement {
 	  if (level) {
 	    trigger = true;
 	  }
+	  if (type) {
+	    switch (mode) {
+	      case 0:
+		gate = level;
+		if (level) {
+		  if (!writing) {
+		    CPUScheduler.removeAllScheduledEvents(Counter.this);
+		    CPUScheduler.addScheduledEvent(Counter.this,
+						   countingElement + 1,
+						   0);
+		    log.finest("Counting resumed");
+		  }
+		} else {
+		  final long remains =
+		    CPUScheduler.getRemainingTime(Counter.this);
+		  if (remains < 0) {
+		    if (!writing) {
+		      countingElement = 0;
+		    }
+		  } else {
+		    CPUScheduler.removeAllScheduledEvents(Counter.this);
+		    countingElement = (int)remains;
+		  }	  
+		  log.finest("Counting suspended, remains: " + remains);
+		}
+		break;
+	    }
+	  }
 	}
       }      
     }
@@ -556,7 +585,7 @@ public class Intel8254 extends Device implements IOElement {
 	    p >>= 1;
 	    if ((p & 1) == 1) {
 	      if (((data >> 5) & 1) == 0) {
-		counters[i].latchOutput();
+		counters[i].latchCounter();
 	      }
 	      if (((data >> 4) & 1) == 0) {
 		counters[i].latchStatus();
@@ -573,7 +602,7 @@ public class Intel8254 extends Device implements IOElement {
 	if (rw == 0) {
 
 	  log.finer("Counter " + number + " latched");
-	  counter.latchOutput();
+	  counter.latchCounter();
 	  
 	} else {
 	  

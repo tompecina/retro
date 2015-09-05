@@ -382,11 +382,11 @@ public class ComputerHardware {
     new IONode()
       .add(speakerNand.getOutPin())
       .add(yellowLEDMeter.getInPin())
-      .add(testpit.getGatePin(0))    // DEBUG
+      // .add(testpit.getClockPin(0))    // DEBUG
       .add(speaker.getInPin());
     new IONode()
       .add(systemPIO.getPin(16 + 3))
-      // .add(testpit.getClockPin(0))    // DEBUG
+      .add(testpit.getGatePin(0))    // DEBUG
       .add(redLEDMeter.getInPin());
       
     // load any startup images and snapshots
