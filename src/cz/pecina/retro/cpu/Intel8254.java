@@ -356,6 +356,7 @@ public class Intel8254 extends Device implements IOElement {
 
     // method called on rising clock edge
     private void risingClock() {
+      log.finest("Rising clock edge detected");
       assert !type;
       if (!type) {
 	switch (mode) {
@@ -373,6 +374,7 @@ public class Intel8254 extends Device implements IOElement {
     
     // method called on clock pulse
     private void clockPulse() {
+      log.finest("Clock pulse detected");
       assert !type;
       if (!type) {
 	switch (mode) {
