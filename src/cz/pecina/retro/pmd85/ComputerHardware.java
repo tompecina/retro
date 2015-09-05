@@ -196,7 +196,7 @@ public class ComputerHardware {
     // set up the general-purpose PIO
     gPIO = new Intel8255A("GENERAL_PURPOSE_PIO");
     hardware.add(gPIO);
-    for (int port: Util.portIterator(0x4c, 0x8c)) {
+    for (int port: Util.portIterator(0x4c, 0xfc)) {
       cpu.addIOInput(port, gPIO);
       cpu.addIOOutput(port, gPIO);
     }
@@ -204,7 +204,7 @@ public class ComputerHardware {
     // set up the IMS-2 (HPIB) PIO
     imsPIO = new Intel8255A("IMS_2_PIO");
     hardware.add(imsPIO);
-    for (int port: Util.portIterator(0x7c, 0x8c)) {
+    for (int port: Util.portIterator(0x7c, 0xfc)) {
       cpu.addIOInput(port, imsPIO);
       cpu.addIOOutput(port, imsPIO);
     }

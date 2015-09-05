@@ -308,16 +308,19 @@ public class Intel8254 extends Device implements IOElement {
     // read one byte from the counter
     public int read() {
       if (statusLatched) {
-	log.finer(String.format("Outputting status: %02x", statusLatch));
+	log.finer(String.format("Outputting (latched) status: %02x", statusLatch));
 	statusLatched = false;
+	return statusLatch;
       }
       int data = 0, value;
       if (outputLatched) {
+	log.finest("Outputting latched counter value");
 	value = outputLatch;
 	if (reading || (rw != 3)) {
 	  outputLatched = false;
 	}
       } else {
+	log.finest("Outputting immediate counter value");
 	value = countingElement;
       }
       switch (rw) {
@@ -410,6 +413,7 @@ public class Intel8254 extends Device implements IOElement {
 	if (!type) {
 	  final boolean newLevel = (IONode.normalize(queryNode()) == 1);
 	  if (newLevel != level) {
+	    log.finest("New level on clock pin: " + newLevel);
 	    level = newLevel;
 	    if (level) {
 	      risingClock();
@@ -514,7 +518,7 @@ public class Intel8254 extends Device implements IOElement {
   
     if (number < 3) {
       final int data = counters[number].read();
-      log.finer(String.format("Counter %d write: 0x%02x", number, data));
+      log.finer(String.format("Counter %d read: 0x%02x", number, data));
       return data;
     } else {
       log.finer("Attempt to read from non-existent register");

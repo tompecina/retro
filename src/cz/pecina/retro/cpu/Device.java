@@ -216,4 +216,10 @@ public abstract class Device extends ArrayList<Descriptor> {
    */
   public void reset() {
   }
+    
+  // for description see Object
+  @Override
+  public String toString() {
+    return name;
+  }
 }

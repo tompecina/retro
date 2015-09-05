@@ -26,3 +26,5 @@ KNOWN BUGS AND ESSENTIAL NEW FEATURES
 * Allow for different CPU frequency of PMD 85-3: + changes to trec/XML, trec/PMT, 1Hz generator.
 
 * Add simple searching facility to CopyFillCompare.
+
+* When entering data in the editing field of Memory/DumpEdit, the default button should be Write.

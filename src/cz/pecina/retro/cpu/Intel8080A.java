@@ -25,6 +25,8 @@ import java.util.logging.Level;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Intel 8080A CPU.
@@ -51,8 +53,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   private AbstractMemory memory;
 
   // ports
-  private final List<List<IOElement>> inputPorts = new ArrayList<>();
-  private final List<List<IOElement>> outputPorts = new ArrayList<>();
+  private final List<Set<IOElement>> inputPorts = new ArrayList<>();
+  private final List<Set<IOElement>> outputPorts = new ArrayList<>();
 
   // CPU registers
   private int A, F = FFIX, B, C, D, E, H, L;
@@ -224,8 +226,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	}
       });
     for (int i = 0; i < 0x100; i++) {
-      inputPorts.add(new ArrayList<IOElement>());
-      outputPorts.add(new ArrayList<IOElement>());
+      inputPorts.add(new HashSet<IOElement>());
+      outputPorts.add(new HashSet<IOElement>());
     }
     log.fine(String.format("New Intel 8080A created, name: %s", name));
   }
