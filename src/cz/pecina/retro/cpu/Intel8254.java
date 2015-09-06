@@ -306,6 +306,7 @@ public class Intel8254 extends Device implements IOElement {
 	    }
 	    break;
 	  case 2:
+	  case 3:
 	    if (type) {
 	    } else if (reset) {
 	      loaded = true;
@@ -463,6 +464,34 @@ public class Intel8254 extends Device implements IOElement {
 	      }
 	    }
 	    break;
+	  case 3:
+	    if (loaded || triggered) {
+	      outPin.level = true;
+	      outPin.notifyChangeNode();
+	      log.finest("Output level: true");
+	      countingElement = counterRegister;
+	      loaded = false;
+	      nullCount = false;
+	      triggered = false;
+	    } else if (gate) {
+	      if (((counterRegister % 2) == 1) &&
+		  (countingElement == counterRegister)) {
+		if (outPin.level) {
+		  countingElement++;
+		} else {
+		  countingElement--;
+		}
+	      }
+	      countingElement -= 2;
+	      if (countingElement == 0) {
+		outPin.level = !outPin.level;
+		outPin.notifyChangeNode();
+		log.finest("Output level: " + outPin.level);
+		countingElement = counterRegister;
+		nullCount = false;
+	      }
+	    }
+	    break;
 	}
       }
     }
@@ -547,7 +576,7 @@ public class Intel8254 extends Device implements IOElement {
 		break;
 	    }
 	  }
-	  if (!level && (mode == 2)) {
+	  if (!level && ((mode == 2) || (mode == 3))) {
 	    outPin.level = true;
 	    outPin.notifyChangeNode();
 	    log.finest("Output level: true");
