@@ -335,7 +335,7 @@ public class TestIntel8254 extends TestCase {
     out0(3);
 
     s = poll(0);
-    assertEquals("Stage 4 status", 0xb0, s.status);
+    assertEquals("Stage 4 status", 0x30, s.status);
     assertEquals("Stage 4 value", 0xffff, s.value);
     assertEquals("Stage 4 out", 0, s.out);
 
