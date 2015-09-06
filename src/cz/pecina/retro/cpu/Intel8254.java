@@ -109,7 +109,7 @@ public class Intel8254 extends Device implements IOElement {
 
     // Note: These two flags are probably implemented as one FF in 8253;
     //       in 8254 they are separate.  We will ignore this difference
-    //       as this only may be observed if an erroneous sequences is
+    //       as this only may be observed if an invalid sequence is
     //       sent to 8253.
 
     // the current count
@@ -418,6 +418,29 @@ public class Intel8254 extends Device implements IOElement {
     private void load() {
       countingElement = counterRegister;
       nullCount = false;
+      reset = false;
+      triggered = false;
+    }
+
+    // reload for Modes 0 & 1
+    private void reload01() {
+      countingElement--;
+      if (countingElement == 0) {
+	out(true);
+      } else if (countingElement < 0) {
+	countingElement = base - 1;
+      }
+    }
+    
+    // reload for Modes 4 & 5
+    private void reload45() {
+      countingElement--;
+      if (countingElement == 0) {
+	out(false);
+      } else if (countingElement < 0) {
+	out(true);
+	countingElement = base - 1;
+      }
     }
     
     // method called on clock pulse
@@ -426,42 +449,30 @@ public class Intel8254 extends Device implements IOElement {
       assert !type;
       if (!type) {
 	switch (mode) {
+
 	  case 0:
 	    if (loaded) {
 	      load();
 	      loaded = false;
-	      reset = false;
 	    } else if (gate && !writing && !reset) {
-	      countingElement--;
-	      if (countingElement == 0) {
-		out(true);
-	      } else if (countingElement < 0) {
-		countingElement = base - 1;
-	      }
+	      reload01();
 	    }
 	    break;
+
 	  case 1:
 	    if (triggered) {
 	      out(false);
 	      load();
-	      triggered = false;
-	      reset = false;
 	    } else if (loaded && !reset) {
-	      countingElement--;
-	      if (countingElement == 0) {
-		out(true);
-	      } else if (countingElement < 0) {
-		countingElement = base - 1;
-	      }
+	      reload01();
 	    }
 	    break;
+
 	  case 2:
 	    if (loaded || triggered) {
 	      out(true);
 	      load();
 	      loaded = false;
-	      triggered = false;
-	      reset = false;
 	    } else if (gate && !reset) {
 	      countingElement--;
 	      if (countingElement == 1) {
@@ -472,58 +483,39 @@ public class Intel8254 extends Device implements IOElement {
 	      }
 	    }
 	    break;
+
 	  case 3:
 	    if (loaded || triggered) {
 	      out(true);
 	      load();
 	      loaded = false;
-	      triggered = false;
-	      reset = false;
 	    } else if (gate && !reset) {
 	      if (((counterRegister % 2) == 1) &&
 		  (countingElement == counterRegister)) {
-		if (outPin.level) {
-		  countingElement++;
-		} else {
-		  countingElement--;
-		}
+		countingElement += (outPin.level ? 1 : -1);
 	      }
 	      countingElement -= 2;
 	      if (countingElement == 0) {
 		out(!outPin.level);
-		countingElement = counterRegister;
-		nullCount = false;
+		load();
 	      }
 	    }
 	    break;
+
 	  case 4:
 	    if (loaded) {
 	      load();
 	      loaded = false;
-	      reset = false;
 	    } else if (gate && !reset) {
-	      countingElement--;
-	      if (countingElement == 0) {
-		out(false);
-	      } else if (countingElement < 0) {
-		out(true);
-		countingElement = base - 1;
-	      }
+	      reload45();
 	    }
 	    break;
+
 	  case 5:
 	    if (triggered) {
 	      load();
-	      triggered = false;
-	      reset = false;
 	    } else if (loaded && !reset) {
-	      countingElement--;
-	      if (countingElement == 0) {
-		out(false);
-	      } else if (countingElement < 0) {
-		out(true);
-		countingElement = base - 1;
-	      }
+	      reload45();
 	    }
 	    break;
 	}

@@ -22,12 +22,15 @@ package cz.pecina.retro.cpu;
 
 import junit.framework.TestCase;
 
+import cz.pecina.retro.common.Parameters;
+
 public class TestIntel8254 extends TestCase {
 
   Intel8254 pit;
   FixedNode c0clk;
   FixedNode[] gates = new FixedNode[2];
   IONode outs[] = new IONode[2];
+  Clock clock = new Clock();
   
   @Override
   protected void setUp() {
@@ -40,6 +43,7 @@ public class TestIntel8254 extends TestCase {
       outs[i] = new IONode();
       outs[i].add(pit.getOutPin(i));
     }
+    Parameters.systemClockSource = clock;
   }
 
   // counter status
@@ -56,6 +60,12 @@ public class TestIntel8254 extends TestCase {
   private void clockPulse0() {
     clock0(1);
     clock0(0);
+  }
+  
+  // clock pulse on Counter 1
+  private void clockPulse1() {
+    clock.tick();
+    CPUScheduler.runSchedule(clock.getSystemClock());
   }
   
   // set gate pin on Counter 0
@@ -80,7 +90,7 @@ public class TestIntel8254 extends TestCase {
     gate1(0);
   }
   
-  // get status and counter value on counter
+  // get status and counter value for Counter n
   private Status poll(final int n) {
     Status s = new Status();
     pit.portOutput(3, 0b11100000 | (0b10 << n));
@@ -118,6 +128,21 @@ public class TestIntel8254 extends TestCase {
   // output value to Counter 1
   private void out1(final int data) {
     out(1, data);
+  }
+
+  // stub system clock source
+  private class Clock implements SystemClockSource {
+
+    private long time;
+
+    @Override
+    public long getSystemClock() {
+      return time;
+    }
+
+    public void tick() {
+      time++;
+    }
   }
 
   public void testMode0_1() {
@@ -2046,5 +2071,68 @@ public class TestIntel8254 extends TestCase {
     assertEquals("Stage 10 status", 0b10011010, s.status);
     assertEquals("Stage 10 value", 4, s.value);
     assertEquals("Stage 10 out", 1, s.out);
+  }
+  
+  public void testMode0_1d() {
+    Status s;
+
+    pit.reset();
+    gate1(1);
+
+    outcw(0b01010000);
+
+    s = poll(1);
+    assertEquals("Stage 0 status", 0b01010000, s.status);
+    assertEquals("Stage 0 out", 0, s.out);
+
+    out1(4);
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 1 status", 0b00010000, s.status);
+    assertEquals("Stage 1 value", 4, s.value);
+    assertEquals("Stage 1 out", 0, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 2 status", 0b00010000, s.status);
+    assertEquals("Stage 2 value", 3, s.value);
+    assertEquals("Stage 2 out", 0, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 3 status", 0b00010000, s.status);
+    assertEquals("Stage 3 value", 2, s.value);
+    assertEquals("Stage 3 out", 0, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 4 status", 0b00010000, s.status);
+    assertEquals("Stage 4 value", 1, s.value);
+    assertEquals("Stage 4 out", 0, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 5 status", 0b10010000, s.status);
+    assertEquals("Stage 5 value", 0, s.value);
+    assertEquals("Stage 5 out", 1, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 6 status", 0b10010000, s.status);
+    assertEquals("Stage 6 value", 0xff, s.value);
+    assertEquals("Stage 6 out", 1, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 7 status", 0b10010000, s.status);
+    assertEquals("Stage 7 value", 0xfe, s.value);
+    assertEquals("Stage 7 out", 1, s.out);
   }
 }
