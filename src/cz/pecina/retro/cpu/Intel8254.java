@@ -136,8 +136,8 @@ public class Intel8254 extends Device implements IOElement {
     // gate pin level detection flag
     private boolean gate;
 
-    // gate pin trigger detection flag
-    private boolean trigger;
+    // gate pin trigger detection flags
+    private boolean trigger, triggered;
 
     // clock pulse detection flag
     private boolean pulse;
@@ -191,7 +191,7 @@ public class Intel8254 extends Device implements IOElement {
       gatePin.reset();
       outPin.reset();
       outputLatched = statusLatched = reading = writing =
-	trigger = pulse = load = false;
+	trigger = triggered = pulse = load = false;
       nullCount = gate = true;
       newCounterRegister = 0;
       base = (bcd ? 10000 : 0x10000);
@@ -263,11 +263,11 @@ public class Intel8254 extends Device implements IOElement {
       }
       if (writing) {
 	log.finest("First byte written to counter");
-	outPin.level = false;
-	outPin.notifyChangeNode();
-	log.finest("Output level: false");
 	switch (mode) {
 	  case 0:
+	    outPin.level = false;
+	    outPin.notifyChangeNode();
+	    log.finest("Output level: false");
 	    if (type) {
 	      final long remains = CPUScheduler.getRemainingTime(this);
 	      if (remains != -1) {
@@ -294,7 +294,10 @@ public class Intel8254 extends Device implements IOElement {
 	      if (gatePin.level) {
 		CPUScheduler.removeAllScheduledEvents(this);
 		nullCount = false;
-		CPUScheduler.addScheduledEvent(this, countingElement + 1, 0);
+		CPUScheduler.addScheduledEvent(
+		  this,
+		  Math.max(countingElement + 1, 1),
+		  0);
 		log.finest("Counter started, remains: " + (countingElement + 1));
 	      }
 	    } else {
@@ -352,9 +355,22 @@ public class Intel8254 extends Device implements IOElement {
 	      outPin.level = true;
 	      outPin.notifyChangeNode();
 	      countingElement = base - ((int)delay);
-	      CPUScheduler.addScheduledEvent(this, countingElement + 1, 0);
+	      CPUScheduler.addScheduledEvent(
+	        this,
+		Math.max(countingElement + 1, 1),
+		0);
 	      log.finest("Output level: true");
 	    }
+	    break;
+	  case 1:
+	    outPin.level = true;
+	    outPin.notifyChangeNode();
+	    countingElement = base - ((int)delay);
+	    CPUScheduler.addScheduledEvent(
+	      this,
+	      Math.max(countingElement + 1, 1),
+	      0);
+	    log.finest("Output level: true");
 	    break;
 	}
       }
@@ -368,15 +384,14 @@ public class Intel8254 extends Device implements IOElement {
 	gatePin.notifyChange();
 	gate = gatePin.level;
 	log.finest("Gate level: " + gate);
-	switch (mode) {
-	  case 0:
-	    gatePin.notifyChange();
-	    gate = gatePin.level;
-	    break;
-	}
+	gatePin.notifyChange();
+	gate = gatePin.level;
+      } else if (trigger) {
+	triggered = true;
+	trigger = false;
       }
     }
-    
+
     // method called on clock pulse
     private void clockPulse() {
       log.finest("Clock pulse detected");
@@ -397,9 +412,28 @@ public class Intel8254 extends Device implements IOElement {
 	      } else if (countingElement < 0) {
 		countingElement = base - 1;
 	      }
-	      break;
 	    }
+	    break;
+	  case 1:
+	    if (triggered) {
+	      countingElement = counterRegister;
+	      nullCount = false;
+	      triggered = false;
+	      outPin.level = false;
+	      outPin.notifyChangeNode();
+	    } else {
+	      countingElement--;
+	      if (countingElement == 0) {
+		outPin.level = true;
+		outPin.notifyChangeNode();
+		log.finest("Output level: true");
+	      } else if (countingElement < 0) {
+		countingElement = base - 1;
+	      }
+	    }
+	    break;
 	}
+	trigger = false;
       }
     }
 
@@ -461,9 +495,10 @@ public class Intel8254 extends Device implements IOElement {
 		if (level) {
 		  if (!writing) {
 		    CPUScheduler.removeAllScheduledEvents(Counter.this);
-		    CPUScheduler.addScheduledEvent(Counter.this,
-						   countingElement + 1,
-						   0);
+		    CPUScheduler.addScheduledEvent(
+		      Counter.this,
+		      Math.max(countingElement + 1, 1),
+		      0);
 		    log.finest("Counting resumed");
 		  }
 		} else {

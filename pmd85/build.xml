@@ -17,10 +17,18 @@
 	    value="cz/pecina/retro"/>
   <property name="src.dir"
 	    value="src"/>
+  <property name="test.dir"
+	    value="test"/>
+  <property name="test.src.dir"
+	    value="${test.dir}/src"/>
   <property name="resources.dir"
 	    value="res"/>
   <property name="lib.dir"
 	    value="lib"/>
+  <property name="test.lib.dir"
+	    value="${test.dir}/lib"/>
+  <property name="test.resources.dir"
+	    value="${test.dir}/res"/>
   <property name="bin.dir"
 	    value="bin"/>
   <property name="bin.misc.dir"
@@ -33,18 +41,24 @@
 	    value="${build.dir}/lib"/>
   <property name="build.classes.dir"
 	    value="${build.dir}/classes"/>
+  <property name="build.test.classes.dir"
+	    value="${build.dir}/test/classes"/>
   <property name="build.licenses.dir"
 	    value="${build.dir}/licenses"/>
   <property name="build.src.dir"
 	    value="${package}/build-src"/>
   <property name="build.src.filtered.dir"
 	    value="${build.dir}/src" />
+  <property name="build.test.src.filtered.dir"
+	    value="${build.dir}/test/src" />
   <property name="build.src.doc.dir"
 	    value="${build.src.dir}/doc"/>
   <property name="javac.source.version"
 	    value="1.8"/>
   <property name="javac.target.version"
 	    value="1.8"/>
+  <property name="tests"
+	    value="Test*"/>
   <property name="args"
 	    value=""/>
   <fileset dir="${bin.dir}"
@@ -802,6 +816,71 @@
 	<enable/>
       </assertions>
     </java>
+  </target>
+  
+  
+  <!-- test.classpath -->
+  <path id="test.base.path">
+    <pathelement location="${build.classes.dir}"/>
+    <pathelement location="${build.test.classes.dir}"/>
+    <pathelement location="${lib.dir}/jdom2.jar"/>
+    <pathelement location="${lib.dir}/commons-cli.jar"/>
+    <pathelement location="${test.lib.dir}/junit.jar"/>
+  </path>
+
+  <!-- test.prepare -->
+  <target name="test.prepare"
+	  description="Set up test directory structure">
+    <echo message="Preparing the test directory structure"/>
+    <mkdir dir="${build.test.classes.dir}"/>
+    <mkdir dir="${build.test.src.filtered.dir}"/>
+    <mkdir dir="${test.resources.dir}/${prefix}/${package}"/>
+    <copy todir="${build.test.src.filtered.dir}">
+      <fileset dir="${test.src.dir}"
+	       includes="**"/>
+      <filterset refid="filterset"/>
+    </copy>
+  </target>
+  
+  <!-- test.compile -->
+  <target name="test.compile"
+	  depends="compile,test.prepare"
+	  description="Compile test source code">
+    <javac srcdir="${build.test.src.filtered.dir}"
+	   destdir="${build.test.classes.dir}"
+	   classpathref="test.base.path"
+	   includeAntRuntime="false"
+	   debug="true"
+	   source="${javac.source.version}"
+	   target="${javac.target.version}"/>
+    <copy todir="${build.test.classes.dir}/${prefix}/${package}">
+      <fileset dir="${test.resources.dir}/${prefix}/${package}"
+	       includes="**"/>
+    </copy>
+  </target>
+
+  <!-- test -->
+  <target name="test"
+	  depends="compile,test.compile"
+	  description="Run tests">
+    <junit printsummary="yes"
+	   haltonerror="yes"
+	   haltonfailure="yes"
+	   fork="yes">
+      <formatter type="plain"
+		 usefile="false"/>
+      <classpath refid="test.base.path"/>
+      <batchtest>
+	<fileset dir="${build.test.classes.dir}">
+	  <include name="**/${tests}.class"/>
+	  <exclude name="**/Test*All.class"/>
+	  <exclude name="**/*$*"/>
+	</fileset>
+      </batchtest>
+      <assertions>
+	<enable/>
+      </assertions>
+    </junit>
   </target>
   
 </project>
