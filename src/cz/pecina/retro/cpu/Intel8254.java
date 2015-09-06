@@ -313,7 +313,9 @@ public class Intel8254 extends Device implements IOElement {
 	      reset = false;
 	    }
 	    break;
+	  case 1:
 	  case 4:
+	  case 5:
 	    if (type) {
 	    } else {
 	      loaded = true;
@@ -405,6 +407,19 @@ public class Intel8254 extends Device implements IOElement {
       }
     }
 
+    // set output pin
+    private void out(final boolean level) {
+      outPin.level = level;
+      outPin.notifyChangeNode();
+      log.finest("Output level: " + level);
+    }
+
+    // load Counting Element
+    private void load() {
+      countingElement = counterRegister;
+      nullCount = false;
+    }
+    
     // method called on clock pulse
     private void clockPulse() {
       log.finest("Clock pulse detected");
@@ -413,15 +428,13 @@ public class Intel8254 extends Device implements IOElement {
 	switch (mode) {
 	  case 0:
 	    if (loaded) {
-	      countingElement = counterRegister;
+	      load();
 	      loaded = false;
-	      nullCount = false;
-	    } else if (gate && !writing) {
+	      reset = false;
+	    } else if (gate && !writing && !reset) {
 	      countingElement--;
 	      if (countingElement == 0) {
-		outPin.level = true;
-		outPin.notifyChangeNode();
-		log.finest("Output level: true");
+		out(true);
 	      } else if (countingElement < 0) {
 		countingElement = base - 1;
 	      }
@@ -429,17 +442,14 @@ public class Intel8254 extends Device implements IOElement {
 	    break;
 	  case 1:
 	    if (triggered) {
-	      countingElement = counterRegister;
-	      nullCount = false;
+	      out(false);
+	      load();
 	      triggered = false;
-	      outPin.level = false;
-	      outPin.notifyChangeNode();
-	    } else {
+	      reset = false;
+	    } else if (loaded && !reset) {
 	      countingElement--;
 	      if (countingElement == 0) {
-		outPin.level = true;
-		outPin.notifyChangeNode();
-		log.finest("Output level: true");
+		out(true);
 	      } else if (countingElement < 0) {
 		countingElement = base - 1;
 	      }
@@ -447,38 +457,29 @@ public class Intel8254 extends Device implements IOElement {
 	    break;
 	  case 2:
 	    if (loaded || triggered) {
-	      outPin.level = true;
-	      outPin.notifyChangeNode();
-	      log.finest("Output level: true");
-	      countingElement = counterRegister;
+	      out(true);
+	      load();
 	      loaded = false;
-	      nullCount = false;
 	      triggered = false;
-	    } else if (gate) {
+	      reset = false;
+	    } else if (gate && !reset) {
 	      countingElement--;
 	      if (countingElement == 1) {
-		outPin.level = false;
-		outPin.notifyChangeNode();
-		log.finest("Output level: false");
+		out(false);
 	      } else if (countingElement == 0) {
-		outPin.level = true;
-		outPin.notifyChangeNode();
-		log.finest("Output level: true");
-		countingElement = counterRegister;
-		nullCount = false;
+		out(true);
+		load();
 	      }
 	    }
 	    break;
 	  case 3:
 	    if (loaded || triggered) {
-	      outPin.level = true;
-	      outPin.notifyChangeNode();
-	      log.finest("Output level: true");
-	      countingElement = counterRegister;
+	      out(true);
+	      load();
 	      loaded = false;
-	      nullCount = false;
 	      triggered = false;
-	    } else if (gate) {
+	      reset = false;
+	    } else if (gate && !reset) {
 	      if (((counterRegister % 2) == 1) &&
 		  (countingElement == counterRegister)) {
 		if (outPin.level) {
@@ -489,9 +490,7 @@ public class Intel8254 extends Device implements IOElement {
 	      }
 	      countingElement -= 2;
 	      if (countingElement == 0) {
-		outPin.level = !outPin.level;
-		outPin.notifyChangeNode();
-		log.finest("Output level: " + outPin.level);
+		out(!outPin.level);
 		countingElement = counterRegister;
 		nullCount = false;
 	      }
@@ -499,20 +498,31 @@ public class Intel8254 extends Device implements IOElement {
 	    break;
 	  case 4:
 	    if (loaded) {
-	      countingElement = counterRegister;
+	      load();
 	      loaded = false;
-	      nullCount = false;
-	    } else if (gate) {
+	      reset = false;
+	    } else if (gate && !reset) {
 	      countingElement--;
 	      if (countingElement == 0) {
-		outPin.level = false;
-		outPin.notifyChangeNode();
-		log.finest("Output level: false");
+		out(false);
 	      } else if (countingElement < 0) {
-		outPin.level = true;
-		outPin.notifyChangeNode();
+		out(true);
 		countingElement = base - 1;
- 		nullCount = false;
+	      }
+	    }
+	    break;
+	  case 5:
+	    if (triggered) {
+	      load();
+	      triggered = false;
+	      reset = false;
+	    } else if (loaded && !reset) {
+	      countingElement--;
+	      if (countingElement == 0) {
+		out(false);
+	      } else if (countingElement < 0) {
+		out(true);
+		countingElement = base - 1;
 	      }
 	    }
 	    break;
