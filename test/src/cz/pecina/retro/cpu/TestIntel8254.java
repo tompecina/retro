@@ -1199,7 +1199,7 @@ public class TestIntel8254 extends TestCase {
     assertEquals("Stage 4 value", 0, s.value);
     assertEquals("Stage 4 out", 0, s.out);
 
-    gate0(0);
+    clockPulse0();
 
     s = poll(0);
     assertEquals("Stage 5 status", 0b10011000, s.status);
@@ -1213,7 +1213,6 @@ public class TestIntel8254 extends TestCase {
     assertEquals("Stage 6 value", 0xfe, s.value);
     assertEquals("Stage 6 out", 1, s.out);
 
-    gate0(1);
     clockPulse0();
     
     s = poll(0);

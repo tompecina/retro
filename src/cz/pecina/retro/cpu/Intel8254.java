@@ -508,10 +508,9 @@ public class Intel8254 extends Device implements IOElement {
 		outPin.level = false;
 		outPin.notifyChangeNode();
 		log.finest("Output level: false");
-	      } else if (countingElement == -1) {
+	      } else if (countingElement < 0) {
 		outPin.level = true;
 		outPin.notifyChangeNode();
-		System.out.println("Output level: true");
 		countingElement = base - 1;
  		nullCount = false;
 	      }
