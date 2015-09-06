@@ -384,11 +384,10 @@ public class Intel8254 extends Device implements IOElement {
 	gatePin.notifyChange();
 	gate = gatePin.level;
 	log.finest("Gate level: " + gate);
-	gatePin.notifyChange();
-	gate = gatePin.level;
-      } else if (trigger) {
-	triggered = true;
-	trigger = false;
+	if (trigger) {
+	  triggered = true;
+	  trigger = false;
+	}
       }
     }
 
@@ -433,7 +432,6 @@ public class Intel8254 extends Device implements IOElement {
 	    }
 	    break;
 	}
-	trigger = false;
       }
     }
 
@@ -641,8 +639,6 @@ public class Intel8254 extends Device implements IOElement {
 	  
 	} else {
 	  
-	  counter.reset();
-	
 	  counter.rw = rw;
 
 	  counter.mode = (data >> 1) & 0x07;
@@ -652,6 +648,8 @@ public class Intel8254 extends Device implements IOElement {
       
 	  counter.bcd = ((data & 1) == 1);
 
+	  counter.reset();
+	
 	  log.fine("Counter " + number + " programmed: RW: " +
 		   (new String[] {"LSB", "MSB", "LSB/MSB"})[rw - 1] +
 		   ", mode: " + counter.mode + ", bcd: " + counter.bcd);
