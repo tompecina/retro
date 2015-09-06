@@ -313,6 +313,11 @@ public class Intel8254 extends Device implements IOElement {
 	      reset = false;
 	    }
 	    break;
+	  case 4:
+	    if (type) {
+	    } else {
+	      loaded = true;
+	    }
 	}
       }
     }
@@ -489,6 +494,26 @@ public class Intel8254 extends Device implements IOElement {
 		log.finest("Output level: " + outPin.level);
 		countingElement = counterRegister;
 		nullCount = false;
+	      }
+	    }
+	    break;
+	  case 4:
+	    if (loaded) {
+	      countingElement = counterRegister;
+	      loaded = false;
+	      nullCount = false;
+	    } else if (gate) {
+	      countingElement--;
+	      if (countingElement == 0) {
+		outPin.level = false;
+		outPin.notifyChangeNode();
+		log.finest("Output level: false");
+	      } else if (countingElement == -1) {
+		outPin.level = true;
+		outPin.notifyChangeNode();
+		System.out.println("Output level: true");
+		countingElement = base - 1;
+ 		nullCount = false;
 	      }
 	    }
 	    break;
