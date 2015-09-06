@@ -61,7 +61,7 @@ public class FixedNode extends IONode {
    *
    * @return the level on the node
    */
-  public int setLevel() {
+  public int getLevel() {
     return level;
   }
 }
