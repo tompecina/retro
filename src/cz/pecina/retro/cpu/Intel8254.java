@@ -362,12 +362,12 @@ public class Intel8254 extends Device implements IOElement {
 	    if (gate && !writing) {
 	      outPin.level = true;
 	      outPin.notifyChangeNode();
+	      log.finest("Output level: true");
 	      countingElement = base - ((int)delay);
 	      CPUScheduler.addScheduledEvent(
 	        this,
 		Math.max(countingElement + 1, 1),
 		0);
-	      log.finest("Output level: true");
 	    }
 	    break;
 	  case 1:
@@ -546,6 +546,11 @@ public class Intel8254 extends Device implements IOElement {
 		}
 		break;
 	    }
+	  }
+	  if (!level && (mode == 2)) {
+	    outPin.level = true;
+	    outPin.notifyChangeNode();
+	    log.finest("Output level: true");
 	  }
 	}
       }      
