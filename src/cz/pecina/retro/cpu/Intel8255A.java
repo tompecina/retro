@@ -89,8 +89,8 @@ public class Intel8255A extends Device implements IOElement {
   /**
    * Gets I/O pin.
    *
-   * @param  n pin number
-   * @return {@code IOPin} object
+   * @param  n pin number, {@code 0-24}
+   * @return   the pin
    */
   public IOPin getPin(final int n) {
     assert (n >= 0) && (n < 24);
@@ -293,7 +293,7 @@ public class Intel8255A extends Device implements IOElement {
       pins[i] = new Pin(i);
     }
     reset();
-    log.fine("New Intel 8255A creation completed, name: " + name);
+    log.finer("New Intel 8255A creation completed, name: " + name);
   }
 
   // for description see Device

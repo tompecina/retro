@@ -346,12 +346,26 @@ public class ComputerHardware {
 
     // DEBUG
     final cz.pecina.retro.cpu.Intel8254 testpit =
-      new cz.pecina.retro.cpu.Intel8254("TEST", new boolean[] {true, false, false});
+      new cz.pecina.retro.cpu.Intel8254("TEST_8254", new boolean[] {false, false, false});
     hardware.add(testpit);
     for (int port: Util.portIterator(0x0c, 0xfc)) {
       cpu.addIOInput(port, testpit);
       cpu.addIOOutput(port, testpit);
     }
+    final cz.pecina.retro.cpu.OutputLatch testclock =
+      new cz.pecina.retro.cpu.OutputLatch("TEST_CLOCK");
+    hardware.add(testclock);
+    cpu.addIOOutput(0x2c, testclock);
+    final cz.pecina.retro.cpu.OutputLatch testgate =
+      new cz.pecina.retro.cpu.OutputLatch("TEST_GATE");
+    hardware.add(testgate);
+    cpu.addIOOutput(0x2d, testgate);
+    new IONode()
+      .add(testpit.getClockPin(0))
+      .add(testclock.getOutPin(0));
+    new IONode()
+      .add(testpit.getGatePin(0))
+      .add(testgate.getOutPin(0));
     
     // connect speaker and LEDs
     new IONode()
@@ -382,11 +396,10 @@ public class ComputerHardware {
     new IONode()
       .add(speakerNand.getOutPin())
       .add(yellowLEDMeter.getInPin())
-      // .add(testpit.getClockPin(0))    // DEBUG
       .add(speaker.getInPin());
     new IONode()
-      .add(systemPIO.getPin(16 + 3))
-      .add(testpit.getGatePin(0))    // DEBUG
+      // .add(systemPIO.getPin(16 + 3))  // DEBUG
+      .add(testpit.getOutPin(0))  // DEBUG
       .add(redLEDMeter.getInPin());
       
     // load any startup images and snapshots
