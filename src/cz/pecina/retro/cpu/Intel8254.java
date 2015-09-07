@@ -33,8 +33,10 @@ public class Intel8254 extends Device implements IOElement {
   // dynamic logger, per device
   private Logger log;
 
-  // counters
-  private final Counter[] counters = new Counter[3];
+  /**
+   * The three counters, Counter 0-3.
+   */
+  protected final Counter[] counters = new Counter[3];
 
   // for description see Device
   @Override
@@ -45,6 +47,9 @@ public class Intel8254 extends Device implements IOElement {
     }
   }
 
+  // counter number, for loop
+  private int number;
+  
   /**
    * Main constructor.
    *
@@ -60,23 +65,59 @@ public class Intel8254 extends Device implements IOElement {
     log.fine("New Intel 8254 creation started, name: " + name);
     assert types.length == 3;
     
-    // add(new Register("MODE_A") {
-    // 	@Override
-    // 	public String getValue() {
-    // 	  return String.valueOf(modeA);
-    // 	}
-    // 	@Override
-    // 	public void processValue(final String value) {
-    // 	  modeA = Integer.parseInt(value);
-    // 	  log.finer("Mode A set to: " + modeA);
-    // 	}
-    //   });
+    for (number = 0; number < 3; number++) {
+
+      add(new Register("COUNTER" + number + "_TYPE") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].direct ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].direct = (Integer.parseInt(value) == 1);
+	    log.finer("Type for counter " + number +
+		      " set to: " + counters[number].direct);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_MODE") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].mode);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].mode = Integer.parseInt(value);
+	    log.finer("Mode for counter " + number +
+		      " set to: " + counters[number].mode);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_CE") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].countingElement);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].countingElement = Integer.parseInt(value);
+	    log.finer("Counting Element for counter " + number +
+		      " set to: " + counters[number].countingElement);
+	  }
+        });
+    }
 
     for (int i = 0; i < 3; i++) {
       counters[i] = new Counter();
-      log.finer("Setting up counter: " + i + ", connection type: " +
+      log.finer("Setting up counter: " + number + ", connection type: " +
 		(types[i] ? "CPU clock" : "normal"));
-      counters[i].type = types[i];
+      counters[i].direct = types[i];
     }
     reset();
     log.fine("New Intel 8254 creation completed, name: " + name);
@@ -93,101 +134,171 @@ public class Intel8254 extends Device implements IOElement {
    */
   protected class Counter implements CPUEventOwner {
 
-    // clock connection type
-    //  false - the clock pin
-    //  true - the CPU clock
-    public boolean type;
+    /**
+     * Type of clock connection of the counter. {@code true} if
+     * directly connected to the system CPU, {@code false} if
+     * the clock pin is used.
+     */
+    public boolean direct;
 
-    // state of the counter
-    private int state;
+    /**
+     * {@code true} if reading is in progress. i.e., LSB read, MSB
+     * will follow.
+     * <p>
+     * Flags {@code reading} and {@code writing} are probably implemented
+     * as one flip-flop in 8253; in 8254 they are separate.  We may
+     * safely ignore the difference as this is only observable when an
+     * invalid sequence is written to 8253, and the datasheet does not
+     * guarantee any particular response in that case.
+     */
+    protected boolean reading;
 
-    // true if reading in progress. i.e., LSB read, MSB will follow
-    private boolean reading;
+    /**
+     * {@code true} if writing is in progress. i.e., LSB written, MSB
+     * will follow.
+     * <p>
+     * Flags {@code reading} and {@code writing} are probably implemented
+     * as one flip-flop in 8253; in 8254 they are separate.  We may
+     * safely ignore the difference as this is only observable when an
+     * invalid sequence is written to 8253, and the datasheet does not
+     * guarantee any particular response in that case.
+     */
+    protected boolean writing;
 
-    // true if writing in progress. i.e., LSB written, MSB will follow
-    private boolean writing;
+    /**
+     * The current/last known state of the Counting Element.
+     */
+    protected int countingElement;
 
-    // Note: These two flags are probably implemented as one FF in 8253;
-    //       in 8254 they are separate.  We will ignore this difference
-    //       as this only may be observed if an invalid sequence is
-    //       sent to 8253.
+    /**
+     * The current state of the Counter Register.
+     */
+    protected int counterRegister;
 
-    // the current count
-    private int countingElement;
+    /**
+     * The new value to be written to the Counter Register.
+     */
+    protected int newCounterRegister;
 
-    // the current initial count
-    private int counterRegister;
-
-    // the new initial count
-    private int newCounterRegister;
-
-    // the output latch
-    private int outputLatch;
+    /**
+     * The value of the (counter) Output Latch.
+     */
+    protected int outputLatch;
     
-    // state of the output latch
-    private boolean outputLatched;
+    /**
+     * {@code true} if the (counter) Output Latch contains data.
+     */
+    protected boolean outputLatched;
 
-    // the status latch
-    private int statusLatch;
+    /**
+     * The value of the Status Latch.
+     */
+    protected int statusLatch;
     
-    // state of the status latch
-    private boolean statusLatched;
+    /**
+     * {@code true} if the Status Latch contains data.
+     */
+    protected boolean statusLatched;
 
-    // gate pin level detection flag
-    private boolean gate;
+    /**
+     * Gate pin level detection flag.  For normal connection, the gate pin
+     * level cannot be used for this purpose as the gate is sampled on every
+     * rising edge of the clock.  For direct connection, this is a mere copy
+     * of the gate pin level.
+     */
+    protected boolean gate;
 
     // gate pin trigger detection flags
-    private boolean trigger, triggered;
+    protected boolean trigger, triggered;
 
-    // clock pulse detection flag
-    private boolean pulse;
+    /**
+     * The clock pulse detection flag.  {@code true} after a rising and before
+     * a falling edge on the clock pin.
+     */
+    protected boolean pulse;
 
-    // binary/BCD mode
-    //  false - binary
-    //  true - BCD
+    /**
+     * The BCD flag copied from the Control Word, {@code false}
+     * - binary mode, {@code true} - BCD mode.
+     */
     public boolean bcd;
 
-    // counting base according to bcd
-    private int base;
+    /**
+     * The base value of the counter calculated from the BCD flag.
+     * Values: {@code 0x10000} if BCD is {@code false}, {@code 10000}
+     * if BCD is {@code true}.
+     */
+    protected int base;
 
-    // RW register
-    //  1 - only LSB
-    //  2 - only MSB
-    //  3 - LSB, then MSB
+    /**
+     * The Read/Write register copied from the Control Word.
+     * <p>
+     * Meaning: {@code 1} - only LSB, {@code 2} - only MSB,
+     * {@code 3} - first LSB, then MSB.
+     */
     public int rw;
 
-    // counter mode, 0-5
+    /**
+     * The counter Mode copied from the Control Word, {@code 0-5}.
+     */
     public int mode;
 
-    // the null count flag
-    private boolean nullCount;
+    /**
+     * The Null Count flag used in the Status.  {@code true} if new value in
+     * the Counter Register has not been written to the Counting Element
+     * (please see the device datasheet for a more precise description).
+     */
+    protected boolean nullCount;
 
     // if true counter will be loaded on the next clock pulse
-    private boolean loaded;
+    protected boolean loaded;
 
     // if counter has been reset
-    private boolean reset;
+    protected boolean reset;
 
-    // the clock pin
+    /**
+     * The total accrued delay accrued by the scheduler.
+     */
+    protected long delay;
+    
+    /**
+     * The clock pin object.
+     */
     public ClockPin clockPin = new ClockPin();
 
-    // the gate pin
+    /**
+     * The gate pin object.
+     */
     public GatePin gatePin = new GatePin();
 
-    // the out pin
+    /**
+     * The output pin object.
+     */
     public OutPin outPin = new OutPin();
 
-    // get LSB
-    private int lsb(final int data) {
+    /**
+     * Gets the LSB (Least Significant Byte).
+     *
+     * @param  data the input data
+     * @return      the LSB (Least Significant Byte) of {@code data}
+     */
+    protected int lsb(final int data) {
       return (bcd ? (data % 100) : (data & 0xff));
     }
     
-    // get MSB
-    private int msb(final int data) {
+    /**
+     * Gets the MSB (Most Significant Byte).
+     *
+     * @param  data the input data
+     * @return      the MSB (Most Significant Byte) of {@code data}
+     */
+    protected int msb(final int data) {
       return (bcd ? ((data / 100) % 100) : ((data >> 8) & 0xff));
     }
     
-    // reset counter
+    /**
+     * Resets the counter.
+     */
     public void reset() {
       CPUScheduler.removeAllScheduledEvents(this);
       clockPin.reset();
@@ -195,32 +306,67 @@ public class Intel8254 extends Device implements IOElement {
       outPin.reset();
       outputLatched = statusLatched = reading = writing =
 	trigger = triggered = pulse = loaded = false;
-      nullCount = gate = reset = true;
+      nullCount = reset = true;
+      gate = gatePin.level;
       newCounterRegister = 0;
+      delay = 0;
       base = (bcd ? 10000 : 0x10000);
       log.finer("Counter reset");
     }
-
-    // get current count
-    private int getCount() {
-      if (type) {
+    
+    /**
+     * Gets the current count of the Counting Element.  For direct connection,
+     * this is merely a guess which may be off up the maximum instruction
+     * duration (including any interrupt procedure) minus one.
+     *
+     * @return the current count of the Counting Element
+     */
+    protected int getCount() {
+      if (direct) {
+	if (!reset && loaded) {
 	final long remains = CPUScheduler.getRemainingTime(this);
 	log.finest("Getting counter state, remains: " + remains);
-	if (remains < 0) {
-	  if (gate && !writing) {
-	    return 0;
-	  } else {
-	    return countingElement % base;
+	if (remains >= 0) {
+	  switch (mode) {
+	    
+	    case 0:
+	    case 1:
+	    case 4:
+	    case 5:
+	      return ((int)remains) % base;
+
+	    case 2:
+	      return (outPin.level ? ((((int)remains) + 1) % base) : 1);
+
+	    case 3:
+	      return ((((int)remains) / 2) + 1) % base;
 	  }
 	} else {
-	  return ((int)remains) % base;
+	  switch (mode) {
+	    
+	    case 0:
+	    case 1:
+	    case 4:
+	    case 5:
+	      return 0;
+
+	    case 2:
+	    case 3:
+	      return counterRegister % base;
+	  }
+	}
+	} else {
+	  return 0;
 	}
       } else {
 	return countingElement % base;
       }
+      return 0;
     }
 
-    // latch the counter value
+    /**
+     * Latches the counter value.
+     */
     public void latchCounter() {
       if (!outputLatched) {
 	outputLatch = getCount();
@@ -231,7 +377,9 @@ public class Intel8254 extends Device implements IOElement {
       }
     }
 
-    // latch status
+    /**
+     * Latches the status.
+     */
     public void latchStatus() {
       if (!statusLatched) {
 	statusLatch = (outPin.query() << 7) |
@@ -246,7 +394,24 @@ public class Intel8254 extends Device implements IOElement {
       }
     }
 
-    // write one byte to the counter
+    /**
+     * Stop counter for direct connection type, ignore for normal connection.
+     */
+    protected void stop() {
+      if (direct) {
+	final long remains = CPUScheduler.getRemainingTime(this);
+	if (remains != -1) {
+	  CPUScheduler.removeAllScheduledEvents(this);
+	  countingElement = (int)remains;
+	}
+      }
+    }
+
+    /**
+     * Writes one byte to the counter.
+     *
+     * @param data the byte to be written
+     */
     public void write(final int data) {
       switch (rw) {
 	case 1:
@@ -270,13 +435,7 @@ public class Intel8254 extends Device implements IOElement {
 	  outPin.level = false;
 	  outPin.notifyChangeNode();
 	  log.finest("Output level: false");
-	  if (type) {
-	    final long remains = CPUScheduler.getRemainingTime(this);
-	    if (remains != -1) {
-	      CPUScheduler.removeAllScheduledEvents(this);
-	      countingElement = (int)remains;
-	    }
-	  }
+	  stop();
 	}
       } else {
 	log.finest("Last byte written to counter");
@@ -287,9 +446,9 @@ public class Intel8254 extends Device implements IOElement {
 	  counterRegister = base + 1;
 	}
 	nullCount = true;
-	switch (mode) {
-	  case 0:
-	    if (type) {
+	if (direct) {
+	  switch (mode) {
+	    case 0:
 	      countingElement = counterRegister;
 	      gatePin.notifyChange();
 	      if (gatePin.level) {
@@ -301,30 +460,24 @@ public class Intel8254 extends Device implements IOElement {
 		  0);
 		log.finest("Counter started, remains: " + (countingElement + 1));
 	      }
-	    } else {
-	      loaded = true;
-	    }
-	    break;
-	  case 2:
-	  case 3:
-	    if (type) {
-	    } else if (reset) {
-	      loaded = true;
-	      reset = false;
-	    }
-	    break;
-	  case 1:
-	  case 4:
-	  case 5:
-	    if (type) {
-	    } else {
-	      loaded = true;
-	    }
+	      break;
+	  }
+	} else if ((mode == 2) || (mode == 3)) {
+	  if (reset) {
+	    loaded = true;
+	    reset = false;
+	  }
+	} else {
+	  loaded = true;
 	}
       }
     }
 
-    // read one byte from the counter
+    /**
+     * Reads one byte from the counter.
+     *
+     * @return the byte read
+     */
     public int read() {
       if (statusLatched) {
 	log.finer(String.format("Outputting (latched) status: 0x%02x", statusLatch));
@@ -361,16 +514,15 @@ public class Intel8254 extends Device implements IOElement {
     // for description see CPUEventOwner
     @Override
     public void performScheduledEvent(final int parameter, final long delay) {
-      assert type;
-      if (type) {
+      assert direct;
+      if (direct) {
 	switch (mode) {
+
 	  case 0:
 	    gatePin.notifyChange();
 	    gate = gatePin.level;
 	    if (gate && !writing) {
-	      outPin.level = true;
-	      outPin.notifyChangeNode();
-	      log.finest("Output level: true");
+	      out(true);
 	      countingElement = base - ((int)delay);
 	      CPUScheduler.addScheduledEvent(
 	        this,
@@ -378,9 +530,9 @@ public class Intel8254 extends Device implements IOElement {
 		0);
 	    }
 	    break;
+
 	  case 1:
-	    outPin.level = true;
-	    outPin.notifyChangeNode();
+	    out(true);
 	    countingElement = base - ((int)delay);
 	    CPUScheduler.addScheduledEvent(
 	      this,
@@ -392,11 +544,13 @@ public class Intel8254 extends Device implements IOElement {
       }
     }
 
-    // method called on rising clock edge
-    private void risingClock() {
+    /**
+     * Method called on every rising edge of clock (only for normal connection).
+     */
+    protected void risingClock() {
       log.finest("Rising clock edge detected");
-      assert !type;
-      if (!type) {
+      assert !direct;
+      if (!direct) {
 	gatePin.notifyChange();
 	gate = gatePin.level;
 	log.finest("Gate level: " + gate);
@@ -407,23 +561,32 @@ public class Intel8254 extends Device implements IOElement {
       }
     }
 
-    // set output pin
-    private void out(final boolean level) {
+    /**
+     * Sets the level on the output pin.
+     *
+     * @param level the new level
+     */
+    protected void out(final boolean level) {
       outPin.level = level;
       outPin.notifyChangeNode();
       log.finest("Output level: " + level);
     }
 
-    // load Counting Element
-    private void load() {
+    /**
+     * Loads the Counting Element from the Counter Register
+     * and modifies the Control Logic flags accordingly.
+     */    
+    protected void load() {
       countingElement = counterRegister;
       nullCount = false;
       reset = false;
       triggered = false;
     }
 
-    // reload for Modes 0 & 1
-    private void reload01() {
+    /**
+     * Decrements and reloads the Counting Element in Modes 0 &amp; 1.
+     */
+    protected void reload01() {
       countingElement--;
       if (countingElement == 0) {
 	out(true);
@@ -432,8 +595,10 @@ public class Intel8254 extends Device implements IOElement {
       }
     }
     
-    // reload for Modes 4 & 5
-    private void reload45() {
+    /**
+     * Decrements and reloads the Counting Element in Modes 4 &amp; 5.
+     */
+    protected void reload45() {
       countingElement--;
       if (countingElement == 0) {
 	out(false);
@@ -443,11 +608,13 @@ public class Intel8254 extends Device implements IOElement {
       }
     }
     
-    // method called on clock pulse
-    private void clockPulse() {
+    /**
+     * Method called on every clock pulse (only for normal connection).
+     */
+    protected void clockPulse() {
       log.finest("Clock pulse detected");
-      assert !type;
-      if (!type) {
+      assert !direct;
+      if (!direct) {
 	switch (mode) {
 
 	  case 0:
@@ -522,12 +689,19 @@ public class Intel8254 extends Device implements IOElement {
       }
     }
 
-    // the clock pin
-    private class ClockPin extends IOPin {
+    /**
+     * The clock pin.
+     */
+    protected class ClockPin extends IOPin {
 
-      private boolean level;
+      /**
+       * The current level of the pin.
+       */
+      public boolean level;
 
-      // reset pin
+      /**
+       * Resets the pin.
+       */
       public void reset() {
 	level = (IONode.normalize(queryNode()) == 1);
       }
@@ -535,7 +709,7 @@ public class Intel8254 extends Device implements IOElement {
       // for description see IOPin
       @Override
       public void notifyChange() {
-	if (!type) {
+	if (!direct) {
 	  final boolean newLevel = (IONode.normalize(queryNode()) == 1);
 	  if (newLevel != level) {
 	    log.finest("New level on clock pin: " + newLevel);
@@ -554,12 +728,19 @@ public class Intel8254 extends Device implements IOElement {
       }
     }
 
-    // the gate pin
-    private class GatePin extends IOPin {
+    /**
+     * The gate pin.
+     */
+    protected class GatePin extends IOPin {
 
+      /**
+       * The current/last known level of the pin.
+       */
       public boolean level;
 
-      // reset pin
+      /**
+       * Resets the pin.
+       */
       public void reset() {
 	level = (IONode.normalize(queryNode()) == 1);
       }
@@ -573,7 +754,7 @@ public class Intel8254 extends Device implements IOElement {
 	  if (level) {
 	    trigger = true;
 	  }
-	  if (type) {
+	  if (direct) {
 	    switch (mode) {
 	      case 0:
 		gate = level;
@@ -611,12 +792,19 @@ public class Intel8254 extends Device implements IOElement {
       }      
     }
 
-    // the out pin
-    private class OutPin extends IOPin {
+    /**
+     * The output pin.
+     */
+    protected class OutPin extends IOPin {
 
+      /**
+       * The current level of the pin.
+       */
       public boolean level;
       
-      // reset pin
+      /**
+       * Resets the pin.
+       */
       public void reset() {
 	level = (mode != 0);
 	notifyChangeNode();
@@ -640,7 +828,7 @@ public class Intel8254 extends Device implements IOElement {
    */
   public IOPin getClockPin(final int number) {
     final Counter counter = counters[number];
-    if (counter.type) {
+    if (counter.direct) {
       log.fine("Trying to obtain clock pin on counter " + number +
 	       ", which is connected to system clock");
       return null;
@@ -660,7 +848,7 @@ public class Intel8254 extends Device implements IOElement {
   }
   
   /**
-   * Gets the out pin.
+   * Gets the output pin.
    *
    * @param  number the counter number
    * @return        the out pin of counter {@code number}

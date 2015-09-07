@@ -2073,7 +2073,7 @@ public class TestIntel8254 extends TestCase {
     assertEquals("Stage 10 out", 1, s.out);
   }
   
-  public void testMode0_1d() {
+  public void testMode0_1a() {
     Status s;
 
     pit.reset();

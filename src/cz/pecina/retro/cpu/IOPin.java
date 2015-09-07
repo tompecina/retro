@@ -40,7 +40,7 @@ public class IOPin {
   }
 
   /**
-   * Set the node.
+   * Sets the node.
    *
    * @param node node to be set
    */
@@ -49,7 +49,7 @@ public class IOPin {
   }
 
   /**
-   * Query the state (signal level) of the node the pin is connected to.
+   * Gets the state (signal level) of the node the pin is connected to.
    * If the pin is connected to no node, high impedance is assumed.
    *
    * @return state (signal level) of the node
@@ -59,7 +59,7 @@ public class IOPin {
   }
 
   /**
-   * Notify the node of the possibly changed state (signal level).
+   * Notifies the node of the possibly changed state (signal level).
    */
   public final void notifyChangeNode() {
     if (node != null)
@@ -67,7 +67,7 @@ public class IOPin {
   }
 
   /**
-   * State (signal level) of the pin.  For output or tri-state pins,
+   * The state (signal level) of the pin.  For output or tri-state pins,
    * this method is to be overridden by the subclass.
    *
    * @return state (signal level) of the pin
