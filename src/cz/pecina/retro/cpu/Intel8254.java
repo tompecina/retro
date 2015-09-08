@@ -454,23 +454,43 @@ public class Intel8254 extends Device implements IOElement {
 	if (direct) {
 	  switch (mode) {
 	    case 0:
-	      long delta = delay;
-	      if ((counterRegister - delta) < 1) {
-		delta = counterRegister - 1;
-	      }
-	      delay -= delta;
-	      countingElement = counterRegister - ((int)delta);
-	      nullCount = false;
-	      loaded = true;
-	      if (gate) {
-		CPUScheduler.removeAllScheduledEvents(this);
-		CPUScheduler.addScheduledEvent(this, countingElement + 1, 0);
-		log.finest("Counter started, remains: " + (countingElement + 1));
+	      {
+		long delta = delay;
+		if ((counterRegister - delta) < 1) {
+		  delta = counterRegister - 1;
+		}
+		delay -= delta;
+		countingElement = counterRegister - ((int)delta);
+		nullCount = false;
+		loaded = true;
+		if (gate) {
+		  CPUScheduler.removeAllScheduledEvents(this);
+		  CPUScheduler.addScheduledEvent(this, countingElement + 1, 0);
+		  log.finest("Counter started, remains: " + (countingElement + 1));
+		}
 	      }
 	      break;
 
 	    case 1:
 	      loaded = true;
+	      break;
+
+	    case 2:
+	      {
+		long delta = delay;
+		if ((counterRegister - delta - 1) < 1) {
+		  delta = counterRegister - 2;
+		}
+		delay -= delta;
+		countingElement = counterRegister - ((int)delta);
+		nullCount = false;
+		loaded = true;
+		if (gate) {
+		  CPUScheduler.removeAllScheduledEvents(this);
+		  CPUScheduler.addScheduledEvent(this, countingElement, 0);
+		  log.finest("Counter started, remains: " + countingElement);
+		}
+	      }
 	      break;
 	  }
 	} else if ((mode == 2) || (mode == 3)) {
@@ -561,6 +581,27 @@ public class Intel8254 extends Device implements IOElement {
 	        this,
 		Math.max(countingElement + 1, 1),
 		0);
+	    }
+	    break;
+
+	  case 2:
+	    {
+	      if (outPin.level) {
+		out(false);
+		CPUScheduler.addScheduledEvent(this, 1, 0);
+	      } else {
+		long delta = delay;
+		if ((counterRegister - delta) < 1) {
+		  delta = counterRegister - 1;
+		}
+		delay -= delta;
+		countingElement = counterRegister - ((int)delta);
+		out(true);
+		CPUScheduler.addScheduledEvent(
+	          this,
+		  Math.max(countingElement, 1),
+		  0);
+	      }
 	    }
 	    break;
 	}

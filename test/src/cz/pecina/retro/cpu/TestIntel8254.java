@@ -2531,4 +2531,202 @@ public class TestIntel8254 extends TestCase {
     assertEquals("Stage 9 value", 2, s.value);
     assertEquals("Stage 9 out", 0, s.out);
   }
+
+  public void testMode2_1a() {
+    Status s;
+
+    pit.reset();
+    gate1(1);
+
+    outcw(0b01010100);
+
+    s = poll(1);
+    assertEquals("Stage 0 status", 0b11010100, s.status);
+    assertEquals("Stage 0 out", 1, s.out);
+
+    out1(3);
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 1 status", 0b10010100, s.status);
+    assertEquals("Stage 1 value", 3, s.value);
+    assertEquals("Stage 1 out", 1, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 2 status", 0b10010100, s.status);
+    assertEquals("Stage 2 value", 2, s.value);
+    assertEquals("Stage 2 out", 1, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 3 status", 0b00010100, s.status);
+    assertEquals("Stage 3 value", 1, s.value);
+    assertEquals("Stage 3 out", 0, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 4 status", 0b10010100, s.status);
+    assertEquals("Stage 4 value", 3, s.value);
+    assertEquals("Stage 4 out", 1, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 5 status", 0b10010100, s.status);
+    assertEquals("Stage 5 value", 2, s.value);
+    assertEquals("Stage 5 out", 1, s.out);
+
+    clockPulse1();
+    
+    s = poll(1);
+    assertEquals("Stage 6 status", 0b00010100, s.status);
+    assertEquals("Stage 6 value", 1, s.value);
+    assertEquals("Stage 6 out", 0, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 7 status", 0b10010100, s.status);
+    assertEquals("Stage 7 value", 3, s.value);
+    assertEquals("Stage 7 out", 1, s.out);
+  }
+
+  public void testMode2_2a() {
+    Status s;
+
+    pit.reset();
+    gate1(1);
+
+    outcw(0b01010100);
+
+    s = poll(1);
+    assertEquals("Stage 0 status", 0b11010100, s.status);
+    assertEquals("Stage 0 out", 1, s.out);
+
+    out1(3);
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 1 status", 0b10010100, s.status);
+    assertEquals("Stage 1 value", 3, s.value);
+    assertEquals("Stage 1 out", 1, s.out);
+
+    clockPulse1();
+    gate1(0);
+
+    s = poll(1);
+    assertEquals("Stage 2 status", 0b10010100, s.status);
+    assertEquals("Stage 2 value", 2, s.value);
+    assertEquals("Stage 2 out", 1, s.out);
+
+    clockPulse1();
+    gate1(1);
+
+    s = poll(1);
+    assertEquals("Stage 3 status", 0b10010100, s.status);
+    assertEquals("Stage 3 value", 2, s.value);
+    assertEquals("Stage 3 out", 1, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 4 status", 0b10010100, s.status);
+    assertEquals("Stage 4 value", 3, s.value);
+    assertEquals("Stage 4 out", 1, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 5 status", 0b10010100, s.status);
+    assertEquals("Stage 5 value", 2, s.value);
+    assertEquals("Stage 5 out", 1, s.out);
+
+    clockPulse1();
+    
+    s = poll(1);
+    assertEquals("Stage 6 status", 0b00010100, s.status);
+    assertEquals("Stage 6 value", 1, s.value);
+    assertEquals("Stage 6 out", 0, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 7 status", 0b10010100, s.status);
+    assertEquals("Stage 7 value", 3, s.value);
+    assertEquals("Stage 7 out", 1, s.out);
+  }
+
+  public void testMode2_3a() {
+    Status s;
+
+    pit.reset();
+    gate1(1);
+
+    outcw(0b01010100);
+
+    s = poll(1);
+    assertEquals("Stage 0 status", 0b11010100, s.status);
+    assertEquals("Stage 0 out", 1, s.out);
+
+    out1(4);
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 1 status", 0b10010100, s.status);
+    assertEquals("Stage 1 value", 4, s.value);
+    assertEquals("Stage 1 out", 1, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 2 status", 0b10010100, s.status);
+    assertEquals("Stage 2 value", 3, s.value);
+    assertEquals("Stage 2 out", 1, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 3 status", 0b10010100, s.status);
+    assertEquals("Stage 3 value", 2, s.value);
+    assertEquals("Stage 3 out", 1, s.out);
+
+    out1(5);
+
+    s = poll(1);
+    assertEquals("Stage 4 status", 0b11010100, s.status);
+    assertEquals("Stage 4 value", 2, s.value);
+    assertEquals("Stage 4 out", 1, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 5 status", 0b01010100, s.status);
+    assertEquals("Stage 5 value", 1, s.value);
+    assertEquals("Stage 5 out", 0, s.out);
+
+    clockPulse1();
+    
+    s = poll(1);
+    assertEquals("Stage 6 status", 0b10010100, s.status);
+    assertEquals("Stage 6 value", 5, s.value);
+    assertEquals("Stage 6 out", 1, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 7 status", 0b10010100, s.status);
+    assertEquals("Stage 7 value", 4, s.value);
+    assertEquals("Stage 7 out", 1, s.out);
+
+    clockPulse1();
+
+    s = poll(1);
+    assertEquals("Stage 8 status", 0b10010100, s.status);
+    assertEquals("Stage 8 value", 3, s.value);
+    assertEquals("Stage 8 out", 1, s.out);
+  }
 }
