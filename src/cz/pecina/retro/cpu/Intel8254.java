@@ -244,9 +244,9 @@ public class Intel8254 extends Device implements IOElement {
     public int mode;
 
     /**
-     * The Null Count flag used in the Status.  {@code true} if new value in
+     * The Null Count flag used in the Status.  {@code true} if the value in
      * the Counter Register has not been written to the Counting Element
-     * (please see the device datasheet for a more precise description).
+     * (please refer to the device datasheet for a more detailed description).
      */
     protected boolean nullCount;
 
@@ -316,8 +316,9 @@ public class Intel8254 extends Device implements IOElement {
     
     /**
      * Gets the current count of the Counting Element.  For direct connection,
-     * this is merely a guess which may be off up the maximum instruction
-     * duration (including any interrupt procedure) minus one.
+     * this is merely a guess which may be off the actual value up the maximum
+     * instruction duration (including any applicable interrupt procedure)
+     * minus one.
      *
      * @return the current count of the Counting Element
      */
@@ -365,7 +366,7 @@ public class Intel8254 extends Device implements IOElement {
     }
 
     /**
-     * Latches the counter value.
+     * Latches the current counter value.
      */
     public void latchCounter() {
       if (!outputLatched) {
@@ -378,7 +379,7 @@ public class Intel8254 extends Device implements IOElement {
     }
 
     /**
-     * Latches the status.
+     * Latches the current status.
      */
     public void latchStatus() {
       if (!statusLatched) {
@@ -395,14 +396,14 @@ public class Intel8254 extends Device implements IOElement {
     }
 
     /**
-     * Stop counter for direct connection type, ignore for normal connection.
+     * Stops the counter for direct connection type (ignored for normal connection).
      */
     protected void stop() {
       if (direct) {
 	final long remains = CPUScheduler.getRemainingTime(this);
 	if (remains != -1) {
 	  CPUScheduler.removeAllScheduledEvents(this);
-	  countingElement = (int)remains;
+	  countingElement = getCount();
 	}
       }
     }
@@ -449,16 +450,17 @@ public class Intel8254 extends Device implements IOElement {
 	if (direct) {
 	  switch (mode) {
 	    case 0:
-	      countingElement = counterRegister;
-	      gatePin.notifyChange();
-	      if (gatePin.level) {
+	      if (!reset && gate) {
+		long delta = delay;
+		if ((counterRegister - delta) < 1) {
+		  delta = counterRegister - 1;
+		}
+		delay -= delta;
+		countingElement = counterRegister - ((int)delta);
 		CPUScheduler.removeAllScheduledEvents(this);
 		nullCount = false;
-		CPUScheduler.addScheduledEvent(
-		  this,
-		  Math.max(countingElement + 1, 1),
-		  0);
-		log.finest("Counter started, remains: " + (countingElement + 1));
+		CPUScheduler.addScheduledEvent(this, countingElement, 0);
+		log.finest("Counter started, remains: " + countingElement);
 	      }
 	      break;
 	  }
