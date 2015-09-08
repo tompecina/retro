@@ -324,38 +324,43 @@ public class Intel8254 extends Device implements IOElement {
      */
     protected int getCount() {
       if (direct) {
-	if (!reset && loaded) {
-	final long remains = CPUScheduler.getRemainingTime(this);
-	log.finest("Getting counter state, remains: " + remains);
-	if (remains >= 0) {
-	  switch (mode) {
-	    
-	    case 0:
-	    case 1:
-	    case 4:
-	    case 5:
-	      return ((int)remains) % base;
-
-	    case 2:
-	      return (outPin.level ? ((((int)remains) + 1) % base) : 1);
-
-	    case 3:
-	      return ((((int)remains) / 2) + 1) % base;
+	if (reset && loaded) {
+	  final long remains = CPUScheduler.getRemainingTime(this);
+	  if (remains >= 0) {
+	    switch (mode) {
+	      
+	      case 0:
+		if (gate) {
+		  log.finest("Getting counter state, remains: " + remains);
+		  return ((int)remains) % base;
+		} else {
+		  return countingElement % base;
+		}
+		
+	      case 1:
+		log.finest("Getting counter state, remains: " + remains);
+		return ((int)remains) % base;
+		
+	      case 4:
+	      case 5:
+		
+	      case 2:
+		if (gate) {
+		  return (outPin.level ? ((((int)remains) + 1) % base) : 1);
+		} else {
+		  return counterRegister % base;
+		}
+		
+	      case 3:
+		if (gate) {
+		  return ((((int)remains) / 2) + 1) % base;
+		} else {
+		  return counterRegister % base;
+		}
+	    }
+	  } else {
+	    return countingElement % base;
 	  }
-	} else {
-	  switch (mode) {
-	    
-	    case 0:
-	    case 1:
-	    case 4:
-	    case 5:
-	      return 0;
-
-	    case 2:
-	    case 3:
-	      return counterRegister % base;
-	  }
-	}
 	} else {
 	  return 0;
 	}
@@ -401,10 +406,11 @@ public class Intel8254 extends Device implements IOElement {
     protected void stop() {
       if (direct) {
 	final long remains = CPUScheduler.getRemainingTime(this);
-	if (remains != -1) {
+	if (remains >= 0) {
 	  CPUScheduler.removeAllScheduledEvents(this);
-	  countingElement = getCount();
-	}
+	  countingElement = (int)remains;
+	}	  
+	log.finest("Counting suspended, remains: " + remains);
       }
     }
 
@@ -433,9 +439,7 @@ public class Intel8254 extends Device implements IOElement {
       if (writing) {
 	log.finest("First byte written to counter");
 	if (mode == 0) {
-	  outPin.level = false;
-	  outPin.notifyChangeNode();
-	  log.finest("Output level: false");
+	  out(false);
 	  stop();
 	}
       } else {
@@ -450,18 +454,23 @@ public class Intel8254 extends Device implements IOElement {
 	if (direct) {
 	  switch (mode) {
 	    case 0:
-	      if (!reset && gate) {
-		long delta = delay;
-		if ((counterRegister - delta) < 1) {
-		  delta = counterRegister - 1;
-		}
-		delay -= delta;
-		countingElement = counterRegister - ((int)delta);
-		CPUScheduler.removeAllScheduledEvents(this);
-		nullCount = false;
-		CPUScheduler.addScheduledEvent(this, countingElement, 0);
-		log.finest("Counter started, remains: " + countingElement);
+	      long delta = delay;
+	      if ((counterRegister - delta) < 1) {
+		delta = counterRegister - 1;
 	      }
+	      delay -= delta;
+	      countingElement = counterRegister - ((int)delta);
+	      nullCount = false;
+	      loaded = true;
+	      if (gate) {
+		CPUScheduler.removeAllScheduledEvents(this);
+		CPUScheduler.addScheduledEvent(this, countingElement + 1, 0);
+		log.finest("Counter started, remains: " + (countingElement + 1));
+	      }
+	      break;
+
+	    case 1:
+	      loaded = true;
 	      break;
 	  }
 	} else if ((mode == 2) || (mode == 3)) {
@@ -515,32 +524,44 @@ public class Intel8254 extends Device implements IOElement {
 
     // for description see CPUEventOwner
     @Override
-    public void performScheduledEvent(final int parameter, final long delay) {
+    public void performScheduledEvent(final int parameter, final long newDelay) {
       assert direct;
       if (direct) {
+	delay += newDelay;
 	switch (mode) {
 
 	  case 0:
-	    gatePin.notifyChange();
-	    gate = gatePin.level;
-	    if (gate && !writing) {
+	    {
+	      long delta = delay;
+	      if ((base - 1 - delta) < 1) {
+		delta = base - 2;
+	      }
+	      delay -= delta;
+	      countingElement = base - 1 - ((int)delta);
+	      if (gate && !writing) {
+		out(true);
+		CPUScheduler.addScheduledEvent(
+	          this,
+		  Math.max(countingElement + 1, 1),
+		  0);
+	      }
+	    }
+	    break;
+
+	  case 1:
+	    {
+	      long delta = delay;
+	      if ((base - 1 - delta) < 1) {
+		delta = base - 2;
+	      }
+	      delay -= delta;
+	      countingElement = base - 1 - ((int)delta);
 	      out(true);
-	      countingElement = base - ((int)delay);
 	      CPUScheduler.addScheduledEvent(
 	        this,
 		Math.max(countingElement + 1, 1),
 		0);
 	    }
-	    break;
-
-	  case 1:
-	    out(true);
-	    countingElement = base - ((int)delay);
-	    CPUScheduler.addScheduledEvent(
-	      this,
-	      Math.max(countingElement + 1, 1),
-	      0);
-	    log.finest("Output level: true");
 	    break;
 	}
       }
@@ -757,38 +778,39 @@ public class Intel8254 extends Device implements IOElement {
 	    trigger = true;
 	  }
 	  if (direct) {
+	    gate = level;
 	    switch (mode) {
+	      
 	      case 0:
-		gate = level;
-		if (level) {
+		if (level && reset && loaded) {
 		  if (!writing) {
 		    CPUScheduler.removeAllScheduledEvents(Counter.this);
 		    CPUScheduler.addScheduledEvent(
 		      Counter.this,
-		      Math.max(countingElement + 1, 1),
+		      Math.max(countingElement, 1),
 		      0);
 		    log.finest("Counting resumed");
 		  }
 		} else {
-		  final long remains =
-		    CPUScheduler.getRemainingTime(Counter.this);
-		  if (remains < 0) {
-		    if (!writing) {
-		      countingElement = 0;
-		    }
-		  } else {
-		    CPUScheduler.removeAllScheduledEvents(Counter.this);
-		    countingElement = (int)remains;
-		  }	  
-		  log.finest("Counting suspended, remains: " + remains);
+		  stop();
+		}
+		break;
+
+	      case 1:
+		if (level && reset && loaded) {
+		  out(false);
+		  CPUScheduler.removeAllScheduledEvents(Counter.this);
+		  CPUScheduler.addScheduledEvent(
+		    Counter.this,
+		    counterRegister + 1,
+		    0);
+		  nullCount = false;
+		  log.finest("Counting triggered");
 		}
 		break;
 	    }
-	  }
-	  if (!level && ((mode == 2) || (mode == 3))) {
-	    outPin.level = true;
-	    outPin.notifyChangeNode();
-	    log.finest("Output level: true");
+	  } else if (!level && ((mode == 2) || (mode == 3))) {
+	    out(true);
 	  }
 	}
       }      
