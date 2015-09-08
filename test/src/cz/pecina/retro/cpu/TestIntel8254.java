@@ -2623,14 +2623,15 @@ public class TestIntel8254 extends TestCase {
     assertEquals("Stage 2 value", 2, s.value);
     assertEquals("Stage 2 out", 1, s.out);
 
+    gate1(0);
     clockPulse1();
-    gate1(1);
 
     s = poll(1);
     assertEquals("Stage 3 status", 0b10010100, s.status);
     assertEquals("Stage 3 value", 2, s.value);
     assertEquals("Stage 3 out", 1, s.out);
 
+    gate1(1);
     clockPulse1();
 
     s = poll(1);

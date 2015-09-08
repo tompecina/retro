@@ -408,7 +408,17 @@ public class Intel8254 extends Device implements IOElement {
 	final long remains = CPUScheduler.getRemainingTime(this);
 	if (remains >= 0) {
 	  CPUScheduler.removeAllScheduledEvents(this);
-	  countingElement = (int)remains;
+	  switch (mode) {
+	    
+	    case 0:
+	    case 1:
+	      countingElement = (int)remains;
+	      break;
+	    
+	    case 2:
+	      countingElement = (int)remains + 1;
+	      break;
+	  }
 	}	  
 	log.finest("Counting suspended, remains: " + remains);
       }
@@ -477,15 +487,15 @@ public class Intel8254 extends Device implements IOElement {
 
 	    case 2:
 	      {
-		long delta = delay;
-		if ((counterRegister - delta - 1) < 1) {
-		  delta = counterRegister - 2;
-		}
-		delay -= delta;
-		countingElement = counterRegister - ((int)delta);
 		nullCount = false;
 		loaded = true;
 		if (gate) {
+		  long delta = delay;
+		  if ((counterRegister - delta - 1) < 1) {
+		    delta = counterRegister - 2;
+		  }
+		  delay -= delta;
+		  countingElement = counterRegister - ((int)delta);
 		  CPUScheduler.removeAllScheduledEvents(this);
 		  CPUScheduler.addScheduledEvent(this, countingElement, 0);
 		  log.finest("Counter started, remains: " + countingElement);
@@ -591,11 +601,11 @@ public class Intel8254 extends Device implements IOElement {
 		CPUScheduler.addScheduledEvent(this, 1, 0);
 	      } else {
 		long delta = delay;
-		if ((counterRegister - delta) < 1) {
-		  delta = counterRegister - 1;
+		if ((counterRegister - 1 - delta) < 1) {
+		  delta = counterRegister - 2;
 		}
 		delay -= delta;
-		countingElement = counterRegister - ((int)delta);
+		countingElement = counterRegister - 1 - ((int)delta);
 		out(true);
 		CPUScheduler.addScheduledEvent(
 	          this,
@@ -609,7 +619,8 @@ public class Intel8254 extends Device implements IOElement {
     }
 
     /**
-     * Method called on every rising edge of clock (only for normal connection).
+     * Method called on every rising edge of the clock (only for normal
+     * connection).
      */
     protected void risingClock() {
       log.finest("Rising clock edge detected");
@@ -847,6 +858,19 @@ public class Intel8254 extends Device implements IOElement {
 		    0);
 		  nullCount = false;
 		  log.finest("Counting triggered");
+		}
+		break;
+
+	      case 2:
+		if (level && reset && loaded) {
+		  CPUScheduler.removeAllScheduledEvents(Counter.this);
+		  CPUScheduler.addScheduledEvent(
+		   Counter.this,
+		   Math.max(counterRegister, 1),
+		   0);
+		  log.finest("Counting resumed");
+		} else {
+		  stop();
 		}
 		break;
 	    }
