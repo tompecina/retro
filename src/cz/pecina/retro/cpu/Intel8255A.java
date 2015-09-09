@@ -125,7 +125,7 @@ public class Intel8255A extends Device implements IOElement {
     directionA = directionB = directionCL = directionCH = INPUT;
     clearRegisters();
     notifyAllPins();
-    log.finer(String.format("%s: reset", name));
+    log.finer(name + ": reset");
   }
 
   /**

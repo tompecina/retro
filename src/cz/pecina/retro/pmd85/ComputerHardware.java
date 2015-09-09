@@ -102,9 +102,6 @@ public class ComputerHardware {
   // the tape recorder XOR
   private XOR xor;
 
-  // the tape recorder frequency generator (freq = phi2/0x6ab = ca 1199.77Hz)
-  private FrequencyGenerator gen;
-
   // the 1Hz frequency generator
   private FrequencyGenerator rtcGenerator;
 

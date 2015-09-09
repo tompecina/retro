@@ -41,7 +41,7 @@ public class Intel8254 extends Device implements IOElement {
   // for description see Device
   @Override
   public void reset() {
-    log.finer(String.format("%s: reset", name));
+    log.finer(name + ": reset");
     for (int i = 0; i < 3; i++) {
       counters[i].reset();
     }
@@ -96,8 +96,37 @@ public class Intel8254 extends Device implements IOElement {
 		      " set to: " + counters[number].mode);
 	  }
         });
+      add(new Register("COUNTER" + number + "_READING") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].reading ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].reading = (Integer.parseInt(value) == 1);
+	    log.finer("Reading for counter " + number +
+		      " set to: " + counters[number].reading);
+	  }
+        });
 
-      add(new Register("COUNTER" + number + "_CE") {
+      add(new Register("COUNTER" + number + "_WRITING") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].writing ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].writing = (Integer.parseInt(value) == 1);
+	    log.finer("Writing for counter " + number +
+		      " set to: " + counters[number].writing);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_COUNTING_ELEMENT") {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -109,6 +138,291 @@ public class Intel8254 extends Device implements IOElement {
 	    counters[number].countingElement = Integer.parseInt(value);
 	    log.finer("Counting Element for counter " + number +
 		      " set to: " + counters[number].countingElement);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_COUNTER_REGISTER") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].counterRegister);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].counterRegister = Integer.parseInt(value);
+	    log.finer("Counter Register for counter " + number +
+		      " set to: " + counters[number].counterRegister);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_NEW_COUNTER_REGISTER") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].newCounterRegister);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].newCounterRegister = Integer.parseInt(value);
+	    log.finer("New Counter Register for counter " + number +
+		      " set to: " + counters[number].newCounterRegister);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_OUTPUT_LATCH") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].outputLatch);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].outputLatch = Integer.parseInt(value);
+	    log.finer("Output Latch for counter " + number +
+		      " set to: " + counters[number].outputLatch);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_OUTPUT_LATCHED") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].outputLatched ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].outputLatched = (Integer.parseInt(value) == 1);
+	    log.finer("Output Latched for counter " + number +
+		      " set to: " + counters[number].outputLatched);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_STATUS_LATCH") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].statusLatch);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].statusLatch = Integer.parseInt(value);
+	    log.finer("Status Latch for counter " + number +
+		      " set to: " + counters[number].statusLatch);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_STATUS_LATCHED") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].statusLatched ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].statusLatched = (Integer.parseInt(value) == 1);
+	    log.finer("Status Latched for counter " + number +
+		      " set to: " + counters[number].statusLatched);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_GATE") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].gate ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].gate = (Integer.parseInt(value) == 1);
+	    log.finer("Gate for counter " + number +
+		      " set to: " + counters[number].gate);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_TRIGGER") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].trigger ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].trigger = (Integer.parseInt(value) == 1);
+	    log.finer("Trigger for counter " + number +
+		      " set to: " + counters[number].trigger);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_TRIGGERED") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].triggered ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].triggered = (Integer.parseInt(value) == 1);
+	    log.finer("Triggered for counter " + number +
+		      " set to: " + counters[number].triggered);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_PULSE") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].pulse ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].pulse = (Integer.parseInt(value) == 1);
+	    log.finer("Pulse for counter " + number +
+		      " set to: " + counters[number].pulse);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_BCD") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].bcd ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].bcd = (Integer.parseInt(value) == 1);
+	    log.finer("BCD for counter " + number +
+		      " set to: " + counters[number].bcd);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_READ_WRITE") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].rw);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].rw = Integer.parseInt(value);
+	    log.finer("Read/Write for counter " + number +
+		      " set to: " + counters[number].rw);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_NULL_COUNT") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].nullCount ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].nullCount = (Integer.parseInt(value) == 1);
+	    log.finer("Null Count for counter " + number +
+		      " set to: " + counters[number].nullCount);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_LOADED") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].loaded ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].loaded = (Integer.parseInt(value) == 1);
+	    log.finer("Loaded for counter " + number +
+		      " set to: " + counters[number].loaded);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_RESET") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].reset ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].reset = (Integer.parseInt(value) == 1);
+	    log.finer("Reset for counter " + number +
+		      " set to: " + counters[number].reset);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_DELAY") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].delay);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].delay = Long.parseLong(value);
+	    log.finer("Delay for counter " + number +
+		      " set to: " + counters[number].delay);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_CLOCK_PIN_LEVEL") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].clockPin.level ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].clockPin.level = (Integer.parseInt(value) == 1);
+	    log.finer("Clock pin level for counter " + number +
+		      " set to: " + counters[number].clockPin.level);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_GATE_PIN_LEVEL") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].gatePin.level ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].gatePin.level = (Integer.parseInt(value) == 1);
+	    log.finer("Gate pin level for counter " + number +
+		      " set to: " + counters[number].gatePin.level);
+	  }
+        });
+
+      add(new Register("COUNTER" + number + "_OUT_PIN_LEVEL") {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].outPin.level ? 1 : 0);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].outPin.level = (Integer.parseInt(value) == 1);
+	    log.finer("Out pin level for counter " + number +
+		      " set to: " + counters[number].outPin.level);
 	  }
         });
     }
@@ -126,6 +440,9 @@ public class Intel8254 extends Device implements IOElement {
   // for description see Device
   @Override
   public void postUnmarshal() {
+    for (int i = 0; i < 3; i++) {
+      counters[i].base = counters[i].getBase();
+    }
     log.fine("Post-unmarshal on 8254 completed");
   }
 
@@ -292,6 +609,17 @@ public class Intel8254 extends Device implements IOElement {
     public OutPin outPin = new OutPin();
 
     /**
+     * Gets the base value the counter calculated from the BCD flag.
+     * Values: {@code 0x10000} if BCD is {@code false}, {@code 10000}
+     * if BCD is {@code true}.
+     *
+     * @return the base value of the counter
+     */
+    protected int getBase() {
+      return (bcd ? 10000 : 0x10000);
+    }
+
+    /**
      * Gets the LSB (Least Significant Byte).
      *
      * @param  data the input data
@@ -325,7 +653,7 @@ public class Intel8254 extends Device implements IOElement {
       gate = gatePin.level;
       newCounterRegister = 0;
       delay = 0;
-      base = (bcd ? 10000 : 0x10000);
+      base = getBase();
       log.finer("Counter reset");
     }
     
@@ -380,10 +708,20 @@ public class Intel8254 extends Device implements IOElement {
     /**
      * Sets the Counting Element to {@code value}, with correction for {@code delay};
      * the resulting value written to the Counting Element is never less than {@code 1}.
+     * This method is only applicabla for direct connection.
      *
      * @param value the new value for the Counting Element
      */
     protected void setCountingElement(final int value) {
+      assert direct;
+      if (direct) {
+	long delta = delay;
+	if ((value - delta) < 1) {
+	  delta = value - 1;
+	}
+	delay -= delta;
+	countingElement = value - ((int)delta);
+      }
     }
 
     /**
@@ -431,17 +769,10 @@ public class Intel8254 extends Device implements IOElement {
 	nullCount = true;
 
 	if (direct) {
-	  long delta;
 	  switch (mode) {
 
 	    case 0:
 	      setCountingElement(counterRegister);
-	      delta = delay;
-	      if ((counterRegister - delta) < 1) {
-		delta = counterRegister - 1;
-	      }
-	      delay -= delta;
-	      countingElement = counterRegister - ((int)delta);
 	      nullCount = false;
 	      loaded = true;
 	      if (gate) {
@@ -463,12 +794,7 @@ public class Intel8254 extends Device implements IOElement {
 		nullCount = false;
 		loaded = true;
 		if (gate) {
-		  delta = delay;
-		  if ((counterRegister - delta - 1) < 1) {
-		    delta = counterRegister - 2;
-		  }
-		  delay -= delta;
-		  countingElement = counterRegister - ((int)delta);
+		  setCountingElement(counterRegister);
 		  CPUScheduler.removeAllEvents(this);
 		  CPUScheduler.addEventRelative(this, countingElement);
 		  log.finest("Counter started, remains: " + countingElement);
@@ -483,13 +809,7 @@ public class Intel8254 extends Device implements IOElement {
 		nullCount = false;
 		loaded = true;
 		if (gate) {
-		  delta = delay;
-		  final int c = (counterRegister + 1) / 2;
-		  if ((c - delta) < 1) {
-		    delta = c - 1;
-		  }
-		  delay -= delta;
-		  countingElement = c - ((int)delta);
+		  setCountingElement((counterRegister + 1) / 2);
 		  CPUScheduler.removeAllEvents(this);
 		  CPUScheduler.addEventRelative(this, countingElement);
 		  log.finest("Counter started, remains: " + countingElement);
@@ -498,12 +818,7 @@ public class Intel8254 extends Device implements IOElement {
 	      break;
 
 	    case 4:
-	      delta = delay;
-	      if ((counterRegister - delta) < 1) {
-		delta = counterRegister - 1;
-	      }
-	      delay -= delta;
-	      countingElement = counterRegister - ((int)delta);
+	      setCountingElement(counterRegister);
 	      nullCount = false;
 	      loaded = true;
 	      if (gate) {
@@ -533,57 +848,49 @@ public class Intel8254 extends Device implements IOElement {
      * @return the current count of the Counting Element
      */
     protected int getCount() {
-      if (direct) {
-	if (reset) {
-	  final long remains = CPUScheduler.getRemainingTime(this);
-	  log.finest("Getting counter state, remains: " + remains);
-	  if (remains >= 0) {
-	    switch (mode) {
-	      
-	      case 0:
-		if (gate) {
-		  return ((int)remains) % base;
-		} else {
-		  return countingElement % base;
-		}
-		
-	      case 1:
+      if (direct && reset) {
+	final long remains = CPUScheduler.getRemainingTime(this);
+	log.finest("Getting counter state, remains: " + remains);
+	if (remains >= 0) {
+	  switch (mode) {
+	    
+	    case 0:
+	      if (gate) {
 		return ((int)remains) % base;
-		
-	      case 2:
-		if (gate) {
-		  return (outPin.level ? ((((int)remains) + 1) % base) : 1);
-		} else {
-		  return counterRegister % base;
-		}
-		
-	      case 3:
-		if (gate) {
-		  return (((int)remains) * 2) % base;
-		} else {
-		  return counterRegister % base;
-		}
-
-	      case 4:
-		if (gate) {
-		  return (outPin.level ? (((int)remains) % base) : 0);
-		} else {
-		  return countingElement % base;
-		}
-
-	      case 5:
+	      } else {
+		return countingElement % base;
+	      }
+	      
+	    case 1:
+	      return ((int)remains) % base;
+	      
+	    case 2:
+	      if (gate) {
+		return (outPin.level ? ((((int)remains) + 1) % base) : 1);
+	      } else {
+		return counterRegister % base;
+	      }
+	      
+	    case 3:
+	      if (gate) {
+		return (((int)remains) * 2) % base;
+	      } else {
+		return counterRegister % base;
+	      }
+	      
+	    case 4:
+	      if (gate) {
 		return (outPin.level ? (((int)remains) % base) : 0);
-	    }
-	  } else {
-	    return countingElement % base;
+	      } else {
+		return countingElement % base;
+	      }
+	      
+	    case 5:
+	      return (outPin.level ? (((int)remains) % base) : 0);
 	  }
-	} else {
-	  return countingElement % base;
 	}
-      } else {
-	return countingElement % base;
       }
-      return 0;
+      return countingElement % base;
     }
 
     /**
@@ -633,116 +940,59 @@ public class Intel8254 extends Device implements IOElement {
 	switch (mode) {
 
 	  case 0:
-	    {
-	      long delta = delay;
-	      if ((base - 1 - delta) < 1) {
-		delta = base - 2;
-	      }
-	      delay -= delta;
-	      countingElement = base - 1 - ((int)delta);
-	      if (gate && !writing) {
-		out(true);
-		CPUScheduler.addEventRelative(
-	          this,
-		  Math.max(countingElement + 1, 1));
-		nullCount = false;
-	      }
-	    }
-	    break;
-
-	  case 1:
-	    {
-	      long delta = delay;
-	      if ((base - 1 - delta) < 1) {
-		delta = base - 2;
-	      }
-	      delay -= delta;
-	      countingElement = base - 1 - ((int)delta);
+	    setCountingElement(base - 1);
+	    if (gate && !writing) {
 	      out(true);
-	      CPUScheduler.addEventRelative(
-	        this,
-		Math.max(countingElement + 1, 1));
-	    }
-	    break;
-
-	  case 2:
-	    {
-	      if (outPin.level) {
-		out(false);
-		CPUScheduler.addEventRelative(this, 1);
-	      } else {
-		out(true);
-		long delta = delay;
-		if ((counterRegister - 1 - delta) < 1) {
-		  delta = counterRegister - 2;
-		}
-		delay -= delta;
-		countingElement = counterRegister - 1 - ((int)delta);
-		CPUScheduler.addEventRelative(
-	          this,
-		  Math.max(countingElement, 1));
-		nullCount = false;
-	      }
-	    }
-	    break;
-
-	  case 3:
-	    {
-	      int c;
-	      if (outPin.level) {
-		out(false);
-		c = (counterRegister - 1) / 2;
-	      } else {
-		out(true);
-		c = (counterRegister + 1) / 2;
-	      }
-	      long delta = delay;
-	      if ((c - delta) < 1) {
-		delta = c - 1;
-	      }
-	      delay -= delta;
-	      countingElement = c - ((int)delta);
-	      CPUScheduler.addEventRelative(
-	        this,
-		Math.max(countingElement, 1));
+	      CPUScheduler.addEventRelative(this, countingElement + 1);
 	      nullCount = false;
 	    }
 	    break;
 
-	  case 4:
-	    {
-	      if (outPin.level && loaded) {
-		out(false);
-		CPUScheduler.addEventRelative(this, 1);
-	      } else {
-		out(true);
-		loaded = false;
-		long delta = delay;
-		if ((base - 1 - delta) < 1) {
-		  delta = base - 2;
-		}
-		delay -= delta;
-		countingElement = base - 1 - ((int)delta);
-		CPUScheduler.addEventRelative(this, countingElement);
-	      }
+	  case 1:
+	    setCountingElement(base - 1);
+	    out(true);
+	    CPUScheduler.addEventRelative(this, countingElement + 1);
+	    break;
+
+	  case 2:
+	    if (outPin.level) {
+	      out(false);
+	      CPUScheduler.addEventRelative(this, 1);
+	    } else {
+	      out(true);
+	      setCountingElement(counterRegister - 1);
+	      CPUScheduler.addEventRelative(this, countingElement);
+	      nullCount = false;
 	    }
 	    break;
 
+	  case 3:
+	    out(!outPin.level);
+	    setCountingElement((counterRegister + (outPin.level ? 1 : -1)) / 2);
+	    CPUScheduler.addEventRelative(this, countingElement);
+	    nullCount = false;
+	    break;
+
+	  case 4:
+	    if (outPin.level && loaded) {
+	      out(false);
+	      CPUScheduler.addEventRelative(this, 1);
+	    } else {
+	      out(true);
+	      loaded = false;
+	      setCountingElement(base - 1);
+	      CPUScheduler.addEventRelative(this, countingElement);
+	    }
+	    break;
+	    
 	  case 5:
-	    {
-	      if (outPin.level && loaded) {
-		out(false);
-		CPUScheduler.addEventRelative(this, 1);
-	      } else {
-		out(true);
-		long delta = delay;
-		if ((base - 1 - delta) < 1) {
-		  delta = base - 2;
-		}
-		delay -= delta;
-		countingElement = base - 1 - ((int)delta);
-		CPUScheduler.addEventRelative(this, countingElement);
-	      }
+	    if (outPin.level && loaded) {
+	      out(false);
+	      CPUScheduler.addEventRelative(this, 1);
+	    } else {
+	      out(true);
+	      setCountingElement(base - 1);
+	      CPUScheduler.addEventRelative(this, countingElement);
 	    }
 	    break;
 	}
@@ -945,9 +1195,7 @@ public class Intel8254 extends Device implements IOElement {
 		if (gate && reset && loaded) {
 		  if (!writing) {
 		    CPUScheduler.removeAllEvents(Counter.this);
-		    CPUScheduler.addEventRelative(
-		      Counter.this,
-		      Math.max(countingElement, 1));
+		    CPUScheduler.addEventRelative(Counter.this, countingElement);
 		    log.finest("Counting resumed");
 		  }
 		} else {
@@ -968,9 +1216,7 @@ public class Intel8254 extends Device implements IOElement {
 	      case 2:
 		if (gate && reset && loaded) {
 		  CPUScheduler.removeAllEvents(Counter.this);
-		  CPUScheduler.addEventRelative(
-		   Counter.this,
-		   Math.max(counterRegister, 1));
+		  CPUScheduler.addEventRelative(Counter.this, counterRegister);
 		  log.finest("Counting resumed");
 		} else {
 		  stop();
@@ -981,9 +1227,7 @@ public class Intel8254 extends Device implements IOElement {
 		if (gate && reset && loaded) {
 		  if (!writing) {
 		    CPUScheduler.removeAllEvents(Counter.this);
-		    CPUScheduler.addEventRelative(
-		      Counter.this,
-		      Math.max(countingElement, 1));
+		    CPUScheduler.addEventRelative(Counter.this, countingElement);
 		    log.finest("Counting resumed");
 		  }
 		} else {
