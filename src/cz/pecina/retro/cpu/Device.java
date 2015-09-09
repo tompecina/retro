@@ -128,6 +128,7 @@ public abstract class Device extends ArrayList<Descriptor> {
     final Element device = new Element("device");
     device.setAttribute("name", name);
     for (Descriptor descriptor: this) {
+      log.finest("Marshalling '" + descriptor.getName() + "'");
       device.addContent(descriptor.marshal());
     }
     postMarshal();
@@ -165,6 +166,7 @@ public abstract class Device extends ArrayList<Descriptor> {
 	  for (Descriptor descriptor: this) {
 	    if (descriptor.getName().equals(descriptorTag
 					    .getAttributeValue("name"))) {
+	      log.finest("Unmarshalling '" + descriptor.getName() + "'");
 	      descriptor.unmarshal(descriptorTag);
 	      break;
 	    }
