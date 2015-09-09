@@ -208,8 +208,19 @@ public class Intel8254 extends Device implements IOElement {
      */
     protected boolean gate;
 
-    // gate pin trigger detection flags
-    protected boolean trigger, triggered;
+    /**
+     * Trigger event detection flag, relevant only for normal connection.
+     * It is set on every rising edge of the gate pin and reset on every
+     * rising edge of the clock.
+     */
+    protected boolean trigger;
+
+    /**
+     * Trigger event detection flag, relevant only for normal connection.
+     * It is set when the trigger (the rising edge of the gate pin) is detected
+     * and reset when it is processed.
+     */
+    protected boolean triggered;
 
     /**
      * The clock pulse detection flag.  {@code true} after a rising and before
@@ -250,7 +261,9 @@ public class Intel8254 extends Device implements IOElement {
      */
     protected boolean nullCount;
 
-    // if true counter will be loaded on the next clock pulse
+    /**
+     * A combined flag with somewhat different meanings in different Modes.
+     */
     protected boolean loaded;
 
     /**
@@ -432,6 +445,7 @@ public class Intel8254 extends Device implements IOElement {
 	      break;
 
 	    case 1:
+	    case 5:
 	      loaded = true;
 	      break;
 
@@ -533,7 +547,6 @@ public class Intel8254 extends Device implements IOElement {
 		}
 		
 	      case 1:
-	      case 5:
 		return ((int)remains) % base;
 		
 	      case 2:
@@ -556,6 +569,9 @@ public class Intel8254 extends Device implements IOElement {
 		} else {
 		  return countingElement % base;
 		}
+
+	      case 5:
+		return (outPin.level ? (((int)remains) % base) : 0);
 	    }
 	  } else {
 	    return countingElement % base;
@@ -711,7 +727,24 @@ public class Intel8254 extends Device implements IOElement {
 		delay -= delta;
 		countingElement = base - 1 - ((int)delta);
 		CPUScheduler.addScheduledEvent(this, countingElement, 0);
-		nullCount = false;
+	      }
+	    }
+	    break;
+
+	  case 5:
+	    {
+	      if (outPin.level && loaded) {
+		out(false);
+		CPUScheduler.addScheduledEvent(this, 1, 0);
+	      } else {
+		out(true);
+		long delta = delay;
+		if ((base - 1 - delta) < 1) {
+		  delta = base - 2;
+		}
+		delay -= delta;
+		countingElement = base - 1 - ((int)delta);
+		CPUScheduler.addScheduledEvent(this, countingElement, 0);
 	      }
 	    }
 	    break;
@@ -720,25 +753,7 @@ public class Intel8254 extends Device implements IOElement {
     }
 
     /**
-     * Method called on every rising edge of the clock (only for normal
-     * connection).
-     */
-    protected void risingClock() {
-      log.finest("Rising clock edge detected");
-      assert !direct;
-      if (!direct) {
-	gatePin.notifyChange();
-	gate = gatePin.level;
-	log.finest("Gate level: " + gate);
-	if (trigger) {
-	  triggered = true;
-	  trigger = false;
-	}
-      }
-    }
-
-    /**
-     * Sets the level on the output pin.
+     * Sets the level of the output pin.
      *
      * @param level the new level
      */
@@ -810,7 +825,13 @@ public class Intel8254 extends Device implements IOElement {
 	    log.finest("New level on clock pin: " + newLevel);
 	    level = newLevel;
 	    if (level) {
-	      risingClock();
+	      gatePin.notifyChange();
+	      gate = gatePin.level;
+	      log.finest("Gate level: " + gate);
+	      if (trigger) {
+		triggered = true;
+		trigger = false;
+	      }
 	      pulse = true;
 	    } else {
 	      if (pulse) {
@@ -924,7 +945,7 @@ public class Intel8254 extends Device implements IOElement {
 	    switch (mode) {
 	      
 	      case 0:
-		if (level && reset && loaded) {
+		if (gate && reset && loaded) {
 		  if (!writing) {
 		    CPUScheduler.removeAllScheduledEvents(Counter.this);
 		    CPUScheduler.addScheduledEvent(
@@ -939,7 +960,7 @@ public class Intel8254 extends Device implements IOElement {
 		break;
 
 	      case 1:
-		if (level && reset && loaded) {
+		if (gate && reset && loaded) {
 		  out(false);
 		  CPUScheduler.removeAllScheduledEvents(Counter.this);
 		  CPUScheduler.addScheduledEvent(
@@ -952,7 +973,7 @@ public class Intel8254 extends Device implements IOElement {
 		break;
 
 	      case 2:
-		if (level && reset && loaded) {
+		if (gate && reset && loaded) {
 		  CPUScheduler.removeAllScheduledEvents(Counter.this);
 		  CPUScheduler.addScheduledEvent(
 		   Counter.this,
@@ -961,6 +982,34 @@ public class Intel8254 extends Device implements IOElement {
 		  log.finest("Counting resumed");
 		} else {
 		  stop();
+		}
+		break;
+	      
+	      case 4:
+		if (gate && reset && loaded) {
+		  if (!writing) {
+		    CPUScheduler.removeAllScheduledEvents(Counter.this);
+		    CPUScheduler.addScheduledEvent(
+		      Counter.this,
+		      Math.max(countingElement, 1),
+		      0);
+		    log.finest("Counting resumed");
+		  }
+		} else {
+		  stop();
+		}
+		break;
+
+	      case 5:
+		if (gate && reset && loaded) {
+		  out(true);
+		  CPUScheduler.removeAllScheduledEvents(Counter.this);
+		  CPUScheduler.addScheduledEvent(
+		    Counter.this,
+		    counterRegister + 1,
+		    0);
+		  nullCount = false;
+		  log.finest("Counting triggered");
 		}
 		break;
 	    }
