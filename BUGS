@@ -13,8 +13,6 @@ KNOWN BUGS AND ESSENTIAL NEW FEATURES
 
 * Sound must be reviewed and probably redone.
 
-* Replace 1200Hz generator with 8253.
-
 * About for PMD 85 missing.
 
 * Implement command-line option for model selection.

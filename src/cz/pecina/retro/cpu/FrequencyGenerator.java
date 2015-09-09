@@ -75,12 +75,12 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
    */
   @Override
   public void reset() {
-    CPUScheduler.removeAllScheduledEvents(this);
+    CPUScheduler.removeAllEvents(this);
     counter = 0;
     output = 0;
     outPin.notifyChangeNode();
     nextEvent = Parameters.systemClockSource.getSystemClock() + offPeriod;
-    CPUScheduler.addScheduledEvent(this, nextEvent, 0);
+    CPUScheduler.addEvent(this, nextEvent);
     log.finer("Frequency generator reset");
   }
 
@@ -159,22 +159,21 @@ public class FrequencyGenerator extends Device implements CPUEventOwner {
   // for description see Device
   @Override
   public void postUnmarshal() {
-    CPUScheduler.removeAllScheduledEvents(this);
-    CPUScheduler.addScheduledEvent(
+    CPUScheduler.removeAllEvents(this);
+    CPUScheduler.addEvent(
       this,
-      Parameters.systemClockSource.getSystemClock() + counter,
-      0);
+      Parameters.systemClockSource.getSystemClock() + counter);
     outPin.notifyChangeNode();
     log.fine("Post-unmarshal on frequency counter completed");
   }
 
   // for description see CPUEventOwner
   @Override
-  public void performScheduledEvent(final int parameter, final long delay) {
+  public void performEvent(final int parameter, final long delay) {
     output = 1 - output;
     outPin.notifyChangeNode();
     nextEvent += ((output == 0) ? offPeriod : onPeriod);
-    CPUScheduler.addScheduledEvent(this, nextEvent, 0);
+    CPUScheduler.addEvent(this, nextEvent);
     if (log.isLoggable(Level.FINEST)) {
       log.finest(
         "Event performed at " + Parameters.systemClockSource.getSystemClock() +

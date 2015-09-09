@@ -278,10 +278,6 @@ public class ComputerHardware {
     rtcGenerator = new FrequencyGenerator("RTC_GENERATOR", 1024000, 1024000);
     hardware.add(rtcGenerator);
 
-    // set up the frequency generator
-    gen = new FrequencyGenerator("TREC_GENERATOR", 854, 853);
-    hardware.add(gen);
-
     // set up the Manchester decoder
     decoder = new ManchesterDecoder("MANCHESTER_DECODER");
     hardware.add(decoder);
@@ -294,7 +290,7 @@ public class ComputerHardware {
       .add(usart.getTxdPin())
       .add(xor.getInPin(0));
     new IONode()
-      .add(gen.getOutPin())
+      .add(pit.getOutPin(1))
       .add(usart.getTxcPin())
       .add(xor.getInPin(1));
     new IONode()
@@ -344,29 +340,6 @@ public class ComputerHardware {
     // set up the speaker
     speaker = new Speaker("SPEAKER");
 
-    // DEBUG
-    final cz.pecina.retro.cpu.Intel8254 testpit =
-      new cz.pecina.retro.cpu.Intel8254("TEST_8254", new boolean[] {false, false, false});
-    hardware.add(testpit);
-    for (int port: Util.portIterator(0x0c, 0xfc)) {
-      cpu.addIOInput(port, testpit);
-      cpu.addIOOutput(port, testpit);
-    }
-    final cz.pecina.retro.cpu.OutputLatch testclock =
-      new cz.pecina.retro.cpu.OutputLatch("TEST_CLOCK");
-    hardware.add(testclock);
-    cpu.addIOOutput(0x2c, testclock);
-    final cz.pecina.retro.cpu.OutputLatch testgate =
-      new cz.pecina.retro.cpu.OutputLatch("TEST_GATE");
-    hardware.add(testgate);
-    cpu.addIOOutput(0x2d, testgate);
-    new IONode()
-      .add(testpit.getClockPin(0))
-      .add(testclock.getOutPin(0));
-    new IONode()
-      .add(testpit.getGatePin(0))
-      .add(testgate.getOutPin(0));
-    
     // connect speaker and LEDs
     new IONode()
       .add(gen4k.getOutPin())
@@ -398,8 +371,7 @@ public class ComputerHardware {
       .add(yellowLEDMeter.getInPin())
       .add(speaker.getInPin());
     new IONode()
-      // .add(systemPIO.getPin(16 + 3))  // DEBUG
-      .add(testpit.getOutPin(0))  // DEBUG
+      .add(systemPIO.getPin(16 + 3))
       .add(redLEDMeter.getInPin());
       
     // load any startup images and snapshots

@@ -142,7 +142,7 @@ public class PCKeyboardHardware implements IOElement, CPUEventOwner {
     for (PCKeyboardKey key: layout.getKeys()) {
       GUI.removeResizeable(key);
     }
-    CPUScheduler.removeAllScheduledEvents(this);
+    CPUScheduler.removeAllEvents(this);
   }
 
   /**
@@ -198,7 +198,7 @@ public class PCKeyboardHardware implements IOElement, CPUEventOwner {
     if ((data & BITMASK_RESET) != 0) {
       resetFlag = true;
       interruptMask = interruptFlag = false;
-      CPUScheduler.removeAllScheduledEvents(this);
+      CPUScheduler.removeAllEvents(this);
       queue.clear();
       timeout = Parameters.systemClockSource.getSystemClock();
       log.fine("PC keyboard reset");
@@ -273,29 +273,27 @@ public class PCKeyboardHardware implements IOElement, CPUEventOwner {
     if (!resetFlag) {
       long startTime = Math.max(Parameters.systemClockSource.getSystemClock(),
 				timeout) + timingTimeout;
-      CPUScheduler.addScheduledEvent(this, startTime, 0);
-      CPUScheduler.addScheduledEvent(this,
-				  startTime + timingPreStart,
-				  BITMASK_DATA);
+      CPUScheduler.addEvent(this, startTime);
+      CPUScheduler.addEvent(this, startTime + timingPreStart, BITMASK_DATA);
       startTime += timingStart;
       if (released) {
 	scanCode |= 0x80;
       }
       scanCode = (scanCode << 1) | 0x01;
       for (int i = 0; i < 9; i++) {
-	CPUScheduler.addScheduledEvent(this,
-				    startTime,
-				    (scanCode & BITMASK_DATA) | BITMASK_CLOCK);
-	CPUScheduler.addScheduledEvent(this,
-				    startTime + timingClockHigh,
-				    scanCode & BITMASK_DATA);
+	CPUScheduler.addEvent(this,
+			      startTime,
+			      (scanCode & BITMASK_DATA) | BITMASK_CLOCK);
+	CPUScheduler.addEvent(this,
+			      startTime + timingClockHigh,
+			      scanCode & BITMASK_DATA);
 	scanCode >>= 1;
-	CPUScheduler.addScheduledEvent(this,
-				    startTime + timingDataChange,
-				    scanCode & BITMASK_DATA);
+	CPUScheduler.addEvent(this,
+			      startTime + timingDataChange,
+			      scanCode & BITMASK_DATA);
 	startTime += timingClockSlot;
       }
-      CPUScheduler.addScheduledEvent(this, startTime, BITMASK_CLOCK);
+      CPUScheduler.addEvent(this, startTime, BITMASK_CLOCK);
       timeout = startTime + timingTimeout;
       log.finer("Scan code scheduled for transmission");
     } else {
@@ -305,7 +303,7 @@ public class PCKeyboardHardware implements IOElement, CPUEventOwner {
 
   // for description see CPUEventOwner
   @Override
-  public void performScheduledEvent(final int parameter, final long delay) {
+  public void performEvent(final int parameter, final long delay) {
     portData = parameter;
     log.finer(String.format("Output data set to %02x", parameter));
     if (((parameter & BITMASK_CLOCK) == 0) && interruptMask) {

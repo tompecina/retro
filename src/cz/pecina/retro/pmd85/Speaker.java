@@ -101,9 +101,9 @@ public class Speaker implements CPUEventOwner {
 	Parameters.sound.write(Sound.SPEAKER_CHANNEL, newLevel);
 	level = newLevel;
 	if (level) {
-	  CPUScheduler.addScheduledEvent(Speaker.this, LIMIT, 0);
+	  CPUScheduler.addEventRelative(Speaker.this, LIMIT);
 	} else {
-	  CPUScheduler.removeAllScheduledEvents(Speaker.this);
+	  CPUScheduler.removeAllEvents(Speaker.this);
 	}
       }
     }
@@ -111,7 +111,7 @@ public class Speaker implements CPUEventOwner {
 
   // for description see CPUEventOwner
   @Override
-  public void performScheduledEvent(final int parameter, final long delay) {
+  public void performEvent(final int parameter, final long delay) {
     Parameters.sound.write(Sound.SPEAKER_CHANNEL, false);
     log.finer("Too long true, sound interface reset");
   }

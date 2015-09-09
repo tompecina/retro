@@ -189,7 +189,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
    */
   public void resetTape() {
     offset -= position;
-    CPUScheduler.removeAllScheduledEvents(this);
+    CPUScheduler.removeAllEvents(this);
     position = 0;
   }
 
@@ -309,14 +309,13 @@ public class TapeRecorderHardware implements CPUEventOwner {
     update();
     final Map.Entry<Long,Long> entry = tape.ceilingEntry(position + 1);
     if (entry != null) {
-      CPUScheduler.addScheduledEvent(
+      CPUScheduler.addEvent(
         this,
 	time + entry.getKey() - position,
 	1);
-      CPUScheduler.addScheduledEvent(
+      CPUScheduler.addEvent(
         this,
-	time + entry.getKey() + entry.getValue() - position,
-	0);
+	time + entry.getKey() + entry.getValue() - position);
     }
     inPulseCount++;
     log.finest("Pulse scheduled");
@@ -324,7 +323,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
 
   // for description see CPUEventOwner
   @Override
-  public void performScheduledEvent(final int parameter, final long delay) {
+  public void performEvent(final int parameter, final long delay) {
     output = parameter;
     outPin.notifyChangeNode();
     Parameters.sound.write(Sound.TAPE_RECORDER_CHANNEL, parameter == 1);
@@ -369,7 +368,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
       recordingLED.setState(false);
       Parameters.sound.write(Sound.TAPE_RECORDER_CHANNEL, false);
       tapeRecorderState = TapeRecorderState.STOPPED;
-      CPUScheduler.removeAllScheduledEvents(this);
+      CPUScheduler.removeAllEvents(this);
       log.finer("Tape recorder stopped");
     }
   }

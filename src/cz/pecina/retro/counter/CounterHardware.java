@@ -206,7 +206,7 @@ public class CounterHardware implements IOElement, CPUEventOwner {
       new ChangeListener() {
 	@Override
 	public void stateChanged(final ChangeEvent event) {
-	  CPUScheduler.removeAllScheduledEvents(CounterHardware.this);
+	  CPUScheduler.removeAllEvents(CounterHardware.this);
 	  holdTimer.stop();
 	  state = State.IDLE;
 	  buffer = counter = 0;
@@ -341,7 +341,7 @@ public class CounterHardware implements IOElement, CPUEventOwner {
    */
   public void deactivate() {
     disconnect();
-    CPUScheduler.removeAllScheduledEvents(this);
+    CPUScheduler.removeAllEvents(this);
     updateTimer.stop();
     holdTimer.stop();
     for (HexESD element: display) {
@@ -372,33 +372,28 @@ public class CounterHardware implements IOElement, CPUEventOwner {
   // start measurement
   private synchronized void startMeasurement() {
     gateLED.setState(true);
-    CPUScheduler.removeAllScheduledEvents(this);
+    CPUScheduler.removeAllEvents(this);
     counter = 0;
     state = State.MEASURE;
     switch (gateTimeKnob.getState()) {
       case TIME_0_01:
-	CPUScheduler.addScheduledEvent(
-	  this,
-	  (int)Math.round(DURATION_TIME_0_01 * Parameters.CPUFrequency),
-	  0);
+	CPUScheduler.addEventRelative(this,
+	  (int)Math.round(DURATION_TIME_0_01 * Parameters.CPUFrequency));
 	break;
       case TIME_0_1:
-	CPUScheduler.addScheduledEvent(
+	CPUScheduler.addEventRelative(
 	  this,
-	  (int)Math.round(DURATION_TIME_0_1 * Parameters.CPUFrequency),
-	  0);
+	  (int)Math.round(DURATION_TIME_0_1 * Parameters.CPUFrequency));
 	break;
       case TIME_1:
-	CPUScheduler.addScheduledEvent(
+	CPUScheduler.addEventRelative(
 	  this,
-	  (int)Math.round(DURATION_TIME_1 * Parameters.CPUFrequency),
-	  0);
+	  (int)Math.round(DURATION_TIME_1 * Parameters.CPUFrequency));
 	break;
       case TIME_10:
-	CPUScheduler.addScheduledEvent(
+	CPUScheduler.addEventRelative(
 	  this,
-	  (int)Math.round(DURATION_TIME_10 * Parameters.CPUFrequency),
-	  0);
+	  (int)Math.round(DURATION_TIME_10 * Parameters.CPUFrequency));
 	break;
     }
     log.finest("Measurement started");
@@ -406,7 +401,7 @@ public class CounterHardware implements IOElement, CPUEventOwner {
 
   // for description see CPUScheduler
   @Override
-  public void performScheduledEvent(final int parameter, final long delay) {
+  public void performEvent(final int parameter, final long delay) {
     // state = State.IDLE;
     gateLED.setState(GATE_LED_DELAY);
     buffer = counter;

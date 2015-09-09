@@ -105,7 +105,7 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
    */
   @Override
   public void reset() {
-    CPUScheduler.removeAllScheduledEvents(this);
+    CPUScheduler.removeAllEvents(this);
     counter = 0;
     trigger = 0;
     clock = 0;
@@ -190,8 +190,8 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
   // for description see Device
   @Override
   public void postUnmarshal() {
-    CPUScheduler.removeAllScheduledEvents(this);
-    CPUScheduler.addScheduledEvent(
+    CPUScheduler.removeAllEvents(this);
+    CPUScheduler.addEvent(
       this,
       Parameters.systemClockSource.getSystemClock() + counter,
       0);
@@ -203,7 +203,7 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
 
   // for description see CPUEventOwner
   @Override
-  public void performScheduledEvent(final int parameter, final long delay) {
+  public void performEvent(final int parameter, final long delay) {
     clock = 0;
     clockPin.notifyChangeNode();
     data = input;
@@ -214,7 +214,7 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
     if (trigger == ZERO_LIMIT) {
       log.finer("Too many 0's, inverting");
       trigger = 0;
-      CPUScheduler.addScheduledEvent(
+      CPUScheduler.addEvent(
         this,
 	Parameters.systemClockSource.getSystemClock() +	SAMPLING_DELAY_RESET,
 	0);
@@ -235,7 +235,7 @@ public class ManchesterDecoder extends Device implements CPUEventOwner {
 	  log.finest("Pulse ended, edge processed");
 	  clock = 1;
 	  clockPin.notifyChangeNode();
-	  CPUScheduler.addScheduledEvent(
+	  CPUScheduler.addEvent(
 	    ManchesterDecoder.this,
 	    Parameters.systemClockSource.getSystemClock() + SAMPLING_DELAY,
 	    0);

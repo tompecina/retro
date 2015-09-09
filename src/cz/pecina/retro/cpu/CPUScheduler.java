@@ -74,9 +74,9 @@ public final class CPUScheduler {
    *                  clock units, added to the current time
    * @param parameter numeric parameter the event will provide to the owner
    */
-  public static void addScheduledEvent(final CPUEventOwner owner,
-				       final int time,
-				       final int parameter) {
+  public static void addEventRelative(final CPUEventOwner owner,
+				      final int time,
+				      final int parameter) {
     assert owner != null;
     assert time >= 0;
     schedule.add(new CPUScheduledEvent(
@@ -88,6 +88,20 @@ public final class CPUScheduler {
   }
 
   /**
+   * Schedules a new event, with the callback parameter set to the default
+   * value (zero).
+   *
+   * @param owner     the owner of the event, i.e., the object that
+   *                  will receive event notifications
+   * @param time      relative time when the event will be fired, in system
+   *                  clock units, added to the current time
+   */
+  public static void addEventRelative(final CPUEventOwner owner,
+				      final int time) {
+    addEventRelative(owner, time, 0);
+  }
+
+  /**
    * Schedules a new event.
    *
    * @param owner     the owner of the event, i.e., the object that
@@ -96,9 +110,9 @@ public final class CPUScheduler {
    *                  clock units
    * @param parameter numeric parameter the event will provide to the owner
    */
-  public static void addScheduledEvent(final CPUEventOwner owner,
-				       final long time,
-				       final int parameter) {
+  public static void addEvent(final CPUEventOwner owner,
+			      final long time,
+			      final int parameter) {
     assert owner != null;
     assert time > 0;
     schedule.add(new CPUScheduledEvent(owner, time, parameter));
@@ -109,12 +123,25 @@ public final class CPUScheduler {
   }
 
   /**
+   * Schedules a new event, with the callback parameter set to the default
+   * value (zero).
+   *
+   * @param owner     the owner of the event, i.e., the object that
+   *                  will receive event notifications
+   * @param time      time when the event will be fired, in system 
+   *                  clock units
+   */
+  public static void addEvent(final CPUEventOwner owner, final long time) {
+    addEvent(owner, time, 0);
+  }
+
+  /**
    * Removes all events scheduled by a particular owner.
    *
    * @param owner the owner whose events will be removed from
    *              the schedule
    */
-  public static void removeAllScheduledEvents(final CPUEventOwner owner) {
+  public static void removeAllEvents(final CPUEventOwner owner) {
     if (log.isLoggable(Level.FINER)) {
       log.finer("Removing all scheduled events for owner: " +
 		owner.getString());
@@ -173,8 +200,7 @@ public final class CPUScheduler {
 	break;
       }
       schedule.remove(event);
-      event.getOwner().performScheduledEvent(event.getParameter(),
-					     time - scheduledTime);
+      event.getOwner().performEvent(event.getParameter(), time - scheduledTime);
     }
   }
 

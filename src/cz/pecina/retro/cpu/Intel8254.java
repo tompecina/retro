@@ -315,7 +315,7 @@ public class Intel8254 extends Device implements IOElement {
      * Resets the counter.
      */
     public void reset() {
-      CPUScheduler.removeAllScheduledEvents(this);
+      CPUScheduler.removeAllEvents(this);
       clockPin.reset();
       gatePin.reset();
       outPin.reset();
@@ -366,7 +366,7 @@ public class Intel8254 extends Device implements IOElement {
       if (direct) {
 	final long remains = CPUScheduler.getRemainingTime(this);
 	if (remains >= 0) {
-	  CPUScheduler.removeAllScheduledEvents(this);
+	  CPUScheduler.removeAllEvents(this);
 	  switch (mode) {
 	    
 	    case 0:
@@ -437,8 +437,8 @@ public class Intel8254 extends Device implements IOElement {
 		nullCount = false;
 		loaded = true;
 		if (gate) {
-		  CPUScheduler.removeAllScheduledEvents(this);
-		  CPUScheduler.addScheduledEvent(this, countingElement + 1, 0);
+		  CPUScheduler.removeAllEvents(this);
+		  CPUScheduler.addEventRelative(this, countingElement + 1);
 		  log.finest("Counter started, remains: " + (countingElement + 1));
 		}
 	      }
@@ -463,8 +463,8 @@ public class Intel8254 extends Device implements IOElement {
 		    }
 		    delay -= delta;
 		    countingElement = counterRegister - ((int)delta);
-		    CPUScheduler.removeAllScheduledEvents(this);
-		    CPUScheduler.addScheduledEvent(this, countingElement, 0);
+		    CPUScheduler.removeAllEvents(this);
+		    CPUScheduler.addEventRelative(this, countingElement);
 		    log.finest("Counter started, remains: " + countingElement);
 		  }
 		}
@@ -486,8 +486,8 @@ public class Intel8254 extends Device implements IOElement {
 		    }
 		    delay -= delta;
 		    countingElement = c - ((int)delta);
-		    CPUScheduler.removeAllScheduledEvents(this);
-		    CPUScheduler.addScheduledEvent(this, countingElement, 0);
+		    CPUScheduler.removeAllEvents(this);
+		    CPUScheduler.addEventRelative(this, countingElement);
 		    log.finest("Counter started, remains: " + countingElement);
 		  }
 		}
@@ -505,8 +505,8 @@ public class Intel8254 extends Device implements IOElement {
 		nullCount = false;
 		loaded = true;
 		if (gate) {
-		  CPUScheduler.removeAllScheduledEvents(this);
-		  CPUScheduler.addScheduledEvent(this, countingElement + 1, 0);
+		  CPUScheduler.removeAllEvents(this);
+		  CPUScheduler.addEventRelative(this, countingElement + 1);
 		  log.finest("Counter started, remains: " + (countingElement + 1));
 		}
 	      }
@@ -625,7 +625,7 @@ public class Intel8254 extends Device implements IOElement {
 
     // for description see CPUEventOwner
     @Override
-    public void performScheduledEvent(final int parameter, final long newDelay) {
+    public void performEvent(final int parameter, final long newDelay) {
       assert direct;
       if (direct) {
 	delay += newDelay;
@@ -641,11 +641,10 @@ public class Intel8254 extends Device implements IOElement {
 	      countingElement = base - 1 - ((int)delta);
 	      if (gate && !writing) {
 		out(true);
-		CPUScheduler.addScheduledEvent(
+		CPUScheduler.addEventRelative(
 	          this,
-		  Math.max(countingElement + 1, 1),
-		  0);
-	      nullCount = false;
+		  Math.max(countingElement + 1, 1));
+		nullCount = false;
 	      }
 	    }
 	    break;
@@ -659,10 +658,9 @@ public class Intel8254 extends Device implements IOElement {
 	      delay -= delta;
 	      countingElement = base - 1 - ((int)delta);
 	      out(true);
-	      CPUScheduler.addScheduledEvent(
+	      CPUScheduler.addEventRelative(
 	        this,
-		Math.max(countingElement + 1, 1),
-		0);
+		Math.max(countingElement + 1, 1));
 	    }
 	    break;
 
@@ -670,7 +668,7 @@ public class Intel8254 extends Device implements IOElement {
 	    {
 	      if (outPin.level) {
 		out(false);
-		CPUScheduler.addScheduledEvent(this, 1, 0);
+		CPUScheduler.addEventRelative(this, 1);
 	      } else {
 		out(true);
 		long delta = delay;
@@ -679,10 +677,9 @@ public class Intel8254 extends Device implements IOElement {
 		}
 		delay -= delta;
 		countingElement = counterRegister - 1 - ((int)delta);
-		CPUScheduler.addScheduledEvent(
+		CPUScheduler.addEventRelative(
 	          this,
-		  Math.max(countingElement, 1),
-		  0);
+		  Math.max(countingElement, 1));
 		nullCount = false;
 	      }
 	    }
@@ -704,10 +701,9 @@ public class Intel8254 extends Device implements IOElement {
 	      }
 	      delay -= delta;
 	      countingElement = c - ((int)delta);
-	      CPUScheduler.addScheduledEvent(
+	      CPUScheduler.addEventRelative(
 	        this,
-		Math.max(countingElement, 1),
-		0);
+		Math.max(countingElement, 1));
 	      nullCount = false;
 	    }
 	    break;
@@ -716,7 +712,7 @@ public class Intel8254 extends Device implements IOElement {
 	    {
 	      if (outPin.level && loaded) {
 		out(false);
-		CPUScheduler.addScheduledEvent(this, 1, 0);
+		CPUScheduler.addEventRelative(this, 1);
 	      } else {
 		out(true);
 		loaded = false;
@@ -726,7 +722,7 @@ public class Intel8254 extends Device implements IOElement {
 		}
 		delay -= delta;
 		countingElement = base - 1 - ((int)delta);
-		CPUScheduler.addScheduledEvent(this, countingElement, 0);
+		CPUScheduler.addEventRelative(this, countingElement);
 	      }
 	    }
 	    break;
@@ -735,7 +731,7 @@ public class Intel8254 extends Device implements IOElement {
 	    {
 	      if (outPin.level && loaded) {
 		out(false);
-		CPUScheduler.addScheduledEvent(this, 1, 0);
+		CPUScheduler.addEventRelative(this, 1);
 	      } else {
 		out(true);
 		long delta = delay;
@@ -744,7 +740,7 @@ public class Intel8254 extends Device implements IOElement {
 		}
 		delay -= delta;
 		countingElement = base - 1 - ((int)delta);
-		CPUScheduler.addScheduledEvent(this, countingElement, 0);
+		CPUScheduler.addEventRelative(this, countingElement);
 	      }
 	    }
 	    break;
@@ -947,11 +943,10 @@ public class Intel8254 extends Device implements IOElement {
 	      case 0:
 		if (gate && reset && loaded) {
 		  if (!writing) {
-		    CPUScheduler.removeAllScheduledEvents(Counter.this);
-		    CPUScheduler.addScheduledEvent(
+		    CPUScheduler.removeAllEvents(Counter.this);
+		    CPUScheduler.addEventRelative(
 		      Counter.this,
-		      Math.max(countingElement, 1),
-		      0);
+		      Math.max(countingElement, 1));
 		    log.finest("Counting resumed");
 		  }
 		} else {
@@ -962,11 +957,8 @@ public class Intel8254 extends Device implements IOElement {
 	      case 1:
 		if (gate && reset && loaded) {
 		  out(false);
-		  CPUScheduler.removeAllScheduledEvents(Counter.this);
-		  CPUScheduler.addScheduledEvent(
-		    Counter.this,
-		    counterRegister + 1,
-		    0);
+		  CPUScheduler.removeAllEvents(Counter.this);
+		  CPUScheduler.addEventRelative(Counter.this, counterRegister + 1);
 		  nullCount = false;
 		  log.finest("Counting triggered");
 		}
@@ -974,11 +966,10 @@ public class Intel8254 extends Device implements IOElement {
 
 	      case 2:
 		if (gate && reset && loaded) {
-		  CPUScheduler.removeAllScheduledEvents(Counter.this);
-		  CPUScheduler.addScheduledEvent(
+		  CPUScheduler.removeAllEvents(Counter.this);
+		  CPUScheduler.addEventRelative(
 		   Counter.this,
-		   Math.max(counterRegister, 1),
-		   0);
+		   Math.max(counterRegister, 1));
 		  log.finest("Counting resumed");
 		} else {
 		  stop();
@@ -988,11 +979,10 @@ public class Intel8254 extends Device implements IOElement {
 	      case 4:
 		if (gate && reset && loaded) {
 		  if (!writing) {
-		    CPUScheduler.removeAllScheduledEvents(Counter.this);
-		    CPUScheduler.addScheduledEvent(
+		    CPUScheduler.removeAllEvents(Counter.this);
+		    CPUScheduler.addEventRelative(
 		      Counter.this,
-		      Math.max(countingElement, 1),
-		      0);
+		      Math.max(countingElement, 1));
 		    log.finest("Counting resumed");
 		  }
 		} else {
@@ -1003,11 +993,8 @@ public class Intel8254 extends Device implements IOElement {
 	      case 5:
 		if (gate && reset && loaded) {
 		  out(true);
-		  CPUScheduler.removeAllScheduledEvents(Counter.this);
-		  CPUScheduler.addScheduledEvent(
-		    Counter.this,
-		    counterRegister + 1,
-		    0);
+		  CPUScheduler.removeAllEvents(Counter.this);
+		  CPUScheduler.addEventRelative(Counter.this, counterRegister + 1);
 		  nullCount = false;
 		  log.finest("Counting triggered");
 		}

@@ -35,7 +35,7 @@ public interface CPUEventOwner {
    * @param delay     the difference between the actual and scheduled time
    *                  in system clock units
    */
-  public void performScheduledEvent(int parameter, long delay);
+  public void performEvent(int parameter, long delay);
 
   /**
    * Get descriptive information on the owner.
