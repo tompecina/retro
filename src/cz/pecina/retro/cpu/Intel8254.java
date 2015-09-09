@@ -424,23 +424,22 @@ public class Intel8254 extends Device implements IOElement {
 	}
 	nullCount = true;
 	if (direct) {
+	  long delta;
 	  switch (mode) {
 
 	    case 0:
-	      {
-		long delta = delay;
-		if ((counterRegister - delta) < 1) {
-		  delta = counterRegister - 1;
-		}
-		delay -= delta;
-		countingElement = counterRegister - ((int)delta);
-		nullCount = false;
-		loaded = true;
-		if (gate) {
-		  CPUScheduler.removeAllEvents(this);
-		  CPUScheduler.addEventRelative(this, countingElement + 1);
-		  log.finest("Counter started, remains: " + (countingElement + 1));
-		}
+	      delta = delay;
+	      if ((counterRegister - delta) < 1) {
+		delta = counterRegister - 1;
+	      }
+	      delay -= delta;
+	      countingElement = counterRegister - ((int)delta);
+	      nullCount = false;
+	      loaded = true;
+	      if (gate) {
+		CPUScheduler.removeAllEvents(this);
+		CPUScheduler.addEventRelative(this, countingElement + 1);
+		log.finest("Counter started, remains: " + (countingElement + 1));
 	      }
 	      break;
 
@@ -450,65 +449,59 @@ public class Intel8254 extends Device implements IOElement {
 	      break;
 
 	    case 2:
-	      {
-		if (loaded) {
-		  nullCount = true;
-		} else {
-		  nullCount = false;
-		  loaded = true;
-		  if (gate) {
-		    long delta = delay;
-		    if ((counterRegister - delta - 1) < 1) {
-		      delta = counterRegister - 2;
-		    }
-		    delay -= delta;
-		    countingElement = counterRegister - ((int)delta);
-		    CPUScheduler.removeAllEvents(this);
-		    CPUScheduler.addEventRelative(this, countingElement);
-		    log.finest("Counter started, remains: " + countingElement);
+	      if (loaded) {
+		nullCount = true;
+	      } else {
+		nullCount = false;
+		loaded = true;
+		if (gate) {
+		  delta = delay;
+		  if ((counterRegister - delta - 1) < 1) {
+		    delta = counterRegister - 2;
 		  }
+		  delay -= delta;
+		  countingElement = counterRegister - ((int)delta);
+		  CPUScheduler.removeAllEvents(this);
+		  CPUScheduler.addEventRelative(this, countingElement);
+		  log.finest("Counter started, remains: " + countingElement);
 		}
 	      }
 	      break;
 
 	    case 3:
-	      {
-		if (loaded) {
-		  nullCount = true;
-		} else {
-		  nullCount = false;
-		  loaded = true;
-		  if (gate) {
-		    long delta = delay;
-		    final int c = (counterRegister + 1) / 2;
-		    if ((c - delta) < 1) {
-		      delta = c - 1;
-		    }
-		    delay -= delta;
-		    countingElement = c - ((int)delta);
-		    CPUScheduler.removeAllEvents(this);
-		    CPUScheduler.addEventRelative(this, countingElement);
-		    log.finest("Counter started, remains: " + countingElement);
+	      if (loaded) {
+		nullCount = true;
+	      } else {
+		nullCount = false;
+		loaded = true;
+		if (gate) {
+		  delta = delay;
+		  final int c = (counterRegister + 1) / 2;
+		  if ((c - delta) < 1) {
+		    delta = c - 1;
 		  }
+		  delay -= delta;
+		  countingElement = c - ((int)delta);
+		  CPUScheduler.removeAllEvents(this);
+		  CPUScheduler.addEventRelative(this, countingElement);
+		  log.finest("Counter started, remains: " + countingElement);
 		}
 	      }
 	      break;
 
 	    case 4:
-	      {
-		long delta = delay;
-		if ((counterRegister - delta) < 1) {
-		  delta = counterRegister - 1;
-		}
-		delay -= delta;
-		countingElement = counterRegister - ((int)delta);
-		nullCount = false;
-		loaded = true;
-		if (gate) {
-		  CPUScheduler.removeAllEvents(this);
-		  CPUScheduler.addEventRelative(this, countingElement + 1);
-		  log.finest("Counter started, remains: " + (countingElement + 1));
-		}
+	      delta = delay;
+	      if ((counterRegister - delta) < 1) {
+		delta = counterRegister - 1;
+	      }
+	      delay -= delta;
+	      countingElement = counterRegister - ((int)delta);
+	      nullCount = false;
+	      loaded = true;
+	      if (gate) {
+		CPUScheduler.removeAllEvents(this);
+		CPUScheduler.addEventRelative(this, countingElement + 1);
+		log.finest("Counter started, remains: " + (countingElement + 1));
 	      }
 	      break;
 	  }
