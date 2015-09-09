@@ -367,23 +367,23 @@ public class Intel8254 extends Device implements IOElement {
 	final long remains = CPUScheduler.getRemainingTime(this);
 	if (remains >= 0) {
 	  CPUScheduler.removeAllEvents(this);
-	  switch (mode) {
-	    
-	    case 0:
-	    case 1:
-	    case 4:
-	    case 5:
-	      countingElement = (int)remains;
-	      break;
-	      
-	    case 2:
-	    case 3:
-	      countingElement = (int)remains + 1;
-	      break;
+	  countingElement = (int)remains;
+	  if ((mode == 2) || (mode == 3)) {
+	    countingElement++;
 	  }
-	}	  
+	}
 	log.finest("Counting suspended, remains: " + remains);
       }
+    }
+
+    
+    /**
+     * Sets the Counting Element to {@code value}, with correction for {@code delay};
+     * the resulting value written to the Counting Element is never less than {@code 1}.
+     *
+     * @param value the new value for the Counting Element
+     */
+    protected void setCountingElement(final int value) {
     }
 
     /**
@@ -393,12 +393,15 @@ public class Intel8254 extends Device implements IOElement {
      */
     public void write(final int data) {
       switch (rw) {
+
 	case 1:
 	  newCounterRegister = data;
 	  break;
+
 	case 2:
 	  newCounterRegister = data * (bcd ? 100 : 0x100); 
 	  break;
+
 	case 3:
 	  if (writing) {
 	    newCounterRegister += data * (bcd ? 100 : 0x100);
@@ -408,6 +411,7 @@ public class Intel8254 extends Device implements IOElement {
 	  writing = !writing;
 	  break;
       }
+      
       if (writing) {
 	log.finest("First byte written to counter");
 	if (mode == 0) {
@@ -415,19 +419,23 @@ public class Intel8254 extends Device implements IOElement {
 	  stop();
 	}
       } else {
+	
 	log.finest("Last byte written to counter");
 	counterRegister = newCounterRegister;
 	if (counterRegister == 0) {
 	  counterRegister = base;
-	} else if (((mode == 2) || (mode == 3)) && (counterRegister == 1)) {
+	} else if ((counterRegister == 1) && ((mode == 2) || (mode == 3))) {
 	  counterRegister = base + 1;
 	}
+	
 	nullCount = true;
+
 	if (direct) {
 	  long delta;
 	  switch (mode) {
 
 	    case 0:
+	      setCountingElement(counterRegister);
 	      delta = delay;
 	      if ((counterRegister - delta) < 1) {
 		delta = counterRegister - 1;
