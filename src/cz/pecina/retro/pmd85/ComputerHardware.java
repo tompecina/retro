@@ -267,7 +267,7 @@ public class ComputerHardware {
     xor = new XOR("XOR", 2);
 
     // set up the PIT
-    pit = new Intel8253("PIT", new boolean[] {false, true, false});
+    pit = new Intel8253Mod("PIT", new boolean[] {false, true, false});
     hardware.add(pit);
     for (int port: Util.portIterator(0x5c, 0xfc)) {
       cpu.addIOInput(port, pit);
