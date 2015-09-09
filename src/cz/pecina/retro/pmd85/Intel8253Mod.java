@@ -23,13 +23,12 @@ package cz.pecina.retro.pmd85;
 import java.util.logging.Logger;
 
 import cz.pecina.retro.cpu.Intel8253;
-import cz.pecina.retro.cpu.Intel8254;
 
 /**
  * Modified Intel 8253 Programmable Interval Timer.  The only
- * modification concerns Counter 1: if 0x20 is written to the counter,
- * (i.e., "silence" for the tape recorder interface), the Mode is
- * changed to 1 so the counter is never started.
+ * difference concerns Counter 1: if 0x20 is written to the counter,
+ * (i.e., "silence" for the tape recorder interface), the Mode of
+ * the counter is set to 1 so the counter is never started.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -57,10 +56,10 @@ public class Intel8253Mod extends Intel8253 {
   // for description see Intel8254
   @Override
   public void portOutput(final int port, final int data) {
-    super.portOutput(port, data);
     if (((port & 0x03) == 1) && (data == 0x20)) {
       counters[1].mode = 1;
       log.finer("Mode of Counter 1 set to 1");
     }
+    super.portOutput(port, data);
   }    
 }

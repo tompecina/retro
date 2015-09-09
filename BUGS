@@ -21,12 +21,19 @@ KNOWN BUGS AND ESSENTIAL NEW FEATURES
 
 * Icon size in some implementations limited to 128x128.
 
-* Allow for different CPU frequency of PMD 85-3: + changes to trec/XML, trec/PMT, 1Hz generator.
+* Allow for different CPU frequency of PMD 85-3: + changes to trec/XML,
+  trec/PMT, 1Hz generator.
 
 * Add simple searching facility to CopyFillCompare.
 
-* When entering data in the editing field of Memory/DumpEdit, the default button should be Write.
+* When entering data in the editing field of Memory/DumpEdit, the default
+  button should be Write.
 
-* Add syntax checking of BASIC programs, at the very least that the line numbers are valid and ascending.
+* Add syntax checking of BASIC programs, at the very least that the line
+  numbers are valid and ascending.
 
-* Check for presence of the BASIC interpreter, at least tentatively, before loading a program.
+* Check for presence of the BASIC interpreter, at least tentatively, before
+  loading a program.
+ 
+* Display does not get repainted automatically when getting into view; this
+  may or may not be fixable (a window/frame event driver?).
