@@ -47,9 +47,6 @@ public class Intel8254 extends Device implements IOElement {
     }
   }
 
-  // counter number, for loop
-  private int number;
-  
   /**
    * Main constructor.
    *
@@ -65,9 +62,9 @@ public class Intel8254 extends Device implements IOElement {
     log.fine("New Intel 8254 creation started, name: " + name);
     assert types.length == 3;
     
-    for (number = 0; number < 3; number++) {
+    for (int i = 0; i < 3; i++) {
 
-      add(new Register("COUNTER" + number + "_TYPE") {
+      add(new CounterRegister("TYPE", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -82,7 +79,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_MODE") {
+      add(new CounterRegister("MODE", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -96,7 +93,7 @@ public class Intel8254 extends Device implements IOElement {
 		      " set to: " + counters[number].mode);
 	  }
         });
-      add(new Register("COUNTER" + number + "_READING") {
+      add(new CounterRegister("READING", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -111,7 +108,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_WRITING") {
+      add(new CounterRegister("WRITING", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -126,7 +123,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_COUNTING_ELEMENT") {
+      add(new CounterRegister("COUNTING_ELEMENT", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -141,7 +138,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_COUNTER_REGISTER") {
+      add(new CounterRegister("COUNTER_REGISTER", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -156,7 +153,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_NEW_COUNTER_REGISTER") {
+      add(new CounterRegister("NEW_COUNTER_REGISTER", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -171,7 +168,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_OUTPUT_LATCH") {
+      add(new CounterRegister("OUTPUT_LATCH", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -186,7 +183,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_OUTPUT_LATCHED") {
+      add(new CounterRegister("OUTPUT_LATCHED", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -201,7 +198,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_STATUS_LATCH") {
+      add(new CounterRegister("STATUS_LATCH", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -216,7 +213,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_STATUS_LATCHED") {
+      add(new CounterRegister("STATUS_LATCHED", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -231,7 +228,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_GATE") {
+      add(new CounterRegister("GATE", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -246,7 +243,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_TRIGGER") {
+      add(new CounterRegister("TRIGGER", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -261,7 +258,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_TRIGGERED") {
+      add(new CounterRegister("TRIGGERED", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -276,7 +273,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_PULSE") {
+      add(new CounterRegister("PULSE", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -291,7 +288,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_BCD") {
+      add(new CounterRegister("BCD", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -306,7 +303,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_READ_WRITE") {
+      add(new CounterRegister("READ_WRITE", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -321,7 +318,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_NULL_COUNT") {
+      add(new CounterRegister("NULL_COUNT", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -336,7 +333,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_LOADED") {
+      add(new CounterRegister("LOADED", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -351,7 +348,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_RESET") {
+      add(new CounterRegister("RESET", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -366,7 +363,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_DELAY") {
+      add(new CounterRegister("DELAY", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -381,7 +378,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_CLOCK_PIN_LEVEL") {
+      add(new CounterRegister("CLOCK_PIN_LEVEL", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -396,7 +393,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_GATE_PIN_LEVEL") {
+      add(new CounterRegister("GATE_PIN_LEVEL", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -411,7 +408,7 @@ public class Intel8254 extends Device implements IOElement {
 	  }
         });
 
-      add(new Register("COUNTER" + number + "_OUT_PIN_LEVEL") {
+      add(new CounterRegister("OUT_PIN_LEVEL", i) {
 	  // for description see Register
 	  @Override
 	  public String getValue() {
@@ -429,7 +426,7 @@ public class Intel8254 extends Device implements IOElement {
 
     for (int i = 0; i < 3; i++) {
       counters[i] = new Counter();
-      log.finer("Setting up counter: " + number + ", connection type: " +
+      log.finer("Setting up counter: " + i + ", connection type: " +
 		(types[i] ? "CPU clock" : "normal"));
       counters[i].direct = types[i];
     }
@@ -444,6 +441,17 @@ public class Intel8254 extends Device implements IOElement {
       counters[i].base = counters[i].getBase();
     }
     log.fine("Post-unmarshal on 8254 completed");
+  }
+
+  // auxiliary subclass for creating counter registers
+  private abstract class CounterRegister extends Register {
+
+    protected int number;
+
+    protected CounterRegister(final String name, final int number) {
+      super("COUNTER" + number + "_" + name);
+      this.number = number;
+    }
   }
 
   /**
