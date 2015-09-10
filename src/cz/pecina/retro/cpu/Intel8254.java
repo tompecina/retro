@@ -585,7 +585,8 @@ public class Intel8254 extends Device implements IOElement {
     protected boolean nullCount;
 
     /**
-     * A combined flag with somewhat different meanings in different Modes.
+     * A combined flag with different meanings in different Modes and for
+     * different connection types.
      */
     protected boolean loaded;
 
@@ -834,7 +835,7 @@ public class Intel8254 extends Device implements IOElement {
 	      }
 	      break;
 	  }
-	} else if ((mode == 2) || (mode == 3)) {
+	} else if (mode == 2) {
 	  if (reset) {
 	    loaded = true;
 	  }
