@@ -152,11 +152,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00010000);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b01010000, s.status);
-    assertEquals("Stage 0 out", 0, s.out);
-
     out0(4);
     clockPulse0();
 
@@ -215,11 +210,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00010000);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b01010000, s.status);
-    assertEquals("Stage 0 out", 0, s.out);
-
     out0(3);
     clockPulse0();
 
@@ -281,11 +271,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00010000);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b01010000, s.status);
-    assertEquals("Stage 0 out", 0, s.out);
-
     out0(3);
     clockPulse0();
 
@@ -345,11 +330,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00110000);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b01110000, s.status);
-    assertEquals("Stage 0 out", 0, s.out);
-
     out0(1);
     out0(0);
     clockPulse0();
@@ -423,11 +403,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00010000);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b01010000, s.status);
-    assertEquals("Stage 0 out", 0, s.out);
-
     out0(3);
     clockPulse0();
 
@@ -501,11 +476,6 @@ public class TestIntel8254 extends TestCase {
     gate0(0);
 
     outcw(0b00010010);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11010010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     clock0(1);
     gate0(1);
@@ -580,11 +550,6 @@ public class TestIntel8254 extends TestCase {
     gate0(0);
 
     outcw(0b00010010);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11010010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     clock0(1);
     gate0(1);
@@ -655,11 +620,6 @@ public class TestIntel8254 extends TestCase {
     gate0(0);
 
     outcw(0b00010010);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11010010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(2);
     clock0(1);
     gate0(1);
@@ -737,11 +697,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00010010);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11010010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     gate0(0);
     clock0(1);
@@ -818,11 +773,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00010010);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11010010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     gate0(0);
     clock0(1);
@@ -894,11 +844,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00010010);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11010010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(2);
     gate0(0);
     clock0(1);
@@ -977,11 +922,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00010100);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11010100, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     clockPulse0();
 
@@ -1040,11 +980,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00010100);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11010100, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     clockPulse0();
 
@@ -1107,11 +1042,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00010100);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11010100, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(4);
     clockPulse0();
 
@@ -1177,11 +1107,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00010110);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11010110, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(4);
     clockPulse0();
 
@@ -1261,11 +1186,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00010110);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11010110, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(5);
     clockPulse0();
 
@@ -1345,11 +1265,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00010110);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11010110, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(4);
     clockPulse0();
 
@@ -1430,11 +1345,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00011000);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11011000, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     clockPulse0();
 
@@ -1493,11 +1403,6 @@ public class TestIntel8254 extends TestCase {
     gate0(0);
 
     outcw(0b00011000);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11011000, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     clockPulse0();
 
@@ -1558,11 +1463,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00011000);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11011000, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     clockPulse0();
 
@@ -1628,11 +1528,6 @@ public class TestIntel8254 extends TestCase {
     gate0(0);
 
     outcw(0b00011010);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11011010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     clockPulse0();
 
@@ -1692,11 +1587,6 @@ public class TestIntel8254 extends TestCase {
     gate0(0);
 
     outcw(0b00011010);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11011010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     clockPulse0();
 
@@ -1764,11 +1654,6 @@ public class TestIntel8254 extends TestCase {
     gate0(0);
 
     outcw(0b00011010);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11011010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     clockPulse0();
 
@@ -1849,11 +1734,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00011010);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11011010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     clock0(1);
     gate0(0);
@@ -1916,11 +1796,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00011010);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11011010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     clock0(1);
     gate0(0);
@@ -1991,11 +1866,6 @@ public class TestIntel8254 extends TestCase {
     gate0(1);
 
     outcw(0b00011010);
-
-    s = poll(0);
-    assertEquals("Stage 0 status", 0b11011010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out0(3);
     clock0(1);
     gate0(0);
@@ -2080,11 +1950,6 @@ public class TestIntel8254 extends TestCase {
     gate1(1);
 
     outcw(0b01010000);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b01010000, s.status);
-    assertEquals("Stage 0 out", 0, s.out);
-
     out1(4);
     clockPulse1();
 
@@ -2143,11 +2008,6 @@ public class TestIntel8254 extends TestCase {
     gate1(1);
 
     outcw(0b01010000);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b01010000, s.status);
-    assertEquals("Stage 0 out", 0, s.out);
-
     out1(3);
     clockPulse1();
 
@@ -2208,11 +2068,6 @@ public class TestIntel8254 extends TestCase {
     gate1(1);
 
     outcw(0b01010000);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b01010000, s.status);
-    assertEquals("Stage 0 out", 0, s.out);
-
     out1(3);
     clockPulse1();
 
@@ -2272,11 +2127,6 @@ public class TestIntel8254 extends TestCase {
     gate1(0);
 
     outcw(0b01010010);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11010010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(3);
     clockPulse1();
 
@@ -2339,11 +2189,6 @@ public class TestIntel8254 extends TestCase {
     gate1(0);
 
     outcw(0b01010010);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11010010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(3);
     clockPulse1();
     gatePulse1();
@@ -2399,11 +2244,6 @@ public class TestIntel8254 extends TestCase {
     gate1(0);
 
     outcw(0b01010010);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11010010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(2);
     clockPulse1();
     gatePulse1();
@@ -2466,11 +2306,6 @@ public class TestIntel8254 extends TestCase {
     gate1(1);
 
     outcw(0b01010010);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11010010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(3);
     clockPulse1();
     gate1(0);
@@ -2539,11 +2374,6 @@ public class TestIntel8254 extends TestCase {
     gate1(1);
 
     outcw(0b01010100);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11010100, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(3);
     clockPulse1();
 
@@ -2602,11 +2432,6 @@ public class TestIntel8254 extends TestCase {
     gate1(1);
 
     outcw(0b01010100);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11010100, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(3);
     clockPulse1();
 
@@ -2668,11 +2493,6 @@ public class TestIntel8254 extends TestCase {
     gate1(1);
 
     outcw(0b01010100);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11010100, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(4);
     clockPulse1();
 
@@ -2738,11 +2558,6 @@ public class TestIntel8254 extends TestCase {
     gate1(1);
 
     outcw(0b01010110);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11010110, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(4);
     clockPulse1();
 
@@ -2822,11 +2637,6 @@ public class TestIntel8254 extends TestCase {
     gate1(1);
 
     outcw(0b01010110);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11010110, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(5);
     clockPulse1();
 
@@ -2906,11 +2716,6 @@ public class TestIntel8254 extends TestCase {
     gate1(1);
 
     outcw(0b01010110);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11010110, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(4);
     clockPulse1();
 
@@ -2991,11 +2796,6 @@ public class TestIntel8254 extends TestCase {
     gate1(1);
 
     outcw(0b01011000);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11011000, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(3);
     clockPulse1();
 
@@ -3054,11 +2854,6 @@ public class TestIntel8254 extends TestCase {
     gate1(0);
 
     outcw(0b01011000);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11011000, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(3);
     clockPulse1();
 
@@ -3118,11 +2913,6 @@ public class TestIntel8254 extends TestCase {
     gate1(1);
 
     outcw(0b01011000);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11011000, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(3);
     clockPulse1();
 
@@ -3182,11 +2972,6 @@ public class TestIntel8254 extends TestCase {
     gate1(0);
 
     outcw(0b01011010);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11011010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(3);
     clockPulse1();
 
@@ -3246,11 +3031,6 @@ public class TestIntel8254 extends TestCase {
     gate1(0);
 
     outcw(0b01011010);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11011010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(3);
     clockPulse1();
 
@@ -3311,11 +3091,6 @@ public class TestIntel8254 extends TestCase {
     gate1(0);
 
     outcw(0b01011010);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11011010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
     out1(3);
     clockPulse1();
 
@@ -3396,12 +3171,6 @@ public class TestIntel8254 extends TestCase {
     gate1(1);
 
     outcw(0b01011010);
-
-    s = poll(1);
-    assertEquals("Stage 0 status", 0b11011010, s.status);
-    assertEquals("Stage 0 out", 1, s.out);
-
-
     out1(3);
     gate1(0);
     clockPulse1();

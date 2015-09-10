@@ -64,6 +64,21 @@ public class Intel8254 extends Device implements IOElement {
     
     for (int i = 0; i < 3; i++) {
 
+      add(new CounterRegister("STATE", i) {
+	  // for description see Register
+	  @Override
+	  public String getValue() {
+	    return String.valueOf(counters[number].state);
+	  }
+	  // for description see Register
+	  @Override
+	  public void processValue(final String value) {
+	    counters[number].state = Integer.parseInt(value);
+	    log.finer("State for counter " + number +
+		      " set to: " + counters[number].state);
+	  }
+        });
+
       add(new CounterRegister("TYPE", i) {
 	  // for description see Register
 	  @Override
@@ -93,6 +108,7 @@ public class Intel8254 extends Device implements IOElement {
 		      " set to: " + counters[number].mode);
 	  }
         });
+
       add(new CounterRegister("READING", i) {
 	  // for description see Register
 	  @Override
@@ -458,6 +474,13 @@ public class Intel8254 extends Device implements IOElement {
   protected class Counter implements CPUEventOwner {
 
     /**
+     * Initialization state of the counter.  Meaning: {@code 0} - not
+     * initialized, waiting for the Control Word. {@code 1} - initialized,
+     * but not loaded. {@code 2} - operational.
+     */
+    public int state;
+
+    /**
      * Type of clock connection of the counter. {@code true} if
      * directly connected to the system CPU, {@code false} if
      * the clock pin is used.
@@ -591,7 +614,7 @@ public class Intel8254 extends Device implements IOElement {
     protected boolean loaded;
 
     /**
-     * {@code true} if the Control Word has been written to the counter.
+     * A completely mysterious flag.
      */
     protected boolean reset;
 
@@ -654,9 +677,10 @@ public class Intel8254 extends Device implements IOElement {
       clockPin.reset();
       gatePin.reset();
       outPin.reset();
+      state = 0;
       outputLatched = statusLatched = reading = writing =
-	trigger = triggered = pulse = loaded = reset = false;
-      nullCount = true;
+	trigger = triggered = pulse = loaded = false;
+      nullCount = reset = true;
       gate = gatePin.level;
       newCounterRegister = 0;
       delay = 0;
@@ -737,6 +761,11 @@ public class Intel8254 extends Device implements IOElement {
      * @param data the byte to be written
      */
     public void write(final int data) {
+
+      if (state == 0) {
+	return;
+      }
+      
       switch (rw) {
 
 	case 1:
@@ -767,6 +796,7 @@ public class Intel8254 extends Device implements IOElement {
 	
 	log.finest("Last byte written to counter");
 	counterRegister = newCounterRegister;
+	state = 2;
 	if (counterRegister == 0) {
 	  counterRegister = base;
 	} else if ((counterRegister == 1) && ((mode == 2) || (mode == 3))) {
@@ -854,7 +884,7 @@ public class Intel8254 extends Device implements IOElement {
      * @return the current count of the Counting Element
      */
     protected int getCount() {
-      if (direct && reset) {
+      if (direct) {
 	final long remains = CPUScheduler.getRemainingTime(this);
 	log.finest("Getting counter state, remains: " + remains);
 	if (remains >= 0) {
@@ -911,11 +941,17 @@ public class Intel8254 extends Device implements IOElement {
      * @return the byte read
      */
     public int read() {
+
+      if (state < 2) {
+	return 0;
+      }
+      
       if (statusLatched) {
 	log.finer(String.format("Outputting (latched) status: 0x%02x", statusLatch));
 	statusLatched = false;
 	return statusLatch;
       }
+      
       int data, value;
       if (outputLatched) {
 	value = outputLatch;
@@ -927,6 +963,7 @@ public class Intel8254 extends Device implements IOElement {
 	value = getCount();
 	log.finest("Outputting immediate counter value: " + value);
       }
+      
       switch (rw) {
 	case 1:
 	  data = lsb(value);
@@ -939,6 +976,7 @@ public class Intel8254 extends Device implements IOElement {
 	  reading = !reading;
 	  break;
       }
+      
       log.finer(String.format("Counter read, value: 0x%02x", data));
       return data;
     }
@@ -1083,6 +1121,9 @@ public class Intel8254 extends Device implements IOElement {
 	  if (newLevel != level) {
 	    log.finest("New level on clock pin: " + newLevel);
 	    level = newLevel;
+	    if (state < 2) {
+	      return;
+	    }
 	    if (level) {
 	      gatePin.notifyChange();
 	      gate = gatePin.level;
@@ -1196,10 +1237,13 @@ public class Intel8254 extends Device implements IOElement {
 	final boolean newLevel = (IONode.normalize(queryNode()) == 1);
 	if (newLevel != level) {
 	  level = newLevel;
+	  if (state < 2) {
+	    return;
+	  }
 	  if (level) {
 	    trigger = true;
 	  }
-	  if (direct && reset && loaded) {
+	  if (direct) {
 	    gate = level;
 	    switch (mode) {
 	      
@@ -1420,7 +1464,7 @@ public class Intel8254 extends Device implements IOElement {
 	  counter.bcd = ((data & 1) == 1);
 
 	  counter.reset();
-	  counter.reset = true;
+	  counter.state = 1;
 	
 	  log.fine("Counter " + number + " programmed: RW: " +
 		   (new String[] {"LSB", "MSB", "LSB/MSB"})[rw - 1] +
