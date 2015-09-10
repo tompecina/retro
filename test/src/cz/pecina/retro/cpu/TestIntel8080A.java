@@ -24,76 +24,8 @@ import junit.framework.TestCase;
 
 public class TestIntel8080A extends TestCase {
 
-  // CRC table
-  private static final long CRC_TABLE[] = {
-    0x00000000, 0x96300777, 0x2c610eee, 0xba510999,
-    0x19c46d07, 0x8ff46a70, 0x35a563e9, 0xa395649e,
-    0x3288db0e, 0xa4b8dc79, 0x1ee9d5e0, 0x88d9d297,
-    0x2b4cb609, 0xbd7cb17e, 0x072db8e7, 0x911dbf90,
-    0x6410b71d, 0xf220b06a, 0x4871b9f3, 0xde41be84,
-    0x7dd4da1a, 0xebe4dd6d, 0x51b5d4f4, 0xc785d383,
-    0x56986c13, 0xc0a86b64, 0x7af962fd, 0xecc9658a,
-    0x4f5c0114, 0xd96c0663, 0x633d0ffa, 0xf50d088d,
-    0xc8206e3b, 0x5e10694c, 0xe44160d5, 0x727167a2,
-    0xd1e4033c, 0x47d4044b, 0xfd850dd2, 0x6bb50aa5,
-    0xfaa8b535, 0x6c98b242, 0xd6c9bbdb, 0x40f9bcac,
-    0xe36cd832, 0x755cdf45, 0xcf0dd6dc, 0x593dd1ab,
-    0xac30d926, 0x3a00de51, 0x8051d7c8, 0x1661d0bf,
-    0xb5f4b421, 0x23c4b356, 0x9995bacf, 0x0fa5bdb8,
-    0x9eb80228, 0x0888055f, 0xb2d90cc6, 0x24e90bb1,
-    0x877c6f2f, 0x114c6858, 0xab1d61c1, 0x3d2d66b6,
-    0x9041dc76, 0x0671db01, 0xbc20d298, 0x2a10d5ef,
-    0x8985b171, 0x1fb5b606, 0xa5e4bf9f, 0x33d4b8e8,
-    0xa2c90778, 0x34f9000f, 0x8ea80996, 0x18980ee1,
-    0xbb0d6a7f, 0x2d3d6d08, 0x976c6491, 0x015c63e6,
-    0xf4516b6b, 0x62616c1c, 0xd8306585, 0x4e0062f2,
-    0xed95066c, 0x7ba5011b, 0xc1f40882, 0x57c40ff5,
-    0xc6d9b065, 0x50e9b712, 0xeab8be8b, 0x7c88b9fc,
-    0xdf1ddd62, 0x492dda15, 0xf37cd38c, 0x654cd4fb,
-    0x5861b24d, 0xce51b53a, 0x7400bca3, 0xe230bbd4,
-    0x41a5df4a, 0xd795d83d, 0x6dc4d1a4, 0xfbf4d6d3,
-    0x6ae96943, 0xfcd96e34, 0x468867ad, 0xd0b860da,
-    0x732d0444, 0xe51d0333, 0x5f4c0aaa, 0xc97c0ddd,
-    0x3c710550, 0xaa410227, 0x10100bbe, 0x86200cc9,
-    0x25b56857, 0xb3856f20, 0x09d466b9, 0x9fe461ce,
-    0x0ef9de5e, 0x98c9d929, 0x2298d0b0, 0xb4a8d7c7,
-    0x173db359, 0x810db42e, 0x3b5cbdb7, 0xad6cbac0,
-    0x2083b8ed, 0xb6b3bf9a, 0x0ce2b603, 0x9ad2b174,
-    0x3947d5ea, 0xaf77d29d, 0x1526db04, 0x8316dc73,
-    0x120b63e3, 0x843b6494, 0x3e6a6d0d, 0xa85a6a7a,
-    0x0bcf0ee4, 0x9dff0993, 0x27ae000a, 0xb19e077d,
-    0x44930ff0, 0xd2a30887, 0x68f2011e, 0xfec20669,
-    0x5d5762f7, 0xcb676580, 0x71366c19, 0xe7066b6e,
-    0x761bd4fe, 0xe02bd389, 0x5a7ada10, 0xcc4add67,
-    0x6fdfb9f9, 0xf9efbe8e, 0x43beb717, 0xd58eb060,
-    0xe8a3d6d6, 0x7e93d1a1, 0xc4c2d838, 0x52f2df4f,
-    0xf167bbd1, 0x6757bca6, 0xdd06b53f, 0x4b36b248,
-    0xda2b0dd8, 0x4c1b0aaf, 0xf64a0336, 0x607a0441,
-    0xc3ef60df, 0x55df67a8, 0xef8e6e31, 0x79be6946,
-    0x8cb361cb, 0x1a8366bc, 0xa0d26f25, 0x36e26852,
-    0x95770ccc, 0x03470bbb, 0xb9160222, 0x2f260555,
-    0xbe3bbac5, 0x280bbdb2, 0x925ab42b, 0x046ab35c,
-    0xa7ffd7c2, 0x31cfd0b5, 0x8b9ed92c, 0x1daede5b,
-    0xb0c2649b, 0x26f263ec, 0x9ca36a75, 0x0a936d02,
-    0xa906099c, 0x3f360eeb, 0x85670772, 0x13570005,
-    0x824abf95, 0x147ab8e2, 0xae2bb17b, 0x381bb60c,
-    0x9b8ed292, 0x0dbed5e5, 0xb7efdc7c, 0x21dfdb0b,
-    0xd4d2d386, 0x42e2d4f1, 0xf8b3dd68, 0x6e83da1f,
-    0xcd16be81, 0x5b26b9f6, 0xe177b06f, 0x7747b718,
-    0xe65a0888, 0x706a0fff, 0xca3b0666, 0x5c0b0111,
-    0xff9e658f, 0x69ae62f8, 0xd3ff6b61, 0x45cf6c16,
-    0x78e20aa0, 0xeed20dd7, 0x5483044e, 0xc2b30339,
-    0x612667a7, 0xf71660d0, 0x4d476949, 0xdb776e3e,
-    0x4a6ad1ae, 0xdc5ad6d9, 0x660bdf40, 0xf03bd837,
-    0x53aebca9, 0xc59ebbde, 0x7fcfb247, 0xe9ffb530,
-    0x1cf2bdbd, 0x8ac2baca, 0x3093b353, 0xa6a3b424,
-    0x0536d0ba, 0x9306d7cd, 0x2957de54, 0xbf67d923,
-    0x2e7a66b3, 0xb84a61c4, 0x021b685d, 0x942b6f2a,
-    0x37be0bb4, 0xa18e0cc3, 0x1bdf055a, 0x8def022d
-  };
-
   // msbt
-  private static final int MSBT = 0x103;
+  private static final int MSBT = 0x0103;
   
   // test groups
   private static final TestGroup[] TEST_GROUPS = {
@@ -104,7 +36,7 @@ public class TestIntel8080A extends TestCase {
       0x58ea, 0x8566, 0xc6, 0xde, 0x9bc9,
       0x30, 0, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0xffff, 0xffff, 0xffff, 0xd7, 0, 0xffff,
-      0xa64b4714,
+      0x14474b0a6L,
       "dad <b,d,h,sp>"),
 
     new TestGroup(
@@ -113,7 +45,7 @@ public class TestIntel8080A extends TestCase {
       0x5b61, 0x0b29, 0x10, 0x66, 0x85b2,
       0x38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
       0, 0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x9e2f929e,
+      0x9e922f9eL,
       "aluop nn"),
 
     new TestGroup(
@@ -122,7 +54,7 @@ public class TestIntel8080A extends TestCase {
       0xe309, 0xa666, 0xd0, 0x3b, 0xadbb,
       0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
       0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0, 0,
-      0x862c76cf,
+      0xcf762c86L,
       "aluop <b,c,d,e,h,l,m,a>"),
 
     new TestGroup(
@@ -131,7 +63,7 @@ public class TestIntel8080A extends TestCase {
       0x8d5b, 0x9079, 0x04, 0x8e, 0x299d,
       0x18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0xff, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0x0c033fbb,
+      0xbb3f030cL,
       "<daa,cma,stc,cmc>"),
 
     new TestGroup(
@@ -140,7 +72,7 @@ public class TestIntel8080A extends TestCase {
       0xa7b0, 0x431b, 0x44, 0x5a, 0xd030,
       0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x0e46b6ad,
+      0xadb6460eL,
       "<inr,dcr> a"),
 
     new TestGroup(
@@ -149,7 +81,7 @@ public class TestIntel8080A extends TestCase {
       0x5a86, 0x1e85, 0x86, 0x58, 0x9bbb,
       0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0xff00, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x4513ed83,
+      0x83ed1345L,
       "<inr,dcr> b"),
 
     new TestGroup(
@@ -158,7 +90,7 @@ public class TestIntel8080A extends TestCase {
       0x11cc, 0xe8a4, 0x02, 0x49, 0x2a4d,
       0x08, 0, 0, 0, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0xcd8792f7,
+      0xf79287cdL,
       "<inx,dcx> b"),
 
     new TestGroup(
@@ -167,7 +99,7 @@ public class TestIntel8080A extends TestCase {
       0x8b27, 0xd208, 0x95, 0x05, 0x0660,
       0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x1b72f6e5,
+      0xe5f6721bL,
       "<inr,dcr> c"),
 
     new TestGroup(
@@ -176,7 +108,7 @@ public class TestIntel8080A extends TestCase {
       0x38cc, 0xdebc, 0x43, 0x5c, 0x03bd,
       0x01, 0, 0, 0, 0, 0, 0, 0, 0xff00, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x9a57b515,
+      0x15b5579aL,
       "<inr,dcr> d"),
 
     new TestGroup(
@@ -185,7 +117,7 @@ public class TestIntel8080A extends TestCase {
       0x9967, 0x3a2e, 0x92, 0xf6, 0x9d54,
       0x08, 0, 0, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x01254e7f,
+      0x7f4e2501L,
       "<inx,dcx> d"),
 
     new TestGroup(
@@ -194,7 +126,7 @@ public class TestIntel8080A extends TestCase {
       0xa0f4, 0xa10a, 0x13, 0x32, 0x5925,
       0x01, 0, 0, 0, 0, 0, 0, 0, 0xff, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x96b32acf,
+      0xcf2ab396L,
       "<inr,dcr> e"),
 
     new TestGroup(
@@ -203,7 +135,7 @@ public class TestIntel8080A extends TestCase {
       0x11a6, 0xbc1a, 0x17, 0x06, 0x2818,
       0x01, 0, 0, 0, 0, 0, 0, 0xff00, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x2c95b212,
+      0x12b2952cL,
       "<inr,dcr> h"),
 
     new TestGroup(
@@ -212,7 +144,7 @@ public class TestIntel8080A extends TestCase {
       0xe2c2, 0x822a, 0x57, 0xe0, 0xc3e1,
       0x08, 0, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0xc0232b9f,
+      0x9f2b23c0L,
       "<inx,dcx> h"),
 
     new TestGroup(
@@ -221,7 +153,7 @@ public class TestIntel8080A extends TestCase {
       0xf4c1, 0xdfa2, 0xd1, 0x3c, 0x3ea2,
       0x01, 0, 0, 0, 0, 0, 0, 0xff, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x56d357ff,
+      0xff57d356L,
       "<inr,dcr> l"),
 
     new TestGroup(
@@ -230,7 +162,7 @@ public class TestIntel8080A extends TestCase {
       0x877e, 0xda58, 0x15, 0x5c, 0x1f37,
       0x01, 0, 0, 0, 0xff, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0xbd63e992,
+      0x92e963bdL,
       "<inr,dcr> m"),
 
     new TestGroup(
@@ -239,7 +171,7 @@ public class TestIntel8080A extends TestCase {
       0xa494, 0xf476, 0x53, 0x02, 0x855b,
       0x08, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xf821,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0xab2f70d5,
+      0xd5702fabL,
       "<inx,dcx> sp"),
 
     new TestGroup(
@@ -248,7 +180,7 @@ public class TestIntel8080A extends TestCase {
       0xb9fa, 0xabb8, 0x04, 0x06, 0x6015,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0, 0, 0,
-      0xcbd5c3a9,
+      0xa9c3d5cbL,
       "lhld nnnn"),
 	
     new TestGroup(
@@ -257,7 +189,7 @@ public class TestIntel8080A extends TestCase {
       0x64ea, 0xe180, 0x10, 0x2d, 0x35e9,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0,
-      0x264f86e8,
+      0xe8864f26L,
       "shld nnnn"),
 
     new TestGroup(
@@ -266,7 +198,7 @@ public class TestIntel8080A extends TestCase {
       0x74b1, 0xb30e, 0x46, 0xd1, 0x30cc,
       0x30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0xff, 0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0x126ef4fc,
+      0xfcf46e12L,
       "lxi <b,d,h,sp>,nnnn"),
 
     new TestGroup(
@@ -275,7 +207,7 @@ public class TestIntel8080A extends TestCase {
       MSBT, MSBT, 0xc6, 0xb1, 0xef8e,
       0x10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0xff, 0, 0, 0, 0, 0, 0xd7, 0xff, 0,
-      0x5f1d822b,
+      0x2b821d5fL,
       "ldax <b,d>"),
 
     new TestGroup(
@@ -284,7 +216,7 @@ public class TestIntel8080A extends TestCase {
       0xde89, 0x7455, 0x53, 0xc0, 0x5509,
       0x38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
-      0x4420a7ea,
+      0xeaa72044L,
       "mvi <b,c,d,e,h,l,m,a>,nn"),
 
     new TestGroup(
@@ -293,7 +225,7 @@ public class TestIntel8080A extends TestCase {
       0x82c7, 0x718f, 0x97, 0x8f, 0xef8e,
       0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0xff, 0,
-      0xee8cb510,
+      0x10b58ceeL,
       "mov <bcdehla>,<bcdehla>"),
 
     new TestGroup(
@@ -302,7 +234,7 @@ public class TestIntel8080A extends TestCase {
       0x0653, 0xcdba, 0xd2, 0x4f, 0x1fd8,
       0x08, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0xff, 0, 0, 0, 0, 0, 0xd7, 0xff, 0,
-      0x72af57ed,
+      0xed57af72L,
       "sta nnnn / lda nnnn"),
 
     new TestGroup(
@@ -311,7 +243,7 @@ public class TestIntel8080A extends TestCase {
       0x0c53, 0xf50e, 0x91, 0xeb, 0x40fc,
       0x18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x3592d8e0,
+      0xe0d89235L,
       "<rlc,rrc,ral,rar>"),
 
     new TestGroup(
@@ -320,7 +252,7 @@ public class TestIntel8080A extends TestCase {
       MSBT, MSBT + 1, 0xc1, 0x21, 0xbde7,
       0x18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0, 0xff, 0,
-      0xe971042b,
+      0x2b0471e9L,
       "stax <b,d>")
   };
 
@@ -397,10 +329,98 @@ public class TestIntel8080A extends TestCase {
     }
   }
 
+  // CRC table
+  private static final long CRC_TABLE[] = {
+    0x00000000L, 0x77073096L, 0xee0e612cL, 0x990951baL,
+    0x076dc419L, 0x706af48fL, 0xe963a535L, 0x9e6495a3L,
+    0x0edb8832L, 0x79dcb8a4L, 0xe0d5e91eL, 0x97d2d988L,
+    0x09b64c2bL, 0x7eb17cbdL, 0xe7b82d07L, 0x90bf1d91L,
+    0x1db71064L, 0x6ab020f2L, 0xf3b97148L, 0x84be41deL,
+    0x1adad47dL, 0x6ddde4ebL, 0xf4d4b551L, 0x83d385c7L,
+    0x136c9856L, 0x646ba8c0L, 0xfd62f97aL, 0x8a65c9ecL,
+    0x14015c4fL, 0x63066cd9L, 0xfa0f3d63L, 0x8d080df5L,
+    0x3b6e20c8L, 0x4c69105eL, 0xd56041e4L, 0xa2677172L,
+    0x3c03e4d1L, 0x4b04d447L, 0xd20d85fdL, 0xa50ab56bL,
+    0x35b5a8faL, 0x42b2986cL, 0xdbbbc9d6L, 0xacbcf940L,
+    0x32d86ce3L, 0x45df5c75L, 0xdcd60dcfL, 0xabd13d59L,
+    0x26d930acL, 0x51de003aL, 0xc8d75180L, 0xbfd06116L,
+    0x21b4f4b5L, 0x56b3c423L, 0xcfba9599L, 0xb8bda50fL,
+    0x2802b89eL, 0x5f058808L, 0xc60cd9b2L, 0xb10be924L,
+    0x2f6f7c87L, 0x58684c11L, 0xc1611dabL, 0xb6662d3dL,
+    0x76dc4190L, 0x01db7106L, 0x98d220bcL, 0xefd5102aL,
+    0x71b18589L, 0x06b6b51fL, 0x9fbfe4a5L, 0xe8b8d433L,
+    0x7807c9a2L, 0x0f00f934L, 0x9609a88eL, 0xe10e9818L,
+    0x7f6a0dbbL, 0x086d3d2dL, 0x91646c97L, 0xe6635c01L,
+    0x6b6b51f4L, 0x1c6c6162L, 0x856530d8L, 0xf262004eL,
+    0x6c0695edL, 0x1b01a57bL, 0x8208f4c1L, 0xf50fc457L,
+    0x65b0d9c6L, 0x12b7e950L, 0x8bbeb8eaL, 0xfcb9887cL,
+    0x62dd1ddfL, 0x15da2d49L, 0x8cd37cf3L, 0xfbd44c65L,
+    0x4db26158L, 0x3ab551ceL, 0xa3bc0074L, 0xd4bb30e2L,
+    0x4adfa541L, 0x3dd895d7L, 0xa4d1c46dL, 0xd3d6f4fbL,
+    0x4369e96aL, 0x346ed9fcL, 0xad678846L, 0xda60b8d0L,
+    0x44042d73L, 0x33031de5L, 0xaa0a4c5fL, 0xdd0d7cc9L,
+    0x5005713cL, 0x270241aaL, 0xbe0b1010L, 0xc90c2086L,
+    0x5768b525L, 0x206f85b3L, 0xb966d409L, 0xce61e49fL,
+    0x5edef90eL, 0x29d9c998L, 0xb0d09822L, 0xc7d7a8b4L,
+    0x59b33d17L, 0x2eb40d81L, 0xb7bd5c3bL, 0xc0ba6cadL,
+    0xedb88320L, 0x9abfb3b6L, 0x03b6e20cL, 0x74b1d29aL,
+    0xead54739L, 0x9dd277afL, 0x04db2615L, 0x73dc1683L,
+    0xe3630b12L, 0x94643b84L, 0x0d6d6a3eL, 0x7a6a5aa8L,
+    0xe40ecf0bL, 0x9309ff9dL, 0x0a00ae27L, 0x7d079eb1L,
+    0xf00f9344L, 0x8708a3d2L, 0x1e01f268L, 0x6906c2feL,
+    0xf762575dL, 0x806567cbL, 0x196c3671L, 0x6e6b06e7L,
+    0xfed41b76L, 0x89d32be0L, 0x10da7a5aL, 0x67dd4accL,
+    0xf9b9df6fL, 0x8ebeeff9L, 0x17b7be43L, 0x60b08ed5L,
+    0xd6d6a3e8L, 0xa1d1937eL, 0x38d8c2c4L, 0x4fdff252L,
+    0xd1bb67f1L, 0xa6bc5767L, 0x3fb506ddL, 0x48b2364bL,
+    0xd80d2bdaL, 0xaf0a1b4cL, 0x36034af6L, 0x41047a60L,
+    0xdf60efc3L, 0xa867df55L, 0x316e8eefL, 0x4669be79L,
+    0xcb61b38cL, 0xbc66831aL, 0x256fd2a0L, 0x5268e236L,
+    0xcc0c7795L, 0xbb0b4703L, 0x220216b9L, 0x5505262fL,
+    0xc5ba3bbeL, 0xb2bd0b28L, 0x2bb45a92L, 0x5cb36a04L,
+    0xc2d7ffa7L, 0xb5d0cf31L, 0x2cd99e8bL, 0x5bdeae1dL,
+    0x9b64c2b0L, 0xec63f226L, 0x756aa39cL, 0x026d930aL,
+    0x9c0906a9L, 0xeb0e363fL, 0x72076785L, 0x05005713L,
+    0x95bf4a82L, 0xe2b87a14L, 0x7bb12baeL, 0x0cb61b38L,
+    0x92d28e9bL, 0xe5d5be0dL, 0x7cdcefb7L, 0x0bdbdf21L,
+    0x86d3d2d4L, 0xf1d4e242L, 0x68ddb3f8L, 0x1fda836eL,
+    0x81be16cdL, 0xf6b9265bL, 0x6fb077e1L, 0x18b74777L,
+    0x88085ae6L, 0xff0f6a70L, 0x66063bcaL, 0x11010b5cL,
+    0x8f659effL, 0xf862ae69L, 0x616bffd3L, 0x166ccf45L,
+    0xa00ae278L, 0xd70dd2eeL, 0x4e048354L, 0x3903b3c2L,
+    0xa7672661L, 0xd06016f7L, 0x4969474dL, 0x3e6e77dbL,
+    0xaed16a4aL, 0xd9d65adcL, 0x40df0b66L, 0x37d83bf0L,
+    0xa9bcae53L, 0xdebb9ec5L, 0x47b2cf7fL, 0x30b5ffe9L,
+    0xbdbdf21cL, 0xcabac28aL, 0x53b39330L, 0x24b4a3a6L,
+    0xbad03605L, 0xcdd70693L, 0x54de5729L, 0x23d967bfL,
+    0xb3667a2eL, 0xc4614ab8L, 0x5d681b02L, 0x2a6f2b94L,
+    0xb40bbe37L, 0xc30c8ea1L, 0x5a05df1bL, 0x2d02ef8dL
+  };
+
+  // CRC accumulator
+  private long crc;
+
+  // inititialize CRC
+  private void initCrc() {
+    crc = 0xffffffffL;
+  }
+
+  // update CRC
+  private void updCrc(final int data) {
+    crc = (crc >> 8) ^ CRC_TABLE[(int)((crc ^ data) & 0xff)];
+  }
+  
   @Override
   protected void setUp() {
   }
 
   public void testMode0_1() {
+    initCrc();
+    updCrc(0xa5);
+    System.out.printf("%08x%n", crc);
+    updCrc(0xc4);
+    System.out.printf("%08x%n", crc);
+    updCrc(0xb6);
+    System.out.printf("%08x%n", crc);
   }
 }
