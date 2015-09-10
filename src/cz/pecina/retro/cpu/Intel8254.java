@@ -422,9 +422,7 @@ public class Intel8254 extends Device implements IOElement {
 		      " set to: " + counters[number].outPin.level);
 	  }
         });
-    }
 
-    for (int i = 0; i < 3; i++) {
       counters[i] = new Counter();
       log.finer("Setting up counter: " + i + ", connection type: " +
 		(types[i] ? "CPU clock" : "normal"));
@@ -748,7 +746,7 @@ public class Intel8254 extends Device implements IOElement {
 	  newCounterRegister = data * (bcd ? 100 : 0x100); 
 	  break;
 
-	case 3:
+	default:
 	  if (writing) {
 	    newCounterRegister += data * (bcd ? 100 : 0x100);
 	  } else {
@@ -917,7 +915,7 @@ public class Intel8254 extends Device implements IOElement {
 	statusLatched = false;
 	return statusLatch;
       }
-      int data = 0, value;
+      int data, value;
       if (outputLatched) {
 	value = outputLatch;
 	log.finest("Outputting latched counter value: " + value);
@@ -935,7 +933,7 @@ public class Intel8254 extends Device implements IOElement {
 	case 2:
 	  data = msb(value);
 	  break;
-	case 3:
+	default:
 	  data = (reading ? msb(value) : lsb(value));
 	  reading = !reading;
 	  break;
@@ -1208,7 +1206,8 @@ public class Intel8254 extends Device implements IOElement {
 		if (gate) {
 		  if (!writing) {
 		    CPUScheduler.removeAllEvents(Counter.this);
-		    CPUScheduler.addEventRelative(Counter.this, countingElement);
+		    CPUScheduler.addEventRelative(Counter.this,
+						  countingElement);
 		    log.finest("Counting resumed");
 		  }
 		} else {
@@ -1220,7 +1219,8 @@ public class Intel8254 extends Device implements IOElement {
 		if (gate) {
 		  out(false);
 		  CPUScheduler.removeAllEvents(Counter.this);
-		  CPUScheduler.addEventRelative(Counter.this, counterRegister + 1);
+		  CPUScheduler.addEventRelative(Counter.this,
+						counterRegister + 1);
 		  nullCount = false;
 		  log.finest("Counting triggered");
 		}
@@ -1229,7 +1229,8 @@ public class Intel8254 extends Device implements IOElement {
 	      case 2:
 		if (gate) {
 		  CPUScheduler.removeAllEvents(Counter.this);
-		  CPUScheduler.addEventRelative(Counter.this, counterRegister);
+		  CPUScheduler.addEventRelative(Counter.this,
+						counterRegister);
 		  log.finest("Counting resumed");
 		} else {
 		  out(true);
@@ -1240,7 +1241,8 @@ public class Intel8254 extends Device implements IOElement {
 	      case 3:
 		if (gate) {
 		  CPUScheduler.removeAllEvents(Counter.this);
-		  CPUScheduler.addEventRelative(Counter.this, ((counterRegister + 1) / 2) + 1);
+		  CPUScheduler.addEventRelative(Counter.this,
+						(counterRegister + 3) / 2);
 		  log.finest("Counting resumed");
 		} else {
 		  out(true);
@@ -1252,7 +1254,8 @@ public class Intel8254 extends Device implements IOElement {
 		if (gate) {
 		  if (!writing) {
 		    CPUScheduler.removeAllEvents(Counter.this);
-		    CPUScheduler.addEventRelative(Counter.this, countingElement);
+		    CPUScheduler.addEventRelative(Counter.this,
+						  countingElement);
 		    log.finest("Counting resumed");
 		  }
 		} else {
@@ -1264,7 +1267,8 @@ public class Intel8254 extends Device implements IOElement {
 		if (gate) {
 		  out(true);
 		  CPUScheduler.removeAllEvents(Counter.this);
-		  CPUScheduler.addEventRelative(Counter.this, counterRegister + 1);
+		  CPUScheduler.addEventRelative(Counter.this,
+						counterRegister + 1);
 		  nullCount = false;
 		  log.finest("Counting triggered");
 		}
