@@ -20,6 +20,8 @@
 
 package cz.pecina.retro.cpu;
 
+import java.math.BigInteger;
+
 import junit.framework.TestCase;
 
 public class TestIntel8080A extends TestCase {
@@ -400,6 +402,15 @@ public class TestIntel8080A extends TestCase {
   // CRC accumulator
   private long crc;
 
+  // CPU
+  private Intel8080A cpu;
+
+  // memory
+  private SimpleMemory mem;
+
+  // RAM
+  private byte[] ram;
+
   // inititialize CRC
   private void initCrc() {
     crc = 0xffffffffL;
@@ -407,20 +418,275 @@ public class TestIntel8080A extends TestCase {
 
   // update CRC
   private void updCrc(final int data) {
+    System.out.printf("%02x -> ", data);
     crc = (crc >> 8) ^ CRC_TABLE[(int)((crc ^ data) & 0xff)];
+    System.out.printf("%08x%n", crc);
   }
   
   @Override
   protected void setUp() {
+    cpu = new Intel8080A("TEST_CPU");
+    mem = new SimpleMemory("TEST_MEM", 0, 0);
+    cpu.setMemory(mem);
+    ram = mem.memory;
   }
 
-  public void testMode0_1() {
-    initCrc();
-    updCrc(0xa5);
-    System.out.printf("%08x%n", crc);
-    updCrc(0xc4);
-    System.out.printf("%08x%n", crc);
-    updCrc(0xb6);
-    System.out.printf("%08x%n", crc);
+  // size
+  private static final int SIZE = 20;
+
+  // offsets
+  private static final int
+    SEN = 0,
+    SP = 1,
+    ACC = 3,
+    FLAGS = 4,
+    BC = 5,
+    DE = 7,
+    HL = 9,
+    HLIX = 11,
+    HLIY = 13,
+    MEM_OP = 15,
+    INS3 = 17,
+    INS2 = 18,
+    INS1 = 19,
+    INS0 = 20;
+
+  // get array of set bit positions
+  private int[] getSetBitPositions(BigInteger x) {
+    final int l = x.bitCount();
+    final int[] r = new int[l];
+    for (int i = 0; i < l; i++) {
+      final int n = x.getLowestSetBit();
+      r[i] = n;
+      x = x.flipBit(n);
+    }
+    return r;
+  }
+
+  public void testExer() {
+    for (TestGroup tg: TEST_GROUPS) {
+      final byte[] temp = new byte[SIZE + 1];
+
+      temp[INS0] = (byte)(tg.ins0_init);
+      temp[INS1] = (byte)(tg.ins1_init);
+      temp[INS2] = (byte)(tg.ins2_init);
+      temp[INS3] = (byte)(tg.ins3_init);
+      temp[MEM_OP + 1] = (byte)(tg.memOp_init & 0xff);
+      temp[MEM_OP] = (byte)(tg.memOp_init >> 8);
+      temp[HLIY + 1] = (byte)(tg.hliy_init & 0xff);
+      temp[HLIY] = (byte)(tg.hliy_init >> 8);
+      temp[HLIX + 1] = (byte)(tg.hlix_init & 0xff);
+      temp[HLIX] = (byte)(tg.hlix_init >> 8);
+      temp[HL + 1] = (byte)(tg.hl_init & 0xff);
+      temp[HL] = (byte)(tg.hl_init >> 8);
+      temp[DE + 1] = (byte)(tg.de_init & 0xff);
+      temp[DE] = (byte)(tg.de_init >> 8);
+      temp[BC + 1] = (byte)(tg.bc_init & 0xff);
+      temp[BC] = (byte)(tg.bc_init >> 8);
+      temp[FLAGS] = (byte)(tg.flags_init);
+      temp[ACC] = (byte)(tg.acc_init);
+      temp[SP + 1] = (byte)(tg.sp_init & 0xff);
+      temp[SP] = (byte)(tg.sp_init >> 8);
+      temp[SEN] = (byte)0x80;
+      final BigInteger init = new BigInteger(1, temp);
+      System.out.println(init.toString(16));
+
+      temp[INS0] = (byte)(tg.ins0_inc);
+      temp[INS1] = (byte)(tg.ins1_inc);
+      temp[INS2] = (byte)(tg.ins2_inc);
+      temp[INS3] = (byte)(tg.ins3_inc);
+      temp[MEM_OP + 1] = (byte)(tg.memOp_inc & 0xff);
+      temp[MEM_OP] = (byte)(tg.memOp_inc >> 8);
+      temp[HLIY + 1] = (byte)(tg.hliy_inc & 0xff);
+      temp[HLIY] = (byte)(tg.hliy_inc >> 8);
+      temp[HLIX + 1] = (byte)(tg.hlix_inc & 0xff);
+      temp[HLIX] = (byte)(tg.hlix_inc >> 8);
+      temp[HL + 1] = (byte)(tg.hl_inc & 0xff);
+      temp[HL] = (byte)(tg.hl_inc >> 8);
+      temp[DE + 1] = (byte)(tg.de_inc & 0xff);
+      temp[DE] = (byte)(tg.de_inc >> 8);
+      temp[BC + 1] = (byte)(tg.bc_inc & 0xff);
+      temp[BC] = (byte)(tg.bc_inc >> 8);
+      temp[FLAGS] = (byte)(tg.flags_inc);
+      temp[ACC] = (byte)(tg.acc_inc);
+      temp[SP + 1] = (byte)(tg.sp_inc & 0xff);
+      temp[SP] = (byte)(tg.sp_inc >> 8);
+      temp[SEN] = (byte)0x80;
+      final BigInteger inc = new BigInteger(1, temp);
+      System.out.println(inc.toString(16));
+      final int[] incPos = getSetBitPositions(inc);
+      final int incLen = incPos.length;
+      System.out.println("incLen:"+incLen);
+      final int incNum = 1 << incLen;
+      System.out.println("incNum:"+incNum);
+      
+      temp[INS0] = (byte)(tg.ins0_shift);
+      temp[INS1] = (byte)(tg.ins1_shift);
+      temp[INS2] = (byte)(tg.ins2_shift);
+      temp[INS3] = (byte)(tg.ins3_shift);
+      temp[MEM_OP + 1] = (byte)(tg.memOp_shift & 0xff);
+      temp[MEM_OP] = (byte)(tg.memOp_shift >> 8);
+      temp[HLIY + 1] = (byte)(tg.hliy_shift & 0xff);
+      temp[HLIY] = (byte)(tg.hliy_shift >> 8);
+      temp[HLIX + 1] = (byte)(tg.hlix_shift & 0xff);
+      temp[HLIX] = (byte)(tg.hlix_shift >> 8);
+      temp[HL + 1] = (byte)(tg.hl_shift & 0xff);
+      temp[HL] = (byte)(tg.hl_shift >> 8);
+      temp[DE + 1] = (byte)(tg.de_shift & 0xff);
+      temp[DE] = (byte)(tg.de_shift >> 8);
+      temp[BC + 1] = (byte)(tg.bc_shift & 0xff);
+      temp[BC] = (byte)(tg.bc_shift >> 8);
+      temp[FLAGS] = (byte)(tg.flags_shift);
+      temp[ACC] = (byte)(tg.acc_shift);
+      temp[SP + 1] = (byte)(tg.sp_shift & 0xff);
+      temp[SP] = (byte)(tg.sp_shift >> 8);
+      temp[SEN] = (byte)0x80;
+      final BigInteger shift = new BigInteger(1, temp);
+      System.out.println(shift.toString(16));
+      final int[] shiftPos = getSetBitPositions(shift);
+      final int shiftLen = shiftPos.length;
+      System.out.println("shiftLen:"+shiftLen);
+
+      initCrc();
+
+      int incCounter = 0;
+
+      byte[] workBytes = init.toByteArray();
+
+      ram[MSBT - 4] = workBytes[INS0 + 1];
+      ram[MSBT - 3] = workBytes[INS1 + 1];
+      ram[MSBT - 2] = workBytes[INS2 + 1];
+      ram[MSBT - 1] = workBytes[INS3 + 1];
+      ram[MSBT] = workBytes[MEM_OP + 2];
+      ram[MSBT + 1] = workBytes[MEM_OP + 1];
+      cpu.setL(workBytes[HL + 2] & 0xff);
+      cpu.setH(workBytes[HL + 1] & 0xff);
+      cpu.setE(workBytes[DE + 2] & 0xff);
+      cpu.setD(workBytes[DE + 1] & 0xff);
+      cpu.setC(workBytes[BC + 2] & 0xff);
+      cpu.setB(workBytes[BC + 1] & 0xff);
+      cpu.setF(workBytes[FLAGS + 1] & 0xff);
+      cpu.setA(workBytes[ACC + 1] & 0xff);
+      cpu.setSP((workBytes[SP + 2] & 0xff) + ((workBytes[SP + 1] & 0xff) << 8));
+      
+      cpu.setPC(MSBT - 4);
+      cpu.exec();  // only if not halt
+
+      workBytes[MEM_OP + 2] = ram[MSBT];
+      workBytes[MEM_OP + 1] = ram[MSBT + 1];
+      workBytes[HLIY + 2] = workBytes[HLIX + 2] =
+	workBytes[HL + 2] = (byte)(cpu.getL());
+      workBytes[HLIY + 1] = workBytes[HLIX + 1] =
+	workBytes[HL + 1] = (byte)(cpu.getH());
+      workBytes[DE + 2] = (byte)(cpu.getE());
+      workBytes[DE + 1] = (byte)(cpu.getD());
+      workBytes[BC + 2] = (byte)(cpu.getC());
+      workBytes[BC + 1] = (byte)(cpu.getB());
+      workBytes[FLAGS + 1] = (byte)(cpu.getF() & tg.flagMask);
+      workBytes[ACC + 1] = (byte)(cpu.getA());
+      workBytes[SP + 2] = (byte)(cpu.getSP() & 0xff);
+      workBytes[SP + 1] = (byte)(cpu.getSP() >> 8);
+      
+      // for (int i = 0; i < workBytes.length; i++)
+      // 	System.out.printf("%d: %02x%n", i, workBytes[i]);
+
+      for (int i = 0; i < (SIZE - 4); i++) {
+	updCrc(workBytes[SIZE - 3 - i] & 0xff);
+      }
+
+      incCounter++;
+
+      BigInteger incMask = BigInteger.ZERO;
+
+      for (int i = 0; i < incLen; i++) {
+	if (((incCounter >> i) & 1) == 1) {
+	  incMask = incMask.flipBit(incPos[i]);
+	}
+      }
+      System.out.println(incMask.toString(16));
+
+      BigInteger shiftMask = BigInteger.ONE.shiftLeft(shiftPos[0]);
+      
+
+      BigInteger work = init.xor(incMask).xor(shiftMask);;
+
+      workBytes = work.toByteArray();
+      
+      for (int i = 0; i < workBytes.length; i++)
+      	System.out.printf("%d: %02x%n", i, workBytes[i]);
+
+      
+      ram[MSBT - 4] = workBytes[INS0 + 1];
+      ram[MSBT - 3] = workBytes[INS1 + 1];
+      ram[MSBT - 2] = workBytes[INS2 + 1];
+      ram[MSBT - 1] = workBytes[INS3 + 1];
+      ram[MSBT] = workBytes[MEM_OP + 2];
+      ram[MSBT + 1] = workBytes[MEM_OP + 1];
+      cpu.setL(workBytes[HL + 2] & 0xff);
+      cpu.setH(workBytes[HL + 1] & 0xff);
+      cpu.setE(workBytes[DE + 2] & 0xff);
+      cpu.setD(workBytes[DE + 1] & 0xff);
+      cpu.setC(workBytes[BC + 2] & 0xff);
+      cpu.setB(workBytes[BC + 1] & 0xff);
+      cpu.setF(workBytes[FLAGS + 1] & 0xff);
+      cpu.setA(workBytes[ACC + 1] & 0xff);
+      cpu.setSP((workBytes[SP + 2] & 0xff) + ((workBytes[SP + 1] & 0xff) << 8));
+      
+      cpu.setPC(MSBT - 4);
+      cpu.exec();
+
+      workBytes[MEM_OP + 2] = ram[MSBT];
+      workBytes[MEM_OP + 1] = ram[MSBT + 1];
+      workBytes[HLIY + 2] = workBytes[HLIX + 2] =
+	workBytes[HL + 2] = (byte)(cpu.getL());
+      workBytes[HLIY + 1] = workBytes[HLIX + 1] =
+	workBytes[HL + 1] = (byte)(cpu.getH());
+      workBytes[DE + 2] = (byte)(cpu.getE());
+      workBytes[DE + 1] = (byte)(cpu.getD());
+      workBytes[BC + 2] = (byte)(cpu.getC());
+      workBytes[BC + 1] = (byte)(cpu.getB());
+      workBytes[FLAGS + 1] = (byte)(cpu.getF() & tg.flagMask);
+      workBytes[ACC + 1] = (byte)(cpu.getA());
+      workBytes[SP + 2] = (byte)(cpu.getSP() & 0xff);
+      workBytes[SP + 1] = (byte)(cpu.getSP() >> 8);
+      
+      // for (int i = 0; i < workBytes.length; i++)
+      // 	System.out.printf("%d: %02x%n", i, workBytes[i]);
+
+      for (int i = 0; i < (SIZE - 4); i++) {
+	updCrc(workBytes[SIZE - 3 - i] & 0xff);
+      }
+
+      // cpu.setBC(tg.bc_init);
+      // cpu.setDE(tg.de_init);
+      // cpu.setHL(tg.hl_init);
+      // cpu.setSP(tg.sp_init);
+      // cpu.setA(tg.acc_init);
+      // cpu.setF(tg.flags_init);
+      // cpu.setPC(0);
+      // ram[MEM_OP] = (byte)(tg.memOp_init & 0xff);
+      // ram[MEM_OP + 1] = (byte)(tg.memOp_init >> 8);
+      // ram[0] = (byte)(tg.ins0_init);
+      // ram[1] = (byte)(tg.ins1_init);
+      // ram[2] = (byte)(tg.ins2_init);
+      // ram[3] = (byte)(tg.ins3_init);
+      // cpu.exec(1, 0, BREAKPOINTS);
+      // ram[HLIY] = ram[HLIX] = ram[HL] = (byte)(cpu.getL());
+      // ram[HLIY + 1] = ram[HLIX + 1] = ram[HL + 1] = (byte)(cpu.getH());
+      // ram[DE] = (byte)(cpu.getE());
+      // ram[DE + 1] = (byte)(cpu.getD());
+      // ram[BC] = (byte)(cpu.getC());
+      // ram[BC + 1] = (byte)(cpu.getB());
+      // ram[FLAGS] = (byte)(cpu.getF() & tg.flagMask);
+      // ram[ACC] = (byte)(cpu.getA());
+      // final int sp = cpu.getSP();
+      // ram[SP] = (byte)(sp & 0xff);
+      // ram[SP + 1] = (byte)(sp >> 8);
+      // for (int i = 0; i < SIZE; i++) {
+      // 	updCrc(ram[MSBT + i] & 0xff);
+      // }
+      // System.out.printf("%08x%n", crc);
+      fail();
+    }
   }
 }

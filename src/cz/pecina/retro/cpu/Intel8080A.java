@@ -49,6 +49,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   private static final int FFIX = 0x02;
   private static final int FMASK = 0xd5;
 
+  // empty list of breakpoints
+  private static final List<Integer> NO_BREAKPOINTS = new ArrayList<>();
+  
   // memory
   private AbstractMemory memory;
 
@@ -5085,5 +5088,11 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       if ((cycleCounter >= endCycleCounter) || breakpoints.contains(PC))
 	break;
     }
+  }
+
+  // for description see Processor
+  @Override
+  public void exec() {
+    exec(1, 0, NO_BREAKPOINTS);
   }
 }

@@ -213,4 +213,9 @@ public interface Processor {
   public abstract void exec(final long minCycles,
 			    final int mask,
 			    final List<Integer> breakpoints);
+
+  /**
+   * Executes one instruction or a divisible part of it.
+   */
+  public abstract void exec();
 }
