@@ -1,4 +1,4 @@
-/* TestIntel8080A.java
+/* TestZilogZ80.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -22,19 +22,46 @@ package cz.pecina.retro.cpu;
 
 import java.math.BigInteger;
 
-public class TestIntel8080A extends ProcessorTest {
+public class TestZilogZ80 extends ProcessorTest {
 
   // test groups
   private static final TestGroup[] TEST_GROUPS = {
 
     new TestGroup(
       0xff,
-      9, 0, 0, 0, 0xc4a5, 0xc4c7, 0xd226, 0xa050,
+      0xed, 0x42, 0, 0, 0x832c, 0x4f88, 0xf22b, 0xb339,
+      0x7e1f, 0x1563, 0xd3, 0x89, 0x465e,
+      0, 0x38, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xffff, 0xffff, 0xffff, 0xd7, 0, 0xffff,
+      0xd48ad519L,
+      "<adc,sbc> hl,<bc,de,hl,sp>"),
+
+    new TestGroup(
+      0xff,
+      0x09, 0, 0, 0, 0xc4a5, 0xc4c7, 0xd226, 0xa050,
       0x58ea, 0x8566, 0xc6, 0xde, 0x9bc9,
       0x30, 0, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0xffff, 0xffff, 0xffff, 0xd7, 0, 0xffff,
-      0x14474ba6L,
-      "dad <b,d,h,sp>"),
+      0xd9a4ca05L,
+      "add hl,<bc,de,hl,sp>"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x09, 0, 0, 0xddac, 0xc294, 0x635b, 0x33d3,
+      0x6a76, 0xfa20, 0x94, 0x68, 0x36f5,
+      0, 0x30, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0xffff, 0, 0xffff, 0xffff, 0xd7, 0, 0xffff,
+      0xb1df8ec0L,
+      "add ix,<bc,de,ix,sp>"),
+
+    new TestGroup(
+      0xff.
+      0xfd, 0x09, 0, 0, 0xc7c2, 0xf407, 0x51c1, 0x3e96,
+      0x0bf4, 0x510f, 0x92, 0x1e, 0x71ea,
+      0, 0x30, 0, 0, 0, 0xf821, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0xffff, 0, 0, 0xffff, 0xffff, 0xd7, 0, 0xffff,
+      0x39c8589bL,
+      "add iy,<bc,de,iy,sp>"),
 
     new TestGroup(
       0xff,
@@ -42,8 +69,8 @@ public class TestIntel8080A extends ProcessorTest {
       0x5b61, 0x0b29, 0x10, 0x66, 0x85b2,
       0x38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
       0, 0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x9e922f9eL,
-      "aluop nn"),
+      0x51c19c2eL,
+      "aluop a,nn"),
 
     new TestGroup(
       0xff,
@@ -51,8 +78,62 @@ public class TestIntel8080A extends ProcessorTest {
       0xe309, 0xa666, 0xd0, 0x3b, 0xadbb,
       0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
       0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0, 0,
-      0xcf762c86L,
-      "aluop <b,c,d,e,h,l,m,a>"),
+      0x06c7aa8eL,
+      "aluop a,<b,c,d,e,h,l,(hl),a>"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x84, 0, 0, 0xd6f7, 0xc76e, 0xaccf, 0x2847,
+      0x22dd, 0xc035, 0xc5, 0x38, 0x234b,
+      0x20, 0x39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
+      0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0, 0,
+      0xa886cc44L,
+      "aluop a,<ixh,ixl,iyh,iyl>"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x86, 0x01, 0, 0x90b7, MSBT - 1, MSBT - 1, 0x32fd,
+      0x406e, 0xc1dc, 0x45, 0x6e, 0xe5fa,
+      0x20, 0x38, 0, 0, 0, 0x01, 0x01, 0, 0, 0, 0, 0xff, 0,
+      0, 0, 0, 0, 0xff, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0xd3f2d74aL,
+      "aluop a,(<ix,iy>+1)"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0xcb, 0x01, 0x46, 0x2075, MSBT - 1, MSBT - 1, 0x3cfc,
+      0xa79a, 0x3d74, 0x51, 0x27, 0xca14,
+      0x20, 0, 0, 0x38, 0, 0, 0, 0, 0, 0, 0x53, 0, 0,
+      0, 0, 0, 0, 0xff, 0, 0, 0, 0, 0, 0, 0, 0,
+      0y83534ee1L,
+      "bit n,(<ix,iy>+1)"),
+
+    new TestGroup(
+      0xff,
+      0xcb, 0x40, 0, 0, 0x3ef1, 0x9dfc, 0x7acc, MSBT,
+      0xbe61, 0x7a86, 0x50, 0x24, 0x1998,
+      0, 0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0x53, 0, 0,
+      0, 0xff, 0, 0, 0,0xffff, 0xffff, 0, 0xff, 0,
+      0x5e020e98L,
+      "bit n,<b,c,d,e,h,l,(hl),a>"),
+
+    new TestGroup(
+      0xff,
+      0xed, 0xa9, 0, 0, 0xc7b6, 0x72b4, 0x18f6, MSBT + 17,
+      0x8dbd, 0x01, 0xc0, 0x30, 0x94a3,
+      0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0x10, 0, 0xff, 0,
+      0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0x134b622dL,
+      "cpd<r>"),
+
+    new TestGroup(
+      0xff,
+      0xed, 0xa1, 0, 0, 0x4d48, 0xaf4a, 0x906b, MSBT,
+      0x4e71, 0x01, 0x93, 0x6a, 0x907c,
+      0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0x10, 0, 0xff, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0x2da42d19L,
+      "cpi<r>"),
 
     new TestGroup(
       0xff,
@@ -60,8 +141,8 @@ public class TestIntel8080A extends ProcessorTest {
       0x8d5b, 0x9079, 0x04, 0x8e, 0x299d,
       0x18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0xff, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0xbb3f030cL,
-      "<daa,cma,stc,cmc>"),
+      0x6d2dd213L,
+      "<daa,cpl,scf,ccf>"),
 
     new TestGroup(
       0xff,
@@ -69,8 +150,8 @@ public class TestIntel8080A extends ProcessorTest {
       0xa7b0, 0x431b, 0x44, 0x5a, 0xd030,
       0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0xadb6460eL,
-      "<inr,dcr> a"),
+      0x81fa8100L,
+      "<inc,dec> a"),
 
     new TestGroup(
       0xff,
@@ -78,8 +159,8 @@ public class TestIntel8080A extends ProcessorTest {
       0x5a86, 0x1e85, 0x86, 0x58, 0x9bbb,
       0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0xff00, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x83ed1345L,
-      "<inr,dcr> b"),
+      0x77f35a73L,
+      "<inc,dec> b"),
 
     new TestGroup(
       0xff,
@@ -87,8 +168,8 @@ public class TestIntel8080A extends ProcessorTest {
       0x11cc, 0xe8a4, 0x02, 0x49, 0x2a4d,
       0x08, 0, 0, 0, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0xf79287cdL,
-      "<inx,dcx> b"),
+      0xd2ae3becL,
+      "<inc,dec> bc"),
 
     new TestGroup(
       0xff,
@@ -96,8 +177,8 @@ public class TestIntel8080A extends ProcessorTest {
       0x8b27, 0xd208, 0x95, 0x05, 0x0660,
       0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0xe5f6721bL,
-      "<inr,dcr> c"),
+      0x1af612a7L,
+      "<inc,dec> c"),
 
     new TestGroup(
       0xff,
@@ -105,8 +186,8 @@ public class TestIntel8080A extends ProcessorTest {
       0x38cc, 0xdebc, 0x43, 0x5c, 0x03bd,
       0x01, 0, 0, 0, 0, 0, 0, 0, 0xff00, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x15b5579aL,
-      "<inr,dcr> d"),
+      0xd146bf51L,
+      "<inc,dec> d"),
 
     new TestGroup(
       0xff,
@@ -114,8 +195,8 @@ public class TestIntel8080A extends ProcessorTest {
       0x9967, 0x3a2e, 0x92, 0xf6, 0x9d54,
       0x08, 0, 0, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x7f4e2501L,
-      "<inx,dcx> d"),
+      0xaec6d42cL,
+      "<inc,dec> de"),
 
     new TestGroup(
       0xff,
@@ -123,8 +204,8 @@ public class TestIntel8080A extends ProcessorTest {
       0xa0f4, 0xa10a, 0x13, 0x32, 0x5925,
       0x01, 0, 0, 0, 0, 0, 0, 0, 0xff, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0xcf2ab396L,
-      "<inr,dcr> e"),
+      0xca8c6ac2L,
+      "<inc,dec> e"),
 
     new TestGroup(
       0xff,
@@ -132,8 +213,8 @@ public class TestIntel8080A extends ProcessorTest {
       0x11a6, 0xbc1a, 0x17, 0x06, 0x2818,
       0x01, 0, 0, 0, 0, 0, 0, 0xff00, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x12b2952cL,
-      "<inr,dcr> h"),
+      0x560f955eL,
+      "<inc,dec> h"),
 
     new TestGroup(
       0xff,
@@ -141,8 +222,26 @@ public class TestIntel8080A extends ProcessorTest {
       0xe2c2, 0x822a, 0x57, 0xe0, 0xc3e1,
       0x08, 0, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x9f2b23c0L,
-      "<inx,dcx> h"),
+      0xfc0d6d4ahL,
+      "<inc,dec> hl"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x23, 0, 0, 0xbc3c, 0x0d9b, 0xe081, 0xadfd,
+      0x9a7f, 0x96e5, 0x13, 0x85, 0x0be2,
+      0, 0x08, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0xa54dbe31L,
+      "<inc,dec> ix"),
+
+    new TestGroup(
+      0xff,
+      0xfd, 0x23, 0, 0, 0x9402, 0x637a, 0x3182, 0xc65a,
+      0xb2e9, 0xabb4, 0x16, 0xf2, 0x6d05,
+      0, 0x08, 0, 0, 0, 0xf821, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0x505d51a3L,
+      "<inc,dec> iy"),
 
     new TestGroup(
       0xff,
@@ -150,8 +249,8 @@ public class TestIntel8080A extends ProcessorTest {
       0xf4c1, 0xdfa2, 0xd1, 0x3c, 0x3ea2,
       0x01, 0, 0, 0, 0, 0, 0, 0xff, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0xff57d356L,
-      "<inr,dcr> l"),
+      0xa0a1b49fL,
+      "<inc,dec> l"),
 
     new TestGroup(
       0xff,
@@ -159,8 +258,8 @@ public class TestIntel8080A extends ProcessorTest {
       0x877e, 0xda58, 0x15, 0x5c, 0x1f37,
       0x01, 0, 0, 0, 0xff, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x92e963bdL,
-      "<inr,dcr> m"),
+      0x28295eceL,
+      "<inc,dec> (hl)"),
 
     new TestGroup(
       0xff,
@@ -168,9 +267,58 @@ public class TestIntel8080A extends ProcessorTest {
       0xa494, 0xf476, 0x53, 0x02, 0x855b,
       0x08, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xf821,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0xd5702fabL,
-      "<inx,dcx> sp"),
+      0x5dacd527L,
+      "<inc,dec> sp"),
 
+    new TestGroup(
+      0xff,
+      0xdd, 0x34, 0x01, 0, 0xfa6e, MSBT - 1, MSBT - 1, 0x2c28,
+      0x8894, 0x5057, 0x16, 0x33, 0x286f,
+      0x20, 0x01, 0, 0, 0xff, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0x0b95a8eaL,
+      "<inc,dec> (<ix,iy>+1)"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x24, 0, 0, 0xb838, 0x316c, 0xc6d4, 0x3e01,
+      0x8358, 0x15b4, 0x81, 0xde, 0x4259,
+      0, 0x01, 0, 0, 0, 0xff00, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0x6f463662L,
+      "<inc,dec> ixh"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x2c, 0, 0, 0x4d14, 0x7460, 0x76d4, 0x06e7,
+      0x32a2, 0x213c, 0xd6,0xd7, 0x99a5,
+      0, 0x01, 0, 0, 0, 0xff, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0x027bef2cL,
+      "<inc,dec> ixl"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x24, 0, 0, 0x2836, 0x9f6f, 0x9116, 0x61b9,
+      0x82cb, 0xe219, 0x92, 0x73, 0xa98c,
+      0, 0x01, 0, 0, 0xff00, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0x2d966f3L,
+      "<inc,dec> iyh"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x2c, 0, 0, 0sd7c6, 0x62d5, 0xa09e, 0x7039,
+      0x3e7e, 0x9f12, 0x90, 0xd9, 0x220f,
+      0, 0x01, 0, 0, 0xff, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0x36c11e75L,
+      "<inc,dec> iyl"),
+
+
+
+
+    
     new TestGroup(
       0xff,
       0x2a, MSBT & 0xff, MSBT >> 8, 0, 0x9863, 0x7830, 0x2077, 0xb1fe,
