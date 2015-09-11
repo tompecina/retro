@@ -221,14 +221,14 @@ public class TestIntel8080A extends TestCase {
       0xeaa72044L,
       "mvi <b,c,d,e,h,l,m,a>,nn"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0x40, 0, 0, 0, 0x72a4, 0xa024, 0x61ac, MSBT,
-    //   0x82c7, 0x718f, 0x97, 0x8f, 0xef8e,
-    //   0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    //   0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0xff, 0,
-    //   0x10b58ceeL,
-    //   "mov <bcdehla>,<bcdehla>"),
+    new TestGroup(
+      0xff,
+      0x40, 0, 0, 0, 0x72a4, 0xa024, 0x61ac, MSBT,
+      0x82c7, 0x718f, 0x97, 0x8f, 0xef8e,
+      0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0xff, 0,
+      0x10b58ceeL,
+      "mov <bcdehla>,<bcdehla>"),
 
     new TestGroup(
       0xff,
@@ -568,25 +568,25 @@ public class TestIntel8080A extends TestCase {
 	if (ram[MSBT - 4] != 0x76) {
 	  cpu.setPC(MSBT - 4);
 	  cpu.exec();
-	}
 
-	workBytes[MEM_OP + 2] = ram[MSBT];
-	workBytes[MEM_OP + 1] = ram[MSBT + 1];
-	workBytes[HLIY + 2] = workBytes[HLIX + 2] =
-	  workBytes[HL + 2] = (byte)(cpu.getL());
-	workBytes[HLIY + 1] = workBytes[HLIX + 1] =
-	  workBytes[HL + 1] = (byte)(cpu.getH());
-	workBytes[DE + 2] = (byte)(cpu.getE());
-	workBytes[DE + 1] = (byte)(cpu.getD());
-	workBytes[BC + 2] = (byte)(cpu.getC());
-	workBytes[BC + 1] = (byte)(cpu.getB());
-	workBytes[FLAGS + 1] = (byte)(cpu.getF() & tg.flagMask);
-	workBytes[ACC + 1] = (byte)(cpu.getA());
-	workBytes[SP + 2] = (byte)(cpu.getSP() & 0xff);
-	workBytes[SP + 1] = (byte)(cpu.getSP() >> 8);
-      
-	for (int i = 0; i < (SIZE - 4); i++) {
-	  updCrc(workBytes[SIZE - 3 - i] & 0xff);
+	  workBytes[MEM_OP + 2] = ram[MSBT];
+	  workBytes[MEM_OP + 1] = ram[MSBT + 1];
+	  workBytes[HLIY + 2] = workBytes[HLIX + 2] =
+	    workBytes[HL + 2] = (byte)(cpu.getL());
+	  workBytes[HLIY + 1] = workBytes[HLIX + 1] =
+	    workBytes[HL + 1] = (byte)(cpu.getH());
+	  workBytes[DE + 2] = (byte)(cpu.getE());
+	  workBytes[DE + 1] = (byte)(cpu.getD());
+	  workBytes[BC + 2] = (byte)(cpu.getC());
+	  workBytes[BC + 1] = (byte)(cpu.getB());
+	  workBytes[FLAGS + 1] = (byte)(cpu.getF() & tg.flagMask);
+	  workBytes[ACC + 1] = (byte)(cpu.getA());
+	  workBytes[SP + 2] = (byte)(cpu.getSP() & 0xff);
+	  workBytes[SP + 1] = (byte)(cpu.getSP() >> 8);
+	  
+	  for (int i = 0; i < (SIZE - 4); i++) {
+	    updCrc(workBytes[SIZE - 3 - i] & 0xff);
+	  }
 	}
 
 	if (++incCounter == incNum) {
