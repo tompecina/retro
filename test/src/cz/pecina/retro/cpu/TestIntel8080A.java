@@ -32,32 +32,32 @@ public class TestIntel8080A extends TestCase {
   // test groups
   private static final TestGroup[] TEST_GROUPS = {
 
-    new TestGroup(
-      0xff,
-      9, 0, 0, 0, 0xc4a5, 0xc4c7, 0xd226, 0xa050,
-      0x58ea, 0x8566, 0xc6, 0xde, 0x9bc9,
-      0x30, 0, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0xffff, 0xffff, 0xffff, 0xd7, 0, 0xffff,
-      0x14474b0a6L,
-      "dad <b,d,h,sp>"),
+    // new TestGroup(
+    //   0xff,
+    //   9, 0, 0, 0, 0xc4a5, 0xc4c7, 0xd226, 0xa050,
+    //   0x58ea, 0x8566, 0xc6, 0xde, 0x9bc9,
+    //   0x30, 0, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0, 0,
+    //   0, 0, 0, 0, 0, 0, 0, 0xffff, 0xffff, 0xffff, 0xd7, 0, 0xffff,
+    //   0x14474b0a6L,
+    //   "dad <b,d,h,sp>"),
 
-    new TestGroup(
-      0xff,
-      0xc6, 0, 0, 0, 0x9140, 0x7e3c, 0x7a67, 0xdf6d,
-      0x5b61, 0x0b29, 0x10, 0x66, 0x85b2,
-      0x38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
-      0, 0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-      0x9e922f9eL,
-      "aluop nn"),
+    // new TestGroup(
+    //   0xff,
+    //   0xc6, 0, 0, 0, 0x9140, 0x7e3c, 0x7a67, 0xdf6d,
+    //   0x5b61, 0x0b29, 0x10, 0x66, 0x85b2,
+    //   0x38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
+    //   0, 0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+    //   0x9e922f9eL,
+    //   "aluop nn"),
 
-    new TestGroup(
-      0xff,
-      0x80, 0, 0, 0, 0xc53e, 0x573a, 0x4c4d, MSBT,
-      0xe309, 0xa666, 0xd0, 0x3b, 0xadbb,
-      0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
-      0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0, 0,
-      0xcf762c86L,
-      "aluop <b,c,d,e,h,l,m,a>"),
+    // new TestGroup(
+    //   0xff,
+    //   0x80, 0, 0, 0, 0xc53e, 0x573a, 0x4c4d, MSBT,
+    //   0xe309, 0xa666, 0xd0, 0x3b, 0xadbb,
+    //   0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
+    //   0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0, 0,
+    //   0xcf762c86L,
+    //   "aluop <b,c,d,e,h,l,m,a>"),
 
     new TestGroup(
       0xff,
@@ -542,7 +542,7 @@ public class TestIntel8080A extends TestCase {
       initCrc();
 
       int incCounter = 0, shiftCounter = 0;
-      BigInteger incMask, shiftMask = BigInteger.ZERO, work;
+      BigInteger incMask, shiftMask = BigInteger.ZERO;
 
       byte[] workBytes = init.toByteArray();
 
@@ -565,11 +565,11 @@ public class TestIntel8080A extends TestCase {
 	cpu.setSP((workBytes[SP + 2] & 0xff) +
 		  ((workBytes[SP + 1] & 0xff) << 8));
 
-	if (shiftCounter == 1) {
-	  for (int i = 0; i < workBytes.length; i++)
-	    System.out.printf("%d: %02x%n", i, workBytes[i]);
-	  System.out.printf("%08x%n", crc);
-	}
+	// if (shiftCounter == 1) {
+	//   for (int i = 0; i < workBytes.length; i++)
+	//     System.out.printf("%d: %02x%n", i, workBytes[i]);
+	//   System.out.printf("%08x%n", crc);
+	// }
 	if (ram[MSBT - 4] != 0x76) {
 	  cpu.setPC(MSBT - 4);
 	  cpu.exec();
@@ -593,13 +593,6 @@ public class TestIntel8080A extends TestCase {
 	for (int i = 0; i < (SIZE - 4); i++) {
 	  updCrc(workBytes[SIZE - 3 - i] & 0xff);
 	}
-	if (shiftCounter == 1) {
-	  for (int i = 0; i < workBytes.length; i++)
-	    System.out.printf("%d: %02x%n", i, workBytes[i]);
-	  System.out.printf("%08x%n", crc);
-	  fail();
-	}
-
 
 	incMask = BigInteger.ZERO;
 	if (++incCounter == incNum) {
@@ -609,22 +602,23 @@ public class TestIntel8080A extends TestCase {
 	  }
 	}
 	
+	if (shiftLen > 0) {
+	  shiftMask = BigInteger.ONE.shiftLeft(shiftPos[shiftCounter]);
+	}
+	
 	for (int i = 0; i < incLen; i++) {
 	  if (((incCounter >> i) & 1) == 1) {
 	    incMask = incMask.flipBit(incPos[i]);
 	  }
 	}
+	// if (shiftCounter == 1) {
+	//   for (int i = 0; i < workBytes.length; i++)
+	//     System.out.printf("%d: %02x%n", i, workBytes[i]);
+	//   System.out.printf("%08x%n", crc);
+	//   fail();
+	// }
 
-	if (shiftLen > 0) {
-	  shiftMask = BigInteger.ONE.shiftLeft(shiftPos[shiftCounter]);
-	}
-
-	
-	work = init
-	  .xor(incMask)
-	  .xor(shiftMask);
-	
-	workBytes = work.toByteArray();
+	workBytes = init.xor(incMask).xor(shiftMask).toByteArray();
       }
       assertEquals(tg.name,
 		   String.format("%08x", tg.crc),
