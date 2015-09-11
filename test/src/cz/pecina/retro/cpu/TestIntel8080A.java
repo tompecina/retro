@@ -538,7 +538,7 @@ public class TestIntel8080A extends TestCase {
       final BigInteger shift = new BigInteger(1, temp);
       final int[] shiftPos = getSetBitPositions(shift);
       final int shiftLen = shiftPos.length;
-
+      
       initCrc();
 
       int incCounter = 0, shiftCounter = 0;
@@ -565,6 +565,11 @@ public class TestIntel8080A extends TestCase {
 	cpu.setSP((workBytes[SP + 2] & 0xff) +
 		  ((workBytes[SP + 1] & 0xff) << 8));
 
+	if (shiftCounter == 1) {
+	  for (int i = 0; i < workBytes.length; i++)
+	    System.out.printf("%d: %02x%n", i, workBytes[i]);
+	  System.out.printf("%08x%n", crc);
+	}
 	if (ram[MSBT - 4] != 0x76) {
 	  cpu.setPC(MSBT - 4);
 	  cpu.exec();
@@ -588,6 +593,13 @@ public class TestIntel8080A extends TestCase {
 	for (int i = 0; i < (SIZE - 4); i++) {
 	  updCrc(workBytes[SIZE - 3 - i] & 0xff);
 	}
+	if (shiftCounter == 1) {
+	  for (int i = 0; i < workBytes.length; i++)
+	    System.out.printf("%d: %02x%n", i, workBytes[i]);
+	  System.out.printf("%08x%n", crc);
+	  fail();
+	}
+
 
 	incMask = BigInteger.ZERO;
 	if (++incCounter == incNum) {
@@ -606,7 +618,8 @@ public class TestIntel8080A extends TestCase {
 	if (shiftLen > 0) {
 	  shiftMask = BigInteger.ONE.shiftLeft(shiftPos[shiftCounter]);
 	}
-	  
+
+	
 	work = init
 	  .xor(incMask)
 	  .xor(shiftMask);
