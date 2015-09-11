@@ -221,14 +221,14 @@ public class TestIntel8080A extends TestCase {
       0xeaa72044L,
       "mvi <b,c,d,e,h,l,m,a>,nn"),
 
-    new TestGroup(
-      0xff,
-      0x40, 0, 0, 0, 0x72a4, 0xa024, 0x61ac, MSBT,
-      0x82c7, 0x718f, 0x97, 0x8f, 0xef8e,
-      0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0xff, 0,
-      0x10b58ceeL,
-      "mov <bcdehla>,<bcdehla>"),
+    // new TestGroup(
+    //   0xff,
+    //   0x40, 0, 0, 0, 0x72a4, 0xa024, 0x61ac, MSBT,
+    //   0x82c7, 0x718f, 0x97, 0x8f, 0xef8e,
+    //   0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    //   0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0xff, 0,
+    //   0x10b58ceeL,
+    //   "mov <bcdehla>,<bcdehla>"),
 
     new TestGroup(
       0xff,
