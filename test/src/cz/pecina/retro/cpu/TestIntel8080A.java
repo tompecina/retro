@@ -38,7 +38,7 @@ public class TestIntel8080A extends TestCase {
       0x58ea, 0x8566, 0xc6, 0xde, 0x9bc9,
       0x30, 0, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0xffff, 0xffff, 0xffff, 0xd7, 0, 0xffff,
-      0x14474b0a6L,
+      0x14474ba6L,
       "dad <b,d,h,sp>"),
 
     new TestGroup(
@@ -542,7 +542,7 @@ public class TestIntel8080A extends TestCase {
       initCrc();
 
       int incCounter = 0, shiftCounter = 0;
-      BigInteger incMask, shiftMask = BigInteger.ZERO;
+      BigInteger incMask, shiftMask;
 
       byte[] workBytes = init.toByteArray();
 
@@ -591,7 +591,7 @@ public class TestIntel8080A extends TestCase {
 
 	if (++incCounter == incNum) {
 	  incCounter = 0;
-	  if ((++shiftCounter == shiftLen) || (shiftLen == 0)) {
+	  if ((++shiftCounter > shiftLen) || (shiftLen == 0)) {
 	    break;
 	  }
 	}
@@ -603,8 +603,10 @@ public class TestIntel8080A extends TestCase {
 	  }
 	}
 
-	if (shiftLen > 0) {
+	if ((shiftLen > 0) && (shiftCounter < shiftLen)) {
 	  shiftMask = BigInteger.ONE.shiftLeft(shiftPos[shiftCounter]);
+	} else {
+	  shiftMask = BigInteger.ZERO;
 	}
 
 	workBytes = init.xor(incMask).xor(shiftMask).toByteArray();
