@@ -24,6 +24,8 @@ import java.util.logging.Logger;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -298,12 +300,12 @@ public class DebuggerHardware {
   }
 
   /**
-   * Gets the breakpoins as a {@code List}.
+   * Gets the breakpoins as a {@code Set}.
    *
-   * @return {@code List} of breakpoints
+   * @return {@code Set} of breakpoints
    */
-  public List<Integer> getBreakpointValues() {
-    return breakpointValues;
+  public Set<Integer> getBreakpointValues() {
+    return new HashSet<Integer>(breakpointValues);
   }
 
   // converts Long to 16-bit unsigned integer

@@ -35,46 +35,129 @@ import java.util.HashSet;
  * @version @VERSION@
  */
 public class Intel8080A extends Device implements Processor, SystemClockSource {
+
   // dynamic logger, per device
   private Logger log;
 
-  // flags
-  private static final int SF = 0x80;
-  private static final int ZF = 0x40;
-  private static final int ACF = 0x10;
-  private static final int PF = 0x04;
-  private static final int CF = 0x01;
+  /**
+   * Mask of the Sign (S) flag.
+   */
+  public static final int SF = 0x80;
 
-  // F manipulation constants
-  private static final int FFIX = 0x02;
-  private static final int FMASK = 0xd5;
+  /**
+   * Mask of the Zero (Z) flag.
+   */
+  public static final int ZF = 0x40;
 
-  // empty list of breakpoints
-  private static final List<Integer> NO_BREAKPOINTS = new ArrayList<>();
+  /**
+   * Mask of the Auxiliary Carry (AC) flag.
+   */
+  public static final int ACF = 0x10;
+
+  /**
+   * Mask of the Parity (P) flag.
+   */
+  public static final int PF = 0x04;
   
-  // memory
-  private AbstractMemory memory;
 
-  // ports
-  private final List<Set<IOElement>> inputPorts = new ArrayList<>();
-  private final List<Set<IOElement>> outputPorts = new ArrayList<>();
+  /**
+   * Mask of the Carry (C) flag.
+   */
+  public static final int CF = 0x01;
 
-  // CPU registers
-  private int A, F = FFIX, B, C, D, E, H, L;
-  private int PC, SP;
+  /**
+   * The AND-mask for the flag bits.
+   */
+  protected static final int FMASK_AND = 0xd5;
 
-  // interrupt enable
-  private boolean IE;
+  /**
+   * The OR-mask for the flag bits.
+   */
+  protected static final int FMASK_OR = 0x02;
 
-  // CPU cycle counter
-  private long cycleCounter;
+  /**
+   * The memory device attached to the processor.
+   */
+  protected AbstractMemory memory;
+
+  /**
+   * List of input ports.
+   */
+  protected final List<Set<IOElement>> inputPorts = new ArrayList<>();
+
+  /**
+   * List of output ports.
+   */
+  protected final List<Set<IOElement>> outputPorts = new ArrayList<>();
+
+  /**
+   * CPU register A (Accumulator).
+   */
+  protected int A;
+
+  /**
+   * CPU register F (Flags).
+   */
+  protected int F = FMASK_OR;
+
+  /**
+   * CPU register B.
+   */
+  protected int B;
+  
+  /**
+   * CPU register C.
+   */
+  protected int C;
+
+  /**
+   * CPU register D.
+   */
+  protected int D;
+
+  /**
+   * CPU register E.
+   */
+  protected int E;
+
+  /**
+   * CPU register H.
+   */
+  protected int H;
+
+  /**
+   * CPU register L.
+   */
+  protected int L;
+
+  /**
+   * The Program Counter (PC).
+   */
+  private int PC;
+
+  /**
+   * The Stack Pointer (SP).
+   */
+  private int SP;
+
+  /**
+   * The Interrupt Enable (IE) flag.
+   */
+  protected boolean IE;
+
+  /**
+   * The CPU cycle counter
+   */
+  protected long cycleCounter;
 
   // aux flags
   private boolean resetPending;
   private int interruptPending = -1;
 
-  // Table combining S, Z and P flags
-  private static final int[] tftbl = {
+  /**
+   * A table combining S, Z and P flags.
+   */
+  protected static final int[] TFTBL = {
     0x44, 0x00, 0x00, 0x04, 0x00, 0x04, 0x04, 0x00,
     0x00, 0x04, 0x04, 0x00, 0x04, 0x00, 0x00, 0x04,
     0x00, 0x04, 0x04, 0x00, 0x04, 0x00, 0x00, 0x04,
@@ -110,14 +193,15 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   };
 
   /**
-   * Main constructor.  Memory must be attached using {@link #setMemory}
-   * for the CPU to function.
+   * The main constructor.  Memory must be attached using
+   * {@link #setMemory} for the CPU to function.
    *
    * @param name davice name
    */
   public Intel8080A(final String name) {
     super(name);
     log = Logger.getLogger(getClass().getName() + "." + name);
+
     add(new Register("A") {
 	@Override
 	public String getValue() {
@@ -128,6 +212,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A = Integer.parseInt(value, 16);
 	}
       });
+
     add(new Register("F") {
 	@Override
 	public String getValue() {
@@ -138,6 +223,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  F = fixF(Integer.parseInt(value, 16));
 	}
       });
+
     add(new Register("B") {
 	@Override
 	public String getValue() {
@@ -148,6 +234,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  B = Integer.parseInt(value, 16);
 	}
       });
+
     add(new Register("C") {
 	@Override
 	public String getValue() {
@@ -158,6 +245,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  C = Integer.parseInt(value, 16);
 	}
       });
+
     add(new Register("D") {
 	@Override
 	public String getValue() {
@@ -168,6 +256,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  D = Integer.parseInt(value, 16);
 	}
       });
+
     add(new Register("E") {
 	@Override
 	public String getValue() {
@@ -178,6 +267,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  E = Integer.parseInt(value, 16);
 	}
       });
+
     add(new Register("H") {
 	@Override
 	public String getValue() {
@@ -188,6 +278,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  H = Integer.parseInt(value, 16);
 	}
       });
+
     add(new Register("L") {
 	@Override
 	public String getValue() {
@@ -198,6 +289,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  L = Integer.parseInt(value, 16);
 	}
       });
+
     add(new Register("PC") {
 	@Override
 	public String getValue() {
@@ -208,6 +300,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  PC = Integer.parseInt(value, 16);
 	}
       });
+
     add(new Register("SP") {
 	@Override
 	public String getValue() {
@@ -218,6 +311,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  SP = Integer.parseInt(value, 16);
 	}
       });
+
     add(new Register("IE") {
 	@Override
 	public String getValue() {
@@ -228,6 +322,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  IE = value.equals("1");
 	}
       });
+
     for (int i = 0; i < 0x100; i++) {
       inputPorts.add(new HashSet<IOElement>());
       outputPorts.add(new HashSet<IOElement>());
@@ -337,156 +432,239 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     interruptPending = -1;
   }
 
-  // fixes the flags register
-  private int fixF(final int n) {
+  /**
+   * Fixes the flags register by applying {@link #FMASK_AND} and
+   * {@link #FMASK_OR}.
+   *
+   * @param  n the input value of the flags register
+   * @return   the fixed value of the flags register
+   */
+  protected static int fixF(final int n) {
     assert (n >= 0) && (n < 0x100);
-    return (n & FMASK) | FFIX;
+    return (n & FMASK_AND) | FMASK_OR;
   }
 
-  // fixed the flags register
-  private int fixF(final byte n) {
+  /**
+   * Fixes the flags register by applying {@link #FMASK_AND} and
+   * {@link #FMASK_OR}.
+   *
+   * @param  n the input value of the flags register
+   * @return   the fixed value of the flags register
+   */
+  protected static int fixF(final byte n) {
     return fixF(n & 0xff);
   }
 
-  // gets BC
-  private int BC() {
+  /**
+   * Gets the register pair BC.
+   *
+   * @return the register pair BC
+   */
+  protected int BC() {
     return (B << 8) + C;
   }
 
-  // gets DE
-  private int DE() {
+  /**
+   * Gets the register pair DE.
+   *
+   * @return the register pair DE
+   */
+  protected int DE() {
     return (D << 8) + E;
   }
 
-  // gets HL
-  private int HL() {
+  /**
+   * Gets the register pair HL.
+   *
+   * @return the register pair HL
+   */
+  protected int HL() {
     return (H << 8) + L;
   }
 
-  // adds the three-flag composite value
-  private void TF(final int v) {
+  /**
+   * Adds the three-flag composite value to the Flags (F)
+   * register according to the parameter.
+   *
+   * @param v the evaluated byte
+   */
+  protected void TF(final int v) {
     assert (v >= 0) && (v < 0x100);
-    F = (F & 0x3b) | tftbl[v];
+    F = (F & 0x3b) | TFTBL[v];
   }
 
-  // sets the sign (S) flag
-  private void SETSF() {
+  /**
+   * Sets the Sign (S) flag.
+   */
+  protected void SETSF() {
     F |= SF;
   }
 
-  // resets the sign (S) flag
-  private void RESETSF() {
+  /**
+   * Resets the Sign (S) flag.
+   */
+  protected void RESETSF() {
     F &= ~SF;
   }
 
-  // gets the sign (S) flag
-  private boolean SFSET() {
+  /**
+   * Gets the Sign (S) flag.
+   *
+   * @return the Sign (S) flag
+   */
+  protected boolean SFSET() {
     return (F & SF) != 0;
   }
 
-  // sets the zero (Z) flag
-  private void SETZF() {
+  /**
+   * Sets the Zero (Z) flag.
+   */
+  protected void SETZF() {
     F |= ZF;
   }
 
-  // resets the zero (Z) flag
-  private void RESETZF() {
+  /**
+   * Resets the Zero (Z) flag.
+   */
+  protected void RESETZF() {
     F &= ~ZF;
   }
 
-  // gets the zero (Z) flag
-  private boolean ZFSET() {
+  /**
+   * Gets the Zero (Z) flag.
+   *
+   * @return the Zero (Z) flag
+   */
+  protected boolean ZFSET() {
     return (F & ZF) != 0;
   }
 
-  // sets the auxiliary carry (AC) flag
-  private void SETACF() {
+  /**
+   * Sets the Auxiliary Carry (AC) flag.
+   */
+  protected void SETACF() {
     F |= ACF;
   }
 
-  // resets the auxiliary carry (AC) flag
-  private void RESETACF() {
+  /**
+   * Resets the Auxiliary Carry (AC) flag.
+   */
+  protected void RESETACF() {
     F &= ~ACF;
   }
 
-  // gets the auxiliary carry (AC) flag
-  private boolean ACFSET() {
+  /**
+   * Gets the Auxiliary Carry (AC) flag.
+   *
+   * @return the Auxiliary Carry (AC) flag
+   */
+  protected boolean ACFSET() {
     return (F & ACF) != 0;
   }
 
-  // sets the parity (P) flag
-  private void SETPF() {
+  /**
+   * Sets the Parity (P) flag.
+   */
+  protected void SETPF() {
     F |= PF;
   }
 
-  // resets the parity (P) flag
-  private void RESETPF() {
+  /**
+   * Resets the Parity (P) flag.
+   */
+  protected void RESETPF() {
     F &= ~PF;
   }
 
-  // gets the parity (P) flag
-  private boolean PFSET() {
+  /**
+   * Gets the Parity (P) flag.
+   *
+   * @return the Parity (P) flag
+   */
+  protected boolean PFSET() {
     return (F & PF) != 0;
   }
 
-  // true of parity even
-  private boolean PE() {
+  /**
+   * {@code true} of parity even.
+   */
+  protected boolean PE() {
     return (F & PF) != 0;
   }
 
-  // true of parity odd
-  private boolean PO() {
+  /**
+   * {@code true} of parity odd.
+   */
+  protected boolean PO() {
     return (F & PF) == 0;
   }
 
-  // sets the carry (C) flag
-  private void SETCF() {
+  /**
+   * Sets the Carry (C) flag.
+   */
+  protected void SETCF() {
     F |= CF;
   }
 
-  // resets the carry (C) flag
-  private void RESETCF() {
+  /**
+   * Resets the Carry (C) flag.
+   */
+  protected void RESETCF() {
     F &= ~CF;
   }
 
-  // gets the carry (C) flag
-  private boolean CFSET() {
+  /**
+   * Gets the Carry (C) flag.
+   *
+   * @return the Carry (C) flag
+   */
+  protected boolean CFSET() {
     return (F & CF) != 0;
   }
 
-  // increments PC
-  private void incPC() {
+  /**
+   * Increments the Program Counter (PC).
+   */
+  protected void incPC() {
     PC = (PC + 1) & 0xffff;
   }
 
-  // adds n to PC
-  private void incPC(final int n) {
+  /**
+   * Adds {@code n} to the Program Counter (PC).
+   *
+   * @param n the value added to the Program Counter (PC)
+   */
+  protected void incPC(final int n) {
     PC = (PC + n) & 0xffff;
   }
 
-  // increments SP
-  private void incSP() {
+  /**
+   * Increments the Stack Pointer (SP).
+   */
+  protected void incSP() {
     SP = (SP + 1) & 0xffff;
   }
 
-  // decrements SP
-  private void decSP() {
+  /**
+   * Decrements the Stack Pointer (SP).
+   */
+  protected void decSP() {
     SP = (SP - 1) & 0xffff;
   }
 
   /**
-   * Gets register A.
+   * Gets the register A.
    *
-   * @return register value
+   * @return the register value
    */
   public int getA() {
     return A;
   }
 
   /**
-   * Sets register A.
+   * Sets the register A.
    *
-   * @param n new register value
+   * @param n the new register value
    */
   public void setA(final int n) {
     assert (n >= 0) && (n < 0x100);
@@ -494,18 +672,18 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Gets register F (flags).
+   * Gets the Flags (F) register.
    *
-   * @return register value
+   * @return the register value
    */
   public int getF() {
     return F;
   }
 
   /**
-   * Sets register F (flags).  Fixed bits are corrected before assignment.
+   * Sets the Flags (F) register.  Fixed bits are corrected before assignment.
    *
-   * @param n new register value
+   * @param n the new register value
    */
   public void setF(final int n) {
     assert (n >= 0) && (n < 0x100);
@@ -513,18 +691,18 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Gets register B.
+   * Gets the register B.
    *
-   * @return register value
+   * @return the register value
    */
   public int getB() {
     return B;
   }
 
   /**
-   * Sets register B.
+   * Sets the register B.
    *
-   * @param n new register value
+   * @param n the new register value
    */
   public void setB(final int n) {
     assert (n >= 0) && (n < 0x100);
@@ -532,18 +710,18 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Gets register C.
+   * Gets the register C.
    *
-   * @return register value
+   * @return the register value
    */
   public int getC() {
     return C;
   }
 
   /**
-   * Sets register C.
+   * Sets the register C.
    *
-   * @param n new register value
+   * @param n the new register value
    */
   public void setC(final int n) {
     assert (n >= 0) && (n < 0x100);
@@ -551,18 +729,18 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Gets register D.
+   * Gets the register D.
    *
-   * @return register value
+   * @return the register value
    */
   public int getD() {
     return D;
   }
 
   /**
-   * Sets register D.
+   * Sets the register D.
    *
-   * @param n new register value
+   * @param n the new register value
    */
   public void setD(final int n) {
     assert (n >= 0) && (n < 0x100);
@@ -570,18 +748,18 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Gets register E.
+   * Gets the register E.
    *
-   * @return register value
+   * @return the register value
    */
   public int getE() {
     return E;
   }
 
   /**
-   * Sets register E.
+   * Sets the register E.
    *
-   * @param n new register value
+   * @param n the new register value
    */
   public void setE(final int n) {
     assert (n >= 0) && (n < 0x100);
@@ -589,18 +767,18 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Gets register H.
+   * Gets the register H.
    *
-   * @return register value
+   * @return the register value
    */
   public int getH() {
     return H;
   }
 
   /**
-   * Sets register H.
+   * Sets the register H.
    *
-   * @param n new register value
+   * @param n the new register value
    */
   public void setH(final int n) {
     assert (n >= 0) && (n < 0x100);
@@ -608,18 +786,18 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Gets register L.
+   * Gets the register L.
    *
-   * @return register value
+   * @return the register value
    */
   public int getL() {
     return L;
   }
 
   /**
-   * Sets register L.
+   * Sets the register L.
    *
-   * @param n new register value
+   * @param n the new register value
    */
   public void setL(final int n) {
     assert (n >= 0) && (n < 0x100);
@@ -627,7 +805,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Gets register pair BC.
+   * Gets the register pair BC.
    *
    * @return register pair value
    */
@@ -636,9 +814,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Sets register pair BC.
+   * Sets the register pair BC.
    *
-   * @param n new register pair value
+   * @param n the new register pair value
    */
   public void setBC(final int n) {
     assert (n >= 0) && (n < 0x10000);
@@ -647,7 +825,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Gets register pair DE.
+   * Gets the register pair DE.
    *
    * @return register pair value
    */
@@ -656,9 +834,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Sets register pair DE.
+   * Sets the register pair DE.
    *
-   * @param n new register pair value
+   * @param n the new register pair value
    */
   public void setDE(final int n) {
     assert (n >= 0) && (n < 0x10000);
@@ -667,7 +845,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Gets register pair HL.
+   * Gets the register pair HL.
    *
    * @return register pair value
    */
@@ -676,9 +854,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Sets register pair HL.
+   * Sets the register pair HL.
    *
-   * @param n new register pair value
+   * @param n the new register pair value
    */
   public void setHL(final int n) {
     assert (n >= 0) && (n < 0x10000);
@@ -700,18 +878,18 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Gets the stack pointer.
+   * Gets the Stack Pointer (SP).
    *
-   * @return stack pointer
+   * @return the Stack Pointer (SP)
    */
   public int getSP() {
     return SP;
   }
 
   /**
-   * Sets the stack pointer.
+   * Sets the Stack Pointer (SP).
    *
-   * @param n new value for the stack pointer
+   * @param n the new value for the Stack Pointer (SP)
    */
   public void setSP(final int n) {
     assert (n >= 0) && (n < 0x10000);
@@ -719,7 +897,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Returns {@code true} if the sign (S) flag is set.
+   * Returns {@code true} if the Sign (S) flag is set.
    *
    * @return {@code true} if flag set, {@code false} otherwise
    */
@@ -728,7 +906,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Sets the sign (S) flag.
+   * Sets the Sign (S) flag.
    *
    * @param b new value for the flag
    */
@@ -741,7 +919,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Returns {@code true} if the zero (Z) flag is set.
+   * Returns {@code true} if the Zero (Z) flag is set.
    *
    * @return {@code true} if flag set, {@code false} otherwise
    */
@@ -750,7 +928,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Sets the zero (Z) flag.
+   * Sets the Zero (Z) flag.
    *
    * @param b new value for the flag
    */
@@ -763,7 +941,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Returns {@code true} if the auxiliary carry (AC) flag is set.
+   * Returns {@code true} if the Auxiliary Carry (AC) flag is set.
    *
    * @return {@code true} if flag set, {@code false} otherwise
    */
@@ -772,7 +950,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Sets the auxiliary carry (AC) flag.
+   * Sets the Auxiliary Carry (AC) flag.
    *
    * @param b new value for the flag
    */
@@ -785,7 +963,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Returns {@code true} if the parity (P) flag is set.
+   * Returns {@code true} if the Parity (P) flag is set.
    *
    * @return {@code true} if flag set, {@code false} otherwise
    */
@@ -794,7 +972,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Sets the parity (P) flag.
+   * Sets the Parity (P) flag.
    *
    * @param b new value for the flag
    */
@@ -807,7 +985,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Returns {@code true} if the carry (C) flag is set.
+   * Returns {@code true} if the Carry (C) flag is set.
    *
    * @return {@code true} if flag set, {@code false} otherwise
    */
@@ -816,7 +994,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Sets the carry (C) flag.
+   * Sets the Carry (C) flag.
    *
    * @param b new value for the flag
    */
@@ -869,8 +1047,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     return cycleCounter;
   }
 
-  // array of opcodes
-  private final Opcode[] opcodes = new Opcode[] {
+  /**
+   * The array of opcodes.
+   */
+  protected final Opcode[] opcodes = new Opcode[] {
 
     // 00 NOP
     new Opcode("NOP", "", 1, Processor.INS_NONE, new Executable() {
@@ -3026,7 +3206,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A = 0;
-	  F = FFIX | ZF | PF | ACF;
+	  F = FMASK_OR | ZF | PF | ACF;
 	  incPC();
 	  return 4;
 	}	
@@ -3472,7 +3652,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A = 0;
-	  F = FFIX | ZF | PF;
+	  F = FMASK_OR | ZF | PF;
 	  incPC();
 	  return 4;
 	}	
@@ -3755,7 +3935,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("CMP", "A", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  F = FFIX | ZF | PF | ACF;
+	  F = FMASK_OR | ZF | PF | ACF;
 	  incPC();
 	  return 4;
 	}	
@@ -4872,22 +5052,30 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   };
 
   /**
-   * Gets Opcode.
+   * Gets an Opcode.
    *
-   * @param  n first byte of {@code Opcode}
-   * @return {@code Opcode} value
+   * @param  n the first byte of {@code Opcode}
+   * @return   {@code Opcode} value
    */
   public Opcode getOpcode(final int n) {
     assert (n >= 0) && (n < 0x100);
     return opcodes[n];
   }
 
-  // inner subclass of Disassembly
-  private class Intel8080ADisassembly extends Disassembly {
-    private Opcode opcode;
+  /**
+   * An inner subclass of Disassembly.
+   */
+  protected class Intel8080ADisassembly extends Disassembly {
 
-    // main constructor
-    private Intel8080ADisassembly(final int[] bytes) {
+    /**
+     * The disassebled opcode.
+     */
+    protected Opcode opcode;
+
+    /**
+     * The main constructor.
+     */
+    protected Intel8080ADisassembly(final int[] bytes) {
       assert bytes != null;
       this.bytes = bytes;
       opcode = opcodes[bytes[0]];	    
@@ -4993,7 +5181,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   /**
    * Gets a string representation of CPU state.
    *
-   * @return CPU state
+   * @return the CPU state as a string
    */
   public String CPUState() {
     return String.format(
@@ -5017,10 +5205,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Gets disassembled instruction.
+   * Gets the disassembled instruction.
    *
-   * @param  pc program counter
-   * @return disassembled instruction
+   * @param  pc the Program Counter (PC)
+   * @return    the disassembled instruction
    */
   public String CPUDissassemble(final int pc) {
     assert (pc >= 0) && (pc < 0x10000);
@@ -5061,7 +5249,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   @Override
   public void exec(final long minCycles,
 		   final int mask,
-		   final List<Integer> breakpoints) {
+		   final Set<Integer> breakpoints) {
     assert minCycles >= 0;
     final long endCycleCounter = cycleCounter + minCycles;
 
@@ -5085,14 +5273,16 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	}
 	cycleCounter += opcode.exec();
       }
-      if ((cycleCounter >= endCycleCounter) || breakpoints.contains(PC))
+      if ((cycleCounter >= endCycleCounter) ||
+	  ((breakpoints != null) && breakpoints.contains(PC))) {
 	break;
+      }
     }
   }
 
   // for description see Processor
   @Override
   public void exec() {
-    exec(1, 0, NO_BREAKPOINTS);
+    exec(1, 0, null);
   }
 }

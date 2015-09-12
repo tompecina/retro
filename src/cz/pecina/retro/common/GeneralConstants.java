@@ -50,7 +50,7 @@ public final class GeneralConstants {
    * Set of safe characters likely to be displayed correctly on all platforms.
    */
   public static final Set<Character> SAFE_CHARACTERS =
-    new HashSet(Arrays.asList(new Character[] {
+    new HashSet<>(Arrays.asList(new Character[] {
       ' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-',
       '.', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';',
       '<', '=', '>', '?', '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',

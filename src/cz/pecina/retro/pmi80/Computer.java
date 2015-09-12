@@ -22,9 +22,6 @@ package cz.pecina.retro.pmi80;
 
 import java.util.logging.Logger;
 
-import java.util.List;
-import java.util.ArrayList;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -95,9 +92,6 @@ public class Computer {
   // state of debugger buttons
   private boolean interruptButtonPressed, runStopButtonPressed;
   private int stepInButtonCounter, stepOverButtonCounter;
-
-  // empty list of breakpoints
-  private static final List<Integer> noBreakpoints = new ArrayList<>();
 
   // true if run() running
   private boolean busy;
@@ -240,7 +234,7 @@ public class Computer {
     	computerHardware.getCPU().exec(
           Parameters.timerCycles * Parameters.speedUp,
 	  0,
-	  noBreakpoints);
+	  null);
     	computerHardware.getDisplayHardware().display();
     	break;
       case STOPPED:
@@ -266,7 +260,7 @@ public class Computer {
     	}
     	if (computerHardware.getDebuggerHardware().stepInButton.isPressed()) {
     	  if (stepInButtonCounter == 0) {
-    	    computerHardware.getCPU().exec(1, 0, noBreakpoints);
+    	    computerHardware.getCPU().exec();
     	    computerHardware.getDebuggerHardware().activate();
     	    stepInButtonCounter = AUTOREPEAT;
     	    break;
@@ -282,7 +276,7 @@ public class Computer {
     	    final Opcode opcode = computerHardware.getCPU()
     	      .getOpcode(computerHardware.getMemory().getByte(pc));
     	    if ((opcode.getType() & Processor.INS_CALL) == 0) {
-    	      computerHardware.getCPU().exec(1, 0, noBreakpoints);
+    	      computerHardware.getCPU().exec();
     	      computerHardware.getDebuggerHardware().activate();
     	    } else {
     	      computerHardware.getDebuggerHardware().getBreakpointValues()

@@ -21,15 +21,21 @@
 package cz.pecina.retro.pmd85;
 
 import java.util.logging.Logger;
-import java.util.Arrays;
+
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.regex.MatchResult;
+
+import java.util.HashSet;
+
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.IOException;
+
 import java.nio.ByteBuffer;
+
 import java.nio.charset.Charset;
+
 import cz.pecina.retro.common.Parameters;
 
 /**
@@ -332,7 +338,7 @@ public class Basic {
     Parameters.cpu.resume();
     Parameters.cpu.exec(Integer.MAX_VALUE,
 			0,
-			Arrays.asList(new Integer[] {breakPoint}));
+			new HashSet<Integer>() {{add(breakPoint);}});
     Parameters.cpu.suspend();
     Parameters.cpu.setPC(pc);
 			
