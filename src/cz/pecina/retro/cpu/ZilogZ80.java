@@ -512,20 +512,31 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Adds the four-flag composite value to the Flags (F)
-   * register according to the parameter.
+   * Puts the two-flag composite value consisting of flags X and Y
+   * to the Flags (F) register according to the parameter.
+   *
+   * @param v the evaluated byte
+   */
+  protected void F2(final int v) {
+    assert (v >= 0) && (v < 0x100);
+    F = (F & 0xd7) | (v & 0x28);
+  }
+
+  /**
+   * Adds the four-flag composite value consisting of flags S, Z, X and Y
+   * to the Flags (F) register according to the parameter.
    *
    * @param v the evaluated byte
    */
   protected void F4(final int v) {
     assert (v >= 0) && (v < 0x100);
+    
     F = (F & 0x17) | TBL4[v];
   }
 
-
   /**
-   * Adds the five-flag composite value to the Flags (F)
-   * register according to the parameter.
+   * Adds the five-flag composite value consisting of flags S, Z, X, Y and P
+   * (Parity) to the Flags (F) register according to the parameter.
    *
    * @param v the evaluated byte
    */
@@ -1248,8 +1259,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 	    
-    // 06 MVIB	  
-    new Opcode("MVI", "B,", 2, Processor.INS_NONE, new Executable() {
+    // 06
+    new Opcode("LD", "B,%s", 2, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1260,8 +1271,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 	
-    // 07 RLC	  
-    new Opcode("RLC", "", 1, Processor.INS_NONE, new Executable() {
+    // 07
+    new Opcode("RLCA", "", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  if ((A & 0x80) != 0) {
@@ -1270,6 +1281,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = ((A << 1) | (F & 1)) & 0xff;
+	  F2(A);
+	  RESETHF();
+	  RESETNF();
 	  incPC();
 	  return 4;
 	}
@@ -1375,8 +1389,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 0e MVIC	  
-    new Opcode("MVI", "C,", 2, Processor.INS_NONE, new Executable() {
+    // 0e
+    new Opcode("LD", "C,%s", 2, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1498,8 +1512,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 16 MVID	  
-    new Opcode("MVI", "D,", 2, Processor.INS_NONE, new Executable() {
+    // 16
+    new Opcode("LD", "D,%s", 2, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1626,8 +1640,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 1e MVIE	  
-    new Opcode("MVI", "E,", 2, Processor.INS_NONE, new Executable() {
+    // 1e
+    new Opcode("LD", "E,%s", 2, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1753,8 +1767,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 26 MVIH	  
-    new Opcode("MVI", "H,", 2, Processor.INS_NONE, new Executable() {
+    // 26
+    new Opcode("LD", "H,%s", 2, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1892,8 +1906,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 2e MVIL	  
-    new Opcode("MVI", "L,", 2, Processor.INS_NONE, new Executable() {
+    // 2e
+    new Opcode("LD", "L,%s", 2, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -2013,8 +2027,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 36 MVIM	  
-    new Opcode("MVI", "M,", 2, Processor.INS_MR, new Executable() {
+    // 36
+    new Opcode("LD", "(HL),%n", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = HL();
@@ -2134,8 +2148,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 3e MVIA	  
-    new Opcode("MVI", "A,", 2, Processor.INS_NONE, new Executable() {
+    // 3e
+    new Opcode("LD", "A,%n", 2, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
