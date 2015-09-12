@@ -157,7 +157,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   /**
    * A table combining S, Z and P flags.
    */
-  protected static final int[] TFTBL = {
+  protected static final int[] TBL3 = {
     0x44, 0x00, 0x00, 0x04, 0x00, 0x04, 0x04, 0x00,
     0x00, 0x04, 0x04, 0x00, 0x04, 0x00, 0x00, 0x04,
     0x00, 0x04, 0x04, 0x00, 0x04, 0x00, 0x00, 0x04,
@@ -488,9 +488,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
    *
    * @param v the evaluated byte
    */
-  protected void TF(final int v) {
+  protected void F3(final int v) {
     assert (v >= 0) && (v < 0x100);
-    F = (F & 0x3b) | TFTBL[v];
+    F = (F & 0x3b) | TBL3[v];
   }
 
   /**
@@ -1106,7 +1106,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  B = (B + 1) & 0xff;
-	  TF(B);
+	  F3(B);
 	  if ((B & 0x0f) != 0) {
 	    RESETACF();
 	  } else {
@@ -1123,7 +1123,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  B = (B - 1) & 0xff;
-	  TF(B);
+	  F3(B);
 	  if ((B & 0x0f) == 0x0f) {
 	    RESETACF();
 	  } else {
@@ -1177,7 +1177,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("DAD", "B", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int ti = (H << 8) + L + (B << 8) + C;
+	  final int ti = (H << 8) + L + (B << 8) + C;
 	  L = ti & 0xff;
 	  H = (ti >> 8) & 0xff;
 	  if (ti > 0xffff) {
@@ -1221,7 +1221,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  C = (C + 1) & 0xff;
-	  TF(C);
+	  F3(C);
 	  if ((C & 0x0f) != 0) {
 	    RESETACF();
 	  } else {
@@ -1238,7 +1238,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  C = (C - 1) & 0xff;
-	  TF(C);
+	  F3(C);
 	  if ((C & 0x0f) == 0x0f) {
 	    RESETACF();
 	  } else {
@@ -1332,7 +1332,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  D = (D + 1) & 0xff;
-	  TF(D);
+	  F3(D);
 	  if ((D & 0x0f) != 0) {
 	    RESETACF();
 	  } else {
@@ -1349,7 +1349,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  D = (D - 1) & 0xff;
-	  TF(D);
+	  F3(D);
 	  if ((D & 0x0f) == 0x0f) {
 	    RESETACF();
 	  } else {
@@ -1377,7 +1377,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("RAL", "", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = A;
+	  final int tb = A;
 	  A = ((A << 1) | (F & 1)) & 0xff;
 	  if ((tb & 0x80) != 0) {
 	    SETCF();
@@ -1404,7 +1404,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("DAD", "D", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int ti = (H << 8) + L + (D << 8) + E;
+	  final int ti = (H << 8) + L + (D << 8) + E;
 	  L = ti & 0xff;
 	  H = (ti >> 8) & 0xff;
 	  if (ti > 0xffff) {
@@ -1448,7 +1448,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  E = (E + 1) & 0xff;
-	  TF(E);
+	  F3(E);
 	  if ((E & 0x0f) != 0) {
 	    RESETACF();
 	  } else {
@@ -1465,7 +1465,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  E = (E - 1) & 0xff;
-	  TF(E);
+	  F3(E);
 	  if ((E & 0x0f) == 0x0f) {
 	    RESETACF();
 	  } else {
@@ -1493,7 +1493,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("RAR", "", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = A;
+	  final int tb = A;
 	  A = ((A >> 1) | (F << 7)) & 0xff;
 	  if ((tb & 1) != 0) {
 	    SETCF();
@@ -1534,7 +1534,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SHLD", "", 3, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = memory.getByte((PC + 1) & 0xffff) +
+	  final int tw = memory.getByte((PC + 1) & 0xffff) +
 	    (memory.getByte((PC + 2) & 0xffff) << 8);
 	  memory.setByte(tw, L);
 	  memory.setByte((tw + 1) & 0xffff, H);
@@ -1563,7 +1563,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  H = (H + 1) & 0xff;
-	  TF(H);
+	  F3(H);
 	  if ((H & 0x0f) != 0) {
 	    RESETACF();
 	  } else {
@@ -1580,7 +1580,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  H = (H - 1) & 0xff;
-	  TF(H);
+	  F3(H);
 	  if ((H & 0x0f) == 0x0f) {
 	    RESETACF();
 	  } else {
@@ -1622,7 +1622,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    SETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -1643,7 +1643,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("DAD", "H", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int ti = (H << 9) + (L << 1);
+	  final int ti = (H << 9) + (L << 1);
 	  L = ti & 0xff;
 	  H = (ti >> 8) & 0xff;
 	  if (ti > 0xffff) {
@@ -1661,7 +1661,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("LHLD", "", 3, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = memory.getByte((PC + 1) & 0xffff) +
+	  final int tw = memory.getByte((PC + 1) & 0xffff) +
 	    (memory.getByte((PC + 2) & 0xffff) << 8);
 	  L = memory.getByte(tw);
 	  H = memory.getByte((tw + 1) & 0xffff);
@@ -1690,7 +1690,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  L = (L + 1) & 0xff;
-	  TF(L);
+	  F3(L);
 	  if ((L & 0x0f) != 0) {
 	    RESETACF();
 	  } else {
@@ -1707,7 +1707,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  L = (L - 1) & 0xff;
-	  TF(L);
+	  F3(L);
 	  if ((L & 0x0f) == 0x0f) {
 	    RESETACF();
 	  } else {
@@ -1757,7 +1757,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int tb = memory.getByte(PC);
+	  final int tb = memory.getByte(PC);
 	  incPC();
 	  SP = tb + (memory.getByte(PC) << 8);
 	  incPC();
@@ -1770,7 +1770,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("STA", "", 3, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = memory.getByte((PC + 1) & 0xffff) +
+	  final int tw = memory.getByte((PC + 1) & 0xffff) +
 	    (memory.getByte((PC + 2) & 0xffff) << 8);
 	  memory.setByte(tw, A);
 	  incPC(3);
@@ -1794,10 +1794,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("INR", "M", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = HL();
-	  int tb = (memory.getByte(tw) + 1) & 0xff;
+	  final int tw = HL();
+	  final int tb = (memory.getByte(tw) + 1) & 0xff;
 	  memory.setByte(tw, tb);
-	  TF(tb);
+	  F3(tb);
 	  if ((tb & 0x0f) != 0) {
 	    RESETACF();
 	  } else {
@@ -1813,10 +1813,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("DCR", "M", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = HL();
-	  int tb = (memory.getByte(tw) - 1) & 0xff;
+	  final int tw = HL();
+	  final int tb = (memory.getByte(tw) - 1) & 0xff;
 	  memory.setByte(tw, tb);
-	  TF(tb);
+	  F3(tb);
 	  if ((tb & 0x0f) == 0x0f) {
 	    RESETACF();
 	  } else {
@@ -1832,7 +1832,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("MVI", "M,", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = HL();
+	  final int tw = HL();
 	  incPC();
 	  memory.setByte(tw, memory.getByte(PC));
 	  incPC();
@@ -1866,7 +1866,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("DAD", "SP", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int ti = (H << 8) + L + SP;
+	  final int ti = (H << 8) + L + SP;
 	  L = ti & 0xff;
 	  H = (ti >> 8) & 0xff;
 	  if (ti > 0xffff) {
@@ -1908,7 +1908,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A = (A + 1) & 0xff;
-	  TF(A);
+	  F3(A);
 	  if ((A & 0x0f) != 0) {
 	    RESETACF();
 	  } else {
@@ -1925,7 +1925,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A = (A - 1) & 0xff;
-	  TF(A);
+	  F3(A);
 	  if ((A & 0x0f) == 0x0f) {
 	    RESETACF();
 	  } else {
@@ -2487,7 +2487,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("MOV", "M,B", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = HL();
+	  final int tw = HL();
 	  memory.setByte(tw, B);
 	  incPC();
 	  return 7;
@@ -2499,7 +2499,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("MOV", "M,C", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = HL();
+	  final int tw = HL();
 	  memory.setByte(tw, C);
 	  incPC();
 	  return 7;
@@ -2511,7 +2511,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("MOV", "M,D", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = HL();
+	  final int tw = HL();
 	  memory.setByte(tw, D);
 	  incPC();
 	  return 7;
@@ -2523,7 +2523,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("MOV", "M,E", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = HL();
+	  final int tw = HL();
 	  memory.setByte(tw, E);
 	  incPC();
 	  return 7;
@@ -2535,7 +2535,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("MOV", "M,H", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = HL();
+	  final int tw = HL();
 	  memory.setByte(tw, H);
 	  incPC();
 	  return 7;
@@ -2547,7 +2547,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("MOV", "M,L", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = HL();
+	  final int tw = HL();
 	  memory.setByte(tw, L);
 	  incPC();
 	  return 7;
@@ -2568,7 +2568,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("MOV", "M,A", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = HL();
+	  final int tw = HL();
 	  memory.setByte(tw, A);
 	  incPC();
 	  return 7;
@@ -2667,7 +2667,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADD", "B", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = A + B;
+	  final int tw = A + B;
 	  if (((A & 0x0f) + (B & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -2679,7 +2679,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -2690,7 +2690,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADD", "C", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = A + C;
+	  final int tw = A + C;
 	  if (((A & 0x0f) + (C & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -2702,7 +2702,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -2713,7 +2713,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADD", "D", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = A + D;
+	  final int tw = A + D;
 	  if (((A & 0x0f) + (D & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -2725,7 +2725,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -2736,7 +2736,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADD", "E", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = A + E;
+	  final int tw = A + E;
 	  if (((A & 0x0f) + (E & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -2748,7 +2748,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -2759,7 +2759,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADD", "H", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = A + H;
+	  final int tw = A + H;
 	  if (((A & 0x0f) + (H & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -2771,7 +2771,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -2782,7 +2782,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADD", "L", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = A + L;
+	  final int tw = A + L;
 	  if (((A & 0x0f) + (L & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -2794,7 +2794,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -2805,8 +2805,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADD", "M", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(HL());
-	  int tw = A + tb;
+	  final int tb = memory.getByte(HL());
+	  final int tw = A + tb;
 	  if (((A & 0x0f) + (tb & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -2818,7 +2818,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 7;
 	}	
@@ -2829,7 +2829,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADD", "A", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = A << 1;
+	  final int tw = A << 1;
 	  if (((A & 0x0f) << 1) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -2841,7 +2841,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -2852,7 +2852,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADC", "B", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = A + B + (F & CF);
+	  final int tw = A + B + (F & CF);
 	  if (((A & 0x0f) + (B & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -2864,7 +2864,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -2875,7 +2875,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADC", "C", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = A + C + (F & CF);
+	  final int tw = A + C + (F & CF);
 	  if (((A & 0x0f) + (C & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -2887,7 +2887,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -2898,7 +2898,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADC", "D", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = A + D + (F & CF);
+	  final int tw = A + D + (F & CF);
 	  if (((A & 0x0f) + (D & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -2910,7 +2910,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -2921,7 +2921,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADC", "E", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = A + E + (F & CF);
+	  final int tw = A + E + (F & CF);
 	  if (((A & 0x0f) + (E & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -2933,7 +2933,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -2944,7 +2944,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADC", "H", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = A + H + (F & CF);
+	  final int tw = A + H + (F & CF);
 	  if (((A & 0x0f) + (H & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -2956,7 +2956,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -2967,7 +2967,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADC", "L", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = A + L + (F & CF);
+	  final int tw = A + L + (F & CF);
 	  if (((A & 0x0f) + (L & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -2979,7 +2979,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -2990,8 +2990,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADC", "M", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(HL());
-	  int tw = A + tb + (F & CF);
+	  final int tb = memory.getByte(HL());
+	  final int tw = A + tb + (F & CF);
 	  if (((A & 0x0f) + (tb & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -3003,7 +3003,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 7;
 	}	
@@ -3014,7 +3014,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ADC", "A", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = (A << 1) + (F & CF);
+	  final int tw = (A << 1) + (F & CF);
 	  if ((((A & 0x0f) << 1) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -3026,7 +3026,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3037,8 +3037,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SUB", "B", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = B;
-	  int tw = A - tb;
+	  final int tb = B;
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3050,7 +3050,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3061,8 +3061,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SUB", "C", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = C;
-	  int tw = A - tb;
+	  final int tb = C;
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3074,7 +3074,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3085,8 +3085,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SUB", "D", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = D;
-	  int tw = A - tb;
+	  final int tb = D;
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3098,7 +3098,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3109,8 +3109,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SUB", "E", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = E;
-	  int tw = A - tb;
+	  final int tb = E;
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3122,7 +3122,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3133,8 +3133,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SUB", "H", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = H;
-	  int tw = A - tb;
+	  final int tb = H;
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3146,7 +3146,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3157,8 +3157,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SUB", "L", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = L;
-	  int tw = A - tb;
+	  final int tb = L;
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3170,7 +3170,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3181,8 +3181,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SUB", "M", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(HL());
-	  int tw = A - tb;
+	  final int tb = memory.getByte(HL());
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3194,7 +3194,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 7;
 	}	
@@ -3217,8 +3217,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "B", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = B;
-	  int tw = A - tb - (F & CF);
+	  final int tb = B;
+	  final int tw = A - tb - (F & CF);
 	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3230,7 +3230,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3241,8 +3241,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "C", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = C;
-	  int tw = A - tb - (F & CF);
+	  final int tb = C;
+	  final int tw = A - tb - (F & CF);
 	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3254,7 +3254,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3265,8 +3265,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "D", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = D;
-	  int tw = A - tb - (F & CF);
+	  final int tb = D;
+	  final int tw = A - tb - (F & CF);
 	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3278,7 +3278,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3289,8 +3289,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "E", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = E;
-	  int tw = A - tb - (F & CF);
+	  final int tb = E;
+	  final int tw = A - tb - (F & CF);
 	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3302,7 +3302,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3313,8 +3313,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "H", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = H;
-	  int tw = A - tb - (F & CF);
+	  final int tb = H;
+	  final int tw = A - tb - (F & CF);
 	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3326,7 +3326,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3337,8 +3337,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "L", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = L;
-	  int tw = A - tb - (F & CF);
+	  final int tb = L;
+	  final int tw = A - tb - (F & CF);
 	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3350,7 +3350,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3361,8 +3361,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "M", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(HL());
-	  int tw = A - tb - (F & CF);
+	  final int tb = memory.getByte(HL());
+	  final int tw = A - tb - (F & CF);
 	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3374,7 +3374,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 7;
 	}	
@@ -3385,8 +3385,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "A", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = A;
-	  int tw = -(F & CF);
+	  final int tb = A;
+	  final int tw = -(F & CF);
 	  if (CFSET()) {
 	    RESETACF();
 	  } else {
@@ -3398,7 +3398,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3416,7 +3416,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  }
 	  A &= B;
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3434,7 +3434,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  }
 	  A &= C;
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3452,7 +3452,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  }
 	  A &= D;
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3470,7 +3470,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  }
 	  A &= E;
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3488,7 +3488,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  }
 	  A &= H;
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3506,7 +3506,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  }
 	  A &= L;
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3517,7 +3517,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ANA", "M", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(HL());
+	  final int tb = memory.getByte(HL());
 	  if (((A | tb) & 0x08) != 0) {
 	    SETACF();
 	  } else {
@@ -3525,7 +3525,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  }
 	  A &= tb;
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 7;
 	}	
@@ -3542,7 +3542,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETACF();
 	  }
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3556,7 +3556,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A ^= B;
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3570,7 +3570,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A ^= C;
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3584,7 +3584,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A ^= D;
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3598,7 +3598,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A ^= E;
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3612,7 +3612,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A ^= H;
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3626,7 +3626,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A ^= L;
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3640,7 +3640,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A ^= memory.getByte(HL());
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 7;
 	}	
@@ -3666,7 +3666,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A |= B;
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3680,7 +3680,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A |= C;
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3694,7 +3694,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A |= D;
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3708,7 +3708,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A |= E;
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3722,7 +3722,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A |= H;
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3736,7 +3736,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A |= L;
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3750,7 +3750,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A |= memory.getByte(HL());
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 7;
 	}	
@@ -3763,7 +3763,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 4;
 	}	
@@ -3774,8 +3774,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("CMP", "B", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = B;
-	  int tw = A - tb;
+	  final int tb = B;
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3786,7 +3786,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  TF(tw & 0xff);
+	  F3(tw & 0xff);
 	  incPC();
 	  return 4;
 	}	
@@ -3797,8 +3797,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("CMP", "C", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = C;
-	  int tw = A - tb;
+	  final int tb = C;
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3809,7 +3809,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  TF(tw & 0xff);
+	  F3(tw & 0xff);
 	  incPC();
 	  return 4;
 	}	
@@ -3820,8 +3820,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("CMP", "D", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = D;
-	  int tw = A - tb;
+	  final int tb = D;
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3832,7 +3832,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  TF(tw & 0xff);
+	  F3(tw & 0xff);
 	  incPC();
 	  return 4;
 	}	
@@ -3843,8 +3843,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("CMP", "E", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = E;
-	  int tw = A - tb;
+	  final int tb = E;
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3855,7 +3855,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  TF(tw & 0xff);
+	  F3(tw & 0xff);
 	  incPC();
 	  return 4;
 	}	
@@ -3866,8 +3866,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("CMP", "H", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = H;
-	  int tw = A - tb;
+	  final int tb = H;
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3878,7 +3878,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  TF(tw & 0xff);
+	  F3(tw & 0xff);
 	  incPC();
 	  return 4;
 	}	
@@ -3889,8 +3889,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("CMP", "L", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = L;
-	  int tw = A - tb;
+	  final int tb = L;
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3901,7 +3901,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  TF(tw & 0xff);
+	  F3(tw & 0xff);
 	  incPC();
 	  return 4;
 	}	
@@ -3912,8 +3912,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("CMP", "M", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(HL());
-	  int tw = A - tb;
+	  final int tb = memory.getByte(HL());
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -3924,7 +3924,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  TF(tw & 0xff);
+	  F3(tw & 0xff);
 	  incPC();
 	  return 7;
 	}	
@@ -3950,7 +3950,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    incPC();
 	    return 5;
 	  } else {
-	    int tb = memory.getByte(SP);
+	    final int tb = memory.getByte(SP);
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
@@ -3982,7 +3982,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    incPC(3);
 	  } else {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
 	  }
 	  return 10;
@@ -3995,7 +3995,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int tb = memory.getByte(PC);
+	  final int tb = memory.getByte(PC);
 	  PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
 	  return 10;
 	}	
@@ -4011,9 +4011,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    return 11;
 	  } else {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    incPC();
-	    int tw = tb + (memory.getByte(PC) << 8);
+	    final int tw = tb + (memory.getByte(PC) << 8);
 	    incPC();
 	    decSP();
 	    memory.setByte(SP, PC >> 8);
@@ -4045,8 +4045,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int tb = memory.getByte(PC);
-	  int tw = A + tb;
+	  final int tb = memory.getByte(PC);
+	  final int tw = A + tb;
 	  if (((A & 0x0f) + (tb & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -4058,7 +4058,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 7;
 	}	
@@ -4085,7 +4085,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  if (ZFSET()) {
-	    int tb = memory.getByte(SP);
+	    final int tb = memory.getByte(SP);
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
@@ -4102,7 +4102,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("RET", "", 1, Processor.INS_RET, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(SP);
+	  final int tb = memory.getByte(SP);
 	  incSP();
 	  PC = tb + (memory.getByte(SP) << 8);
 	  incSP();
@@ -4117,7 +4117,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  if (ZFSET()) {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
 	  } else {
 	    incPC(3);
@@ -4133,7 +4133,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int tb = memory.getByte(PC);
+	  final int tb = memory.getByte(PC);
 	  PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
 	  return 10;
 	}	
@@ -4146,9 +4146,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  if (ZFSET()) {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    incPC();
-	    int tw = tb + (memory.getByte(PC) << 8);
+	    final int tw = tb + (memory.getByte(PC) << 8);
 	    incPC();
 	    decSP();
 	    memory.setByte(SP, PC >> 8);
@@ -4169,9 +4169,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int tb = memory.getByte(PC);
+	  final int tb = memory.getByte(PC);
 	  incPC();
-	  int tw = tb + (memory.getByte(PC) << 8);
+	  final int tw = tb + (memory.getByte(PC) << 8);
 	  incPC();
 	  decSP();
 	  memory.setByte(SP, PC >> 8);
@@ -4188,8 +4188,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int tb = memory.getByte(PC);
-	  int tw = A + tb + (F & CF);
+	  final int tb = memory.getByte(PC);
+	  final int tw = A + tb + (F & CF);
 	  if (((A & 0x0f) + (tb & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
@@ -4201,7 +4201,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 7;
 	}	
@@ -4231,7 +4231,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    incPC();
 	    return 5;
 	  } else {
-	    int tb = memory.getByte(SP);
+	    final int tb = memory.getByte(SP);
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
@@ -4263,7 +4263,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    incPC(3);
 	  } else {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
 	  }
 	  return 10;
@@ -4295,9 +4295,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    return 11;
 	  } else {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    incPC();
-	    int tw = tb + (memory.getByte(PC) << 8);
+	    final int tw = tb + (memory.getByte(PC) << 8);
 	    incPC();
 	    decSP();
 	    memory.setByte(SP, PC >> 8);
@@ -4329,8 +4329,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int tb = memory.getByte(PC);
-	  int tw = A - tb;
+	  final int tb = memory.getByte(PC);
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -4342,7 +4342,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 7;
 	}	
@@ -4369,7 +4369,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  if (CFSET()) {
-	    int tb = memory.getByte(SP);
+	    final int tb = memory.getByte(SP);
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
@@ -4387,7 +4387,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	       new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(SP);
+	  final int tb = memory.getByte(SP);
 	  incSP();
 	  PC = tb + (memory.getByte(SP) << 8);
 	  incSP();
@@ -4402,7 +4402,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  if (CFSET()) {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
 	  } else {
 	    incPC(3);
@@ -4434,9 +4434,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  if (CFSET()) {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    incPC();
-	    int tw = tb + (memory.getByte(PC) << 8);
+	    final int tw = tb + (memory.getByte(PC) << 8);
 	    incPC();
 	    decSP();
 	    memory.setByte(SP, PC >> 8);
@@ -4458,9 +4458,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int tb = memory.getByte(PC);
+	  final int tb = memory.getByte(PC);
 	  incPC();
-	  int tw = tb + (memory.getByte(PC) << 8);
+	  final int tw = tb + (memory.getByte(PC) << 8);
 	  incPC();
 	  decSP();
 	  memory.setByte(SP, PC >> 8);
@@ -4477,8 +4477,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int tb = memory.getByte(PC);
-	  int tw = A - tb - (F & CF);
+	  final int tb = memory.getByte(PC);
+	  final int tw = A - tb - (F & CF);
 	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
@@ -4490,7 +4490,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = tw & 0xff;
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 7;
 	}	
@@ -4520,7 +4520,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    incPC();
 	    return 5;
 	  } else {
-	    int tb = memory.getByte(SP);
+	    final int tb = memory.getByte(SP);
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
@@ -4552,7 +4552,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    incPC(3);
 	  } else {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
 	  }
 	  return 10;
@@ -4567,7 +4567,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  int tb = memory.getByte(SP);
 	  memory.setByte(SP, L);
 	  L = tb;
-	  int tw = (SP + 1) & 0xffff;
+	  final int tw = (SP + 1) & 0xffff;
 	  tb = memory.getByte(tw);
 	  memory.setByte(tw, H);
 	  H = tb;
@@ -4586,9 +4586,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    return 11;
 	  } else {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    incPC();
-	    int tw = tb + (memory.getByte(PC) << 8);
+	    final int tw = tb + (memory.getByte(PC) << 8);
 	    incPC();
 	    decSP();
 	    memory.setByte(SP, PC >> 8);
@@ -4620,7 +4620,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int tb = memory.getByte(PC);
+	  final int tb = memory.getByte(PC);
 	  if (((A | tb) & 0x08) != 0) {
 	    SETACF();
 	  } else {
@@ -4628,7 +4628,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  }
 	  A &= tb & 0xff;
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 7;
 	}	
@@ -4655,7 +4655,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  if (PE()) {
-	    int tb = memory.getByte(SP);
+	    final int tb = memory.getByte(SP);
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
@@ -4684,7 +4684,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  if (PE()) {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
 	  } else {
 	    incPC(3);
@@ -4716,9 +4716,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  if (PE()) {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    incPC();
-	    int tw = tb + (memory.getByte(PC) << 8);
+	    final int tw = tb + (memory.getByte(PC) << 8);
 	    incPC();
 	    decSP();
 	    memory.setByte(SP, PC >> 8);
@@ -4740,9 +4740,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int tb = memory.getByte(PC);
+	  final int tb = memory.getByte(PC);
 	  incPC();
-	  int tw = tb + (memory.getByte(PC) << 8);
+	  final int tw = tb + (memory.getByte(PC) << 8);
 	  incPC();
 	  decSP();
 	  memory.setByte(SP, PC >> 8);
@@ -4762,7 +4762,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A ^= memory.getByte(PC);
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 7;
 	}	
@@ -4792,7 +4792,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    incPC();
 	    return 5;
 	  } else {
-	    int tb = memory.getByte(SP);
+	    final int tb = memory.getByte(SP);
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
@@ -4824,7 +4824,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    incPC(3);
 	  } else {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
 	  }
 	  return 10;
@@ -4852,9 +4852,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    return 11;
 	  } else {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    incPC();
-	    int tw = tb + (memory.getByte(PC) << 8);
+	    final int tw = tb + (memory.getByte(PC) << 8);
 	    incPC();
 	    decSP();
 	    memory.setByte(SP, PC >> 8);
@@ -4889,7 +4889,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A |= memory.getByte(PC);
 	  RESETACF();
 	  RESETCF();
-	  TF(A);
+	  F3(A);
 	  incPC();
 	  return 7;
 	}	
@@ -4916,7 +4916,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  if (SFSET()) {
-	    int tb = memory.getByte(SP);
+	    final int tb = memory.getByte(SP);
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
@@ -4946,7 +4946,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  if (SFSET()) {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
 	  } else {
 	    incPC(3);
@@ -4973,9 +4973,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  if (SFSET()) {
 	    incPC();
-	    int tb = memory.getByte(PC);
+	    final int tb = memory.getByte(PC);
 	    incPC();
-	    int tw = tb + (memory.getByte(PC) << 8);
+	    final int tw = tb + (memory.getByte(PC) << 8);
 	    incPC();
 	    decSP();
 	    memory.setByte(SP, PC >> 8);
@@ -4997,9 +4997,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int tb = memory.getByte(PC);
+	  final int tb = memory.getByte(PC);
 	  incPC();
-	  int tw = tb + (memory.getByte(PC) << 8);
+	  final int tw = tb + (memory.getByte(PC) << 8);
 	  incPC();
 	  decSP();
 	  memory.setByte(SP, PC >> 8);
@@ -5016,8 +5016,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int tb = memory.getByte(PC);
-	  int tw = A - tb;
+	  final int tb = memory.getByte(PC);
+	  final int tw = A - tb;
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
@@ -5028,7 +5028,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  TF(tw & 0xff);
+	  F3(tw & 0xff);
 	  incPC();
 	  return 7;
 	}	
