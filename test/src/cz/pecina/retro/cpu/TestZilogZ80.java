@@ -189,14 +189,14 @@ public class TestZilogZ80 extends ProcessorTest {
     //   0xd146bf51L,
     //   "<inc,dec> d"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0x13, 0, 0, 0, 0x342e, 0x131d, 0x28c9, 0x0aca,
-    //   0x9967, 0x3a2e, 0x92, 0xf6, 0x9d54,
-    //   0x08, 0, 0, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0,
-    //   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-    //   0xaec6d42cL,
-    //   "<inc,dec> de"),
+    new TestGroup(
+      0xff,
+      0x13, 0, 0, 0, 0x342e, 0x131d, 0x28c9, 0x0aca,
+      0x9967, 0x3a2e, 0x92, 0xf6, 0x9d54,
+      0x08, 0, 0, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0xaec6d42cL,
+      "<inc,dec> de"),
 
     // new TestGroup(
     //   0xff,
