@@ -72,14 +72,14 @@ public class TestZilogZ80 extends ProcessorTest {
     //   0x51c19c2eL,
     //   "aluop a,nn"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0x80, 0, 0, 0, 0xc53e, 0x573a, 0x4c4d, MSBT,
-    //   0xe309, 0xa666, 0xd0, 0x3b, 0xadbb,
-    //   0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
-    //   0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0, 0,
-    //   0x06c7aa8eL,
-    //   "aluop a,<b,c,d,e,h,l,(hl),a>"),
+    new TestGroup(
+      0xff,
+      0x80, 0, 0, 0, 0xc53e, 0x573a, 0x4c4d, MSBT,
+      0xe309, 0xa666, 0xd0, 0x3b, 0xadbb,
+      0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
+      0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0, 0,
+      0x06c7aa8eL,
+      "aluop a,<b,c,d,e,h,l,(hl),a>"),
 
     // new TestGroup(
     //   0xff,

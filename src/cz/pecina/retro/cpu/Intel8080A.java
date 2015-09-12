@@ -3037,9 +3037,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SUB", "B", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = B;
-	  final int tw = A - tb;
-	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
+	  final int tw = A - B;
+	  if (((A & 0x0f) - (B & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
 	    RESETACF();
@@ -3061,9 +3060,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SUB", "C", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = C;
-	  final int tw = A - tb;
-	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
+	  final int tw = A - C;
+	  if (((A & 0x0f) - (C & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
 	    RESETACF();
@@ -3085,9 +3083,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SUB", "D", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = D;
-	  final int tw = A - tb;
-	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
+	  final int tw = A - D;
+	  if (((A & 0x0f) - (D & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
 	    RESETACF();
@@ -3109,9 +3106,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SUB", "E", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = E;
-	  final int tw = A - tb;
-	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
+	  final int tw = A - E;
+	  if (((A & 0x0f) - (E & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
 	    RESETACF();
@@ -3133,9 +3129,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SUB", "H", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = H;
-	  final int tw = A - tb;
-	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
+	  final int tw = A - H;
+	  if (((A & 0x0f) - (H & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
 	    RESETACF();
@@ -3157,9 +3152,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SUB", "L", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = L;
-	  final int tw = A - tb;
-	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
+	  final int tw = A - L;
+	  if (((A & 0x0f) - (L & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
 	    RESETACF();
@@ -3217,9 +3211,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "B", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = B;
-	  final int tw = A - tb - (F & CF);
-	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
+	  final int tw = A - B - (F & CF);
+	  if (((A & 0x0f) - (B & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
 	    RESETACF();
@@ -3241,9 +3234,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "C", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = C;
-	  final int tw = A - tb - (F & CF);
-	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
+	  final int tw = A - C - (F & CF);
+	  if (((A & 0x0f) - (C & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
 	    RESETACF();
@@ -3265,9 +3257,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "D", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = D;
-	  final int tw = A - tb - (F & CF);
-	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
+	  final int tw = A - D - (F & CF);
+	  if (((A & 0x0f) - (D & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
 	    RESETACF();
@@ -3289,9 +3280,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "E", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = E;
-	  final int tw = A - tb - (F & CF);
-	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
+	  final int tw = A - E - (F & CF);
+	  if (((A & 0x0f) - (E & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
 	    RESETACF();
@@ -3313,9 +3303,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "H", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = H;
-	  final int tw = A - tb - (F & CF);
-	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
+	  final int tw = A - H - (F & CF);
+	  if (((A & 0x0f) - (H & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
 	    RESETACF();
@@ -3337,9 +3326,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "L", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = L;
-	  final int tw = A - tb - (F & CF);
-	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
+	  final int tw = A - L - (F & CF);
+	  if (((A & 0x0f) - (L & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
 	    RESETACF();
@@ -3385,7 +3373,6 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("SBB", "A", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = A;
 	  final int tw = -(F & CF);
 	  if (CFSET()) {
 	    RESETACF();
