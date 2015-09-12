@@ -145,6 +145,46 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   protected int IY;
 
   /**
+   * CPU register A' (alternative Accumulator).
+   */
+  protected int Aa;
+
+  /**
+   * CPU register F' (alternative Flags).
+   */
+  protected int Fa;
+
+  /**
+   * CPU register B'.
+   */
+  protected int Ba;
+  
+  /**
+   * CPU register C'.
+   */
+  protected int Ca;
+
+  /**
+   * CPU register D'.
+   */
+  protected int Da;
+
+  /**
+   * CPU register E'.
+   */
+  protected int Ea;
+
+  /**
+   * CPU register H'.
+   */
+  protected int Ha;
+
+  /**
+   * CPU register L'.
+   */
+  protected int La;
+
+  /**
    * The Program Counter (PC).
    */
   private int PC;
@@ -339,6 +379,94 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public void processValue(final String value) {
 	  L = Integer.parseInt(value, 16);
+	}
+      });
+
+    add(new Register("Aa") {
+	@Override
+	public String getValue() {
+	  return String.format("%02x", Aa);
+	}
+	@Override
+	public void processValue(final String value) {
+	  Aa = Integer.parseInt(value, 16);
+	}
+      });
+
+    add(new Register("Fa") {
+	@Override
+	public String getValue() {
+	  return String.format("%02x", Fa);
+	}
+	@Override
+	public void processValue(final String value) {
+	  Fa = Integer.parseInt(value, 16);
+	}
+      });
+
+    add(new Register("Ba") {
+	@Override
+	public String getValue() {
+	  return String.format("%02x", Ba);
+	}
+	@Override
+	public void processValue(final String value) {
+	  Ba = Integer.parseInt(value, 16);
+	}
+      });
+
+    add(new Register("Ca") {
+	@Override
+	public String getValue() {
+	  return String.format("%02x", Ca);
+	}
+	@Override
+	public void processValue(final String value) {
+	  Ca = Integer.parseInt(value, 16);
+	}
+      });
+
+    add(new Register("Da") {
+	@Override
+	public String getValue() {
+	  return String.format("%02x", Da);
+	}
+	@Override
+	public void processValue(final String value) {
+	  Da = Integer.parseInt(value, 16);
+	}
+      });
+
+    add(new Register("Ea") {
+	@Override
+	public String getValue() {
+	  return String.format("%02x", Ea);
+	}
+	@Override
+	public void processValue(final String value) {
+	  Ea = Integer.parseInt(value, 16);
+	}
+      });
+
+    add(new Register("Ha") {
+	@Override
+	public String getValue() {
+	  return String.format("%02x", Ha);
+	}
+	@Override
+	public void processValue(final String value) {
+	  Ha = Integer.parseInt(value, 16);
+	}
+      });
+
+    add(new Register("La") {
+	@Override
+	public String getValue() {
+	  return String.format("%02x", La);
+	}
+	@Override
+	public void processValue(final String value) {
+	  La = Integer.parseInt(value, 16);
 	}
       });
 
@@ -879,6 +1007,158 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
+   * Gets the register A'.
+   *
+   * @return the register value
+   */
+  public int getAa() {
+    return Aa;
+  }
+
+  /**
+   * Sets the register A'.
+   *
+   * @param n the new register value
+   */
+  public void setAa(final int n) {
+    assert (n >= 0) && (n < 0x100);
+    Aa = n & 0xff;
+  }
+
+  /**
+   * Gets the alternative Flags (F') register.
+   *
+   * @return the register value
+   */
+  public int getFa() {
+    return Fa;
+  }
+
+  /**
+   * Sets the alternative Flags (F') register.
+   *
+   * @param n the new register value
+   */
+  public void setFa(final int n) {
+    assert (n >= 0) && (n < 0x100);
+    Fa = n;
+  }
+
+  /**
+   * Gets the register B'.
+   *
+   * @return the register value
+   */
+  public int getBa() {
+    return Ba;
+  }
+
+  /**
+   * Sets the register B'.
+   *
+   * @param n the new register value
+   */
+  public void setBa(final int n) {
+    assert (n >= 0) && (n < 0x100);
+    Ba = n & 0xff;
+  }
+
+  /**
+   * Gets the register C'.
+   *
+   * @return the register value
+   */
+  public int getCa() {
+    return Ca;
+  }
+
+  /**
+   * Sets the register C'.
+   *
+   * @param n the new register value
+   */
+  public void setCa(final int n) {
+    assert (n >= 0) && (n < 0x100);
+    Ca = n & 0xff;
+  }
+
+  /**
+   * Gets the register D'.
+   *
+   * @return the register value
+   */
+  public int getDa() {
+    return Da;
+  }
+
+  /**
+   * Sets the register D'.
+   *
+   * @param n the new register value
+   */
+  public void setDa(final int n) {
+    assert (n >= 0) && (n < 0x100);
+    Da = n & 0xff;
+  }
+
+  /**
+   * Gets the register E'.
+   *
+   * @return the register value
+   */
+  public int getEa() {
+    return Ea;
+  }
+
+  /**
+   * Sets the register E'.
+   *
+   * @param n the new register value
+   */
+  public void setEa(final int n) {
+    assert (n >= 0) && (n < 0x100);
+    Ea = n & 0xff;
+  }
+
+  /**
+   * Gets the register H'.
+   *
+   * @return the register value
+   */
+  public int getHa() {
+    return Ha;
+  }
+
+  /**
+   * Sets the register H'.
+   *
+   * @param n the new register value
+   */
+  public void setHa(final int n) {
+    assert (n >= 0) && (n < 0x100);
+    Ha = n & 0xff;
+  }
+
+  /**
+   * Gets the register L'.
+   *
+   * @return the register value
+   */
+  public int getLa() {
+    return La;
+  }
+
+  /**
+   * Sets the register L'.
+   *
+   * @param n the new register value
+   */
+  public void setLa(final int n) {
+    assert (n >= 0) && (n < 0x100);
+    La = n & 0xff;
+  }
+
+  /**
    * Gets the register pair BC.
    *
    * @return register pair value
@@ -1290,36 +1570,49 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 08 undefined (NOP)
-    new Opcode("UND", "", 1, Processor.INS_UND, new Executable() {
+    // 08
+    new Opcode("EX", "AF,AF'", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
+	  int tb = A;
+	  A = Aa;
+	  Aa = tb;
+	  tb = F;
+	  F = Fa;
+	  Fa = tb;
 	  incPC();
 	  return 4;
 	}
       }		    
       ),
 	
-    // 09 DADB	  
-    new Opcode("DAD", "B", 1, Processor.INS_NONE, new Executable() {
+    // 09
+    new Opcode("ADD", "HL,BC", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  final int ti = (H << 8) + L + (B << 8) + C;
+	  if (((H ^ B ^ (ti >> 8)) & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
 	  L = ti & 0xff;
 	  H = (ti >> 8) & 0xff;
+	  F2(H);
 	  if (ti > 0xffff) {
 	    SETCF();
 	  } else {
 	    RESETCF();
 	  }
+	  RESETNF();
 	  incPC();
-	  return 10;
+	  return 11;
 	}	
       }		    
       ),
 	
-    // 0a LDAXB	  
-    new Opcode("LDAX", "B", 1, Processor.INS_MR, new Executable() {
+    // 0a
+    new Opcode("LD", "A,(BC)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  A = memory.getByte(BC());
@@ -1401,8 +1694,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 0f RRC	  
-    new Opcode("RRC", "", 1, Processor.INS_NONE, new Executable() {
+    // 0f
+    new Opcode("RRCA", "", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  if ((A & 1) != 0) {
@@ -1411,18 +1704,29 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    RESETCF();
 	  }
 	  A = ((A >> 1) | (F << 7)) & 0xff;
+	  F2(A);
+	  RESETHF();
+	  RESETNF();
 	  incPC();
 	  return 4;
 	}
       }		    
       ),
 	
-    // 10 undefined (NOP)
-    new Opcode("UND", "", 1, Processor.INS_UND, new Executable() {
+    // 10
+    new Opcode("DJNZ", "<r>", 1, Processor.INS_JMP, new Executable() {
 	@Override
 	public int exec() {
-	  incPC();
-	  return 4;
+	  B = (B - 1) & 0xff;
+	  if (B == 0) {
+	    incPC(2);
+	    return 8;
+	  } else {
+	    incPC();
+	    final int tb = memory.getByte(PC);
+	    PC = (PC + 1 + tb) & 0xffff;
+	    return 13;
+	  }
 	}
       }		    
       ),
@@ -1524,8 +1828,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 17 RAL	  
-    new Opcode("RAL", "", 1, Processor.INS_NONE, new Executable() {
+    // 17
+    new Opcode("RLA", "", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  final int tb = A;
@@ -1535,42 +1839,54 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
+	  F2(A);
+	  RESETHF();
+	  RESETNF();
 	  incPC();
 	  return 4;
 	}
       }		    
       ),
 	
-    // 18 undefined (NOP)
-    new Opcode("UND", "", 1, Processor.INS_UND, new Executable() {
+    // 18
+    new Opcode("JR", "<r>", 1, Processor.INS_JMP, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
-	  return 4;
+	  final int tb = memory.getByte(PC);
+	  PC = (PC + 1 + tb) & 0xffff;
+	  return 12;
 	}
       }		    
       ),
 	
-    // 19 DADD
-    new Opcode("DAD", "D", 1, Processor.INS_NONE, new Executable() {
+    // 19
+    new Opcode("ADD", "HL,DE", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  final int ti = (H << 8) + L + (D << 8) + E;
+	  if (((H ^ D ^ (ti >> 8)) & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
 	  L = ti & 0xff;
 	  H = (ti >> 8) & 0xff;
+	  F2(H);
 	  if (ti > 0xffff) {
 	    SETCF();
 	  } else {
 	    RESETCF();
 	  }
+	  RESETNF();
 	  incPC();
-	  return 10;
+	  return 11;
 	}	
       }		    
       ),
 	
-    // 1a LDAXD	  
-    new Opcode("LDAX", "D", 1, Processor.INS_MR, new Executable() {
+    // 1a
+    new Opcode("LD", "A,(DE)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  A = memory.getByte(DE());
@@ -1652,8 +1968,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 1f RAR	  
-    new Opcode("RAR", "", 1, Processor.INS_NONE, new Executable() {
+    // 1f
+    new Opcode("RRA", "", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  final int tb = A;
@@ -1663,18 +1979,28 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
+	  F2(A);
+	  RESETHF();
+	  RESETNF();	  
 	  incPC();
 	  return 4;
 	}	
       }		    
       ),
 	
-    // 20 undefined (NOP)
-    new Opcode("UND", "", 1, Processor.INS_UND, new Executable() {
+    // 20
+    new Opcode("JR", "NZ,<r>", 1, Processor.INS_JMP, new Executable() {
 	@Override
 	public int exec() {
-	  incPC();
-	  return 4;
+	  if (ZFSET()) {
+	    incPC(2);
+	    return 7;
+	  } else {
+	    incPC();
+	    final int tb = memory.getByte(PC);
+	    PC = (PC + 1 + tb) & 0xffff;
+	    return 12;
+	  }
 	}
       }		    
       ),
@@ -1693,8 +2019,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 22 SHLD
-    new Opcode("SHLD", "", 3, Processor.INS_MW, new Executable() {
+    // 22
+    new Opcode("LD", "(%s),HL", 3, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = memory.getByte((PC + 1) & 0xffff) +
@@ -1779,55 +2105,84 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 27 DAA	  
+    // 27
     new Opcode("DAA", "", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  int tw = A;
-	  if (((tw & 0x0f) > 0x09) || HFSET()) {
-	    if ((tw & 0x0f) > 0x09) {
-	      SETHF();
-	    } else {
-	      RESETHF();
+	  final int ld = A & 0x0f;
+	  if (NFSET()) {
+	    final boolean hd = CFSET() || (A > 0x99);
+	    if (HFSET() || (ld > 9)) {
+	      if (ld > 5) {
+		RESETHF();
+	      }
+	      A = (A - 6) & 0xff;
 	    }
-	    tw += 0x06;
+	    if (hd) {
+	      A -= 0x0160;
+	    }
+	  } else {
+	    if (HFSET() || (ld > 9)) {
+	      if (ld > 9) {
+		SETHF();
+	      } else {
+		RESETHF();
+	      }
+	      A += 6;
+	    }
+	    if (CFSET() || ((A & 0x01f0) > 0x90)) {
+	      A += 0x60;
+	    }
 	  }
-	  if ((tw > 0x9f) || CFSET()) {
-	    tw += 0x60;
+	  if (((A >> 8) & 1) == 1) {
 	    SETCF();
 	  }
-	  A = tw & 0xff;
+	  A &= 0xff;
 	  F5(A);
-	  incPC();
-	  return 4;
-	}	
-      }		    
-      ),
-	
-    // 28 undefined (NOP)
-    new Opcode("UND", "", 1, Processor.INS_UND, new Executable() {
-	@Override
-	public int exec() {
 	  incPC();
 	  return 4;
 	}
       }		    
       ),
 	
-    // 29 DADH	  
-    new Opcode("DAD", "H", 1, Processor.INS_NONE, new Executable() {
+    // 28
+    new Opcode("JR", "Z,<r>", 1, Processor.INS_JMP, new Executable() {
 	@Override
 	public int exec() {
-	  final int ti = (H << 9) + (L << 1);
+	  if (ZFSET()) {
+	    incPC();
+	    final int tb = memory.getByte(PC);
+	    PC = (PC + 1 + tb) & 0xffff;
+	    return 12;
+	  } else {
+	    incPC(2);
+	    return 7;
+	  }
+	}
+      }		    
+      ),
+	
+    // 29	  
+    new Opcode("ADD", "HL,HL", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = (HL() << 1);
+	  if (((ti >> 8) & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
 	  L = ti & 0xff;
 	  H = (ti >> 8) & 0xff;
+	  F2(H);
 	  if (ti > 0xffff) {
 	    SETCF();
 	  } else {
 	    RESETCF();
 	  }
+	  RESETNF();
 	  incPC();
-	  return 10;
+	  return 11;
 	}	
       }		    
       ),
@@ -1918,11 +2273,14 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 2f CMA	  
-    new Opcode("CMA", "", 1, Processor.INS_NONE, new Executable() {
+    // 2f
+    new Opcode("CPL", "", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  A = (~A) & 0xff;
+	  F2(A);
+	  SETHF();
+	  SETNF();
 	  incPC();
 	  return 4;
 	}	
@@ -2040,11 +2398,14 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 37 STC	  
-    new Opcode("STC", "", 1, Processor.INS_NONE, new Executable() {
+    // 37
+    new Opcode("SCF", "", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  SETCF();
+	  F2(A);
+	  RESETHF();
+	  RESETNF();
 	  incPC();
 	  return 4;
 	}	
@@ -2061,20 +2422,27 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 39 DADSP
-    new Opcode("DAD", "SP", 1, Processor.INS_NONE, new Executable() {
+    // 39
+    new Opcode("ADD", "HL,SP", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  final int ti = (H << 8) + L + SP;
+	  if (((H ^ ((SP ^ ti) >> 8)) & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
 	  L = ti & 0xff;
 	  H = (ti >> 8) & 0xff;
+	  F2(H);
 	  if (ti > 0xffff) {
 	    SETCF();
 	  } else {
 	    RESETCF();
 	  }
+	  RESETNF();
 	  incPC();
-	  return 10;
+	  return 11;
 	}	
       }		    
       ), 
@@ -2160,11 +2528,18 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // 3f CMC	  
-    new Opcode("CMC", "", 1, Processor.INS_NONE, new Executable() {
+    // 3f
+    new Opcode("CCF", "", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  F ^= CF;
+	  F2(A);
+	  if (CFSET()) {
+	    RESETHF();
+	  } else {
+	    SETHF();
+	  }
+	  RESETNF();
 	  incPC();
 	  return 4;
 	}	
@@ -4593,16 +4968,31 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // d9 undefined (RET)
-    new Opcode("UND", "", 1, Processor.INS_UND | Processor.INS_RET,
+    // d9
+    new Opcode("EXX", "", 1, Processor.INS_UND | Processor.INS_RET,
 	       new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = memory.getByte(SP);
-	  incSP();
-	  PC = tb + (memory.getByte(SP) << 8);
-	  incSP();
-	  return 10;
+	  int tb = B;
+	  B = Ba;
+	  Ba = tb;
+	  tb = C;
+	  C = Ca;
+	  Ca = tb;
+	  tb = D;
+	  D = Da;
+	  Da = tb;
+	  tb = E;
+	  E = Ea;
+	  Ea = tb;
+	  tb = H;
+	  H = Ha;
+	  Ha = tb;
+	  tb = L;
+	  L = La;
+	  La = tb;
+	  incPC();
+	  return 4;
 	}	
       }		    
       ),
@@ -4905,8 +5295,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 	
-    // eb XCHG	  
-    new Opcode("XCHG", "", 1, Processor.INS_NONE, new Executable() {
+    // eb
+    new Opcode("EX", "DE,HL", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
 	  int tb = H;
