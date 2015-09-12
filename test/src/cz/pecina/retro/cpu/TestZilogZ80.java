@@ -315,27 +315,77 @@ public class TestZilogZ80 extends ProcessorTest {
       0x36c11e75L,
       "<inc,dec> iyl"),
 
+    new TestGroup(
+      0xff,
+      0xed, 0x4b, MSBT & 0xff, MSBT >> 8, 0xf9a8, 0xf559, 0x93a4, 0xf5ed,
+      0x6f96, 0xd968, 0x86, 0xe6, 0x4bd8,
+      0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0, 0, 0,
+      0x4d45a9acL,
+      "ld <bc,de>,(nnnn)"),
 
-
-
-    
     new TestGroup(
       0xff,
       0x2a, MSBT & 0xff, MSBT >> 8, 0, 0x9863, 0x7830, 0x2077, 0xb1fe,
       0xb9fa, 0xabb8, 0x04, 0x06, 0x6015,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0, 0, 0,
-      0xa9c3d5cbL,
-      "lhld nnnn"),
-	
+      0x5f972487L,
+      "ld hl,(nnnn)"),
+
+    new TestGroup(
+      0xff,
+      0xed, 0x7b, MSBT & 0xff, MSBT >> 8, 0x8dfc, 0x57d7, 0x2161, 0xca18,
+      0xc185, 0x27da, 0x83, 0x1e, 0xf460,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0, 0, 0,
+      0x7acea11bL,
+      "ld sp,(nnnn)"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x2a, MSBT & 0xff, MSBT >> 8, 0xded7, 0xa6fa, 0xf780, 0x244c,
+      0x87de, 0xbcc2, 0x16, 0x63, 0x4c96,
+      0x20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0, 0, 0,
+      0x858bf16dL,
+      "ld <ix,iy>,(nnnn)"),
+
+    new TestGroup(
+      0xff,
+      0xed, 0x43, MSBT & 0xff, MSBT >> 8, 0x1f98, 0x844d, 0xe8ac, 0sc9ed,
+      0xc95d, 0x8f61, 0x80, 0x3f, 0xc7bf,
+      0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0xffff, 0xffff, 0, 0, 0,
+      0x641e8715L,
+      "ld (nnnn),<bc,de>"),
+    
     new TestGroup(
       0xff,
       0x22, MSBT & 0xff, MSBT >> 8, 0, 0xd003, 0x7772, 0x7f53, 0x3f72,
       0x64ea, 0xe180, 0x10, 0x2d, 0x35e9,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0,
-      0xe8864f26L,
-      "shld nnnn"),
+      0xa3608b47L,
+      "ld (nnnn),hl"),
+
+    new TestGroup(
+      0xff,
+      0xed, 0x73, MSBT & 0xff, MSBT >> 8, 0xc0dc, 0xd1d6, 0xed5a, 0xf356,
+      0xafda, 0x6ca7, 0x44, 0x9f, 0x3f0a,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff,
+      0x16585fd7L,
+      "ld (nnnn),sp"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x22, MSBT & 0xff, MSBT >> 8, 0x6cc3, 0x0d91, 0x6900, 0x8ef8,
+      0xe3d6, 0xc3f7, 0xc6, 0xd9, 0xc2df,
+      0x20, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0xffff, 0xffff, 0, 0, 0, 0, 0, 0,
+      0xba102a6bL,
+      "ld (nnnn),<ix,iy>"),
 
     new TestGroup(
       0xff,
@@ -343,8 +393,17 @@ public class TestZilogZ80 extends ProcessorTest {
       0x74b1, 0xb30e, 0x46, 0xd1, 0x30cc,
       0x30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0xff, 0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0xfcf46e12L,
-      "lxi <b,d,h,sp>,nnnn"),
+      0xde391969L,
+      "ld <bc,de,hl,sp>,nnnn"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x21, 0, 0, 0x87e8, 0x2006, 0xbd12, 0xb69b,
+      0x7253, 0xa1e5, 0x51, 0x13, 0xf1bd,
+      0x20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0xff, 0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0x227dd525L,
+      "ld <ix,iy>,nnnn"),
 
     new TestGroup(
       0xff,
@@ -352,8 +411,8 @@ public class TestZilogZ80 extends ProcessorTest {
       MSBT, MSBT, 0xc6, 0xb1, 0xef8e,
       0x10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0xff, 0, 0, 0, 0, 0, 0xd7, 0xff, 0,
-      0x2b821d5fL,
-      "ldax <b,d>"),
+      0xb0818935L,
+      "ld a,<(bc),(de)>"),
 
     new TestGroup(
       0xff,
@@ -361,8 +420,53 @@ public class TestZilogZ80 extends ProcessorTest {
       0xde89, 0x7455, 0x53, 0xc0, 0x5509,
       0x38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
-      0xeaa72044L,
-      "mvi <b,c,d,e,h,l,m,a>,nn"),
+      0xf1dab556L,
+      "ld <b,c,d,e,h,l,(hl),a>,nn"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x36, 0x01, 0, 0x1b45, MSBT - 1, MSBT - 1, 0xd5c1,
+      0x61c7, 0xbdc4, 0xc0, 0x85, 0xcd16,
+      0x20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0xff, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
+      0x26db477eL,
+      "ld (<ix,iy>+1),nn"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x46, 0x01, 0, 0xd016, MSBT - 1, MSBT - 1, 0x4260,
+      0x7f39, 0x0404, 0x97, 0x4a, 0xd085,
+      0x20, 0x18, 0, 0, 0, 0x01, 0x01, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0, 0, 0,
+      0xcc1106a8L,
+      "ld <b,c,d,e>,(<ix,iy>+1)"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x66, 0x01, 0, 0x84e0, MSBT - 1, MSBT - 1, 0x9c52,
+      0xa799, 0x49b6, 0x93, 0, 0xeead,
+      0x20, 0x08, 0, 0, 0, 0x01, 0x01, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0, 0, 0,
+      0xfa2a4d03L,
+      "ld <h,l>,(<ix,iy>+1)"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x7e, 0x01, 0, 0xd8b6, MSBT - 1, MSBT - 1, 0xc612,
+      0xdf07, 0x9cd0, 0x43, 0xa6, 0xa0e5,
+      0x20, 0, 0, 0, 0, 0x01, 0x01, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0, 0, 0,
+      0xa5e9ac64L,
+      "ld a,(<ix,iy>+1)"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x26, 0, 0, 0x3c53, 0x4640, 0xe179, 0x7711,
+      0xc107, 0x1afa, 0x81, 0xad, 0x5d9b,
+      0x20, 0x08, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0,
+      0x24e8828bL,
+      "ld <ixh,ixl,iyh,iyl>,nn"),
 
     new TestGroup(
       0xff,
@@ -370,8 +474,17 @@ public class TestZilogZ80 extends ProcessorTest {
       0x82c7, 0x718f, 0x97, 0x8f, 0xef8e,
       0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0xff, 0,
-      0x10b58ceeL,
-      "mov <bcdehla>,<bcdehla>"),
+      0x74040118L,
+      "ld <bcdehla>,<bcdehla>"),
+
+    new TestGroup(
+      0xff,
+      0xdd, 0x40, 0, 0, 0xbcc5, MSBT, MSBT, MSBT,
+      0x2fc2, 0x98c0, 0x83, 0x1f, 0x3bcd,
+      0x20, 0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0xff, 0,
+      0x4780a36bL,
+      "ld <bcdexya>,<bcdexya>"),
 
     new TestGroup(
       0xff,
@@ -379,9 +492,22 @@ public class TestZilogZ80 extends ProcessorTest {
       0x0653, 0xcdba, 0xd2, 0x4f, 0x1fd8,
       0x08, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0xff, 0, 0, 0, 0, 0, 0xd7, 0xff, 0,
-      0xed57af72L,
-      "sta nnnn / lda nnnn"),
+      0xc9262de5L,
+      "ld a,(nnnn) / ld (nnnn),a"),
 
+    new TestGroup(
+      0xff,
+      0xed, 0xa8, 0, 0, 0x9852, 0x68fa, 0x66a1, MSBT + 3,
+      MSBT + 1, 0x0001, 0xc1, 0x68, 0x20b7,
+      0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0x94f42769L,
+      "ldd<r> (1)"),
+
+
+
+
+    
     new TestGroup(
       0xff,
       0x07, 0, 0, 0, 0xcb92, 0x6d43, 0x0a90, 0xc284,
