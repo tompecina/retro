@@ -632,12 +632,12 @@ public class TestZilogZ80 extends ProcessorTest {
   };
 
   // CPU
-  private Intel8080A cpu;
+  private ZilogZ80 cpu;
 
   @Override
   protected void setUp() {
     super.setUp();
-    cpu = new Intel8080A("TEST_CPU");
+    cpu = new ZilogZ80("TEST_CPU");
     cpu.setMemory(mem);
   }
 
@@ -752,10 +752,12 @@ public class TestZilogZ80 extends ProcessorTest {
 
 	  workBytes[MEM_OP + 2] = ram[MSBT];
 	  workBytes[MEM_OP + 1] = ram[MSBT + 1];
-	  workBytes[IY + 2] = workBytes[IX + 2] =
-	    workBytes[HL + 2] = (byte)(cpu.getL());
-	  workBytes[IY + 1] = workBytes[IX + 1] =
-	    workBytes[HL + 1] = (byte)(cpu.getH());
+	  workBytes[IY + 2] = (byte)(cpu.getIY() & 0xff);
+	  workBytes[IX + 2] = (byte)(cpu.getIX() & 0xff);
+	  workBytes[HL + 2] = (byte)(cpu.getL());
+	  workBytes[IY + 1] = (byte)(cpu.getIY() >> 8);
+	  workBytes[IX + 1] = (byte)(cpu.getIX() >> 8);
+	  workBytes[HL + 1] = (byte)(cpu.getH());
 	  workBytes[DE + 2] = (byte)(cpu.getE());
 	  workBytes[DE + 1] = (byte)(cpu.getD());
 	  workBytes[BC + 2] = (byte)(cpu.getC());
