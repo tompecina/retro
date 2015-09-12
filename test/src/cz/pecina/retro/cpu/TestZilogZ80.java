@@ -745,7 +745,8 @@ public class TestZilogZ80 extends ProcessorTest {
 	cpu.setSP((workBytes[SP + 2] & 0xff) +
 		  ((workBytes[SP + 1] & 0xff) << 8));
 
-	if (ram[MSBT - 4] != 0x76) {
+	if ((ram[MSBT - 4] != 0x76) &&
+	    (((ram[MSBT - 4] & 0xdf) != 0xdd) || (ram[MSBT - 3] != 0x76))) {
 	  cpu.setPC(MSBT - 4);
 	  cpu.exec();
 
