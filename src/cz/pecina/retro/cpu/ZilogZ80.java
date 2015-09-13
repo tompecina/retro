@@ -7239,7 +7239,40 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // ed a1
-    null,
+    new Opcode("CPI", "", 1, Processor.INS_MR | Processor.INS_BLOCK, new Executable() {
+	@Override
+	public int exec() {
+	  final int tb = memory.getByte(HL());
+	  int tw = A - tb;
+	  final int cb = A ^ tb ^ tw;
+	  F4(tw);
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	    tw--;
+	  } else {
+	    RESETHF();
+	  }
+	  if ((tw & 0x02) != 0) {
+	    SETYF();
+	  } else {
+	    RESETYF();
+	  }
+	  if ((tw & 0x08) != 0) {
+	    SETXF();
+	  } else {
+	    RESETXF();
+	  }
+	  if ((B | C) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  SETNF();
+	  incPC();
+	  return 16;
+	}	
+      }		    
+      ),
 
     // ed a2
     null,
@@ -7319,7 +7352,42 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // ed b1
-    null,
+    new Opcode("CPIR", "", 1, Processor.INS_MR | Processor.INS_BLOCK, new Executable() {
+	@Override
+	public int exec() {
+	  final int tb = memory.getByte(HL());
+	  int tw = A - tb;
+	  final int cb = A ^ tb ^ tw;
+	  F4(tw);
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	    tw--;
+	  } else {
+	    RESETHF();
+	  }
+	  if ((tw & 0x02) != 0) {
+	    SETYF();
+	  } else {
+	    RESETYF();
+	  }
+	  if ((tw & 0x08) != 0) {
+	    SETXF();
+	  } else {
+	    RESETXF();
+	  }
+	  SETNF();
+	  if ((B | C) != 0) {
+	    SETPF();
+	    incPC(-1);
+	    return 21;
+	  } else {
+	    RESETPF();
+	    incPC();
+	    return 16;
+	  }
+	}	
+      }		    
+      ),
 
     // ed b2
     null,
