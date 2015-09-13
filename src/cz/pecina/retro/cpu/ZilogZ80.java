@@ -3758,7 +3758,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -3788,7 +3788,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -3818,7 +3818,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -3848,7 +3848,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -3878,7 +3878,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -3908,7 +3908,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -3939,7 +3939,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -3985,7 +3985,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -4015,7 +4015,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -4045,7 +4045,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -4075,7 +4075,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -4105,7 +4105,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -4135,7 +4135,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -4166,7 +4166,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -4581,7 +4581,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -4610,7 +4610,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -4639,7 +4639,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -4668,7 +4668,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -4697,7 +4697,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -4726,7 +4726,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -4756,7 +4756,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -4900,7 +4900,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -5050,7 +5050,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -5198,7 +5198,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -5368,7 +5368,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
@@ -5913,7 +5913,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    RESETCF();
 	  }
-	  if ((((cb >> 6) ^ (cb >> 5)) & 0x04) != 0) {
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
 	    RESETPF();
