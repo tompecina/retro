@@ -72,10 +72,15 @@ public interface Processor {
   public static final int INS_MW = 1 << 6;
 
   /**
+   * Mask for block instruction (repeated or not).
+   */
+  public static final int INS_BLOCK = 1 << 7;
+
+  /**
    * Mask for instruction that is not officially defined by
    * the CPU manufacturer.
    */
-  public static final int INS_UND = 1 << 7;
+  public static final int INS_UND = 1 << 8;
 
   /**
    * Adds memory.
