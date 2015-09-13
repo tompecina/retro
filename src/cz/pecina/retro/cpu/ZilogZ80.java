@@ -5900,7 +5900,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
    */
   protected final Opcode[] opcodesED = new Opcode[] {
 
-    // 00 - 3f
+    // ed 00 - ed 3f
     null, null, null, null, null, null, null, null,
     null, null, null, null, null, null, null, null,
     null, null, null, null, null, null, null, null,
@@ -5910,7 +5910,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     null, null, null, null, null, null, null, null,
     null, null, null, null, null, null, null, null,
 
-    // 40
+    // ed 40
     new Opcode("IN", "B,(C)", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -5927,7 +5927,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 41
+    // ed 41
     new Opcode("OUT", "(C),B", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -5940,7 +5940,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 42
+    // ed 42
     new Opcode("SBC", "HL,BC", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
@@ -5976,22 +5976,58 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 
-    // 43
+    // ed 43
+    new Opcode("LD", "(%s),BC", 3, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = memory.getByte((PC + 1) & 0xffff) +
+	    (memory.getByte((PC + 2) & 0xffff) << 8);
+	  memory.setByte(tw, C);
+	  memory.setByte((tw + 1) & 0xffff, B);
+	  incPC(3);
+	  return 20;
+	}
+      }		    
+      ),
+
+    // ed 44
+    new Opcode("NEG", "", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if (A != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  if ((A & 0x0f) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
+	  if (A == 0x80) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  A = (-A) & 0xff;
+	  F4(A);
+	  SETNF();
+	  incPC();
+	  return 8;
+	}	
+      }		    
+      ),
+
+    // ed 45
     null,
 
-    // 44
+    // ed 46
     null,
 
-    // 45
+    // ed 47
     null,
 
-    // 46
-    null,
-
-    // 47
-    null,
-
-    // 48
+    // ed 48
     new Opcode("IN", "C,(C)", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -6009,7 +6045,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 49
+    // ed 49
     new Opcode("OUT", "(C),C", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -6022,7 +6058,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 4a
+    // ed 4a
     new Opcode("ADC", "HL,BC", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
@@ -6058,22 +6094,33 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 
-    // 4b
+    // ed 4b
+    new Opcode("LD", "BC,(%s)", 3, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = memory.getByte((PC + 1) & 0xffff) +
+	    (memory.getByte((PC + 2) & 0xffff) << 8);
+	  C = memory.getByte(tw);
+	  B = memory.getByte((tw + 1) & 0xffff);
+	  incPC(3);
+	  return 20;
+	}
+      }		    
+      ), 
+
+    // ed 4c
     null,
 
-    // 4c
+    // ed 4d
     null,
 
-    // 4d
+    // ed 4e
     null,
 
-    // 4e
+    // ed 4f
     null,
 
-    // 4f
-    null,
-
-    // 50
+    // ed 50
     new Opcode("IN", "D,(C)", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -6090,7 +6137,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 51
+    // ed 51
     new Opcode("OUT", "(C),D", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -6103,7 +6150,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 52
+    // ed 52
     new Opcode("SBC", "HL,DE", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
@@ -6139,22 +6186,33 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 
-    // 53
+    // ed 53
+    new Opcode("LD", "(%s),DE", 3, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = memory.getByte((PC + 1) & 0xffff) +
+	    (memory.getByte((PC + 2) & 0xffff) << 8);
+	  memory.setByte(tw, E);
+	  memory.setByte((tw + 1) & 0xffff, D);
+	  incPC(3);
+	  return 20;
+	}
+      }		    
+      ),
+
+    // ed 54
     null,
 
-    // 54
+    // ed 55
     null,
 
-    // 55
+    // ed 56
     null,
 
-    // 56
+    // ed 57
     null,
 
-    // 57
-    null,
-
-    // 58
+    // ed 58
     new Opcode("IN", "E,(C)", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -6171,7 +6229,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 59
+    // ed 59
     new Opcode("OUT", "(C),E", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -6184,7 +6242,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 5a
+    // ed 5a
     new Opcode("ADC", "HL,DE", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
@@ -6220,22 +6278,33 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 
-    // 5b
+    // ed 5b
+    new Opcode("LD", "DE,(%s)", 3, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = memory.getByte((PC + 1) & 0xffff) +
+	    (memory.getByte((PC + 2) & 0xffff) << 8);
+	  E = memory.getByte(tw);
+	  D = memory.getByte((tw + 1) & 0xffff);
+	  incPC(3);
+	  return 20;
+	}
+      }		    
+      ), 
+
+    // ed 5c
     null,
 
-    // 5c
+    // ed 5d
     null,
 
-    // 5d
+    // ed 5e
     null,
 
-    // 5e
+    // ed 5f
     null,
 
-    // 5f
-    null,
-
-    // 60
+    // ed 60
     new Opcode("IN", "H,(C)", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -6252,7 +6321,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 61
+    // ed 61
     new Opcode("OUT", "(C),H", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -6265,7 +6334,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 62
+    // ed 62
     new Opcode("SBC", "HL,HL", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
@@ -6300,22 +6369,33 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 
-    // 63
+    // ed 63
+    new Opcode("LD", "(%s),HL", 3, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = memory.getByte((PC + 1) & 0xffff) +
+	    (memory.getByte((PC + 2) & 0xffff) << 8);
+	  memory.setByte(tw, L);
+	  memory.setByte((tw + 1) & 0xffff, H);
+	  incPC(3);
+	  return 20;
+	}
+      }		    
+      ),
+
+    // ed 64
     null,
 
-    // 64
+    // ed 65
     null,
 
-    // 65
+    // ed 66
     null,
 
-    // 66
+    // ed 67
     null,
 
-    // 67
-    null,
-
-    // 68
+    // ed 68
     new Opcode("IN", "L,(C)", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -6332,7 +6412,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 69
+    // ed 69
     new Opcode("OUT", "(C),L", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -6345,7 +6425,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 6a
+    // ed 6a
     new Opcode("ADC", "HL,HL", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
@@ -6380,22 +6460,33 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 
-    // 6b
+    // ed 6b
+    new Opcode("LD", "HL,(%s)", 3, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = memory.getByte((PC + 1) & 0xffff) +
+	    (memory.getByte((PC + 2) & 0xffff) << 8);
+	  L = memory.getByte(tw);
+	  H = memory.getByte((tw + 1) & 0xffff);
+	  incPC(3);
+	  return 20;
+	}
+      }		    
+      ), 
+
+    // ed 6c
     null,
 
-    // 6c
+    // ed 6d
     null,
 
-    // 6d
+    // ed 6e
     null,
 
-    // 6e
+    // ed 6f
     null,
 
-    // 6f
-    null,
-
-    // 70
+    // ed 70
     new Opcode("IN", "(C)", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -6412,7 +6503,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 71
+    // ed 71
     new Opcode("OUT", "(C),0", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -6425,7 +6516,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 72
+    // ed 72
     new Opcode("SBC", "HL,SP", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
@@ -6461,22 +6552,33 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 
-    // 73
+    // ed 73
+    new Opcode("LD", "(%s),SP", 3, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = memory.getByte((PC + 1) & 0xffff) +
+	    (memory.getByte((PC + 2) & 0xffff) << 8);
+	  memory.setByte(tw, SP & 0xff);
+	  memory.setByte((tw + 1) & 0xffff, SP >> 8);
+	  incPC(3);
+	  return 20;
+	}
+      }		    
+      ),
+
+    // ed 74
     null,
 
-    // 74
+    // ed 75
     null,
 
-    // 75
+    // ed 76
     null,
 
-    // 76
+    // ed 77
     null,
 
-    // 77
-    null,
-
-    // 78
+    // ed 78
     new Opcode("IN", "A,(C)", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -6493,7 +6595,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 79
+    // ed 79
     new Opcode("OUT", "(C),A", 2, Processor.INS_IO, new Executable() {
 	@Override
 	public int exec() {
@@ -6506,7 +6608,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 7a
+    // ed 7a
     new Opcode("ADC", "HL,SP", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
@@ -6542,403 +6644,413 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // 7b
-    null,
+    // ed 7b
+    new Opcode("LD", "SP,(%s)", 3, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = memory.getByte((PC + 1) & 0xffff) +
+	    (memory.getByte((PC + 2) & 0xffff) << 8);
+	  SP = memory.getByte(tw) + (memory.getByte((tw + 1) & 0xffff) << 8);
+	  incPC(3);
+	  return 20;
+	}
+      }		    
+      ), 
 
-    // 7c
+    // ed 7c
     null,
 
-    // 7d
+    // ed 7d
     null,
 
-    // 7e
+    // ed 7e
     null,
 
-    // 7f
+    // ed 7f
     null,
 
-    // 80
+    // ed 80
     null,
 
-    // 81
+    // ed 81
     null,
 
-    // 82
+    // ed 82
     null,
 
-    // 83
+    // ed 83
     null,
 
-    // 84
+    // ed 84
     null,
 
-    // 85
+    // ed 85
     null,
 
-    // 86
+    // ed 86
     null,
 
-    // 87
+    // ed 87
     null,
 
-    // 88
+    // ed 88
     null,
 
-    // 89
+    // ed 89
     null,
 
-    // 8a
+    // ed 8a
     null,
 
-    // 8b
+    // ed 8b
     null,
 
-    // 8c
+    // ed 8c
     null,
 
-    // 8d
+    // ed 8d
     null,
 
-    // 8e
+    // ed 8e
     null,
 
-    // 8f
+    // ed 8f
     null,
 
-    // 90
+    // ed 90
     null,
 
-    // 91
+    // ed 91
     null,
 
-    // 92
+    // ed 92
     null,
 
-    // 93
+    // ed 93
     null,
 
-    // 94
+    // ed 94
     null,
 
-    // 95
+    // ed 95
     null,
 
-    // 96
+    // ed 96
     null,
 
-    // 97
+    // ed 97
     null,
 
-    // 98
+    // ed 98
     null,
 
-    // 99
+    // ed 99
     null,
 
-    // 9a
+    // ed 9a
     null,
 
-    // 9b
+    // ed 9b
     null,
 
-    // 9c
+    // ed 9c
     null,
 
-    // 9d
+    // ed 9d
     null,
 
-    // 9e
+    // ed 9e
     null,
 
-    // 9f
+    // ed 9f
     null,
 
-    // a0
+    // ed a0
     null,
 
-    // a1
+    // ed a1
     null,
 
-    // a2
+    // ed a2
     null,
 
-    // a3
+    // ed a3
     null,
 
-    // a4
+    // ed a4
     null,
 
-    // a5
+    // ed a5
     null,
 
-    // a6
+    // ed a6
     null,
 
-    // a7
+    // ed a7
     null,
 
-    // a8
+    // ed a8
     null,
 
-    // a9
+    // ed a9
     null,
 
-    // aa
+    // ed aa
     null,
 
-    // ab
+    // ed ab
     null,
 
-    // ac
+    // ed ac
     null,
 
-    // ad
+    // ed ad
     null,
 
-    // ae
+    // ed ae
     null,
 
-    // af
+    // ed af
     null,
 
-    // b0
+    // ed b0
     null,
 
-    // b1
+    // ed b1
     null,
 
-    // b2
+    // ed b2
     null,
 
-    // b3
+    // ed b3
     null,
 
-    // b4
+    // ed b4
     null,
 
-    // b5
+    // ed b5
     null,
 
-    // b6
+    // ed b6
     null,
 
-    // b7
+    // ed b7
     null,
 
-    // b8
+    // ed b8
     null,
 
-    // b9
+    // ed b9
     null,
 
-    // ba
+    // ed ba
     null,
 
-    // bb
+    // ed bb
     null,
 
-    // bc
+    // ed bc
     null,
 
-    // bd
+    // ed bd
     null,
 
-    // be
+    // ed be
     null,
 
-    // bf
+    // ed bf
     null,
 
-    // c0
+    // ed c0
     null,
 
-    // c1
+    // ed c1
     null,
 
-    // c2
+    // ed c2
     null,
 
-    // c3
+    // ed c3
     null,
 
-    // c4
+    // ed c4
     null,
 
-    // c5
+    // ed c5
     null,
 
-    // c6
+    // ed c6
     null,
 
-    // c7
+    // ed c7
     null,
 
-    // c8
+    // ed c8
     null,
 
-    // c9
+    // ed c9
     null,
 
-    // ca
+    // ed ca
     null,
 
-    // cb
+    // ed cb
     null,
 
-    // cc
+    // ed cc
     null,
 
-    // cd
+    // ed cd
     null,
 
-    // ce
+    // ed ce
     null,
 
-    // cf
+    // ed cf
     null,
 
-    // d0
+    // ed d0
     null,
 
-    // d1
+    // ed d1
     null,
 
-    // d2
+    // ed d2
     null,
 
-    // d3
+    // ed d3
     null,
 
-    // d4
+    // ed d4
     null,
 
-    // d5
+    // ed d5
     null,
 
-    // d6
+    // ed d6
     null,
 
-    // d7
+    // ed d7
     null,
 
-    // d8
+    // ed d8
     null,
 
-    // d9
+    // ed d9
     null,
 
-    // da
+    // ed da
     null,
 
-    // db
+    // ed db
     null,
 
-    // dc
+    // ed dc
     null,
 
-    // dd
+    // ed dd
     null,
 
-    // de
+    // ed de
     null,
 
-    // df
+    // ed df
     null,
 
-    // e0
+    // ed e0
     null,
 
-    // e1
+    // ed e1
     null,
 
-    // e2
+    // ed e2
     null,
 
-    // e3
+    // ed e3
     null,
 
-    // e4
+    // ed e4
     null,
 
-    // e5
+    // ed e5
     null,
 
-    // e6
+    // ed e6
     null,
 
-    // e7
+    // ed e7
     null,
 
-    // e8
+    // ed e8
     null,
 
-    // e9
+    // ed e9
     null,
 
-    // ea
+    // ed ea
     null,
 
-    // eb
+    // ed eb
     null,
 
-    // ec
+    // ed ec
     null,
 
-    // ed
+    // ed ed
     null,
 
-    // ee
+    // ed ee
     null,
 
-    // ef
+    // ed ef
     null,
 
-    // f0
+    // ed f0
     null,
 
-    // f1
+    // ed f1
     null,
 
-    // f2
+    // ed f2
     null,
 
-    // f3
+    // ed f3
     null,
 
-    // f4
+    // ed f4
     null,
 
-    // f5
+    // ed f5
     null,
 
-    // f6
+    // ed f6
     null,
 
-    // f7
+    // ed f7
     null,
 
-    // f8
+    // ed f8
     null,
 
-    // f9
+    // ed f9
     null,
 
-    // fa
+    // ed fa
     null,
 
-    // fb
+    // ed fb
     null,
 
-    // fc
+    // ed fc
     null,
 
-    // fd
+    // ed fd
     null,
 
-    // fe
+    // ed fe
     null,
 
-    // ff
+    // ed ff
     null
   };
     

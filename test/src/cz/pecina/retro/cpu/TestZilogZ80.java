@@ -315,14 +315,14 @@ public class TestZilogZ80 extends ProcessorTest {
     //   0x36c11e75L,
     //   "<inc,dec> iyl"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0xed, 0x4b, MSBT & 0xff, MSBT >> 8, 0xf9a8, 0xf559, 0x93a4, 0xf5ed,
-    //   0x6f96, 0xd968, 0x86, 0xe6, 0x4bd8,
-    //   0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    //   0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0, 0, 0,
-    //   0x4d45a9acL,
-    //   "ld <bc,de>,(nnnn)"),
+    new TestGroup(
+      0xff,
+      0xed, 0x4b, MSBT & 0xff, MSBT >> 8, 0xf9a8, 0xf559, 0x93a4, 0xf5ed,
+      0x6f96, 0xd968, 0x86, 0xe6, 0x4bd8,
+      0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0, 0, 0,
+      0x4d45a9acL,
+      "ld <bc,de>,(nnnn)"),
 
     new TestGroup(
       0xff,
@@ -333,14 +333,14 @@ public class TestZilogZ80 extends ProcessorTest {
       0x5f972487L,
       "ld hl,(nnnn)"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0xed, 0x7b, MSBT & 0xff, MSBT >> 8, 0x8dfc, 0x57d7, 0x2161, 0xca18,
-    //   0xc185, 0x27da, 0x83, 0x1e, 0xf460,
-    //   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    //   0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0, 0, 0,
-    //   0x7acea11bL,
-    //   "ld sp,(nnnn)"),
+    new TestGroup(
+      0xff,
+      0xed, 0x7b, MSBT & 0xff, MSBT >> 8, 0x8dfc, 0x57d7, 0x2161, 0xca18,
+      0xc185, 0x27da, 0x83, 0x1e, 0xf460,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0, 0, 0,
+      0x7acea11bL,
+      "ld sp,(nnnn)"),
 
     // new TestGroup(
     //   0xff,
@@ -351,14 +351,14 @@ public class TestZilogZ80 extends ProcessorTest {
     //   0x858bf16dL,
     //   "ld <ix,iy>,(nnnn)"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0xed, 0x43, MSBT & 0xff, MSBT >> 8, 0x1f98, 0x844d, 0xe8ac, 0xc9ed,
-    //   0xc95d, 0x8f61, 0x80, 0x3f, 0xc7bf,
-    //   0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    //   0, 0, 0, 0, 0, 0, 0, 0, 0xffff, 0xffff, 0, 0, 0,
-    //   0x641e8715L,
-    //   "ld (nnnn),<bc,de>"),
+    new TestGroup(
+      0xff,
+      0xed, 0x43, MSBT & 0xff, MSBT >> 8, 0x1f98, 0x844d, 0xe8ac, 0xc9ed,
+      0xc95d, 0x8f61, 0x80, 0x3f, 0xc7bf,
+      0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0xffff, 0xffff, 0, 0, 0,
+      0x641e8715L,
+      "ld (nnnn),<bc,de>"),
     
     new TestGroup(
       0xff,
@@ -369,14 +369,14 @@ public class TestZilogZ80 extends ProcessorTest {
       0xa3608b47L,
       "ld (nnnn),hl"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0xed, 0x73, MSBT & 0xff, MSBT >> 8, 0xc0dc, 0xd1d6, 0xed5a, 0xf356,
-    //   0xafda, 0x6ca7, 0x44, 0x9f, 0x3f0a,
-    //   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    //   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff,
-    //   0x16585fd7L,
-    //   "ld (nnnn),sp"),
+    new TestGroup(
+      0xff,
+      0xed, 0x73, MSBT & 0xff, MSBT >> 8, 0xc0dc, 0xd1d6, 0xed5a, 0xf356,
+      0xafda, 0x6ca7, 0x44, 0x9f, 0x3f0a,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xffff,
+      0x16585fd7L,
+      "ld (nnnn),sp"),
 
     // new TestGroup(
     //   0xff,
@@ -531,14 +531,14 @@ public class TestZilogZ80 extends ProcessorTest {
     //   0xe9ead0aeL,
     //   "ldi<r> (2)"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0xed, 0x44, 0, 0, 0x38a2, 0x5f6b, 0xd934, 0x57e4,
-    //   0xd2d6, 0x4642, 0x43, 0x5a, 0x09cc,
-    //   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0xff, 0,
-    //   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    //   0xd638dd6aL,
-    //   "neg"),
+    new TestGroup(
+      0xff,
+      0xed, 0x44, 0, 0, 0x38a2, 0x5f6b, 0xd934, 0x57e4,
+      0xd2d6, 0x4642, 0x43, 0x5a, 0x09cc,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0xff, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0xd638dd6aL,
+      "neg"),
 
     // new TestGroup(
     //   0xff,
