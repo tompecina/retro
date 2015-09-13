@@ -5188,7 +5188,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       (ZFSET() ? 1 : 0),
       (SFSET() ? 1 : 0),
       (PE() ? 1 : 0),
-      (IE ? 1 : 0), F);
+      (IE ? 1 : 0),
+      F);
   }
 
   /**

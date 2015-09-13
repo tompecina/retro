@@ -195,9 +195,29 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   private int SP;
 
   /**
-   * The Interrupt Enable (IE) flag.
+   * The Interrupt Enable flag IFF1.
    */
-  protected boolean IE;
+  protected boolean IFF1;
+
+  /**
+   * The Interrupt Enable flag IFF2.
+   */
+  protected boolean IFF2;
+
+  /**
+   * The Interrupt Mode.
+   */
+  protected int IM;
+
+  /**
+   * The Interrupt Register (I).
+   */
+  protected int I;
+
+  /**
+   * The Refresh Register (R).
+   */
+  protected int R;
 
   /**
    * The CPU cycle counter
@@ -492,14 +512,58 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	}
       });
 
-    add(new Register("IE") {
+    add(new Register("IFF1") {
 	@Override
 	public String getValue() {
-	  return IE ? "1" : "0";
+	  return IFF1 ? "1" : "0";
 	}
 	@Override
 	public void processValue(final String value) {
-	  IE = value.equals("1");
+	  IFF1 = value.equals("1");
+	}
+      });
+
+    add(new Register("IFF2") {
+	@Override
+	public String getValue() {
+	  return IFF2 ? "1" : "0";
+	}
+	@Override
+	public void processValue(final String value) {
+	  IFF2 = value.equals("1");
+	}
+      });
+
+    add(new Register("IM") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(IM);
+	}
+	@Override
+	public void processValue(final String value) {
+	  IM = Integer.parseInt(value);
+	}
+      });
+
+    add(new Register("I") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(I);
+	}
+	@Override
+	public void processValue(final String value) {
+	  I = Integer.parseInt(value);
+	}
+      });
+
+    add(new Register("R") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(R);
+	}
+	@Override
+	public void processValue(final String value) {
+	  R = Integer.parseInt(value);
 	}
       });
 
@@ -582,6 +646,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   @Override
   public void reset() {
     PC = 0;
+    IFF1 = IFF2 = false;
+    IM = 0;
+    R = I = 0;
     resetPending = false;
     interruptPending = -1;
     log.fine("Reset performed");
@@ -591,7 +658,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   @Override
   public void requestInterrupt(final int vector) {
     assert (vector >= 0) && (vector < 8);
-    if (IE) {
+    if (IFF1) {
       interruptPending = vector;
     }
   }
@@ -600,8 +667,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   @Override
   public void interrupt(final int vector) {
     assert (vector >= 0) && (vector < 8);
-    if (IE) {
-      IE = false;
+    if (IFF1) {
+      IFF1 = false;
       decSP();
       memory.setByte(SP, PC >> 8);
       decSP();
@@ -865,6 +932,13 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
    */
   protected void decSP() {
     SP = (SP - 1) & 0xffff;
+  }
+
+  /**
+   * Increments the Refresh Register (R).
+   */
+  protected void incR() {
+    R = (R & 0x80) | ((R + 1) & 0x7f);
   }
 
   /**
@@ -1414,7 +1488,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   // for description see Processor
   @Override
   public boolean isIE() {
-    return IE;
+    return IFF1;
   }
 
   /**
@@ -1423,7 +1497,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
    * @param b if {@code true}, interrupts will be enabled
    */
   public void setIE(final boolean b) {
-    IE = b;
+    IFF1 = b;
   }
 
   /**
@@ -5689,7 +5763,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("DI", "", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  IE = false;
+	  IFF1 = false;
 	  incPC();
 	  return 4;
 	}	
@@ -5814,7 +5888,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("EI", "", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  IE = true;
+	  IFF1 = true;
 	  incPC();
 	  return 4;
 	}	
@@ -6019,13 +6093,41 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // ed 45
-    null,
+    new Opcode("RETN", "", 1, Processor.INS_RET, new Executable() {
+	@Override
+	public int exec() {
+	  IFF1 = IFF2;
+	  final int tb = memory.getByte(SP);
+	  incSP();
+	  PC = tb + (memory.getByte(SP) << 8);
+	  incSP();
+	  return 14;
+	}	
+      }		    
+      ),
 
     // ed 46
-    null,
+    new Opcode("IM", "0", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  IM = 0;
+	  incPC();
+	  return 8;
+	}	
+      }		    
+      ),
 
     // ed 47
-    null,
+    new Opcode("LD", "I, A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  I = A;
+	  incPC();
+	  return 9;
+	}	
+      }		    
+      ),
+
 
     // ed 48
     new Opcode("IN", "C,(C)", 2, Processor.INS_IO, new Executable() {
@@ -6108,17 +6210,68 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ), 
 
-    // ed 4c
-    null,
+    // ed 4c (undocumented)
+    new Opcode("NEG", "", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if (A != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  if ((A & 0x0f) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
+	  if (A == 0x80) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  A = (-A) & 0xff;
+	  F4(A);
+	  SETNF();
+	  incPC();
+	  return 8;
+	}	
+      }		    
+      ),
 
     // ed 4d
-    null,
+    new Opcode("RETI", "", 1, Processor.INS_RET, new Executable() {
+	@Override
+	public int exec() {
+	  final int tb = memory.getByte(SP);
+	  incSP();
+	  PC = tb + (memory.getByte(SP) << 8);
+	  incSP();
+	  return 14;
+	}	
+      }		    
+      ),
 
-    // ed 4e
-    null,
+    // ed 4e (undocumented)
+    new Opcode("IM", "0", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  IM = 0;
+	  incPC();
+	  return 8;
+	}	
+      }		    
+      ),
 
     // ed 4f
-    null,
+    new Opcode("LD", "R, A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  R = A;
+	  incPC();
+	  return 9;
+	}	
+      }		    
+      ),
 
     // ed 50
     new Opcode("IN", "D,(C)", 2, Processor.INS_IO, new Executable() {
@@ -6200,14 +6353,58 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 
-    // ed 54
-    null,
+    // ed 54 (undocumented)
+    new Opcode("NEG", "", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if (A != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  if ((A & 0x0f) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
+	  if (A == 0x80) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  A = (-A) & 0xff;
+	  F4(A);
+	  SETNF();
+	  incPC();
+	  return 8;
+	}	
+      }		    
+      ),
 
-    // ed 55
-    null,
+    // ed 55 (undocumented)
+    new Opcode("RETN", "", 1, Processor.INS_RET, new Executable() {
+	@Override
+	public int exec() {
+	  IFF1 = IFF2;
+	  final int tb = memory.getByte(SP);
+	  incSP();
+	  PC = tb + (memory.getByte(SP) << 8);
+	  incSP();
+	  return 14;
+	}	
+      }		    
+      ),
 
     // ed 56
-    null,
+    new Opcode("IM", "1", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  IM = 1;
+	  incPC();
+	  return 8;
+	}	
+      }		    
+      ),
 
     // ed 57
     null,
@@ -6299,7 +6496,15 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     null,
 
     // ed 5e
-    null,
+    new Opcode("IM", "2", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  IM = 2;
+	  incPC();
+	  return 8;
+	}	
+      }		    
+      ),
 
     // ed 5f
     null,
@@ -7189,7 +7394,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   public String CPUState() {
     return String.format(
       "PC:%04x SP:%04x A:%02x B:%02x C:%02x D:%02x E:%02x H:%02x L:%02x " +
-      "CF:%d HF:%d ZF:%d SF:%d PF:%d IE:%d F:%02x",
+      "CF:%d HF:%d ZF:%d SF:%d PF:%d IFF1:%d IFF2:%d F:%02x",
       PC,
       SP,
       A,
@@ -7204,7 +7409,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       (ZFSET() ? 1 : 0),
       (SFSET() ? 1 : 0),
       (PE() ? 1 : 0),
-      (IE ? 1 : 0), F);
+      (IFF1 ? 1 : 0),
+      (IFF2 ? 1 : 0),
+      F);
   }
 
   /**
@@ -7265,10 +7472,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	interrupt(interruptPending);
 	break;
       } else {
+	incR();
 	final int tb = memory.getByte(PC);
 	Opcode opcode = opcodes[tb];
 	if (opcode == null) {
 	  incPC();
+	  incR();
 	  opcode = opcodesED[memory.getByte(PC)];
 	}
 	if ((opcode.getType() & mask) != 0)
