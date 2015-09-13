@@ -728,14 +728,9 @@ public class TestZilogZ80 extends ProcessorTest {
 
       for (;;) {
 
-	ram[MSBT - 4] = workBytes[INS0 + 1];
-	ram[MSBT - 3] = workBytes[INS1 + 1];
-	ram[MSBT - 2] = workBytes[INS2 + 1];
-	ram[MSBT - 1] = workBytes[INS3 + 1];
-	ram[MSBT] = workBytes[MEM_OP + 2];
-	ram[MSBT + 1] = workBytes[MEM_OP + 1];
-	ram[MSBT + 2] = workBytes[IY + 2];
-	ram[MSBT + 3] = workBytes[IY + 1];
+	for (int i = 0; i < SIZE; i++) {
+	  ram[MSBT - 4 + i] = workBytes[SIZE + 1 - i];
+	}
 	cpu.setIY((workBytes[IY + 2] & 0xff) +
 		  ((workBytes[IY + 1] & 0xff) << 8));
 	cpu.setIX((workBytes[IX + 2] & 0xff) +

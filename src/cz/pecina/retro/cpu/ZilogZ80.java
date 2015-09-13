@@ -7242,10 +7242,35 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("CPI", "", 1, Processor.INS_MR | Processor.INS_BLOCK, new Executable() {
 	@Override
 	public int exec() {
+
+
+
+
+	  // int acu = A;
+	  // int temp = memory.getByte(HL()); incHL();
+	  // int sum = acu - temp;
+	  // int cbits = acu ^ temp ^ sum;
+	  // decBC();
+	  // F = (F & ~0xfe) | (sum & 0x80) | ((((sum & 0xff) == 0) ? 1 : 0) << 6) |
+	  //   (((sum - ((cbits&16)>>4))&2) << 4) | (cbits & 16) |
+	  //   ((sum - ((cbits >> 4) & 1)) & 8) |
+	  //   (((BC() & 0xffff) != 0) ? 1 : 0) << 2 | 2;
+	  // if ((sum & 15) == 8 && (cbits & 16) != 0)
+	  //   F &= ~8;
+
+
+
+
+
+
+
+
 	  final int tb = memory.getByte(HL());
 	  int tw = A - tb;
 	  final int cb = A ^ tb ^ tw;
-	  F4(tw);
+	  incHL();
+	  decBC();
+	  F4(tw & 0xff);
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	    tw--;
@@ -7268,6 +7293,10 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    RESETPF();
 	  }
 	  SETNF();
+
+
+
+
 	  incPC();
 	  return 16;
 	}	
@@ -7355,27 +7384,58 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("CPIR", "", 1, Processor.INS_MR | Processor.INS_BLOCK, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = memory.getByte(HL());
-	  int tw = A - tb;
-	  final int cb = A ^ tb ^ tw;
-	  F4(tw);
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	    tw--;
-	  } else {
-	    RESETHF();
-	  }
-	  if ((tw & 0x02) != 0) {
-	    SETYF();
-	  } else {
-	    RESETYF();
-	  }
-	  if ((tw & 0x08) != 0) {
-	    SETXF();
-	  } else {
-	    RESETXF();
-	  }
-	  SETNF();
+
+
+
+	  System.out.printf("HL:%04x BC:%04x%n", HL(), BC());
+
+
+
+	  int acu = A;
+	  int temp = memory.getByte(HL()); incHL();
+	  int sum = acu - temp;
+	  int cbits = acu ^ temp ^ sum;
+	  decBC();
+	  F = (F & ~0xfe) | (sum & 0x80) | ((((sum & 0xff) == 0) ? 1 : 0) << 6) |
+	    (((sum - ((cbits&16)>>4))&2) << 4) | (cbits & 16) |
+	    ((sum - ((cbits >> 4) & 1)) & 8) |
+	    (((BC() & 0xffff) != 0) ? 1 : 0) << 2 | 2;
+	  if ((sum & 15) == 8 && (cbits & 16) != 0)
+	    F &= ~8;
+
+
+
+
+
+
+
+
+	  // final int tb = memory.getByte(HL());
+	  // int tw = A - tb;
+	  // final int cb = A ^ tb ^ tw;
+	  // incHL();
+	  // decBC();
+	  // F4(tw & 0xff);
+	  // if ((cb & 0x10) != 0) {
+	  //   SETHF();
+	  //   tw--;
+	  // } else {
+	  //   RESETHF();
+	  // }
+	  // if ((tw & 0x02) != 0) {
+	  //   SETYF();
+	  // } else {
+	  //   RESETYF();
+	  // }
+	  // if ((tw & 0x08) != 0) {
+	  //   SETXF();
+	  // } else {
+	  //   RESETXF();
+	  // }
+	  // SETNF();
+
+
+
 	  if ((B | C) != 0) {
 	    SETPF();
 	    incPC(-1);
