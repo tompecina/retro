@@ -7387,7 +7387,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 
 
 
-	  System.out.printf("HL:%04x BC:%04x%n", HL(), BC());
+	  // System.out.printf("HL:%04x BC:%04x%n", HL(), BC());
 
 
 
