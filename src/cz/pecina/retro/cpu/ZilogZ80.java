@@ -5896,6 +5896,1053 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   };
 
   /**
+   * The array of opcodes with prefix ED.
+   */
+  protected final Opcode[] opcodesED = new Opcode[] {
+
+    // 00 - 3f
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+
+    // 40
+    new Opcode("IN", "B,(C)", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  B = 0xff;
+	  for (IOElement t: inputPorts.get(C)) {
+	    B &= t.portInput(C);
+	  }
+	  F5(B);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 41
+    new Opcode("OUT", "(C),B", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  for (IOElement t: outputPorts.get(C)) {
+	    t.portOutput(C, B);
+	  }
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 42
+    new Opcode("SBC", "HL,BC", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = (H << 8) + L - (B << 8) - C - (F & CF);
+	  final int cb = H ^ B ^ (tw >> 8);
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
+	  if ((cb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  L = tw & 0xff;
+	  H = (tw >> 8) & 0xff;
+	  F4(H);
+	  if ((H | L) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETNF();
+	  incPC();
+	  return 15;
+	}	
+      }		    
+      ),
+
+    // 43
+    null,
+
+    // 44
+    null,
+
+    // 45
+    null,
+
+    // 46
+    null,
+
+    // 47
+    null,
+
+    // 48
+    new Opcode("IN", "C,(C)", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  final int tb = C;
+	  C = 0xff;
+	  for (IOElement t: inputPorts.get(tb)) {
+	    C &= t.portInput(tb);
+	  }
+	  F5(C);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 49
+    new Opcode("OUT", "(C),C", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  for (IOElement t: outputPorts.get(C)) {
+	    t.portOutput(C, C);
+	  }
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 4a
+    new Opcode("ADC", "HL,BC", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = (H << 8) + L + (B << 8) + C + (F & CF);
+	  final int cb = H ^ B ^ (tw >> 8);
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
+	  if ((cb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  L = tw & 0xff;
+	  H = (tw >> 8) & 0xff;
+	  F4(H);
+	  if ((H | L) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  RESETNF();
+	  incPC();
+	  return 15;
+	}	
+      }		    
+      ),
+
+    // 4b
+    null,
+
+    // 4c
+    null,
+
+    // 4d
+    null,
+
+    // 4e
+    null,
+
+    // 4f
+    null,
+
+    // 50
+    new Opcode("IN", "D,(C)", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  D = 0xff;
+	  for (IOElement t: inputPorts.get(C)) {
+	    D &= t.portInput(C);
+	  }
+	  F5(D);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 51
+    new Opcode("OUT", "(C),D", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  for (IOElement t: outputPorts.get(C)) {
+	    t.portOutput(C, D);
+	  }
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 52
+    new Opcode("SBC", "HL,DE", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = (H << 8) + L - (D << 8) - E - (F & CF);
+	  final int cb = H ^ D ^ (tw >> 8);
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
+	  if ((cb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  L = tw & 0xff;
+	  H = (tw >> 8) & 0xff;
+	  F4(H);
+	  if ((H | L) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETNF();
+	  incPC();
+	  return 15;
+	}	
+      }		    
+      ),
+
+    // 53
+    null,
+
+    // 54
+    null,
+
+    // 55
+    null,
+
+    // 56
+    null,
+
+    // 57
+    null,
+
+    // 58
+    new Opcode("IN", "E,(C)", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  E = 0xff;
+	  for (IOElement t: inputPorts.get(C)) {
+	    E &= t.portInput(C);
+	  }
+	  F5(E);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 59
+    new Opcode("OUT", "(C),E", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  for (IOElement t: outputPorts.get(C)) {
+	    t.portOutput(C, E);
+	  }
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 5a
+    new Opcode("ADC", "HL,DE", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = (H << 8) + L + (D << 8) + E + (F & CF);
+	  final int cb = H ^ D ^ (tw >> 8);
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
+	  if ((cb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  L = tw & 0xff;
+	  H = (tw >> 8) & 0xff;
+	  F4(H);
+	  if ((H | L) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  RESETNF();
+	  incPC();
+	  return 15;
+	}	
+      }		    
+      ),
+
+    // 5b
+    null,
+
+    // 5c
+    null,
+
+    // 5d
+    null,
+
+    // 5e
+    null,
+
+    // 5f
+    null,
+
+    // 60
+    new Opcode("IN", "H,(C)", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  H = 0xff;
+	  for (IOElement t: inputPorts.get(C)) {
+	    H &= t.portInput(C);
+	  }
+	  F5(H);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 61
+    new Opcode("OUT", "(C),H", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  for (IOElement t: outputPorts.get(C)) {
+	    t.portOutput(C, H);
+	  }
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 62
+    new Opcode("SBC", "HL,HL", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = -(F & CF);
+	  if ((tw & 0x1000) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
+	  if ((tw & 0x10000) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  if (((tw ^ (tw >> 1)) & 0x8000) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  L = tw & 0xff;
+	  H = (tw >> 8) & 0xff;
+	  F4(H);
+	  if ((H | L) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETNF();
+	  incPC();
+	  return 15;
+	}	
+      }		    
+      ),
+
+    // 63
+    null,
+
+    // 64
+    null,
+
+    // 65
+    null,
+
+    // 66
+    null,
+
+    // 67
+    null,
+
+    // 68
+    new Opcode("IN", "L,(C)", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  L = 0xff;
+	  for (IOElement t: inputPorts.get(C)) {
+	    L &= t.portInput(C);
+	  }
+	  F5(L);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 69
+    new Opcode("OUT", "(C),L", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  for (IOElement t: outputPorts.get(C)) {
+	    t.portOutput(C, L);
+	  }
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 6a
+    new Opcode("ADC", "HL,HL", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = (H << 9) + (L << 1) + (F & CF);
+	  if ((tw & 0x1000) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
+	  if ((tw & 0x10000) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  if (((tw ^ (tw >> 1)) & 0x8000) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  L = tw & 0xff;
+	  H = (tw >> 8) & 0xff;
+	  F4(H);
+	  if ((H | L) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  RESETNF();
+	  incPC();
+	  return 15;
+	}	
+      }		    
+      ),
+
+    // 6b
+    null,
+
+    // 6c
+    null,
+
+    // 6d
+    null,
+
+    // 6e
+    null,
+
+    // 6f
+    null,
+
+    // 70
+    new Opcode("IN", "(C)", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = 0xff;
+	  for (IOElement t: inputPorts.get(C)) {
+	    tb &= t.portInput(C);
+	  }
+	  F5(tb);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 71
+    new Opcode("OUT", "(C),0", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  for (IOElement t: outputPorts.get(C)) {
+	    t.portOutput(C, 0);
+	  }
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 72
+    new Opcode("SBC", "HL,SP", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = (H << 8) + L - SP - (F & CF);
+	  final int cb = H ^ (SP >> 8) ^ (tw >> 8);
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
+	  if ((cb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  L = tw & 0xff;
+	  H = (tw >> 8) & 0xff;
+	  F4(H);
+	  if ((H | L) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETNF();
+	  incPC();
+	  return 15;
+	}	
+      }		    
+      ),
+
+    // 73
+    null,
+
+    // 74
+    null,
+
+    // 75
+    null,
+
+    // 76
+    null,
+
+    // 77
+    null,
+
+    // 78
+    new Opcode("IN", "A,(C)", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  A = 0xff;
+	  for (IOElement t: inputPorts.get(C)) {
+	    A &= t.portInput(C);
+	  }
+	  F5(A);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 79
+    new Opcode("OUT", "(C),A", 2, Processor.INS_IO, new Executable() {
+	@Override
+	public int exec() {
+	  for (IOElement t: outputPorts.get(C)) {
+	    t.portOutput(C, A);
+	  }
+	  incPC();
+	  return 12;
+	}	
+      }
+      ),
+
+    // 7a
+    new Opcode("ADC", "HL,SP", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = (H << 8) + L + SP + (F & CF);
+	  final int cb = H ^ (SP >> 8) ^ (tw >> 8);
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    RESETHF();
+	  }
+	  if ((cb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  L = tw & 0xff;
+	  H = (tw >> 8) & 0xff;
+	  F4(H);
+	  if ((H | L) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  RESETNF();
+	  incPC();
+	  return 15;
+	}	
+      }
+      ),
+
+    // 7b
+    null,
+
+    // 7c
+    null,
+
+    // 7d
+    null,
+
+    // 7e
+    null,
+
+    // 7f
+    null,
+
+    // 80
+    null,
+
+    // 81
+    null,
+
+    // 82
+    null,
+
+    // 83
+    null,
+
+    // 84
+    null,
+
+    // 85
+    null,
+
+    // 86
+    null,
+
+    // 87
+    null,
+
+    // 88
+    null,
+
+    // 89
+    null,
+
+    // 8a
+    null,
+
+    // 8b
+    null,
+
+    // 8c
+    null,
+
+    // 8d
+    null,
+
+    // 8e
+    null,
+
+    // 8f
+    null,
+
+    // 90
+    null,
+
+    // 91
+    null,
+
+    // 92
+    null,
+
+    // 93
+    null,
+
+    // 94
+    null,
+
+    // 95
+    null,
+
+    // 96
+    null,
+
+    // 97
+    null,
+
+    // 98
+    null,
+
+    // 99
+    null,
+
+    // 9a
+    null,
+
+    // 9b
+    null,
+
+    // 9c
+    null,
+
+    // 9d
+    null,
+
+    // 9e
+    null,
+
+    // 9f
+    null,
+
+    // a0
+    null,
+
+    // a1
+    null,
+
+    // a2
+    null,
+
+    // a3
+    null,
+
+    // a4
+    null,
+
+    // a5
+    null,
+
+    // a6
+    null,
+
+    // a7
+    null,
+
+    // a8
+    null,
+
+    // a9
+    null,
+
+    // aa
+    null,
+
+    // ab
+    null,
+
+    // ac
+    null,
+
+    // ad
+    null,
+
+    // ae
+    null,
+
+    // af
+    null,
+
+    // b0
+    null,
+
+    // b1
+    null,
+
+    // b2
+    null,
+
+    // b3
+    null,
+
+    // b4
+    null,
+
+    // b5
+    null,
+
+    // b6
+    null,
+
+    // b7
+    null,
+
+    // b8
+    null,
+
+    // b9
+    null,
+
+    // ba
+    null,
+
+    // bb
+    null,
+
+    // bc
+    null,
+
+    // bd
+    null,
+
+    // be
+    null,
+
+    // bf
+    null,
+
+    // c0
+    null,
+
+    // c1
+    null,
+
+    // c2
+    null,
+
+    // c3
+    null,
+
+    // c4
+    null,
+
+    // c5
+    null,
+
+    // c6
+    null,
+
+    // c7
+    null,
+
+    // c8
+    null,
+
+    // c9
+    null,
+
+    // ca
+    null,
+
+    // cb
+    null,
+
+    // cc
+    null,
+
+    // cd
+    null,
+
+    // ce
+    null,
+
+    // cf
+    null,
+
+    // d0
+    null,
+
+    // d1
+    null,
+
+    // d2
+    null,
+
+    // d3
+    null,
+
+    // d4
+    null,
+
+    // d5
+    null,
+
+    // d6
+    null,
+
+    // d7
+    null,
+
+    // d8
+    null,
+
+    // d9
+    null,
+
+    // da
+    null,
+
+    // db
+    null,
+
+    // dc
+    null,
+
+    // dd
+    null,
+
+    // de
+    null,
+
+    // df
+    null,
+
+    // e0
+    null,
+
+    // e1
+    null,
+
+    // e2
+    null,
+
+    // e3
+    null,
+
+    // e4
+    null,
+
+    // e5
+    null,
+
+    // e6
+    null,
+
+    // e7
+    null,
+
+    // e8
+    null,
+
+    // e9
+    null,
+
+    // ea
+    null,
+
+    // eb
+    null,
+
+    // ec
+    null,
+
+    // ed
+    null,
+
+    // ee
+    null,
+
+    // ef
+    null,
+
+    // f0
+    null,
+
+    // f1
+    null,
+
+    // f2
+    null,
+
+    // f3
+    null,
+
+    // f4
+    null,
+
+    // f5
+    null,
+
+    // f6
+    null,
+
+    // f7
+    null,
+
+    // f8
+    null,
+
+    // f9
+    null,
+
+    // fa
+    null,
+
+    // fb
+    null,
+
+    // fc
+    null,
+
+    // fd
+    null,
+
+    // fe
+    null,
+
+    // ff
+    null
+  };
+    
+  /**
    * Gets an Opcode.
    *
    * @param  n the first byte of {@code Opcode}
@@ -6106,7 +7153,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	interrupt(interruptPending);
 	break;
       } else {
-	final Opcode opcode = opcodes[memory.getByte(PC)];
+	final int tb = memory.getByte(PC);
+	Opcode opcode = opcodes[tb];
+	if (opcode == null) {
+	  incPC();
+	  opcode = opcodesED[memory.getByte(PC)];
+	}
 	if ((opcode.getType() & mask) != 0)
 	  break;
 	if (log.isLoggable(Level.FINER)) {

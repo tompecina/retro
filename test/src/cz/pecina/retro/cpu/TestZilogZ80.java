@@ -27,14 +27,14 @@ public class TestZilogZ80 extends ProcessorTest {
   // test groups
   private static final TestGroup[] TEST_GROUPS = {
 
-    // new TestGroup(
-    //   0xff,
-    //   0xed, 0x42, 0, 0, 0x832c, 0x4f88, 0xf22b, 0xb339,
-    //   0x7e1f, 0x1563, 0xd3, 0x89, 0x465e,
-    //   0, 0x38, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0, 0,
-    //   0, 0, 0, 0, 0, 0, 0, 0xffff, 0xffff, 0xffff, 0xd7, 0, 0xffff,
-    //   0xd48ad519L,
-    //   "<adc,sbc> hl,<bc,de,hl,sp>"),
+    new TestGroup(
+      0xff,
+      0xed, 0x42, 0, 0, 0x832c, 0x4f88, 0xf22b, 0xb339,
+      0x7e1f, 0x1563, 0xd3, 0x89, 0x465e,
+      0, 0x38, 0, 0, 0, 0, 0, 0xf821, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0xffff, 0xffff, 0xffff, 0xd7, 0, 0xffff,
+      0xd48ad519L,
+      "<adc,sbc> hl,<bc,de,hl,sp>"),
 
     new TestGroup(
       0xff,
