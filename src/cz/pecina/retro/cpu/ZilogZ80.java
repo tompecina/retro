@@ -7243,6 +7243,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 
+	  System.out.printf("cpi  HL:%04x BC:%04x%n", HL(), BC());
 
 
 
@@ -7387,7 +7388,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 
 
 
-	  // System.out.printf("HL:%04x BC:%04x%n", HL(), BC());
+	  System.out.printf("cpir HL:%04x BC:%04x%n", HL(), BC());
 
 
 
