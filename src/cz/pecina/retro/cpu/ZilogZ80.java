@@ -7243,9 +7243,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 
-	  System.out.printf("cpi  HL:%04x BC:%04x%n", HL(), BC());
-
-
+	  if (HL()-0x103 > 15) {
+	      System.out.printf("cpir HL:%04x HL-0x103:%d BC:%04x (HL):%02x%n", HL(), HL()-0x103, BC(), memory.getByte(HL()));
+	      for (int i = 0; i < 20; i++)
+		System.out.printf("%02x ", memory.getByte(0x103+i));
+	      System.out.println();
+	    }
 
 	  // int acu = A;
 	  // int temp = memory.getByte(HL()); incHL();
@@ -7388,21 +7391,40 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 
 
 
-	  System.out.printf("cpir HL:%04x BC:%04x%n", HL(), BC());
+	  // if (HL()-0x103 > 15) {
+	      System.out.printf("cpir HL:%04x HL-0x103:%d BC:%04x (HL):%02x%n", HL(), HL()-0x103, BC(), memory.getByte(HL()));
+	      for (int i = 0; i < 20; i++)
+		System.out.printf("%02x ", memory.getByte(0x103+i));
+	      System.out.println();
+	    // }
 
 
 
-	  int acu = A;
-	  int temp = memory.getByte(HL()); incHL();
-	  int sum = acu - temp;
-	  int cbits = acu ^ temp ^ sum;
-	  decBC();
-	  F = (F & ~0xfe) | (sum & 0x80) | ((((sum & 0xff) == 0) ? 1 : 0) << 6) |
-	    (((sum - ((cbits&16)>>4))&2) << 4) | (cbits & 16) |
-	    ((sum - ((cbits >> 4) & 1)) & 8) |
-	    (((BC() & 0xffff) != 0) ? 1 : 0) << 2 | 2;
-	  if ((sum & 15) == 8 && (cbits & 16) != 0)
-	    F &= ~8;
+
+	  int val = memory.getByte(HL());
+	  int res = A - val;
+	  incHL();
+	  decBC();						      
+	  F = (F & CF) | (TBL4[res & 0xff]&(SF|ZF)) | ((A^val^res)&HF) | NF;  
+	  if( HFSET() ) res -= 1;
+	  if( (res & 0x02) != 0) F |= YF; /* bit 1 -> flag 5 */        
+	  if( (res & 0x08) != 0) F |= XF; /* bit 3 -> flag 3 */        
+	  if( BC() != 0 ) F |= PF;         
+	  
+
+
+	  
+	  // int acu = A;
+	  // int temp = memory.getByte(HL()); incHL();
+	  // int sum = acu - temp;
+	  // int cbits = acu ^ temp ^ sum;
+	  // decBC();
+	  // F = (F & ~0xfe) | (sum & 0x80) | ((((sum & 0xff) == 0) ? 1 : 0) << 6) |
+	  //   (((sum - ((cbits&16)>>4))&2) << 4) | (cbits & 16) |
+	  //   ((sum - ((cbits >> 4) & 1)) & 8) |
+	  //   (((BC() & 0xffff) != 0) ? 1 : 0) << 2 | 2;
+	  // if ((sum & 15) == 8 && (cbits & 16) != 0)
+	  //   F &= ~8;
 
 
 
