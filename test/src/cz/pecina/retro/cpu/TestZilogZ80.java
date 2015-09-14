@@ -108,29 +108,29 @@ public class TestZilogZ80 extends ProcessorTest {
     //   0x83534ee1L,
     //   "bit n,(<ix,iy>+1)"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0xcb, 0x40, 0, 0, 0x3ef1, 0x9dfc, 0x7acc, MSBT,
-    //   0xbe61, 0x7a86, 0x50, 0x24, 0x1998,
-    //   0, 0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0x53, 0, 0,
-    //   0, 0, 0, 0, 0xff, 0, 0, 0,0xffff, 0xffff, 0, 0xff, 0,
-    //   0x5e020e98L,
-    //   "bit n,<b,c,d,e,h,l,(hl),a>"),
+    new TestGroup(
+      0xff,
+      0xcb, 0x40, 0, 0, 0x3ef1, 0x9dfc, 0x7acc, MSBT,
+      0xbe61, 0x7a86, 0x50, 0x24, 0x1998,
+      0, 0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0x53, 0, 0,
+      0, 0, 0, 0, 0xff, 0, 0, 0,0xffff, 0xffff, 0, 0xff, 0,
+      0x5e020e98L,
+      "bit n,<b,c,d,e,h,l,(hl),a>"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0xed, 0xa9, 0, 0, 0xc7b6, 0x72b4, 0x18f6, MSBT + 17,
-    //   0x8dbd, 0x0001, 0xc0, 0x30, 0x94a3,
-    //   0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0x10, 0, 0xff, 0,
-    //   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-    //   0x134b622dL,
-    //   "cpd<r>"),
+    new TestGroup(
+      0xff,
+      0xed, 0xa9, 0, 0, 0xc7b6, 0x72b4, 0x18f6, MSBT + 17,
+      0x8dbd, 0x0001, 0xc0, 0x30, 0x94a3,
+      0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0x0a, 0, 0xff, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0x134b622dL,
+      "cpd<r>"),
 
     new TestGroup(
       0xff,
       0xed, 0xa1, 0, 0, 0x4d48, 0xaf4a, 0x906b, MSBT,
       0x4e71, 0x0001, 0x93, 0x6a, 0x907c,
-      0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0x10, 0, 0xff, 0,
+      0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0x0a, 0, 0xff, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xd7, 0, 0,
       0x2da42d19L,
       "cpi<r>"),
@@ -495,23 +495,23 @@ public class TestZilogZ80 extends ProcessorTest {
       0xc9262de5L,
       "ld a,(nnnn) / ld (nnnn),a"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0xed, 0xa8, 0, 0, 0x9852, 0x68fa, 0x66a1, MSBT + 3,
-    //   MSBT + 1, 0x0001, 0xc1, 0x68, 0x20b7,
-    //   0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    //   0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-    //   0x94f42769L,
-    //   "ldd<r> (1)"),
+    new TestGroup(
+      0xff,
+      0xed, 0xa8, 0, 0, 0x9852, 0x68fa, 0x66a1, MSBT + 3,
+      MSBT + 1, 0x0001, 0xc1, 0x68, 0x20b7,
+      0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0x94f42769L,
+      "ldd<r> (1)"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0xed, 0xa8, 0, 0, 0xf12e, 0xeb2a, 0xd5ba, MSBT + 3,
-    //   MSBT + 1, 0x0002, 0x47, 0xff, 0xfbe4,
-    //   0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    //   0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0xd7, 0, 0,
-    //   0x39dd3de1L,
-    //   "ldd<r> (2)"),
+    new TestGroup(
+      0xff,
+      0xed, 0xa8, 0, 0, 0xf12e, 0xeb2a, 0xd5ba, MSBT + 3,
+      MSBT + 1, 0x0002, 0x47, 0xff, 0xfbe4,
+      0, 0x10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xffff, 0, 0, 0, 0, 0, 0xd7, 0, 0,
+      0x39dd3de1L,
+      "ldd<r> (2)"),
 
     new TestGroup(
       0xff,
@@ -745,7 +745,9 @@ public class TestZilogZ80 extends ProcessorTest {
 	cpu.setA(workBytes[ACC + 1] & 0xff);
 	cpu.setSP((workBytes[SP + 2] & 0xff) +
 		  ((workBytes[SP + 1] & 0xff) << 8));
-
+	ram[MSBT + 16] = 0x2a;
+	ram[MSBT + 17] = 0x06;
+		
 	final int pc = MSBT - 4;
 	if ((ram[pc] != 0x76) &&
 	    (((ram[pc] & 0xdf) != 0xdd) || (ram[pc + 1] != 0x76))) {
@@ -753,7 +755,7 @@ public class TestZilogZ80 extends ProcessorTest {
 	  do {
 	    cpu.exec();
 	  } while (cpu.getPC() == pc);
-
+	  
 	  workBytes[MEM_OP + 2] = ram[MSBT];
 	  workBytes[MEM_OP + 1] = ram[MSBT + 1];
 	  workBytes[IY + 2] = (byte)(cpu.getIY() & 0xff);
@@ -775,7 +777,7 @@ public class TestZilogZ80 extends ProcessorTest {
 	    updCrc(workBytes[SIZE - 3 - i] & 0xff);
 	  }
 	}
-
+	
 	if (++incCounter == incNum) {
 	  incCounter = 0;
 	  if ((++shiftCounter > shiftLen) || (shiftLen == 0)) {

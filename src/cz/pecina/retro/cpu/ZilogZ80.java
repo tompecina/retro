@@ -145,6 +145,11 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   protected int IY;
 
   /**
+   * CPU register pair WZ.
+   */
+  protected int WZ;
+
+  /**
    * CPU register A' (alternative Accumulator).
    */
   protected int Aa;
@@ -185,6 +190,11 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   protected int La;
 
   /**
+   * CPU register pair WZ'.
+   */
+  protected int WZa;
+
+  /**
    * The Program Counter (PC).
    */
   private int PC;
@@ -215,9 +225,15 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   protected int I;
 
   /**
-   * The Refresh Register (R).
+   * The Refresh Register (R).  This register holds the seven
+   * lowest bits of the actual register; bit 7 is held by R7.
    */
   protected int R;
+
+  /**
+   * The register holding bit 7 of the Refresh Register (R).
+   */
+  protected int R7;
 
   /**
    * The CPU cycle counter
@@ -648,7 +664,11 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     PC = 0;
     IFF1 = IFF2 = false;
     IM = 0;
-    R = I = 0;
+    R = R7 = I = 0;
+    A = F = B = C = D = E = H = L =
+      Aa = Fa = Ba = Ca = Da = Ea = Ha = La = 0xff;
+    SP = IX = IY = WZ = WZa = 0xffff;
+    WZa = 0xffff;
     resetPending = false;
     interruptPending = -1;
     log.fine("Reset performed");
@@ -752,6 +772,19 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     F = (F & 0x13) | TBL5[v];
   }
   
+  /**
+   * Adds the five-flag composite value consisting of flags S, Z, X, Y and P
+   * to the Flags (F) register according to two different parameters.
+   *
+   * @param szp the byte according to which S, Z and P will be set
+   * @param xy  the byte according to which X and Y will be set
+   */
+  protected void F32(final int szp, final int xy) {
+    assert (szp >= 0) && (szp < 0x100);
+    assert (xy >= 0) && (xy < 0x100);
+    F = (((F & 0x13) | TBL5[szp]) & 0xd7) | (xy & 0x28);
+  }
+
   /**
    * Sets the Sign (S) flag.
    */
@@ -949,6 +982,13 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
+   * Decrements the Program Counter (PC).
+   */
+  protected void decPC() {
+    PC = (PC - 1) & 0xffff;
+  }
+
+  /**
    * Increments the Stack Pointer (SP).
    */
   protected void incSP() {
@@ -960,13 +1000,6 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
    */
   protected void decSP() {
     SP = (SP - 1) & 0xffff;
-  }
-
-  /**
-   * Increments the Refresh Register (R).
-   */
-  protected void incR() {
-    R = (R & 0x80) | ((R + 1) & 0x7f);
   }
 
   /**
@@ -1294,6 +1327,15 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
+   * Increments the register pair BC.
+   */
+  protected void incBC() {
+    final int tw = (B << 8) + C + 1;
+    B = (tw >> 8) & 0xff;
+    C = tw & 0xff;
+  }
+
+  /**
    * Decrements the register pair BC.
    */
   protected void decBC() {
@@ -1332,6 +1374,15 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
+   * Decrements the register pair DE.
+   */
+  protected void decDE() {
+    final int tw = (D << 8) + E - 1;
+    D = (tw >> 8) & 0xff;
+    E = tw & 0xff;
+  }
+
+  /**
    * Gets the register pair HL.
    *
    * @return register pair value
@@ -1356,6 +1407,15 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
    */
   protected void incHL() {
     final int tw = (H << 8) + L + 1;
+    H = (tw >> 8) & 0xff;
+    L = tw & 0xff;
+  }
+
+  /**
+   * Decrements the register pair HL.
+   */
+  protected void decHL() {
+    final int tw = (H << 8) + L - 1;
     H = (tw >> 8) & 0xff;
     L = tw & 0xff;
   }
@@ -5401,6 +5461,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  tb = L;
 	  L = La;
 	  La = tb;
+	  tb = WZ;
+	  WZ = WZa;
+	  WZa = tb;
 	  incPC();
 	  return 4;
 	}	
@@ -6025,7 +6088,2442 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   };
 
   /**
-   * The array of opcodes with prefix ED.
+   * The array of opcodes with the prefix CB.
+   */
+  protected final Opcode[] opcodesCB = new Opcode[] {
+
+
+
+    // cb 00
+    new Opcode("RLC", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((B & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  B = ((B << 1) | (F & 1)) & 0xff;
+	  F5(B);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 01
+    new Opcode("RLC", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((C & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  C = ((C << 1) | (F & 1)) & 0xff;
+	  F5(C);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 02
+    new Opcode("RLC", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((D & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  D = ((D << 1) | (F & 1)) & 0xff;
+	  F5(D);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 03
+    new Opcode("RLC", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((E & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  E = ((E << 1) | (F & 1)) & 0xff;
+	  F5(E);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 04
+    new Opcode("RLC", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((H & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  H = ((H << 1) | (F & 1)) & 0xff;
+	  F5(H);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 05
+    new Opcode("RLC", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((L & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  L = ((L << 1) | (F & 1)) & 0xff;
+	  F5(L);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 06
+    new Opcode("RLC", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(HL(), tb);
+	  F5(tb);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 07
+    new Opcode("RLC", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((A & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  A = ((A << 1) | (F & 1)) & 0xff;
+	  F5(A);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 08
+    new Opcode("RRC", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((B & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  B = ((B >> 1) | (F << 1)) & 0xff;
+	  F5(B);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 09
+    new Opcode("RRC", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((C & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  C = ((C >> 1) | (F << 1)) & 0xff;
+	  F5(C);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 0a
+    new Opcode("RRC", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((D & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  D = ((D >> 1) | (F << 1)) & 0xff;
+	  F5(D);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 0b
+    new Opcode("RRC", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((E & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  E = ((E >> 1) | (F << 1)) & 0xff;
+	  F5(E);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 0c
+    new Opcode("RRC", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((H & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  H = ((H >> 1) | (F << 1)) & 0xff;
+	  F5(H);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 0d
+    new Opcode("RRC", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((L & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  L = ((L >> 1) | (F << 1)) & 0xff;
+	  F5(L);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 0e
+    new Opcode("RRC", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  tb = ((tb >> 1) | (F << 1)) & 0xff;
+	  memory.setByte(HL(), tb);
+	  F5(tb);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 0f
+    new Opcode("RRC", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((A & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  A = ((A >> 1) | (F << 1)) & 0xff;
+	  F5(A);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 10
+    new Opcode("RL", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  B = (B << 1) | (F & 1);
+	  if ((B & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  B &= 0xff;
+	  F5(B);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 11
+    new Opcode("RL", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  C = (C << 1) | (F & 1);
+	  if ((C & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  C &= 0xff;
+	  F5(C);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 12
+    new Opcode("RL", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  D = (D << 1) | (F & 1);
+	  if ((D & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  D &= 0xff;
+	  F5(D);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 13
+    new Opcode("RL", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  E = (E << 1) | (F & 1);
+	  if ((E & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  E &= 0xff;
+	  F5(E);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 14
+    new Opcode("RL", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  H = (H << 1) | (F & 1);
+	  if ((H & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  H &= 0xff;
+	  F5(H);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 15
+    new Opcode("RL", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  L = (L << 1) | (F & 1);
+	  if ((L & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  L &= 0xff;
+	  F5(L);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 16
+    new Opcode("RL", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(HL(), tb);
+	  F5(tb);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 17
+    new Opcode("RL", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  A = (A << 1) | (F & 1);
+	  if ((A & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  A &= 0xff;
+	  F5(A);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 18
+    new Opcode("RR", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = B;
+	  B = (B >> 1) | ((F & 1) << 7);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  F5(B);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 19
+    new Opcode("RR", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = C;
+	  C = (C >> 1) | ((F & 1) << 7);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  F5(C);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 1a
+    new Opcode("RR", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = D;
+	  D = (D >> 1) | ((F & 1) << 7);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  F5(D);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 1b
+    new Opcode("RR", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = E;
+	  E = (E >> 1) | ((F & 1) << 7);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  F5(E);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 1c
+    new Opcode("RR", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = H;
+	  H = (H >> 1) | ((F & 1) << 7);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  F5(H);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 1d
+    new Opcode("RR", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = L;
+	  L = (L >> 1) | ((F & 1) << 7);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  F5(L);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 1e
+    new Opcode("RR", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(HL(), tb);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  F5(tb);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 1f
+    new Opcode("RR", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = A;
+	  A = (A >> 1) | ((F & 1) << 7);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  F5(A);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 20
+    new Opcode("SLA", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((B & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  B = (B << 1) & 0xff;
+	  F5(B);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 21
+    new Opcode("SLA", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((C & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  C = (C << 1) & 0xff;
+	  F5(C);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 22
+    new Opcode("SLA", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((D & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  D = (D << 1) & 0xff;
+	  F5(D);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 23
+    new Opcode("SLA", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((E & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  E = (E << 1) & 0xff;
+	  F5(E);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 24
+    new Opcode("SLA", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((H & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  H = (H << 1) & 0xff;
+	  F5(H);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 25
+    new Opcode("SLA", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((L & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  L = (L << 1) & 0xff;
+	  F5(L);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 26
+    new Opcode("SLA", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(HL(), tb);
+	  F5(tb);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 27
+    new Opcode("SLA", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((A & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  A = (A << 1) & 0xff;
+	  F5(A);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 28
+    new Opcode("SRA", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((B & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  B = (B & 0x80) | (B >> 1);
+	  F5(B);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 29
+    new Opcode("SRA", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((C & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  C = (C & 0x80) | (C >> 1);
+	  F5(C);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 2a
+    new Opcode("SRA", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((D & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  D = (D & 0x80) | (D >> 1);
+	  F5(D);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 2b
+    new Opcode("SRA", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((E & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  E = (E & 0x80) | (E >> 1);
+	  F5(E);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 2c
+    new Opcode("SRA", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((H & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  H = (H & 0x80) | (H >> 1);
+	  F5(H);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 2d
+    new Opcode("SRA", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((L & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  L = (L & 0x80) | (L >> 1);
+	  F5(L);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 2e
+    new Opcode("SRA", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(HL(), tb);
+	  F5(tb);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 2f
+    new Opcode("SRA", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((A & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  A = (A & 0x80) | (A >> 1);
+	  F5(A);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 30
+    new Opcode("SLL", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((B & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  B = ((B << 1) & 0xff) | 1;
+	  F5(B);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 31
+    new Opcode("SLL", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((C & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  C = ((C << 1) & 0xff) | 1;
+	  F5(C);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 32
+    new Opcode("SLL", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((D & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  D = ((D << 1) & 0xff) | 1;
+	  F5(D);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 33
+    new Opcode("SLL", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((E & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  E = ((E << 1) & 0xff) | 1;
+	  F5(E);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 34
+    new Opcode("SLL", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((H & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  H = ((H << 1) & 0xff) | 1;
+	  F5(H);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 35
+    new Opcode("SLL", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((L & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  L = ((L << 1) & 0xff) | 1;
+	  F5(L);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 36
+    new Opcode("SLL", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(HL(), tb);
+	  F5(tb);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 37
+    new Opcode("SLL", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((A & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  A = ((A << 1) & 0xff) | 1;
+	  F5(A);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 38
+    new Opcode("SRL", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((B & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  B >>= 1;
+	  F5(B);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 39
+    new Opcode("SRL", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((C & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  C >>= 1;
+	  F5(C);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 3a
+    new Opcode("SRL", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((D & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  D >>= 1;
+	  F5(D);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 3b
+    new Opcode("SRL", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((E & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  E >>= 1;
+	  F5(E);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 3c
+    new Opcode("SRL", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((H & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  H >>= 1;
+	  F5(H);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 3d
+    new Opcode("SRL", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((L & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  L >>= 1;
+	  F5(L);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 3e
+    new Opcode("SRL", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(HL(), tb);
+	  F5(tb);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 3f
+    new Opcode("SRL", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((A & 1) != 0) {
+	    SETCF();
+	  } else {
+	    RESETCF();
+	  }
+	  A >>= 1;
+	  F5(A);
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 40
+    new Opcode("BIT", "0,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(B);
+	  if ((B & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 41
+    new Opcode("BIT", "0,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(C);
+	  if ((C & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 42
+    new Opcode("BIT", "0,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(D);
+	  if ((D & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 43
+    new Opcode("BIT", "0,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(E);
+	  if ((E & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 44
+    new Opcode("BIT", "0,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(H);
+	  if ((H & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 45
+    new Opcode("BIT", "0,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(L);
+	  if ((L & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 46
+    new Opcode("BIT", "0,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = 0;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 47
+    new Opcode("BIT", "0,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(A);
+	  if ((A & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 48
+    new Opcode("BIT", "1,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(B);
+	  if ((B & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 49
+    new Opcode("BIT", "1,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(C);
+	  if ((C & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 4a
+    new Opcode("BIT", "1,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(D);
+	  if ((D & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 4b
+    new Opcode("BIT", "1,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(E);
+	  if ((E & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 4c
+    new Opcode("BIT", "1,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(H);
+	  if ((H & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 4d
+    new Opcode("BIT", "1,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(L);
+	  if ((L & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 4e
+    new Opcode("BIT", "1,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = 0;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 4f
+    new Opcode("BIT", "1,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(A);
+	  if ((A & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 50
+    new Opcode("BIT", "2,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(B);
+	  if ((B & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 51
+    new Opcode("BIT", "2,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(C);
+	  if ((C & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 52
+    new Opcode("BIT", "2,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(D);
+	  if ((D & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 53
+    new Opcode("BIT", "2,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(E);
+	  if ((E & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 54
+    new Opcode("BIT", "2,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(H);
+	  if ((H & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 55
+    new Opcode("BIT", "2,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(L);
+	  if ((L & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 56
+    new Opcode("BIT", "2,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = 0;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 57
+    new Opcode("BIT", "2,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(A);
+	  if ((A & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 58
+    new Opcode("BIT", "3,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(B);
+	  if ((B & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 59
+    new Opcode("BIT", "3,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(C);
+	  if ((C & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 5a
+    new Opcode("BIT", "3,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(D);
+	  if ((D & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 5b
+    new Opcode("BIT", "3,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(E);
+	  if ((E & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 5c
+    new Opcode("BIT", "3,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(H);
+	  if ((H & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 5d
+    new Opcode("BIT", "3,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(L);
+	  if ((L & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 5e
+    new Opcode("BIT", "3,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = 0;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 5f
+    new Opcode("BIT", "3,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(A);
+	  if ((A & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 60
+    new Opcode("BIT", "4,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(B);
+	  if ((B & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 61
+    new Opcode("BIT", "4,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(C);
+	  if ((C & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 62
+    new Opcode("BIT", "4,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(D);
+	  if ((D & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 63
+    new Opcode("BIT", "4,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(E);
+	  if ((E & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 64
+    new Opcode("BIT", "4,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(H);
+	  if ((H & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 65
+    new Opcode("BIT", "4,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(L);
+	  if ((L & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 66
+    new Opcode("BIT", "4,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = 0;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 67
+    new Opcode("BIT", "4,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(A);
+	  if ((A & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 68
+    new Opcode("BIT", "5,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(B);
+	  if ((B & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 69
+    new Opcode("BIT", "5,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(C);
+	  if ((C & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 6a
+    new Opcode("BIT", "5,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(D);
+	  if ((D & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 6b
+    new Opcode("BIT", "5,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(E);
+	  if ((E & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 6c
+    new Opcode("BIT", "5,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(H);
+	  if ((H & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 6d
+    new Opcode("BIT", "5,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(L);
+	  if ((L & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 6e
+    new Opcode("BIT", "5,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = 0;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 6f
+    new Opcode("BIT", "5,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(A);
+	  if ((A & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 70
+    new Opcode("BIT", "6,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(B);
+	  if ((B & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 71
+    new Opcode("BIT", "6,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(C);
+	  if ((C & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 72
+    new Opcode("BIT", "6,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(D);
+	  if ((D & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 73
+    new Opcode("BIT", "6,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(E);
+	  if ((E & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 74
+    new Opcode("BIT", "6,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(H);
+	  if ((H & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 75
+    new Opcode("BIT", "6,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(L);
+	  if ((L & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 76
+    new Opcode("BIT", "6,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = 0;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 77
+    new Opcode("BIT", "6,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(A);
+	  if ((A & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 78
+    new Opcode("BIT", "7,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(B);
+	  if ((B & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 79
+    new Opcode("BIT", "7,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(C);
+	  if ((C & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 7a
+    new Opcode("BIT", "7,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(D);
+	  if ((D & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 7b
+    new Opcode("BIT", "7,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(E);
+	  if ((E & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 7c
+    new Opcode("BIT", "7,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(H);
+	  if ((H & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 7d
+    new Opcode("BIT", "7,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(L);
+	  if ((L & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 7e
+    new Opcode("BIT", "7,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = 0;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 7f
+    new Opcode("BIT", "7,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F5(A);
+	  if ((A & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    RESETZF();
+	  }
+	  SETHF();
+	  RESETNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+
+
+
+
+
+
+
+
+
+    
+  };
+
+  /**
+   * The array of opcodes with the prefix ED.
    */
   protected final Opcode[] opcodesED = new Opcode[] {
 
@@ -6322,7 +8820,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("LD", "R, A", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  R = A;
+	  R = R7 = A;
 	  incPC();
 	  return 9;
 	}	
@@ -6618,7 +9116,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("LD", "A, R", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  A = R;
+	  A = (R & 0x7f) | (R7 & 0x80);
 	  F4(A);
 	  if (IFF2) {
 	    SETPF();
@@ -7207,7 +9705,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     null, null, null, null, null, null, null, null,
 
     // ed a0
-    new Opcode("LDI", "", 1, Processor.INS_MR | Processor.INS_MW | Processor.INS_BLOCK, new Executable() {
+    new Opcode("LDI", "", 1,
+	       Processor.INS_MR | Processor.INS_MW | Processor.INS_BLK,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  int tb = memory.getByte(HL());
@@ -7240,33 +9740,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // ed a1
-    new Opcode("CPI", "", 1, Processor.INS_MR | Processor.INS_BLOCK, new Executable() {
+    new Opcode("CPI", "",
+	       1,
+	       Processor.INS_MR | Processor.INS_BLK,
+	       new Executable() {
 	@Override
 	public int exec() {
-
-	  System.out.printf("cpi  HL:%04x BC:%04x%n", HL(), BC());
-
-
-
-	  // int acu = A;
-	  // int temp = memory.getByte(HL()); incHL();
-	  // int sum = acu - temp;
-	  // int cbits = acu ^ temp ^ sum;
-	  // decBC();
-	  // F = (F & ~0xfe) | (sum & 0x80) | ((((sum & 0xff) == 0) ? 1 : 0) << 6) |
-	  //   (((sum - ((cbits&16)>>4))&2) << 4) | (cbits & 16) |
-	  //   ((sum - ((cbits >> 4) & 1)) & 8) |
-	  //   (((BC() & 0xffff) != 0) ? 1 : 0) << 2 | 2;
-	  // if ((sum & 15) == 8 && (cbits & 16) != 0)
-	  //   F &= ~8;
-
-
-
-
-
-
-
-
 	  final int tb = memory.getByte(HL());
 	  int tw = A - tb;
 	  final int cb = A ^ tb ^ tw;
@@ -7295,10 +9774,6 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    RESETPF();
 	  }
 	  SETNF();
-
-
-
-
 	  incPC();
 	  return 16;
 	}	
@@ -7306,49 +9781,248 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // ed a2
-    null,
+    new Opcode("INI", "",
+	       1,
+	       Processor.INS_IO | Processor.INS_MW | Processor.INS_BLK,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  int tb = 0xff;
+	  for (IOElement t: inputPorts.get(C)) {
+	    tb &= t.portInput(C);
+	  }
+	  memory.setByte(HL(), tb);
+	  incHL();
+	  B--;
+	  F4(B);
+	  final int tw = ((C + 1) & 0xff) + tb;
+	  if ((tb & SF) != 0) {
+	    SETNF();
+	  } else {
+	    RESETNF();
+	  }
+	  if ((tw & 0x100) != 0) {
+	    SETHF();
+	    SETCF();
+	  } else {
+	    RESETHF();
+	    RESETCF();
+	  }
+	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  incPC();
+	  return 16;
+	}	
+      }		    
+      ),
 
     // ed a3
-    null,
+    new Opcode("OUTI", "",
+	       1,
+	       Processor.INS_IO | Processor.INS_MR | Processor.INS_BLK,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  for (IOElement t: outputPorts.get(C)) {
+	    t.portOutput(C, tb);
+	  }
+	  incHL();
+	  B--;
+	  F4(B);
+	  final int tw = L + tb;
+	  if ((tb & SF) != 0) {
+	    SETNF();
+	  } else {
+	    RESETNF();
+	  }
+	  if ((tw & 0x100) != 0) {
+	    SETHF();
+	    SETCF();
+	  } else {
+	    RESETHF();
+	    RESETCF();
+	  }
+	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  incPC();
+	  return 16;
+	}	
+      }		    
+      ),
 
-    // ed a4
-    null,
-
-    // ed a5
-    null,
-
-    // ed a6
-    null,
-
-    // ed a7
-    null,
+    // ed a4 - ed a7
+    null, null, null, null,
 
     // ed a8
-    null,
+    new Opcode("LDD", "",
+	       1,
+	       Processor.INS_MR | Processor.INS_MW | Processor.INS_BLK,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  memory.setByte(DE(), tb);
+	  decHL();
+	  decDE();
+	  decBC();
+	  tb += A;
+	  if ((tb & 0x02) != 0) {
+	    SETYF();
+	  } else {
+	    RESETYF();
+	  }
+	  if ((tb & 0x08) != 0) {
+	    SETXF();
+	  } else {
+	    RESETXF();
+	  }
+	  if ((B | C) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 16;
+	}	
+      }		    
+      ),
 
     // ed a9
-    null,
+    new Opcode("CPD", "",
+	       1,
+	       Processor.INS_MR | Processor.INS_BLK,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  final int tb = memory.getByte(HL());
+	  int tw = A - tb;
+	  final int cb = A ^ tb ^ tw;
+	  decHL();
+	  decBC();
+	  F4(tw & 0xff);
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	    tw--;
+	  } else {
+	    RESETHF();
+	  }
+	  if ((tw & 0x02) != 0) {
+	    SETYF();
+	  } else {
+	    RESETYF();
+	  }
+	  if ((tw & 0x08) != 0) {
+	    SETXF();
+	  } else {
+	    RESETXF();
+	  }
+	  if ((B | C) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  SETNF();
+	  incPC();
+	  return 16;
+	}	
+      }		    
+      ),
 
     // ed aa
-    null,
+    new Opcode("IND", "",
+	       1,
+	       Processor.INS_IO | Processor.INS_MW | Processor.INS_BLK,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  int tb = 0xff;
+	  for (IOElement t: inputPorts.get(C)) {
+	    tb &= t.portInput(C);
+	  }
+	  memory.setByte(HL(), tb);
+	  decHL();
+	  B--;
+	  F4(B);
+	  final int tw = ((C - 1) & 0xff) + tb;
+	  if ((tb & SF) != 0) {
+	    SETNF();
+	  } else {
+	    RESETNF();
+	  }
+	  if ((tw & 0x100) != 0) {
+	    SETHF();
+	    SETCF();
+	  } else {
+	    RESETHF();
+	    RESETCF();
+	  }
+	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  incPC();
+	  return 16;
+	}	
+      }		    
+      ),
 
     // ed ab
-    null,
+    new Opcode("OUTD", "",
+	       1,
+	       Processor.INS_IO | Processor.INS_MR | Processor.INS_BLK,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  for (IOElement t: outputPorts.get(C)) {
+	    t.portOutput(C, tb);
+	  }
+	  decHL();
+	  B--;
+	  F4(B);
+	  final int tw = L + tb;
+	  if ((tb & SF) != 0) {
+	    SETNF();
+	  } else {
+	    RESETNF();
+	  }
+	  if ((tw & 0x100) != 0) {
+	    SETHF();
+	    SETCF();
+	  } else {
+	    RESETHF();
+	    RESETCF();
+	  }
+	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  incPC();
+	  return 16;
+	}	
+      }		    
+      ),
 
-    // ed ac
-    null,
-
-    // ed ad
-    null,
-
-    // ed ae
-    null,
-
-    // ed af
-    null,
+    // ed ac - ed af
+    null, null, null, null,
 
     // ed b0
-    new Opcode("LDIR", "", 1, Processor.INS_MR | Processor.INS_MW | Processor.INS_BLOCK, new Executable() {
+    new Opcode("LDIR", "",
+	       1,
+	       Processor.INS_MR | Processor.INS_MW |
+	       Processor.INS_BLK | Processor.INS_REP,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  int tb = memory.getByte(HL());
@@ -7371,7 +10045,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  RESETNF();
 	  if ((B | C) != 0) {
 	    SETPF();
-	    incPC(-1);
+	    decPC();
 	    return 21;
 	  } else {
 	    RESETPF();
@@ -7383,64 +10057,171 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // ed b1
-    new Opcode("CPIR", "", 1, Processor.INS_MR | Processor.INS_BLOCK, new Executable() {
+    new Opcode("CPIR", "",
+	       1,
+	       Processor.INS_MR | Processor.INS_BLK | Processor.INS_REP,
+	       new Executable() {
 	@Override
 	public int exec() {
-
-
-
-	  System.out.printf("cpir HL:%04x BC:%04x%n", HL(), BC());
-
-
-
-	  int acu = A;
-	  int temp = memory.getByte(HL()); incHL();
-	  int sum = acu - temp;
-	  int cbits = acu ^ temp ^ sum;
+	  final int tb = memory.getByte(HL());
+	  int tw = A - tb;
+	  final int cb = A ^ tb ^ tw;
+	  incHL();
 	  decBC();
-	  F = (F & ~0xfe) | (sum & 0x80) | ((((sum & 0xff) == 0) ? 1 : 0) << 6) |
-	    (((sum - ((cbits&16)>>4))&2) << 4) | (cbits & 16) |
-	    ((sum - ((cbits >> 4) & 1)) & 8) |
-	    (((BC() & 0xffff) != 0) ? 1 : 0) << 2 | 2;
-	  if ((sum & 15) == 8 && (cbits & 16) != 0)
-	    F &= ~8;
-
-
-
-
-
-
-
-
-	  // final int tb = memory.getByte(HL());
-	  // int tw = A - tb;
-	  // final int cb = A ^ tb ^ tw;
-	  // incHL();
-	  // decBC();
-	  // F4(tw & 0xff);
-	  // if ((cb & 0x10) != 0) {
-	  //   SETHF();
-	  //   tw--;
-	  // } else {
-	  //   RESETHF();
-	  // }
-	  // if ((tw & 0x02) != 0) {
-	  //   SETYF();
-	  // } else {
-	  //   RESETYF();
-	  // }
-	  // if ((tw & 0x08) != 0) {
-	  //   SETXF();
-	  // } else {
-	  //   RESETXF();
-	  // }
-	  // SETNF();
-
-
-
+	  F4(tw & 0xff);
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	    tw--;
+	  } else {
+	    RESETHF();
+	  }
+	  if ((tw & 0x02) != 0) {
+	    SETYF();
+	  } else {
+	    RESETYF();
+	  }
+	  if ((tw & 0x08) != 0) {
+	    SETXF();
+	  } else {
+	    RESETXF();
+	  }
+	  SETNF();
 	  if ((B | C) != 0) {
 	    SETPF();
-	    incPC(-1);
+	  } else {
+	    RESETPF();
+	  }
+	  if (!ZFSET() && PFSET()) {
+	    decPC();
+	    return 21;
+	  } else {
+	    incPC();
+	    return 16;
+	  }
+	}	
+      }		    
+      ),
+
+    // ed b2
+    new Opcode("INIR", "", 1,
+	       Processor.INS_IO | Processor.INS_MW |
+	       Processor.INS_BLK | Processor.INS_REP,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  int tb = 0xff;
+	  for (IOElement t: inputPorts.get(C)) {
+	    tb &= t.portInput(C);
+	  }
+	  memory.setByte(HL(), tb);
+	  incHL();
+	  B--;
+	  F4(B);
+	  final int tw = ((C + 1) & 0xff) + tb;
+	  if ((tb & SF) != 0) {
+	    SETNF();
+	  } else {
+	    RESETNF();
+	  }
+	  if ((tw & 0x100) != 0) {
+	    SETHF();
+	    SETCF();
+	  } else {
+	    RESETHF();
+	    RESETCF();
+	  }
+	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  if (B != 0) {
+	    decPC();
+	    return 21;
+	  } else {
+	    incPC();
+	    return 16;
+	  }
+	}	
+      }		    
+      ),
+
+    // ed b3
+    new Opcode("OTIR", "",
+	       1,
+	       Processor.INS_IO | Processor.INS_MR |
+	       Processor.INS_BLK | Processor.INS_REP,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  for (IOElement t: outputPorts.get(C)) {
+	    t.portOutput(C, tb);
+	  }
+	  incHL();
+	  B--;
+	  F4(B);
+	  final int tw = L + tb;
+	  if ((tb & SF) != 0) {
+	    SETNF();
+	  } else {
+	    RESETNF();
+	  }
+	  if ((tw & 0x100) != 0) {
+	    SETHF();
+	    SETCF();
+	  } else {
+	    RESETHF();
+	    RESETCF();
+	  }
+	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  if (B != 0) {
+	    decPC();
+	    return 21;
+	  } else {
+	    incPC();
+	    return 16;
+	  }
+	}	
+      }		    
+      ),
+
+    // ed b4 - ed b7
+    null, null, null, null,
+
+    // ed b8
+    new Opcode("LDDR", "",
+	       1,
+	       Processor.INS_MR | Processor.INS_MW |
+	       Processor.INS_BLK | Processor.INS_REP,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  memory.setByte(DE(), tb);
+	  decHL();
+	  decDE();
+	  decBC();
+	  tb += A;
+	  if ((tb & 0x02) != 0) {
+	    SETYF();
+	  } else {
+	    RESETYF();
+	  }
+	  if ((tb & 0x08) != 0) {
+	    SETXF();
+	  } else {
+	    RESETXF();
+	  }
+	  RESETHF();
+	  RESETNF();
+	  if ((B | C) != 0) {
+	    SETPF();
+	    decPC();
 	    return 21;
 	  } else {
 	    RESETPF();
@@ -7451,239 +10232,153 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }		    
       ),
 
-    // ed b2
-    null,
-
-    // ed b3
-    null,
-
-    // ed b4
-    null,
-
-    // ed b5
-    null,
-
-    // ed b6
-    null,
-
-    // ed b7
-    null,
-
-    // ed b8
-    null,
-
     // ed b9
-    null,
+    new Opcode("CPDR", "",
+	       1,
+	       Processor.INS_MR | Processor.INS_BLK | Processor.INS_REP,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  final int tb = memory.getByte(HL());
+	  int tw = A - tb;
+	  final int cb = A ^ tb ^ tw;
+	  decHL();
+	  decBC();
+	  F4(tw & 0xff);
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	    tw--;
+	  } else {
+	    RESETHF();
+	  }
+	  if ((tw & 0x02) != 0) {
+	    SETYF();
+	  } else {
+	    RESETYF();
+	  }
+	  if ((tw & 0x08) != 0) {
+	    SETXF();
+	  } else {
+	    RESETXF();
+	  }
+	  SETNF();
+	  if ((B | C) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  if (!ZFSET() && PFSET()) {
+	    decPC();
+	    return 21;
+	  } else {
+	    incPC();
+	    return 16;
+	  }
+	}	
+      }		    
+      ),
 
     // ed ba
-    null,
+    new Opcode("INDR", "",
+	       1,
+	       Processor.INS_IO | Processor.INS_MW |
+	       Processor.INS_BLK | Processor.INS_REP,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  int tb = 0xff;
+	  for (IOElement t: inputPorts.get(C)) {
+	    tb &= t.portInput(C);
+	  }
+	  memory.setByte(HL(), tb);
+	  decHL();
+	  B--;
+	  F4(B);
+	  final int tw = ((C - 1) & 0xff) + tb;
+	  if ((tb & SF) != 0) {
+	    SETNF();
+	  } else {
+	    RESETNF();
+	  }
+	  if ((tw & 0x100) != 0) {
+	    SETHF();
+	    SETCF();
+	  } else {
+	    RESETHF();
+	    RESETCF();
+	  }
+	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  if (B != 0) {
+	    decPC();
+	    return 21;
+	  } else {
+	    incPC();
+	    return 16;
+	  }
+	}	
+      }		    
+      ),
 
     // ed bb
-    null,
-
-    // ed bc
-    null,
-
-    // ed bd
-    null,
-
-    // ed be
-    null,
-
-    // ed bf
-    null,
-
-    // ed c0
-    null,
-
-    // ed c1
-    null,
-
-    // ed c2
-    null,
-
-    // ed c3
-    null,
-
-    // ed c4
-    null,
-
-    // ed c5
-    null,
-
-    // ed c6
-    null,
-
-    // ed c7
-    null,
-
-    // ed c8
-    null,
-
-    // ed c9
-    null,
-
-    // ed ca
-    null,
-
-    // ed cb
-    null,
-
-    // ed cc
-    null,
-
-    // ed cd
-    null,
-
-    // ed ce
-    null,
-
-    // ed cf
-    null,
-
-    // ed d0
-    null,
-
-    // ed d1
-    null,
-
-    // ed d2
-    null,
-
-    // ed d3
-    null,
-
-    // ed d4
-    null,
-
-    // ed d5
-    null,
-
-    // ed d6
-    null,
-
-    // ed d7
-    null,
-
-    // ed d8
-    null,
-
-    // ed d9
-    null,
-
-    // ed da
-    null,
-
-    // ed db
-    null,
-
-    // ed dc
-    null,
-
-    // ed dd
-    null,
-
-    // ed de
-    null,
-
-    // ed df
-    null,
-
-    // ed e0
-    null,
-
-    // ed e1
-    null,
-
-    // ed e2
-    null,
-
-    // ed e3
-    null,
-
-    // ed e4
-    null,
-
-    // ed e5
-    null,
-
-    // ed e6
-    null,
-
-    // ed e7
-    null,
-
-    // ed e8
-    null,
-
-    // ed e9
-    null,
-
-    // ed ea
-    null,
-
-    // ed eb
-    null,
-
-    // ed ec
-    null,
-
-    // ed ed
-    null,
-
-    // ed ee
-    null,
-
-    // ed ef
-    null,
-
-    // ed f0
-    null,
-
-    // ed f1
-    null,
-
-    // ed f2
-    null,
-
-    // ed f3
-    null,
-
-    // ed f4
-    null,
-
-    // ed f5
-    null,
-
-    // ed f6
-    null,
-
-    // ed f7
-    null,
-
-    // ed f8
-    null,
-
-    // ed f9
-    null,
-
-    // ed fa
-    null,
-
-    // ed fb
-    null,
-
-    // ed fc
-    null,
-
-    // ed fd
-    null,
-
-    // ed fe
-    null,
-
-    // ed ff
-    null
+    new Opcode("OTDR", "",
+	       1,
+	       Processor.INS_IO | Processor.INS_MR |
+	       Processor.INS_BLK | Processor.INS_REP,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  for (IOElement t: outputPorts.get(C)) {
+	    t.portOutput(C, tb);
+	  }
+	  decHL();
+	  B--;
+	  F4(B);
+	  final int tw = L + tb;
+	  if ((tb & SF) != 0) {
+	    SETNF();
+	  } else {
+	    RESETNF();
+	  }
+	  if ((tw & 0x100) != 0) {
+	    SETHF();
+	    SETCF();
+	  } else {
+	    RESETHF();
+	    RESETCF();
+	  }
+	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  if (B != 0) {
+	    decPC();
+	    return 21;
+	  } else {
+	    incPC();
+	    return 16;
+	  }
+	}	
+      }		    
+      ),
+
+    // ed bc - ed bf
+    null, null, null, null,
+
+    // ed c0 - ed ff
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null
   };
     
   /**
@@ -7899,13 +10594,20 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	interrupt(interruptPending);
 	break;
       } else {
-	incR();
+	R++;
 	final int tb = memory.getByte(PC);
 	Opcode opcode = opcodes[tb];
 	if (opcode == null) {
-	  incR();
+	  R++;
 	  incPC();
-	  opcode = opcodesED[memory.getByte(PC)];
+	  switch (tb) {
+	    case 0xcb:
+	      opcode = opcodesCB[memory.getByte(PC)];
+	      break;
+	    case 0xed:
+	      opcode = opcodesED[memory.getByte(PC)];
+	      break;
+	  }
 	}
 	if ((opcode.getType() & mask) != 0)
 	  break;
