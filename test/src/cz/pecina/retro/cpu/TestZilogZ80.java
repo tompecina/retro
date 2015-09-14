@@ -576,14 +576,14 @@ public class TestZilogZ80 extends ProcessorTest {
     //   0xa4255833L,
     //   "shf/rot <b,c,d,e,h,l,(hl),a>"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0xcb, 0x80, 0, 0, 0x2cd5, 0x97ab, 0x39ff, MSBT,
-    //   0xd14b, 0x6ab2, 0x53, 0x27, 0xb538,
-    //   0, 0x7f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    //   0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0xff, 0,
-    //   0x8b57f008L,
-    //   "<set,res> n,<bcdehl(hl)a>"),
+    new TestGroup(
+      0xff,
+      0xcb, 0x80, 0, 0, 0x2cd5, 0x97ab, 0x39ff, MSBT,
+      0xd14b, 0x6ab2, 0x53, 0x27, 0xb538,
+      0, 0x7f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0xd7, 0xff, 0,
+      0x8b57f008L,
+      "<set,res> n,<bcdehl(hl)a>"),
 
     // new TestGroup(
     //   0xff,
@@ -747,6 +747,7 @@ public class TestZilogZ80 extends ProcessorTest {
 		  ((workBytes[SP + 1] & 0xff) << 8));
 	ram[MSBT + 16] = 0x2a;
 	ram[MSBT + 17] = 0x06;
+	cpu.setWZ(0);
 	
 	final int pc = MSBT - 4;
 	if ((ram[pc] != 0x76) &&

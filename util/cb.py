@@ -318,14 +318,15 @@ for i in range(0x40, 0x80):
         s = "tb"
         print("	  int tb = memory.getByte(HL());")
     if ii == 6:
-        print("	  WZ = tb << 8;  // wrong!")
-        print("	  F32(" + s + ", WZ >> 8);")
+        print("	  F22(" + s + ", WZ >> 8);")
     else:
-        print("	  F32(" + s + ", 0);  // wrong!")
+        print("	  F4(" + s + ");")
     print(("	  if ((" + s + " & 0x%02x) == 0) {") % (1 << b))
     print("	    SETZF();")
+    print("	    SETPF();")
     print("	  } else {")
     print("	    CLEARZF();")
+    print("	    CLEARPF();")
     print("	  }")
     if b == 7:
         print("	  if (ZFSET()) {")
@@ -347,3 +348,58 @@ for i in range(0x40, 0x80):
     print("      ),")
     print();
     
+for i in range(0x80, 0xc0):
+
+    ii = i & 0x07
+    s = ss[ii]
+    b = (i & 0b00111000) >> 3
+
+    print("    // cb %02x" % i)
+
+    if ii == 6:
+        print("    new Opcode(\"RES\", \"%d,(HL)\", 1, Processor.INS_MW, new Executable() {" % b)
+    else:
+        print(("    new Opcode(\"RES\", \"%d," + s + "\", 1, Processor.INS_NONE, new Executable() {") % b)
+    print("	@Override")
+    print("	public int exec() {")
+    if ii == 6:
+        print(("	  memory.setByte(HL(), memory.getByte(HL()) & 0x%02x);") % (0xff - (1 << b)))
+    else:
+        print(("	  " + s + " &= 0x%02x;") % (0xff - (1 << b)))
+    print("	  incPC();")
+    if ii == 6:
+        print("	  return 15;")
+    else:
+        print("	  return 8;")
+    print("	}")
+    print("      }")		    
+    print("      ),")
+    print();
+    
+for i in range(0xc0, 0x100):
+
+    ii = i & 0x07
+    s = ss[ii]
+    b = (i & 0b00111000) >> 3
+
+    print("    // cb %02x" % i)
+
+    if ii == 6:
+        print("    new Opcode(\"SET\", \"%d,(HL)\", 1, Processor.INS_MW, new Executable() {" % b)
+    else:
+        print(("    new Opcode(\"SET\", \"%d," + s + "\", 1, Processor.INS_NONE, new Executable() {") % b)
+    print("	@Override")
+    print("	public int exec() {")
+    if ii == 6:
+        print(("	  memory.setByte(HL(), memory.getByte(HL()) | 0x%02x);") % (1 << b))
+    else:
+        print(("	  " + s + " |= 0x%02x;") % (1 << b))
+    print("	  incPC();")
+    if ii == 6:
+        print("	  return 15;")
+    else:
+        print("	  return 8;")
+    print("	}")
+    print("      }")		    
+    print("      ),")
+    print();
