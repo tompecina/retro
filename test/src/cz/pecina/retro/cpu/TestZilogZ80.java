@@ -747,7 +747,7 @@ public class TestZilogZ80 extends ProcessorTest {
 		  ((workBytes[SP + 1] & 0xff) << 8));
 	ram[MSBT + 16] = 0x2a;
 	ram[MSBT + 17] = 0x06;
-		
+	
 	final int pc = MSBT - 4;
 	if ((ram[pc] != 0x76) &&
 	    (((ram[pc] & 0xdf) != 0xdd) || (ram[pc + 1] != 0x76))) {

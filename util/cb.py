@@ -318,7 +318,7 @@ for i in range(0x40, 0x80):
         s = "tb"
         print("	  int tb = memory.getByte(HL());")
     if ii == 6:
-        print("	  WZ = 0;  // wrong!")
+        print("	  WZ = tb << 8;  // wrong!")
         print("	  F32(" + s + ", WZ >> 8);")
     else:
         print("	  F5(" + s + ");")
@@ -327,6 +327,14 @@ for i in range(0x40, 0x80):
     print("	  } else {")
     print("	    RESETZF();")
     print("	  }")
+    if b == 7:
+        print("	  if (ZFSET()) {")
+        print("	    SETSF();")
+        print("	  } else {")
+        print("	    RESETSF();")
+        print("	  }")
+    else:
+        print("	  RESETSF();")
     print("	  SETHF();")
     print("	  RESETNF();")
     print("	  incPC();")
