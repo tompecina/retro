@@ -815,9 +815,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Resets the Sign (S) flag.
+   * Clears the Sign (S) flag.
    */
-  protected void RESETSF() {
+  protected void CLEARSF() {
     F &= ~SF;
   }
 
@@ -838,9 +838,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Resets the Zero (Z) flag.
+   * Clears the Zero (Z) flag.
    */
-  protected void RESETZF() {
+  protected void CLEARZF() {
     F &= ~ZF;
   }
 
@@ -868,16 +868,16 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Resets the Y flag.
+   * Clears the Y flag.
    */
-  protected void RESETYF() {
+  protected void CLEARYF() {
     F &= ~YF;
   }
 
   /**
-   * Resets the Half Carry (H) flag.
+   * Clears the Half Carry (H) flag.
    */
-  protected void RESETHF() {
+  protected void CLEARHF() {
     F &= ~HF;
   }
 
@@ -898,9 +898,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Resets the X flag.
+   * Clears the X flag.
    */
-  protected void RESETXF() {
+  protected void CLEARXF() {
     F &= ~XF;
   }
 
@@ -912,9 +912,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Resets the Parity/Overflow (P) flag.
+   * Clears the Parity/Overflow (P) flag.
    */
-  protected void RESETPF() {
+  protected void CLEARPF() {
     F &= ~PF;
   }
 
@@ -949,9 +949,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Resets the Add/Subtract (N) flag.
+   * Clears the Add/Subtract (N) flag.
    */
-  protected void RESETNF() {
+  protected void CLEARNF() {
     F &= ~NF;
   }
 
@@ -972,9 +972,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Resets the Carry (C) flag.
+   * Clears the Carry (C) flag.
    */
-  protected void RESETCF() {
+  protected void CLEARCF() {
     F &= ~CF;
   }
 
@@ -1549,7 +1549,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     if (b) {
       SETSF();
     } else {
-      RESETSF();
+      CLEARSF();
     }
   }
 
@@ -1571,7 +1571,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     if (b) {
       SETZF();
     } else {
-      RESETZF();
+      CLEARZF();
     }
   }
 
@@ -1593,7 +1593,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     if (b) {
       SETHF();
     } else {
-      RESETHF();
+      CLEARHF();
     }
   }
 
@@ -1615,7 +1615,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     if (b) {
       SETPF();
     } else {
-      RESETPF();
+      CLEARPF();
     }
   }
 
@@ -1637,7 +1637,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     if (b) {
       SETCF();
     } else {
-      RESETCF();
+      CLEARCF();
     }
   }
 
@@ -1745,14 +1745,14 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (B == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((B & 0x0f) == 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}
@@ -1768,12 +1768,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (B == 0x7f) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((B & 0x0f) == 0x0f) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  SETNF();
 	  incPC();
@@ -1801,12 +1801,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((A & 0x80) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = ((A << 1) | (F & 1)) & 0xff;
 	  F2(A);
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}
@@ -1837,7 +1837,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (((H ^ B ^ (ti >> 8)) & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  L = ti & 0xff;
 	  H = (ti >> 8) & 0xff;
@@ -1845,9 +1845,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (ti > 0xffff) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 11;
 	}	
@@ -1888,14 +1888,14 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (C == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((C & 0x0f) == 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}
@@ -1911,12 +1911,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (C == 0x7f) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((C & 0x0f) == 0x0f) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  SETNF();
 	  incPC();
@@ -1944,12 +1944,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((A & 1) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = ((A >> 1) | (F << 7)) & 0xff;
 	  F2(A);
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}
@@ -2022,14 +2022,14 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (D == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((D & 0x0f) == 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}
@@ -2045,12 +2045,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (D == 0x7f) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((D & 0x0f) == 0x0f) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  SETNF();
 	  incPC();
@@ -2080,11 +2080,11 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tb & 0x80) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  F2(A);
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}
@@ -2111,7 +2111,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (((H ^ D ^ (ti >> 8)) & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  L = ti & 0xff;
 	  H = (ti >> 8) & 0xff;
@@ -2119,9 +2119,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (ti > 0xffff) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 11;
 	}	
@@ -2162,14 +2162,14 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (E == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((E & 0x0f) == 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}
@@ -2185,12 +2185,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (E == 0x7f) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((E & 0x0f) == 0x0f) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  SETNF();
 	  incPC();
@@ -2220,11 +2220,11 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tb & 1) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  F2(A);
-	  RESETHF();
-	  RESETNF();	  
+	  CLEARHF();
+	  CLEARNF();	  
 	  incPC();
 	  return 4;
 	}	
@@ -2299,14 +2299,14 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (H == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((H & 0x0f) == 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}
@@ -2322,12 +2322,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (H == 0x7f) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((H & 0x0f) == 0x0f) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  SETNF();
 	  incPC();
@@ -2357,7 +2357,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    final boolean hd = CFSET() || (A > 0x99);
 	    if (HFSET() || (ld > 9)) {
 	      if (ld > 5) {
-		RESETHF();
+		CLEARHF();
 	      }
 	      A = (A - 6) & 0xff;
 	    }
@@ -2369,7 +2369,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	      if (ld > 9) {
 		SETHF();
 	      } else {
-		RESETHF();
+		CLEARHF();
 	      }
 	      A += 6;
 	    }
@@ -2413,7 +2413,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (((ti >> 8) & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  L = ti & 0xff;
 	  H = (ti >> 8) & 0xff;
@@ -2421,9 +2421,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (ti > 0xffff) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 11;
 	}	
@@ -2467,14 +2467,14 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (L == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((L & 0x0f) == 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}
@@ -2490,12 +2490,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (L == 0x7f) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((L & 0x0f) == 0x0f) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  SETNF();
 	  incPC();
@@ -2596,14 +2596,14 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (tb == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((tb & 0x0f) == 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 11;
 	}
@@ -2621,12 +2621,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (tb == 0x7f) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((tb & 0x0f) == 0x0f) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  SETNF();
 	  incPC();
@@ -2654,8 +2654,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  SETCF();
 	  F2(A);
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -2687,7 +2687,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (((H ^ ((SP ^ ti) >> 8)) & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  L = ti & 0xff;
 	  H = (ti >> 8) & 0xff;
@@ -2695,9 +2695,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (ti > 0xffff) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 11;
 	}	
@@ -2736,14 +2736,14 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (A == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((A & 0x0f) == 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}
@@ -2759,12 +2759,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (A == 0x7f) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if ((A & 0x0f) == 0x0f) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  SETNF();
 	  incPC();
@@ -2792,11 +2792,11 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F ^= CF;
 	  F2(A);
 	  if (CFSET()) {
-	    RESETHF();
+	    CLEARHF();
 	  } else {
 	    SETHF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3515,21 +3515,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3545,21 +3545,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3575,21 +3575,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3605,21 +3605,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3635,21 +3635,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3665,21 +3665,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3696,21 +3696,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 7;
 	}	
@@ -3725,21 +3725,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tw & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((tw ^ (tw >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3755,21 +3755,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3785,21 +3785,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3815,21 +3815,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3845,21 +3845,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3875,21 +3875,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3905,21 +3905,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3936,21 +3936,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 7;
 	}	
@@ -3965,21 +3965,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tw & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((tw ^ (tw >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 4;
 	}	
@@ -3995,17 +3995,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4025,17 +4025,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4055,17 +4055,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4085,17 +4085,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4115,17 +4115,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4145,17 +4145,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4176,17 +4176,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4201,9 +4201,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("SUB", "A", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  RESETHF();
-	  RESETCF();
-	  RESETPF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARPF();
 	  A = 0;
 	  F4(0);
 	  SETNF();
@@ -4222,17 +4222,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4252,17 +4252,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4282,17 +4282,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4312,17 +4312,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4342,17 +4342,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4372,17 +4372,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4403,17 +4403,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4432,17 +4432,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tw & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((tw ^ (tw >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -4459,8 +4459,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  A &= B;
 	  SETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4474,8 +4474,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  A &= C;
 	  SETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4489,8 +4489,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  A &= D;
 	  SETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4504,8 +4504,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  A &= E;
 	  SETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4519,8 +4519,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  A &= H;
 	  SETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4534,8 +4534,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  A &= L;
 	  SETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4550,8 +4550,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  final int tb = memory.getByte(HL());
 	  A &= tb;
 	  SETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 7;
@@ -4564,8 +4564,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  SETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4578,9 +4578,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A ^= B;
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4593,9 +4593,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A ^= C;
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4608,9 +4608,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A ^= D;
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4623,9 +4623,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A ^= E;
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4638,9 +4638,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A ^= H;
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4653,9 +4653,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A ^= L;
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4668,9 +4668,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A ^= memory.getByte(HL());
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 7;
@@ -4695,9 +4695,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A |= B;
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4710,9 +4710,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A |= C;
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4725,9 +4725,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A |= D;
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4740,9 +4740,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A |= E;
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4755,9 +4755,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A |= H;
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4770,9 +4770,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A |= L;
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4785,9 +4785,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A |= memory.getByte(HL());
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 7;
@@ -4799,9 +4799,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("OR", "A", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 4;
@@ -4818,17 +4818,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  F22(tw & 0xff, B);
 	  SETNF();
@@ -4847,17 +4847,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  F22(tw & 0xff, C);
 	  SETNF();
@@ -4876,17 +4876,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  F22(tw & 0xff, D);
 	  SETNF();
@@ -4905,17 +4905,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  F22(tw & 0xff, E);
 	  SETNF();
@@ -4934,17 +4934,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  F22(tw & 0xff, H);
 	  SETNF();
@@ -4963,17 +4963,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  F22(tw & 0xff, L);
 	  SETNF();
@@ -4993,17 +4993,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  F22(tw & 0xff, tb);
 	  SETNF();
@@ -5017,9 +5017,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("CP", "A", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  RESETHF();
-	  RESETCF();
-	  RESETPF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARPF();
 	  F22(0, A);
 	  SETNF();
 	  incPC();
@@ -5137,21 +5137,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 7;
 	}	
@@ -5277,21 +5277,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 7;
 	}	
@@ -5425,17 +5425,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -5581,17 +5581,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = tw & 0xff;
 	  F4(A);
@@ -5728,8 +5728,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  final int tb = memory.getByte(PC);
 	  A &= tb;
 	  SETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 7;
@@ -5845,9 +5845,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  incPC();
 	  A ^= memory.getByte(PC);
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 7;
@@ -5973,9 +5973,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  incPC();
 	  A |= memory.getByte(PC);
-	  RESETHF();
-	  RESETCF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
 	  F5(A);
 	  incPC();
 	  return 7;
@@ -6092,17 +6092,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  F22(tw & 0xff, tb);
 	  SETNF();
@@ -6135,6 +6135,2517 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 
 
 
+    // cb 00
+    new Opcode("RLC", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((B & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  B = ((B << 1) | (F & 1)) & 0xff;
+	  F5(B);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 01
+    new Opcode("RLC", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((C & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  C = ((C << 1) | (F & 1)) & 0xff;
+	  F5(C);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 02
+    new Opcode("RLC", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((D & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  D = ((D << 1) | (F & 1)) & 0xff;
+	  F5(D);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 03
+    new Opcode("RLC", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((E & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  E = ((E << 1) | (F & 1)) & 0xff;
+	  F5(E);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 04
+    new Opcode("RLC", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((H & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  H = ((H << 1) | (F & 1)) & 0xff;
+	  F5(H);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 05
+    new Opcode("RLC", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((L & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  L = ((L << 1) | (F & 1)) & 0xff;
+	  F5(L);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 06
+    new Opcode("RLC", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(HL(), tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 07
+    new Opcode("RLC", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((A & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  A = ((A << 1) | (F & 1)) & 0xff;
+	  F5(A);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 08
+    new Opcode("RRC", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((B & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  B = ((B >> 1) | (F << 1)) & 0xff;
+	  F5(B);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 09
+    new Opcode("RRC", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((C & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  C = ((C >> 1) | (F << 1)) & 0xff;
+	  F5(C);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 0a
+    new Opcode("RRC", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((D & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  D = ((D >> 1) | (F << 1)) & 0xff;
+	  F5(D);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 0b
+    new Opcode("RRC", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((E & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  E = ((E >> 1) | (F << 1)) & 0xff;
+	  F5(E);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 0c
+    new Opcode("RRC", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((H & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  H = ((H >> 1) | (F << 1)) & 0xff;
+	  F5(H);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 0d
+    new Opcode("RRC", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((L & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  L = ((L >> 1) | (F << 1)) & 0xff;
+	  F5(L);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 0e
+    new Opcode("RRC", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 1)) & 0xff;
+	  memory.setByte(HL(), tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 0f
+    new Opcode("RRC", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((A & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  A = ((A >> 1) | (F << 1)) & 0xff;
+	  F5(A);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 10
+    new Opcode("RL", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  B = (B << 1) | (F & 1);
+	  if ((B & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  B &= 0xff;
+	  F5(B);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 11
+    new Opcode("RL", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  C = (C << 1) | (F & 1);
+	  if ((C & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  C &= 0xff;
+	  F5(C);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 12
+    new Opcode("RL", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  D = (D << 1) | (F & 1);
+	  if ((D & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  D &= 0xff;
+	  F5(D);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 13
+    new Opcode("RL", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  E = (E << 1) | (F & 1);
+	  if ((E & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  E &= 0xff;
+	  F5(E);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 14
+    new Opcode("RL", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  H = (H << 1) | (F & 1);
+	  if ((H & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  H &= 0xff;
+	  F5(H);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 15
+    new Opcode("RL", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  L = (L << 1) | (F & 1);
+	  if ((L & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  L &= 0xff;
+	  F5(L);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 16
+    new Opcode("RL", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(HL(), tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 17
+    new Opcode("RL", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  A = (A << 1) | (F & 1);
+	  if ((A & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  A &= 0xff;
+	  F5(A);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 18
+    new Opcode("RR", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = B;
+	  B = (B >> 1) | ((F & 1) << 7);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(B);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 19
+    new Opcode("RR", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = C;
+	  C = (C >> 1) | ((F & 1) << 7);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(C);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 1a
+    new Opcode("RR", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = D;
+	  D = (D >> 1) | ((F & 1) << 7);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(D);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 1b
+    new Opcode("RR", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = E;
+	  E = (E >> 1) | ((F & 1) << 7);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(E);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 1c
+    new Opcode("RR", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = H;
+	  H = (H >> 1) | ((F & 1) << 7);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(H);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 1d
+    new Opcode("RR", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = L;
+	  L = (L >> 1) | ((F & 1) << 7);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(L);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 1e
+    new Opcode("RR", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(HL(), tb);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 1f
+    new Opcode("RR", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  final int ti = A;
+	  A = (A >> 1) | ((F & 1) << 7);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(A);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 20
+    new Opcode("SLA", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((B & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  B = (B << 1) & 0xff;
+	  F5(B);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 21
+    new Opcode("SLA", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((C & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  C = (C << 1) & 0xff;
+	  F5(C);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 22
+    new Opcode("SLA", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((D & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  D = (D << 1) & 0xff;
+	  F5(D);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 23
+    new Opcode("SLA", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((E & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  E = (E << 1) & 0xff;
+	  F5(E);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 24
+    new Opcode("SLA", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((H & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  H = (H << 1) & 0xff;
+	  F5(H);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 25
+    new Opcode("SLA", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((L & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  L = (L << 1) & 0xff;
+	  F5(L);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 26
+    new Opcode("SLA", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(HL(), tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 27
+    new Opcode("SLA", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((A & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  A = (A << 1) & 0xff;
+	  F5(A);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 28
+    new Opcode("SRA", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((B & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  B = (B & 0x80) | (B >> 1);
+	  F5(B);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 29
+    new Opcode("SRA", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((C & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  C = (C & 0x80) | (C >> 1);
+	  F5(C);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 2a
+    new Opcode("SRA", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((D & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  D = (D & 0x80) | (D >> 1);
+	  F5(D);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 2b
+    new Opcode("SRA", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((E & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  E = (E & 0x80) | (E >> 1);
+	  F5(E);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 2c
+    new Opcode("SRA", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((H & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  H = (H & 0x80) | (H >> 1);
+	  F5(H);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 2d
+    new Opcode("SRA", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((L & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  L = (L & 0x80) | (L >> 1);
+	  F5(L);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 2e
+    new Opcode("SRA", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(HL(), tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 2f
+    new Opcode("SRA", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((A & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  A = (A & 0x80) | (A >> 1);
+	  F5(A);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 30
+    new Opcode("SLL", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((B & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  B = ((B << 1) & 0xff) | 1;
+	  F5(B);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 31
+    new Opcode("SLL", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((C & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  C = ((C << 1) & 0xff) | 1;
+	  F5(C);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 32
+    new Opcode("SLL", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((D & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  D = ((D << 1) & 0xff) | 1;
+	  F5(D);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 33
+    new Opcode("SLL", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((E & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  E = ((E << 1) & 0xff) | 1;
+	  F5(E);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 34
+    new Opcode("SLL", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((H & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  H = ((H << 1) & 0xff) | 1;
+	  F5(H);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 35
+    new Opcode("SLL", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((L & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  L = ((L << 1) & 0xff) | 1;
+	  F5(L);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 36
+    new Opcode("SLL", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(HL(), tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 37
+    new Opcode("SLL", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((A & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  A = ((A << 1) & 0xff) | 1;
+	  F5(A);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 38
+    new Opcode("SRL", "B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((B & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  B >>= 1;
+	  F5(B);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 39
+    new Opcode("SRL", "C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((C & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  C >>= 1;
+	  F5(C);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 3a
+    new Opcode("SRL", "D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((D & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  D >>= 1;
+	  F5(D);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 3b
+    new Opcode("SRL", "E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((E & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  E >>= 1;
+	  F5(E);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 3c
+    new Opcode("SRL", "H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((H & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  H >>= 1;
+	  F5(H);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 3d
+    new Opcode("SRL", "L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((L & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  L >>= 1;
+	  F5(L);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 3e
+    new Opcode("SRL", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(HL(), tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // cb 3f
+    new Opcode("SRL", "A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  if ((A & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  A >>= 1;
+	  F5(A);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 40
+    new Opcode("BIT", "0,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(B, 0);  // wrong!
+	  if ((B & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 41
+    new Opcode("BIT", "0,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(C, 0);  // wrong!
+	  if ((C & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 42
+    new Opcode("BIT", "0,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(D, 0);  // wrong!
+	  if ((D & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 43
+    new Opcode("BIT", "0,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(E, 0);  // wrong!
+	  if ((E & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 44
+    new Opcode("BIT", "0,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(H, 0);  // wrong!
+	  if ((H & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 45
+    new Opcode("BIT", "0,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(L, 0);  // wrong!
+	  if ((L & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 46
+    new Opcode("BIT", "0,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = tb << 8;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 47
+    new Opcode("BIT", "0,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(A, 0);  // wrong!
+	  if ((A & 0x01) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 48
+    new Opcode("BIT", "1,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(B, 0);  // wrong!
+	  if ((B & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 49
+    new Opcode("BIT", "1,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(C, 0);  // wrong!
+	  if ((C & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 4a
+    new Opcode("BIT", "1,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(D, 0);  // wrong!
+	  if ((D & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 4b
+    new Opcode("BIT", "1,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(E, 0);  // wrong!
+	  if ((E & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 4c
+    new Opcode("BIT", "1,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(H, 0);  // wrong!
+	  if ((H & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 4d
+    new Opcode("BIT", "1,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(L, 0);  // wrong!
+	  if ((L & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 4e
+    new Opcode("BIT", "1,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = tb << 8;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 4f
+    new Opcode("BIT", "1,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(A, 0);  // wrong!
+	  if ((A & 0x02) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 50
+    new Opcode("BIT", "2,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(B, 0);  // wrong!
+	  if ((B & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 51
+    new Opcode("BIT", "2,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(C, 0);  // wrong!
+	  if ((C & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 52
+    new Opcode("BIT", "2,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(D, 0);  // wrong!
+	  if ((D & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 53
+    new Opcode("BIT", "2,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(E, 0);  // wrong!
+	  if ((E & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 54
+    new Opcode("BIT", "2,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(H, 0);  // wrong!
+	  if ((H & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 55
+    new Opcode("BIT", "2,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(L, 0);  // wrong!
+	  if ((L & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 56
+    new Opcode("BIT", "2,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = tb << 8;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 57
+    new Opcode("BIT", "2,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(A, 0);  // wrong!
+	  if ((A & 0x04) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 58
+    new Opcode("BIT", "3,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(B, 0);  // wrong!
+	  if ((B & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 59
+    new Opcode("BIT", "3,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(C, 0);  // wrong!
+	  if ((C & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 5a
+    new Opcode("BIT", "3,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(D, 0);  // wrong!
+	  if ((D & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 5b
+    new Opcode("BIT", "3,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(E, 0);  // wrong!
+	  if ((E & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 5c
+    new Opcode("BIT", "3,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(H, 0);  // wrong!
+	  if ((H & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 5d
+    new Opcode("BIT", "3,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(L, 0);  // wrong!
+	  if ((L & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 5e
+    new Opcode("BIT", "3,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = tb << 8;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 5f
+    new Opcode("BIT", "3,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(A, 0);  // wrong!
+	  if ((A & 0x08) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 60
+    new Opcode("BIT", "4,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(B, 0);  // wrong!
+	  if ((B & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 61
+    new Opcode("BIT", "4,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(C, 0);  // wrong!
+	  if ((C & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 62
+    new Opcode("BIT", "4,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(D, 0);  // wrong!
+	  if ((D & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 63
+    new Opcode("BIT", "4,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(E, 0);  // wrong!
+	  if ((E & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 64
+    new Opcode("BIT", "4,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(H, 0);  // wrong!
+	  if ((H & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 65
+    new Opcode("BIT", "4,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(L, 0);  // wrong!
+	  if ((L & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 66
+    new Opcode("BIT", "4,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = tb << 8;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 67
+    new Opcode("BIT", "4,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(A, 0);  // wrong!
+	  if ((A & 0x10) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 68
+    new Opcode("BIT", "5,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(B, 0);  // wrong!
+	  if ((B & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 69
+    new Opcode("BIT", "5,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(C, 0);  // wrong!
+	  if ((C & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 6a
+    new Opcode("BIT", "5,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(D, 0);  // wrong!
+	  if ((D & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 6b
+    new Opcode("BIT", "5,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(E, 0);  // wrong!
+	  if ((E & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 6c
+    new Opcode("BIT", "5,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(H, 0);  // wrong!
+	  if ((H & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 6d
+    new Opcode("BIT", "5,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(L, 0);  // wrong!
+	  if ((L & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 6e
+    new Opcode("BIT", "5,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = tb << 8;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 6f
+    new Opcode("BIT", "5,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(A, 0);  // wrong!
+	  if ((A & 0x20) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 70
+    new Opcode("BIT", "6,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(B, 0);  // wrong!
+	  if ((B & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 71
+    new Opcode("BIT", "6,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(C, 0);  // wrong!
+	  if ((C & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 72
+    new Opcode("BIT", "6,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(D, 0);  // wrong!
+	  if ((D & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 73
+    new Opcode("BIT", "6,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(E, 0);  // wrong!
+	  if ((E & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 74
+    new Opcode("BIT", "6,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(H, 0);  // wrong!
+	  if ((H & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 75
+    new Opcode("BIT", "6,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(L, 0);  // wrong!
+	  if ((L & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 76
+    new Opcode("BIT", "6,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = tb << 8;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 77
+    new Opcode("BIT", "6,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(A, 0);  // wrong!
+	  if ((A & 0x40) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 78
+    new Opcode("BIT", "7,B", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(B, 0);  // wrong!
+	  if ((B & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 79
+    new Opcode("BIT", "7,C", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(C, 0);  // wrong!
+	  if ((C & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 7a
+    new Opcode("BIT", "7,D", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(D, 0);  // wrong!
+	  if ((D & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 7b
+    new Opcode("BIT", "7,E", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(E, 0);  // wrong!
+	  if ((E & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 7c
+    new Opcode("BIT", "7,H", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(H, 0);  // wrong!
+	  if ((H & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 7d
+    new Opcode("BIT", "7,L", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(L, 0);  // wrong!
+	  if ((L & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
+
+    // cb 7e
+    new Opcode("BIT", "7,(HL)", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  WZ = tb << 8;  // wrong!
+	  F32(tb, WZ >> 8);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 12;
+	}
+      }
+      ),
+
+    // cb 7f
+    new Opcode("BIT", "7,A", 1, Processor.INS_NONE, new Executable() {
+	@Override
+	public int exec() {
+	  F32(A, 0);  // wrong!
+	  if ((A & 0x80) == 0) {
+	    SETZF();
+	  } else {
+	    CLEARZF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 8;
+	}
+      }
+      ),
 
 
 
@@ -6173,8 +8684,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    B &= t.portInput(C);
 	  }
 	  F5(B);
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 12;
 	}	
@@ -6203,17 +8714,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((cb & 0x100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  L = tw & 0xff;
 	  H = (tw >> 8) & 0xff;
@@ -6221,7 +8732,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((H | L) == 0) {
 	    SETZF();
 	  } else {
-	    RESETZF();
+	    CLEARZF();
 	  }
 	  SETNF();
 	  incPC();
@@ -6251,17 +8762,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (A != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if ((A & 0x0f) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if (A == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = (-A) & 0xff;
 	  F4(A);
@@ -6319,8 +8830,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    C &= t.portInput(tb);
 	  }
 	  F5(C);
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 12;
 	}	
@@ -6349,17 +8860,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((cb & 0x100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  L = tw & 0xff;
 	  H = (tw >> 8) & 0xff;
@@ -6367,9 +8878,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((H | L) == 0) {
 	    SETZF();
 	  } else {
-	    RESETZF();
+	    CLEARZF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 15;
 	}	
@@ -6397,17 +8908,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (A != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if ((A & 0x0f) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if (A == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = (-A) & 0xff;
 	  F4(A);
@@ -6463,8 +8974,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    D &= t.portInput(C);
 	  }
 	  F5(D);
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 12;
 	}	
@@ -6493,17 +9004,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((cb & 0x100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  L = tw & 0xff;
 	  H = (tw >> 8) & 0xff;
@@ -6511,7 +9022,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((H | L) == 0) {
 	    SETZF();
 	  } else {
-	    RESETZF();
+	    CLEARZF();
 	  }
 	  SETNF();
 	  incPC();
@@ -6541,17 +9052,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (A != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if ((A & 0x0f) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if (A == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = (-A) & 0xff;
 	  F4(A);
@@ -6596,10 +9107,10 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (IFF2) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 9;
 	}	
@@ -6615,8 +9126,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    E &= t.portInput(C);
 	  }
 	  F5(E);
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 12;
 	}	
@@ -6645,17 +9156,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((cb & 0x100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  L = tw & 0xff;
 	  H = (tw >> 8) & 0xff;
@@ -6663,9 +9174,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((H | L) == 0) {
 	    SETZF();
 	  } else {
-	    RESETZF();
+	    CLEARZF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 15;
 	}	
@@ -6693,17 +9204,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (A != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if ((A & 0x0f) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if (A == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = (-A) & 0xff;
 	  F4(A);
@@ -6748,10 +9259,10 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (IFF2) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 9;
 	}	
@@ -6767,8 +9278,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    H &= t.portInput(C);
 	  }
 	  F5(H);
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 12;
 	}	
@@ -6796,17 +9307,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tw & 0x1000) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x10000) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((tw ^ (tw >> 1)) & 0x8000) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  L = tw & 0xff;
 	  H = (tw >> 8) & 0xff;
@@ -6814,7 +9325,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((H | L) == 0) {
 	    SETZF();
 	  } else {
-	    RESETZF();
+	    CLEARZF();
 	  }
 	  SETNF();
 	  incPC();
@@ -6844,17 +9355,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (A != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if ((A & 0x0f) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if (A == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = (-A) & 0xff;
 	  F4(A);
@@ -6898,8 +9409,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  memory.setByte(HL(), (tb >> 4) | ((A & 0x0f) << 4));
 	  A = (A & 0xf0) | (tb & 0x0f);
 	  F5(A);
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 18;
 	}	
@@ -6915,8 +9426,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    L &= t.portInput(C);
 	  }
 	  F5(L);
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 12;
 	}	
@@ -6944,17 +9455,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tw & 0x1000) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x10000) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((tw ^ (tw >> 1)) & 0x8000) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  L = tw & 0xff;
 	  H = (tw >> 8) & 0xff;
@@ -6962,9 +9473,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((H | L) == 0) {
 	    SETZF();
 	  } else {
-	    RESETZF();
+	    CLEARZF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 15;
 	}	
@@ -6992,17 +9503,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (A != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if ((A & 0x0f) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if (A == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = (-A) & 0xff;
 	  F4(A);
@@ -7046,8 +9557,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  memory.setByte(HL(), ((tb & 0x0f) << 4) | (A & 0x0f));
 	  A = (A & 0xf0) | ((tb >> 4) & 0x0f);
 	  F5(A);
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 18;
 	}	
@@ -7063,8 +9574,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    tb &= t.portInput(C);
 	  }
 	  F5(tb);
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 12;
 	}	
@@ -7093,17 +9604,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((cb & 0x100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  L = tw & 0xff;
 	  H = (tw >> 8) & 0xff;
@@ -7111,7 +9622,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((H | L) == 0) {
 	    SETZF();
 	  } else {
-	    RESETZF();
+	    CLEARZF();
 	  }
 	  SETNF();
 	  incPC();
@@ -7141,17 +9652,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (A != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if ((A & 0x0f) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if (A == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = (-A) & 0xff;
 	  F4(A);
@@ -7199,8 +9710,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    A &= t.portInput(C);
 	  }
 	  F5(A);
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 12;
 	}	
@@ -7229,17 +9740,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((cb & 0x100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  L = tw & 0xff;
 	  H = (tw >> 8) & 0xff;
@@ -7247,9 +9758,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((H | L) == 0) {
 	    SETZF();
 	  } else {
-	    RESETZF();
+	    CLEARZF();
 	  }
-	  RESETNF();
+	  CLEARNF();
 	  incPC();
 	  return 15;
 	}	
@@ -7276,17 +9787,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if (A != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  if ((A & 0x0f) != 0) {
 	    SETHF();
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if (A == 0x80) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  A = (-A) & 0xff;
 	  F4(A);
@@ -7346,20 +9857,20 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tb & 0x02) != 0) {
 	    SETYF();
 	  } else {
-	    RESETYF();
+	    CLEARYF();
 	  }
 	  if ((tb & 0x08) != 0) {
 	    SETXF();
 	  } else {
-	    RESETXF();
+	    CLEARXF();
 	  }
 	  if ((B | C) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 16;
 	}	
@@ -7383,22 +9894,22 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    SETHF();
 	    tw--;
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x02) != 0) {
 	    SETYF();
 	  } else {
-	    RESETYF();
+	    CLEARYF();
 	  }
 	  if ((tw & 0x08) != 0) {
 	    SETXF();
 	  } else {
-	    RESETXF();
+	    CLEARXF();
 	  }
 	  if ((B | C) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  SETNF();
 	  incPC();
@@ -7426,19 +9937,19 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tb & SF) != 0) {
 	    SETNF();
 	  } else {
-	    RESETNF();
+	    CLEARNF();
 	  }
 	  if ((tw & 0x100) != 0) {
 	    SETHF();
 	    SETCF();
 	  } else {
-	    RESETHF();
-	    RESETCF();
+	    CLEARHF();
+	    CLEARCF();
 	  }
 	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  incPC();
 	  return 16;
@@ -7464,19 +9975,19 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tb & SF) != 0) {
 	    SETNF();
 	  } else {
-	    RESETNF();
+	    CLEARNF();
 	  }
 	  if ((tw & 0x100) != 0) {
 	    SETHF();
 	    SETCF();
 	  } else {
-	    RESETHF();
-	    RESETCF();
+	    CLEARHF();
+	    CLEARCF();
 	  }
 	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  incPC();
 	  return 16;
@@ -7503,20 +10014,20 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tb & 0x02) != 0) {
 	    SETYF();
 	  } else {
-	    RESETYF();
+	    CLEARYF();
 	  }
 	  if ((tb & 0x08) != 0) {
 	    SETXF();
 	  } else {
-	    RESETXF();
+	    CLEARXF();
 	  }
 	  if ((B | C) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  incPC();
 	  return 16;
 	}	
@@ -7540,22 +10051,22 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    SETHF();
 	    tw--;
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x02) != 0) {
 	    SETYF();
 	  } else {
-	    RESETYF();
+	    CLEARYF();
 	  }
 	  if ((tw & 0x08) != 0) {
 	    SETXF();
 	  } else {
-	    RESETXF();
+	    CLEARXF();
 	  }
 	  if ((B | C) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  SETNF();
 	  incPC();
@@ -7583,19 +10094,19 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tb & SF) != 0) {
 	    SETNF();
 	  } else {
-	    RESETNF();
+	    CLEARNF();
 	  }
 	  if ((tw & 0x100) != 0) {
 	    SETHF();
 	    SETCF();
 	  } else {
-	    RESETHF();
-	    RESETCF();
+	    CLEARHF();
+	    CLEARCF();
 	  }
 	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  incPC();
 	  return 16;
@@ -7621,19 +10132,19 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tb & SF) != 0) {
 	    SETNF();
 	  } else {
-	    RESETNF();
+	    CLEARNF();
 	  }
 	  if ((tw & 0x100) != 0) {
 	    SETHF();
 	    SETCF();
 	  } else {
-	    RESETHF();
-	    RESETCF();
+	    CLEARHF();
+	    CLEARCF();
 	  }
 	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  incPC();
 	  return 16;
@@ -7661,21 +10172,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tb & 0x02) != 0) {
 	    SETYF();
 	  } else {
-	    RESETYF();
+	    CLEARYF();
 	  }
 	  if ((tb & 0x08) != 0) {
 	    SETXF();
 	  } else {
-	    RESETXF();
+	    CLEARXF();
 	  }
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  if ((B | C) != 0) {
 	    SETPF();
 	    decPC();
 	    return 21;
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	    incPC();
 	    return 16;
 	  }
@@ -7700,23 +10211,23 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    SETHF();
 	    tw--;
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x02) != 0) {
 	    SETYF();
 	  } else {
-	    RESETYF();
+	    CLEARYF();
 	  }
 	  if ((tw & 0x08) != 0) {
 	    SETXF();
 	  } else {
-	    RESETXF();
+	    CLEARXF();
 	  }
 	  SETNF();
 	  if ((B | C) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if (!ZFSET() && PFSET()) {
 	    decPC();
@@ -7748,19 +10259,19 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tb & SF) != 0) {
 	    SETNF();
 	  } else {
-	    RESETNF();
+	    CLEARNF();
 	  }
 	  if ((tw & 0x100) != 0) {
 	    SETHF();
 	    SETCF();
 	  } else {
-	    RESETHF();
-	    RESETCF();
+	    CLEARHF();
+	    CLEARCF();
 	  }
 	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if (B != 0) {
 	    decPC();
@@ -7792,19 +10303,19 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tb & SF) != 0) {
 	    SETNF();
 	  } else {
-	    RESETNF();
+	    CLEARNF();
 	  }
 	  if ((tw & 0x100) != 0) {
 	    SETHF();
 	    SETCF();
 	  } else {
-	    RESETHF();
-	    RESETCF();
+	    CLEARHF();
+	    CLEARCF();
 	  }
 	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if (B != 0) {
 	    decPC();
@@ -7837,21 +10348,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tb & 0x02) != 0) {
 	    SETYF();
 	  } else {
-	    RESETYF();
+	    CLEARYF();
 	  }
 	  if ((tb & 0x08) != 0) {
 	    SETXF();
 	  } else {
-	    RESETXF();
+	    CLEARXF();
 	  }
-	  RESETHF();
-	  RESETNF();
+	  CLEARHF();
+	  CLEARNF();
 	  if ((B | C) != 0) {
 	    SETPF();
 	    decPC();
 	    return 21;
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	    incPC();
 	    return 16;
 	  }
@@ -7876,23 +10387,23 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    SETHF();
 	    tw--;
 	  } else {
-	    RESETHF();
+	    CLEARHF();
 	  }
 	  if ((tw & 0x02) != 0) {
 	    SETYF();
 	  } else {
-	    RESETYF();
+	    CLEARYF();
 	  }
 	  if ((tw & 0x08) != 0) {
 	    SETXF();
 	  } else {
-	    RESETXF();
+	    CLEARXF();
 	  }
 	  SETNF();
 	  if ((B | C) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if (!ZFSET() && PFSET()) {
 	    decPC();
@@ -7925,19 +10436,19 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tb & SF) != 0) {
 	    SETNF();
 	  } else {
-	    RESETNF();
+	    CLEARNF();
 	  }
 	  if ((tw & 0x100) != 0) {
 	    SETHF();
 	    SETCF();
 	  } else {
-	    RESETHF();
-	    RESETCF();
+	    CLEARHF();
+	    CLEARCF();
 	  }
 	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if (B != 0) {
 	    decPC();
@@ -7969,19 +10480,19 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  if ((tb & SF) != 0) {
 	    SETNF();
 	  } else {
-	    RESETNF();
+	    CLEARNF();
 	  }
 	  if ((tw & 0x100) != 0) {
 	    SETHF();
 	    SETCF();
 	  } else {
-	    RESETHF();
-	    RESETCF();
+	    CLEARHF();
+	    CLEARCF();
 	  }
 	  if ((TBL5[(tw & 0x07) ^ B] & PF) != 0) {
 	    SETPF();
 	  } else {
-	    RESETPF();
+	    CLEARPF();
 	  }
 	  if (B != 0) {
 	    decPC();

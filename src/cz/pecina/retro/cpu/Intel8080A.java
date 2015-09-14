@@ -501,9 +501,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Resets the Sign (S) flag.
+   * Clears the Sign (S) flag.
    */
-  protected void RESETSF() {
+  protected void CLEARSF() {
     F &= ~SF;
   }
 
@@ -524,9 +524,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Resets the Zero (Z) flag.
+   * Clears the Zero (Z) flag.
    */
-  protected void RESETZF() {
+  protected void CLEARZF() {
     F &= ~ZF;
   }
 
@@ -547,9 +547,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Resets the Auxiliary Carry (AC) flag.
+   * Clears the Auxiliary Carry (AC) flag.
    */
-  protected void RESETACF() {
+  protected void CLEARACF() {
     F &= ~ACF;
   }
 
@@ -570,9 +570,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Resets the Parity (P) flag.
+   * Clears the Parity (P) flag.
    */
-  protected void RESETPF() {
+  protected void CLEARPF() {
     F &= ~PF;
   }
 
@@ -607,9 +607,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Resets the Carry (C) flag.
+   * Clears the Carry (C) flag.
    */
-  protected void RESETCF() {
+  protected void CLEARCF() {
     F &= ~CF;
   }
 
@@ -914,7 +914,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     if (b) {
       SETSF();
     } else {
-      RESETSF();
+      CLEARSF();
     }
   }
 
@@ -936,7 +936,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     if (b) {
       SETZF();
     } else {
-      RESETZF();
+      CLEARZF();
     }
   }
 
@@ -958,7 +958,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     if (b) {
       SETACF();
     } else {
-      RESETACF();
+      CLEARACF();
     }
   }
 
@@ -980,7 +980,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     if (b) {
       SETPF();
     } else {
-      RESETPF();
+      CLEARPF();
     }
   }
 
@@ -1002,7 +1002,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     if (b) {
       SETCF();
     } else {
-      RESETCF();
+      CLEARCF();
     }
   }
 
@@ -1108,7 +1108,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  B = (B + 1) & 0xff;
 	  F3(B);
 	  if ((B & 0x0f) != 0) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1125,7 +1125,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  B = (B - 1) & 0xff;
 	  F3(B);
 	  if ((B & 0x0f) == 0x0f) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1154,7 +1154,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if ((A & 0x80) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = ((A << 1) | (F & 1)) & 0xff;
 	  incPC();
@@ -1183,7 +1183,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (ti > 0xffff) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  incPC();
 	  return 10;
@@ -1223,7 +1223,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  C = (C + 1) & 0xff;
 	  F3(C);
 	  if ((C & 0x0f) != 0) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1240,7 +1240,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  C = (C - 1) & 0xff;
 	  F3(C);
 	  if ((C & 0x0f) == 0x0f) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1269,7 +1269,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if ((A & 1) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = ((A >> 1) | (F << 7)) & 0xff;
 	  incPC();
@@ -1334,7 +1334,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  D = (D + 1) & 0xff;
 	  F3(D);
 	  if ((D & 0x0f) != 0) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1351,7 +1351,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  D = (D - 1) & 0xff;
 	  F3(D);
 	  if ((D & 0x0f) == 0x0f) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1382,7 +1382,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if ((tb & 0x80) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  incPC();
 	  return 4;
@@ -1410,7 +1410,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (ti > 0xffff) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  incPC();
 	  return 10;
@@ -1450,7 +1450,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  E = (E + 1) & 0xff;
 	  F3(E);
 	  if ((E & 0x0f) != 0) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1467,7 +1467,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  E = (E - 1) & 0xff;
 	  F3(E);
 	  if ((E & 0x0f) == 0x0f) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1498,7 +1498,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if ((tb & 1) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  incPC();
 	  return 4;
@@ -1565,7 +1565,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  H = (H + 1) & 0xff;
 	  F3(H);
 	  if ((H & 0x0f) != 0) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1582,7 +1582,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  H = (H - 1) & 0xff;
 	  F3(H);
 	  if ((H & 0x0f) == 0x0f) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1613,7 +1613,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	    if ((tw & 0x0f) > 0x09) {
 	      SETACF();
 	    } else {
-	      RESETACF();
+	      CLEARACF();
 	    }
 	    tw += 0x06;
 	  }
@@ -1649,7 +1649,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (ti > 0xffff) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  incPC();
 	  return 10;
@@ -1692,7 +1692,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  L = (L + 1) & 0xff;
 	  F3(L);
 	  if ((L & 0x0f) != 0) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1709,7 +1709,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  L = (L - 1) & 0xff;
 	  F3(L);
 	  if ((L & 0x0f) == 0x0f) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1799,7 +1799,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  memory.setByte(tw, tb);
 	  F3(tb);
 	  if ((tb & 0x0f) != 0) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1818,7 +1818,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  memory.setByte(tw, tb);
 	  F3(tb);
 	  if ((tb & 0x0f) == 0x0f) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1872,7 +1872,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (ti > 0xffff) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  incPC();
 	  return 10;
@@ -1910,7 +1910,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A = (A + 1) & 0xff;
 	  F3(A);
 	  if ((A & 0x0f) != 0) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -1927,7 +1927,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  A = (A - 1) & 0xff;
 	  F3(A);
 	  if ((A & 0x0f) == 0x0f) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
@@ -2671,12 +2671,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (B & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -2694,12 +2694,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (C & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -2717,12 +2717,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (D & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -2740,12 +2740,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (E & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -2763,12 +2763,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (H & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -2786,12 +2786,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (L & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -2810,12 +2810,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (tb & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -2833,12 +2833,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) << 1) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -2856,12 +2856,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (B & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -2879,12 +2879,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (C & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -2902,12 +2902,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (D & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -2925,12 +2925,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (E & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -2948,12 +2948,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (H & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -2971,12 +2971,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (L & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -2995,12 +2995,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (tb & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3018,12 +3018,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if ((((A & 0x0f) << 1) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3041,12 +3041,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (B & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3064,12 +3064,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (C & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3087,12 +3087,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (D & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3110,12 +3110,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (E & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3133,12 +3133,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (H & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3156,12 +3156,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (L & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3180,12 +3180,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3215,12 +3215,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (B & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3238,12 +3238,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (C & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3261,12 +3261,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (D & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3284,12 +3284,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (E & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3307,12 +3307,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (H & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3330,12 +3330,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (L & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3354,12 +3354,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3375,14 +3375,14 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  final int tw = -(F & CF);
 	  if (CFSET()) {
-	    RESETACF();
+	    CLEARACF();
 	  } else {
 	    SETACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -3399,10 +3399,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A | B) & 0x08) != 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  A &= B;
-	  RESETCF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3417,10 +3417,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A | C) & 0x08) != 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  A &= C;
-	  RESETCF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3435,10 +3435,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A | D) & 0x08) != 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  A &= D;
-	  RESETCF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3453,10 +3453,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A | E) & 0x08) != 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  A &= E;
-	  RESETCF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3471,10 +3471,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A | H) & 0x08) != 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  A &= H;
-	  RESETCF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3489,10 +3489,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A | L) & 0x08) != 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  A &= L;
-	  RESETCF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3508,10 +3508,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A | tb) & 0x08) != 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  A &= tb;
-	  RESETCF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 7;
@@ -3526,9 +3526,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if ((A & 0x08) != 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
-	  RESETCF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3541,8 +3541,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A ^= B;
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3555,8 +3555,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A ^= C;
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3569,8 +3569,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A ^= D;
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3583,8 +3583,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A ^= E;
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3597,8 +3597,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A ^= H;
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3611,8 +3611,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A ^= L;
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3625,8 +3625,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A ^= memory.getByte(HL());
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 7;
@@ -3651,8 +3651,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A |= B;
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3665,8 +3665,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A |= C;
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3679,8 +3679,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A |= D;
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3693,8 +3693,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A |= E;
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3707,8 +3707,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A |= H;
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3721,8 +3721,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A |= L;
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3735,8 +3735,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  A |= memory.getByte(HL());
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 7;
@@ -3748,8 +3748,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("ORA", "A", 1, Processor.INS_NONE, new Executable() {
 	@Override
 	public int exec() {
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 4;
@@ -3766,12 +3766,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  F3(tw & 0xff);
 	  incPC();
@@ -3789,12 +3789,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  F3(tw & 0xff);
 	  incPC();
@@ -3812,12 +3812,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  F3(tw & 0xff);
 	  incPC();
@@ -3835,12 +3835,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  F3(tw & 0xff);
 	  incPC();
@@ -3858,12 +3858,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  F3(tw & 0xff);
 	  incPC();
@@ -3881,12 +3881,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  F3(tw & 0xff);
 	  incPC();
@@ -3904,12 +3904,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  F3(tw & 0xff);
 	  incPC();
@@ -4037,12 +4037,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (tb & 0x0f)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -4180,12 +4180,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) + (tb & 0x0f) + (F & CF)) > 0x0f) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -4321,12 +4321,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -4469,12 +4469,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (tb & 0x0f) - (F & CF)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  A = tw & 0xff;
 	  F3(A);
@@ -4611,10 +4611,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A | tb) & 0x08) != 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  A &= tb & 0xff;
-	  RESETCF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 7;
@@ -4747,8 +4747,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  incPC();
 	  A ^= memory.getByte(PC);
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 7;
@@ -4874,8 +4874,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  incPC();
 	  A |= memory.getByte(PC);
-	  RESETACF();
-	  RESETCF();
+	  CLEARACF();
+	  CLEARCF();
 	  F3(A);
 	  incPC();
 	  return 7;
@@ -5008,12 +5008,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  if (((A & 0x0f) - (tb & 0x0f)) >= 0) {
 	    SETACF();
 	  } else {
-	    RESETACF();
+	    CLEARACF();
 	  }
 	  if ((tw & 0x0100) != 0) {
 	    SETCF();
 	  } else {
-	    RESETCF();
+	    CLEARCF();
 	  }
 	  F3(tw & 0xff);
 	  incPC();
