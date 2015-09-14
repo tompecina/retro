@@ -299,3 +299,43 @@ for i in range(0x38, 0x40):
     print("      }")		    
     print("      ),")
     print();
+
+for i in range(0x40, 0x80):
+
+    ii = i & 0x07
+    s = ss[ii]
+    b = (i & 0b00111000) >> 3
+
+    print("    // cb %02x" % i)
+
+    if ii == 6:
+        print("    new Opcode(\"BIT\", \"%d,(HL)\", 1, Processor.INS_MR, new Executable() {" % b)
+    else:
+        print(("    new Opcode(\"BIT\", \"%d," + s + "\", 1, Processor.INS_NONE, new Executable() {") % b)
+    print("	@Override")
+    print("	public int exec() {")
+    if ii == 6:
+        s = "tb"
+        print("	  int tb = memory.getByte(HL());")
+    if ii == 6:
+        print("	  WZ = 0;  // wrong!")
+        print("	  F32(" + s + ", WZ >> 8);")
+    else:
+        print("	  F5(" + s + ");")
+    print(("	  if ((" + s + " & 0x%02x) == 0) {") % (1 << b))
+    print("	    SETZF();")
+    print("	  } else {")
+    print("	    RESETZF();")
+    print("	  }")
+    print("	  SETHF();")
+    print("	  RESETNF();")
+    print("	  incPC();")
+    if ii == 6:
+        print("	  return 12;")
+    else:
+        print("	  return 8;")
+    print("	}")
+    print("      }")		    
+    print("      ),")
+    print();
+    

@@ -108,14 +108,14 @@ public class TestZilogZ80 extends ProcessorTest {
     //   0x83534ee1L,
     //   "bit n,(<ix,iy>+1)"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0xcb, 0x40, 0, 0, 0x3ef1, 0x9dfc, 0x7acc, MSBT,
-    //   0xbe61, 0x7a86, 0x50, 0x24, 0x1998,
-    //   0, 0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0x53, 0, 0,
-    //   0, 0, 0, 0, 0xff, 0, 0, 0,0xffff, 0xffff, 0, 0xff, 0,
-    //   0x5e020e98L,
-    //   "bit n,<b,c,d,e,h,l,(hl),a>"),
+    new TestGroup(
+      0xff,
+      0xcb, 0x40, 0, 0, 0x3ef1, 0x9dfc, 0x7acc, MSBT,
+      0xbe61, 0x7a86, 0x50, 0x24, 0x1998,
+      0, 0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0x53, 0, 0,
+      0, 0, 0, 0, 0xff, 0, 0, 0,0xffff, 0xffff, 0, 0xff, 0,
+      0x5e020e98L,
+      "bit n,<b,c,d,e,h,l,(hl),a>"),
 
     new TestGroup(
       0xff,
