@@ -5448,6 +5448,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  tb = L;
 	  L = La;
 	  La = tb;
+	  tb = WZ;
+	  WZ = WZa;
+	  WZa = tb;
 	  incPC();
 	  return 4;
 	}	
@@ -6075,9 +6078,6 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
    * The array of opcodes with the prefix CB.
    */
   protected final Opcode[] opcodesCB = new Opcode[] {
-
-
-
 
     // cb 00
     new Opcode("RLC", "B", 1, Processor.INS_NONE, new Executable() {
@@ -7326,6 +7326,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	}
       }
       ),
+
 
 
 
