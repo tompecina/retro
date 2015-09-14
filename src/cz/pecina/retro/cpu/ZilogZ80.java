@@ -1856,7 +1856,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 	
     // 10
-    new Opcode("DJNZ", "<r>", 1, Processor.INS_JMP, new Executable() {
+    new Opcode("DJNZ", "<d>", 1, Processor.INS_JMP, new Executable() {
 	@Override
 	public int exec() {
 	  B = (B - 1) & 0xff;
@@ -1865,7 +1865,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    return 8;
 	  } else {
 	    incPC();
-	    final int tb = memory.getByte(PC);
+	    final byte tb = (byte)(memory.getByte(PC));
 	    PC = (PC + 1 + tb) & 0xffff;
 	    return 13;
 	  }
@@ -1991,11 +1991,11 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 	
     // 18
-    new Opcode("JR", "<r>", 1, Processor.INS_JMP, new Executable() {
+    new Opcode("JR", "<d>", 1, Processor.INS_JMP, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
-	  final int tb = memory.getByte(PC);
+	  final byte tb = (byte)(memory.getByte(PC));
 	  PC = (PC + 1 + tb) & 0xffff;
 	  return 12;
 	}
@@ -2131,7 +2131,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 	
     // 20
-    new Opcode("JR", "NZ,<r>", 1, Processor.INS_JMP, new Executable() {
+    new Opcode("JR", "NZ,<d>", 1, Processor.INS_JMP, new Executable() {
 	@Override
 	public int exec() {
 	  if (ZFSET()) {
@@ -2139,7 +2139,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    return 7;
 	  } else {
 	    incPC();
-	    final int tb = memory.getByte(PC);
+	    final byte tb = (byte)(memory.getByte(PC));
 	    PC = (PC + 1 + tb) & 0xffff;
 	    return 12;
 	  }
@@ -2288,12 +2288,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 	
     // 28
-    new Opcode("JR", "Z,<r>", 1, Processor.INS_JMP, new Executable() {
+    new Opcode("JR", "Z,<d>", 1, Processor.INS_JMP, new Executable() {
 	@Override
 	public int exec() {
 	  if (ZFSET()) {
 	    incPC();
-	    final int tb = memory.getByte(PC);
+	    final byte tb = (byte)( memory.getByte(PC));
 	    PC = (PC + 1 + tb) & 0xffff;
 	    return 12;
 	  } else {
@@ -2430,7 +2430,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 	
     // 30
-    new Opcode("JR", "NC,<r>", 1, Processor.INS_JMP, new Executable() {
+    new Opcode("JR", "NC,<d>", 1, Processor.INS_JMP, new Executable() {
 	@Override
 	public int exec() {
 	  if (CFSET()) {
@@ -2438,7 +2438,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    return 7;
 	  } else {
 	    incPC();
-	    final int tb = memory.getByte(PC);
+	    final byte tb = (byte)(memory.getByte(PC));
 	    PC = (PC + 1 + tb) & 0xffff;
 	    return 12;
 	  }
@@ -2562,12 +2562,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 	
     // 38
-    new Opcode("JR", "C,<r>", 1, Processor.INS_JMP, new Executable() {
+    new Opcode("JR", "C,<d>", 1, Processor.INS_JMP, new Executable() {
 	@Override
 	public int exec() {
 	  if (CFSET()) {
 	    incPC();
-	    final int tb = memory.getByte(PC);
+	    final byte tb = (byte)(memory.getByte(PC));
 	    PC = (PC + 1 + tb) & 0xffff;
 	    return 12;
 	  } else {
@@ -5058,7 +5058,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 	
     // c7
-    new Opcode("RST", "<i>", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "<r>", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -5198,7 +5198,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 	
     // cf
-    new Opcode("RST", "<i>", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "<r>", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -5346,7 +5346,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 	
     // d7
-    new Opcode("RST", "<i>", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "<r>", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -5499,7 +5499,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 	
     // df
-    new Opcode("RST", "<i>", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "<r>", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -5634,7 +5634,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 	
     // e7
-    new Opcode("RST", "<i>", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "<r>", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -5752,7 +5752,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 	
     // ef
-    new Opcode("RST", "<i>", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "<r>", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -5880,7 +5880,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 	
     // f7
-    new Opcode("RST", "<i>", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "<r>", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -6009,7 +6009,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ), 
 	
     // ff
-    new Opcode("RST", "<i>", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "<r>", 1, Processor.INS_CALL, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -6297,6 +6297,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("RETI", "", 1, Processor.INS_RET, new Executable() {
 	@Override
 	public int exec() {
+	  IFF1 = IFF2;
 	  final int tb = memory.getByte(SP);
 	  incSP();
 	  PC = tb + (memory.getByte(SP) << 8);
@@ -7902,6 +7903,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	final int tb = memory.getByte(PC);
 	Opcode opcode = opcodes[tb];
 	if (opcode == null) {
+	  incR();
 	  incPC();
 	  opcode = opcodesED[memory.getByte(PC)];
 	}
