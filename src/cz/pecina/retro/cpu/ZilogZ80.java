@@ -949,6 +949,13 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
+   * Decrements the Program Counter (PC).
+   */
+  protected void decPC() {
+    PC = (PC - 1) & 0xffff;
+  }
+
+  /**
    * Increments the Stack Pointer (SP).
    */
   protected void incSP() {
@@ -1294,6 +1301,15 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
+   * Increments the register pair BC.
+   */
+  protected void incBC() {
+    final int tw = (B << 8) + C + 1;
+    B = (tw >> 8) & 0xff;
+    C = tw & 0xff;
+  }
+
+  /**
    * Decrements the register pair BC.
    */
   protected void decBC() {
@@ -1332,6 +1348,15 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
+   * Decrements the register pair DE.
+   */
+  protected void decDE() {
+    final int tw = (D << 8) + E - 1;
+    D = (tw >> 8) & 0xff;
+    E = tw & 0xff;
+  }
+
+  /**
    * Gets the register pair HL.
    *
    * @return register pair value
@@ -1356,6 +1381,15 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
    */
   protected void incHL() {
     final int tw = (H << 8) + L + 1;
+    H = (tw >> 8) & 0xff;
+    L = tw & 0xff;
+  }
+
+  /**
+   * Decrements the register pair HL.
+   */
+  protected void decHL() {
+    final int tw = (H << 8) + L - 1;
     H = (tw >> 8) & 0xff;
     L = tw & 0xff;
   }
@@ -7295,10 +7329,75 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     null,
 
     // ed a8
-    null,
+    new Opcode("LDD", "", 1, Processor.INS_MR | Processor.INS_MW | Processor.INS_BLOCK, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  memory.setByte(DE(), tb);
+	  decHL();
+	  decDE();
+	  decBC();
+	  tb += A;
+	  if ((tb & 0x02) != 0) {
+	    SETYF();
+	  } else {
+	    RESETYF();
+	  }
+	  if ((tb & 0x08) != 0) {
+	    SETXF();
+	  } else {
+	    RESETXF();
+	  }
+	  if ((B | C) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  RESETHF();
+	  RESETNF();
+	  incPC();
+	  return 16;
+	}	
+      }		    
+      ),
 
     // ed a9
-    null,
+    new Opcode("CPD", "", 1, Processor.INS_MR | Processor.INS_BLOCK, new Executable() {
+	@Override
+	public int exec() {
+	  final int tb = memory.getByte(HL());
+	  int tw = A - tb;
+	  final int cb = A ^ tb ^ tw;
+	  decHL();
+	  decBC();
+	  F4(tw & 0xff);
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	    tw--;
+	  } else {
+	    RESETHF();
+	  }
+	  if ((tw & 0x02) != 0) {
+	    SETYF();
+	  } else {
+	    RESETYF();
+	  }
+	  if ((tw & 0x08) != 0) {
+	    SETXF();
+	  } else {
+	    RESETXF();
+	  }
+	  if ((B | C) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  SETNF();
+	  incPC();
+	  return 16;
+	}	
+      }		    
+      ),
 
     // ed aa
     null,
@@ -7342,7 +7441,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  RESETNF();
 	  if ((B | C) != 0) {
 	    SETPF();
-	    incPC(-1);
+	    decPC();
 	    return 21;
 	  } else {
 	    RESETPF();
@@ -7386,7 +7485,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    RESETPF();
 	  }
 	  if (!ZFSET() && PFSET()) {
-	    incPC(-1);
+	    decPC();
 	    return 21;
 	  } else {
 	    incPC();
@@ -7415,10 +7514,82 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     null,
 
     // ed b8
-    null,
+    new Opcode("LDDR", "", 1, Processor.INS_MR | Processor.INS_MW | Processor.INS_BLOCK, new Executable() {
+	@Override
+	public int exec() {
+	  int tb = memory.getByte(HL());
+	  memory.setByte(DE(), tb);
+	  decHL();
+	  decDE();
+	  decBC();
+	  tb += A;
+	  if ((tb & 0x02) != 0) {
+	    SETYF();
+	  } else {
+	    RESETYF();
+	  }
+	  if ((tb & 0x08) != 0) {
+	    SETXF();
+	  } else {
+	    RESETXF();
+	  }
+	  RESETHF();
+	  RESETNF();
+	  if ((B | C) != 0) {
+	    SETPF();
+	    decPC();
+	    return 21;
+	  } else {
+	    RESETPF();
+	    incPC();
+	    return 16;
+	  }
+	}	
+      }		    
+      ),
 
     // ed b9
-    null,
+    new Opcode("CPDR", "", 1, Processor.INS_MR | Processor.INS_BLOCK, new Executable() {
+	@Override
+	public int exec() {
+	  final int tb = memory.getByte(HL());
+	  int tw = A - tb;
+	  final int cb = A ^ tb ^ tw;
+	  decHL();
+	  decBC();
+	  F4(tw & 0xff);
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	    tw--;
+	  } else {
+	    RESETHF();
+	  }
+	  if ((tw & 0x02) != 0) {
+	    SETYF();
+	  } else {
+	    RESETYF();
+	  }
+	  if ((tw & 0x08) != 0) {
+	    SETXF();
+	  } else {
+	    RESETXF();
+	  }
+	  SETNF();
+	  if ((B | C) != 0) {
+	    SETPF();
+	  } else {
+	    RESETPF();
+	  }
+	  if (!ZFSET() && PFSET()) {
+	    decPC();
+	    return 21;
+	  } else {
+	    incPC();
+	    return 16;
+	  }
+	}	
+      }		    
+      ),
 
     // ed ba
     null,
