@@ -567,14 +567,14 @@ public class TestZilogZ80 extends ProcessorTest {
     //   0x710034cbL,
     //   "shf/rot (<ix,iy>+1)"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0xcb, 0, 0, 0, 0xcceb, 0x5d4a, 0xe007, MSBT,
-    //   0x1395, 0x30ee, 0x43, 0x78, 0x3dad,
-    //   0, 0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0x80, 0, 0,
-    //   0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0x57, 0xff, 0,
-    //   0xa4255833L,
-    //   "shf/rot <b,c,d,e,h,l,(hl),a>"),
+    new TestGroup(
+      0xff,
+      0xcb, 0, 0, 0, 0xcceb, 0x5d4a, 0xe007, MSBT,
+      0x1395, 0x30ee, 0x43, 0x78, 0x3dad,
+      0, 0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0x80, 0, 0,
+      0, 0, 0, 0, 0xff, 0, 0, 0, 0xffff, 0xffff, 0x57, 0xff, 0,
+      0xa4255833L,
+      "shf/rot <b,c,d,e,h,l,(hl),a>"),
 
     new TestGroup(
       0xff,
@@ -776,7 +776,6 @@ public class TestZilogZ80 extends ProcessorTest {
 	  
 	  for (int i = 0; i < (SIZE - 4); i++) {
 	    updCrc(workBytes[SIZE - 3 - i] & 0xff);
-	    // System.out.printf("%02x:%02x>%08x%n", ram[MSBT - 3], workBytes[SIZE - 3 - i], crc);
 	  }
 	}
 	

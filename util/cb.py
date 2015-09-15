@@ -12,7 +12,7 @@ for i in range(0x08):
     if ii == 6:
         print("    new Opcode(\"RLC\", \"(HL)\", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {")
     else:
-        print("    new Opcode(\"RLC\", \"" + s + "\", 1, Processor.INS_NONE, new Executable() {")
+        print("    new Opcode(\"RLC\", \"" + s + "\", 1, 0, new Executable() {")
     print("	@Override")
     print("	public int exec() {")
     if ii == 6:
@@ -49,7 +49,7 @@ for i in range(0x08, 0x10):
     if ii == 6:
         print("    new Opcode(\"RRC\", \"(HL)\", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {")
     else:
-        print("    new Opcode(\"RRC\", \"" + s + "\", 1, Processor.INS_NONE, new Executable() {")
+        print("    new Opcode(\"RRC\", \"" + s + "\", 1, 0, new Executable() {")
     print("	@Override")
     print("	public int exec() {")
     if ii == 6:
@@ -60,7 +60,7 @@ for i in range(0x08, 0x10):
     print("	  } else {")
     print("	    CLEARCF();")
     print("	  }")
-    print("	  " + s + " = ((" + s + " >> 1) | (F << 1)) & 0xff;")
+    print("	  " + s + " = ((" + s + " >> 1) | (F << 7)) & 0xff;")
     if ii == 6:
         print("	  memory.setByte(HL(), tb);")
     print("	  F5(" + s + ");")
@@ -86,7 +86,7 @@ for i in range(0x10, 0x18):
     if ii == 6:
         print("    new Opcode(\"RL\", \"(HL)\", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {")
     else:
-        print("    new Opcode(\"RL\", \"" + s + "\", 1, Processor.INS_NONE, new Executable() {")
+        print("    new Opcode(\"RL\", \"" + s + "\", 1, 0, new Executable() {")
     print("	@Override")
     print("	public int exec() {")
     if ii == 6:
@@ -124,7 +124,7 @@ for i in range(0x18, 0x20):
     if ii == 6:
         print("    new Opcode(\"RR\", \"(HL)\", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {")
     else:
-        print("    new Opcode(\"RR\", \"" + s + "\", 1, Processor.INS_NONE, new Executable() {")
+        print("    new Opcode(\"RR\", \"" + s + "\", 1, 0, new Executable() {")
     print("	@Override")
     print("	public int exec() {")
     if ii == 6:
@@ -162,7 +162,7 @@ for i in range(0x20, 0x28):
     if ii == 6:
         print("    new Opcode(\"SLA\", \"(HL)\", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {")
     else:
-        print("    new Opcode(\"SLA\", \"" + s + "\", 1, Processor.INS_NONE, new Executable() {")
+        print("    new Opcode(\"SLA\", \"" + s + "\", 1, 0, new Executable() {")
     print("	@Override")
     print("	public int exec() {")
     if ii == 6:
@@ -199,7 +199,7 @@ for i in range(0x28, 0x30):
     if ii == 6:
         print("    new Opcode(\"SRA\", \"(HL)\", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {")
     else:
-        print("    new Opcode(\"SRA\", \"" + s + "\", 1, Processor.INS_NONE, new Executable() {")
+        print("    new Opcode(\"SRA\", \"" + s + "\", 1, 0, new Executable() {")
     print("	@Override")
     print("	public int exec() {")
     if ii == 6:
@@ -236,7 +236,7 @@ for i in range(0x30, 0x38):
     if ii == 6:
         print("    new Opcode(\"SLL\", \"(HL)\", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {")
     else:
-        print("    new Opcode(\"SLL\", \"" + s + "\", 1, Processor.INS_NONE, new Executable() {")
+        print("    new Opcode(\"SLL\", \"" + s + "\", 1, 0, new Executable() {")
     print("	@Override")
     print("	public int exec() {")
     if ii == 6:
@@ -273,7 +273,7 @@ for i in range(0x38, 0x40):
     if ii == 6:
         print("    new Opcode(\"SRL\", \"(HL)\", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {")
     else:
-        print("    new Opcode(\"SRL\", \"" + s + "\", 1, Processor.INS_NONE, new Executable() {")
+        print("    new Opcode(\"SRL\", \"" + s + "\", 1, 0, new Executable() {")
     print("	@Override")
     print("	public int exec() {")
     if ii == 6:
@@ -311,7 +311,7 @@ for i in range(0x40, 0x80):
     if ii == 6:
         print("    new Opcode(\"BIT\", \"%d,(HL)\", 1, Processor.INS_MR, new Executable() {" % b)
     else:
-        print(("    new Opcode(\"BIT\", \"%d," + s + "\", 1, Processor.INS_NONE, new Executable() {") % b)
+        print(("    new Opcode(\"BIT\", \"%d," + s + "\", 1, 0, new Executable() {") % b)
     print("	@Override")
     print("	public int exec() {")
     if ii == 6:
@@ -359,7 +359,7 @@ for i in range(0x80, 0xc0):
     if ii == 6:
         print("    new Opcode(\"RES\", \"%d,(HL)\", 1, Processor.INS_MW, new Executable() {" % b)
     else:
-        print(("    new Opcode(\"RES\", \"%d," + s + "\", 1, Processor.INS_NONE, new Executable() {") % b)
+        print(("    new Opcode(\"RES\", \"%d," + s + "\", 1, 0, new Executable() {") % b)
     print("	@Override")
     print("	public int exec() {")
     if ii == 6:
@@ -387,7 +387,7 @@ for i in range(0xc0, 0x100):
     if ii == 6:
         print("    new Opcode(\"SET\", \"%d,(HL)\", 1, Processor.INS_MW, new Executable() {" % b)
     else:
-        print(("    new Opcode(\"SET\", \"%d," + s + "\", 1, Processor.INS_NONE, new Executable() {") % b)
+        print(("    new Opcode(\"SET\", \"%d," + s + "\", 1, 0, new Executable() {") % b)
     print("	@Override")
     print("	public int exec() {")
     if ii == 6:

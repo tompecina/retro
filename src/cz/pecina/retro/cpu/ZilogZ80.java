@@ -6389,10 +6389,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // cb 06
-    new Opcode("RLC", "(HL)",
-	       1,
-	       Processor.INS_MR | Processor.INS_MW,
-	       new Executable() {
+    new Opcode("RLC", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  int tb = memory.getByte(HL());
@@ -6440,7 +6437,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    CLEARCF();
 	  }
-	  B = ((B >> 1) | (F << 1)) & 0xff;
+	  B = ((B >> 1) | (F << 7)) & 0xff;
 	  F5(B);
 	  CLEARHF();
 	  CLEARNF();
@@ -6459,7 +6456,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    CLEARCF();
 	  }
-	  C = ((C >> 1) | (F << 1)) & 0xff;
+	  C = ((C >> 1) | (F << 7)) & 0xff;
 	  F5(C);
 	  CLEARHF();
 	  CLEARNF();
@@ -6478,7 +6475,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    CLEARCF();
 	  }
-	  D = ((D >> 1) | (F << 1)) & 0xff;
+	  D = ((D >> 1) | (F << 7)) & 0xff;
 	  F5(D);
 	  CLEARHF();
 	  CLEARNF();
@@ -6497,7 +6494,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    CLEARCF();
 	  }
-	  E = ((E >> 1) | (F << 1)) & 0xff;
+	  E = ((E >> 1) | (F << 7)) & 0xff;
 	  F5(E);
 	  CLEARHF();
 	  CLEARNF();
@@ -6516,7 +6513,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    CLEARCF();
 	  }
-	  H = ((H >> 1) | (F << 1)) & 0xff;
+	  H = ((H >> 1) | (F << 7)) & 0xff;
 	  F5(H);
 	  CLEARHF();
 	  CLEARNF();
@@ -6535,7 +6532,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    CLEARCF();
 	  }
-	  L = ((L >> 1) | (F << 1)) & 0xff;
+	  L = ((L >> 1) | (F << 7)) & 0xff;
 	  F5(L);
 	  CLEARHF();
 	  CLEARNF();
@@ -6546,10 +6543,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // cb 0e
-    new Opcode("RRC", "(HL)",
-	       1,
-	       Processor.INS_MR | Processor.INS_MW,
-	       new Executable() {
+    new Opcode("RRC", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  int tb = memory.getByte(HL());
@@ -6558,7 +6552,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    CLEARCF();
 	  }
-	  tb = ((tb >> 1) | (F << 1)) & 0xff;
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
 	  memory.setByte(HL(), tb);
 	  F5(tb);
 	  CLEARHF();
@@ -6578,7 +6572,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    CLEARCF();
 	  }
-	  A = ((A >> 1) | (F << 1)) & 0xff;
+	  A = ((A >> 1) | (F << 7)) & 0xff;
 	  F5(A);
 	  CLEARHF();
 	  CLEARNF();
@@ -6709,10 +6703,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // cb 16
-    new Opcode("RL", "(HL)",
-	       1,
-	       Processor.INS_MR | Processor.INS_MW,
-	       new Executable() {
+    new Opcode("RL", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  int tb = memory.getByte(HL());
@@ -6874,10 +6865,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // cb 1e
-    new Opcode("RR", "(HL)",
-	       1,
-	       Processor.INS_MR | Processor.INS_MW,
-	       new Executable() {
+    new Opcode("RR", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  int tb = memory.getByte(HL());
@@ -7033,10 +7021,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // cb 26
-    new Opcode("SLA", "(HL)",
-	       1,
-	       Processor.INS_MR | Processor.INS_MW,
-	       new Executable() {
+    new Opcode("SLA", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  int tb = memory.getByte(HL());
@@ -7190,10 +7175,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // cb 2e
-    new Opcode("SRA", "(HL)",
-	       1,
-	       Processor.INS_MR | Processor.INS_MW,
-	       new Executable() {
+    new Opcode("SRA", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  int tb = memory.getByte(HL());
@@ -7347,10 +7329,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // cb 36
-    new Opcode("SLL", "(HL)",
-	       1,
-	       Processor.INS_MR | Processor.INS_MW,
-	       new Executable() {
+    new Opcode("SLL", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  int tb = memory.getByte(HL());
@@ -7504,10 +7483,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // cb 3e
-    new Opcode("SRL", "(HL)",
-	       1,
-	       Processor.INS_MR | Processor.INS_MW,
-	       new Executable() {
+    new Opcode("SRL", "(HL)", 1, Processor.INS_MR | Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  int tb = memory.getByte(HL());
