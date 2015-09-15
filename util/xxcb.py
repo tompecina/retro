@@ -10,7 +10,7 @@ for j in range(2):
     x = xx[j]
 
     print("  /**")
-    print("   * The array of opcodes with the prefix CB %s." % p.upper())
+    print("   * The array of opcodes with the prefix %s CB." % p.upper())
     print("   */")
     print("  protected final Opcode[] opcodes%sCB = new Opcode[] {" % p.upper())
     print();
@@ -21,9 +21,9 @@ for j in range(2):
         s = ss[ii]
     
         if ii == 6:
-            print("    // dd cb %02x" % i)
+            print(("    // " + p + " cb %02x") % i)
         else:
-            print("    // dd cb %02x (undocumented)" % i)
+            print(("    // " + p + " cb %02x (undocumented)") % i)
 
         if ii == 6:
             print("    new Opcode(\"RLC\", \"(" + x + "<d>)\", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {")
@@ -59,9 +59,9 @@ for j in range(2):
         s = ss[ii]
 
         if ii == 6:
-            print("    // dd cb %02x" % i)
+            print(("    // " + p + " cb %02x") % i)
         else:
-            print("    // dd cb %02x (undocumented)" % i)
+            print(("    // " + p + " cb %02x (undocumented)") % i)
 
         if ii == 6:
             print("    new Opcode(\"RRC\", \"(" + x + "<d>)\", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {")
@@ -97,9 +97,9 @@ for j in range(2):
         s = ss[ii]
 
         if ii == 6:
-            print("    // dd cb %02x" % i)
+            print(("    // " + p + " cb %02x") % i)
         else:
-            print("    // dd cb %02x (undocumented)" % i)
+            print(("    // " + p + " cb %02x (undocumented)") % i)
 
         if ii == 6:
             print("    new Opcode(\"RL\", \"(" + x + "<d>)\", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {")
@@ -136,9 +136,9 @@ for j in range(2):
         s = ss[ii]
 
         if ii == 6:
-            print("    // dd cb %02x" % i)
+            print(("    // " + p + " cb %02x") % i)
         else:
-            print("    // dd cb %02x (undocumented)" % i)
+            print(("    // " + p + " cb %02x (undocumented)") % i)
 
         if ii == 6:
             print("    new Opcode(\"RR\", \"(" + x + "<d>)\", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {")
@@ -175,9 +175,9 @@ for j in range(2):
         s = ss[ii]
 
         if ii == 6:
-            print("    // dd cb %02x" % i)
+            print(("    // " + p + " cb %02x") % i)
         else:
-            print("    // dd cb %02x (undocumented)" % i)
+            print(("    // " + p + " cb %02x (undocumented)") % i)
 
         if ii == 6:
             print("    new Opcode(\"SLA\", \"(" + x + "<d>)\", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {")
@@ -213,9 +213,9 @@ for j in range(2):
         s = ss[ii]
 
         if ii == 6:
-            print("    // dd cb %02x" % i)
+            print(("    // " + p + " cb %02x") % i)
         else:
-            print("    // dd cb %02x (undocumented)" % i)
+            print(("    // " + p + " cb %02x (undocumented)") % i)
 
         if ii == 6:
             print("    new Opcode(\"SRA\", \"(" + x + "<d>)\", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {")
@@ -251,9 +251,9 @@ for j in range(2):
         s = ss[ii]
 
         if ii == 6:
-            print("    // dd cb %02x" % i)
+            print(("    // " + p + " cb %02x") % i)
         else:
-            print("    // dd cb %02x (undocumented)" % i)
+            print(("    // " + p + " cb %02x (undocumented)") % i)
 
         if ii == 6:
             print("    new Opcode(\"SLL\", \"(" + x + "<d>)\", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {")
@@ -289,9 +289,9 @@ for j in range(2):
         s = ss[ii]
 
         if ii == 6:
-            print("    // dd cb %02x" % i)
+            print(("    // " + p + " cb %02x") % i)
         else:
-            print("    // dd cb %02x (undocumented)" % i)
+            print(("    // " + p + " cb %02x (undocumented)") % i)
 
         if ii == 6:
             print("    new Opcode(\"SRL\", \"(" + x + "<d>)\", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {")
@@ -328,9 +328,9 @@ for j in range(2):
         b = (i & 0b00111000) >> 3
 
         if ii == 6:
-            print("    // dd cb %02x" % i)
+            print(("    // " + p + " cb %02x") % i)
         else:
-            print("    // dd cb %02x (undocumented)" % i)
+            print(("    // " + p + " cb %02x (undocumented)") % i)
 
         if ii == 6:
             print(("    new Opcode(\"BIT\", \"%d,(" + x + "<d>)\", 2, Processor.INS_MR, new Executable() {") % b)
@@ -376,9 +376,9 @@ for j in range(2):
         b = (i & 0b00111000) >> 3
 
         if ii == 6:
-            print("    // dd cb %02x" % i)
+            print(("    // " + p + " cb %02x") % i)
         else:
-            print("    // dd cb %02x (undocumented)" % i)
+            print(("    // " + p + " cb %02x (undocumented)") % i)
 
         if ii == 6:
             print(("    new Opcode(\"RES\", \"%d,(" + x + "<d>)\", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {") % b)
@@ -388,10 +388,11 @@ for j in range(2):
         print("	public int exec() {")
         print("	  incPC();")
         print("	  WZ = " + x + " + ((byte)memory.getByte(PC));")
-        print(("	  final int tb = memory.getByte(WZ) & 0x%02x;") % (0xff - (1 << b)))
-        print("	  memory.setByte(WZ, tb);")
         if ii != 6:
-            print("	  " + s + " = tb;")
+            print(("	  " + s + " = memory.getByte(WZ) & 0x%02x;") % (0xff - (1 << b)))
+            print("	  memory.setByte(WZ, " + s + ");")
+        else:
+            print("	  memory.setByte(WZ, memory.getByte(WZ) & 0x%02x);" % (0xff - (1 << b)))
         print("	  incPC();")
         print("	  return 19;")
         print("	}")
@@ -406,9 +407,9 @@ for j in range(2):
         b = (i & 0b00111000) >> 3
 
         if ii == 6:
-            print("    // dd cb %02x" % i)
+            print(("    // " + p + " cb %02x") % i)
         else:
-            print("    // dd cb %02x (undocumented)" % i)
+            print(("    // " + p + " cb %02x (undocumented)") % i)
 
         if ii == 6:
             print(("    new Opcode(\"SET\", \"%d,(" + x + "<d>)\", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {") % b)
@@ -418,14 +419,17 @@ for j in range(2):
         print("	public int exec() {")
         print("	  incPC();")
         print("	  WZ = " + x + " + ((byte)memory.getByte(PC));")
-        print(("	  final int tb = memory.getByte(WZ) | 0x%02x;") % (1 << b))
         if ii != 6:
-            print("	  " + s + " = tb;")
+            print(("	  " + s + " = memory.getByte(WZ) | 0x%02x;") % (1 << b))
+            print("	  memory.setByte(WZ, " + s + ");")
+        else:
+            print("	  memory.setByte(WZ, memory.getByte(WZ) | 0x%02x);" % (1 << b))
         print("	  incPC();")
         print("	  return 19;")
         print("	}")
         print("      }")		    
         print("      ),")
+        print();
 
     print("  };")
     print();
