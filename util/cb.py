@@ -357,7 +357,7 @@ for i in range(0x80, 0xc0):
     print("    // cb %02x" % i)
 
     if ii == 6:
-        print("    new Opcode(\"RES\", \"%d,(HL)\", 1, Processor.INS_MW, new Executable() {" % b)
+        print("    new Opcode(\"RES\", \"%d,(HL)\", 1, Processor.INS_MW | Processor.INS_MW, new Executable() {" % b)
     else:
         print(("    new Opcode(\"RES\", \"%d," + s + "\", 1, 0, new Executable() {") % b)
     print("	@Override")
@@ -385,7 +385,7 @@ for i in range(0xc0, 0x100):
     print("    // cb %02x" % i)
 
     if ii == 6:
-        print("    new Opcode(\"SET\", \"%d,(HL)\", 1, Processor.INS_MW, new Executable() {" % b)
+        print("    new Opcode(\"SET\", \"%d,(HL)\", 1, Processor.INS_MW | Processor.INS_MW, new Executable() {" % b)
     else:
         print(("    new Opcode(\"SET\", \"%d," + s + "\", 1, 0, new Executable() {") % b)
     print("	@Override")
