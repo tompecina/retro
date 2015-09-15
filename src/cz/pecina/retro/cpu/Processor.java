@@ -32,11 +32,6 @@ import java.util.Set;
 public interface Processor {
 
   /**
-   * General instruction.
-   */
-  public static final int INS_NONE = 0;
-
-  /**
    * Mask for halting instruction.
    */
   public static final int INS_HLT = 1 << 0;
@@ -57,35 +52,40 @@ public interface Processor {
   public static final int INS_RET = 1 << 3;
 
   /**
-   * Mask for I/O instruction.
+   * Mask for I/O read instruction.
    */
-  public static final int INS_IO = 1 << 4;
+  public static final int INS_IOR = 1 << 4;
+
+  /**
+   * Mask for I/O write instruction.
+   */
+  public static final int INS_IOW = 1 << 5;
 
   /**
    * Mask for memory read instruction.
    */
-  public static final int INS_MR = 1 << 5;
+  public static final int INS_MR = 1 << 6;
 
   /**
    * Mask for memory write instruction.
    */
-  public static final int INS_MW = 1 << 6;
+  public static final int INS_MW = 1 << 7;
 
   /**
    * Mask for block instruction (repeated or not).
    */
-  public static final int INS_BLK = 1 << 7;
+  public static final int INS_BLK = 1 << 8;
 
   /**
    * Mask for (auto)repeated instruction.
    */
-  public static final int INS_REP = 1 << 8;
+  public static final int INS_REP = 1 << 9;
 
   /**
    * Mask for instruction that is not officially defined by
    * the CPU manufacturer.
    */
-  public static final int INS_UND = 1 << 9;
+  public static final int INS_UND = 1 << 10;
 
   /**
    * Adds memory.

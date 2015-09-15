@@ -1053,7 +1053,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   protected final Opcode[] opcodes = new Opcode[] {
 
     // 00 NOP
-    new Opcode("NOP", "", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("NOP", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1063,7 +1063,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 01 LXIB	  
-    new Opcode("LXI", "B,", 3, Processor.INS_NONE, new Executable() {
+    new Opcode("LXI", "B,", 3, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1088,7 +1088,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 03 INXB	  
-    new Opcode("INX", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("INX", "B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  C = (C + 1) & 0xff;
@@ -1102,7 +1102,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 04 INRB	  
-    new Opcode("INR", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("INR", "B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  B = (B + 1) & 0xff;
@@ -1119,7 +1119,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 05 DCRB	  
-    new Opcode("DCR", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DCR", "B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  B = (B - 1) & 0xff;
@@ -1136,7 +1136,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	    
     // 06 MVIB	  
-    new Opcode("MVI", "B,", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("MVI", "B,", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1148,7 +1148,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 07 RLC	  
-    new Opcode("RLC", "", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("RLC", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  if ((A & 0x80) != 0) {
@@ -1174,7 +1174,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 09 DADB	  
-    new Opcode("DAD", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DAD", "B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int ti = (H << 8) + L + (B << 8) + C;
@@ -1203,7 +1203,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 0b DCXB	  
-    new Opcode("DCX", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DCX", "B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  if (--C < 0) {
@@ -1217,7 +1217,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 0c INRC	  
-    new Opcode("INR", "C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("INR", "C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  C = (C + 1) & 0xff;
@@ -1234,7 +1234,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 0d DCRC	  
-    new Opcode("DCR", "C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DCR", "C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  C = (C - 1) & 0xff;
@@ -1251,7 +1251,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 0e MVIC	  
-    new Opcode("MVI", "C,", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("MVI", "C,", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1263,7 +1263,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 0f RRC	  
-    new Opcode("RRC", "", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("RRC", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  if ((A & 1) != 0) {
@@ -1289,7 +1289,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 11 LXID	  
-    new Opcode("LXI", "D,", 3, Processor.INS_NONE, new Executable() {
+    new Opcode("LXI", "D,", 3, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1314,7 +1314,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 13 INXD	  
-    new Opcode("INX", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("INX", "D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  E = (E + 1) & 0xff;
@@ -1328,7 +1328,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 14 INRD	  
-    new Opcode("INR", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("INR", "D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  D = (D + 1) & 0xff;
@@ -1345,7 +1345,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 15 DCRD	  
-    new Opcode("DCR", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DCR", "D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  D = (D - 1) & 0xff;
@@ -1362,7 +1362,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 16 MVID	  
-    new Opcode("MVI", "D,", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("MVI", "D,", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1374,7 +1374,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 17 RAL	  
-    new Opcode("RAL", "", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("RAL", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tb = A;
@@ -1401,7 +1401,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 19 DADD
-    new Opcode("DAD", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DAD", "D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int ti = (H << 8) + L + (D << 8) + E;
@@ -1430,7 +1430,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 1b DCXD	  
-    new Opcode("DCX", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DCX", "D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  if (--E < 0) {
@@ -1444,7 +1444,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 1c INRE	  
-    new Opcode("INR", "E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("INR", "E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  E = (E + 1) & 0xff;
@@ -1461,7 +1461,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 1d DCRE	  
-    new Opcode("DCR", "E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DCR", "E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  E = (E - 1) & 0xff;
@@ -1478,7 +1478,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 1e MVIE	  
-    new Opcode("MVI", "E,", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("MVI", "E,", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1490,7 +1490,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 1f RAR	  
-    new Opcode("RAR", "", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("RAR", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tb = A;
@@ -1517,7 +1517,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 21 LXIH	  
-    new Opcode("LXI", "H,", 3, Processor.INS_NONE, new Executable() {
+    new Opcode("LXI", "H,", 3, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1545,7 +1545,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 23 INXH
-    new Opcode("INX", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("INX", "H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  L = (L + 1) & 0xff;
@@ -1559,7 +1559,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 24 INRH	  
-    new Opcode("INR", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("INR", "H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  H = (H + 1) & 0xff;
@@ -1576,7 +1576,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 25 DCRH	  
-    new Opcode("DCR", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DCR", "H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  H = (H - 1) & 0xff;
@@ -1593,7 +1593,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 26 MVIH	  
-    new Opcode("MVI", "H,", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("MVI", "H,", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1605,7 +1605,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 27 DAA	  
-    new Opcode("DAA", "", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DAA", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  int tw = A;
@@ -1640,7 +1640,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 29 DADH	  
-    new Opcode("DAD", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DAD", "H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int ti = (H << 9) + (L << 1);
@@ -1672,7 +1672,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ), 
 	
     // 2b DCXH
-    new Opcode("DCX", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DCX", "H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  if (--L < 0) {
@@ -1686,7 +1686,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 2c INRL	  
-    new Opcode("INR", "L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("INR", "L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  L = (L + 1) & 0xff;
@@ -1703,7 +1703,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 2d DCRL	  
-    new Opcode("DCR", "L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DCR", "L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  L = (L - 1) & 0xff;
@@ -1720,7 +1720,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 2e MVIL	  
-    new Opcode("MVI", "L,", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("MVI", "L,", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1732,7 +1732,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 2f CMA	  
-    new Opcode("CMA", "", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("CMA", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A = (~A) & 0xff;
@@ -1753,7 +1753,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 31 LXISP	  
-    new Opcode("LXI", "SP,", 3, Processor.INS_NONE, new Executable() {
+    new Opcode("LXI", "SP,", 3, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1780,7 +1780,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ), 
 	
     // 33 INXSP	  
-    new Opcode("INX", "SP", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("INX", "SP", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incSP();
@@ -1791,7 +1791,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 34 INRM	  
-    new Opcode("INR", "M", 1, Processor.INS_MW, new Executable() {
+    new Opcode("INR", "M",
+	       1,
+	       Processor.INS_MR | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = HL();
@@ -1810,7 +1813,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 35 DCRM	  
-    new Opcode("DCR", "M", 1, Processor.INS_MW, new Executable() {
+    new Opcode("DCR", "M",
+	       1,
+	       Processor.INS_MR | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = HL();
@@ -1829,7 +1835,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 36 MVIM	  
-    new Opcode("MVI", "M,", 2, Processor.INS_MR, new Executable() {
+    new Opcode("MVI", "M,", 2, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = HL();
@@ -1842,7 +1848,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 37 STC	  
-    new Opcode("STC", "", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("STC", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  SETCF();
@@ -1863,7 +1869,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 39 DADSP
-    new Opcode("DAD", "SP", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DAD", "SP", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int ti = (H << 8) + L + SP;
@@ -1893,7 +1899,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 3b DCXSP	  
-    new Opcode("DCX", "SP", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DCX", "SP", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  decSP();
@@ -1904,7 +1910,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 3c INRA	  
-    new Opcode("INR", "A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("INR", "A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A = (A + 1) & 0xff;
@@ -1921,7 +1927,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 3d DCRA	  
-    new Opcode("DCR", "A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DCR", "A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A = (A - 1) & 0xff;
@@ -1938,7 +1944,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 3e MVIA	  
-    new Opcode("MVI", "A,", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("MVI", "A,", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1950,7 +1956,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 3f CMC	  
-    new Opcode("CMC", "", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("CMC", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  F ^= CF;
@@ -1961,7 +1967,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 40 MOVBB	  
-    new Opcode("MOV", "B,B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "B,B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -1971,7 +1977,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 41 MOVBC	  
-    new Opcode("MOV", "B,C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "B,C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  B = C;
@@ -1982,7 +1988,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 42 MOVBD	  
-    new Opcode("MOV", "B,D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "B,D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  B = D;
@@ -1993,7 +1999,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 43 MOVBE	  
-    new Opcode("MOV", "B,E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "B,E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  B = E;
@@ -2004,7 +2010,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 44 MOVBH	  
-    new Opcode("MOV", "B,H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "B,H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  B = H;
@@ -2015,7 +2021,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 45 MOVBL	  
-    new Opcode("MOV", "B,L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "B,L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  B = L;
@@ -2037,7 +2043,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 47 MOVBA	  
-    new Opcode("MOV", "B,A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "B,A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  B = A;
@@ -2048,7 +2054,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 48 MOVCB	  
-    new Opcode("MOV", "C,B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "C,B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  C = B;
@@ -2059,7 +2065,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 49 MOVCC	  
-    new Opcode("MOV", "C,C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "C,C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -2069,7 +2075,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 4a MOVCD	  
-    new Opcode("MOV", "C,D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "C,D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  C = D;
@@ -2080,7 +2086,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 4b MOVCE	  
-    new Opcode("MOV", "C,E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "C,E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  C = E;
@@ -2091,7 +2097,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 4c MOVCH	  
-    new Opcode("MOV", "C,H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "C,H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  C = H;
@@ -2102,7 +2108,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 4d MOVCL	  
-    new Opcode("MOV", "C,L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "C,L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  C = L;
@@ -2125,7 +2131,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 4f MOVCA	  
-    new Opcode("MOV", "C,A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "C,A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  C = A;
@@ -2136,7 +2142,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 50 MOVDB	  
-    new Opcode("MOV", "D,B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "D,B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  D = B;
@@ -2147,7 +2153,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 51 MOVDC	  
-    new Opcode("MOV", "D,C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "D,C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  D = C;
@@ -2158,7 +2164,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 52 MOVDD	  
-    new Opcode("MOV", "D,D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "D,D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -2168,7 +2174,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 53 MOVDE	  
-    new Opcode("MOV", "D,E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "D,E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  D = E;
@@ -2179,7 +2185,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 54 MOVDH	  
-    new Opcode("MOV", "D,H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "D,H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  D = H;
@@ -2190,7 +2196,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 55 MOVDL	  
-    new Opcode("MOV", "D,L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "D,L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  D = L;
@@ -2212,7 +2218,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 57 MOVDA	  
-    new Opcode("MOV", "D,A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "D,A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  D = A;
@@ -2223,7 +2229,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 58 MOVEB	  
-    new Opcode("MOV", "E,B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "E,B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  E = B;
@@ -2234,7 +2240,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 59 MOVEC	  
-    new Opcode("MOV", "E,C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "E,C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  E = C;
@@ -2245,7 +2251,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 5a MOVED	  
-    new Opcode("MOV", "E,D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "E,D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  E = D;
@@ -2256,7 +2262,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 5b MOVEE	  
-    new Opcode("MOV", "E,E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "E,E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -2266,7 +2272,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 5c MOVEH	  
-    new Opcode("MOV", "E,H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "E,H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  E = H;
@@ -2277,7 +2283,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 5d MOVEL	  
-    new Opcode("MOV", "E,L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "E,L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  E = L;
@@ -2299,7 +2305,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 5f MOVEA	  
-    new Opcode("MOV", "E,A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "E,A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  E = A;
@@ -2310,7 +2316,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 60 MOVHB	  
-    new Opcode("MOV", "H,B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "H,B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  H = B;
@@ -2321,7 +2327,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 61 MOVHC	  
-    new Opcode("MOV", "H,C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "H,C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  H = C;
@@ -2332,7 +2338,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 62 MOVHD	  
-    new Opcode("MOV", "H,D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "H,D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  H = D;
@@ -2343,7 +2349,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 63 MOVHE	  
-    new Opcode("MOV", "H,E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "H,E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  H = E;
@@ -2354,7 +2360,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 64 MOVHH	  
-    new Opcode("MOV", "H,H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "H,H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -2364,7 +2370,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 65 MOVHL	  
-    new Opcode("MOV", "H,L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "H,L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  H = L;
@@ -2386,7 +2392,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 67 MOVHA	  
-    new Opcode("MOV", "H,A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "H,A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  H = A;
@@ -2397,7 +2403,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 68 MOVLB	  
-    new Opcode("MOV", "L,B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "L,B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  L = B;
@@ -2408,7 +2414,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 69 MOVLC	  
-    new Opcode("MOV", "L,C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "L,C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  L = C;
@@ -2419,7 +2425,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 6a MOVLD	  
-    new Opcode("MOV", "L,D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "L,D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  L = D;
@@ -2430,7 +2436,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 6b MOVLE	  
-    new Opcode("MOV", "L,E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "L,E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  L = E;
@@ -2441,7 +2447,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 6c MOVLH	  
-    new Opcode("MOV", "L,H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "L,H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  L = H;
@@ -2452,7 +2458,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 6d MOVLL	  
-    new Opcode("MOV", "L,L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "L,L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -2473,7 +2479,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 6f MOVLA	  
-    new Opcode("MOV", "L,A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "L,A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  L = A;
@@ -2577,7 +2583,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 78 MOVAB	  
-    new Opcode("MOV", "A,B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "A,B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A = B;
@@ -2588,7 +2594,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 79 MOVAC	  
-    new Opcode("MOV", "A,C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "A,C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A = C;
@@ -2599,7 +2605,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 7a MOVAD	  
-    new Opcode("MOV", "A,D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "A,D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A = D;
@@ -2610,7 +2616,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 7b MOVAE	  
-    new Opcode("MOV", "A,E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "A,E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A = E;
@@ -2621,7 +2627,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 7c MOVAH	  
-    new Opcode("MOV", "A,H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "A,H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A = H;
@@ -2632,7 +2638,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 7d MOVAL	  
-    new Opcode("MOV", "A,L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "A,L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A = L;
@@ -2654,7 +2660,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 7f MOVAA	  
-    new Opcode("MOV", "A,A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("MOV", "A,A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -2664,7 +2670,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 80 ADDB	  
-    new Opcode("ADD", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ADD", "B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A + B;
@@ -2687,7 +2693,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 81 ADDC	  
-    new Opcode("ADD", "C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ADD", "C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A + C;
@@ -2710,7 +2716,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 82 ADDD	  
-    new Opcode("ADD", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ADD", "D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A + D;
@@ -2733,7 +2739,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 83 ADDE	  
-    new Opcode("ADD", "E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ADD", "E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A + E;
@@ -2756,7 +2762,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 84 ADDH	  
-    new Opcode("ADD", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ADD", "H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A + H;
@@ -2779,7 +2785,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 85 ADDL	  
-    new Opcode("ADD", "L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ADD", "L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A + L;
@@ -2826,7 +2832,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 87 ADDA	  
-    new Opcode("ADD", "A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ADD", "A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A << 1;
@@ -2849,7 +2855,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 88 ADCB	  
-    new Opcode("ADC", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ADC", "B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A + B + (F & CF);
@@ -2872,7 +2878,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 89 ADCC	  
-    new Opcode("ADC", "C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ADC", "C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A + C + (F & CF);
@@ -2895,7 +2901,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 8a ADCD	  
-    new Opcode("ADC", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ADC", "D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A + D + (F & CF);
@@ -2918,7 +2924,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 8b ADCE	  
-    new Opcode("ADC", "E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ADC", "E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A + E + (F & CF);
@@ -2941,7 +2947,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 8c ADCH	  
-    new Opcode("ADC", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ADC", "H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A + H + (F & CF);
@@ -2964,7 +2970,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 8d ADCL	  
-    new Opcode("ADC", "L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ADC", "L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A + L + (F & CF);
@@ -3011,7 +3017,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 8f ADCA	  
-    new Opcode("ADC", "A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ADC", "A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = (A << 1) + (F & CF);
@@ -3034,7 +3040,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 90 SUBB	  
-    new Opcode("SUB", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SUB", "B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A - B;
@@ -3057,7 +3063,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 91 SUBC	  
-    new Opcode("SUB", "C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SUB", "C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A - C;
@@ -3080,7 +3086,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 92 SUBD	  
-    new Opcode("SUB", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SUB", "D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A - D;
@@ -3103,7 +3109,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 93 SUBE	  
-    new Opcode("SUB", "E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SUB", "E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A - E;
@@ -3126,7 +3132,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 94 SUBH	  
-    new Opcode("SUB", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SUB", "H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A - H;
@@ -3149,7 +3155,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 95 SUBL	  
-    new Opcode("SUB", "L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SUB", "L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A - L;
@@ -3196,7 +3202,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 97 SUBA	  
-    new Opcode("SUB", "A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SUB", "A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A = 0;
@@ -3208,7 +3214,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 98 SBBB	  
-    new Opcode("SBB", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SBB", "B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A - B - (F & CF);
@@ -3231,7 +3237,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 99 SBBC	  
-    new Opcode("SBB", "C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SBB", "C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A - C - (F & CF);
@@ -3254,7 +3260,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 9a SBBD	  
-    new Opcode("SBB", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SBB", "D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A - D - (F & CF);
@@ -3277,7 +3283,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 9b SBBE	  
-    new Opcode("SBB", "E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SBB", "E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A - E - (F & CF);
@@ -3300,7 +3306,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 9c SBBH	  
-    new Opcode("SBB", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SBB", "H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A - H - (F & CF);
@@ -3323,7 +3329,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 9d SBBL	  
-    new Opcode("SBB", "L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SBB", "L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = A - L - (F & CF);
@@ -3370,7 +3376,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // 9f SBBA	  
-    new Opcode("SBB", "A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SBB", "A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = -(F & CF);
@@ -3393,7 +3399,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // a0 ANAB	  
-    new Opcode("ANA", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ANA", "B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  if (((A | B) & 0x08) != 0) {
@@ -3411,7 +3417,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // a1 ANAC	  
-    new Opcode("ANA", "C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ANA", "C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  if (((A | C) & 0x08) != 0) {
@@ -3429,7 +3435,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // a2 ANAD	  
-    new Opcode("ANA", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ANA", "D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  if (((A | D) & 0x08) != 0) {
@@ -3447,7 +3453,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // a3 ANAE	  
-    new Opcode("ANA", "E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ANA", "E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  if (((A | E) & 0x08) != 0) {
@@ -3465,7 +3471,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // a4 ANAH	  
-    new Opcode("ANA", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ANA", "H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  if (((A | H) & 0x08) != 0) {
@@ -3483,7 +3489,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // a5 ANAL	  
-    new Opcode("ANA", "L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ANA", "L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  if (((A | L) & 0x08) != 0) {
@@ -3520,7 +3526,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // a7 ANAA	  
-    new Opcode("ANA", "A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ANA", "A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  if ((A & 0x08) != 0) {
@@ -3537,7 +3543,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // a8 XRAB	  
-    new Opcode("XRA", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("XRA", "B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A ^= B;
@@ -3551,7 +3557,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // a9 XRAC	  
-    new Opcode("XRA", "C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("XRA", "C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A ^= C;
@@ -3565,7 +3571,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // aa XRAD	  
-    new Opcode("XRA", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("XRA", "D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A ^= D;
@@ -3579,7 +3585,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // ab XRAE	  
-    new Opcode("XRA", "E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("XRA", "E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A ^= E;
@@ -3593,7 +3599,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // ac XRAH	  
-    new Opcode("XRA", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("XRA", "H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A ^= H;
@@ -3607,7 +3613,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // ad XRAL	  
-    new Opcode("XRA", "L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("XRA", "L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A ^= L;
@@ -3635,7 +3641,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // af XRAA	  
-    new Opcode("XRA", "A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("XRA", "A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A = 0;
@@ -3647,7 +3653,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // b0 ORAB	  
-    new Opcode("ORA", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ORA", "B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A |= B;
@@ -3661,7 +3667,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // b1 ORAC	  
-    new Opcode("ORA", "C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ORA", "C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A |= C;
@@ -3675,7 +3681,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // b2 ORAD	  
-    new Opcode("ORA", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ORA", "D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A |= D;
@@ -3689,7 +3695,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // b3 ORAE	  
-    new Opcode("ORA", "E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ORA", "E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A |= E;
@@ -3703,7 +3709,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // b4 ORAH	  
-    new Opcode("ORA", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ORA", "H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A |= H;
@@ -3717,7 +3723,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // b5 ORAL	  
-    new Opcode("ORA", "L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ORA", "L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  A |= L;
@@ -3745,7 +3751,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // b7 ORAA	  
-    new Opcode("ORA", "A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("ORA", "A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  CLEARACF();
@@ -3758,7 +3764,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // b8 CMPB	  
-    new Opcode("CMP", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("CMP", "B", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tb = B;
@@ -3781,7 +3787,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // b9 CMPC	  
-    new Opcode("CMP", "C", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("CMP", "C", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tb = C;
@@ -3804,7 +3810,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // ba CMPD	  
-    new Opcode("CMP", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("CMP", "D", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tb = D;
@@ -3827,7 +3833,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // bb CMPE	  
-    new Opcode("CMP", "E", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("CMP", "E", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tb = E;
@@ -3850,7 +3856,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // bc CMPH	  
-    new Opcode("CMP", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("CMP", "H", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tb = H;
@@ -3873,7 +3879,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // bd CMPL	  
-    new Opcode("CMP", "L", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("CMP", "L", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  final int tb = L;
@@ -3919,7 +3925,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // bf CMPA	  
-    new Opcode("CMP", "A", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("CMP", "A", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  F = FMASK_OR | ZF | PF | ACF;
@@ -3930,7 +3936,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // c0 RNZ
-    new Opcode("RNZ", "", 1, Processor.INS_RET, new Executable() {
+    new Opcode("RNZ", "",
+	       1,
+	       Processor.INS_RET | Processor.INS_MR,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (ZFSET()) {
@@ -3948,7 +3957,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // c1 POPB	  
-    new Opcode("POP", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("POP", "B", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  C = memory.getByte(SP);
@@ -3990,7 +3999,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // c4 CNZ	  
-    new Opcode("CNZ", "", 3, Processor.INS_CALL, new Executable() {
+    new Opcode("CNZ", "",
+	       3,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (ZFSET()) {
@@ -4014,7 +4026,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // c5 PUSHB	  
-    new Opcode("PUSH", "B", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("PUSH", "B", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  decSP();
@@ -4028,7 +4040,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // c6 ADI	  
-    new Opcode("ADI", "", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("ADI", "", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4053,7 +4065,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // c7 RST0	  
-    new Opcode("RST", "0", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "0",
+	       1,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4068,7 +4083,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // c8 RZ	  
-    new Opcode("RZ", "", 1, Processor.INS_RET, new Executable() {
+    new Opcode("RZ", "",
+	       1,
+	       Processor.INS_RET | Processor.INS_MR,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (ZFSET()) {
@@ -4086,7 +4104,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ), 
 	
     // c9 RET	  
-    new Opcode("RET", "", 1, Processor.INS_RET, new Executable() {
+    new Opcode("RET", "",
+	       1,
+	       Processor.INS_RET | Processor.INS_MR,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  final int tb = memory.getByte(SP);
@@ -4128,7 +4149,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // cc CZ	  
-    new Opcode("CZ", "", 3, Processor.INS_CALL, new Executable() {
+    new Opcode("CZ", "",
+	       3,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (ZFSET()) {
@@ -4152,7 +4176,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),  
 	
     // cd CALL	  
-    new Opcode("CALL", "", 3, Processor.INS_CALL, new Executable() {
+    new Opcode("CALL", "",
+	       3,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4171,7 +4198,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // ce ACI	  
-    new Opcode("ACI", "", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("ACI", "", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4196,7 +4223,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // cf RST1	  
-    new Opcode("RST", "1", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "1",
+	       1,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4211,7 +4241,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // d0 RNC	  
-    new Opcode("RNC", "", 1, Processor.INS_RET, new Executable() {
+    new Opcode("RNC", "",
+	       1,
+	       Processor.INS_RET | Processor.INS_MR,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (CFSET()) {
@@ -4229,7 +4262,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // d1 POPD	  
-    new Opcode("POP", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("POP", "D", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  E = memory.getByte(SP);
@@ -4259,7 +4292,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // d3 OUT	  
-    new Opcode("OUT", "", 2, Processor.INS_IO, new Executable() {
+    new Opcode("OUT", "", 2, Processor.INS_IOW, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4274,7 +4307,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // d4 CNC	  
-    new Opcode("CNC", "", 3, Processor.INS_CALL, new Executable() {
+    new Opcode("CNC", "",
+	       3,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (CFSET()) {
@@ -4298,7 +4334,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // d5 PUSHD	  
-    new Opcode("PUSH", "D", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("PUSH", "D", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  decSP();
@@ -4312,7 +4348,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // d6 SUI	  
-    new Opcode("SUI", "", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("SUI", "", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4337,7 +4373,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // d7 RST2	  
-    new Opcode("RST", "2", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "2",
+	       1,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4352,7 +4391,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // d8 RC	  
-    new Opcode("RC", "", 1, Processor.INS_RET, new Executable() {
+    new Opcode("RC", "",
+	       1,
+	       Processor.INS_RET | Processor.INS_MR,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (CFSET()) {
@@ -4370,7 +4412,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // d9 undefined (RET)
-    new Opcode("UND", "", 1, Processor.INS_UND | Processor.INS_RET,
+    new Opcode("UND", "",
+	       1,
+	       Processor.INS_UND | Processor.INS_RET | Processor.INS_MR,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -4400,7 +4444,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // db IN	  
-    new Opcode("IN", "", 2, Processor.INS_IO, new Executable() {
+    new Opcode("IN", "", 2, Processor.INS_IOR, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4416,7 +4460,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // dc CC	  
-    new Opcode("CC", "", 3, Processor.INS_CALL, new Executable() {
+    new Opcode("CC", "",
+	       3,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (CFSET()) {
@@ -4440,7 +4487,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // dd undefined (CALL)
-    new Opcode("UND", "", 3, Processor.INS_UND | Processor.INS_CALL,
+    new Opcode("UND", "",
+	       3,
+	       Processor.INS_UND | Processor.INS_CALL | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -4460,7 +4509,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // de SBI	  
-    new Opcode("SBI", "", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("SBI", "", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4485,7 +4534,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // df RST3	  
-    new Opcode("RST", "3", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "3",
+	       1,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4500,7 +4552,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // e0 RPO	  
-    new Opcode("RPO", "", 1, Processor.INS_RET, new Executable() {
+    new Opcode("RPO", "",
+	       1,
+	       Processor.INS_RET | Processor.INS_MR,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (PE()) {
@@ -4518,7 +4573,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // e1 POPH	  
-    new Opcode("POP", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("POP", "H", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  L = memory.getByte(SP);
@@ -4527,8 +4582,8 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	  incSP();
 	  incPC();
 	  return 10;
-	}	
-      }		    
+	}
+      }
       ),
 	
     // e2 JPO	  
@@ -4548,7 +4603,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // e3 XTHL	  
-    new Opcode("XTHL", "", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("XTHL", "",
+	       1,
+	       Processor.INS_MR | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  int tb = memory.getByte(SP);
@@ -4565,7 +4623,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // e4 CPO	  
-    new Opcode("CPO", "", 3, Processor.INS_CALL, new Executable() {
+    new Opcode("CPO", "",
+	       3,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (PE()) {
@@ -4589,7 +4650,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // e5 PUSHH	  
-    new Opcode("PUSH", "H", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("PUSH", "H", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  decSP();
@@ -4603,7 +4664,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // e6 ANI	  
-    new Opcode("ANI", "", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("ANI", "", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4623,7 +4684,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // e7 RST4	  
-    new Opcode("RST", "4", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "4",
+	       1,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4638,7 +4702,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // e8 RPE	  
-    new Opcode("RPE", "", 1, Processor.INS_RET, new Executable() {
+    new Opcode("RPE", "",
+	       1,
+	       Processor.INS_RET | Processor.INS_MR,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (PE()) {
@@ -4682,7 +4749,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // eb XCHG	  
-    new Opcode("XCHG", "", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("XCHG", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  int tb = H;
@@ -4698,7 +4765,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // ec CPE	  
-    new Opcode("CPE", "", 3, Processor.INS_CALL, new Executable() {
+    new Opcode("CPE", "",
+	       3,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (PE()) {
@@ -4722,7 +4792,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // ed undefined (CALL)
-    new Opcode("UND", "", 3, Processor.INS_UND | Processor.INS_CALL,
+    new Opcode("UND", "",
+	       3,
+	       Processor.INS_UND | Processor.INS_CALL | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -4742,7 +4814,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // ee XRI	  
-    new Opcode("XRI", "", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("XRI", "", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4757,7 +4829,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // ef RST5	  
-    new Opcode("RST", "5", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "5",
+	       1,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4772,7 +4847,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // f0 RP	  
-    new Opcode("RP", "", 1, Processor.INS_RET, new Executable() {
+    new Opcode("RP", "",
+	       1,
+	       Processor.INS_RET | Processor.INS_MR,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (SFSET()) {
@@ -4790,7 +4868,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // f1 POPPSW	  
-    new Opcode("POP", "PSW", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("POP", "PSW", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  F = fixF(memory.getByte(SP));
@@ -4804,7 +4882,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // f2 JP	  
-    new Opcode("JP", "", 3, Processor.INS_JMP, new Executable() {
+    new Opcode("JP", "",
+	       3,
+	       Processor.INS_JMP,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (SFSET()) {
@@ -4820,7 +4901,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // f3 DI	  
-    new Opcode("DI", "", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("DI", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  IE = false;
@@ -4831,7 +4912,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ), 
 	
     // f4 CP	  
-    new Opcode("CP", "", 3, Processor.INS_CALL, new Executable() {
+    new Opcode("CP", "",
+	       3,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (SFSET()) {
@@ -4855,7 +4939,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // f5 PUSHPSW	  
-    new Opcode("PUSH", "PSW", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("PUSH", "PSW", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  decSP();
@@ -4869,7 +4953,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // f6 ORI	  
-    new Opcode("ORI", "", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("ORI", "", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4884,7 +4968,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // f7 RST6	  
-    new Opcode("RST", "6", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "6",
+	       1,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -4899,7 +4986,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // f8 RM	  
-    new Opcode("RM", "", 1, Processor.INS_RET, new Executable() {
+    new Opcode("RM", "",
+	       1,
+	       Processor.INS_RET | Processor.INS_MR,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (SFSET()) {
@@ -4917,7 +5007,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // f9 SPHL	  
-    new Opcode("SPHL", "", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("SPHL", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  SP = HL();
@@ -4944,7 +5034,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // fb EI	  
-    new Opcode("EI", "", 1, Processor.INS_NONE, new Executable() {
+    new Opcode("EI", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
 	  IE = true;
@@ -4955,7 +5045,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // fc CM	  
-    new Opcode("CM", "", 3, Processor.INS_CALL, new Executable() {
+    new Opcode("CM", "",
+	       3,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  if (SFSET()) {
@@ -4979,7 +5072,9 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // fd undefined (CALL)
-    new Opcode("UND", "", 3, Processor.INS_UND | Processor.INS_CALL,
+    new Opcode("UND", "",
+	       3,
+	       Processor.INS_UND | Processor.INS_CALL | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -4999,7 +5094,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ),
 	
     // fe CPI	  
-    new Opcode("CPI", "", 2, Processor.INS_NONE, new Executable() {
+    new Opcode("CPI", "", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -5023,7 +5118,10 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       ), 
 	
     // ff RST7	  
-    new Opcode("RST", "7", 1, Processor.INS_CALL, new Executable() {
+    new Opcode("RST", "7",
+	       1,
+	       Processor.INS_CALL | Processor.INS_MW,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
