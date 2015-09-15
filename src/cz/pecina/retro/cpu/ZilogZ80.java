@@ -10478,6 +10478,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  final int tb = ((IX >> 8) - 1) & 0xff;
+	  IX = (tb << 8) + (IX & 0xff);
 	  F4(tb);
 	  if (tb == 0x7f) {
 	    SETPF();
@@ -14002,6 +14003,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  final int tb = ((IY >> 8) - 1) & 0xff;
+	  IY = (tb << 8) + (IY & 0xff);
 	  F4(tb);
 	  if (tb == 0x7f) {
 	    SETPF();
