@@ -12093,7 +12093,10 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // ed 45
-    new Opcode("RETN", "", 1, Processor.INS_RET | Processor.INS_MR, new Executable() {
+    new Opcode("RETN", "",
+	       1,
+	       Processor.INS_RET | Processor.INS_MR,
+	       new Executable() {
 	@Override
 	public int exec() {
 	  IFF1 = IFF2;

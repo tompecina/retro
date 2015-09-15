@@ -719,7 +719,8 @@ public class Intel8254 extends Device implements IOElement {
     }
 
     /**
-     * Stops the counter for direct connection type (ignored for normal connection).
+     * Stops the counter for direct connection type (ignored for normal
+     * connection).
      */
     protected void stop() {
       if (direct) {
@@ -737,9 +738,10 @@ public class Intel8254 extends Device implements IOElement {
 
     
     /**
-     * Sets the Counting Element to {@code value}, with correction for {@code delay};
-     * the resulting value written to the Counting Element is never less than {@code 1}.
-     * This method is only applicabla for direct connection.
+     * Sets the Counting Element to {@code value}, with correction for
+     * {@code delay}; the resulting value written to the Counting Element
+     * is never less than {@code 1}.  This method is only applicabla for
+     * direct connection.
      *
      * @param value the new value for the Counting Element
      */
@@ -815,7 +817,8 @@ public class Intel8254 extends Device implements IOElement {
 	      if (gate) {
 		CPUScheduler.removeAllEvents(this);
 		CPUScheduler.addEventRelative(this, countingElement + 1);
-		log.finest("Counter started, remains: " + (countingElement + 1));
+		log.finest("Counter started, remains: " +
+			   (countingElement + 1));
 	      }
 	      break;
 
@@ -861,7 +864,8 @@ public class Intel8254 extends Device implements IOElement {
 	      if (gate) {
 		CPUScheduler.removeAllEvents(this);
 		CPUScheduler.addEventRelative(this, countingElement + 1);
-		log.finest("Counter started, remains: " + (countingElement + 1));
+		log.finest("Counter started, remains: " +
+			   (countingElement + 1));
 	      }
 	      break;
 	  }
@@ -947,7 +951,8 @@ public class Intel8254 extends Device implements IOElement {
       }
       
       if (statusLatched) {
-	log.finer(String.format("Outputting (latched) status: 0x%02x", statusLatch));
+	log.finer(String.format("Outputting (latched) status: 0x%02x",
+				statusLatch));
 	statusLatched = false;
 	return statusLatch;
       }
