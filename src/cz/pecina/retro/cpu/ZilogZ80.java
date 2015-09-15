@@ -7676,7 +7676,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("BIT", "0,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(HL());
+	  final int tb = memory.getByte(HL());
 	  F22(tb, WZ >> 8);
 	  if ((tb & 0x01) == 0) {
 	    SETZF();
@@ -7845,7 +7845,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("BIT", "1,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(HL());
+	  final int tb = memory.getByte(HL());
 	  F22(tb, WZ >> 8);
 	  if ((tb & 0x02) == 0) {
 	    SETZF();
@@ -8014,7 +8014,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("BIT", "2,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(HL());
+	  final int tb = memory.getByte(HL());
 	  F22(tb, WZ >> 8);
 	  if ((tb & 0x04) == 0) {
 	    SETZF();
@@ -8183,7 +8183,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("BIT", "3,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(HL());
+	  final int tb = memory.getByte(HL());
 	  F22(tb, WZ >> 8);
 	  if ((tb & 0x08) == 0) {
 	    SETZF();
@@ -8352,7 +8352,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("BIT", "4,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(HL());
+	  final int tb = memory.getByte(HL());
 	  F22(tb, WZ >> 8);
 	  if ((tb & 0x10) == 0) {
 	    SETZF();
@@ -8521,7 +8521,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("BIT", "5,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(HL());
+	  final int tb = memory.getByte(HL());
 	  F22(tb, WZ >> 8);
 	  if ((tb & 0x20) == 0) {
 	    SETZF();
@@ -8690,7 +8690,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("BIT", "6,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(HL());
+	  final int tb = memory.getByte(HL());
 	  F22(tb, WZ >> 8);
 	  if ((tb & 0x40) == 0) {
 	    SETZF();
@@ -8883,7 +8883,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("BIT", "7,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(HL());
+	  final int tb = memory.getByte(HL());
 	  F22(tb, WZ >> 8);
 	  if ((tb & 0x80) == 0) {
 	    SETZF();
@@ -8999,7 +8999,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb 86
     new Opcode("RES", "0,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -9090,7 +9090,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb 8e
     new Opcode("RES", "1,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -9181,7 +9181,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb 96
     new Opcode("RES", "2,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -9272,7 +9272,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb 9e
     new Opcode("RES", "3,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -9363,7 +9363,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb a6
     new Opcode("RES", "4,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -9454,7 +9454,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb ae
     new Opcode("RES", "5,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -9545,7 +9545,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb b6
     new Opcode("RES", "6,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -9636,7 +9636,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb be
     new Opcode("RES", "7,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -9727,7 +9727,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb c6
     new Opcode("SET", "0,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -9818,7 +9818,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb ce
     new Opcode("SET", "1,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -9909,7 +9909,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb d6
     new Opcode("SET", "2,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -10000,7 +10000,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb de
     new Opcode("SET", "3,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -10091,7 +10091,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb e6
     new Opcode("SET", "4,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -10182,7 +10182,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb ee
     new Opcode("SET", "5,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -10273,7 +10273,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb f6
     new Opcode("SET", "6,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -10364,7 +10364,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     // cb fe
     new Opcode("SET", "7,(HL)",
 	       1,
-	       Processor.INS_MW | Processor.INS_MW,
+	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
@@ -10384,8 +10384,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  return 8;
 	}
       }
-      ),
-
+      )
   };
 
   /**
@@ -15492,6 +15491,9796 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   };
 
   /**
+   * The array of opcodes with the prefix CB DD.
+   */
+  protected final Opcode[] opcodesDDCB = new Opcode[] {
+
+    // dd cb 00 (undocumented)
+    new Opcode("RLC", "(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 01 (undocumented)
+    new Opcode("RLC", "(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 02 (undocumented)
+    new Opcode("RLC", "(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 03 (undocumented)
+    new Opcode("RLC", "(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 04 (undocumented)
+    new Opcode("RLC", "(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 05 (undocumented)
+    new Opcode("RLC", "(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 06
+    new Opcode("RLC", "(IX<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 07 (undocumented)
+    new Opcode("RLC", "(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 08 (undocumented)
+    new Opcode("RRC", "(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 09 (undocumented)
+    new Opcode("RRC", "(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 0a (undocumented)
+    new Opcode("RRC", "(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 0b (undocumented)
+    new Opcode("RRC", "(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 0c (undocumented)
+    new Opcode("RRC", "(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 0d (undocumented)
+    new Opcode("RRC", "(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 0e
+    new Opcode("RRC", "(IX<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 0f (undocumented)
+    new Opcode("RRC", "(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 10 (undocumented)
+    new Opcode("RL", "(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 11 (undocumented)
+    new Opcode("RL", "(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 12 (undocumented)
+    new Opcode("RL", "(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 13 (undocumented)
+    new Opcode("RL", "(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 14 (undocumented)
+    new Opcode("RL", "(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 15 (undocumented)
+    new Opcode("RL", "(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 16
+    new Opcode("RL", "(IX<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 17 (undocumented)
+    new Opcode("RL", "(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 18 (undocumented)
+    new Opcode("RR", "(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 19 (undocumented)
+    new Opcode("RR", "(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 1a (undocumented)
+    new Opcode("RR", "(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 1b (undocumented)
+    new Opcode("RR", "(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 1c (undocumented)
+    new Opcode("RR", "(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 1d (undocumented)
+    new Opcode("RR", "(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 1e
+    new Opcode("RR", "(IX<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 1f (undocumented)
+    new Opcode("RR", "(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 20 (undocumented)
+    new Opcode("SLA", "(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 21 (undocumented)
+    new Opcode("SLA", "(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 22 (undocumented)
+    new Opcode("SLA", "(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 23 (undocumented)
+    new Opcode("SLA", "(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 24 (undocumented)
+    new Opcode("SLA", "(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 25 (undocumented)
+    new Opcode("SLA", "(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 26
+    new Opcode("SLA", "(IX<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 27 (undocumented)
+    new Opcode("SLA", "(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 28 (undocumented)
+    new Opcode("SRA", "(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 29 (undocumented)
+    new Opcode("SRA", "(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 2a (undocumented)
+    new Opcode("SRA", "(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 2b (undocumented)
+    new Opcode("SRA", "(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 2c (undocumented)
+    new Opcode("SRA", "(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 2d (undocumented)
+    new Opcode("SRA", "(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 2e
+    new Opcode("SRA", "(IX<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 2f (undocumented)
+    new Opcode("SRA", "(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 30 (undocumented)
+    new Opcode("SLL", "(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 31 (undocumented)
+    new Opcode("SLL", "(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 32 (undocumented)
+    new Opcode("SLL", "(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 33 (undocumented)
+    new Opcode("SLL", "(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 34 (undocumented)
+    new Opcode("SLL", "(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 35 (undocumented)
+    new Opcode("SLL", "(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 36
+    new Opcode("SLL", "(IX<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 37 (undocumented)
+    new Opcode("SLL", "(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 38 (undocumented)
+    new Opcode("SRL", "(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 39 (undocumented)
+    new Opcode("SRL", "(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 3a (undocumented)
+    new Opcode("SRL", "(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 3b (undocumented)
+    new Opcode("SRL", "(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 3c (undocumented)
+    new Opcode("SRL", "(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 3d (undocumented)
+    new Opcode("SRL", "(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 3e
+    new Opcode("SRL", "(IX<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 3f (undocumented)
+    new Opcode("SRL", "(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 40 (undocumented)
+    new Opcode("BIT", "0,(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 41 (undocumented)
+    new Opcode("BIT", "0,(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 42 (undocumented)
+    new Opcode("BIT", "0,(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 43 (undocumented)
+    new Opcode("BIT", "0,(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 44 (undocumented)
+    new Opcode("BIT", "0,(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 45 (undocumented)
+    new Opcode("BIT", "0,(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 46
+    new Opcode("BIT", "0,(IX<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 47 (undocumented)
+    new Opcode("BIT", "0,(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 48 (undocumented)
+    new Opcode("BIT", "1,(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 49 (undocumented)
+    new Opcode("BIT", "1,(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 4a (undocumented)
+    new Opcode("BIT", "1,(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 4b (undocumented)
+    new Opcode("BIT", "1,(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 4c (undocumented)
+    new Opcode("BIT", "1,(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 4d (undocumented)
+    new Opcode("BIT", "1,(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 4e
+    new Opcode("BIT", "1,(IX<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 4f (undocumented)
+    new Opcode("BIT", "1,(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 50 (undocumented)
+    new Opcode("BIT", "2,(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 51 (undocumented)
+    new Opcode("BIT", "2,(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 52 (undocumented)
+    new Opcode("BIT", "2,(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 53 (undocumented)
+    new Opcode("BIT", "2,(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 54 (undocumented)
+    new Opcode("BIT", "2,(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 55 (undocumented)
+    new Opcode("BIT", "2,(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 56
+    new Opcode("BIT", "2,(IX<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 57 (undocumented)
+    new Opcode("BIT", "2,(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 58 (undocumented)
+    new Opcode("BIT", "3,(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 59 (undocumented)
+    new Opcode("BIT", "3,(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 5a (undocumented)
+    new Opcode("BIT", "3,(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 5b (undocumented)
+    new Opcode("BIT", "3,(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 5c (undocumented)
+    new Opcode("BIT", "3,(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 5d (undocumented)
+    new Opcode("BIT", "3,(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 5e
+    new Opcode("BIT", "3,(IX<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 5f (undocumented)
+    new Opcode("BIT", "3,(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 60 (undocumented)
+    new Opcode("BIT", "4,(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 61 (undocumented)
+    new Opcode("BIT", "4,(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 62 (undocumented)
+    new Opcode("BIT", "4,(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 63 (undocumented)
+    new Opcode("BIT", "4,(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 64 (undocumented)
+    new Opcode("BIT", "4,(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 65 (undocumented)
+    new Opcode("BIT", "4,(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 66
+    new Opcode("BIT", "4,(IX<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 67 (undocumented)
+    new Opcode("BIT", "4,(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 68 (undocumented)
+    new Opcode("BIT", "5,(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 69 (undocumented)
+    new Opcode("BIT", "5,(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 6a (undocumented)
+    new Opcode("BIT", "5,(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 6b (undocumented)
+    new Opcode("BIT", "5,(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 6c (undocumented)
+    new Opcode("BIT", "5,(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 6d (undocumented)
+    new Opcode("BIT", "5,(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 6e
+    new Opcode("BIT", "5,(IX<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 6f (undocumented)
+    new Opcode("BIT", "5,(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 70 (undocumented)
+    new Opcode("BIT", "6,(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 71 (undocumented)
+    new Opcode("BIT", "6,(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 72 (undocumented)
+    new Opcode("BIT", "6,(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 73 (undocumented)
+    new Opcode("BIT", "6,(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 74 (undocumented)
+    new Opcode("BIT", "6,(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 75 (undocumented)
+    new Opcode("BIT", "6,(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 76
+    new Opcode("BIT", "6,(IX<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 77 (undocumented)
+    new Opcode("BIT", "6,(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 78 (undocumented)
+    new Opcode("BIT", "7,(IX<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 79 (undocumented)
+    new Opcode("BIT", "7,(IX<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 7a (undocumented)
+    new Opcode("BIT", "7,(IX<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 7b (undocumented)
+    new Opcode("BIT", "7,(IX<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 7c (undocumented)
+    new Opcode("BIT", "7,(IX<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 7d (undocumented)
+    new Opcode("BIT", "7,(IX<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 7e
+    new Opcode("BIT", "7,(IX<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 7f (undocumented)
+    new Opcode("BIT", "7,(IX<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 80 (undocumented)
+    new Opcode("RES", "0,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 81 (undocumented)
+    new Opcode("RES", "0,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 82 (undocumented)
+    new Opcode("RES", "0,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 83 (undocumented)
+    new Opcode("RES", "0,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 84 (undocumented)
+    new Opcode("RES", "0,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 85 (undocumented)
+    new Opcode("RES", "0,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 86
+    new Opcode("RES", "0,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 87 (undocumented)
+    new Opcode("RES", "0,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 88 (undocumented)
+    new Opcode("RES", "1,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 89 (undocumented)
+    new Opcode("RES", "1,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 8a (undocumented)
+    new Opcode("RES", "1,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 8b (undocumented)
+    new Opcode("RES", "1,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 8c (undocumented)
+    new Opcode("RES", "1,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 8d (undocumented)
+    new Opcode("RES", "1,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 8e
+    new Opcode("RES", "1,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 8f (undocumented)
+    new Opcode("RES", "1,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 90 (undocumented)
+    new Opcode("RES", "2,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 91 (undocumented)
+    new Opcode("RES", "2,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 92 (undocumented)
+    new Opcode("RES", "2,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 93 (undocumented)
+    new Opcode("RES", "2,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 94 (undocumented)
+    new Opcode("RES", "2,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 95 (undocumented)
+    new Opcode("RES", "2,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 96
+    new Opcode("RES", "2,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 97 (undocumented)
+    new Opcode("RES", "2,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 98 (undocumented)
+    new Opcode("RES", "3,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 99 (undocumented)
+    new Opcode("RES", "3,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 9a (undocumented)
+    new Opcode("RES", "3,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 9b (undocumented)
+    new Opcode("RES", "3,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 9c (undocumented)
+    new Opcode("RES", "3,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 9d (undocumented)
+    new Opcode("RES", "3,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 9e
+    new Opcode("RES", "3,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 9f (undocumented)
+    new Opcode("RES", "3,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a0 (undocumented)
+    new Opcode("RES", "4,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a1 (undocumented)
+    new Opcode("RES", "4,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a2 (undocumented)
+    new Opcode("RES", "4,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a3 (undocumented)
+    new Opcode("RES", "4,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a4 (undocumented)
+    new Opcode("RES", "4,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a5 (undocumented)
+    new Opcode("RES", "4,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a6
+    new Opcode("RES", "4,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a7 (undocumented)
+    new Opcode("RES", "4,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a8 (undocumented)
+    new Opcode("RES", "5,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a9 (undocumented)
+    new Opcode("RES", "5,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb aa (undocumented)
+    new Opcode("RES", "5,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb ab (undocumented)
+    new Opcode("RES", "5,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb ac (undocumented)
+    new Opcode("RES", "5,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb ad (undocumented)
+    new Opcode("RES", "5,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb ae
+    new Opcode("RES", "5,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb af (undocumented)
+    new Opcode("RES", "5,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b0 (undocumented)
+    new Opcode("RES", "6,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b1 (undocumented)
+    new Opcode("RES", "6,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b2 (undocumented)
+    new Opcode("RES", "6,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b3 (undocumented)
+    new Opcode("RES", "6,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b4 (undocumented)
+    new Opcode("RES", "6,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b5 (undocumented)
+    new Opcode("RES", "6,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b6
+    new Opcode("RES", "6,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b7 (undocumented)
+    new Opcode("RES", "6,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b8 (undocumented)
+    new Opcode("RES", "7,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b9 (undocumented)
+    new Opcode("RES", "7,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb ba (undocumented)
+    new Opcode("RES", "7,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb bb (undocumented)
+    new Opcode("RES", "7,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb bc (undocumented)
+    new Opcode("RES", "7,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb bd (undocumented)
+    new Opcode("RES", "7,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb be
+    new Opcode("RES", "7,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb bf (undocumented)
+    new Opcode("RES", "7,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb c0 (undocumented)
+    new Opcode("SET", "0,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c1 (undocumented)
+    new Opcode("SET", "0,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c2 (undocumented)
+    new Opcode("SET", "0,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c3 (undocumented)
+    new Opcode("SET", "0,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c4 (undocumented)
+    new Opcode("SET", "0,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c5 (undocumented)
+    new Opcode("SET", "0,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c6
+    new Opcode("SET", "0,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c7 (undocumented)
+    new Opcode("SET", "0,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c8 (undocumented)
+    new Opcode("SET", "1,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c9 (undocumented)
+    new Opcode("SET", "1,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ca (undocumented)
+    new Opcode("SET", "1,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb cb (undocumented)
+    new Opcode("SET", "1,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb cc (undocumented)
+    new Opcode("SET", "1,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb cd (undocumented)
+    new Opcode("SET", "1,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ce
+    new Opcode("SET", "1,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb cf (undocumented)
+    new Opcode("SET", "1,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d0 (undocumented)
+    new Opcode("SET", "2,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d1 (undocumented)
+    new Opcode("SET", "2,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d2 (undocumented)
+    new Opcode("SET", "2,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d3 (undocumented)
+    new Opcode("SET", "2,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d4 (undocumented)
+    new Opcode("SET", "2,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d5 (undocumented)
+    new Opcode("SET", "2,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d6
+    new Opcode("SET", "2,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d7 (undocumented)
+    new Opcode("SET", "2,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d8 (undocumented)
+    new Opcode("SET", "3,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d9 (undocumented)
+    new Opcode("SET", "3,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb da (undocumented)
+    new Opcode("SET", "3,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb db (undocumented)
+    new Opcode("SET", "3,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb dc (undocumented)
+    new Opcode("SET", "3,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb dd (undocumented)
+    new Opcode("SET", "3,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb de
+    new Opcode("SET", "3,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb df (undocumented)
+    new Opcode("SET", "3,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e0 (undocumented)
+    new Opcode("SET", "4,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e1 (undocumented)
+    new Opcode("SET", "4,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e2 (undocumented)
+    new Opcode("SET", "4,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e3 (undocumented)
+    new Opcode("SET", "4,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e4 (undocumented)
+    new Opcode("SET", "4,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e5 (undocumented)
+    new Opcode("SET", "4,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e6
+    new Opcode("SET", "4,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e7 (undocumented)
+    new Opcode("SET", "4,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e8 (undocumented)
+    new Opcode("SET", "5,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e9 (undocumented)
+    new Opcode("SET", "5,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ea (undocumented)
+    new Opcode("SET", "5,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb eb (undocumented)
+    new Opcode("SET", "5,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ec (undocumented)
+    new Opcode("SET", "5,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ed (undocumented)
+    new Opcode("SET", "5,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ee
+    new Opcode("SET", "5,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ef (undocumented)
+    new Opcode("SET", "5,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f0 (undocumented)
+    new Opcode("SET", "6,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f1 (undocumented)
+    new Opcode("SET", "6,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f2 (undocumented)
+    new Opcode("SET", "6,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f3 (undocumented)
+    new Opcode("SET", "6,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f4 (undocumented)
+    new Opcode("SET", "6,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f5 (undocumented)
+    new Opcode("SET", "6,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f6
+    new Opcode("SET", "6,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f7 (undocumented)
+    new Opcode("SET", "6,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f8 (undocumented)
+    new Opcode("SET", "7,(IX<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f9 (undocumented)
+    new Opcode("SET", "7,(IX<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb fa (undocumented)
+    new Opcode("SET", "7,(IX<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb fb (undocumented)
+    new Opcode("SET", "7,(IX<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb fc (undocumented)
+    new Opcode("SET", "7,(IX<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb fd (undocumented)
+    new Opcode("SET", "7,(IX<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb fe
+    new Opcode("SET", "7,(IX<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ff (undocumented)
+    new Opcode("SET", "7,(IX<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+  };
+
+  /**
+   * The array of opcodes with the prefix CB FD.
+   */
+  protected final Opcode[] opcodesFDCB = new Opcode[] {
+
+    // dd cb 00 (undocumented)
+    new Opcode("RLC", "(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 01 (undocumented)
+    new Opcode("RLC", "(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 02 (undocumented)
+    new Opcode("RLC", "(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 03 (undocumented)
+    new Opcode("RLC", "(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 04 (undocumented)
+    new Opcode("RLC", "(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 05 (undocumented)
+    new Opcode("RLC", "(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 06
+    new Opcode("RLC", "(IY<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 07 (undocumented)
+    new Opcode("RLC", "(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) | (F & 1)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 08 (undocumented)
+    new Opcode("RRC", "(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 09 (undocumented)
+    new Opcode("RRC", "(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 0a (undocumented)
+    new Opcode("RRC", "(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 0b (undocumented)
+    new Opcode("RRC", "(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 0c (undocumented)
+    new Opcode("RRC", "(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 0d (undocumented)
+    new Opcode("RRC", "(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 0e
+    new Opcode("RRC", "(IY<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 0f (undocumented)
+    new Opcode("RRC", "(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb >> 1) | (F << 7)) & 0xff;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 10 (undocumented)
+    new Opcode("RL", "(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 11 (undocumented)
+    new Opcode("RL", "(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 12 (undocumented)
+    new Opcode("RL", "(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 13 (undocumented)
+    new Opcode("RL", "(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 14 (undocumented)
+    new Opcode("RL", "(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 15 (undocumented)
+    new Opcode("RL", "(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 16
+    new Opcode("RL", "(IY<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 17 (undocumented)
+    new Opcode("RL", "(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  tb = (tb << 1) | (F & 1);
+	  if ((tb & 0x100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb &= 0xff;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 18 (undocumented)
+    new Opcode("RR", "(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 19 (undocumented)
+    new Opcode("RR", "(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 1a (undocumented)
+    new Opcode("RR", "(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 1b (undocumented)
+    new Opcode("RR", "(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 1c (undocumented)
+    new Opcode("RR", "(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 1d (undocumented)
+    new Opcode("RR", "(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 1e
+    new Opcode("RR", "(IY<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 1f (undocumented)
+    new Opcode("RR", "(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  final int ti = tb;
+	  tb = (tb >> 1) | ((F & 1) << 7);
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  if ((ti & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 20 (undocumented)
+    new Opcode("SLA", "(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 21 (undocumented)
+    new Opcode("SLA", "(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 22 (undocumented)
+    new Opcode("SLA", "(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 23 (undocumented)
+    new Opcode("SLA", "(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 24 (undocumented)
+    new Opcode("SLA", "(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 25 (undocumented)
+    new Opcode("SLA", "(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 26
+    new Opcode("SLA", "(IY<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 27 (undocumented)
+    new Opcode("SLA", "(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb << 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 28 (undocumented)
+    new Opcode("SRA", "(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 29 (undocumented)
+    new Opcode("SRA", "(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 2a (undocumented)
+    new Opcode("SRA", "(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 2b (undocumented)
+    new Opcode("SRA", "(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 2c (undocumented)
+    new Opcode("SRA", "(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 2d (undocumented)
+    new Opcode("SRA", "(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 2e
+    new Opcode("SRA", "(IY<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 2f (undocumented)
+    new Opcode("SRA", "(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = (tb & 0x80) | (tb >> 1);
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 30 (undocumented)
+    new Opcode("SLL", "(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 31 (undocumented)
+    new Opcode("SLL", "(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 32 (undocumented)
+    new Opcode("SLL", "(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 33 (undocumented)
+    new Opcode("SLL", "(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 34 (undocumented)
+    new Opcode("SLL", "(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 35 (undocumented)
+    new Opcode("SLL", "(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 36
+    new Opcode("SLL", "(IY<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 37 (undocumented)
+    new Opcode("SLL", "(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 0x80) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb = ((tb << 1) & 0xff) | 1;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 38 (undocumented)
+    new Opcode("SRL", "(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 39 (undocumented)
+    new Opcode("SRL", "(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 3a (undocumented)
+    new Opcode("SRL", "(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 3b (undocumented)
+    new Opcode("SRL", "(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 3c (undocumented)
+    new Opcode("SRL", "(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 3d (undocumented)
+    new Opcode("SRL", "(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 3e
+    new Opcode("SRL", "(IY<d>)", 2, Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 3f (undocumented)
+    new Opcode("SRL", "(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  int tb = memory.getByte(WZ);
+	  if ((tb & 1) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  tb >>= 1;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  F5(tb);
+	  CLEARHF();
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 40 (undocumented)
+    new Opcode("BIT", "0,(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 41 (undocumented)
+    new Opcode("BIT", "0,(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 42 (undocumented)
+    new Opcode("BIT", "0,(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 43 (undocumented)
+    new Opcode("BIT", "0,(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 44 (undocumented)
+    new Opcode("BIT", "0,(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 45 (undocumented)
+    new Opcode("BIT", "0,(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 46
+    new Opcode("BIT", "0,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 47 (undocumented)
+    new Opcode("BIT", "0,(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x01) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 48 (undocumented)
+    new Opcode("BIT", "1,(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 49 (undocumented)
+    new Opcode("BIT", "1,(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 4a (undocumented)
+    new Opcode("BIT", "1,(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 4b (undocumented)
+    new Opcode("BIT", "1,(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 4c (undocumented)
+    new Opcode("BIT", "1,(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 4d (undocumented)
+    new Opcode("BIT", "1,(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 4e
+    new Opcode("BIT", "1,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 4f (undocumented)
+    new Opcode("BIT", "1,(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x02) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 50 (undocumented)
+    new Opcode("BIT", "2,(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 51 (undocumented)
+    new Opcode("BIT", "2,(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 52 (undocumented)
+    new Opcode("BIT", "2,(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 53 (undocumented)
+    new Opcode("BIT", "2,(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 54 (undocumented)
+    new Opcode("BIT", "2,(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 55 (undocumented)
+    new Opcode("BIT", "2,(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 56
+    new Opcode("BIT", "2,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 57 (undocumented)
+    new Opcode("BIT", "2,(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x04) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 58 (undocumented)
+    new Opcode("BIT", "3,(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 59 (undocumented)
+    new Opcode("BIT", "3,(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 5a (undocumented)
+    new Opcode("BIT", "3,(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 5b (undocumented)
+    new Opcode("BIT", "3,(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 5c (undocumented)
+    new Opcode("BIT", "3,(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 5d (undocumented)
+    new Opcode("BIT", "3,(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 5e
+    new Opcode("BIT", "3,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 5f (undocumented)
+    new Opcode("BIT", "3,(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x08) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 60 (undocumented)
+    new Opcode("BIT", "4,(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 61 (undocumented)
+    new Opcode("BIT", "4,(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 62 (undocumented)
+    new Opcode("BIT", "4,(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 63 (undocumented)
+    new Opcode("BIT", "4,(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 64 (undocumented)
+    new Opcode("BIT", "4,(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 65 (undocumented)
+    new Opcode("BIT", "4,(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 66
+    new Opcode("BIT", "4,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 67 (undocumented)
+    new Opcode("BIT", "4,(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x10) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 68 (undocumented)
+    new Opcode("BIT", "5,(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 69 (undocumented)
+    new Opcode("BIT", "5,(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 6a (undocumented)
+    new Opcode("BIT", "5,(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 6b (undocumented)
+    new Opcode("BIT", "5,(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 6c (undocumented)
+    new Opcode("BIT", "5,(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 6d (undocumented)
+    new Opcode("BIT", "5,(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 6e
+    new Opcode("BIT", "5,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 6f (undocumented)
+    new Opcode("BIT", "5,(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x20) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 70 (undocumented)
+    new Opcode("BIT", "6,(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 71 (undocumented)
+    new Opcode("BIT", "6,(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 72 (undocumented)
+    new Opcode("BIT", "6,(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 73 (undocumented)
+    new Opcode("BIT", "6,(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 74 (undocumented)
+    new Opcode("BIT", "6,(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 75 (undocumented)
+    new Opcode("BIT", "6,(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 76
+    new Opcode("BIT", "6,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 77 (undocumented)
+    new Opcode("BIT", "6,(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x40) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  CLEARSF();
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 78 (undocumented)
+    new Opcode("BIT", "7,(IY<d>),B", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 79 (undocumented)
+    new Opcode("BIT", "7,(IY<d>),C", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 7a (undocumented)
+    new Opcode("BIT", "7,(IY<d>),D", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 7b (undocumented)
+    new Opcode("BIT", "7,(IY<d>),E", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 7c (undocumented)
+    new Opcode("BIT", "7,(IY<d>),H", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 7d (undocumented)
+    new Opcode("BIT", "7,(IY<d>),L", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 7e
+    new Opcode("BIT", "7,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F22(tb, WZ >> 8);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 7f (undocumented)
+    new Opcode("BIT", "7,(IY<d>),A", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  F4(tb);
+	  if ((tb & 0x80) == 0) {
+	    SETZF();
+	    SETPF();
+	  } else {
+	    CLEARZF();
+	    CLEARPF();
+	  }
+	  if (ZFSET()) {
+	    CLEARSF();
+	  } else {
+	    SETSF();
+	  }
+	  SETHF();
+	  CLEARNF();
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // dd cb 80 (undocumented)
+    new Opcode("RES", "0,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 81 (undocumented)
+    new Opcode("RES", "0,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 82 (undocumented)
+    new Opcode("RES", "0,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 83 (undocumented)
+    new Opcode("RES", "0,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 84 (undocumented)
+    new Opcode("RES", "0,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 85 (undocumented)
+    new Opcode("RES", "0,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 86
+    new Opcode("RES", "0,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 87 (undocumented)
+    new Opcode("RES", "0,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfe;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 88 (undocumented)
+    new Opcode("RES", "1,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 89 (undocumented)
+    new Opcode("RES", "1,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 8a (undocumented)
+    new Opcode("RES", "1,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 8b (undocumented)
+    new Opcode("RES", "1,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 8c (undocumented)
+    new Opcode("RES", "1,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 8d (undocumented)
+    new Opcode("RES", "1,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 8e
+    new Opcode("RES", "1,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 8f (undocumented)
+    new Opcode("RES", "1,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfd;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 90 (undocumented)
+    new Opcode("RES", "2,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 91 (undocumented)
+    new Opcode("RES", "2,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 92 (undocumented)
+    new Opcode("RES", "2,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 93 (undocumented)
+    new Opcode("RES", "2,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 94 (undocumented)
+    new Opcode("RES", "2,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 95 (undocumented)
+    new Opcode("RES", "2,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 96
+    new Opcode("RES", "2,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 97 (undocumented)
+    new Opcode("RES", "2,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xfb;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 98 (undocumented)
+    new Opcode("RES", "3,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 99 (undocumented)
+    new Opcode("RES", "3,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 9a (undocumented)
+    new Opcode("RES", "3,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 9b (undocumented)
+    new Opcode("RES", "3,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 9c (undocumented)
+    new Opcode("RES", "3,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 9d (undocumented)
+    new Opcode("RES", "3,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 9e
+    new Opcode("RES", "3,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb 9f (undocumented)
+    new Opcode("RES", "3,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xf7;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a0 (undocumented)
+    new Opcode("RES", "4,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a1 (undocumented)
+    new Opcode("RES", "4,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a2 (undocumented)
+    new Opcode("RES", "4,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a3 (undocumented)
+    new Opcode("RES", "4,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a4 (undocumented)
+    new Opcode("RES", "4,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a5 (undocumented)
+    new Opcode("RES", "4,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a6
+    new Opcode("RES", "4,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a7 (undocumented)
+    new Opcode("RES", "4,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xef;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a8 (undocumented)
+    new Opcode("RES", "5,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb a9 (undocumented)
+    new Opcode("RES", "5,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb aa (undocumented)
+    new Opcode("RES", "5,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb ab (undocumented)
+    new Opcode("RES", "5,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb ac (undocumented)
+    new Opcode("RES", "5,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb ad (undocumented)
+    new Opcode("RES", "5,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb ae
+    new Opcode("RES", "5,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb af (undocumented)
+    new Opcode("RES", "5,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xdf;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b0 (undocumented)
+    new Opcode("RES", "6,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b1 (undocumented)
+    new Opcode("RES", "6,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b2 (undocumented)
+    new Opcode("RES", "6,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b3 (undocumented)
+    new Opcode("RES", "6,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b4 (undocumented)
+    new Opcode("RES", "6,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b5 (undocumented)
+    new Opcode("RES", "6,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b6
+    new Opcode("RES", "6,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b7 (undocumented)
+    new Opcode("RES", "6,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0xbf;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b8 (undocumented)
+    new Opcode("RES", "7,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb b9 (undocumented)
+    new Opcode("RES", "7,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb ba (undocumented)
+    new Opcode("RES", "7,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb bb (undocumented)
+    new Opcode("RES", "7,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb bc (undocumented)
+    new Opcode("RES", "7,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb bd (undocumented)
+    new Opcode("RES", "7,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb be
+    new Opcode("RES", "7,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb bf (undocumented)
+    new Opcode("RES", "7,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) & 0x7f;
+	  memory.setByte(WZ, tb);
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd cb c0 (undocumented)
+    new Opcode("SET", "0,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c1 (undocumented)
+    new Opcode("SET", "0,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c2 (undocumented)
+    new Opcode("SET", "0,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c3 (undocumented)
+    new Opcode("SET", "0,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c4 (undocumented)
+    new Opcode("SET", "0,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c5 (undocumented)
+    new Opcode("SET", "0,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c6
+    new Opcode("SET", "0,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c7 (undocumented)
+    new Opcode("SET", "0,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x01;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c8 (undocumented)
+    new Opcode("SET", "1,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb c9 (undocumented)
+    new Opcode("SET", "1,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ca (undocumented)
+    new Opcode("SET", "1,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb cb (undocumented)
+    new Opcode("SET", "1,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb cc (undocumented)
+    new Opcode("SET", "1,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb cd (undocumented)
+    new Opcode("SET", "1,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ce
+    new Opcode("SET", "1,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb cf (undocumented)
+    new Opcode("SET", "1,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x02;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d0 (undocumented)
+    new Opcode("SET", "2,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d1 (undocumented)
+    new Opcode("SET", "2,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d2 (undocumented)
+    new Opcode("SET", "2,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d3 (undocumented)
+    new Opcode("SET", "2,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d4 (undocumented)
+    new Opcode("SET", "2,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d5 (undocumented)
+    new Opcode("SET", "2,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d6
+    new Opcode("SET", "2,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d7 (undocumented)
+    new Opcode("SET", "2,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x04;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d8 (undocumented)
+    new Opcode("SET", "3,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb d9 (undocumented)
+    new Opcode("SET", "3,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb da (undocumented)
+    new Opcode("SET", "3,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb db (undocumented)
+    new Opcode("SET", "3,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb dc (undocumented)
+    new Opcode("SET", "3,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb dd (undocumented)
+    new Opcode("SET", "3,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb de
+    new Opcode("SET", "3,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb df (undocumented)
+    new Opcode("SET", "3,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x08;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e0 (undocumented)
+    new Opcode("SET", "4,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e1 (undocumented)
+    new Opcode("SET", "4,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e2 (undocumented)
+    new Opcode("SET", "4,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e3 (undocumented)
+    new Opcode("SET", "4,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e4 (undocumented)
+    new Opcode("SET", "4,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e5 (undocumented)
+    new Opcode("SET", "4,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e6
+    new Opcode("SET", "4,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e7 (undocumented)
+    new Opcode("SET", "4,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x10;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e8 (undocumented)
+    new Opcode("SET", "5,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb e9 (undocumented)
+    new Opcode("SET", "5,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ea (undocumented)
+    new Opcode("SET", "5,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb eb (undocumented)
+    new Opcode("SET", "5,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ec (undocumented)
+    new Opcode("SET", "5,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ed (undocumented)
+    new Opcode("SET", "5,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ee
+    new Opcode("SET", "5,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ef (undocumented)
+    new Opcode("SET", "5,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x20;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f0 (undocumented)
+    new Opcode("SET", "6,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f1 (undocumented)
+    new Opcode("SET", "6,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f2 (undocumented)
+    new Opcode("SET", "6,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f3 (undocumented)
+    new Opcode("SET", "6,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f4 (undocumented)
+    new Opcode("SET", "6,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f5 (undocumented)
+    new Opcode("SET", "6,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f6
+    new Opcode("SET", "6,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f7 (undocumented)
+    new Opcode("SET", "6,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x40;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f8 (undocumented)
+    new Opcode("SET", "7,(IY<d>),B", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  B = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb f9 (undocumented)
+    new Opcode("SET", "7,(IY<d>),C", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  C = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb fa (undocumented)
+    new Opcode("SET", "7,(IY<d>),D", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  D = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb fb (undocumented)
+    new Opcode("SET", "7,(IY<d>),E", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  E = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb fc (undocumented)
+    new Opcode("SET", "7,(IY<d>),H", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  H = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb fd (undocumented)
+    new Opcode("SET", "7,(IY<d>),L", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  L = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb fe
+    new Opcode("SET", "7,(IY<d>)", 2, Processor.INS_MW | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+    // dd cb ff (undocumented)
+    new Opcode("SET", "7,(IY<d>),A", 2, Processor.INS_UND | Processor.INS_MR | Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ) | 0x80;
+	  A = tb;
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+  };
+
+  /**
    * Gets an Opcode.
    *
    * @param  n the first byte of {@code Opcode}
@@ -15718,9 +25507,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  }
 	  if (tb == 0xcb) {
 	    if (prefix == 0xdd) {
-	      // table = opcodesDDCB;
+	      table = opcodesDDCB;
 	    } else if (prefix == 0xfd) {
-	      // table = opcodesFDCB;
+	      table = opcodesFDCB;
 	    } else {
 	      R++;
 	      table = opcodesCB;
