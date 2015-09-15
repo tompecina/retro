@@ -99,14 +99,14 @@ public class TestZilogZ80 extends ProcessorTest {
       0xd3f2d74aL,
       "aluop a,(<ix,iy>+1)"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0xdd, 0xcb, 0x01, 0x46, 0x2075, MSBT - 1, MSBT - 1, 0x3cfc,
-    //   0xa79a, 0x3d74, 0x51, 0x27, 0xca14,
-    //   0x20, 0, 0, 0x38, 0, 0, 0, 0, 0, 0, 0x53, 0, 0,
-    //   0, 0, 0, 0, 0xff, 0, 0, 0, 0, 0, 0, 0, 0,
-    //   0x83534ee1L,
-    //   "bit n,(<ix,iy>+1)"),
+    new TestGroup(
+      0xff,
+      0xdd, 0xcb, 0x01, 0x46, 0x2075, MSBT - 1, MSBT - 1, 0x3cfc,
+      0xa79a, 0x3d74, 0x51, 0x27, 0xca14,
+      0x20, 0, 0, 0x38, 0, 0, 0, 0, 0, 0, 0x53, 0, 0,
+      0, 0, 0, 0, 0xff, 0, 0, 0, 0, 0, 0, 0, 0,
+      0x83534ee1L,
+      "bit n,(<ix,iy>+1)"),
 
     new TestGroup(
       0xff,
@@ -558,14 +558,14 @@ public class TestZilogZ80 extends ProcessorTest {
       0x9ba3807cL,
       "<rlca,rrca,rla,rra>"),
 
-    // new TestGroup(
-    //   0xff,
-    //   0xdd, 0xcb, 1, 6, 0xddaf, MSBT - 1, MSBT - 1, 0xff3c,
-    //   0xdbf6, 0x94f4, 0x82, 0x80, 0x61d9,
-    //   0x20, 0, 0, 0x38, 0, 0, 0, 0, 0, 0, 0x80, 0, 0,
-    //   0, 0, 0, 0, 0xff, 0, 0, 0, 0, 0, 0x57, 0, 0,
-    //   0x710034cbL,
-    //   "shf/rot (<ix,iy>+1)"),
+    new TestGroup(
+      0xff,
+      0xdd, 0xcb, 1, 6, 0xddaf, MSBT - 1, MSBT - 1, 0xff3c,
+      0xdbf6, 0x94f4, 0x82, 0x80, 0x61d9,
+      0x20, 0, 0, 0x38, 0, 0, 0, 0, 0, 0, 0x80, 0, 0,
+      0, 0, 0, 0, 0xff, 0, 0, 0, 0, 0, 0x57, 0, 0,
+      0x710034cbL,
+      "shf/rot (<ix,iy>+1)"),
 
     new TestGroup(
       0xff,
