@@ -689,8 +689,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     R = R7 = I = 0;
     A = F = B = C = D = E = H = L =
       Aa = Fa = Ba = Ca = Da = Ea = Ha = La = 0xff;
-    SP = IX = IY = WZ = WZa = 0xffff;
-    WZa = 0xffff;
+    SP = IX = IY = 0xffff;
+    WZ = WZa = 0;
     resetPending = false;
     interruptPending = -1;
     log.fine("Reset performed");
@@ -2738,9 +2738,13 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("LD", "A,(%s)", 3, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  A = memory.getByte((memory.getByte((PC + 1) & 0xffff)) +
-			     (memory.getByte((PC + 2) & 0xffff) << 8));
-	  incPC(3);
+	  incPC();
+	  WZ = memory.getByte(PC);
+	  incPC();
+	  WZ += memory.getByte(PC) << 8;
+	  A = memory.getByte(WZ);
+	  incWZ();
+	  incPC();
 	  return 13;
 	}
       }		
