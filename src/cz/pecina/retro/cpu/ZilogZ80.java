@@ -2903,7 +2903,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // 46
-    new Opcode("LD", "B,M", 1, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "B,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  B = memory.getByte(HL());
@@ -2991,7 +2991,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 
 
     // 4e
-    new Opcode("LD", "C,M", 1, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "C,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  C = memory.getByte(HL());
@@ -3078,7 +3078,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // 56
-    new Opcode("LD", "D,M", 1, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "D,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  D = memory.getByte(HL());
@@ -3165,7 +3165,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // 5e
-    new Opcode("LD", "E,M", 1, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "E,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  E = memory.getByte(HL());
@@ -3252,7 +3252,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // 66
-    new Opcode("LD", "H,M", 1, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "H,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  H = memory.getByte(HL());
@@ -3339,7 +3339,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // 6e
-    new Opcode("LD", "L,M", 1, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "L,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  L = memory.getByte(HL());
@@ -3361,7 +3361,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // 70
-    new Opcode("LD", "M,B", 1, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(HL),B", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = HL();
@@ -3373,7 +3373,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // 71
-    new Opcode("LD", "M,C", 1, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(HL),C", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = HL();
@@ -3385,7 +3385,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // 72
-    new Opcode("LD", "M,D", 1, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(HL),D", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = HL();
@@ -3397,7 +3397,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // 73
-    new Opcode("LD", "M,E", 1, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(HL),E", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = HL();
@@ -3409,7 +3409,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // 74
-    new Opcode("LD", "M,H", 1, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(HL),H", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = HL();
@@ -3421,7 +3421,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // 75
-    new Opcode("LD", "M,L", 1, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(HL),L", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = HL();
@@ -3442,7 +3442,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // 77
-    new Opcode("LD", "M,A", 1, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(HL),A", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  final int tw = HL();
@@ -3520,7 +3520,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // 7e
-    new Opcode("LD", "A,M", 1, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "A,(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  A = memory.getByte(HL());
@@ -4581,8 +4581,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("AND", "(HL)", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = memory.getByte(HL());
-	  A &= tb;
+	  A &= memory.getByte(HL());
 	  SETHF();
 	  CLEARCF();
 	  CLEARNF();
@@ -6163,7 +6162,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // fa
-    new Opcode("JP", "M,<nn>", 3, Processor.INS_JMP, new Executable() {
+    new Opcode("JP", "(HL),<nn>", 3, Processor.INS_JMP, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -6192,7 +6191,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // fc
-    new Opcode("CALL", "M,<nn>",
+    new Opcode("CALL", "(HL),<nn>",
 	       3,
 	       Processor.INS_CALL | Processor.INS_MW,
 	       new Executable() {
@@ -10374,254 +10373,10 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // dd 0a
-    new Opcode("LD", "A,(BC)", 1, Processor.INS_MR, new Executable() {
-	@Override
-	public int exec() {
-	  A = memory.getByte(BC());
-	  WZ = (BC() + 1) & 0xffff;
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd 0b
-    new Opcode("DEC", "BC", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  if (--C < 0) {
-	    C = 0xff;
-	    B = (B - 1) & 0xff;
-	  }
-	  incPC();
-	  return 6;
-	}
-      }
-      ),
-
-    // dd 0c
-    new Opcode("INC", "C", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  C = (C + 1) & 0xff;
-	  F4(C);
-	  if (C == 0x80) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  if ((C & 0x0f) == 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 0d
-    new Opcode("DEC", "C", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  C = (C - 1) & 0xff;
-	  F4(C);
-	  if (C == 0x7f) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  if ((C & 0x0f) == 0x0f) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 0e
-    new Opcode("LD", "C,<n>", 2, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  C = memory.getByte(PC);
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd 0f
-    new Opcode("RRCA", "", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  if ((A & 1) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  A = ((A >> 1) | (F << 7)) & 0xff;
-	  F2(A);
-	  CLEARHF();
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 10
-    new Opcode("DJNZ", "<e>", 1, Processor.INS_JMP, new Executable() {
-	@Override
-	public int exec() {
-	  B = (B - 1) & 0xff;
-	  if (B == 0) {
-	    incPC(2);
-	    return 8;
-	  } else {
-	    incPC();
-	    PC = WZ = (PC + 1 + (byte)(memory.getByte(PC))) & 0xffff;
-	    return 13;
-	  }
-	}
-      }
-      ),
-
-    // dd 11
-    new Opcode("LD", "DE,<nn>", 3, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  E = memory.getByte(PC);
-	  incPC();
-	  D = memory.getByte(PC);
-	  incPC();
-	  return 10;
-	}
-      }
-      ),
-
-    // dd 12
-    new Opcode("LD", "(DE),A", 1, Processor.INS_MW, new Executable() {
-	@Override
-	public int exec() {
-	  memory.setByte(DE(), A);
-	  WZ = ((E + 1) & 0xff) + (A << 8);
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd 13
-    new Opcode("INC", "DE", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  E = (E + 1) & 0xff;
-	  if (E == 0) {
-	    D = (D + 1) & 0xff;
-	  }
-	  incPC();
-	  return 6;
-	}
-      }
-      ),
-
-    // dd 14
-    new Opcode("INC", "D", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  D = (D + 1) & 0xff;
-	  F4(D);
-	  if (D == 0x80) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  if ((D & 0x0f) == 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 15
-    new Opcode("DEC", "D", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  D = (D - 1) & 0xff;
-	  F4(D);
-	  if (D == 0x7f) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  if ((D & 0x0f) == 0x0f) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 16
-    new Opcode("LD", "D,<n>", 2, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  D = memory.getByte(PC);
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd 17
-    new Opcode("RLA", "", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tb = A;
-	  A = ((A << 1) | (F & 1)) & 0xff;
-	  if ((tb & 0x80) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  F2(A);
-	  CLEARHF();
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 18
-    new Opcode("JR", "<e>", 1, Processor.INS_JMP, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  PC = WZ = (PC + 1 + (byte)(memory.getByte(PC))) & 0xffff;
-	  return 12;
-	}
-      }
-      ),
+    // dd 0a - dd 18
+    null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null,
 
     // dd 19
     new Opcode("ADD", "IX,DE", 1, 0, new Executable() {
@@ -10648,134 +10403,18 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // dd 1a
-    new Opcode("LD", "A,(DE)", 1, Processor.INS_MR, new Executable() {
-	@Override
-	public int exec() {
-	  A = memory.getByte(DE());
-	  WZ = (DE() + 1) & 0xffff;
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd 1b
-    new Opcode("DEC", "DE", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  if (--E < 0) {
-	    E = 0xff;
-	    D = (D - 1) & 0xff;
-	  }
-	  incPC();
-	  return 6;
-	}
-      }
-      ),
-
-    // dd 1c
-    new Opcode("INC", "E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  E = (E + 1) & 0xff;
-	  F4(E);
-	  if (E == 0x80) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  if ((E & 0x0f) == 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 1d
-    new Opcode("DEC", "E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  E = (E - 1) & 0xff;
-	  F4(E);
-	  if (E == 0x7f) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  if ((E & 0x0f) == 0x0f) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 1e
-    new Opcode("LD", "E,<n>", 2, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  E = memory.getByte(PC);
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd 1f
-    new Opcode("RRA", "", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tb = A;
-	  A = ((A >> 1) | (F << 7)) & 0xff;
-	  if ((tb & 1) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  F2(A);
-	  CLEARHF();
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 20
-    new Opcode("JR", "NZ,<e>", 1, Processor.INS_JMP, new Executable() {
-	@Override
-	public int exec() {
-	  if (ZFSET()) {
-	    incPC(2);
-	    return 7;
-	  } else {
-	    incPC();
-	    PC = WZ = (PC + 1 + (byte)(memory.getByte(PC))) & 0xffff;
-	    return 12;
-	  }
-	}
-      }
-      ),
+    // dd 1a - dd 20
+    null, null, null, null, null, null,
+    null,
 
     // dd 21
-    new Opcode("LD", "HL,<nn>", 3, 0, new Executable() {
+    new Opcode("LD", "IX,<nn>", 3, 0, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
-	  L = memory.getByte(PC);
+	  IX = memory.getByte(PC);
 	  incPC();
-	  H = memory.getByte(PC);
+	  IX += memory.getByte(PC) << 8;
 	  incPC();
 	  return 10;
 	}
@@ -10783,16 +10422,16 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 22
-    new Opcode("LD", "(<nn>),HL", 3, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(<nn>),IX", 3, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
 	  WZ = memory.getByte(PC);
 	  incPC();
 	  WZ += memory.getByte(PC) << 8;
-	  memory.setByte(WZ, L);
+	  memory.setByte(WZ, IX & 0xff);
 	  incWZ();
-	  memory.setByte(WZ, H);
+	  memory.setByte(WZ, IX >> 8);
 	  incPC();
 	  return 16;
 	}
@@ -10800,13 +10439,10 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 23
-    new Opcode("INC", "HL", 1, 0, new Executable() {
+    new Opcode("INC", "IX", 1, 0, new Executable() {
 	@Override
 	public int exec() {
-	  L = (L + 1) & 0xff;
-	  if (L == 0) {
-	    H = (H + 1) & 0xff;
-	  }
+	  IX = (IX + 1) & 0xffff;
 	  incPC();
 	  return 6;
 	}
@@ -10814,17 +10450,18 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 24
-    new Opcode("INC", "H", 1, 0, new Executable() {
+    new Opcode("INC", "IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  H = (H + 1) & 0xff;
-	  F4(H);
-	  if (H == 0x80) {
+	  final int tb = ((IX >> 8) + 1) & 0xff;
+	  IX = (tb << 8) + (IX & 0xff);
+	  F4(tb);
+	  if (tb == 0x80) {
 	    SETPF();
 	  } else {
 	    CLEARPF();
 	  }
-	  if ((H & 0x0f) == 0) {
+	  if ((tb & 0x0f) == 0) {
 	    SETHF();
 	  } else {
 	    CLEARHF();
@@ -10837,17 +10474,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 25
-    new Opcode("DEC", "H", 1, 0, new Executable() {
+    new Opcode("DEC", "IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  H = (H - 1) & 0xff;
-	  F4(H);
-	  if (H == 0x7f) {
+	  final int tb = ((IX >> 8) - 1) & 0xff;
+	  F4(tb);
+	  if (tb == 0x7f) {
 	    SETPF();
 	  } else {
 	    CLEARPF();
 	  }
-	  if ((H & 0x0f) == 0x0f) {
+	  if ((tb & 0x0f) == 0x0f) {
 	    SETHF();
 	  } else {
 	    CLEARHF();
@@ -10860,72 +10497,19 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 26
-    new Opcode("LD", "H,<n>", 2, 0, new Executable() {
+    new Opcode("LD", "IXH,<n>", 2, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
-	  H = memory.getByte(PC);
+	  IX = (memory.getByte(PC) << 8) + (IX & 0xff);
 	  incPC();
 	  return 7;
 	}
       }
       ),
 
-    // dd 27
-    new Opcode("DAA", "", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int ld = A & 0x0f;
-	  if (NFSET()) {
-	    final boolean hd = CFSET() || (A > 0x99);
-	    if (HFSET() || (ld > 9)) {
-	      if (ld > 5) {
-		CLEARHF();
-	      }
-	      A = (A - 6) & 0xff;
-	    }
-	    if (hd) {
-	      A -= 0x0160;
-	    }
-	  } else {
-	    if (HFSET() || (ld > 9)) {
-	      if (ld > 9) {
-		SETHF();
-	      } else {
-		CLEARHF();
-	      }
-	      A += 6;
-	    }
-	    if (CFSET() || ((A & 0x01f0) > 0x90)) {
-	      A += 0x60;
-	    }
-	  }
-	  if (((A >> 8) & 1) == 1) {
-	    SETCF();
-	  }
-	  A &= 0xff;
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 28
-    new Opcode("JR", "Z,<e>", 1, Processor.INS_JMP, new Executable() {
-	@Override
-	public int exec() {
-	  if (!ZFSET()) {
-	    incPC(2);
-	    return 7;
-	  } else {
-	    incPC();
-	    PC = WZ = (PC + 1 + (byte)(memory.getByte(PC))) & 0xffff;
-	    return 12;
-	  }
-	}
-      }
-      ),
+    // dd 27 - dd 28
+    null, null,
 
     // dd 29
     new Opcode("ADD", "IX,IX", 1, 0, new Executable() {
@@ -10953,16 +10537,16 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 2a
-    new Opcode("LD", "HL,(<nn>)", 3, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "IX,(<nn>)", 3, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
 	  WZ = memory.getByte(PC);
 	  incPC();
 	  WZ += memory.getByte(PC) << 8;
-	  L = memory.getByte(WZ);
+	  IX = memory.getByte(WZ);
 	  incWZ();
-	  H = memory.getByte(WZ);
+	  IX += memory.getByte(WZ) << 8;
 	  incPC();
 	  return 16;
 	}
@@ -10970,13 +10554,10 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 2b
-    new Opcode("DEC", "HL", 1, 0, new Executable() {
+    new Opcode("DEC", "IX", 1, 0, new Executable() {
 	@Override
 	public int exec() {
-	  if (--L < 0) {
-	    L = 0xff;
-	    H = (H - 1) & 0xff;
-	  }
+	  IX = (IX - 1) & 0xffff;
 	  incPC();
 	  return 6;
 	}
@@ -10984,143 +10565,11 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 2c
-    new Opcode("INC", "L", 1, 0, new Executable() {
+    new Opcode("INC", "IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  L = (L + 1) & 0xff;
-	  F4(L);
-	  if (L == 0x80) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  if ((L & 0x0f) == 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 2d
-    new Opcode("DEC", "L", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  L = (L - 1) & 0xff;
-	  F4(L);
-	  if (L == 0x7f) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  if ((L & 0x0f) == 0x0f) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 2e
-    new Opcode("LD", "L,<n>", 2, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  L = memory.getByte(PC);
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd 2f
-    new Opcode("CPL", "", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A = (~A) & 0xff;
-	  F2(A);
-	  SETHF();
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 30
-    new Opcode("JR", "NC,<e>", 1, Processor.INS_JMP, new Executable() {
-	@Override
-	public int exec() {
-	  if (CFSET()) {
-	    incPC(2);
-	    return 7;
-	  } else {
-	    incPC();
-	    PC = WZ = (PC + 1 + (byte)(memory.getByte(PC))) & 0xffff;
-	    return 12;
-	  }
-	}
-      }
-      ),
-
-    // dd 31
-    new Opcode("LD", "SP,<nn>", 3, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  final int tb = memory.getByte(PC);
-	  incPC();
-	  SP = tb + (memory.getByte(PC) << 8);
-	  incPC();
-	  return 10;
-	}
-      }
-      ),
-
-    // dd 32
-    new Opcode("LD", "(<nn>),A", 3, Processor.INS_MW, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  memory.setByte(WZ + (memory.getByte(PC) << 8), A);
-	  WZ += A << 8;
-	  incPC();
-	  return 13;
-	}
-      }
-      ),
-
-    // dd 33
-    new Opcode("INC", "SP", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incSP();
-	  incPC();
-	  return 6;
-	}
-      }
-      ),
-
-    // dd 34
-    new Opcode("INC", "(HL)",
-	       1,
-	       Processor.INS_MR | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = HL();
-	  final int tb = (memory.getByte(tw) + 1) & 0xff;
-	  memory.setByte(tw, tb);
+	  final int tb = (IX + 1) & 0xff;
+	  IX = tb + (IX & 0xff00);
 	  F4(tb);
 	  if (tb == 0x80) {
 	    SETPF();
@@ -11134,21 +10583,17 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  }
 	  CLEARNF();
 	  incPC();
-	  return 11;
+	  return 4;
 	}
       }
       ),
 
-    // dd 35
-    new Opcode("DEC", "M",
-	       1,
-	       Processor.INS_MR | Processor.INS_MW,
-	       new Executable() {
+    // dd 2d
+    new Opcode("DEC", "IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = HL();
-	  final int tb = (memory.getByte(tw) - 1) & 0xff;
-	  memory.setByte(tw, tb);
+	  final int tb = (IX - 1) & 0xff;
+	  IX = tb + (IX & 0xff00);
 	  F4(tb);
 	  if (tb == 0x7f) {
 	    SETPF();
@@ -11162,56 +10607,104 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  }
 	  SETNF();
 	  incPC();
-	  return 11;
-	}
-      }
-      ),
-
-    // dd 36
-    new Opcode("LD", "(HL),<n>", 2, Processor.INS_MW, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = HL();
-	  incPC();
-	  memory.setByte(tw, memory.getByte(PC));
-	  incPC();
-	  return 10;
-	}
-      }
-      ),
-
-    // dd 37
-    new Opcode("SCF", "", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  SETCF();
-	  F2(A);
-	  CLEARHF();
-	  CLEARNF();
-	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 38
-    new Opcode("JR", "C,<e>", 1, Processor.INS_JMP, new Executable() {
+    // dd 2e
+    new Opcode("LD", "IXL,<n>", 2, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  if (!CFSET()) {
-	    incPC(2);
-	    return 7;
-	  } else {
-	    incPC();
-	    PC = WZ = (PC + 1 + (byte)(memory.getByte(PC))) & 0xffff;
-	    return 12;
-	  }
+	  incPC();
+	  IX = memory.getByte(PC) + (IX & 0xff00);
+	  incPC();
+	  return 7;
 	}
       }
       ),
 
+    // dd 2f - dd 33
+    null,
+    null, null, null, null,
+
+    // dd 34
+    new Opcode("INC", "(IX<d>)",
+	       2,
+	       Processor.INS_MR | Processor.INS_MW,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = (memory.getByte(WZ) + 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  F4(tb);
+	  if (tb == 0x80) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  if ((tb & 0x0f) == 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd 35
+    new Opcode("DEC", "(IX<d>)",
+	       2,
+	       Processor.INS_MR | Processor.INS_MW,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = (memory.getByte(WZ) - 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  F4(tb);
+	  if (tb == 0x7f) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  if ((tb & 0x0f) == 0x0f) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  SETNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // dd 36
+    new Opcode("LD", "(IX<d>),<n>", 3, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  incPC();
+	  memory.setByte(WZ, memory.getByte(PC));
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // dd 37 - dd 38
+    null, null,
+
     // dd 39
-    new Opcode("ADD", "IX,SP", 1, 0, new Executable() {
+    new Opcode("ADD", "IX,SP", 2, 0, new Executable() {
 	@Override
 	public int exec() {
 	  WZ = (IX + 1) & 0xffff;
@@ -11235,168 +10728,26 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // dd 3a
-    new Opcode("LD", "A,(<nn>)", 3, Processor.INS_MR, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  A = memory.getByte(WZ);
-	  incWZ();
-	  incPC();
-	  return 13;
-	}
-      }
-      ),
+    // dd 3a - 43
+    null, null, null, null, null, null,
+    null, null, null, null,
 
-    // dd 3b
-    new Opcode("DEC", "SP", 1, 0, new Executable() {
+    // dd 44 (undocumented)
+    new Opcode("LD", "B,IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  decSP();
-	  incPC();
-	  return 6;
-	}
-      }
-      ),
-
-    // dd 3c
-    new Opcode("INC", "A", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A = (A + 1) & 0xff;
-	  F4(A);
-	  if (A == 0x80) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  if ((A & 0x0f) == 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  CLEARNF();
+	  B = IX >> 8;
 	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 3d
-    new Opcode("DEC", "A", 1, 0, new Executable() {
+    // dd 45 (undocumented)
+    new Opcode("LD", "B,IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  A = (A - 1) & 0xff;
-	  F4(A);
-	  if (A == 0x7f) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  if ((A & 0x0f) == 0x0f) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 3e
-    new Opcode("LD", "A,<n>", 2, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  A = memory.getByte(PC);
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd 3f
-    new Opcode("CCF", "", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  F ^= CF;
-	  F2(A);
-	  if (CFSET()) {
-	    CLEARHF();
-	  } else {
-	    SETHF();
-	  }
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 40
-    new Opcode("LD", "B,B", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 41
-    new Opcode("LD", "B,C", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  B = C;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 42
-    new Opcode("LD", "B,D", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  B = D;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 43
-    new Opcode("LD", "B,E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  B = E;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 44
-    new Opcode("LD", "B,H", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  B = H;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 45
-    new Opcode("LD", "B,L", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  B = L;
+	  B = IX & 0xff;
 	  incPC();
 	  return 4;
 	}
@@ -11404,174 +10755,76 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 46
-    new Opcode("LD", "B,M", 1, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "B,(IX<d>)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  B = memory.getByte(HL());
 	  incPC();
-	  return 7;
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  B = memory.getByte(WZ);
+	  incPC();
+	  return 15;
 	}
       }
       ),
 
-    // dd 47
-    new Opcode("LD", "B,A", 1, 0, new Executable() {
+    // dd 47 - dd 4b
+    null, null, null, null, null,
+    
+    
+    // dd 4c (undocumented)
+    new Opcode("LD", "C,IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  B = A;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 48
-    new Opcode("LD", "C,B", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  C = B;
+	  C = IX >> 8;
 	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 49
-    new Opcode("LD", "C,C", 1, 0, new Executable() {
+    // dd 4d (undocumented)
+    new Opcode("LD", "C,IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
+	  C = IX & 0xff;
 	  incPC();
 	  return 4;
 	}
       }
       ),
-
-    // dd 4a
-    new Opcode("LD", "C,D", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  C = D;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 4b
-    new Opcode("LD", "C,E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  C = E;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 4c
-    new Opcode("LD", "C,H", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  C = H;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 4d
-    new Opcode("LD", "C,L", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  C = L;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
 
     // dd 4e
-    new Opcode("LD", "C,M", 1, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "C,(IX<d>)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  C = memory.getByte(HL());
 	  incPC();
-	  return 7;
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  C = memory.getByte(WZ);
+	  incPC();
+	  return 15;
 	}
       }
       ),
 
-    // dd 4f
-    new Opcode("LD", "C,A", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  C = A;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
+    // dd 4f - dd 53
+    null, null, null, null, null,
 
-    // dd 50
-    new Opcode("LD", "D,B", 1, 0, new Executable() {
+    // dd 54 (undocumented)
+    new Opcode("LD", "D,IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  D = B;
+	  D = IX >> 8;
 	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 51
-    new Opcode("LD", "D,C", 1, 0, new Executable() {
+    // dd 55 (undocumented)
+    new Opcode("LD", "D,IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  D = C;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 52
-    new Opcode("LD", "D,D", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 53
-    new Opcode("LD", "D,E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  D = E;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 54
-    new Opcode("LD", "D,H", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  D = H;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 55
-    new Opcode("LD", "D,L", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  D = L;
+	  D = IX & 0xff;
 	  incPC();
 	  return 4;
 	}
@@ -11579,86 +10832,37 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 56
-    new Opcode("LD", "D,M", 1, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "D,(IX<d>)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  D = memory.getByte(HL());
 	  incPC();
-	  return 7;
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  D = memory.getByte(WZ);
+	  incPC();
+	  return 15;
 	}
       }
       ),
 
-    // dd 57
-    new Opcode("LD", "D,A", 1, 0, new Executable() {
+    // dd 57 - dd 5b
+    null, null, null, null, null,
+    
+    // dd 5c (undocumented)
+    new Opcode("LD", "D,IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  D = A;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 58
-    new Opcode("LD", "E,B", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  E = B;
+	  D = IX >> 8;
 	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 59
-    new Opcode("LD", "E,C", 1, 0, new Executable() {
+    // dd 5d (undocumented)
+    new Opcode("LD", "E,IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  E = C;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 5a
-    new Opcode("LD", "E,D", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  E = D;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 5b
-    new Opcode("LD", "E,E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 5c
-    new Opcode("LD", "E,H", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  E = H;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 5d
-    new Opcode("LD", "E,L", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  E = L;
+	  E = IX & 0xff;
 	  incPC();
 	  return 4;
 	}
@@ -11666,73 +10870,67 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 5e
-    new Opcode("LD", "E,M", 1, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "D,(IX<d>)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  E = memory.getByte(HL());
 	  incPC();
-	  return 7;
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  E = memory.getByte(WZ);
+	  incPC();
+	  return 15;
 	}
       }
       ),
 
     // dd 5f
-    new Opcode("LD", "E,A", 1, 0, new Executable() {
+    null,
+
+    // dd 60 (undocumented)
+    new Opcode("LD", "IXH,B", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  E = A;
+	  IX = (B << 8) + (IX & 0xff);
 	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 60
-    new Opcode("LD", "H,B", 1, 0, new Executable() {
+    // dd 61 (undocumented)
+    new Opcode("LD", "IXH,C", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  H = B;
+	  IX = (C << 8) + (IX & 0xff);
 	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 61
-    new Opcode("LD", "H,C", 1, 0, new Executable() {
+    // dd 62 (undocumented)
+    new Opcode("LD", "IXH,D", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  H = C;
+	  IX = (D << 8) + (IX & 0xff);
 	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 62
-    new Opcode("LD", "H,D", 1, 0, new Executable() {
+    // dd 63 (undocumented)
+    new Opcode("LD", "IXH,E", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  H = D;
+	  IX = (E << 8) + (IX & 0xff);
 	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 63
-    new Opcode("LD", "H,E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  H = E;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 64
-    new Opcode("LD", "H,H", 1, 0, new Executable() {
+    // dd 64 (undocumented)
+    new Opcode("LD", "IXH,IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -11741,11 +10939,11 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // dd 65
-    new Opcode("LD", "H,L", 1, 0, new Executable() {
+    // dd 65 (undocumented)
+    new Opcode("LD", "IXH,IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  H = L;
+	  IX = ((IX & 0xff) << 8) + (IX & 0xff);
 	  incPC();
 	  return 4;
 	}
@@ -11753,84 +10951,86 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 66
-    new Opcode("LD", "H,M", 1, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "H,(IX<d>)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  H = memory.getByte(HL());
 	  incPC();
-	  return 7;
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  H = memory.getByte(WZ);
+	  incPC();
+	  return 15;
 	}
       }
       ),
 
-    // dd 67
-    new Opcode("LD", "H,A", 1, 0, new Executable() {
+    // dd 67 (undocumented)
+    new Opcode("LD", "IXH,A", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  H = A;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 68
-    new Opcode("LD", "L,B", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  L = B;
+	  IX = (A << 8) + (IX & 0xff);
 	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 69
-    new Opcode("LD", "L,C", 1, 0, new Executable() {
+    // dd 68 (undocumented)
+    new Opcode("LD", "IXL,B", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  L = C;
+	  IX = (IX & 0xff00) + B;
 	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 6a
-    new Opcode("LD", "L,D", 1, 0, new Executable() {
+    // dd 69 (undocumented)
+    new Opcode("LD", "IXL,C", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  L = D;
+	  IX = (IX & 0xff00) + C;
 	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 6b
-    new Opcode("LD", "L,E", 1, 0, new Executable() {
+    // dd 6a (undocumented)
+    new Opcode("LD", "IXL,D", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  L = E;
+	  IX = (IX & 0xff00) + D;
 	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 6c
-    new Opcode("LD", "L,H", 1, 0, new Executable() {
+    // dd 6b (undocumented)
+    new Opcode("LD", "IXL,E", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  L = H;
+	  IX = (IX & 0xff00) + E;
 	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 6d
-    new Opcode("LD", "L,L", 1, 0, new Executable() {
+    // dd 6c (undocumented)
+    new Opcode("LD", "IXL,IXH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  IX = (IX & 0xff00) + (IX >> 8);
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // dd 6d (undocumented)
+    new Opcode("LD", "IXL,IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
 	  incPC();
@@ -11840,21 +11040,23 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 6e
-    new Opcode("LD", "L,M", 1, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "L,(IX<d>)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  L = memory.getByte(HL());
 	  incPC();
-	  return 7;
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  L = memory.getByte(WZ);
+	  incPC();
+	  return 15;
 	}
       }
       ),
 
-    // dd 6f
-    new Opcode("LD", "L,A", 1, 0, new Executable() {
+    // dd 6f (undocumented)
+    new Opcode("LD", "IXL,A", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  L = A;
+	  IX = (IX & 0xff00) + A;
 	  incPC();
 	  return 4;
 	}
@@ -11862,158 +11064,118 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 70
-    new Opcode("LD", "M,B", 1, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(IX<d>),B", 2, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = HL();
-	  memory.setByte(tw, B);
 	  incPC();
-	  return 7;
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  memory.setByte(WZ, B);
+	  incPC();
+	  return 15;
 	}
       }
       ),
 
     // dd 71
-    new Opcode("LD", "M,C", 1, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(IX<d>),C", 2, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = HL();
-	  memory.setByte(tw, C);
 	  incPC();
-	  return 7;
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  memory.setByte(WZ, C);
+	  incPC();
+	  return 15;
 	}
       }
       ),
 
     // dd 72
-    new Opcode("LD", "M,D", 1, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(IX<d>),D", 2, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = HL();
-	  memory.setByte(tw, D);
 	  incPC();
-	  return 7;
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  memory.setByte(WZ, D);
+	  incPC();
+	  return 15;
 	}
       }
       ),
 
     // dd 73
-    new Opcode("LD", "M,E", 1, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(IX<d>),E", 2, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = HL();
-	  memory.setByte(tw, E);
 	  incPC();
-	  return 7;
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  memory.setByte(WZ, E);
+	  incPC();
+	  return 15;
 	}
       }
       ),
 
     // dd 74
-    new Opcode("LD", "M,H", 1, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(IX<d>),H", 2, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = HL();
-	  memory.setByte(tw, H);
 	  incPC();
-	  return 7;
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  memory.setByte(WZ, H);
+	  incPC();
+	  return 15;
 	}
       }
       ),
 
     // dd 75
-    new Opcode("LD", "M,L", 1, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(IX<d>),L", 2, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = HL();
-	  memory.setByte(tw, L);
 	  incPC();
-	  return 7;
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  memory.setByte(WZ, L);
+	  incPC();
+	  return 15;
 	}
       }
       ),
 
     // dd 76
-    new Opcode("HALT", "", 1, Processor.INS_HLT, new Executable() {
-	@Override
-	public int exec() {
-	  return 4;
-	}
-      }
-      ),
+    null,
 
     // dd 77
-    new Opcode("LD", "M,A", 1, Processor.INS_MW, new Executable() {
+    new Opcode("LD", "(IX<d>),A", 2, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = HL();
-	  memory.setByte(tw, A);
 	  incPC();
-	  return 7;
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  memory.setByte(WZ, A);
+	  incPC();
+	  return 15;
 	}
       }
       ),
 
-    // dd 78
-    new Opcode("LD", "A,B", 1, 0, new Executable() {
+    // dd 78 - dd 7b
+    null, null, null, null,
+    
+    // dd 7c (undocumented)
+    new Opcode("LD", "A,IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  A = B;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 79
-    new Opcode("LD", "A,C", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A = C;
+	  A = IX >> 8;
 	  incPC();
 	  return 4;
 	}
       }
       ),
 
-    // dd 7a
-    new Opcode("LD", "A,D", 1, 0, new Executable() {
+    // dd 7d (undocumented)
+    new Opcode("LD", "A,IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  A = D;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 7b
-    new Opcode("LD", "A,E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A = E;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 7c
-    new Opcode("LD", "A,H", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A = H;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 7d
-    new Opcode("LD", "A,L", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A = L;
+	  A = IX & 0xff;
 	  incPC();
 	  return 4;
 	}
@@ -12021,32 +11183,27 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 7e
-    new Opcode("LD", "A,M", 1, Processor.INS_MR, new Executable() {
+    new Opcode("LD", "A,(IX<d>)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  A = memory.getByte(HL());
 	  incPC();
-	  return 7;
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  A = memory.getByte(WZ);
+	  incPC();
+	  return 15;
 	}
       }
       ),
 
-    // dd 7f
-    new Opcode("LD", "A,A", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
+    // dd 7f - dd 83
+    null, null, null, null, null,
 
-    // dd 80
-    new Opcode("ADD", "A,B", 1, 0, new Executable() {
+    // dd 84 (undocumented)
+    new Opcode("ADD", "A,IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = A + B;
-	  final int cb = A ^ B ^ tw;
+	  final int tw = A + (IX >> 8);
+	  final int cb = A ^ (IX >> 8) ^ tw;
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
@@ -12071,132 +11228,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // dd 81
-    new Opcode("ADD", "A,C", 1, 0, new Executable() {
+    // dd 85 (undocumented)
+    new Opcode("ADD", "A,IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = A + C;
-	  final int cb = A ^ C ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 82
-    new Opcode("ADD", "A,D", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A + D;
-	  final int cb = A ^ D ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 83
-    new Opcode("ADD", "A,E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A + E;
-	  final int cb = A ^ E ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 84
-    new Opcode("ADD", "A,H", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A + H;
-	  final int cb = A ^ H ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 85
-    new Opcode("ADD", "A,L", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A + L;
-	  final int cb = A ^ L ^ tw;
+	  final int tw = A + (IX & 0xff);
+	  final int cb = A ^ (IX & 0xff) ^ tw;
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
@@ -12222,10 +11259,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 86
-    new Opcode("ADD", "A,(HL)", 1, Processor.INS_MR, new Executable() {
+    new Opcode("ADD", "A,(IX<d>)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = memory.getByte(HL());
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
 	  final int tw = A + tb;
 	  final int cb = A ^ tb ^ tw;
 	  if ((cb & 0x10) != 0) {
@@ -12247,46 +11286,20 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F4(A);
 	  CLEARNF();
 	  incPC();
-	  return 7;
+	  return 15;
 	}
       }
       ),
 
-    // dd 87
-    new Opcode("ADD", "A,A", 1, 0, new Executable() {
+    // dd 87 - dd 8b
+    null, null, null, null, null,
+    
+    // dd 8c (undocumented)
+    new Opcode("ADC", "A,IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = A << 1;
-	  if ((tw & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((tw ^ (tw >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 88
-    new Opcode("ADC", "A,B", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A + B + (F & CF);
-	  final int cb = A ^ B ^ tw;
+	  final int tw = A + (IX >> 8) + (F & CF);
+	  final int cb = A ^ (IX >> 8) ^ tw;
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
@@ -12311,132 +11324,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // dd 89
-    new Opcode("ADC", "A,C", 1, 0, new Executable() {
+    // dd 8d (undocumented)
+    new Opcode("ADC", "A,L", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = A + C + (F & CF);
-	  final int cb = A ^ C ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 8a
-    new Opcode("ADC", "A,D", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A + D + (F & CF);
-	  final int cb = A ^ D ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 8b
-    new Opcode("ADC", "A,E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A + E + (F & CF);
-	  final int cb = A ^ E ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 8c
-    new Opcode("ADC", "A,H", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A + H + (F & CF);
-	  final int cb = A ^ H ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 8d
-    new Opcode("ADC", "A,L", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A + L + (F & CF);
-	  final int cb = A ^ L ^ tw;
+	  final int tw = A + (IX & 0xff) + (F & CF);
+	  final int cb = A ^ (IX & 0xff) ^ tw;
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
@@ -12462,10 +11355,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 8e
-    new Opcode("ADC", "A,(HL)", 1, Processor.INS_MR, new Executable() {
+    new Opcode("ADC", "A,(IX<d>)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = memory.getByte(HL());
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
 	  final int tw = A + tb + (F & CF);
 	  final int cb = A ^ tb ^ tw;
 	  if ((cb & 0x10) != 0) {
@@ -12487,46 +11382,20 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F4(A);
 	  CLEARNF();
 	  incPC();
-	  return 7;
+	  return 15;
 	}
       }
       ),
 
-    // dd 8f
-    new Opcode("ADC", "A,A", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = (A << 1) + (F & CF);
-	  if ((tw & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((tw ^ (tw >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  CLEARNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
+    // dd 8f - dd 93
+    null, null, null, null, null,
 
-    // dd 90
-    new Opcode("SUB", "B", 1, 0, new Executable() {
+    // dd 94 (undocumented)
+    new Opcode("SUB", "IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = A - B;
-	  final int cb = A ^ B ^ tw;
+	  final int tw = A - (IX >> 8);
+	  final int cb = A ^ (IX >> 8) ^ tw;
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
@@ -12551,132 +11420,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // dd 91
-    new Opcode("SUB", "C", 1, 0, new Executable() {
+    // dd 95 (undocumented)
+    new Opcode("SUB", "IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = A - C;
-	  final int cb = A ^ C ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 92
-    new Opcode("SUB", "D", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A - D;
-	  final int cb = A ^ D ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 93
-    new Opcode("SUB", "E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A - E;
-	  final int cb = A ^ E ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 94
-    new Opcode("SUB", "H", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A - H;
-	  final int cb = A ^ H ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 95
-    new Opcode("SUB", "L", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A - L;
-	  final int cb = A ^ L ^ tw;
+	  final int tw = A - (IX & 0xff);
+	  final int cb = A ^ (IX & 0xff) ^ tw;
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
@@ -12702,10 +11451,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 96
-    new Opcode("SUB", "(HL)", 1, Processor.INS_MR, new Executable() {
+    new Opcode("SUB", "(IX<d>)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = memory.getByte(HL());
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
 	  final int tw = A - tb;
 	  final int cb = A ^ tb ^ tw;
 	  if ((cb & 0x10) != 0) {
@@ -12727,33 +11478,20 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F4(A);
 	  SETNF();
 	  incPC();
-	  return 7;
+	  return 15;
 	}
       }
       ),
 
-    // dd 97
-    new Opcode("SUB", "A", 1, 0, new Executable() {
+    // dd 97 - dd 9b
+    null, null, null, null, null,
+    
+    // dd 9c (undocumented)
+    new Opcode("SBC", "A,IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  CLEARHF();
-	  CLEARCF();
-	  CLEARPF();
-	  A = 0;
-	  F4(0);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 98
-    new Opcode("SBC", "A,B", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A - B - (F & CF);
-	  final int cb = A ^ B ^ tw;
+	  final int tw = A - (IX >> 8) - (F & CF);
+	  final int cb = A ^ (IX >> 8) ^ tw;
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
@@ -12778,132 +11516,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // dd 99
-    new Opcode("SBC", "A,C", 1, 0, new Executable() {
+    // dd 9d (undocumented)
+    new Opcode("SBC", "A,IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = A - C - (F & CF);
-	  final int cb = A ^ C ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 9a
-    new Opcode("SBC", "A,D", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A - D - (F & CF);
-	  final int cb = A ^ D ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 9b
-    new Opcode("SBC", "A,E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A - E - (F & CF);
-	  final int cb = A ^ E ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 9c
-    new Opcode("SBC", "A,H", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A - H - (F & CF);
-	  final int cb = A ^ H ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd 9d
-    new Opcode("SBC", "A,L", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A - L - (F & CF);
-	  final int cb = A ^ L ^ tw;
+	  final int tw = A - (IX & 0xff) - (F & CF);
+	  final int cb = A ^ (IX & 0xff) ^ tw;
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
@@ -12929,10 +11547,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd 9e
-    new Opcode("SBC", "A,(HL)", 1, Processor.INS_MR, new Executable() {
+    new Opcode("SBC", "A,(IX<d>)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = memory.getByte(HL());
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
 	  final int tw = A - tb - (F & CF);
 	  final int cb = A ^ tb ^ tw;
 	  if ((cb & 0x10) != 0) {
@@ -12954,45 +11574,19 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F4(A);
 	  SETNF();
 	  incPC();
-	  return 7;
+	  return 15;
 	}
       }
       ),
 
-    // dd 9f
-    new Opcode("SBC", "A,A", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = -(F & CF);
-	  if ((tw & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((tw ^ (tw >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
+    // dd 9f - dd a3
+    null, null, null, null, null,
 
-    // dd a0
-    new Opcode("AND", "B", 1, 0, new Executable() {
+    // dd a4 (undocumented)
+    new Opcode("AND", "IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  A &= B;
+	  A &= IX >> 8;
 	  SETHF();
 	  CLEARCF();
 	  CLEARNF();
@@ -13003,71 +11597,11 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // dd a1
-    new Opcode("AND", "C", 1, 0, new Executable() {
+    // dd a5 (undocumented)
+    new Opcode("AND", "L", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  A &= C;
-	  SETHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd a2
-    new Opcode("AND", "D", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A &= D;
-	  SETHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd a3
-    new Opcode("AND", "E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A &= E;
-	  SETHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd a4
-    new Opcode("AND", "H", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A &= H;
-	  SETHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd a5
-    new Opcode("AND", "L", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A &= L;
+	  A &= IX & 0x0f;
 	  SETHF();
 	  CLEARCF();
 	  CLEARNF();
@@ -13079,40 +11613,30 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd a6
-    new Opcode("AND", "(HL)", 1, Processor.INS_MR, new Executable() {
+    new Opcode("AND", "(IX<d>)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = memory.getByte(HL());
-	  A &= tb;
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  A &= memory.getByte(WZ);
 	  SETHF();
 	  CLEARCF();
 	  CLEARNF();
 	  F5(A);
 	  incPC();
-	  return 7;
+	  return 15;
 	}
       }
       ),
 
-    // dd a7
-    new Opcode("AND", "A", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  SETHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
+    // dd a7 - dd db
+    null, null, null, null, null,
 
-    // dd a8
-    new Opcode("XOR", "B", 1, 0, new Executable() {
+    // dd ac (undocumented)
+    new Opcode("XOR", "IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  A ^= B;
+	  A ^= IX >> 8;
 	  CLEARHF();
 	  CLEARCF();
 	  CLEARNF();
@@ -13123,71 +11647,11 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // dd a9
-    new Opcode("XOR", "C", 1, 0, new Executable() {
+    // dd ad (undocumented)
+    new Opcode("XOR", "IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  A ^= C;
-	  CLEARHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd aa
-    new Opcode("XOR", "D", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A ^= D;
-	  CLEARHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd ab
-    new Opcode("XOR", "E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A ^= E;
-	  CLEARHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd ac
-    new Opcode("XOR", "H", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A ^= H;
-	  CLEARHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd ad
-    new Opcode("XOR", "L", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A ^= L;
+	  A ^= IX >> 8;
 	  CLEARHF();
 	  CLEARCF();
 	  CLEARNF();
@@ -13199,37 +11663,30 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd ae
-    new Opcode("XOR", "(HL)", 1, Processor.INS_MR, new Executable() {
+    new Opcode("XOR", "(IX<d>)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  A ^= memory.getByte(HL());
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  A ^= memory.getByte(WZ);
 	  CLEARHF();
 	  CLEARCF();
 	  CLEARNF();
 	  F5(A);
 	  incPC();
-	  return 7;
+	  return 15;
 	}
       }
       ),
 
-    // dd af
-    new Opcode("XOR", "A", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A = 0;
-	  F = ZF | PF;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
+    // dd af - dd b3
+    null, null, null, null, null,
 
-    // dd b0
-    new Opcode("OR", "B", 1, 0, new Executable() {
+    // dd b4 (undocumented)
+    new Opcode("OR", "IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  A |= B;
+	  A |= IX >> 8;
 	  CLEARHF();
 	  CLEARCF();
 	  CLEARNF();
@@ -13240,71 +11697,11 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // dd b1
-    new Opcode("OR", "C", 1, 0, new Executable() {
+    // dd b5 (undocumented)
+    new Opcode("OR", "IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  A |= C;
-	  CLEARHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd b2
-    new Opcode("OR", "D", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A |= D;
-	  CLEARHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd b3
-    new Opcode("OR", "E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A |= E;
-	  CLEARHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd b4
-    new Opcode("OR", "H", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A |= H;
-	  CLEARHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd b5
-    new Opcode("OR", "L", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  A |= L;
+	  A |= IX & 0xff;
 	  CLEARHF();
 	  CLEARCF();
 	  CLEARNF();
@@ -13316,156 +11713,31 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd b6
-    new Opcode("OR", "(HL)", 1, Processor.INS_MR, new Executable() {
+    new Opcode("OR", "(HL)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  A |= memory.getByte(HL());
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  A |= memory.getByte(WZ);
 	  CLEARHF();
 	  CLEARCF();
 	  CLEARNF();
 	  F5(A);
 	  incPC();
-	  return 7;
+	  return 15;
 	}
       }
       ),
 
-    // dd b7
-    new Opcode("OR", "A", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  CLEARHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
+    // dd b7 - dd bb
+    null, null, null, null, null,
 
-    // dd b8
-    new Opcode("CP", "B", 1, 0, new Executable() {
+    // dd bc (undocumented)
+    new Opcode("CP", "IXH", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = A - B;
-	  final int cb = A ^ B ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  F22(tw & 0xff, B);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd b9
-    new Opcode("CP", "C", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A - C;
-	  final int cb = A ^ C ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  F22(tw & 0xff, C);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd ba
-    new Opcode("CP", "D", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A - D;
-	  final int cb = A ^ D ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  F22(tw & 0xff, D);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd bb
-    new Opcode("CP", "E", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A - E;
-	  final int cb = A ^ E ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  F22(tw & 0xff, E);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd bc
-    new Opcode("CP", "H", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  final int tw = A - H;
-	  final int cb = A ^ H ^ tw;
+	  final int tw = A - (IX >> 8);
+	  final int cb = A ^ (IX >> 8) ^ tw;
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
@@ -13489,12 +11761,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       }
       ),
 
-    // dd bd
-    new Opcode("CP", "L", 1, 0, new Executable() {
+    // dd bd (undocumented)
+    new Opcode("CP", "IXL", 1, Processor.INS_UND, new Executable() {
 	@Override
 	public int exec() {
-	  final int tw = A - L;
-	  final int cb = A ^ L ^ tw;
+	  final int tw = A - (IX & 0xff);
+	  final int cb = A ^ (IX & 0xff) ^ tw;
 	  if ((cb & 0x10) != 0) {
 	    SETHF();
 	  } else {
@@ -13510,7 +11782,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  } else {
 	    CLEARPF();
 	  }
-	  F22(tw & 0xff, L);
+	  F22(tw & 0xff, H);
 	  SETNF();
 	  incPC();
 	  return 4;
@@ -13519,10 +11791,12 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd be
-    new Opcode("CP", "(HL)", 1, Processor.INS_MR, new Executable() {
+    new Opcode("CP", "(IX<d>)", 2, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  final int tb = memory.getByte(HL());
+	  incPC();
+	  WZ = IX + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
 	  final int tw = A - tb;
 	  final int cb = A ^ tb ^ tw;
 	  if ((cb & 0x10) != 0) {
@@ -13543,701 +11817,26 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F22(tw & 0xff, tb);
 	  SETNF();
 	  incPC();
-	  return 7;
+	  return 15;
 	}
       }
       ),
 
-    // dd bf
-    new Opcode("CP", "A", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  CLEARHF();
-	  CLEARCF();
-	  CLEARPF();
-	  F22(0, A);
-	  SETNF();
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd c0
-    new Opcode("RET", "NZ",
-	       1,
-	       Processor.INS_RET | Processor.INS_MR,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  if (ZFSET()) {
-	    incPC();
-	    return 5;
-	  } else {
-	    WZ = memory.getByte(SP);
-	    incSP();
-	    WZ += memory.getByte(SP) << 8;
-	    incSP();
-	    PC = WZ;
-	    return 11;
-	  }
-	}
-      }
-      ),
-
-    // dd c1
-    new Opcode("POP", "BC", 1, Processor.INS_MR, new Executable() {
-	@Override
-	public int exec() {
-	  C = memory.getByte(SP);
-	  incSP();
-	  B = memory.getByte(SP);
-	  incSP();
-	  incPC();
-	  return 10;
-	}
-      }
-      ),
-
-    // dd c2
-    new Opcode("JP", "NZ,<nn>", 3, Processor.INS_JMP, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  if (ZFSET()) {
-	    incPC();
-	  } else {
-	    PC = WZ;
-	  }
-	  return 10;
-	}
-      }
-      ),
-
-    // dd c3
-    new Opcode("JP", "<nn>", 3, Processor.INS_JMP, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  PC = WZ;
-	  return 10;
-	}
-      }
-      ),
-
-    // dd c4
-    new Opcode("CALL", "NZ,<nn>",
-	       3,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  incPC();
-	  if (ZFSET()) {
-	    return 10;
-	  } else {
-	    decSP();
-	    memory.setByte(SP, PC >> 8);
-	    decSP();
-	    memory.setByte(SP, PC & 0xff);
-	    PC = WZ;
-	    return 17;
-	  }
-	}
-      }
-      ),
-
-    // dd c5
-    new Opcode("PUSH", "BC", 1, Processor.INS_MW, new Executable() {
-	@Override
-	public int exec() {
-	  decSP();
-	  memory.setByte(SP, B);
-	  decSP();
-	  memory.setByte(SP, C);
-	  incPC();
-	  return 11;
-	}
-      }
-      ),
-
-    // dd c6
-    new Opcode("ADD", "A,<n>", 2, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  final int tb = memory.getByte(PC);
-	  final int tw = A + tb;
-	  final int cb = A ^ tb ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  CLEARNF();
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd c7
-    new Opcode("RST", "<p>",
-	       1,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  decSP();
-	  memory.setByte(SP, PC >> 8);
-	  decSP();
-	  memory.setByte(SP, PC & 0xff);
-	  PC = WZ = 0x0000;
-	  return 11;
-	}
-      }
-      ),
-
-    // dd c8
-    new Opcode("RET", "Z",
-	       1,
-	       Processor.INS_RET | Processor.INS_MR,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  if (!ZFSET()) {
-	    incPC();
-	    return 5;
-	  } else {
-	    WZ = memory.getByte(SP);
-	    incSP();
-	    WZ += memory.getByte(SP) << 8;
-	    incSP();
-	    PC = WZ;
-	    return 11;
-	  }
-	}
-      }
-      ),
-
-    // dd c9
-    new Opcode("RET", "",
-	       1,
-	       Processor.INS_RET | Processor.INS_MR,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  WZ = memory.getByte(SP);
-	  incSP();
-	  WZ += memory.getByte(SP) << 8;
-	  incSP();
-	  PC = WZ;
-	  return 10;
-	}
-      }
-      ),
-
-    // dd ca
-    new Opcode("JP", "Z,<nn>", 3, Processor.INS_JMP, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  if (!ZFSET()) {
-	    incPC();
-	  } else {
-	    PC = WZ;
-	  }
-	  return 10;
-	}
-      }
-      ),
-
-    // dd cb
+    // dd bf - e0
     null,
-
-    // dd cc
-    new Opcode("CALL", "Z,<nn>",
-	       3,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  incPC();
-	  if (!ZFSET()) {
-	    return 10;
-	  } else {
-	    decSP();
-	    memory.setByte(SP, PC >> 8);
-	    decSP();
-	    memory.setByte(SP, PC & 0xff);
-	    PC = WZ;
-	    return 17;
-	  }
-	}
-      }
-      ),
-
-    // dd cd
-    new Opcode("CALL", "<nn>",
-	       3,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  incPC();
-	  decSP();
-	  memory.setByte(SP, PC >> 8);
-	  decSP();
-	  memory.setByte(SP, PC & 0xff);
-	  PC = WZ;
-	  return 17;
-	}
-      }
-      ),
-
-    // dd ce
-    new Opcode("ADC", "A,<n>", 2, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  final int tb = memory.getByte(PC);
-	  final int tw = A + tb + (F & CF);
-	  final int cb = A ^ tb ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  CLEARNF();
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd cf
-    new Opcode("RST", "<p>",
-	       1,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  decSP();
-	  memory.setByte(SP, PC >> 8);
-	  decSP();
-	  memory.setByte(SP, PC & 0xff);
-	  PC = WZ = 0x0008;
-	  return 11;
-	}
-      }
-      ),
-
-    // dd d0
-    new Opcode("RET", "NC",
-	       1,
-	       Processor.INS_RET | Processor.INS_MR,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  if (CFSET()) {
-	    incPC();
-	    return 5;
-	  } else {
-	    WZ = memory.getByte(SP);
-	    incSP();
-	    WZ += memory.getByte(SP) << 8;
-	    incSP();
-	    PC = WZ;
-	    return 11;
-	  }
-	}
-      }
-      ),
-
-    // dd d1
-    new Opcode("POP", "DE", 1, Processor.INS_MR, new Executable() {
-	@Override
-	public int exec() {
-	  E = memory.getByte(SP);
-	  incSP();
-	  D = memory.getByte(SP);
-	  incSP();
-	  incPC();
-	  return 10;
-	}
-      }
-      ),
-
-    // dd d2
-    new Opcode("JP", "NC,<nn>", 3, Processor.INS_JMP, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  if (CFSET()) {
-	    incPC();
-	  } else {
-	    PC = WZ;
-	  }
-	  return 10;
-	}
-      }
-      ),
-
-    // dd d3
-    new Opcode("OUT", "(<n>),A", 2, Processor.INS_IOW, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  int port = memory.getByte(PC);
-	  for (IOElement t: outputPorts.get(port)) {
-	    t.portOutput(port, A);
-	  }
-	  WZ = ((port + 1) & 0xff) + (A << 8);
-	  incPC();
-	  return 11;
-	}
-      }
-      ),
-
-    // dd d4
-    new Opcode("CALL", "NC,<nn>",
-	       3,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  incPC();
-	  if (CFSET()) {
-	    return 10;
-	  } else {
-	    decSP();
-	    memory.setByte(SP, PC >> 8);
-	    decSP();
-	    memory.setByte(SP, PC & 0xff);
-	    PC = WZ;
-	    return 17;
-	  }
-	}
-      }
-      ),
-
-    // dd d5
-    new Opcode("PUSH", "DE", 1, Processor.INS_MW, new Executable() {
-	@Override
-	public int exec() {
-	  decSP();
-	  memory.setByte(SP, D);
-	  decSP();
-	  memory.setByte(SP, E);
-	  incPC();
-	  return 11;
-	}
-      }
-      ),
-
-    // dd d6
-    new Opcode("SUB", "<n>", 2, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  final int tb = memory.getByte(PC);
-	  final int tw = A - tb;
-	  final int cb = A ^ tb ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  SETNF();
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd d7
-    new Opcode("RST", "<p>",
-	       1,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  decSP();
-	  memory.setByte(SP, PC >> 8);
-	  decSP();
-	  memory.setByte(SP, PC & 0xff);
-	  PC = WZ = 0x0010;
-	  return 11;
-	}
-      }
-      ),
-
-    // dd d8
-    new Opcode("RET", "C",
-	       1,
-	       Processor.INS_RET | Processor.INS_MR,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  if (!CFSET()) {
-	    incPC();
-	    return 5;
-	  } else {
-	    WZ = memory.getByte(SP);
-	    incSP();
-	    WZ += memory.getByte(SP) << 8;
-	    incSP();
-	    PC = WZ;
-	    return 11;
-	  }
-	}
-      }
-      ),
-
-    // dd d9
-    new Opcode("EXX", "", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  int tb = B;
-	  B = Ba;
-	  Ba = tb;
-	  tb = C;
-	  C = Ca;
-	  Ca = tb;
-	  tb = D;
-	  D = Da;
-	  Da = tb;
-	  tb = E;
-	  E = Ea;
-	  Ea = tb;
-	  tb = H;
-	  H = Ha;
-	  Ha = tb;
-	  tb = L;
-	  L = La;
-	  La = tb;
-	  tb = WZ;
-	  WZ = WZa;
-	  WZa = tb;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd da
-    new Opcode("JP", "C,<nn>",
-	       3,
-	       Processor.INS_JMP,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  if (!CFSET()) {
-	    incPC();
-	  } else {
-	    PC = WZ;
-	  }
-	  return 10;
-	}
-      }
-      ),
-
-    // dd db
-    new Opcode("IN", "A,(<n>)", 2, Processor.INS_IOR, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  int port = memory.getByte(PC);
-	  WZ = ((A << 8) + port + 1) & 0xffff;
-	  A = 0xff;
-	  for (IOElement t: inputPorts.get(port)) {
-	    A &= t.portInput(port);
-	  }
-	  incPC();
-	  return 11;
-	}
-      }
-      ),
-
-    // dd dc
-    new Opcode("CALL", "C,<nn>",
-	       3,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  incPC();
-	  if (!CFSET()) {
-	    return 10;
-	  } else {
-	    decSP();
-	    memory.setByte(SP, PC >> 8);
-	    decSP();
-	    memory.setByte(SP, PC & 0xff);
-	    PC = WZ;
-	    return 17;
-	  }
-	}
-      }
-      ),
-
-    // dd dd
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
     null,
-
-    // dd de
-    new Opcode("SBC", "A,<n>", 2, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  final int tb = memory.getByte(PC);
-	  final int tw = A - tb - (F & CF);
-	  final int cb = A ^ tb ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  A = tw & 0xff;
-	  F4(A);
-	  SETNF();
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd df
-    new Opcode("RST", "<p>",
-	       1,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  decSP();
-	  memory.setByte(SP, PC >> 8);
-	  decSP();
-	  memory.setByte(SP, PC & 0xff);
-	  PC = WZ = 0x0018;
-	  return 11;
-	}
-      }
-      ),
-
-    // dd e0
-    new Opcode("RET", "PO",
-	       1,
-	       Processor.INS_RET | Processor.INS_MR,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  if (PFSET()) {
-	    incPC();
-	    return 5;
-	  } else {
-	    WZ = memory.getByte(SP);
-	    incSP();
-	    WZ += memory.getByte(SP) << 8;
-	    incSP();
-	    PC = WZ;
-	    return 11;
-	  }
-	}
-      }
-      ),
-
+    
     // dd e1
-    new Opcode("POP", "HL", 1, Processor.INS_MR, new Executable() {
+    new Opcode("POP", "IX", 1, Processor.INS_MR, new Executable() {
 	@Override
 	public int exec() {
-	  L = memory.getByte(SP);
+	  IX = memory.getByte(SP);
 	  incSP();
-	  H = memory.getByte(SP);
+	  IX |= memory.getByte(SP) << 8;
 	  incSP();
 	  incPC();
 	  return 10;
@@ -14246,41 +11845,21 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd e2
-    new Opcode("JP", "PO,<nn>",
-	       3,
-	       Processor.INS_JMP,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  if (PFSET()) {
-	    incPC();
-	  } else {
-	    PC = WZ;
-	  }
-	  return 10;
-	}
-      }
-      ),
+    null,
 
     // dd e3
-    new Opcode("EX", "(SP),HL",
+    new Opcode("EX", "(SP),IX",
 	       1,
 	       Processor.INS_MR | Processor.INS_MW,
 	       new Executable() {
 	@Override
 	public int exec() {
-	  int tb = memory.getByte(SP);
-	  memory.setByte(SP, L);
-	  L = tb;
+	  final int tb = memory.getByte(SP);
+	  memory.setByte(SP, IX & 0xff);
 	  final int tw = (SP + 1) & 0xffff;
-	  tb = memory.getByte(tw);
-	  memory.setByte(tw, H);
-	  H = tb;
-	  WZ = HL();
+	  final int ti = memory.getByte(tw);
+	  memory.setByte(tw, IX >> 8);
+	  WZ = IX = tb + (ti << 8);
 	  incPC();
 	  return 19;
 	}
@@ -14288,487 +11867,53 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd e4
-    new Opcode("CALL", "PO,<nn>",
-	       3,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  incPC();
-	  if (PFSET()) {
-	    return 10;
-	  } else {
-	    decSP();
-	    memory.setByte(SP, PC >> 8);
-	    decSP();
-	    memory.setByte(SP, PC & 0xff);
-	    PC = WZ;
-	    return 17;
-	  }
-	}
-      }
-      ),
-
-    // dd e5
-    new Opcode("PUSH", "HL", 1, Processor.INS_MW, new Executable() {
-	@Override
-	public int exec() {
-	  decSP();
-	  memory.setByte(SP, H);
-	  decSP();
-	  memory.setByte(SP, L);
-	  incPC();
-	  return 11;
-	}
-      }
-      ),
-
-    // dd e6
-    new Opcode("AND", "<n>", 2, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  final int tb = memory.getByte(PC);
-	  A &= tb;
-	  SETHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd e7
-    new Opcode("RST", "<p>",
-	       1,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  decSP();
-	  memory.setByte(SP, PC >> 8);
-	  decSP();
-	  memory.setByte(SP, PC & 0xff);
-	  PC = WZ = 0x0020;
-	  return 11;
-	}
-      }
-      ),
-
-    // dd e8
-    new Opcode("RET", "PE",
-	       1,
-	       Processor.INS_RET | Processor.INS_MR,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  if (!PFSET()) {
-	    incPC();
-	    return 5;
-	  } else {
-	    WZ = memory.getByte(SP);
-	    incSP();
-	    WZ += memory.getByte(SP) << 8;
-	    incSP();
-	    PC = WZ;
-	    return 11;
-	  }
-	}
-      }
-      ),
-
-    // dd e9
-    new Opcode("JP", "(HL)", 1, Processor.INS_JMP, new Executable() {
-	@Override
-	public int exec() {
-	  PC = HL();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd ea
-    new Opcode("JP", "PE,<nn>", 3, Processor.INS_JMP, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  if (!PFSET()) {
-	    incPC();
-	  } else {
-	    PC = WZ;
-	  }
-	  return 10;
-	}
-      }
-      ),
-
-    // dd eb
-    new Opcode("EX", "DE,HL", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  int tb = H;
-	  H = D;
-	  D = tb;
-	  tb = L;
-	  L = E;
-	  E = tb;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd ec
-    new Opcode("CALL", "PE,<nn>",
-	       3,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  incPC();
-	  if (!PFSET()) {
-	    return 10;
-	  } else {
-	    decSP();
-	    memory.setByte(SP, PC >> 8);
-	    decSP();
-	    memory.setByte(SP, PC & 0xff);
-	    PC = WZ;
-	    return 17;
-	  }
-	}
-      }
-      ),
-
-    // dd ed
     null,
 
-    // dd ee
-    new Opcode("XOR", "<n>", 2, 0, new Executable() {
+    // dd e5
+    new Opcode("PUSH", "IX", 1, Processor.INS_MW, new Executable() {
 	@Override
 	public int exec() {
-	  incPC();
-	  A ^= memory.getByte(PC);
-	  CLEARHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd ef
-    new Opcode("RST", "<p>",
-	       1,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
 	  decSP();
-	  memory.setByte(SP, PC >> 8);
+	  memory.setByte(SP, IX >> 8);
 	  decSP();
-	  memory.setByte(SP, PC & 0xff);
-	  PC = WZ = 0x0028;
+	  memory.setByte(SP, IX & 0xff);
+	  incPC();
 	  return 11;
 	}
       }
       ),
 
-    // dd f0
-    new Opcode("RET", "P",
-	       1,
-	       Processor.INS_RET | Processor.INS_MR,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  if (SFSET()) {
-	    incPC();
-	    return 5;
-	  } else {
-	    WZ = memory.getByte(SP);
-	    incSP();
-	    WZ += memory.getByte(SP) << 8;
-	    incSP();
-	    PC = WZ;
-	    return 11;
-	  }
-	}
-      }
-      ),
+    // dd e6 - dd e8
+    null, null, null,
 
-    // dd f1
-    new Opcode("POP", "AF", 1, Processor.INS_MR, new Executable() {
+    // dd e9
+    new Opcode("JP", "(IX)", 1, Processor.INS_JMP, new Executable() {
 	@Override
 	public int exec() {
-	  F = memory.getByte(SP);
-	  incSP();
-	  A = memory.getByte(SP);
-	  incSP();
-	  incPC();
-	  return 10;
-	}
-      }
-      ),
-
-    // dd f2
-    new Opcode("JP", "P,<nn>", 3, Processor.INS_JMP, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  if (SFSET()) {
-	    incPC();
-	  } else {
-	    PC = WZ;
-	  }
-	  return 10;
-	}
-      }
-      ),
-
-    // dd f3
-    new Opcode("DI", "", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  IFF1 = false;
-	  incPC();
+	  PC = IX;
 	  return 4;
 	}
       }
       ),
 
-    // dd f4
-    new Opcode("CALL", "P,<nn>",
-	       3,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  incPC();
-	  if (SFSET()) {
-	    return 10;
-	  } else {
-	    decSP();
-	    memory.setByte(SP, PC >> 8);
-	    decSP();
-	    memory.setByte(SP, PC & 0xff);
-	    PC = WZ;
-	    return 17;
-	  }
-	}
-      }
-      ),
-
-    // dd f5
-    new Opcode("PUSH", "AF", 1, Processor.INS_MW, new Executable() {
-	@Override
-	public int exec() {
-	  decSP();
-	  memory.setByte(SP, A);
-	  decSP();
-	  memory.setByte(SP, F);
-	  incPC();
-	  return 11;
-	}
-      }
-      ),
-
-    // dd f6
-    new Opcode("OR", "<n>", 2, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  A |= memory.getByte(PC);
-	  CLEARHF();
-	  CLEARCF();
-	  CLEARNF();
-	  F5(A);
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd f7
-    new Opcode("RST", "<p>",
-	       1,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  decSP();
-	  memory.setByte(SP, PC >> 8);
-	  decSP();
-	  memory.setByte(SP, PC & 0xff);
-	  PC = WZ = 0x0030;
-	  return 11;
-	}
-      }
-      ),
-
-    // dd f8
-    new Opcode("RET", "M",
-	       1,
-	       Processor.INS_RET | Processor.INS_MR,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  if (!SFSET()) {
-	    incPC();
-	    return 5;
-	  } else {
-	    WZ = memory.getByte(SP);
-	    incSP();
-	    WZ += memory.getByte(SP) << 8;
-	    incSP();
-	    PC = WZ;
-	    return 11;
-	  }
-	}
-      }
-      ),
-
+    // dd ea - dd e8
+    null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null,
+    
     // dd f9
-    new Opcode("LD", "SP,HL", 1, 0, new Executable() {
+    new Opcode("LD", "SP,IX", 1, 0, new Executable() {
 	@Override
 	public int exec() {
-	  SP = HL();
+	  SP = IX;
 	  incPC();
 	  return 6;
 	}
       }
       ),
 
-    // dd fa
-    new Opcode("JP", "M,<nn>", 3, Processor.INS_JMP, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  if (!SFSET()) {
-	    incPC();
-	  } else {
-	    PC = WZ;
-	  }
-	  return 10;
-	}
-      }
-      ),
-
-    // dd fb
-    new Opcode("EI", "", 1, 0, new Executable() {
-	@Override
-	public int exec() {
-	  IFF1 = true;
-	  incPC();
-	  return 4;
-	}
-      }
-      ),
-
-    // dd fc
-    new Opcode("CALL", "M,<nn>",
-	       3,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  WZ = memory.getByte(PC);
-	  incPC();
-	  WZ += memory.getByte(PC) << 8;
-	  incPC();
-	  if (!SFSET()) {
-	    return 10;
-	  } else {
-	    decSP();
-	    memory.setByte(SP, PC >> 8);
-	    decSP();
-	    memory.setByte(SP, PC & 0xff);
-	    PC = WZ;
-	    return 17;
-	  }
-	}
-      }
-      ),
-
-    // dd fd
-    null,
-
-    // dd fe
-    new Opcode("CP", "<n>", 2, 0, new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  final int tb = memory.getByte(PC);
-	  final int tw = A - tb;
-	  final int cb = A ^ tb ^ tw;
-	  if ((cb & 0x10) != 0) {
-	    SETHF();
-	  } else {
-	    CLEARHF();
-	  }
-	  if ((tw & 0x0100) != 0) {
-	    SETCF();
-	  } else {
-	    CLEARCF();
-	  }
-	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
-	    SETPF();
-	  } else {
-	    CLEARPF();
-	  }
-	  F22(tw & 0xff, tb);
-	  SETNF();
-	  incPC();
-	  return 7;
-	}
-      }
-      ),
-
-    // dd ff
-    new Opcode("RST", "<p>",
-	       1,
-	       Processor.INS_CALL | Processor.INS_MW,
-	       new Executable() {
-	@Override
-	public int exec() {
-	  incPC();
-	  decSP();
-	  memory.setByte(SP, PC >> 8);
-	  decSP();
-	  memory.setByte(SP, PC & 0xff);
-	  PC = WZ = 0x0038;
-	  return 11;
-	}
-      }
-      )
+    // dd fa - dd ff
+    null, null, null, null, null, null
   };
 
   /**
@@ -16719,6 +13864,1583 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   };
 
   /**
+   * The array of opcodes with the prefix DD.
+   */
+  protected final Opcode[] opcodesFD = new Opcode[] {
+
+    // fd 00 - fd 08
+    null, null, null, null, null, null, null, null,
+    null,
+    
+    // fd 09
+    new Opcode("ADD", "IY,BC", 1, 0, new Executable() {
+	@Override
+	public int exec() {
+	  WZ = (IY + 1) & 0xffff;
+	  final int ti = IY + BC();
+	  if ((((IY >> 8) ^ B ^ (ti >> 8)) & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  IY = ti & 0xffff;
+	  F2(IY >> 8);
+	  if (ti > 0xffff) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  CLEARNF();
+	  incPC();
+	  return 11;
+	}
+      }
+      ),
+
+    // fd 0a - fd 18
+    null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null,
+
+    // fd 19
+    new Opcode("ADD", "IY,DE", 1, 0, new Executable() {
+	@Override
+	public int exec() {
+	  WZ = (IY + 1) & 0xffff;
+	  final int ti = IY + DE();
+	  if ((((IY >> 8) ^ D ^ (ti >> 8)) & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  IY = ti & 0xffff;
+	  F2(IY >> 8);
+	  if (ti > 0xffff) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  CLEARNF();
+	  incPC();
+	  return 11;
+	}
+      }
+      ),
+
+    // fd 1a - fd 20
+    null, null, null, null, null, null,
+    null,
+
+    // fd 21
+    new Opcode("LD", "IY,<nn>", 3, 0, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  IY = memory.getByte(PC);
+	  incPC();
+	  IY += memory.getByte(PC) << 8;
+	  incPC();
+	  return 10;
+	}
+      }
+      ),
+
+    // fd 22
+    new Opcode("LD", "(<nn>),IY", 3, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = memory.getByte(PC);
+	  incPC();
+	  WZ += memory.getByte(PC) << 8;
+	  memory.setByte(WZ, IY & 0xff);
+	  incWZ();
+	  memory.setByte(WZ, IY >> 8);
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // fd 23
+    new Opcode("INC", "IY", 1, 0, new Executable() {
+	@Override
+	public int exec() {
+	  IY = (IY + 1) & 0xffff;
+	  incPC();
+	  return 6;
+	}
+      }
+      ),
+
+    // fd 24
+    new Opcode("INC", "IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  final int tb = ((IY >> 8) + 1) & 0xff;
+	  IY = (tb << 8) + (IY & 0xff);
+	  F4(tb);
+	  if (tb == 0x80) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  if ((tb & 0x0f) == 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  CLEARNF();
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 25
+    new Opcode("DEC", "IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  final int tb = ((IY >> 8) - 1) & 0xff;
+	  F4(tb);
+	  if (tb == 0x7f) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  if ((tb & 0x0f) == 0x0f) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  SETNF();
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 26
+    new Opcode("LD", "IYH,<n>", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  IY = (memory.getByte(PC) << 8) + (IY & 0xff);
+	  incPC();
+	  return 7;
+	}
+      }
+      ),
+
+    // fd 27 - fd 28
+    null, null,
+
+    // fd 29
+    new Opcode("ADD", "IY,IY", 1, 0, new Executable() {
+	@Override
+	public int exec() {
+	  WZ = (IY + 1) & 0xffff;
+	  final int ti = IY << 1;
+	  if (((ti >> 8) & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  IY = ti & 0xffff;
+	  F2(IY >> 8);
+	  if (ti > 0xffff) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  CLEARNF();
+	  incPC();
+	  return 11;
+	}
+      }
+      ),
+
+    // fd 2a
+    new Opcode("LD", "IY,(<nn>)", 3, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = memory.getByte(PC);
+	  incPC();
+	  WZ += memory.getByte(PC) << 8;
+	  IY = memory.getByte(WZ);
+	  incWZ();
+	  IY += memory.getByte(WZ) << 8;
+	  incPC();
+	  return 16;
+	}
+      }
+      ),
+
+    // fd 2b
+    new Opcode("DEC", "IY", 1, 0, new Executable() {
+	@Override
+	public int exec() {
+	  IY = (IY - 1) & 0xffff;
+	  incPC();
+	  return 6;
+	}
+      }
+      ),
+
+    // fd 2c
+    new Opcode("INC", "IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  final int tb = (IY + 1) & 0xff;
+	  IY = tb + (IY & 0xff00);
+	  F4(tb);
+	  if (tb == 0x80) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  if ((tb & 0x0f) == 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  CLEARNF();
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 2d
+    new Opcode("DEC", "IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  final int tb = (IY - 1) & 0xff;
+	  IY = tb + (IY & 0xff00);
+	  F4(tb);
+	  if (tb == 0x7f) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  if ((tb & 0x0f) == 0x0f) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  SETNF();
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 2e
+    new Opcode("LD", "IYL,<n>", 2, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  IY = memory.getByte(PC) + (IY & 0xff00);
+	  incPC();
+	  return 7;
+	}
+      }
+      ),
+
+    // fd 2f - fd 33
+    null,
+    null, null, null, null,
+
+    // fd 34
+    new Opcode("INC", "(IY<d>)",
+	       2,
+	       Processor.INS_MR | Processor.INS_MW,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = (memory.getByte(WZ) + 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  F4(tb);
+	  if (tb == 0x80) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  if ((tb & 0x0f) == 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  CLEARNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // fd 35
+    new Opcode("DEC", "(IY<d>)",
+	       2,
+	       Processor.INS_MR | Processor.INS_MW,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = (memory.getByte(WZ) - 1) & 0xff;
+	  memory.setByte(WZ, tb);
+	  F4(tb);
+	  if (tb == 0x7f) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  if ((tb & 0x0f) == 0x0f) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  SETNF();
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // fd 36
+    new Opcode("LD", "(IY<d>),<n>", 3, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  incPC();
+	  memory.setByte(WZ, memory.getByte(PC));
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 37 - fd 38
+    null, null,
+
+    // fd 39
+    new Opcode("ADD", "IY,SP", 2, 0, new Executable() {
+	@Override
+	public int exec() {
+	  WZ = (IY + 1) & 0xffff;
+	  final int ti = IY + SP;
+	  if ((((IY >> 8) ^ ((SP ^ ti) >> 8)) & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  IY = ti & 0xffff;
+	  F2(IY >> 8);
+	  if (ti > 0xffff) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  CLEARNF();
+	  incPC();
+	  return 11;
+	}
+      }
+      ),
+
+    // fd 3a - 43
+    null, null, null, null, null, null,
+    null, null, null, null,
+
+    // fd 44 (undocumented)
+    new Opcode("LD", "B,IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  B = IY >> 8;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 45 (undocumented)
+    new Opcode("LD", "B,IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  B = IY & 0xff;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 46
+    new Opcode("LD", "B,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  B = memory.getByte(WZ);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 47 - fd 4b
+    null, null, null, null, null,
+    
+    
+    // fd 4c (undocumented)
+    new Opcode("LD", "C,IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  C = IY >> 8;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 4d (undocumented)
+    new Opcode("LD", "C,IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  C = IY & 0xff;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 4e
+    new Opcode("LD", "C,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  C = memory.getByte(WZ);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 4f - fd 53
+    null, null, null, null, null,
+
+    // fd 54 (undocumented)
+    new Opcode("LD", "D,IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  D = IY >> 8;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 55 (undocumented)
+    new Opcode("LD", "D,IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  D = IY & 0xff;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 56
+    new Opcode("LD", "D,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  D = memory.getByte(WZ);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 57 - fd 5b
+    null, null, null, null, null,
+    
+    // fd 5c (undocumented)
+    new Opcode("LD", "D,IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  D = IY >> 8;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 5d (undocumented)
+    new Opcode("LD", "E,IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  E = IY & 0xff;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 5e
+    new Opcode("LD", "D,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  E = memory.getByte(WZ);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 5f
+    null,
+
+    // fd 60 (undocumented)
+    new Opcode("LD", "IYH,B", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  IY = (B << 8) + (IY & 0xff);
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 61 (undocumented)
+    new Opcode("LD", "IYH,C", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  IY = (C << 8) + (IY & 0xff);
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 62 (undocumented)
+    new Opcode("LD", "IYH,D", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  IY = (D << 8) + (IY & 0xff);
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 63 (undocumented)
+    new Opcode("LD", "IYH,E", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  IY = (E << 8) + (IY & 0xff);
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 64 (undocumented)
+    new Opcode("LD", "IYH,IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 65 (undocumented)
+    new Opcode("LD", "IYH,IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  IY = ((IY & 0xff) << 8) + (IY & 0xff);
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 66
+    new Opcode("LD", "H,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  H = memory.getByte(WZ);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 67 (undocumented)
+    new Opcode("LD", "IYH,A", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  IY = (A << 8) + (IY & 0xff);
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 68 (undocumented)
+    new Opcode("LD", "IYL,B", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  IY = (IY & 0xff00) + B;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 69 (undocumented)
+    new Opcode("LD", "IYL,C", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  IY = (IY & 0xff00) + C;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 6a (undocumented)
+    new Opcode("LD", "IYL,D", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  IY = (IY & 0xff00) + D;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 6b (undocumented)
+    new Opcode("LD", "IYL,E", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  IY = (IY & 0xff00) + E;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 6c (undocumented)
+    new Opcode("LD", "IYL,IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  IY = (IY & 0xff00) + (IY >> 8);
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 6d (undocumented)
+    new Opcode("LD", "IYL,IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 6e
+    new Opcode("LD", "L,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  L = memory.getByte(WZ);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 6f (undocumented)
+    new Opcode("LD", "IYL,A", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  IY = (IY & 0xff00) + A;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 70
+    new Opcode("LD", "(IY<d>),B", 2, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  memory.setByte(WZ, B);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 71
+    new Opcode("LD", "(IY<d>),C", 2, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  memory.setByte(WZ, C);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 72
+    new Opcode("LD", "(IY<d>),D", 2, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  memory.setByte(WZ, D);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 73
+    new Opcode("LD", "(IY<d>),E", 2, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  memory.setByte(WZ, E);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 74
+    new Opcode("LD", "(IY<d>),H", 2, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  memory.setByte(WZ, H);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 75
+    new Opcode("LD", "(IY<d>),L", 2, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  memory.setByte(WZ, L);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 76
+    null,
+
+    // fd 77
+    new Opcode("LD", "(IY<d>),A", 2, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  memory.setByte(WZ, A);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 78 - fd 7b
+    null, null, null, null,
+    
+    // fd 7c (undocumented)
+    new Opcode("LD", "A,IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  A = IY >> 8;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 7d (undocumented)
+    new Opcode("LD", "A,IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  A = IY & 0xff;
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 7e
+    new Opcode("LD", "A,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  A = memory.getByte(WZ);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 7f - fd 83
+    null, null, null, null, null,
+
+    // fd 84 (undocumented)
+    new Opcode("ADD", "A,IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = A + (IY >> 8);
+	  final int cb = A ^ (IY >> 8) ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  A = tw & 0xff;
+	  F4(A);
+	  CLEARNF();
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 85 (undocumented)
+    new Opcode("ADD", "A,IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = A + (IY & 0xff);
+	  final int cb = A ^ (IY & 0xff) ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  A = tw & 0xff;
+	  F4(A);
+	  CLEARNF();
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 86
+    new Opcode("ADD", "A,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  final int tw = A + tb;
+	  final int cb = A ^ tb ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  A = tw & 0xff;
+	  F4(A);
+	  CLEARNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 87 - fd 8b
+    null, null, null, null, null,
+    
+    // fd 8c (undocumented)
+    new Opcode("ADC", "A,IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = A + (IY >> 8) + (F & CF);
+	  final int cb = A ^ (IY >> 8) ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  A = tw & 0xff;
+	  F4(A);
+	  CLEARNF();
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 8d (undocumented)
+    new Opcode("ADC", "A,L", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = A + (IY & 0xff) + (F & CF);
+	  final int cb = A ^ (IY & 0xff) ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  A = tw & 0xff;
+	  F4(A);
+	  CLEARNF();
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 8e
+    new Opcode("ADC", "A,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  final int tw = A + tb + (F & CF);
+	  final int cb = A ^ tb ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  A = tw & 0xff;
+	  F4(A);
+	  CLEARNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 8f - fd 93
+    null, null, null, null, null,
+
+    // fd 94 (undocumented)
+    new Opcode("SUB", "IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = A - (IY >> 8);
+	  final int cb = A ^ (IY >> 8) ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  A = tw & 0xff;
+	  F4(A);
+	  SETNF();
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 95 (undocumented)
+    new Opcode("SUB", "IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = A - (IY & 0xff);
+	  final int cb = A ^ (IY & 0xff) ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  A = tw & 0xff;
+	  F4(A);
+	  SETNF();
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 96
+    new Opcode("SUB", "(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  final int tw = A - tb;
+	  final int cb = A ^ tb ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  A = tw & 0xff;
+	  F4(A);
+	  SETNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 97 - fd 9b
+    null, null, null, null, null,
+    
+    // fd 9c (undocumented)
+    new Opcode("SBC", "A,IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = A - (IY >> 8) - (F & CF);
+	  final int cb = A ^ (IY >> 8) ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  A = tw & 0xff;
+	  F4(A);
+	  SETNF();
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 9d (undocumented)
+    new Opcode("SBC", "A,IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = A - (IY & 0xff) - (F & CF);
+	  final int cb = A ^ (IY & 0xff) ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  A = tw & 0xff;
+	  F4(A);
+	  SETNF();
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd 9e
+    new Opcode("SBC", "A,(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  final int tw = A - tb - (F & CF);
+	  final int cb = A ^ tb ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  A = tw & 0xff;
+	  F4(A);
+	  SETNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd 9f - fd a3
+    null, null, null, null, null,
+
+    // fd a4 (undocumented)
+    new Opcode("AND", "IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  A &= IY >> 8;
+	  SETHF();
+	  CLEARCF();
+	  CLEARNF();
+	  F5(A);
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd a5 (undocumented)
+    new Opcode("AND", "L", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  A &= IY & 0x0f;
+	  SETHF();
+	  CLEARCF();
+	  CLEARNF();
+	  F5(A);
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd a6
+    new Opcode("AND", "(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  A &= memory.getByte(WZ);
+	  SETHF();
+	  CLEARCF();
+	  CLEARNF();
+	  F5(A);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd a7 - fd db
+    null, null, null, null, null,
+
+    // fd ac (undocumented)
+    new Opcode("XOR", "IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  A ^= IY >> 8;
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
+	  F5(A);
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd ad (undocumented)
+    new Opcode("XOR", "IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  A ^= IY >> 8;
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
+	  F5(A);
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd ae
+    new Opcode("XOR", "(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  A ^= memory.getByte(WZ);
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
+	  F5(A);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd af - fd b3
+    null, null, null, null, null,
+
+    // fd b4 (undocumented)
+    new Opcode("OR", "IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  A |= IY >> 8;
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
+	  F5(A);
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd b5 (undocumented)
+    new Opcode("OR", "IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  A |= IY & 0xff;
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
+	  F5(A);
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd b6
+    new Opcode("OR", "(HL)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  A |= memory.getByte(WZ);
+	  CLEARHF();
+	  CLEARCF();
+	  CLEARNF();
+	  F5(A);
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd b7 - fd bb
+    null, null, null, null, null,
+
+    // fd bc (undocumented)
+    new Opcode("CP", "IYH", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = A - (IY >> 8);
+	  final int cb = A ^ (IY >> 8) ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  F22(tw & 0xff, H);
+	  SETNF();
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd bd (undocumented)
+    new Opcode("CP", "IYL", 1, Processor.INS_UND, new Executable() {
+	@Override
+	public int exec() {
+	  final int tw = A - (IY & 0xff);
+	  final int cb = A ^ (IY & 0xff) ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  F22(tw & 0xff, H);
+	  SETNF();
+	  incPC();
+	  return 4;
+	}
+      }
+      ),
+
+    // fd be
+    new Opcode("CP", "(IY<d>)", 2, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  incPC();
+	  WZ = IY + ((byte)memory.getByte(PC));
+	  final int tb = memory.getByte(WZ);
+	  final int tw = A - tb;
+	  final int cb = A ^ tb ^ tw;
+	  if ((cb & 0x10) != 0) {
+	    SETHF();
+	  } else {
+	    CLEARHF();
+	  }
+	  if ((tw & 0x0100) != 0) {
+	    SETCF();
+	  } else {
+	    CLEARCF();
+	  }
+	  if (((cb ^ (cb >> 1)) & 0x80) != 0) {
+	    SETPF();
+	  } else {
+	    CLEARPF();
+	  }
+	  F22(tw & 0xff, tb);
+	  SETNF();
+	  incPC();
+	  return 15;
+	}
+      }
+      ),
+
+    // fd bf - e0
+    null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null,
+    
+    // fd e1
+    new Opcode("POP", "IY", 1, Processor.INS_MR, new Executable() {
+	@Override
+	public int exec() {
+	  IY = memory.getByte(SP);
+	  incSP();
+	  IY |= memory.getByte(SP) << 8;
+	  incSP();
+	  incPC();
+	  return 10;
+	}
+      }
+      ),
+
+    // fd e2
+    null,
+
+    // fd e3
+    new Opcode("EX", "(SP),IY",
+	       1,
+	       Processor.INS_MR | Processor.INS_MW,
+	       new Executable() {
+	@Override
+	public int exec() {
+	  final int tb = memory.getByte(SP);
+	  memory.setByte(SP, IY & 0xff);
+	  final int tw = (SP + 1) & 0xffff;
+	  final int ti = memory.getByte(tw);
+	  memory.setByte(tw, IY >> 8);
+	  WZ = IY = tb + (ti << 8);
+	  incPC();
+	  return 19;
+	}
+      }
+      ),
+
+    // fd e4
+    null,
+
+    // fd e5
+    new Opcode("PUSH", "IY", 1, Processor.INS_MW, new Executable() {
+	@Override
+	public int exec() {
+	  decSP();
+	  memory.setByte(SP, IY >> 8);
+	  decSP();
+	  memory.setByte(SP, IY & 0xff);
+	  incPC();
+	  return 11;
+	}
+      }
+      ),
+
+    // fd e6 - fd e8
+    null, null, null,
+
+    // fd e9
+    new Opcode("JP", "(IY)", 1, Processor.INS_JMP, new Executable() {
+	@Override
+	public int exec() {
+	  PC = IY;
+	  return 4;
+	}
+      }
+      ),
+
+    // fd ea - fd e8
+    null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null,
+    
+    // fd f9
+    new Opcode("LD", "SP,IY", 1, 0, new Executable() {
+	@Override
+	public int exec() {
+	  SP = IY;
+	  incPC();
+	  return 6;
+	}
+      }
+      ),
+
+    // fd fa - fd ff
+    null, null, null, null, null, null
+  };
+
+  /**
    * Gets an Opcode.
    *
    * @param  n the first byte of {@code Opcode}
@@ -16945,9 +15667,9 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  }
 	  if (tb == 0xcb) {
 	    if (prefix == 0xdd) {
-	      // table = opcodesCBDD;
+	      // table = opcodesDDCB;
 	    } else if (prefix == 0xfd) {
-	      // table = opcodesCBFD;
+	      // table = opcodesFDCB;
 	    } else {
 	      R++;
 	      table = opcodesCB;
@@ -16967,8 +15689,8 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	    table = opcodes;
 	  } else if ((prefix == 0xdd) && (opcodesDD[tb] != null)) {
 	    table = opcodesDD;
-	  // } else if ((prefix == 0xfd) && (opcodesFD[tb] != null)) {
-	  //   table = opcodesFD;
+	  } else if ((prefix == 0xfd) && (opcodesFD[tb] != null)) {
+	    table = opcodesFD;
 	  }
 	  break;
 	}
