@@ -15519,7 +15519,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15546,7 +15546,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15573,7 +15573,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15600,7 +15600,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15627,7 +15627,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15654,7 +15654,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15680,7 +15680,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15707,7 +15707,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15734,7 +15734,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15761,7 +15761,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15788,7 +15788,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15815,7 +15815,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15842,7 +15842,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15869,7 +15869,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15895,7 +15895,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15922,7 +15922,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15950,7 +15950,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -15978,7 +15978,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16006,7 +16006,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16034,7 +16034,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16062,7 +16062,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16090,7 +16090,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16117,7 +16117,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16145,7 +16145,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16173,7 +16173,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16201,7 +16201,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16229,7 +16229,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16257,7 +16257,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16285,7 +16285,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16313,7 +16313,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16340,7 +16340,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16368,7 +16368,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16395,7 +16395,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16422,7 +16422,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16449,7 +16449,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16476,7 +16476,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16503,7 +16503,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16530,7 +16530,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16556,7 +16556,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16583,7 +16583,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16610,7 +16610,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16637,7 +16637,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16664,7 +16664,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16691,7 +16691,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16718,7 +16718,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16745,7 +16745,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16771,7 +16771,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16798,7 +16798,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16825,7 +16825,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16852,7 +16852,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16879,7 +16879,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16906,7 +16906,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16933,7 +16933,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16960,7 +16960,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -16986,7 +16986,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -17013,7 +17013,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -17040,7 +17040,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -17067,7 +17067,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -17094,7 +17094,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -17121,7 +17121,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -17148,7 +17148,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -17175,7 +17175,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -17201,7 +17201,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -17228,7 +17228,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -17255,7 +17255,7 @@ new Opcode("BIT", "0,(IX<d>),B",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17282,7 +17282,7 @@ new Opcode("BIT", "0,(IX<d>),C",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17309,7 +17309,7 @@ new Opcode("BIT", "0,(IX<d>),D",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17336,7 +17336,7 @@ new Opcode("BIT", "0,(IX<d>),E",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17363,7 +17363,7 @@ new Opcode("BIT", "0,(IX<d>),H",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17390,7 +17390,7 @@ new Opcode("BIT", "0,(IX<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17414,7 +17414,7 @@ new Opcode("BIT", "0,(IX<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17441,7 +17441,7 @@ new Opcode("BIT", "0,(IX<d>),A",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17468,7 +17468,7 @@ new Opcode("BIT", "1,(IX<d>),B",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17495,7 +17495,7 @@ new Opcode("BIT", "1,(IX<d>),C",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17522,7 +17522,7 @@ new Opcode("BIT", "1,(IX<d>),D",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17549,7 +17549,7 @@ new Opcode("BIT", "1,(IX<d>),E",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17576,7 +17576,7 @@ new Opcode("BIT", "1,(IX<d>),H",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17603,7 +17603,7 @@ new Opcode("BIT", "1,(IX<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17627,7 +17627,7 @@ new Opcode("BIT", "1,(IX<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17654,7 +17654,7 @@ new Opcode("BIT", "1,(IX<d>),A",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17681,7 +17681,7 @@ new Opcode("BIT", "2,(IX<d>),B",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17708,7 +17708,7 @@ new Opcode("BIT", "2,(IX<d>),C",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17735,7 +17735,7 @@ new Opcode("BIT", "2,(IX<d>),D",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17762,7 +17762,7 @@ new Opcode("BIT", "2,(IX<d>),E",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17789,7 +17789,7 @@ new Opcode("BIT", "2,(IX<d>),H",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17816,7 +17816,7 @@ new Opcode("BIT", "2,(IX<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17840,7 +17840,7 @@ new Opcode("BIT", "2,(IX<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17867,7 +17867,7 @@ new Opcode("BIT", "2,(IX<d>),A",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17894,7 +17894,7 @@ new Opcode("BIT", "3,(IX<d>),B",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17921,7 +17921,7 @@ new Opcode("BIT", "3,(IX<d>),C",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17948,7 +17948,7 @@ new Opcode("BIT", "3,(IX<d>),D",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -17975,7 +17975,7 @@ new Opcode("BIT", "3,(IX<d>),E",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18002,7 +18002,7 @@ new Opcode("BIT", "3,(IX<d>),H",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18029,7 +18029,7 @@ new Opcode("BIT", "3,(IX<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18053,7 +18053,7 @@ new Opcode("BIT", "3,(IX<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18080,7 +18080,7 @@ new Opcode("BIT", "3,(IX<d>),A",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18107,7 +18107,7 @@ new Opcode("BIT", "4,(IX<d>),B",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18134,7 +18134,7 @@ new Opcode("BIT", "4,(IX<d>),C",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18161,7 +18161,7 @@ new Opcode("BIT", "4,(IX<d>),D",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18188,7 +18188,7 @@ new Opcode("BIT", "4,(IX<d>),E",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18215,7 +18215,7 @@ new Opcode("BIT", "4,(IX<d>),H",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18242,7 +18242,7 @@ new Opcode("BIT", "4,(IX<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18266,7 +18266,7 @@ new Opcode("BIT", "4,(IX<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18293,7 +18293,7 @@ new Opcode("BIT", "4,(IX<d>),A",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18320,7 +18320,7 @@ new Opcode("BIT", "5,(IX<d>),B",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18347,7 +18347,7 @@ new Opcode("BIT", "5,(IX<d>),C",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18374,7 +18374,7 @@ new Opcode("BIT", "5,(IX<d>),D",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18401,7 +18401,7 @@ new Opcode("BIT", "5,(IX<d>),E",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18428,7 +18428,7 @@ new Opcode("BIT", "5,(IX<d>),H",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18455,7 +18455,7 @@ new Opcode("BIT", "5,(IX<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18479,7 +18479,7 @@ new Opcode("BIT", "5,(IX<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18506,7 +18506,7 @@ new Opcode("BIT", "5,(IX<d>),A",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18533,7 +18533,7 @@ new Opcode("BIT", "6,(IX<d>),B",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18560,7 +18560,7 @@ new Opcode("BIT", "6,(IX<d>),C",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18587,7 +18587,7 @@ new Opcode("BIT", "6,(IX<d>),D",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18614,7 +18614,7 @@ new Opcode("BIT", "6,(IX<d>),E",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18641,7 +18641,7 @@ new Opcode("BIT", "6,(IX<d>),H",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18668,7 +18668,7 @@ new Opcode("BIT", "6,(IX<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18692,7 +18692,7 @@ new Opcode("BIT", "6,(IX<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18719,7 +18719,7 @@ new Opcode("BIT", "6,(IX<d>),A",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18750,7 +18750,7 @@ new Opcode("BIT", "7,(IX<d>),B",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18781,7 +18781,7 @@ new Opcode("BIT", "7,(IX<d>),C",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18812,7 +18812,7 @@ new Opcode("BIT", "7,(IX<d>),D",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18843,7 +18843,7 @@ new Opcode("BIT", "7,(IX<d>),E",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18874,7 +18874,7 @@ new Opcode("BIT", "7,(IX<d>),H",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18905,7 +18905,7 @@ new Opcode("BIT", "7,(IX<d>),L",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18933,7 +18933,7 @@ new Opcode("BIT", "7,(IX<d>),L",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18964,7 +18964,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -18981,7 +18981,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0xfe;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -18998,7 +18998,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0xfe;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19015,7 +19015,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0xfe;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19032,7 +19032,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0xfe;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19049,7 +19049,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0xfe;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19066,7 +19066,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0xfe;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19082,7 +19082,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0xfe);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19099,7 +19099,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0xfe;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19116,7 +19116,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0xfd;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19133,7 +19133,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0xfd;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19150,7 +19150,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0xfd;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19167,7 +19167,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0xfd;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19184,7 +19184,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0xfd;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19201,7 +19201,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0xfd;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19217,7 +19217,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0xfd);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19234,7 +19234,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0xfd;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19251,7 +19251,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0xfb;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19268,7 +19268,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0xfb;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19285,7 +19285,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0xfb;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19302,7 +19302,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0xfb;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19319,7 +19319,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0xfb;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19336,7 +19336,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0xfb;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19352,7 +19352,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0xfb);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19369,7 +19369,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0xfb;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19386,7 +19386,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0xf7;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19403,7 +19403,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0xf7;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19420,7 +19420,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0xf7;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19437,7 +19437,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0xf7;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19454,7 +19454,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0xf7;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19471,7 +19471,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0xf7;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19487,7 +19487,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0xf7);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19504,7 +19504,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0xf7;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19521,7 +19521,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0xef;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19538,7 +19538,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0xef;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19555,7 +19555,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0xef;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19572,7 +19572,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0xef;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19589,7 +19589,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0xef;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19606,7 +19606,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0xef;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19622,7 +19622,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0xef);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19639,7 +19639,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0xef;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19656,7 +19656,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0xdf;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19673,7 +19673,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0xdf;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19690,7 +19690,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0xdf;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19707,7 +19707,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0xdf;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19724,7 +19724,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0xdf;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19741,7 +19741,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0xdf;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19757,7 +19757,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0xdf);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19774,7 +19774,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0xdf;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19791,7 +19791,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0xbf;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19808,7 +19808,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0xbf;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19825,7 +19825,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0xbf;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19842,7 +19842,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0xbf;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19859,7 +19859,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0xbf;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19876,7 +19876,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0xbf;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19892,7 +19892,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0xbf);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19909,7 +19909,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0xbf;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19926,7 +19926,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0x7f;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19943,7 +19943,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0x7f;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19960,7 +19960,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0x7f;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19977,7 +19977,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0x7f;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -19994,7 +19994,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0x7f;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20011,7 +20011,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0x7f;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20027,7 +20027,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0x7f);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20044,7 +20044,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0x7f;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20061,7 +20061,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x01;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20078,7 +20078,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x01;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20095,7 +20095,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x01;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20112,7 +20112,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x01;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20129,7 +20129,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x01;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20146,7 +20146,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x01;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20162,7 +20162,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x01);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20179,7 +20179,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x01;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20196,7 +20196,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x02;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20213,7 +20213,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x02;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20230,7 +20230,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x02;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20247,7 +20247,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x02;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20264,7 +20264,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x02;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20281,7 +20281,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x02;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20297,7 +20297,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x02);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20314,7 +20314,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x02;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20331,7 +20331,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x04;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20348,7 +20348,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x04;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20365,7 +20365,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x04;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20382,7 +20382,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x04;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20399,7 +20399,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x04;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20416,7 +20416,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x04;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20432,7 +20432,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x04);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20449,7 +20449,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x04;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20466,7 +20466,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x08;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20483,7 +20483,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x08;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20500,7 +20500,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x08;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20517,7 +20517,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x08;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20534,7 +20534,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x08;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20551,7 +20551,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x08;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20567,7 +20567,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x08);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20584,7 +20584,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x08;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20601,7 +20601,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x10;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20618,7 +20618,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x10;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20635,7 +20635,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x10;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20652,7 +20652,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x10;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20669,7 +20669,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x10;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20686,7 +20686,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x10;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20702,7 +20702,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x10);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20719,7 +20719,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x10;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20736,7 +20736,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x20;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20753,7 +20753,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x20;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20770,7 +20770,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x20;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20787,7 +20787,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x20;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20804,7 +20804,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x20;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20821,7 +20821,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x20;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20837,7 +20837,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x20);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20854,7 +20854,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x20;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20871,7 +20871,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x40;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20888,7 +20888,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x40;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20905,7 +20905,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x40;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20922,7 +20922,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x40;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20939,7 +20939,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x40;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20956,7 +20956,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x40;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20972,7 +20972,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x40);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -20989,7 +20989,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x40;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21006,7 +21006,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x80;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21023,7 +21023,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x80;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21040,7 +21040,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x80;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21057,7 +21057,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x80;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21074,7 +21074,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x80;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21091,7 +21091,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x80;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21107,7 +21107,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  incPC(-1);
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x80);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21124,7 +21124,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  WZ = IX + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x80;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21157,7 +21157,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21184,7 +21184,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21211,7 +21211,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21238,7 +21238,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21265,7 +21265,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21292,7 +21292,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21318,7 +21318,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21345,7 +21345,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21372,7 +21372,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21399,7 +21399,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21426,7 +21426,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21453,7 +21453,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21480,7 +21480,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21507,7 +21507,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21533,7 +21533,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21560,7 +21560,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21588,7 +21588,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21616,7 +21616,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21644,7 +21644,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21672,7 +21672,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21700,7 +21700,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21728,7 +21728,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21755,7 +21755,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21783,7 +21783,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21811,7 +21811,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21839,7 +21839,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21867,7 +21867,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21895,7 +21895,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21923,7 +21923,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21951,7 +21951,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -21978,7 +21978,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22006,7 +22006,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22033,7 +22033,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22060,7 +22060,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22087,7 +22087,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22114,7 +22114,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22141,7 +22141,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22168,7 +22168,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22194,7 +22194,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22221,7 +22221,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22248,7 +22248,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22275,7 +22275,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22302,7 +22302,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22329,7 +22329,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22356,7 +22356,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22383,7 +22383,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22409,7 +22409,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22436,7 +22436,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22463,7 +22463,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22490,7 +22490,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22517,7 +22517,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22544,7 +22544,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22571,7 +22571,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22598,7 +22598,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22624,7 +22624,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22651,7 +22651,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22678,7 +22678,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22705,7 +22705,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22732,7 +22732,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22759,7 +22759,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22786,7 +22786,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22813,7 +22813,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22839,7 +22839,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22866,7 +22866,7 @@ new Opcode("BIT", "7,(IX<d>),A",
 	  F5(tb);
 	  CLEARHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -22893,7 +22893,7 @@ new Opcode("BIT", "0,(IY<d>),B",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -22920,7 +22920,7 @@ new Opcode("BIT", "0,(IY<d>),C",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -22947,7 +22947,7 @@ new Opcode("BIT", "0,(IY<d>),D",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -22974,7 +22974,7 @@ new Opcode("BIT", "0,(IY<d>),E",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23001,7 +23001,7 @@ new Opcode("BIT", "0,(IY<d>),H",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23028,7 +23028,7 @@ new Opcode("BIT", "0,(IY<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23052,7 +23052,7 @@ new Opcode("BIT", "0,(IY<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23079,7 +23079,7 @@ new Opcode("BIT", "0,(IY<d>),A",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23106,7 +23106,7 @@ new Opcode("BIT", "1,(IY<d>),B",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23133,7 +23133,7 @@ new Opcode("BIT", "1,(IY<d>),C",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23160,7 +23160,7 @@ new Opcode("BIT", "1,(IY<d>),D",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23187,7 +23187,7 @@ new Opcode("BIT", "1,(IY<d>),E",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23214,7 +23214,7 @@ new Opcode("BIT", "1,(IY<d>),H",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23241,7 +23241,7 @@ new Opcode("BIT", "1,(IY<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23265,7 +23265,7 @@ new Opcode("BIT", "1,(IY<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23292,7 +23292,7 @@ new Opcode("BIT", "1,(IY<d>),A",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23319,7 +23319,7 @@ new Opcode("BIT", "2,(IY<d>),B",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23346,7 +23346,7 @@ new Opcode("BIT", "2,(IY<d>),C",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23373,7 +23373,7 @@ new Opcode("BIT", "2,(IY<d>),D",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23400,7 +23400,7 @@ new Opcode("BIT", "2,(IY<d>),E",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23427,7 +23427,7 @@ new Opcode("BIT", "2,(IY<d>),H",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23454,7 +23454,7 @@ new Opcode("BIT", "2,(IY<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23478,7 +23478,7 @@ new Opcode("BIT", "2,(IY<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23505,7 +23505,7 @@ new Opcode("BIT", "2,(IY<d>),A",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23532,7 +23532,7 @@ new Opcode("BIT", "3,(IY<d>),B",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23559,7 +23559,7 @@ new Opcode("BIT", "3,(IY<d>),C",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23586,7 +23586,7 @@ new Opcode("BIT", "3,(IY<d>),D",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23613,7 +23613,7 @@ new Opcode("BIT", "3,(IY<d>),E",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23640,7 +23640,7 @@ new Opcode("BIT", "3,(IY<d>),H",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23667,7 +23667,7 @@ new Opcode("BIT", "3,(IY<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23691,7 +23691,7 @@ new Opcode("BIT", "3,(IY<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23718,7 +23718,7 @@ new Opcode("BIT", "3,(IY<d>),A",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23745,7 +23745,7 @@ new Opcode("BIT", "4,(IY<d>),B",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23772,7 +23772,7 @@ new Opcode("BIT", "4,(IY<d>),C",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23799,7 +23799,7 @@ new Opcode("BIT", "4,(IY<d>),D",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23826,7 +23826,7 @@ new Opcode("BIT", "4,(IY<d>),E",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23853,7 +23853,7 @@ new Opcode("BIT", "4,(IY<d>),H",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23880,7 +23880,7 @@ new Opcode("BIT", "4,(IY<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23904,7 +23904,7 @@ new Opcode("BIT", "4,(IY<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23931,7 +23931,7 @@ new Opcode("BIT", "4,(IY<d>),A",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23958,7 +23958,7 @@ new Opcode("BIT", "5,(IY<d>),B",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -23985,7 +23985,7 @@ new Opcode("BIT", "5,(IY<d>),C",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24012,7 +24012,7 @@ new Opcode("BIT", "5,(IY<d>),D",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24039,7 +24039,7 @@ new Opcode("BIT", "5,(IY<d>),E",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24066,7 +24066,7 @@ new Opcode("BIT", "5,(IY<d>),H",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24093,7 +24093,7 @@ new Opcode("BIT", "5,(IY<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24117,7 +24117,7 @@ new Opcode("BIT", "5,(IY<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24144,7 +24144,7 @@ new Opcode("BIT", "5,(IY<d>),A",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24171,7 +24171,7 @@ new Opcode("BIT", "6,(IY<d>),B",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24198,7 +24198,7 @@ new Opcode("BIT", "6,(IY<d>),C",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24225,7 +24225,7 @@ new Opcode("BIT", "6,(IY<d>),D",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24252,7 +24252,7 @@ new Opcode("BIT", "6,(IY<d>),E",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24279,7 +24279,7 @@ new Opcode("BIT", "6,(IY<d>),H",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24306,7 +24306,7 @@ new Opcode("BIT", "6,(IY<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24330,7 +24330,7 @@ new Opcode("BIT", "6,(IY<d>),L",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24357,7 +24357,7 @@ new Opcode("BIT", "6,(IY<d>),A",
 	  CLEARSF();
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24388,7 +24388,7 @@ new Opcode("BIT", "7,(IY<d>),B",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24419,7 +24419,7 @@ new Opcode("BIT", "7,(IY<d>),C",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24450,7 +24450,7 @@ new Opcode("BIT", "7,(IY<d>),D",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24481,7 +24481,7 @@ new Opcode("BIT", "7,(IY<d>),E",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24512,7 +24512,7 @@ new Opcode("BIT", "7,(IY<d>),H",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24543,7 +24543,7 @@ new Opcode("BIT", "7,(IY<d>),L",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24571,7 +24571,7 @@ new Opcode("BIT", "7,(IY<d>),L",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24602,7 +24602,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  }
 	  SETHF();
 	  CLEARNF();
-	  incPC(3);
+	  incPC(2);
 	  return 16;
 	}
       }
@@ -24619,7 +24619,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0xfe;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24636,7 +24636,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0xfe;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24653,7 +24653,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0xfe;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24670,7 +24670,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0xfe;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24687,7 +24687,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0xfe;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24704,7 +24704,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0xfe;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24720,7 +24720,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0xfe);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24737,7 +24737,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0xfe;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24754,7 +24754,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0xfd;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24771,7 +24771,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0xfd;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24788,7 +24788,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0xfd;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24805,7 +24805,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0xfd;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24822,7 +24822,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0xfd;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24839,7 +24839,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0xfd;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24855,7 +24855,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0xfd);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24872,7 +24872,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0xfd;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24889,7 +24889,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0xfb;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24906,7 +24906,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0xfb;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24923,7 +24923,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0xfb;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24940,7 +24940,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0xfb;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24957,7 +24957,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0xfb;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24974,7 +24974,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0xfb;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -24990,7 +24990,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0xfb);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25007,7 +25007,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0xfb;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25024,7 +25024,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0xf7;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25041,7 +25041,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0xf7;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25058,7 +25058,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0xf7;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25075,7 +25075,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0xf7;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25092,7 +25092,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0xf7;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25109,7 +25109,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0xf7;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25125,7 +25125,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0xf7);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25142,7 +25142,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0xf7;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25159,7 +25159,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0xef;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25176,7 +25176,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0xef;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25193,7 +25193,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0xef;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25210,7 +25210,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0xef;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25227,7 +25227,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0xef;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25244,7 +25244,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0xef;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25260,7 +25260,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0xef);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25277,7 +25277,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0xef;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25294,7 +25294,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0xdf;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25311,7 +25311,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0xdf;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25328,7 +25328,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0xdf;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25345,7 +25345,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0xdf;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25362,7 +25362,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0xdf;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25379,7 +25379,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0xdf;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25395,7 +25395,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0xdf);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25412,7 +25412,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0xdf;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25429,7 +25429,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0xbf;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25446,7 +25446,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0xbf;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25463,7 +25463,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0xbf;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25480,7 +25480,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0xbf;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25497,7 +25497,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0xbf;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25514,7 +25514,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0xbf;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25530,7 +25530,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0xbf);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25547,7 +25547,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0xbf;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25564,7 +25564,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) & 0x7f;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25581,7 +25581,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) & 0x7f;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25598,7 +25598,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) & 0x7f;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25615,7 +25615,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) & 0x7f;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25632,7 +25632,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) & 0x7f;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25649,7 +25649,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) & 0x7f;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25665,7 +25665,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) & 0x7f);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25682,7 +25682,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) & 0x7f;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25699,7 +25699,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x01;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25716,7 +25716,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x01;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25733,7 +25733,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x01;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25750,7 +25750,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x01;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25767,7 +25767,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x01;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25784,7 +25784,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x01;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25800,7 +25800,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x01);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25817,7 +25817,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x01;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25834,7 +25834,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x02;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25851,7 +25851,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x02;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25868,7 +25868,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x02;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25885,7 +25885,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x02;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25902,7 +25902,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x02;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25919,7 +25919,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x02;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25935,7 +25935,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x02);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25952,7 +25952,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x02;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25969,7 +25969,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x04;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -25986,7 +25986,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x04;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26003,7 +26003,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x04;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26020,7 +26020,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x04;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26037,7 +26037,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x04;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26054,7 +26054,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x04;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26070,7 +26070,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x04);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26087,7 +26087,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x04;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26104,7 +26104,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x08;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26121,7 +26121,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x08;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26138,7 +26138,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x08;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26155,7 +26155,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x08;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26172,7 +26172,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x08;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26189,7 +26189,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x08;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26205,7 +26205,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x08);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26222,7 +26222,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x08;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26239,7 +26239,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x10;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26256,7 +26256,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x10;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26273,7 +26273,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x10;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26290,7 +26290,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x10;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26307,7 +26307,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x10;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26324,7 +26324,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x10;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26340,7 +26340,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x10);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26357,7 +26357,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x10;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26374,7 +26374,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x20;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26391,7 +26391,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x20;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26408,7 +26408,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x20;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26425,7 +26425,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x20;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26442,7 +26442,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x20;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26459,7 +26459,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x20;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26475,7 +26475,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x20);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26492,7 +26492,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x20;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26509,7 +26509,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x40;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26526,7 +26526,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x40;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26543,7 +26543,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x40;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26560,7 +26560,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x40;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26577,7 +26577,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x40;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26594,7 +26594,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x40;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26610,7 +26610,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x40);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26627,7 +26627,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x40;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26644,7 +26644,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  B = memory.getByte(WZ) | 0x80;
 	  memory.setByte(WZ, B);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26661,7 +26661,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  C = memory.getByte(WZ) | 0x80;
 	  memory.setByte(WZ, C);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26678,7 +26678,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  D = memory.getByte(WZ) | 0x80;
 	  memory.setByte(WZ, D);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26695,7 +26695,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  E = memory.getByte(WZ) | 0x80;
 	  memory.setByte(WZ, E);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26712,7 +26712,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  H = memory.getByte(WZ) | 0x80;
 	  memory.setByte(WZ, H);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26729,7 +26729,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  L = memory.getByte(WZ) | 0x80;
 	  memory.setByte(WZ, L);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26745,7 +26745,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  incPC(-1);
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  memory.setByte(WZ, memory.getByte(WZ) | 0x80);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
@@ -26762,7 +26762,7 @@ new Opcode("BIT", "7,(IY<d>),A",
 	  WZ = IY + ((byte)memory.getByte(PC));
 	  A = memory.getByte(WZ) | 0x80;
 	  memory.setByte(WZ, A);
-	  incPC(3);
+	  incPC(2);
 	  return 19;
 	}
       }
