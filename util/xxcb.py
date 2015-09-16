@@ -383,7 +383,7 @@ for j in range(2):
         if ii == 6:
             print(("    new Opcode(\"BIT\", \"%d,(" + x + "<d>)\", 2, Processor.INS_MR, new Executable() {") % b)
         else:
-            print(("new Opcode(\"BIT\", \"%d,(" + x + "<d>)," + s + "\",") % b)
+            print(("    new Opcode(\"BIT\", \"%d,(" + x + "<d>)," + s + "\",") % b)
             print("	       2,")
             print("	       Processor.INS_UND | Processor.INS_MR,")
             print("	       new Executable() {")

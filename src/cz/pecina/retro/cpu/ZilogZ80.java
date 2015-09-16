@@ -17235,7 +17235,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
       ),
 
     // dd cb 40 (undocumented)
-new Opcode("BIT", "0,(IX<d>),B",
+    new Opcode("BIT", "0,(IX<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17262,7 +17262,7 @@ new Opcode("BIT", "0,(IX<d>),B",
       ),
 
     // dd cb 41 (undocumented)
-new Opcode("BIT", "0,(IX<d>),C",
+    new Opcode("BIT", "0,(IX<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17289,7 +17289,7 @@ new Opcode("BIT", "0,(IX<d>),C",
       ),
 
     // dd cb 42 (undocumented)
-new Opcode("BIT", "0,(IX<d>),D",
+    new Opcode("BIT", "0,(IX<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17316,7 +17316,7 @@ new Opcode("BIT", "0,(IX<d>),D",
       ),
 
     // dd cb 43 (undocumented)
-new Opcode("BIT", "0,(IX<d>),E",
+    new Opcode("BIT", "0,(IX<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17343,7 +17343,7 @@ new Opcode("BIT", "0,(IX<d>),E",
       ),
 
     // dd cb 44 (undocumented)
-new Opcode("BIT", "0,(IX<d>),H",
+    new Opcode("BIT", "0,(IX<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17370,7 +17370,7 @@ new Opcode("BIT", "0,(IX<d>),H",
       ),
 
     // dd cb 45 (undocumented)
-new Opcode("BIT", "0,(IX<d>),L",
+    new Opcode("BIT", "0,(IX<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17421,7 +17421,7 @@ new Opcode("BIT", "0,(IX<d>),L",
       ),
 
     // dd cb 47 (undocumented)
-new Opcode("BIT", "0,(IX<d>),A",
+    new Opcode("BIT", "0,(IX<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17448,7 +17448,7 @@ new Opcode("BIT", "0,(IX<d>),A",
       ),
 
     // dd cb 48 (undocumented)
-new Opcode("BIT", "1,(IX<d>),B",
+    new Opcode("BIT", "1,(IX<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17475,7 +17475,7 @@ new Opcode("BIT", "1,(IX<d>),B",
       ),
 
     // dd cb 49 (undocumented)
-new Opcode("BIT", "1,(IX<d>),C",
+    new Opcode("BIT", "1,(IX<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17502,7 +17502,7 @@ new Opcode("BIT", "1,(IX<d>),C",
       ),
 
     // dd cb 4a (undocumented)
-new Opcode("BIT", "1,(IX<d>),D",
+    new Opcode("BIT", "1,(IX<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17529,7 +17529,7 @@ new Opcode("BIT", "1,(IX<d>),D",
       ),
 
     // dd cb 4b (undocumented)
-new Opcode("BIT", "1,(IX<d>),E",
+    new Opcode("BIT", "1,(IX<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17556,7 +17556,7 @@ new Opcode("BIT", "1,(IX<d>),E",
       ),
 
     // dd cb 4c (undocumented)
-new Opcode("BIT", "1,(IX<d>),H",
+    new Opcode("BIT", "1,(IX<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17583,7 +17583,7 @@ new Opcode("BIT", "1,(IX<d>),H",
       ),
 
     // dd cb 4d (undocumented)
-new Opcode("BIT", "1,(IX<d>),L",
+    new Opcode("BIT", "1,(IX<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17634,7 +17634,7 @@ new Opcode("BIT", "1,(IX<d>),L",
       ),
 
     // dd cb 4f (undocumented)
-new Opcode("BIT", "1,(IX<d>),A",
+    new Opcode("BIT", "1,(IX<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17661,7 +17661,7 @@ new Opcode("BIT", "1,(IX<d>),A",
       ),
 
     // dd cb 50 (undocumented)
-new Opcode("BIT", "2,(IX<d>),B",
+    new Opcode("BIT", "2,(IX<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17688,7 +17688,7 @@ new Opcode("BIT", "2,(IX<d>),B",
       ),
 
     // dd cb 51 (undocumented)
-new Opcode("BIT", "2,(IX<d>),C",
+    new Opcode("BIT", "2,(IX<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17715,7 +17715,7 @@ new Opcode("BIT", "2,(IX<d>),C",
       ),
 
     // dd cb 52 (undocumented)
-new Opcode("BIT", "2,(IX<d>),D",
+    new Opcode("BIT", "2,(IX<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17742,7 +17742,7 @@ new Opcode("BIT", "2,(IX<d>),D",
       ),
 
     // dd cb 53 (undocumented)
-new Opcode("BIT", "2,(IX<d>),E",
+    new Opcode("BIT", "2,(IX<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17769,7 +17769,7 @@ new Opcode("BIT", "2,(IX<d>),E",
       ),
 
     // dd cb 54 (undocumented)
-new Opcode("BIT", "2,(IX<d>),H",
+    new Opcode("BIT", "2,(IX<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17796,7 +17796,7 @@ new Opcode("BIT", "2,(IX<d>),H",
       ),
 
     // dd cb 55 (undocumented)
-new Opcode("BIT", "2,(IX<d>),L",
+    new Opcode("BIT", "2,(IX<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17847,7 +17847,7 @@ new Opcode("BIT", "2,(IX<d>),L",
       ),
 
     // dd cb 57 (undocumented)
-new Opcode("BIT", "2,(IX<d>),A",
+    new Opcode("BIT", "2,(IX<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17874,7 +17874,7 @@ new Opcode("BIT", "2,(IX<d>),A",
       ),
 
     // dd cb 58 (undocumented)
-new Opcode("BIT", "3,(IX<d>),B",
+    new Opcode("BIT", "3,(IX<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17901,7 +17901,7 @@ new Opcode("BIT", "3,(IX<d>),B",
       ),
 
     // dd cb 59 (undocumented)
-new Opcode("BIT", "3,(IX<d>),C",
+    new Opcode("BIT", "3,(IX<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17928,7 +17928,7 @@ new Opcode("BIT", "3,(IX<d>),C",
       ),
 
     // dd cb 5a (undocumented)
-new Opcode("BIT", "3,(IX<d>),D",
+    new Opcode("BIT", "3,(IX<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17955,7 +17955,7 @@ new Opcode("BIT", "3,(IX<d>),D",
       ),
 
     // dd cb 5b (undocumented)
-new Opcode("BIT", "3,(IX<d>),E",
+    new Opcode("BIT", "3,(IX<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -17982,7 +17982,7 @@ new Opcode("BIT", "3,(IX<d>),E",
       ),
 
     // dd cb 5c (undocumented)
-new Opcode("BIT", "3,(IX<d>),H",
+    new Opcode("BIT", "3,(IX<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18009,7 +18009,7 @@ new Opcode("BIT", "3,(IX<d>),H",
       ),
 
     // dd cb 5d (undocumented)
-new Opcode("BIT", "3,(IX<d>),L",
+    new Opcode("BIT", "3,(IX<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18060,7 +18060,7 @@ new Opcode("BIT", "3,(IX<d>),L",
       ),
 
     // dd cb 5f (undocumented)
-new Opcode("BIT", "3,(IX<d>),A",
+    new Opcode("BIT", "3,(IX<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18087,7 +18087,7 @@ new Opcode("BIT", "3,(IX<d>),A",
       ),
 
     // dd cb 60 (undocumented)
-new Opcode("BIT", "4,(IX<d>),B",
+    new Opcode("BIT", "4,(IX<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18114,7 +18114,7 @@ new Opcode("BIT", "4,(IX<d>),B",
       ),
 
     // dd cb 61 (undocumented)
-new Opcode("BIT", "4,(IX<d>),C",
+    new Opcode("BIT", "4,(IX<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18141,7 +18141,7 @@ new Opcode("BIT", "4,(IX<d>),C",
       ),
 
     // dd cb 62 (undocumented)
-new Opcode("BIT", "4,(IX<d>),D",
+    new Opcode("BIT", "4,(IX<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18168,7 +18168,7 @@ new Opcode("BIT", "4,(IX<d>),D",
       ),
 
     // dd cb 63 (undocumented)
-new Opcode("BIT", "4,(IX<d>),E",
+    new Opcode("BIT", "4,(IX<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18195,7 +18195,7 @@ new Opcode("BIT", "4,(IX<d>),E",
       ),
 
     // dd cb 64 (undocumented)
-new Opcode("BIT", "4,(IX<d>),H",
+    new Opcode("BIT", "4,(IX<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18222,7 +18222,7 @@ new Opcode("BIT", "4,(IX<d>),H",
       ),
 
     // dd cb 65 (undocumented)
-new Opcode("BIT", "4,(IX<d>),L",
+    new Opcode("BIT", "4,(IX<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18273,7 +18273,7 @@ new Opcode("BIT", "4,(IX<d>),L",
       ),
 
     // dd cb 67 (undocumented)
-new Opcode("BIT", "4,(IX<d>),A",
+    new Opcode("BIT", "4,(IX<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18300,7 +18300,7 @@ new Opcode("BIT", "4,(IX<d>),A",
       ),
 
     // dd cb 68 (undocumented)
-new Opcode("BIT", "5,(IX<d>),B",
+    new Opcode("BIT", "5,(IX<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18327,7 +18327,7 @@ new Opcode("BIT", "5,(IX<d>),B",
       ),
 
     // dd cb 69 (undocumented)
-new Opcode("BIT", "5,(IX<d>),C",
+    new Opcode("BIT", "5,(IX<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18354,7 +18354,7 @@ new Opcode("BIT", "5,(IX<d>),C",
       ),
 
     // dd cb 6a (undocumented)
-new Opcode("BIT", "5,(IX<d>),D",
+    new Opcode("BIT", "5,(IX<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18381,7 +18381,7 @@ new Opcode("BIT", "5,(IX<d>),D",
       ),
 
     // dd cb 6b (undocumented)
-new Opcode("BIT", "5,(IX<d>),E",
+    new Opcode("BIT", "5,(IX<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18408,7 +18408,7 @@ new Opcode("BIT", "5,(IX<d>),E",
       ),
 
     // dd cb 6c (undocumented)
-new Opcode("BIT", "5,(IX<d>),H",
+    new Opcode("BIT", "5,(IX<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18435,7 +18435,7 @@ new Opcode("BIT", "5,(IX<d>),H",
       ),
 
     // dd cb 6d (undocumented)
-new Opcode("BIT", "5,(IX<d>),L",
+    new Opcode("BIT", "5,(IX<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18486,7 +18486,7 @@ new Opcode("BIT", "5,(IX<d>),L",
       ),
 
     // dd cb 6f (undocumented)
-new Opcode("BIT", "5,(IX<d>),A",
+    new Opcode("BIT", "5,(IX<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18513,7 +18513,7 @@ new Opcode("BIT", "5,(IX<d>),A",
       ),
 
     // dd cb 70 (undocumented)
-new Opcode("BIT", "6,(IX<d>),B",
+    new Opcode("BIT", "6,(IX<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18540,7 +18540,7 @@ new Opcode("BIT", "6,(IX<d>),B",
       ),
 
     // dd cb 71 (undocumented)
-new Opcode("BIT", "6,(IX<d>),C",
+    new Opcode("BIT", "6,(IX<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18567,7 +18567,7 @@ new Opcode("BIT", "6,(IX<d>),C",
       ),
 
     // dd cb 72 (undocumented)
-new Opcode("BIT", "6,(IX<d>),D",
+    new Opcode("BIT", "6,(IX<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18594,7 +18594,7 @@ new Opcode("BIT", "6,(IX<d>),D",
       ),
 
     // dd cb 73 (undocumented)
-new Opcode("BIT", "6,(IX<d>),E",
+    new Opcode("BIT", "6,(IX<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18621,7 +18621,7 @@ new Opcode("BIT", "6,(IX<d>),E",
       ),
 
     // dd cb 74 (undocumented)
-new Opcode("BIT", "6,(IX<d>),H",
+    new Opcode("BIT", "6,(IX<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18648,7 +18648,7 @@ new Opcode("BIT", "6,(IX<d>),H",
       ),
 
     // dd cb 75 (undocumented)
-new Opcode("BIT", "6,(IX<d>),L",
+    new Opcode("BIT", "6,(IX<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18699,7 +18699,7 @@ new Opcode("BIT", "6,(IX<d>),L",
       ),
 
     // dd cb 77 (undocumented)
-new Opcode("BIT", "6,(IX<d>),A",
+    new Opcode("BIT", "6,(IX<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18726,7 +18726,7 @@ new Opcode("BIT", "6,(IX<d>),A",
       ),
 
     // dd cb 78 (undocumented)
-new Opcode("BIT", "7,(IX<d>),B",
+    new Opcode("BIT", "7,(IX<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18757,7 +18757,7 @@ new Opcode("BIT", "7,(IX<d>),B",
       ),
 
     // dd cb 79 (undocumented)
-new Opcode("BIT", "7,(IX<d>),C",
+    new Opcode("BIT", "7,(IX<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18788,7 +18788,7 @@ new Opcode("BIT", "7,(IX<d>),C",
       ),
 
     // dd cb 7a (undocumented)
-new Opcode("BIT", "7,(IX<d>),D",
+    new Opcode("BIT", "7,(IX<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18819,7 +18819,7 @@ new Opcode("BIT", "7,(IX<d>),D",
       ),
 
     // dd cb 7b (undocumented)
-new Opcode("BIT", "7,(IX<d>),E",
+    new Opcode("BIT", "7,(IX<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18850,7 +18850,7 @@ new Opcode("BIT", "7,(IX<d>),E",
       ),
 
     // dd cb 7c (undocumented)
-new Opcode("BIT", "7,(IX<d>),H",
+    new Opcode("BIT", "7,(IX<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18881,7 +18881,7 @@ new Opcode("BIT", "7,(IX<d>),H",
       ),
 
     // dd cb 7d (undocumented)
-new Opcode("BIT", "7,(IX<d>),L",
+    new Opcode("BIT", "7,(IX<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -18940,7 +18940,7 @@ new Opcode("BIT", "7,(IX<d>),L",
       ),
 
     // dd cb 7f (undocumented)
-new Opcode("BIT", "7,(IX<d>),A",
+    new Opcode("BIT", "7,(IX<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -22873,7 +22873,7 @@ new Opcode("BIT", "7,(IX<d>),A",
       ),
 
     // fd cb 40 (undocumented)
-new Opcode("BIT", "0,(IY<d>),B",
+    new Opcode("BIT", "0,(IY<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -22900,7 +22900,7 @@ new Opcode("BIT", "0,(IY<d>),B",
       ),
 
     // fd cb 41 (undocumented)
-new Opcode("BIT", "0,(IY<d>),C",
+    new Opcode("BIT", "0,(IY<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -22927,7 +22927,7 @@ new Opcode("BIT", "0,(IY<d>),C",
       ),
 
     // fd cb 42 (undocumented)
-new Opcode("BIT", "0,(IY<d>),D",
+    new Opcode("BIT", "0,(IY<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -22954,7 +22954,7 @@ new Opcode("BIT", "0,(IY<d>),D",
       ),
 
     // fd cb 43 (undocumented)
-new Opcode("BIT", "0,(IY<d>),E",
+    new Opcode("BIT", "0,(IY<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -22981,7 +22981,7 @@ new Opcode("BIT", "0,(IY<d>),E",
       ),
 
     // fd cb 44 (undocumented)
-new Opcode("BIT", "0,(IY<d>),H",
+    new Opcode("BIT", "0,(IY<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23008,7 +23008,7 @@ new Opcode("BIT", "0,(IY<d>),H",
       ),
 
     // fd cb 45 (undocumented)
-new Opcode("BIT", "0,(IY<d>),L",
+    new Opcode("BIT", "0,(IY<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23059,7 +23059,7 @@ new Opcode("BIT", "0,(IY<d>),L",
       ),
 
     // fd cb 47 (undocumented)
-new Opcode("BIT", "0,(IY<d>),A",
+    new Opcode("BIT", "0,(IY<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23086,7 +23086,7 @@ new Opcode("BIT", "0,(IY<d>),A",
       ),
 
     // fd cb 48 (undocumented)
-new Opcode("BIT", "1,(IY<d>),B",
+    new Opcode("BIT", "1,(IY<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23113,7 +23113,7 @@ new Opcode("BIT", "1,(IY<d>),B",
       ),
 
     // fd cb 49 (undocumented)
-new Opcode("BIT", "1,(IY<d>),C",
+    new Opcode("BIT", "1,(IY<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23140,7 +23140,7 @@ new Opcode("BIT", "1,(IY<d>),C",
       ),
 
     // fd cb 4a (undocumented)
-new Opcode("BIT", "1,(IY<d>),D",
+    new Opcode("BIT", "1,(IY<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23167,7 +23167,7 @@ new Opcode("BIT", "1,(IY<d>),D",
       ),
 
     // fd cb 4b (undocumented)
-new Opcode("BIT", "1,(IY<d>),E",
+    new Opcode("BIT", "1,(IY<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23194,7 +23194,7 @@ new Opcode("BIT", "1,(IY<d>),E",
       ),
 
     // fd cb 4c (undocumented)
-new Opcode("BIT", "1,(IY<d>),H",
+    new Opcode("BIT", "1,(IY<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23221,7 +23221,7 @@ new Opcode("BIT", "1,(IY<d>),H",
       ),
 
     // fd cb 4d (undocumented)
-new Opcode("BIT", "1,(IY<d>),L",
+    new Opcode("BIT", "1,(IY<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23272,7 +23272,7 @@ new Opcode("BIT", "1,(IY<d>),L",
       ),
 
     // fd cb 4f (undocumented)
-new Opcode("BIT", "1,(IY<d>),A",
+    new Opcode("BIT", "1,(IY<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23299,7 +23299,7 @@ new Opcode("BIT", "1,(IY<d>),A",
       ),
 
     // fd cb 50 (undocumented)
-new Opcode("BIT", "2,(IY<d>),B",
+    new Opcode("BIT", "2,(IY<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23326,7 +23326,7 @@ new Opcode("BIT", "2,(IY<d>),B",
       ),
 
     // fd cb 51 (undocumented)
-new Opcode("BIT", "2,(IY<d>),C",
+    new Opcode("BIT", "2,(IY<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23353,7 +23353,7 @@ new Opcode("BIT", "2,(IY<d>),C",
       ),
 
     // fd cb 52 (undocumented)
-new Opcode("BIT", "2,(IY<d>),D",
+    new Opcode("BIT", "2,(IY<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23380,7 +23380,7 @@ new Opcode("BIT", "2,(IY<d>),D",
       ),
 
     // fd cb 53 (undocumented)
-new Opcode("BIT", "2,(IY<d>),E",
+    new Opcode("BIT", "2,(IY<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23407,7 +23407,7 @@ new Opcode("BIT", "2,(IY<d>),E",
       ),
 
     // fd cb 54 (undocumented)
-new Opcode("BIT", "2,(IY<d>),H",
+    new Opcode("BIT", "2,(IY<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23434,7 +23434,7 @@ new Opcode("BIT", "2,(IY<d>),H",
       ),
 
     // fd cb 55 (undocumented)
-new Opcode("BIT", "2,(IY<d>),L",
+    new Opcode("BIT", "2,(IY<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23485,7 +23485,7 @@ new Opcode("BIT", "2,(IY<d>),L",
       ),
 
     // fd cb 57 (undocumented)
-new Opcode("BIT", "2,(IY<d>),A",
+    new Opcode("BIT", "2,(IY<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23512,7 +23512,7 @@ new Opcode("BIT", "2,(IY<d>),A",
       ),
 
     // fd cb 58 (undocumented)
-new Opcode("BIT", "3,(IY<d>),B",
+    new Opcode("BIT", "3,(IY<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23539,7 +23539,7 @@ new Opcode("BIT", "3,(IY<d>),B",
       ),
 
     // fd cb 59 (undocumented)
-new Opcode("BIT", "3,(IY<d>),C",
+    new Opcode("BIT", "3,(IY<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23566,7 +23566,7 @@ new Opcode("BIT", "3,(IY<d>),C",
       ),
 
     // fd cb 5a (undocumented)
-new Opcode("BIT", "3,(IY<d>),D",
+    new Opcode("BIT", "3,(IY<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23593,7 +23593,7 @@ new Opcode("BIT", "3,(IY<d>),D",
       ),
 
     // fd cb 5b (undocumented)
-new Opcode("BIT", "3,(IY<d>),E",
+    new Opcode("BIT", "3,(IY<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23620,7 +23620,7 @@ new Opcode("BIT", "3,(IY<d>),E",
       ),
 
     // fd cb 5c (undocumented)
-new Opcode("BIT", "3,(IY<d>),H",
+    new Opcode("BIT", "3,(IY<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23647,7 +23647,7 @@ new Opcode("BIT", "3,(IY<d>),H",
       ),
 
     // fd cb 5d (undocumented)
-new Opcode("BIT", "3,(IY<d>),L",
+    new Opcode("BIT", "3,(IY<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23698,7 +23698,7 @@ new Opcode("BIT", "3,(IY<d>),L",
       ),
 
     // fd cb 5f (undocumented)
-new Opcode("BIT", "3,(IY<d>),A",
+    new Opcode("BIT", "3,(IY<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23725,7 +23725,7 @@ new Opcode("BIT", "3,(IY<d>),A",
       ),
 
     // fd cb 60 (undocumented)
-new Opcode("BIT", "4,(IY<d>),B",
+    new Opcode("BIT", "4,(IY<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23752,7 +23752,7 @@ new Opcode("BIT", "4,(IY<d>),B",
       ),
 
     // fd cb 61 (undocumented)
-new Opcode("BIT", "4,(IY<d>),C",
+    new Opcode("BIT", "4,(IY<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23779,7 +23779,7 @@ new Opcode("BIT", "4,(IY<d>),C",
       ),
 
     // fd cb 62 (undocumented)
-new Opcode("BIT", "4,(IY<d>),D",
+    new Opcode("BIT", "4,(IY<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23806,7 +23806,7 @@ new Opcode("BIT", "4,(IY<d>),D",
       ),
 
     // fd cb 63 (undocumented)
-new Opcode("BIT", "4,(IY<d>),E",
+    new Opcode("BIT", "4,(IY<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23833,7 +23833,7 @@ new Opcode("BIT", "4,(IY<d>),E",
       ),
 
     // fd cb 64 (undocumented)
-new Opcode("BIT", "4,(IY<d>),H",
+    new Opcode("BIT", "4,(IY<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23860,7 +23860,7 @@ new Opcode("BIT", "4,(IY<d>),H",
       ),
 
     // fd cb 65 (undocumented)
-new Opcode("BIT", "4,(IY<d>),L",
+    new Opcode("BIT", "4,(IY<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23911,7 +23911,7 @@ new Opcode("BIT", "4,(IY<d>),L",
       ),
 
     // fd cb 67 (undocumented)
-new Opcode("BIT", "4,(IY<d>),A",
+    new Opcode("BIT", "4,(IY<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23938,7 +23938,7 @@ new Opcode("BIT", "4,(IY<d>),A",
       ),
 
     // fd cb 68 (undocumented)
-new Opcode("BIT", "5,(IY<d>),B",
+    new Opcode("BIT", "5,(IY<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23965,7 +23965,7 @@ new Opcode("BIT", "5,(IY<d>),B",
       ),
 
     // fd cb 69 (undocumented)
-new Opcode("BIT", "5,(IY<d>),C",
+    new Opcode("BIT", "5,(IY<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -23992,7 +23992,7 @@ new Opcode("BIT", "5,(IY<d>),C",
       ),
 
     // fd cb 6a (undocumented)
-new Opcode("BIT", "5,(IY<d>),D",
+    new Opcode("BIT", "5,(IY<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24019,7 +24019,7 @@ new Opcode("BIT", "5,(IY<d>),D",
       ),
 
     // fd cb 6b (undocumented)
-new Opcode("BIT", "5,(IY<d>),E",
+    new Opcode("BIT", "5,(IY<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24046,7 +24046,7 @@ new Opcode("BIT", "5,(IY<d>),E",
       ),
 
     // fd cb 6c (undocumented)
-new Opcode("BIT", "5,(IY<d>),H",
+    new Opcode("BIT", "5,(IY<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24073,7 +24073,7 @@ new Opcode("BIT", "5,(IY<d>),H",
       ),
 
     // fd cb 6d (undocumented)
-new Opcode("BIT", "5,(IY<d>),L",
+    new Opcode("BIT", "5,(IY<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24124,7 +24124,7 @@ new Opcode("BIT", "5,(IY<d>),L",
       ),
 
     // fd cb 6f (undocumented)
-new Opcode("BIT", "5,(IY<d>),A",
+    new Opcode("BIT", "5,(IY<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24151,7 +24151,7 @@ new Opcode("BIT", "5,(IY<d>),A",
       ),
 
     // fd cb 70 (undocumented)
-new Opcode("BIT", "6,(IY<d>),B",
+    new Opcode("BIT", "6,(IY<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24178,7 +24178,7 @@ new Opcode("BIT", "6,(IY<d>),B",
       ),
 
     // fd cb 71 (undocumented)
-new Opcode("BIT", "6,(IY<d>),C",
+    new Opcode("BIT", "6,(IY<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24205,7 +24205,7 @@ new Opcode("BIT", "6,(IY<d>),C",
       ),
 
     // fd cb 72 (undocumented)
-new Opcode("BIT", "6,(IY<d>),D",
+    new Opcode("BIT", "6,(IY<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24232,7 +24232,7 @@ new Opcode("BIT", "6,(IY<d>),D",
       ),
 
     // fd cb 73 (undocumented)
-new Opcode("BIT", "6,(IY<d>),E",
+    new Opcode("BIT", "6,(IY<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24259,7 +24259,7 @@ new Opcode("BIT", "6,(IY<d>),E",
       ),
 
     // fd cb 74 (undocumented)
-new Opcode("BIT", "6,(IY<d>),H",
+    new Opcode("BIT", "6,(IY<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24286,7 +24286,7 @@ new Opcode("BIT", "6,(IY<d>),H",
       ),
 
     // fd cb 75 (undocumented)
-new Opcode("BIT", "6,(IY<d>),L",
+    new Opcode("BIT", "6,(IY<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24337,7 +24337,7 @@ new Opcode("BIT", "6,(IY<d>),L",
       ),
 
     // fd cb 77 (undocumented)
-new Opcode("BIT", "6,(IY<d>),A",
+    new Opcode("BIT", "6,(IY<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24364,7 +24364,7 @@ new Opcode("BIT", "6,(IY<d>),A",
       ),
 
     // fd cb 78 (undocumented)
-new Opcode("BIT", "7,(IY<d>),B",
+    new Opcode("BIT", "7,(IY<d>),B",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24395,7 +24395,7 @@ new Opcode("BIT", "7,(IY<d>),B",
       ),
 
     // fd cb 79 (undocumented)
-new Opcode("BIT", "7,(IY<d>),C",
+    new Opcode("BIT", "7,(IY<d>),C",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24426,7 +24426,7 @@ new Opcode("BIT", "7,(IY<d>),C",
       ),
 
     // fd cb 7a (undocumented)
-new Opcode("BIT", "7,(IY<d>),D",
+    new Opcode("BIT", "7,(IY<d>),D",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24457,7 +24457,7 @@ new Opcode("BIT", "7,(IY<d>),D",
       ),
 
     // fd cb 7b (undocumented)
-new Opcode("BIT", "7,(IY<d>),E",
+    new Opcode("BIT", "7,(IY<d>),E",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24488,7 +24488,7 @@ new Opcode("BIT", "7,(IY<d>),E",
       ),
 
     // fd cb 7c (undocumented)
-new Opcode("BIT", "7,(IY<d>),H",
+    new Opcode("BIT", "7,(IY<d>),H",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24519,7 +24519,7 @@ new Opcode("BIT", "7,(IY<d>),H",
       ),
 
     // fd cb 7d (undocumented)
-new Opcode("BIT", "7,(IY<d>),L",
+    new Opcode("BIT", "7,(IY<d>),L",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -24578,7 +24578,7 @@ new Opcode("BIT", "7,(IY<d>),L",
       ),
 
     // fd cb 7f (undocumented)
-new Opcode("BIT", "7,(IY<d>),A",
+    new Opcode("BIT", "7,(IY<d>),A",
 	       2,
 	       Processor.INS_UND | Processor.INS_MR,
 	       new Executable() {
@@ -26768,6 +26768,7 @@ new Opcode("BIT", "7,(IY<d>),A",
       }
       )
   };
+
 
   /**
    * Gets an Opcode.
