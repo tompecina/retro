@@ -1,0 +1,15 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+pg="-repage 512x512+0+0"
+for s in $seq; do
+    w=$(($s*32))
+    h=$(($s*32))
+    o=0
+    for b in "debug" "mem" "wheel" "cassette" "cable" "info" "mouse" "gamepad" "printer" "camera" "power" "keyboard" "reset" "diskette" "star" "plus"; do
+	convert $opts -crop 512x512+$o+0 $pg $filtertrans $src/icons.png -alpha Set -channel A -evaluate Multiply $trans -resize ${w}x$h $dst/$b-$s-u.png
+	convert $opts -crop 512x512+$o+512 $pg $filtertrans $src/icons.png -alpha Set -channel A -evaluate Multiply $trans -resize ${w}x$h $dst/$b-$s-d.png
+	o=$(($o+512))
+    done
+done

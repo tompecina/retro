@@ -1,0 +1,69 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+function key {
+    x=$(($2*20))
+    y=$(($3*20))
+    w=$(($4*20))
+    h=$(($5*20))
+    pg="-repage ${w}x$h+0+0"
+    convert $opts -crop ${w}x$h+$x+$y $pg $src/keys.png $dst/tmp.png
+    for s in $seq; do
+	ww=$(($4*2*$s))
+	hh=$(($5*2*$s))
+     	convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/$1-$s-u.png
+    done
+    y=$(($y+$h))
+    convert $opts -crop ${w}x$h+$x+$y $pg $src/keys.png $dst/tmp.png
+    for s in $seq; do
+	ww=$(($4*2*$s))
+	hh=$(($5*2*$s))
+     	convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/$1-$s-d.png
+    done
+    y=$(($y+$h))
+    convert $opts -crop ${w}x$h+$x+$y $pg $src/keys.png $dst/tmp.png
+    for s in $seq; do
+	ww=$(($4*2*$s))
+	hh=$(($5*2*$s))
+     	convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/$1-$s-l.png
+    done
+}
+key Q 0 0 16 11
+key W 16 0 16 11
+key E 32 0 16 11
+key R 48 0 16 11
+key T 64 0 16 11
+key Y 80 0 16 11
+key U 96 0 16 11
+key I 112 0 16 11
+key O 128 0 16 11
+key P 144 0 16 11
+key A 160 0 16 11
+key S 176 0 16 11
+key D 192 0 16 11
+key F 208 0 16 11
+key G 224 0 16 11
+key H 240 0 16 11
+key J 256 0 16 11
+key K 272 0 16 11
+key L 288 0 16 11
+key Z 304 0 16 11
+key X 320 0 16 11
+key C 336 0 16 11
+key V 352 0 16 11
+key B 368 0 16 11
+key N 384 0 16 11
+key M 400 0 16 11
+key ctrl 416 0 16 11
+key num 432 0 16 11
+key space 448 0 73 11
+key enter 521 0 16 11
+key up_down 537 0 16 11
+key large_small 553 0 16 11
+key cs 569 0 16 11
+key up 585 0 16 11
+key left 601 0 16 11
+key down 617 0 16 11
+key right 633 0 16 11
+rm $dst/tmp*.png
