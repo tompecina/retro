@@ -46,68 +46,68 @@ import cz.pecina.retro.gui.IconCache;
  */
 public class Emulator {
 
-  // // static logger
-  // private static final Logger log =
-  //   Logger.getLogger(Emulator.class.getName());
+  // static logger
+  private static final Logger log =
+    Logger.getLogger(Emulator.class.getName());
 
-  // /**
-  //  * Creates an instance of the emulator.
-  //  */
-  // public Emulator() {
-  //   log.fine("New Emulator creation started");
+  /**
+   * Creates an instance of the emulator.
+   */
+  public Emulator() {
+    log.fine("New Emulator creation started");
 
-  //   // set OpenGL for Linux environment
-  //   System.setProperty("sun.java2d.opengl",
-  // 		       Parameters.openGL ? "true" : "false");
-  //   // set general parameters
-  //   Parameters.CPUFrequency = Constants.CPU_FREQUENCY;
-  //   Parameters.timerPeriod = Constants.TIMER_PERIOD;
-  //   Parameters.timerCycles = Constants.TIMER_CYCLES;
-  //   Parameters.charset = new OndraCharset();
+    // set OpenGL for Linux environment
+    System.setProperty("sun.java2d.opengl",
+  		       Parameters.openGL ? "true" : "false");
+    // set general parameters
+    Parameters.CPUFrequency = Constants.CPU_FREQUENCY;
+    Parameters.timerPeriod = Constants.TIMER_PERIOD;
+    Parameters.timerCycles = Constants.TIMER_CYCLES;
+    Parameters.charset = new OndraCharset();
 
-  //   // initialize application
-  //   GeneralUserPreferences.setNodeClass(UserPreferences.class);
-  //   UserPreferences.getPreferences();
-  //   Application.addModules(new GUI(),
-  //   			   new Memory(),
-  //   			   new TapeRecorder(),
-  //   			   new Peripherals());
-  //   GUI.setPixelSize(UserPreferences.getPixelSize());
-  //   log.fine("Application set up");
+    // initialize application
+    GeneralUserPreferences.setNodeClass(UserPreferences.class);
+    UserPreferences.getPreferences();
+    Application.addModules(new GUI(),
+    			   new Memory(),
+    			   new TapeRecorder(),
+    			   new Peripherals());
+    GUI.setPixelSize(UserPreferences.getPixelSize());
+    log.fine("Application set up");
 
-  //   // set up tooltip parameters
-  //   final ToolTipManager ttm = ToolTipManager.sharedInstance();
-  //   ttm.setInitialDelay(GeneralConstants.TOOL_TIP_INITIAL_DELAY);
-  //   ttm.setDismissDelay(GeneralConstants.TOOL_TIP_DISMISS_DELAY);
-  //   ttm.setReshowDelay(GeneralConstants.TOOL_TIP_RESHOW_DELAY);
-  //   log.fine("General tooltip options set");
+    // set up tooltip parameters
+    final ToolTipManager ttm = ToolTipManager.sharedInstance();
+    ttm.setInitialDelay(GeneralConstants.TOOL_TIP_INITIAL_DELAY);
+    ttm.setDismissDelay(GeneralConstants.TOOL_TIP_DISMISS_DELAY);
+    ttm.setReshowDelay(GeneralConstants.TOOL_TIP_RESHOW_DELAY);
+    log.fine("General tooltip options set");
 
-  //   // set up application icons
-  //   for (int size: GUI.APPLICATION_ICON_SIZES) {
-  //     GUI.addApplicationIcon(IconCache.get("ondra/ApplicationIcons/icon-" +
-  //   					   size + ".png").getImage());
-  //   }
+    // set up application icons
+    for (int size: GUI.APPLICATION_ICON_SIZES) {
+      GUI.addApplicationIcon(IconCache.get("ondra/ApplicationIcons/icon-" +
+    					   size + ".png").getImage());
+    }
 
-  //   // create new computer control object
-  //   new Computer();
+    // create new computer control object
+    new Computer();
 
-  //   log.fine("New Emulator creation completed");
-  // }
+    log.fine("New Emulator creation completed");
+  }
 
-  // // for description see Object
-  // @Override
-  // public String toString() {
-  //   return "Emulator";
-  // }
+  // for description see Object
+  @Override
+  public String toString() {
+    return "Emulator";
+  }
 
-  // /**
-  //  * Main method.
-  //  *
-  //  * @param args command-line arguments
-  //  */
-  // public static void main(final String args[]) {
-  //   log.fine("Application started");
-  //   Parameters.arguments = args;
-  //   new Emulator();
-  // }
+  /**
+   * Main method.
+   *
+   * @param args command-line arguments
+   */
+  public static void main(final String args[]) {
+    log.fine("Application started");
+    Parameters.arguments = args;
+    new Emulator();
+  }
 }

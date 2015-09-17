@@ -131,7 +131,7 @@
 		includes="${properties.files}"/>
     <srcfileset dir="${src.dir}/${prefix}/trec"
 		includes="${properties.files}"/>
-    <srcfileset dir="${src.dir}/${prefix}/debug"
+    <srcfileset dir="${src.dir}/${prefix}/jstick"
 		includes="${properties.files}"/>
     <srcfileset dir="${src.dir}/${prefix}/peripherals"
 		includes="${properties.files}"/>
@@ -147,7 +147,7 @@
 		    files="${properties.files}"/>
     <targetfilelist dir="${resources.dir}/${prefix}/trec"
 		    files="${properties.files}"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/debug"
+    <targetfilelist dir="${resources.dir}/${prefix}/jstick"
 		    files="${properties.files}"/>
     <targetfilelist dir="${resources.dir}/${prefix}/peripherals"
 		    files="${properties.files}"/>
@@ -201,6 +201,15 @@
     <apply executable="native2ascii"
 	   dest="${resources.dir}/${prefix}/trec">
       <fileset dir="${src.dir}/${prefix}/trec"
+	       includes="${properties.files}"/>
+      <srcfile/>
+      <targetfile/>
+      <identitymapper/>
+    </apply>
+    <mkdir dir="${resources.dir}/${prefix}/jstick"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/jstick">
+      <fileset dir="${src.dir}/${prefix}/jstick"
 	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
@@ -653,60 +662,43 @@
     <exec executable="${bin.dir}/${prefix}/trec/VUMeter.makegraphics"/>
   </target>
 
-  <!-- debug.DebuggerPanel -->
+  <!-- jstick.JoystickPanel -->
   <dependset>
     <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/debug"
-		includes="DebuggerPanel.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/debug"
-		includes="debugger.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/debug/DebuggerPanel"
-		    files="mask-1.png"/>
-  </dependset>
-  <available file="${resources.dir}/${prefix}/debug/DebuggerPanel/mask-1.png"
-	     property="avail.debug.DebuggerPanel"/>
-  <target name="debug.DebuggerPanel"
-	  unless="avail.debug.DebuggerPanel">
-    <exec executable="${bin.dir}/${prefix}/debug/DebuggerPanel.makegraphics"/>
-  </target>
-
-  <!-- debug.DebuggerButton -->
-  <dependset>
-    <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/debug"
-		includes="DebuggerButton.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/debug"
-		includes="buttons.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/debug/DebuggerButton"
-		    files="stepin-1-u.png"/>
-  </dependset>
-  <available file="${resources.dir}/${prefix}/debug/DebuggerButton/stepin-1-u.png"
-	     property="avail.debug.DebuggerButton"/>
-  <target name="debug.DebuggerButton"
-	  unless="avail.debug.DebuggerButton">
-    <exec executable="${bin.dir}/${prefix}/debug/DebuggerButton.makegraphics"/>
-  </target>
-
-  <!-- counter.CounterPanel -->
-  <dependset>
-    <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/counter"
-		includes="CounterPanel.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/counter"
+    <srcfileset dir="${bin.dir}/${prefix}/jstick"
+		includes="JoystickPanel.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/jstick"
 		includes="mask.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/counter/CounterPanel"
+    <targetfilelist dir="${resources.dir}/${prefix}/jstick/JoystickPanel"
 		    files="mask-1.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/counter/CounterPanel/mask-1.png"
-	     property="avail.counter.CounterPanel"/>
-  <target name="counter.CounterPanel"
-	  unless="avail.counter.CounterPanel">
-    <exec executable="${bin.dir}/${prefix}/counter/CounterPanel.makegraphics"/>
+  <available file="${resources.dir}/${prefix}/jstick/JoystickPanel/mask-1.png"
+	     property="avail.jstick.JoystickPanel"/>
+  <target name="jstick.JoystickPanel"
+	  unless="avail.jstick.JoystickPanel">
+    <exec executable="${bin.dir}/${prefix}/jstick/JoystickPanel.makegraphics"/>
+  </target>
+
+  <!-- jstick.JoystickButton -->
+  <dependset>
+    <srcfileset refid="common.makegraphics"/>
+    <srcfileset dir="${bin.dir}/${prefix}/jstick"
+		includes="JoystickButton.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/jstick"
+		includes="buttons.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/jstick/JoystickButton"
+		    files="N-1-u.png"/>
+  </dependset>
+  <available file="${resources.dir}/${prefix}/jstick/JoystickButton/N-1-u.png"
+	     property="avail.jstick.JoystickButton"/>
+  <target name="jstick.JoystickButton"
+	  unless="avail.jstick.JoystickButton">
+    <exec executable="${bin.dir}/${prefix}/jstick/JoystickButton.makegraphics"/>
   </target>
 
   <!-- graphics -->
   <target name="graphics"
-	  depends="prepare,gui.LED,gui.SSD,gui.SiSD,gui.ESD,gui.SignESD,gui.Digit,gui.CounterResetButton,gui.UniversalButton,gui.Knob,gui.Background,ondra.Marking,ondra.ComputerPanel,ondra.KeyboardPanel,ondra.KeyboardKey,ondra.IconButton,ondra.AboutLogo,ondra.AboutPhoto,ondra.AboutLicense,ondra.ApplicationIcons,trec.TapeRecorderPanel,trec.TapeRecorderButton,trec.VUMeter,debug.DebuggerPanel,debug.DebuggerButton"
+	  depends="prepare,gui.LED,gui.SSD,gui.SiSD,gui.ESD,gui.SignESD,gui.Digit,gui.CounterResetButton,gui.UniversalButton,gui.Knob,gui.Background,ondra.Marking,ondra.ComputerPanel,ondra.KeyboardPanel,ondra.KeyboardKey,ondra.IconButton,ondra.AboutLogo,ondra.AboutPhoto,ondra.AboutLicense,ondra.ApplicationIcons,trec.TapeRecorderPanel,trec.TapeRecorderButton,trec.VUMeter,jstick.JoystickPanel,jstick.JoystickButton"
 	  description="Create bitmaps"
 	  unless="nographics"/>
 
@@ -737,8 +729,8 @@
     <copy todir="${build.classes.dir}/${prefix}/trec">
       <fileset dir="${resources.dir}/${prefix}/trec"/>
     </copy>
-    <copy todir="${build.classes.dir}/${prefix}/debug">
-      <fileset dir="${resources.dir}/${prefix}/debug"/>
+    <copy todir="${build.classes.dir}/${prefix}/jstick">
+      <fileset dir="${resources.dir}/${prefix}/jstick"/>
     </copy>
     <copy todir="${build.classes.dir}/${prefix}/peripherals">
       <fileset dir="${resources.dir}/${prefix}/peripherals"/>

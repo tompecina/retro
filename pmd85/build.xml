@@ -687,23 +687,6 @@
     <exec executable="${bin.dir}/${prefix}/debug/DebuggerButton.makegraphics"/>
   </target>
 
-  <!-- counter.CounterPanel -->
-  <dependset>
-    <srcfileset refid="common.makegraphics"/>
-    <srcfileset dir="${bin.dir}/${prefix}/counter"
-		includes="CounterPanel.makegraphics"/>
-    <srcfileset dir="${graphics.dir}/counter"
-		includes="mask.png"/>
-    <targetfilelist dir="${resources.dir}/${prefix}/counter/CounterPanel"
-		    files="mask-1.png"/>
-  </dependset>
-  <available file="${resources.dir}/${prefix}/counter/CounterPanel/mask-1.png"
-	     property="avail.counter.CounterPanel"/>
-  <target name="counter.CounterPanel"
-	  unless="avail.counter.CounterPanel">
-    <exec executable="${bin.dir}/${prefix}/counter/CounterPanel.makegraphics"/>
-  </target>
-
   <!-- graphics -->
   <target name="graphics"
 	  depends="prepare,gui.LED,gui.SSD,gui.SiSD,gui.ESD,gui.SignESD,gui.Digit,gui.CounterResetButton,gui.UniversalButton,gui.Knob,gui.Background,pmd85.Marking,pmd85.ComputerPanel,pmd85.KeyboardPanel,pmd85.KeyboardKey,pmd85.IconButton,pmd85.AboutLogo,pmd85.AboutPhoto,pmd85.AboutLicense,pmd85.ApplicationIcons,trec.TapeRecorderPanel,trec.TapeRecorderButton,trec.VUMeter,debug.DebuggerPanel,debug.DebuggerButton"

@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.pecina.retro.pmd85;
+package cz.pecina.retro.ondra;
 
 import java.util.logging.Logger;
 
@@ -69,10 +69,10 @@ public class MemoryFrame extends HidingFrame {
     this.hardware = hardware;
 
     saveMemoryPlugins = new MemoryPlugin[] {
-      new BasicMemoryPlugin(),
+      /* new BasicMemoryPlugin(), */
       new ScreenShotMemoryPlugin(computer.getComputerHardware())};
     loadMemoryPlugins = new MemoryPlugin[] {
-      new BasicMemoryPlugin()};
+      /* new BasicMemoryPlugin() */};
     
     memoryPanel = new MemoryPanel(this,
 				  hardware,

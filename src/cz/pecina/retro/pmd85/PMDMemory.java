@@ -94,10 +94,11 @@ public class PMDMemory
   /**
    * Constructor of PMD memory object.
    *
-   * @param name    device name
-   * @param sizeROM size of ROM (in KiB)
-   * @param sizeRAM size of RAM (in KiB)
-   * @param sizeRMM size of RMM module (in KiB)
+   * @param name            device name
+   * @param sizeROM         size of ROM (in KiB)
+   * @param sizeRAM         size of RAM (in KiB)
+   * @param sizeRMM         size of RMM module (in KiB)
+   * @param displayHardware the display hardware object
    */
   public PMDMemory(final String name,
 		   final int sizeROM,

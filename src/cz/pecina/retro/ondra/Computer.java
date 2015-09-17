@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.pecina.retro.pmd85;
+package cz.pecina.retro.ondra;
 
 import java.util.logging.Logger;
 
@@ -36,7 +36,7 @@ import cz.pecina.retro.cpu.Opcode;
 import cz.pecina.retro.gui.GUI;
 
 /**
- * Tesla PMD 85 control object.
+ * Tesla Ondra SPO 186 control object.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -46,9 +46,6 @@ public class Computer implements Runnable {
   // static logger
   private static final Logger log =
     Logger.getLogger(Computer.class.getName());
-
-  // debugger button autorepeat constant
-  private static int AUTOREPEAT = Math.round(200f / Constants.TIMER_PERIOD);
 
   // the computer hardware object
   private ComputerHardware computerHardware;
@@ -83,21 +80,8 @@ public class Computer implements Runnable {
   // the icon layout
   private IconLayout iconLayout;
 
-  // the reset button
-  private KeyboardKey resetKey;
-
-  // the shift keys
-  private KeyboardKey leftShiftKey, rightShiftKey;
-
-  // debugger states
-  private enum DebuggerState {HIDDEN, RUNNING, STOPPED};
-
-  // debugger state
-  private DebuggerState debuggerState = DebuggerState.HIDDEN;
-
-  // state of debugger buttons
-  private boolean interruptButtonPressed, runStopButtonPressed;
-  private int stepInButtonCounter, stepOverButtonCounter;
+  // the NMI button
+  private KeyboardKey nmiKey;
 
   // true if run() running
   private boolean busy;
