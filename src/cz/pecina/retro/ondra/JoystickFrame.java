@@ -50,7 +50,7 @@ public class JoystickFrame extends HidingFrame implements Resizeable {
   /**
    * Creates the Joystick frame.
    *
-   * @param computer         the computer object
+   * @param computer the computer object
    */
   public JoystickFrame(final Computer computer) {
     super(Application.getString(JoystickFrame.class, "joystick.frameTitle"),
@@ -59,7 +59,9 @@ public class JoystickFrame extends HidingFrame implements Resizeable {
     assert computer != null;
     this.computer = computer;
 
-    joystickPanel = new JoystickPanel(this, computer);
+    joystickPanel =
+      new JoystickPanel(this,
+			computer.getComputerHardware().getJoystickHardware());
     add(joystickPanel);
     pack();
     GUI.addResizeable(this);
@@ -71,7 +73,9 @@ public class JoystickFrame extends HidingFrame implements Resizeable {
     log.fine("JoystickFrame redraw started");
     super.setTitle(Application.getString(this, "joystick.frameTitle"));
     remove(joystickPanel);
-    joystickPanel = new JoystickPanel(this, computer);
+    joystickPanel =
+      new JoystickPanel(this,
+			computer.getComputerHardware().getJoystickHardware());
     add(joystickPanel);
     pack();
     log.fine("JoystickFrame redraw completed");

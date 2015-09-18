@@ -27,9 +27,11 @@ import org.jdom2.Element;
 
 import cz.pecina.retro.cpu.Device;
 import cz.pecina.retro.cpu.AbstractMemory;
+import cz.pecina.retro.cpu.IOElement;
 import cz.pecina.retro.cpu.Register;
 import cz.pecina.retro.cpu.Block;
 import cz.pecina.retro.cpu.IOPin;
+import cz.pecina.retro.cpu.IONode;
 
 import cz.pecina.retro.memory.Snapshot;
 import cz.pecina.retro.memory.Info;
@@ -46,7 +48,7 @@ import cz.pecina.retro.trec.TapeRecorderHardware;
  */
 public class OndraMemory
   extends Device
-  implements AbstractMemory {
+  implements AbstractMemory, IOElement {
 
   // memory sizes
   private static final int ROM_SIZE = 0x4000;
@@ -165,15 +167,10 @@ public class OndraMemory
   // for description see Device
   @Override
   public void reset() {
-    resetFlag = true;
+    allRAMPin.notifyChange();
+    inPortPin.notifyChange();
   }
   
-  // for description see IOElement
-  @Override
-  public void portOutput(final int port, int data) {
-    resetFlag = false;
-  }
-
   // for description see IOElement
   @Override
   public int portInput(final int port) {
@@ -243,14 +240,14 @@ public class OndraMemory
     if (!allRAMFlag && (address < 0x4000)) {
       data = rom[address];
     } else if (inPortFlag && (address >= 0xe000)) {
-      data = tapeRecorderHardware.getOutputPin().query() << 7;
+      data = tapeRecorderHardware.getOutPin().query() << 7;
       if ((address & 0x0f) == 0x0b) {
 	data |=
-	  (joystickHardware.getNorthButton().isPressed() ? 0x04 : 0) |
-	  (joystickHardware.getEastButton().isPressed() ? 0x01 : 0) |
-	  (joystickHardware.getSouthButton().isPressed() ? 0x08 : 0) |
-	  (joystickHardware.getWestButton().isPressed() ? 0x02 : 0) |
-	  (joystickHardware.getFireButton().isPressed() ? 0x10 : 0);
+	  (IONode.normalize(joystickHardware.getNorthPin().query()) << 2) |
+	  IONode.normalize(joystickHardware.getEastPin().query()) |
+	  (IONode.normalize(joystickHardware.getSouthPin().query()) << 3) |
+	  (IONode.normalize(joystickHardware.getWestPin().query()) << 1) |
+	  (IONode.normalize(joystickHardware.getFirePin().query()) << 4);
       } else {
 	data |= keyboardHardware.getState(1 << (address & 0x0f));
       }

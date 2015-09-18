@@ -60,10 +60,10 @@ public class Computer implements Runnable {
   // private ResetFrame resetFrame;
 
   // the memory frame
-  // private MemoryFrame memoryFrame;
+  private MemoryFrame memoryFrame;
 
   // the keyboard frame
-  // private KeyboardFrame keyboardFrame;
+  private KeyboardFrame keyboardFrame;
 
   // the joystick frame
   private JoystickFrame joystickFrame;
@@ -108,7 +108,7 @@ public class Computer implements Runnable {
     // keyboardFrame =
     //   new KeyboardFrame(this, computerHardware.getKeyboardHardware());
     joystickFrame =
-      new JoystickFrame(this, computerHardware.getJoystickHardware());
+      new JoystickFrame(this);
     // tapeRecorderFrame = new TapeRecorderFrame(
     //   this,
     //   computerHardware.getTapeRecorderHardware());

@@ -61,6 +61,9 @@ public class ComputerPanel extends BackgroundFixedPane {
   // keyboard hardware
   private KeyboardHardware keyboardHardware;
   
+  // brand marking
+  private final Marking marking = new Marking();
+
   /**
    * Creates the layered panel containing the elements of the main
    * control panel.
@@ -106,8 +109,7 @@ public class ComputerPanel extends BackgroundFixedPane {
     log.finer("LEDs set up");
 
     // set up brand marking
-    computerHardware.getMarking().place(this,
-					MARKING_OFFSET_X, MARKING_OFFSET_Y);
+    marking.place(this, MARKING_OFFSET_X, MARKING_OFFSET_Y);
     log.finer("Brand marking set up");
 	
     // set up icons

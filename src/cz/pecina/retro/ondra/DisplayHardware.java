@@ -66,7 +66,7 @@ public class DisplayHardware extends Device implements IOElement {
     assert computerHardware != null;
     display = new Display(computerHardware);
     for (int i = 0; i < 2; i++) {
-      addressPins[i] = new addressPin(i);
+      addressPins[i] = new AddressPin(i);
     }
     log.finer("Display hardware creation completed");
   }
@@ -100,7 +100,7 @@ public class DisplayHardware extends Device implements IOElement {
 
     @Override
     public void notifyChange() {
-      newEnableFlag = (queryNode() != 0);
+      final boolean newEnableFlag = (queryNode() != 0);
       if (newEnableFlag != enableFlag) {
 	enableFlag = newEnableFlag;
 	display.repaint();
@@ -140,7 +140,7 @@ public class DisplayHardware extends Device implements IOElement {
    * @param  the pin number
    * @return the pin object
    */
-  public IOPin getAddress(final int n) {
+  public IOPin getAddressPin(final int n) {
     return addressPins[n];
   }
 }

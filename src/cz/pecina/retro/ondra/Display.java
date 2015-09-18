@@ -120,6 +120,7 @@ public class Display {
     }
     log.fine("Display created");
   }
+
   /**
    * Repaints any changed stripes.
    */
@@ -128,6 +129,16 @@ public class Display {
 	stripes[stripe].refresh();
     }
     log.finest("Display refreshed");
+  }
+
+  /**
+   * Repaints all stripes.
+   */
+  public void repaint() {
+    for (int stripe = 0; stripe < NUMBER_STRIPES; stripe++) {
+	stripes[stripe].repaint();
+    }
+    log.finest("Display repainted");
   }
 
   /**

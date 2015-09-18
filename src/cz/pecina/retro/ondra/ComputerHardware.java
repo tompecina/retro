@@ -49,7 +49,6 @@ import cz.pecina.retro.trec.TapeRecorderInterface;
 import cz.pecina.retro.trec.TapeRecorderHardware;
 
 import cz.pecina.retro.gui.LED;
-import cz.pecina.retro.gui.Marking;
 
 /**
  * Tesla Ondra SPO 186 hardware object.
@@ -96,12 +95,14 @@ public class ComputerHardware {
   // LEDs
   private final LED yellowLED =
     new LED("small", "yellow");
-  private final LED redLED =
-    new LED("small", "red");
+  private final LED greenLED =
+    new LED("small", "green");
 
-  // the marking
-  private final Marking marking =
-    new Marking("ondra/Marking/basic-%d.png");
+  // LED pins
+  private final NegativeLEDPin yellowLEDPin =
+    new NegativeLEDPin(yellowLED);
+  private final NegativeLEDPin greenLEDPin =
+    new NegativeLEDPin(greenLED);
 
   /**
    * Creates a new computer hardware object.
@@ -112,8 +113,36 @@ public class ComputerHardware {
     // create new hardware
     hardware = new Hardware("ONDRA");
 
+    // set up the display hardware
+    displayHardware = new DisplayHardware("DISPLAY", this);
+    hardware.add(displayHardware);
+    for (int port: Util.portIterator(0, 0)) {
+      cpu.addIOInput(port, displayHardware);
+    }
+
+    // set up the keyboard hardware
+    keyboardHardware = new KeyboardHardware();
+    
+    // set up the joystick hardware
+    joystickHardware = new JoystickHardware();
+    
+    // set up the tape recorder hardware
+    final TapeRecorderInterface tapeRecorderInterface =
+      new TapeRecorderInterface();
+    tapeRecorderInterface.tapeSampleRate = Constants.TAPE_SAMPLE_RATE;
+    tapeRecorderInterface.timerPeriod = Constants.TIMER_PERIOD;
+    tapeRecorderInterface.tapeFormats = Arrays.asList(new String[]
+      {"XML", "PMT", "WAV"});
+    tapeRecorderInterface.vuRecConstant = 150.0;
+    tapeRecorderInterface.vuPlayConstant = 80.0;
+    tapeRecorderHardware = new TapeRecorderHardware(tapeRecorderInterface);
+
     // set up memory
-    memory = new OndraMemory("MEMORY", displayHardware);
+    memory = new OndraMemory("MEMORY",
+			     displayHardware,
+			     keyboardHardware,
+			     joystickHardware,
+			     tapeRecorderHardware);
     hardware.add(memory);
     Parameters.memoryDevice = memory;
     Parameters.memoryObject = memory;
@@ -144,27 +173,6 @@ public class ComputerHardware {
       cpu.addIOOutput(port, printerLatch);
     }
     
-    // set up the display hardware
-    displayHardware = new DisplayHardware("DISPLAY", this);
-    hardware.add(displayHardware);
-    for (int port: Util.portIterator(0, 0)) {
-      cpu.addIOInput(port, displayHardware);
-    }
-
-    // set up the keyboard hardware
-    keyboardHardware = new KeyboardHardware();
-    
-    // set up the tape recorder hardware
-    final TapeRecorderInterface tapeRecorderInterface =
-      new TapeRecorderInterface();
-    tapeRecorderInterface.tapeSampleRate = Constants.TAPE_SAMPLE_RATE;
-    tapeRecorderInterface.timerPeriod = Constants.TIMER_PERIOD;
-    tapeRecorderInterface.tapeFormats = Arrays.asList(new String[]
-      {"XML", "PMT", "WAV"});
-    tapeRecorderInterface.vuRecConstant = 150.0;
-    tapeRecorderInterface.vuPlayConstant = 80.0;
-    tapeRecorderHardware = new TapeRecorderHardware(tapeRecorderInterface);
-
     // connect memory controller
     new IONode().add(primaryLatch.getOutPin(1)).add(memory.getAllRAMPin());
     new IONode().add(primaryLatch.getOutPin(2)).add(memory.getInPortPin());
@@ -190,17 +198,13 @@ public class ComputerHardware {
     Parameters.sound.setMute(Sound.SPEAKER_CHANNEL,
       UserPreferences.isSpeakerMute());
     
-    // set up LEDs
-    yellowLEDPin = new NegativeLEDPin(yellowLed);
-    redLEDPin = new NegativeLEDPin(redLed);
-    
     // connect LEDs
     new IONode()
       .add(secondaryLatch.getOutPin(1))
       .add(yellowLEDPin);
     new IONode()
       .add(secondaryLatch.getOutPin(0))
-      .add(green);
+      .add(greenLEDPin);
     
     // set up the speaker
     // speaker = new Speaker("SPEAKER");
@@ -269,15 +273,6 @@ public class ComputerHardware {
   }
   
   /**
-   * Gets the model.
-   *
-   * @return the model
-   */
-  public int getModel() {
-    return model;
-  }
-
-  /**
    * Gets the memory.
    *
    * @return the memory
@@ -332,6 +327,15 @@ public class ComputerHardware {
   }
 
   /**
+   * Gets the joystick hardware.
+   *
+   * @return the joystick hardware object
+   */
+  public JoystickHardware getJoystickHardware() {
+    return joystickHardware;
+  }
+
+  /**
    * Gets the yellow LED.
    *
    * @return the yellow LED
@@ -347,14 +351,5 @@ public class ComputerHardware {
    */
   public LED getGreenLED() {
     return greenLED;
-  }
-
-  /**
-   * Gets the marking.
-   *
-   * @return the marking
-   */
-  public Marking getMarking() {
-    return marking;
   }
 }

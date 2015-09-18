@@ -72,11 +72,11 @@ public class JoystickHardware {
     new PushButton("jstick/JoystickButton/F-%d-%s.png", null, null);
  
   // button pins
-  private final NorthPin[] northPin = new NorthPin();
-  private final EastPin[] eastPin = new EastPin();
-  private final SouthPin[] southPin = new SouthPin();
-  private final WestPin[] westPin = new WestPin();
-  private final FirePin[] firePin = new FirePin();
+  private final NorthPin northPin = new NorthPin();
+  private final EastPin eastPin = new EastPin();
+  private final SouthPin southPin = new SouthPin();
+  private final WestPin westPin = new WestPin();
+  private final FirePin firePin = new FirePin();
 
   // button presses
   private boolean northBuffer, northCurrent, northNext;

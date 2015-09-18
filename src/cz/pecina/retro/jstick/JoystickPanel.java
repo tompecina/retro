@@ -50,6 +50,13 @@ public class JoystickPanel extends BackgroundFixedPane {
   private static final int WEST_OFFSET_Y = 0;
   private static final int FIRE_OFFSET_X = 0;
   private static final int FIRE_OFFSET_Y = 0;
+
+  // the enclosing frame
+  private JFrame frame;
+
+  // the joystick hardware
+  private JoystickHardware joystickHardware;
+
   /**
    * Creates the layered panel containing the elements of the
    * joystick panel.
