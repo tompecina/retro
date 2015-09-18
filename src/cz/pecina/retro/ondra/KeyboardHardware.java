@@ -128,11 +128,13 @@ public class KeyboardHardware {
   /**
    * Gets the current state.
    *
-   * @param column the selected column
-   * @return       the state of the keyboard output
+   * @param  column the selected column
+   * @return        the state of the keyboard output
    */
   public int getState(final int column) {
-    assert (column >= 0) && (column < NUMBER_MATRIX_COLUMNS);
+    if ((column < 0) || (column >= NUMBER_MATRIX_COLUMNS)) {
+      return 0xff;
+    }
     int state = 0;
     for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {
       if (buffer[row][column]) {

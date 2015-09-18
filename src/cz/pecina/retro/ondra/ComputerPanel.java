@@ -44,9 +44,9 @@ public class ComputerPanel extends BackgroundFixedPane {
   private static final int DISPLAY_OFFSET_Y = 12;
 
   // LED positions
-  private static final int LED_OFFSET_X = 355;
-  private static final int LED_OFFSET_Y = 268;
-  private static final int LED_GRID_Y = 10;
+  private static final int LED_OFFSET_X = 350;
+  private static final int LED_OFFSET_Y = 278;
+  private static final int LED_GRID_X = 12;
   
   // brand marking position
   private static final int MARKING_OFFSET_X = 8;
@@ -104,8 +104,8 @@ public class ComputerPanel extends BackgroundFixedPane {
 					  LED_OFFSET_X,
 					  LED_OFFSET_Y);
     computerHardware.getGreenLED().place(this,
-					 LED_OFFSET_X,
-					 LED_OFFSET_Y + LED_GRID_Y);
+					 LED_OFFSET_X + LED_GRID_X,
+					 LED_OFFSET_Y);
     log.finer("LEDs set up");
 
     // set up brand marking

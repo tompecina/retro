@@ -57,7 +57,7 @@ public class Computer implements Runnable {
   // private SettingsFrame settingsFrame;
 
   // the reset frame
-  // private ResetFrame resetFrame;
+  private ResetFrame resetFrame;
 
   // the memory frame
   private MemoryFrame memoryFrame;
@@ -114,14 +114,14 @@ public class Computer implements Runnable {
     //   computerHardware.getTapeRecorderHardware());
     // peripheralsFrame = new PeripheralsFrame(this, computerHardware);
     // settingsFrame = new SettingsFrame(this, peripheralsFrame.getPeripherals());
-    // resetFrame = new ResetFrame(this, computerHardware.getHardware());
+    resetFrame = new ResetFrame(this, computerHardware.getHardware());
     // aboutFrame = new AboutFrame(this);
 
     // reset all stateful hardware
     computerHardware.reset();
 
     // start emulation
-    // new Timer(Parameters.timerPeriod, new TimerListener()).start();
+    new Timer(Parameters.timerPeriod, new TimerListener()).start();
 
     log.fine("New Computer created");
   }
@@ -139,12 +139,17 @@ public class Computer implements Runnable {
   // the main emulation method
   public void run() {
 	
-    // if (busy) {
-    //   log.fine("Processing took too long, timer event dismissed");
+    if (busy) {
+      log.fine("Processing took too long, timer event dismissed");
     //   Parameters.sound.update();
-    //   return;
-    // }
-    // busy = true;
+      return;
+    }
+    busy = true;
+
+    	computerHardware.getCPU().exec(
+          Parameters.timerCycles * Parameters.speedUp,
+    	  0,
+    	  null);
 
     // switch (debuggerState) {
     //   case HIDDEN:
@@ -303,7 +308,7 @@ public class Computer implements Runnable {
     // computerHardware.getKeyboardHardware().getRedLED()
     //   .setState(redLEDState);
     
-    // busy = false;
+    busy = false;
   }
 
   /**

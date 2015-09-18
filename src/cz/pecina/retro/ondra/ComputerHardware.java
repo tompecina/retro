@@ -269,7 +269,6 @@ public class ComputerHardware {
     hardware.reset();
     clearRAM();
     loadROM();
-    reset();
   }
   
   /**

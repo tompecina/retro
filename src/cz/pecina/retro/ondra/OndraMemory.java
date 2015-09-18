@@ -186,7 +186,7 @@ public class OndraMemory
 
     @Override
     public void notifyChange() {
-      allRAMFlag = (queryNode() == 0);
+      allRAMFlag = (queryNode() == 1);
     }
   }
 
@@ -208,7 +208,7 @@ public class OndraMemory
 
     @Override
     public void notifyChange() {
-      inPortFlag = (queryNode() == 0);
+      inPortFlag = (queryNode() == 1);
     }
   }
 
@@ -249,7 +249,7 @@ public class OndraMemory
 	  (IONode.normalize(joystickHardware.getWestPin().query()) << 1) |
 	  (IONode.normalize(joystickHardware.getFirePin().query()) << 4);
       } else {
-	data |= keyboardHardware.getState(1 << (address & 0x0f));
+	data |= keyboardHardware.getState(address & 0x0f);
       }
     } else {
 	data = ram[address];
