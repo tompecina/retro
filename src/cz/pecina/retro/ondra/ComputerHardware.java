@@ -113,6 +113,12 @@ public class ComputerHardware {
     // create new hardware
     hardware = new Hardware("ONDRA");
 
+    // set up CPU
+    cpu = new ZilogZ80("CPU");
+    hardware.add(cpu);
+    Parameters.systemClockSource = cpu;
+    Parameters.cpu = cpu;
+
     // set up the display hardware
     displayHardware = new DisplayHardware("DISPLAY", this);
     hardware.add(displayHardware);
@@ -147,12 +153,6 @@ public class ComputerHardware {
     Parameters.memoryDevice = memory;
     Parameters.memoryObject = memory;
 	
-    // set up CPU
-    cpu = new ZilogZ80("CPU");
-    hardware.add(cpu);
-    Parameters.systemClockSource = cpu;
-    Parameters.cpu = cpu;
-
     // connect CPU and memory
     cpu.setMemory(memory);
 
