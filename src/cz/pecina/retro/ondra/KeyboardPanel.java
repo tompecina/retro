@@ -44,15 +44,17 @@ public class KeyboardPanel extends BackgroundFixedPane {
   private static final Logger log =
     Logger.getLogger(KeyboardPanel.class.getName());
 
-  // base key dimensions
-  private static final int BASE_WIDTH = 2;
-  private static final int BASE_HEIGHT = 14;
+  // key geometry
+  private static final int KEY_OFFSET_X = 40;
+  private static final int KEY_OFFSET_Y = 12;
+  private static final int KEY_GRID_X = 2;
+  private static final int KEY_GRID_Y = 28;
 
   // LED positions
-  private static final int YELLOW_LED_OFFSET_X = 103;
-  private static final int YELLOW_LED_OFFSET_Y = 103;
-  private static final int GREEN_LED_OFFSET_X = 272;
-  private static final int GREEN_LED_OFFSET_Y = YELLOW_LED_OFFSET_Y;
+  private static final int YELLOW_LED_OFFSET_X = 18;
+  private static final int YELLOW_LED_OFFSET_Y = 76;
+  private static final int GREEN_LED_OFFSET_X = YELLOW_LED_OFFSET_X;
+  private static final int GREEN_LED_OFFSET_Y = 103;
   
   // enclosing frame
   private JFrame frame;
@@ -61,8 +63,8 @@ public class KeyboardPanel extends BackgroundFixedPane {
   private void placeKeys() {
     for (KeyboardKey key: keyboardHardware.getKeyboardLayout().getKeys()) {
       key.place(this,
-    		key.getOffsetX() * BASE_WIDTH,
-    		key.getOffsetY() * BASE_HEIGHT);
+    		KEY_OFFSET_X + (key.getOffsetX() * KEY_GRID_X),
+    		KEY_OFFSET_Y + (key.getOffsetY() * KEY_GRID_Y));
       log.finest("Key '" + key + "' added");
     }
     log.finer("All keys added");
@@ -75,8 +77,8 @@ public class KeyboardPanel extends BackgroundFixedPane {
     for (KeyboardKey key: keyboardHardware.getKeyboardLayout().getKeys()) {
       remove(key);
       key.place(this,
-    		key.getOffsetX() * BASE_WIDTH,
-    		key.getOffsetY() * BASE_HEIGHT);
+    		KEY_OFFSET_X + (key.getOffsetX() * KEY_GRID_X),
+    		KEY_OFFSET_Y + (key.getOffsetY() * KEY_GRID_Y));
       log.finest("Key '" + key + "' replaced");
     }
     repaint();

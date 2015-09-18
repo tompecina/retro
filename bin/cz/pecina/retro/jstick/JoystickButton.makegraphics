@@ -10,15 +10,15 @@ function button {
     pg="-repage ${w}x$h+0+0"
     convert $opts -crop ${w}x$h+$x+$y $pg $src/buttons.png $dst/tmp.png
     for s in $seq; do
-	ww=$(($4*20*$s))
-	hh=$(($5*20*$s))
+	ww=$(($4*10*$s))
+	hh=$(($5*10*$s))
      	convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/$1-$s-u.png
     done
     y=$(($y+$h))
     convert $opts -crop ${w}x$h+$x+$y $pg $src/buttons.png $dst/tmp.png
     for s in $seq; do
-	ww=$(($4*20*$s))
-	hh=$(($5*20*$s))
+	ww=$(($4*10*$s))
+	hh=$(($5*10*$s))
      	convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/$1-$s-d.png
     done
 }
