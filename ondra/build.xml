@@ -444,6 +444,8 @@
 		includes="plastic-gray.png"/>
     <srcfileset dir="${graphics.dir}/gui"
 		includes="plastic-darkgray.png"/>
+    <srcfileset dir="${graphics.dir}/gui"
+		includes="metal-black.png"/>
     <targetfilelist dir="${resources.dir}/${prefix}/gui/Background"
 		    files="plastic-gray.png"/>
   </dependset>
@@ -517,9 +519,9 @@
     <srcfileset dir="${graphics.dir}/${package}"
 		includes="keys.png"/>
     <targetfilelist dir="${resources.dir}/${prefix}/${package}/KeyboardKey"
-		    files="Q-1-u.png"/>
+		    files="q-1-u.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/KeyboardKey/Q-1-u.png"
+  <available file="${resources.dir}/${prefix}/${package}/KeyboardKey/q-1-u.png"
 	     property="avail.ondra.KeyboardKey"/>
   <target name="ondra.KeyboardKey"
 	  unless="avail.ondra.KeyboardKey">

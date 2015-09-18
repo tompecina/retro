@@ -52,7 +52,7 @@ public class TapeRecorderFrame extends HidingFrame implements Resizeable {
    * Creates the tape recorder frame.
    *
    * @param computer             the computer control object
-   * @param tapeRecorderHardware hardware to operate on
+   * @param tapeRecorderHardware the hardware to operate on
    */
   public TapeRecorderFrame(final Computer computer,
 			   final TapeRecorderHardware tapeRecorderHardware) {

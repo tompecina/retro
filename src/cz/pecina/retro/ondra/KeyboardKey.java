@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.pecina.retro.pmd85;
+package cz.pecina.retro.ondra;
 
 import java.util.logging.Logger;
 
@@ -34,7 +34,7 @@ import cz.pecina.retro.common.Application;
 import cz.pecina.retro.gui.LockableButton;
 
 /**
- * Key on the Tesla PMD 85 keyboard.
+ * Key on the Tesla Ondra SPO 186 keyboard.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -65,8 +65,8 @@ public class KeyboardKey extends LockableButton {
    *
    * @param keyboardHardware the keyboard hardware object to operate on
    * @param cap              cap of the key
-   * @param offsetX          x-offset of the key in 1/2s of the base key width
-   * @param offsetY          y-offset of the key in 1/2s of the base key height
+   * @param offsetX          x-offset of the key
+   * @param offsetY          y-offset of the key
    * @param matrixRow        position of the key in the hardware matrix
    *                         (row) or {@code -1} if not connected
    * @param matrixColumn     position of the key in the hardware matrix
@@ -78,7 +78,7 @@ public class KeyboardKey extends LockableButton {
 		     final int offsetY,
 		     final int matrixRow,
 		     final int matrixColumn) {
-    super("pmd85/KeyboardKey/" + cap + "-%d-%s.png", null, null);
+    super("ondra/KeyboardKey/" + cap + "-%d-%s.png", null, null);
     log.fine("New key creation started: " + cap +
 	     ", matrix column: " + matrixColumn + ", matrix row: " + matrixRow);
     assert keyboardHardware != null;
@@ -137,7 +137,7 @@ public class KeyboardKey extends LockableButton {
    */
   public void setCap(final String cap) {
     this.cap = cap;
-    super.setTemplate("pmd85/KeyboardKey/" + cap + "-%d-%s.png");
+    super.setTemplate("ondra/KeyboardKey/" + cap + "-%d-%s.png");
     log.fine("New cap set: " + cap);
   }
 
@@ -153,7 +153,7 @@ public class KeyboardKey extends LockableButton {
   /**
    * Sets the x-offset of the key.
    *
-   * @param offsetX x-offset of the key in 1/2s of the base key width
+   * @param offsetX x-offset of the key
    */
   public void setOffsetX(final int offsetX) {
     this.offsetX = offsetX;
@@ -162,7 +162,7 @@ public class KeyboardKey extends LockableButton {
   /**
    * Gets the x-offset of the key.
    *
-   * @return x-offset of the key in 1/2s of the base key width
+   * @return x-offset of the key
    */
   public int getOffsetX() {
     return offsetX;
@@ -171,7 +171,7 @@ public class KeyboardKey extends LockableButton {
   /**
    * Sets the y-offset of the key.
    *
-   * @param offsetY y-offset of the key in 1/2s of the base key width
+   * @param offsetY y-offset of the key
    */
   public void setOffsetY(final int offsetY) {
     this.offsetY = offsetY;
@@ -180,7 +180,7 @@ public class KeyboardKey extends LockableButton {
   /**
    * Gets the y-offset of the key.
    *
-   * @return y-offset of the key in 1/2s of the base key width
+   * @return y-offset of the key
    */
   public int getOffsetY() {
     return offsetY;
@@ -202,54 +202,5 @@ public class KeyboardKey extends LockableButton {
    */
   public int getMatrixColumn() {
     return matrixColumn;
-  }
-
-  /**
-   * Connects the key to the RESET signal of the processor.
-   */
-  public void setReset() {
-    reset = true;
-  }
-
-  /**
-   * Tests if the key is connected to the RESET signal of the processor.
-   *
-   * @return {@code true} if the key is connected to the RESET signal
-   *         of the processor
-   */
-  public boolean isReset() {
-    return reset;
-  }
-
-  /**
-   * Makes the key a shift.
-   */
-  public void setShift() {
-    shift = true;
-  }
-
-  /**
-   * Tests if the key is a shift.
-   *
-   * @return {@code true} if the key is a shift
-   */
-  public boolean isShift() {
-    return shift;
-  }
-
-  /**
-   * Makes the key STOP.
-   */
-  public void setStop() {
-    stop = true;
-  }
-
-  /**
-   * Tests if the key is STOP.
-   *
-   * @return {@code true} if the key is STOP
-   */
-  public boolean isStop() {
-    return stop;
   }
 }

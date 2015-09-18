@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.pecina.retro.pmd85;
+package cz.pecina.retro.ondra;
 
 import java.util.logging.Logger;
 
@@ -39,29 +39,20 @@ import cz.pecina.retro.common.Sound;
 
 import cz.pecina.retro.cpu.IONode;
 import cz.pecina.retro.cpu.Hardware;
-import cz.pecina.retro.cpu.Intel8080A;
-import cz.pecina.retro.cpu.Intel8255A;
-import cz.pecina.retro.cpu.Intel8251A;
-import cz.pecina.retro.cpu.Intel8253;
-import cz.pecina.retro.cpu.Invertor;
-import cz.pecina.retro.cpu.NAND;
-import cz.pecina.retro.cpu.XOR;
-import cz.pecina.retro.cpu.FrequencyGenerator;
-import cz.pecina.retro.cpu.FrequencyDivider;
-import cz.pecina.retro.cpu.ProportionMeter;
+import cz.pecina.retro.cpu.ZilogZ80;
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.IONode;
+
+import cz.pecina.retro.jstick.JoystickHardware;
 
 import cz.pecina.retro.trec.TapeRecorderInterface;
 import cz.pecina.retro.trec.TapeRecorderHardware;
 
-import cz.pecina.retro.debug.DebuggerHardware;
-
-import cz.pecina.retro.gui.VariableLED;
+import cz.pecina.retro.gui.LED;
 import cz.pecina.retro.gui.Marking;
 
 /**
- * Tesla PMD 85 hardware object.
+ * Tesla Ondra SPO 186 hardware object.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -75,82 +66,36 @@ public class ComputerHardware {
   // the general hardware
   private Hardware hardware;
 
-  // the computer model
-  private int model;
-
   // the memory
-  private PMDMemory memory;
+  private OndraMemory memory;
 
   // the CPU
-  private Intel8080A cpu;
-
-  // the system 8255A (PIO)
-  private Intel8255A systemPIO;
-
-  // the general-purpose 8255A (PIO)
-  private Intel8255A gPIO;
-
-  // the IMS-2 8255A (PIO)
-  private Intel8255A imsPIO;
-
-  // the 8251A (USART)
-  private Intel8251A usart;
-
-  // the 8253 (PIT)
-  private Intel8253 pit;
-
-  // the tape recorder XOR
-  private XOR xor;
-
-  // the 1Hz frequency generator
-  private FrequencyGenerator rtcGenerator;
-
-  // the fixed frequency generator (freq = 4000Hz)
-  private FrequencyGenerator gen4k;
-
-  // the 1:4 frequency divider
-  private FrequencyDivider div;
+  private ZilogZ80 cpu;
 
   // the speaker
-  private Speaker speaker;
-
-  // the speaker & yellow LED logic
-  private NAND pc0nand, pc1nand, speakerNand;
-  private Invertor pc2inv;
-
-  // the tape recorder Manchester decoder
-  private ManchesterDecoder decoder;
+  // private Speaker speaker;
 
   // the display hardware
-  private DisplayHardware displayHardware;
+  // private DisplayHardware displayHardware;
 
   // the keyboard hardware
-  private KeyboardHardware keyboardHardware;
+  // private KeyboardHardware keyboardHardware;
+
+  // the joystick hardware
+  private JoystickHardware joystickHardware;
 
   // the tape recorder hardware
   private TapeRecorderHardware tapeRecorderHardware;
 
-  // the ROMModule hardware
-  private ROMModuleHardware romModuleHardware;
-
-  // the debugger hardware
-  private DebuggerHardware debuggerHardware;
-
   // LEDs
-  private final VariableLED yellowLED =
-    new VariableLED("small", "yellow");
-  private final VariableLED redLED =
-    new VariableLED("small", "red");
-
-  // LED meters
-  private final ProportionMeter yellowLEDMeter;
-  private final ProportionMeter redLEDMeter;
+  private final LED yellowLED =
+    new LED("small", "yellow");
+  private final LED redLED =
+    new LED("small", "red");
 
   // the marking
   private final Marking marking =
-    new Marking("pmd85/Marking/basic-%d-%d.png",
-		Constants.NUMBER_MODELS,
-		UserPreferences.getModel());
+    new Marking("ondra/Marking/basic-%d.png");
 
   /**
    * Creates a new computer hardware object.
@@ -159,19 +104,19 @@ public class ComputerHardware {
     log.fine("New Computer hardware object creation started");
 
     // create new hardware
-    hardware = new Hardware("PMD_85");
+    hardware = new Hardware("ONDRA");
 
     // set up the display hardware
     displayHardware = new DisplayHardware(this);
 
     // set up memory
-    memory = new PMDMemory("MEMORY", 8, 64, 32, displayHardware);
+    memory = new OndraMemory("MEMORY", displayHardware);
     hardware.add(memory);
     Parameters.memoryDevice = memory;
     Parameters.memoryObject = memory;
 	
     // set up CPU
-    cpu = new Intel8080A("CPU");
+    cpu = new ZilogZ80("CPU");
     hardware.add(cpu);
     Parameters.systemClockSource = cpu;
     Parameters.cpu = cpu;
@@ -182,30 +127,6 @@ public class ComputerHardware {
       cpu.addIOOutput(port, memory);
     }
       
-    // set up the system PIO
-    systemPIO = new Intel8255A("SYSTEM_PIO");
-    hardware.add(systemPIO);
-    for (int port: Util.portIterator(0x84, 0x8c)) {
-      cpu.addIOInput(port, systemPIO);
-      cpu.addIOOutput(port, systemPIO);
-    }
-
-    // set up the general-purpose PIO
-    gPIO = new Intel8255A("GENERAL_PURPOSE_PIO");
-    hardware.add(gPIO);
-    for (int port: Util.portIterator(0x4c, 0xfc)) {
-      cpu.addIOInput(port, gPIO);
-      cpu.addIOOutput(port, gPIO);
-    }
-
-    // set up the IMS-2 (HPIB) PIO
-    imsPIO = new Intel8255A("IMS_2_PIO");
-    hardware.add(imsPIO);
-    for (int port: Util.portIterator(0x7c, 0xfc)) {
-      cpu.addIOInput(port, imsPIO);
-      cpu.addIOOutput(port, imsPIO);
-    }
-
     // set up the keyboard hardware
     keyboardHardware = new KeyboardHardware();
     
@@ -215,13 +136,10 @@ public class ComputerHardware {
     tapeRecorderInterface.tapeSampleRate = Constants.TAPE_SAMPLE_RATE;
     tapeRecorderInterface.timerPeriod = Constants.TIMER_PERIOD;
     tapeRecorderInterface.tapeFormats = Arrays.asList(new String[]
-      {"XML", "PMT", "PTP", "PMD", "PMDTAPE", "WAV"});
+      {"XML", "PMT", "WAV"});
     tapeRecorderInterface.vuRecConstant = 150.0;
     tapeRecorderInterface.vuPlayConstant = 80.0;
     tapeRecorderHardware = new TapeRecorderHardware(tapeRecorderInterface);
-
-    // set up the debugger hardware
-    debuggerHardware = new DebuggerHardware(cpu);
 
     // connect memory controller
     new IONode().add(systemPIO.getPin(16 + 4)).add(memory.getAllRAMPin());
@@ -338,38 +256,35 @@ public class ComputerHardware {
     speaker = new Speaker("SPEAKER");
 
     // connect speaker and LEDs
-    new IONode()
-      .add(gen4k.getOutPin())
-      .add(pc1nand.getInPin(1))
-      .add(div.getInPin());
-    new IONode()
-      .add(systemPIO.getPin(16 + 1))
-      .add(pc1nand.getInPin(0));
-    new IONode()
-      .add(div.getOutPin())
-      .add(pc0nand.getInPin(1));
-    new IONode()
-      .add(systemPIO.getPin(16))
-      .add(pc0nand.getInPin(0));
-    new IONode()
-      .add(systemPIO.getPin(16 + 2))
-      .add(pc2inv.getInPin());
-    new IONode()
-      .add(pc0nand.getOutPin())
-      .add(speakerNand.getInPin(0));
-    new IONode()
-      .add(pc1nand.getOutPin())
-      .add(speakerNand.getInPin(2));
-    new IONode()
-      .add(pc2inv.getOutPin())
-      .add(speakerNand.getInPin(1));
-    new IONode()
-      .add(speakerNand.getOutPin())
-      .add(yellowLEDMeter.getInPin())
-      .add(speaker.getInPin());
-    new IONode()
-      .add(systemPIO.getPin(16 + 3))
-      .add(redLEDMeter.getInPin());
+    // new IONode()
+    //   .add(gen4k.getOutPin())
+    //   .add(pc1nand.getInPin(1))
+    //   .add(div.getInPin());
+    // new IONode()
+    //   .add(systemPIO.getPin(16 + 1))
+    //   .add(pc1nand.getInPin(0));
+    // new IONode()
+    //   .add(div.getOutPin())
+    //   .add(pc0nand.getInPin(1));
+    // new IONode()
+    //   .add(systemPIO.getPin(16))
+    //   .add(pc0nand.getInPin(0));
+    // new IONode()
+    //   .add(systemPIO.getPin(16 + 2))
+    //   .add(pc2inv.getInPin());
+    // new IONode()
+    //   .add(pc0nand.getOutPin())
+    //   .add(speakerNand.getInPin(0));
+    // new IONode()
+    //   .add(pc2inv.getOutPin())
+    //   .add(speakerNand.getInPin(1));
+    // new IONode()
+    //   .add(speakerNand.getOutPin())
+    //   .add(yellowLEDMeter.getInPin())
+    //   .add(speaker.getInPin());
+    // new IONode()
+    //   .add(systemPIO.getPin(16 + 3))
+    //   .add(redLEDMeter.getInPin());
       
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);
@@ -500,7 +415,7 @@ public class ComputerHardware {
    *
    * @return the memory
    */
-  public PMDMemory getMemory() {
+  public OndraMemory getMemory() {
     return memory;
   }
 
@@ -509,35 +424,8 @@ public class ComputerHardware {
    *
    * @return the CPU
    */
-  public Intel8080A getCPU() {
+  public ZilogZ80 getCPU() {
     return cpu;
-  }
-
-  /**
-   * Gets the system PIO.
-   *
-   * @return the system PIO
-   */
-  public Intel8255A getSystemPIO() {
-    return systemPIO;
-  }
-
-  /**
-   * Gets the general-purpose PIO.
-   *
-   * @return the general-purpose PIO
-   */
-  public Intel8255A getGPIO() {
-    return gPIO;
-  }
-
-  /**
-   * Gets the IMS-2 (HPIB) PIO.
-   *
-   * @return the IMS-2 (HPIB) PIO
-   */
-  public Intel8255A getImsPIO() {
-    return imsPIO;
   }
 
   /**
@@ -577,57 +465,21 @@ public class ComputerHardware {
   }
 
   /**
-   * Gets the ROM module hardware.
-   *
-   * @return the ROM module hardware object
-   */
-  public ROMModuleHardware getROMModuleHardware() {
-    return romModuleHardware;
-  }
-
-  /**
-   * Gets the debugger hardware.
-   *
-   * @return the debugger hardware object
-   */
-  public DebuggerHardware getDebuggerHardware() {
-    return debuggerHardware;
-  }
-
-  /**
    * Gets the yellow LED.
    *
    * @return the yellow LED
    */
-  public VariableLED getYellowLED() {
+  public LED getYellowLED() {
     return yellowLED;
   }
 
   /**
-   * Gets the red LED.
+   * Gets the green LED.
    *
-   * @return the red LED
+   * @return the green LED
    */
-  public VariableLED getRedLED() {
-    return redLED;
-  }
-
-  /**
-   * Gets the yellow LED meter.
-   *
-   * @return the yellow LED meter
-   */
-  public ProportionMeter getYellowLEDMeter() {
-    return yellowLEDMeter;
-  }
-
-  /**
-   * Gets the red LED meter.
-   *
-   * @return the red LED meter
-   */
-  public ProportionMeter getRedLEDMeter() {
-    return redLEDMeter;
+  public LED getGreenLED() {
+    return greenLED;
   }
 
   /**

@@ -4,3 +4,4 @@ source bin/common.makegraphics
 
 cp $src/plastic-gray.png $dst
 cp $src/plastic-darkgray.png $dst
+cp $src/metal-black.png $dst

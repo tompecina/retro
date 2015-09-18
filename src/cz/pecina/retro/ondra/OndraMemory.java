@@ -53,9 +53,6 @@ public class OndraMemory
   private static final int ROM_SIZE = 0x4000;
   private static final int RAM_SIZE = 0x10000;
 
-  // start address of the video RAM
-  private static final int START_VIDEO_RAM = 0xd800;
-
   // dynamic logger, per device
   private Logger log;
 
@@ -102,7 +99,7 @@ public class OndraMemory
    */
   public OndraMemory(final String name,
 		     final DisplayHardware displayHardware,
-		     final KeybaordHardware keyboardHardware,
+		     final KeyboardHardware keyboardHardware,
 		     final JoystickHardware joystickHardware,
 		     final TapeRecorderHardware tapeRecorderHardware) {
     super(name);
@@ -232,7 +229,7 @@ public class OndraMemory
    * Refreshes the Video RAM.
    */
   public void refreshVideoRAM() {
-    for (int address = START_VIDEO_RAM; address < RAM_SIZE; address++) {
+    for (int address = Display.START_VIDEO; address < RAM_SIZE; address++) {
       setByte(address, ram[address]);
     }
     log.fine("Video RAM refreshed");
@@ -257,6 +254,7 @@ public class OndraMemory
 	  (joystickHardware.getFireButton().isPressed() ? 0x10 : 0);
       } else {
 	data |= keyboardHardware.getState(1 << (address & 0x0f));
+      }
     } else {
 	data = ram[address];
       }

@@ -54,25 +54,25 @@ public class Computer implements Runnable {
   private ComputerFrame computerFrame;
 
   // the settings frame
-  private SettingsFrame settingsFrame;
+  // private SettingsFrame settingsFrame;
 
   // the reset frame
-  private ResetFrame resetFrame;
+  // private ResetFrame resetFrame;
 
   // the memory frame
-  private MemoryFrame memoryFrame;
+  // private MemoryFrame memoryFrame;
 
   // the keyboard frame
-  private KeyboardFrame keyboardFrame;
+  // private KeyboardFrame keyboardFrame;
+
+  // the joystick frame
+  private JoystickFrame joystickFrame;
 
   // the peripherals frame
-  private PeripheralsFrame peripheralsFrame;
+  // private PeripheralsFrame peripheralsFrame;
 
   // the tape recorder frame
-  private TapeRecorderFrame tapeRecorderFrame;
-
-  // the debugger frame
-  private DebuggerFrame debuggerFrame;
+  // private TapeRecorderFrame tapeRecorderFrame;
 
   // the About frame
   // private AboutFrame aboutFrame;
@@ -81,7 +81,7 @@ public class Computer implements Runnable {
   private IconLayout iconLayout;
 
   // the NMI button
-  private KeyboardKey nmiKey;
+  // private KeyboardKey nmiButton;
 
   // true if run() running
   private boolean busy;
@@ -104,40 +104,24 @@ public class Computer implements Runnable {
     			computerHardware.getDisplayHardware(),
     			computerHardware.getKeyboardHardware()
 			);
-    memoryFrame = new MemoryFrame(this, computerHardware.getHardware());
-    keyboardFrame =
-      new KeyboardFrame(this, computerHardware.getKeyboardHardware());
-    tapeRecorderFrame = new TapeRecorderFrame(
-      this,
-      computerHardware.getTapeRecorderHardware());
-    debuggerFrame = new DebuggerFrame(
-      this,
-      computerHardware.getDebuggerHardware());
-    peripheralsFrame = new PeripheralsFrame(this, computerHardware);
-    settingsFrame = new SettingsFrame(this, peripheralsFrame.getPeripherals());
-    resetFrame = new ResetFrame(this, computerHardware.getHardware());
+    // memoryFrame = new MemoryFrame(this, computerHardware.getHardware());
+    // keyboardFrame =
+    //   new KeyboardFrame(this, computerHardware.getKeyboardHardware());
+    joystickFrame =
+      new JoystickFrame(this, computerHardware.getJoystickHardware());
+    // tapeRecorderFrame = new TapeRecorderFrame(
+    //   this,
+    //   computerHardware.getTapeRecorderHardware());
+    // peripheralsFrame = new PeripheralsFrame(this, computerHardware);
+    // settingsFrame = new SettingsFrame(this, peripheralsFrame.getPeripherals());
+    // resetFrame = new ResetFrame(this, computerHardware.getHardware());
     // aboutFrame = new AboutFrame(this);
 
-    // find reset and shift keys
-    for (KeyboardKey key: computerHardware.getKeyboardHardware()
-	   .getKeyboardLayout().getKeys()) {
-      if (key.isReset()) {
-	resetKey = key;
-      }
-      if (key.isShift()) {
-	if (leftShiftKey == null) {
-	  leftShiftKey = key;
-	} else {
-	  rightShiftKey = key;
-	}
-      }
-    }
-
-    // set the model and reset all stateful hardware
-    computerHardware.setModel(this, UserPreferences.getModel());
+    // reset all stateful hardware
+    computerHardware.reset();
 
     // start emulation
-    new Timer(Parameters.timerPeriod, new TimerListener()).start();
+    // new Timer(Parameters.timerPeriod, new TimerListener()).start();
 
     log.fine("New Computer created");
   }
@@ -155,171 +139,171 @@ public class Computer implements Runnable {
   // the main emulation method
   public void run() {
 	
-    if (busy) {
-      log.fine("Processing took too long, timer event dismissed");
-      Parameters.sound.update();
-      return;
-    }
-    busy = true;
+    // if (busy) {
+    //   log.fine("Processing took too long, timer event dismissed");
+    //   Parameters.sound.update();
+    //   return;
+    // }
+    // busy = true;
 
-    switch (debuggerState) {
-      case HIDDEN:
-    	computerHardware.getDebuggerHardware().removeTemporaryBreakpoints();
-    	stepInButtonCounter = stepOverButtonCounter = 0;
-    	runStopButtonPressed = false;
-    	if (resetKey.isPressed() &&
-	    (leftShiftKey.isPressed() || rightShiftKey.isPressed()))  {
-    	  // computerHardware.getCPU().requestReset();
-    	  // computerHardware.getSystemPIO().reset();
-    	  // computerHardware.getMemory().reset();
-	  computerHardware.reset();
-    	  // computerHardware.getPeripheralPPI().reset();
-    	  // computerHardware.getDisplayHardware().display();
-    	  break;
-    	}
-    	// if (interruptButton.isPressed()) {
-    	//   if (!interruptButtonPressed) {
-    	//     computerHardware.getCPU().requestInterrupt(7);
-    	//     interruptButtonPressed = true;
-    	//     break;
-    	//   }
-    	// } else {
-    	//   interruptButtonPressed = false;
-	// }
-    	computerHardware.getCPU().exec(
-          Parameters.timerCycles * Parameters.speedUp,
-  	  0,
-  	  null);
-    	// computerHardware.getDisplayHardware().display();
-    	break;
-      case STOPPED:
-    	computerHardware.getDebuggerHardware().removeTemporaryBreakpoints();
-    	// computerHardware.getDisplayHardware().displayImmediate();
-    	computerHardware.getDebuggerHardware().update();
-    	if (resetKey.isPressed() &&
-	    (leftShiftKey.isPressed() || rightShiftKey.isPressed()))  {
-    	  // computerHardware.getCPU().reset();
-    	  // computerHardware.getSystemPIO().reset();
-    	  // computerHardware.getMemory().reset();
-	  computerHardware.reset();
-    	  // computerHardware.getPeripheralPPI().reset();
-    	  computerHardware.getDebuggerHardware().activate();
-    	  break;
-    	}
-    	// if (interruptButton.isPressed()) {
-    	//   if (!interruptButtonPressed) {
-    	//     computerHardware.getCPU().interrupt(7);
-    	//     interruptButtonPressed = true;
-    	//     computerHardware.getDebuggerHardware().activate();
-    	//     break;
-    	//   }
-    	// } else {
-    	//   interruptButtonPressed = false;
-    	// }
-    	if (computerHardware.getDebuggerHardware().stepInButton.isPressed()) {
-    	  if (stepInButtonCounter == 0) {
-    	    computerHardware.getCPU().exec();
-    	    computerHardware.getDebuggerHardware().activate();
-    	    stepInButtonCounter = AUTOREPEAT;
-    	    break;
-    	  } else {
-    	    stepInButtonCounter--;
-    	  }
-    	} else {
-    	  stepInButtonCounter = 0;
-    	}
-    	if (computerHardware.getDebuggerHardware().stepOverButton.isPressed()) {
-    	  if (stepOverButtonCounter == 0) {
-    	    final int pc = computerHardware.getCPU().getPC();
-    	    final Opcode opcode = computerHardware.getCPU()
-    	      .getOpcode(computerHardware.getMemory().getByte(pc));
-    	    if ((opcode.getType() & Processor.INS_CALL) == 0) {
-    	      computerHardware.getCPU().exec();
-    	      computerHardware.getDebuggerHardware().activate();
-    	    } else {
-    	      computerHardware.getDebuggerHardware().getBreakpointValues()
-    		.add((pc + opcode.getLength()) & 0xffff);
-    	      computerHardware.getDebuggerHardware().deactivate();
-    	      debuggerState = DebuggerState.RUNNING;
-    	    }
-    	    stepOverButtonCounter = AUTOREPEAT;
-    	    break;
-    	  } else {
-    	    stepOverButtonCounter--;
-    	  }
-    	} else {
-    	  stepOverButtonCounter = 0;
-    	}
-    	if (computerHardware.getDebuggerHardware().runStopButton.isPressed()) {
-    	  if (!runStopButtonPressed) {
-    	    computerHardware.getDebuggerHardware().deactivate();
-    	    debuggerState = DebuggerState.RUNNING;
-    	    runStopButtonPressed = true;
-    	    break;
-    	  }
-    	} else {
-    	  runStopButtonPressed = false;
-    	}
-    	break;
-      case RUNNING:
-    	// computerHardware.getDisplayHardware().reset();
-    	if (resetKey.isPressed() &&
-	    (leftShiftKey.isPressed() || rightShiftKey.isPressed()))  {
-    	  // computerHardware.getCPU().requestReset();
-    	  // computerHardware.getSystemPIO().reset();
-    	  // computerHardware.getMemory().reset();
-	  computerHardware.reset();
-    	  // computerHardware.getPeripheralPPI().reset();
-    	  // computerHardware.getDisplayHardware().display();
-    	  break;
-    	}
-    	// if (interruptButton.isPressed()) {
-    	//   if (!interruptButtonPressed) {
-    	//     computerHardware.getCPU().requestInterrupt(7);
-    	//     interruptButtonPressed = true;
-    	//     break;
-    	//   }
-    	// } else {
-    	//   interruptButtonPressed = false;
-    	// }
-    	if (computerHardware.getDebuggerHardware().runStopButton.isPressed()) {
-    	  if (!runStopButtonPressed) {
-    	    computerHardware.getDebuggerHardware().activate();
-    	    debuggerState = DebuggerState.STOPPED;
-    	    runStopButtonPressed = true;
-    	    break;
-    	  }
-    	} else {
-    	  runStopButtonPressed = false;
-    	}
-    	computerHardware.getCPU().exec(Parameters.timerCycles, 0,
-    	  computerHardware.getDebuggerHardware().getBreakpointValues());
-    	// computerHardware.getDisplayHardware().display();
-    	if (computerHardware.getDebuggerHardware().getBreakpointValues()
-    	    .contains(computerHardware.getCPU().getPC())) {
-    	  computerHardware.getDebuggerHardware().activate();
-    	  debuggerState = DebuggerState.STOPPED;
-    	}
-    	break;
-    }
-    computerHardware.getTapeRecorderHardware().process();
-    Parameters.sound.update();
-    computerHardware.getKeyboardHardware().update();
-    computerHardware.getDisplayHardware().refresh();
+    // switch (debuggerState) {
+    //   case HIDDEN:
+    // 	computerHardware.getDebuggerHardware().removeTemporaryBreakpoints();
+    // 	stepInButtonCounter = stepOverButtonCounter = 0;
+    // 	runStopButtonPressed = false;
+    // 	if (resetKey.isPressed() &&
+    // 	    (leftShiftKey.isPressed() || rightShiftKey.isPressed()))  {
+    // 	  // computerHardware.getCPU().requestReset();
+    // 	  // computerHardware.getSystemPIO().reset();
+    // 	  // computerHardware.getMemory().reset();
+    // 	  computerHardware.reset();
+    // 	  // computerHardware.getPeripheralPPI().reset();
+    // 	  // computerHardware.getDisplayHardware().display();
+    // 	  break;
+    // 	}
+    // 	// if (interruptButton.isPressed()) {
+    // 	//   if (!interruptButtonPressed) {
+    // 	//     computerHardware.getCPU().requestInterrupt(7);
+    // 	//     interruptButtonPressed = true;
+    // 	//     break;
+    // 	//   }
+    // 	// } else {
+    // 	//   interruptButtonPressed = false;
+    // 	// }
+    // 	computerHardware.getCPU().exec(
+    //       Parameters.timerCycles * Parameters.speedUp,
+    // 	  0,
+    // 	  null);
+    // 	// computerHardware.getDisplayHardware().display();
+    // 	break;
+    //   case STOPPED:
+    // 	computerHardware.getDebuggerHardware().removeTemporaryBreakpoints();
+    // 	// computerHardware.getDisplayHardware().displayImmediate();
+    // 	computerHardware.getDebuggerHardware().update();
+    // 	if (resetKey.isPressed() &&
+    // 	    (leftShiftKey.isPressed() || rightShiftKey.isPressed()))  {
+    // 	  // computerHardware.getCPU().reset();
+    // 	  // computerHardware.getSystemPIO().reset();
+    // 	  // computerHardware.getMemory().reset();
+    // 	  computerHardware.reset();
+    // 	  // computerHardware.getPeripheralPPI().reset();
+    // 	  computerHardware.getDebuggerHardware().activate();
+    // 	  break;
+    // 	}
+    // 	// if (interruptButton.isPressed()) {
+    // 	//   if (!interruptButtonPressed) {
+    // 	//     computerHardware.getCPU().interrupt(7);
+    // 	//     interruptButtonPressed = true;
+    // 	//     computerHardware.getDebuggerHardware().activate();
+    // 	//     break;
+    // 	//   }
+    // 	// } else {
+    // 	//   interruptButtonPressed = false;
+    // 	// }
+    // 	if (computerHardware.getDebuggerHardware().stepInButton.isPressed()) {
+    // 	  if (stepInButtonCounter == 0) {
+    // 	    computerHardware.getCPU().exec();
+    // 	    computerHardware.getDebuggerHardware().activate();
+    // 	    stepInButtonCounter = AUTOREPEAT;
+    // 	    break;
+    // 	  } else {
+    // 	    stepInButtonCounter--;
+    // 	  }
+    // 	} else {
+    // 	  stepInButtonCounter = 0;
+    // 	}
+    // 	if (computerHardware.getDebuggerHardware().stepOverButton.isPressed()) {
+    // 	  if (stepOverButtonCounter == 0) {
+    // 	    final int pc = computerHardware.getCPU().getPC();
+    // 	    final Opcode opcode = computerHardware.getCPU()
+    // 	      .getOpcode(computerHardware.getMemory().getByte(pc));
+    // 	    if ((opcode.getType() & Processor.INS_CALL) == 0) {
+    // 	      computerHardware.getCPU().exec();
+    // 	      computerHardware.getDebuggerHardware().activate();
+    // 	    } else {
+    // 	      computerHardware.getDebuggerHardware().getBreakpointValues()
+    // 		.add((pc + opcode.getLength()) & 0xffff);
+    // 	      computerHardware.getDebuggerHardware().deactivate();
+    // 	      debuggerState = DebuggerState.RUNNING;
+    // 	    }
+    // 	    stepOverButtonCounter = AUTOREPEAT;
+    // 	    break;
+    // 	  } else {
+    // 	    stepOverButtonCounter--;
+    // 	  }
+    // 	} else {
+    // 	  stepOverButtonCounter = 0;
+    // 	}
+    // 	if (computerHardware.getDebuggerHardware().runStopButton.isPressed()) {
+    // 	  if (!runStopButtonPressed) {
+    // 	    computerHardware.getDebuggerHardware().deactivate();
+    // 	    debuggerState = DebuggerState.RUNNING;
+    // 	    runStopButtonPressed = true;
+    // 	    break;
+    // 	  }
+    // 	} else {
+    // 	  runStopButtonPressed = false;
+    // 	}
+    // 	break;
+    //   case RUNNING:
+    // 	// computerHardware.getDisplayHardware().reset();
+    // 	if (resetKey.isPressed() &&
+    // 	    (leftShiftKey.isPressed() || rightShiftKey.isPressed()))  {
+    // 	  // computerHardware.getCPU().requestReset();
+    // 	  // computerHardware.getSystemPIO().reset();
+    // 	  // computerHardware.getMemory().reset();
+    // 	  computerHardware.reset();
+    // 	  // computerHardware.getPeripheralPPI().reset();
+    // 	  // computerHardware.getDisplayHardware().display();
+    // 	  break;
+    // 	}
+    // 	// if (interruptButton.isPressed()) {
+    // 	//   if (!interruptButtonPressed) {
+    // 	//     computerHardware.getCPU().requestInterrupt(7);
+    // 	//     interruptButtonPressed = true;
+    // 	//     break;
+    // 	//   }
+    // 	// } else {
+    // 	//   interruptButtonPressed = false;
+    // 	// }
+    // 	if (computerHardware.getDebuggerHardware().runStopButton.isPressed()) {
+    // 	  if (!runStopButtonPressed) {
+    // 	    computerHardware.getDebuggerHardware().activate();
+    // 	    debuggerState = DebuggerState.STOPPED;
+    // 	    runStopButtonPressed = true;
+    // 	    break;
+    // 	  }
+    // 	} else {
+    // 	  runStopButtonPressed = false;
+    // 	}
+    // 	computerHardware.getCPU().exec(Parameters.timerCycles, 0,
+    // 	  computerHardware.getDebuggerHardware().getBreakpointValues());
+    // 	// computerHardware.getDisplayHardware().display();
+    // 	if (computerHardware.getDebuggerHardware().getBreakpointValues()
+    // 	    .contains(computerHardware.getCPU().getPC())) {
+    // 	  computerHardware.getDebuggerHardware().activate();
+    // 	  debuggerState = DebuggerState.STOPPED;
+    // 	}
+    // 	break;
+    // }
+    // computerHardware.getTapeRecorderHardware().process();
+    // Parameters.sound.update();
+    // computerHardware.getKeyboardHardware().update();
+    // computerHardware.getDisplayHardware().refresh();
 
-    // update LEDs
-    final float yellowLEDState =
-      (float)computerHardware.getYellowLEDMeter().getProportionAndReset();
-    computerHardware.getYellowLED().setState(yellowLEDState);
-    computerHardware.getKeyboardHardware().getYellowLED()
-      .setState(yellowLEDState);
-    final float redLEDState =
-      (float)computerHardware.getRedLEDMeter().getProportionAndReset();
-    computerHardware.getRedLED().setState(redLEDState);
-    computerHardware.getKeyboardHardware().getRedLED()
-      .setState(redLEDState);
+    // // update LEDs
+    // final float yellowLEDState =
+    //   (float)computerHardware.getYellowLEDMeter().getProportionAndReset();
+    // computerHardware.getYellowLED().setState(yellowLEDState);
+    // computerHardware.getKeyboardHardware().getYellowLED()
+    //   .setState(yellowLEDState);
+    // final float redLEDState =
+    //   (float)computerHardware.getRedLEDMeter().getProportionAndReset();
+    // computerHardware.getRedLED().setState(redLEDState);
+    // computerHardware.getKeyboardHardware().getRedLED()
+    //   .setState(redLEDState);
     
-    busy = false;
+    // busy = false;
   }
 
   /**
@@ -349,26 +333,12 @@ public class Computer implements Runnable {
     return computerFrame;
   }
 
-  /**
-   * Gets the keyboard frame.
-   *
-   * @return the keyboard frame
-   */
-  public KeyboardFrame getKeyboardFrame() {
-    return keyboardFrame;
-  }
-
-  /**
-   * Stops the debugger.
-   */
-  public void debuggerStop() {
-    debuggerState = DebuggerState.STOPPED;
-  }
-
-  /**
-   * Hides the debugger.
-   */
-  public void debuggerHide() {
-    debuggerState = DebuggerState.HIDDEN;
-  }
+  // /**
+  //  * Gets the keyboard frame.
+  //  *
+  //  * @return the keyboard frame
+  //  */
+  // public KeyboardFrame getKeyboardFrame() {
+  //   return keyboardFrame;
+  // }
 }

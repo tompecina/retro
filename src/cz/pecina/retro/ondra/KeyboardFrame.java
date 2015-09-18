@@ -1,4 +1,4 @@
-/* JoystickFrame.java
+/* KeyboardFrame.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -27,54 +27,62 @@ import cz.pecina.retro.common.Application;
 import cz.pecina.retro.gui.Resizeable;
 import cz.pecina.retro.gui.GUI;
 
-import cz.pecina.retro.jstick.JoystickPanel;
-
 /**
- * The Joystick frame.
+ * The Ondra keyboard frame.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class JoystickFrame extends HidingFrame implements Resizeable {
+public class KeyboardFrame extends HidingFrame implements Resizeable {
 
   // static logger
   private static final Logger log =
-    Logger.getLogger(JoystickFrame.class.getName());
+    Logger.getLogger(KeyboardFrame.class.getName());
 
-  // the computer object
-  private Computer computer;
+  // keyboard panel
+  private KeyboardPanel keyboardPanel;
 
-  // joystick panel
-  private JoystickPanel joystickPanel;
+  // keyboard hardware object
+  private KeyboardHardware keyboardHardware;
 
   /**
-   * Creates the Joystick frame.
+   * Creates the keyboard frame.
    *
-   * @param computer         the computer object
+   * @param computer         the computer control object
+   * @param keyboardHardware hardware to operate on
    */
-  public JoystickFrame(final Computer computer) {
-    super(Application.getString(JoystickFrame.class, "joystick.frameTitle"),
-	  computer.getIconLayout().getIcon(IconLayout.ICON_POSITION_GAMEPAD));
-    log.fine("New JoystickFrame creation started");
-    assert computer != null;
-    this.computer = computer;
-
-    joystickPanel = new JoystickPanel(this, computer);
-    add(joystickPanel);
+  public KeyboardFrame(final Computer computer,
+		       final KeyboardHardware keyboardHardware) {
+    super(Application.getString(KeyboardFrame.class,
+      "keyboard.frameTitle"), computer.getIconLayout()
+      .getIcon(IconLayout.ICON_POSITION_KEYBOARD));
+    log.fine("New KeyboardFrame creation started");
+    this.keyboardHardware = keyboardHardware;
+    keyboardPanel = new KeyboardPanel(this, keyboardHardware);
+    add(keyboardPanel);
     pack();
     GUI.addResizeable(this);
-    log.fine("JoystickFrame set up");
+    log.fine("KeyboardFrame set up");
   }
 
+  /**
+   * Gets the keyboard panel.
+   *
+   * @return the keyboard panel
+   */
+  public KeyboardPanel getKeyboardPanel() {
+    return keyboardPanel;
+  }
+  
   // redraw frame
   private void redraw() {
-    log.fine("JoystickFrame redraw started");
-    super.setTitle(Application.getString(this, "joystick.frameTitle"));
-    remove(joystickPanel);
-    joystickPanel = new JoystickPanel(this, computer);
-    add(joystickPanel);
+    log.fine("KeyboardFrame redraw started");
+    super.setTitle(Application.getString(this, "keyboard.frameTitle"));
+    remove(keyboardPanel);
+    keyboardPanel = new KeyboardPanel(this, keyboardHardware);
+    add(keyboardPanel);
     pack();
-    log.fine("JoystickFrame redraw completed");
+    log.fine("KeyboardFrame redraw completed");
   }
 
   // for description see Localized
