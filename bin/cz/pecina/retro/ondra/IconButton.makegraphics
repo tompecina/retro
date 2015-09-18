@@ -2,6 +2,7 @@
 
 source bin/common.makegraphics
 
+trans=0.5
 pg="-repage 512x512+0+0"
 for s in $seq; do
     w=$(($s*32))

@@ -3,8 +3,8 @@
 source bin/common.makegraphics
 
 for s in $seq; do
-    w=$(($s*372))
-    h=$(($s*276))
+    w=$(($s*380))
+    h=$(($s*292))
     convert $opts -size ${w}x$h xc:transparent $dst/tmp2.png
     convert $opts $src/mask.png $filter -resize ${w}x$h $dst/tmp3.png
     convert $opts $dst/tmp2.png $dst/tmp3.png -composite $dst/mask-$s.png
