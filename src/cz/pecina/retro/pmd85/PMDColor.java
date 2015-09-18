@@ -55,7 +55,7 @@ public class PMDColor {
   /**
    * White-on-black color modes.
    */
-  public static PMDColor[][] WOB_COLORS= {
+  public static PMDColor[][] WOB_COLORS = {
     {
       new PMDColor(new Color(0xffffff), false),
       new PMDColor(new Color(0x808080), false),

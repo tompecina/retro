@@ -1,4 +1,4 @@
-/* IOElement.java
+/* NegativeLEDPin.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -20,40 +20,32 @@
 
 package cz.pecina.retro.cpu;
 
+import cz.pecina.retro.gui.LED;
+
 /**
- * A device capable of communicating with the CPU using I/O ports.
+ * An input pin driving a LED supplied by the constructor, active in L.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public interface IOElement {
+public class NegativeLEDPin extends IOPin {
+
+  // the LED
+  private LED led;
 
   /**
-   * Port direction (output).
-   */
-  public static final int OUTPUT = 0;
-
-  /**
-   * Port direction (output).
-   */
-  public static final int INPUT = 1;
-
-  /**
-   * Responds to port input request.
+   * Main constructor.
    *
-   * @param  port port number
-   * @return byte returned by the device
+   * @param led the LED connected to the pin
    */
-  public default int portInput(int port) {
-    return 0xff;
+  public NegativeLEDPin(final LED led) {
+    assert led != null;
+    this.led = led;
   }
 
-  /**
-   * Responds to port output request.
-   *
-   * @param port port number
-   * @param data byte sent to the device
-   */
-  public default void portOutput(int port, int data) {
+  // for description see IOPin
+  @Override
+  public void notifyChange() {
+    led.setState(queryNode() == 0);
   }
 }

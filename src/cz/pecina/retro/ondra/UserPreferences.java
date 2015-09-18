@@ -72,6 +72,12 @@ public final class UserPreferences extends GeneralUserPreferences {
   // keyboard shortcuts
   private static Shortcuts shortcuts;
 
+  // the color mode
+  private static int colorMode;
+
+  // the custom color
+  private static OndraColor customColor;
+
   // tests if a key is in Parameters.preferences
   private static boolean hasKey(final String key) {
     try {
@@ -140,6 +146,20 @@ public final class UserPreferences extends GeneralUserPreferences {
 	shortcuts = getDefaultShortcuts();
       }
 	    
+      colorMode = Parameters.preferences.getInt("colorMode", -1);
+      if (colorMode == -1) {
+	colorMode = OndraColor.DEFAULT_COLOR_MODE;
+	Parameters.preferences.putInt("colorMode", colorMode);
+      }
+
+      final int color =
+	Parameters.preferences.getInt("customColor", -1);
+      customColor = (color == -1) ?
+	            OndraColor.DEFAULT_COLOR :
+	            new OndraColor(new Color(color));
+      Parameters.preferences.putInt("customColor",
+				    customColor.getColor().getRGB());
+
       retrieved = true;
     }
     log.finer("User preferences retrieved");
@@ -323,6 +343,68 @@ public final class UserPreferences extends GeneralUserPreferences {
       }
     }
     return shortcuts;
+  }
+
+
+  /**
+   * Sets the color mode.
+   *
+   * @param computer  the computer object
+   * @param colorMode the color mode
+   */
+  public static void setColorMode(final Computer computer,
+				  final int colorMode) {
+    assert computer != null;
+    assert (colorMode >= 0) && (colorMode < OndraColor.NUMBER_COLOR_MODES);
+    getPreferences();
+    UserPreferences.colorMode = colorMode;
+    Parameters.preferences.putInt("colorMode", colorMode);
+    computer.getComputerHardware().getDisplayHardware().getDisplay()
+      .setColorMode(colorMode);
+    computer.getComputerHardware().getMemory().refreshVideoRAM();
+    log.fine("Color mode in user preferences set to: " + colorMode);
+  }
+
+  /**
+   * Gets the color mode.
+   *
+   * @return the color mode
+   */
+  public static int getColorMode() {
+    getPreferences();
+    log.finer("Color mode retrieved from user preferences: " + colorMode);
+    return colorMode;
+  }
+
+  /**
+   * Sets the custom color.
+   *
+   * @param computer    the computer object
+   * @param customColor the custom color
+   */
+  public static void setCustomColor(final Computer computer,
+				    final OndraColor customColor) {
+    assert computer != null;
+    assert customColor != null;
+    getPreferences();
+    UserPreferences.customColor = customColor;
+    Parameters.preferences.putInt("customColor",
+				  customColor.getColor().getRGB());
+    computer.getComputerHardware().getDisplayHardware().getDisplay()
+      .setCustomColor(customColor);
+    computer.getComputerHardware().getMemory().refreshVideoRAM();
+    log.fine("Custom color in user preferences set");
+  }
+
+  /**
+   * Gets the custom color.
+   *
+   * @return the custom color
+   */
+  public static OndraColor getCustomColor() {
+    getPreferences();
+    log.finer("Custom color retrieved from user preferences");
+    return customColor;
   }
 
   // default constructor disabled

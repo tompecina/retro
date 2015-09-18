@@ -56,11 +56,6 @@ public class DisplayStripe extends JComponent implements Resizeable {
    * Creates an instance of a display stripe.
    */
   public DisplayStripe() {
-    for (int row = 0; row < Display.STRIPE_HEIGHT; row++) {
-      for (int column = 0; column < Display.DISPLAY_WIDTH_CELLS; column++) {
-	colors[row][column] = Color.BLACK;
-      }
-    }
     redrawOnPixelResize();
     GUI.addResizeable(this);
     log.fine("New display stripe created");
@@ -79,7 +74,7 @@ public class DisplayStripe extends JComponent implements Resizeable {
     assert (row >= 0) & (row < Display.STRIPE_HEIGHT);
     assert (column >= 0) & (column < Display.DISPLAY_WIDTH_CELLS);
     if (log.isLoggable(Level.FINEST)) {
-      log.finest(String.format("Setting cell at (%d,%d) to 0x%02x",
+      log.finest(String.format("Setting cell at (%d,%d) to 0x%02x, color: %s",
 			       row, column,
 			       pixels));
     }

@@ -95,12 +95,6 @@ public class KeyboardHardware {
 	}
       }
     }
-    for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {
-      scanPins[row] = new ScanPin(row);
-    }
-    for (int i = 0; i < 4; i++) {
-      selectPins[i] = new SelectPin(i);
-    }
     log.fine("New keyboard hardware created");
   }
 
@@ -132,16 +126,17 @@ public class KeyboardHardware {
    * Gets the current state.
    *
    * @param column the selected column
+   * @return       the state of the keyboard output
    */
-  public void getState(final int column) {
-    assert (n >= 0) && (n < NUMBER_MATRIX_COLUMNS);
+  public int getState(final int column) {
+    assert (column >= 0) && (column < NUMBER_MATRIX_COLUMNS);
     int state = 0;
     for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {
       if (buffer[row][column]) {
 	state |= 1 << row;
       }
     }
-    return scanPins[n];
+    return state;
   }
 
   /**
@@ -161,10 +156,6 @@ public class KeyboardHardware {
 	next[row][column] = current[row][column];
       }
     }
-    shiftBuffer = shiftNext;
-    shiftNext = shiftCurrent;
-    stopBuffer = stopNext;
-    stopNext = stopCurrent;
   }
 
   /**

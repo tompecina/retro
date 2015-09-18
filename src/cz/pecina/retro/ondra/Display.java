@@ -77,8 +77,34 @@ public class Display {
   // the computer hardware object
   private ComputerHardware computerHardware;
 
+  // the color mode
+  private int colorMode;
+
+  // custom color
+  private OndraColor customColor;
+
+  // active color
+  private OndraColor color;
+
   // display stripes
   private DisplayStripe[] stripes = new DisplayStripe[NUMBER_STRIPES];
+  
+  // set the active color
+  private void setActiveColor() {
+    switch (colorMode) {
+      case 0:
+	color = OndraColor.WOB_COLOR;
+	break;
+      case 1:
+	color = OndraColor.GOB_COLOR;
+	break;
+      case 2:
+	color = OndraColor.DEFAULT_COLOR;
+	break;
+      default:
+	color = customColor;
+    }
+  }
   
   /**
    * Creates the display control object.
@@ -122,6 +148,48 @@ public class Display {
       }
       stripes[stripe].setByte(row, column, data);
     }
+  }
+
+  /**
+   * Sets the color mode.
+   *
+   * @param colorMode the color mode
+   */
+  public void setColorMode(final int colorMode) {
+    log.fine("Setting color mode: " + colorMode);
+    assert (colorMode >= 0) && (colorMode < OndraColor.NUMBER_COLOR_MODES);
+    this.colorMode = colorMode;
+    setActiveColor();
+  }
+
+  /**
+   * Gets the color mode.
+   *
+   * @return the color mode
+   */
+  public int getColorMode() {
+    return colorMode;
+  }
+
+  /**
+   * Sets the custom color.
+   *
+   * @param customColor the custom color
+   */
+  public void setCustomColor(final OndraColor customColor) {
+    log.fine("Setting custom color");
+    assert customColor != null;
+    this.customColor = customColor;
+    setActiveColor();
+  }
+
+  /**
+   * Gets the custom color.
+   *
+   * @return the custom color
+   */
+  public OndraColor getCustomColors() {
+    return customColor;
   }
 
   /**

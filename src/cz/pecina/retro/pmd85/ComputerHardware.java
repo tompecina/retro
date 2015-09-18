@@ -49,8 +49,6 @@ import cz.pecina.retro.cpu.XOR;
 import cz.pecina.retro.cpu.FrequencyGenerator;
 import cz.pecina.retro.cpu.FrequencyDivider;
 import cz.pecina.retro.cpu.ProportionMeter;
-import cz.pecina.retro.cpu.IOPin;
-import cz.pecina.retro.cpu.IONode;
 
 import cz.pecina.retro.trec.TapeRecorderInterface;
 import cz.pecina.retro.trec.TapeRecorderHardware;

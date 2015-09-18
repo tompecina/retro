@@ -46,7 +46,7 @@ public class ComputerPanel extends BackgroundFixedPane {
   // LED positions
   private static final int LED_OFFSET_X = 267;
   private static final int LED_OFFSET_Y = 277;
-  private static final int LED_GRID_X = 12;
+  private static final int LED_GRID_Y = 12;
   
   // brand marking position
   private static final int MARKING_OFFSET_X = 12;

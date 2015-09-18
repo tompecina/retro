@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 /**
  * 8-bit output buffer/register/latch.
  * <p>
- * This is a register holding the value written to it idenfinitely.
+ * This is a register holding a value written to it indefinitely.
  * It can only be accessed by sensing the output pins, reading back the value
  * from a port is not possible.  It roughly corresponds to devices such as
  * Intel 8212 or Tesla MHB3212, the main difference being that it is not
@@ -63,10 +63,7 @@ public class OutputLatch extends Device implements IOElement {
     }
   }
 
-  /**
-   * Resets the device.  All I/O pins are configured as inputs, Mode 0
-   * is activated on both A and B.
-   */
+  // for description see Device
   @Override
   public void reset() {
     register = 0;

@@ -333,12 +333,12 @@ public class Computer implements Runnable {
     return computerFrame;
   }
 
-  // /**
-  //  * Gets the keyboard frame.
-  //  *
-  //  * @return the keyboard frame
-  //  */
-  // public KeyboardFrame getKeyboardFrame() {
-  //   return keyboardFrame;
-  // }
+  /**
+   * Gets the keyboard frame.
+   *
+   * @return the keyboard frame
+   */
+  public KeyboardFrame getKeyboardFrame() {
+    return keyboardFrame;
+  }
 }

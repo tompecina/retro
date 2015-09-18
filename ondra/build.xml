@@ -247,13 +247,11 @@
   <!-- rom -->
   <dependset>
     <srcfileset dir="${bin.misc.dir}/${package}"
-		includes="monitor-0.bin"/>
-    <srcfileset dir="${bin.misc.dir}/${package}"
-		includes="basic-0.bin"/>
+		includes="monitor.bin"/>
     <targetfilelist dir="${resources.dir}/${prefix}/${package}/ROM"
-		    files="monitor-3.bin"/>
+		    files="monitor.bin"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/ROM/monitor-0.bin"
+  <available file="${resources.dir}/${prefix}/${package}/ROM/monitor.bin"
 	     property="avail.${package}.ROM"/>
   <target name="rom"
 	  unless="avail.${package}.ROM">

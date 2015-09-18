@@ -40,8 +40,8 @@ import cz.pecina.retro.common.Sound;
 import cz.pecina.retro.cpu.IONode;
 import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.ZilogZ80;
-import cz.pecina.retro.cpu.IOPin;
-import cz.pecina.retro.cpu.IONode;
+import cz.pecina.retro.cpu.OutputLatch;
+import cz.pecina.retro.cpu.NegativeLEDPin;
 
 import cz.pecina.retro.jstick.JoystickHardware;
 
@@ -72,14 +72,20 @@ public class ComputerHardware {
   // the CPU
   private ZilogZ80 cpu;
 
+  // the combined output latches
+  private OutputLatch primaryLatch, secondaryLatch;
+
+  // the printer latch
+  private OutputLatch printerLatch;
+  
   // the speaker
   // private Speaker speaker;
 
   // the display hardware
-  // private DisplayHardware displayHardware;
+  private DisplayHardware displayHardware;
 
   // the keyboard hardware
-  // private KeyboardHardware keyboardHardware;
+  private KeyboardHardware keyboardHardware;
 
   // the joystick hardware
   private JoystickHardware joystickHardware;
@@ -106,9 +112,6 @@ public class ComputerHardware {
     // create new hardware
     hardware = new Hardware("ONDRA");
 
-    // set up the display hardware
-    displayHardware = new DisplayHardware(this);
-
     // set up memory
     memory = new OndraMemory("MEMORY", displayHardware);
     hardware.add(memory);
@@ -123,10 +126,31 @@ public class ComputerHardware {
 
     // connect CPU and memory
     cpu.setMemory(memory);
-    for (int port: Util.portIterator(0, 0)) {
-      cpu.addIOOutput(port, memory);
+
+    // set up the output latches
+    primaryLatch = new OutputLatch("PRIMARY_LATCH");
+    hardware.add(primaryLatch);
+    for (int port: Util.portIterator(0, 0x08)) {
+      cpu.addIOOutput(port, primaryLatch);
     }
-      
+    secondaryLatch = new OutputLatch("SECONDARY_LATCH");
+    hardware.add(secondaryLatch);
+    for (int port: Util.portIterator(0, 0x01)) {
+      cpu.addIOOutput(port, secondaryLatch);
+    }
+    printerLatch = new OutputLatch("PRINTER_LATCH");
+    hardware.add(printerLatch);
+    for (int port: Util.portIterator(0, 0x02)) {
+      cpu.addIOOutput(port, printerLatch);
+    }
+    
+    // set up the display hardware
+    displayHardware = new DisplayHardware("DISPLAY", this);
+    hardware.add(displayHardware);
+    for (int port: Util.portIterator(0, 0)) {
+      cpu.addIOInput(port, displayHardware);
+    }
+
     // set up the keyboard hardware
     keyboardHardware = new KeyboardHardware();
     
@@ -142,85 +166,18 @@ public class ComputerHardware {
     tapeRecorderHardware = new TapeRecorderHardware(tapeRecorderInterface);
 
     // connect memory controller
-    new IONode().add(systemPIO.getPin(16 + 4)).add(memory.getAllRAMPin());
-    new IONode().add(systemPIO.getPin(16 + 5)).add(memory.getAllROMPin());
+    new IONode().add(primaryLatch.getOutPin(1)).add(memory.getAllRAMPin());
+    new IONode().add(primaryLatch.getOutPin(2)).add(memory.getInPortPin());
 
-    // connect keyboard
-    for (int i = 0; i < 4; i++) {
-      new IONode().add(systemPIO.getPin(i))
-    	.add(keyboardHardware.getSelectPin(i));
-    }
-    for (int i = 0; i < 5; i++) {
-      new IONode().add(systemPIO.getPin(8 + i))
-    	.add(keyboardHardware.getScanPin(i));
-    }
-    new IONode()
-      .add(systemPIO.getPin(8 + 5))
-      .add(keyboardHardware.getShiftPin());
-    new IONode()
-      .add(systemPIO.getPin(8 + 6))
-      .add(keyboardHardware.getStopPin());
+    // connect display
+    new IONode().add(primaryLatch.getOutPin(0)).add(displayHardware.getEnablePin());
+    new IONode().add(primaryLatch.getOutPin(4)).add(displayHardware.getAddressPin(0));
+    new IONode().add(primaryLatch.getOutPin(5)).add(displayHardware.getAddressPin(1));
     
-    // set up the ROM module hardware
-    romModuleHardware = new ROMModuleHardware(this);
-
-    // connect the ROM module
-    for (int port: Util.portIterator(0x88, 0x8c)) {
-      cpu.addIOInput(port, romModuleHardware.getPIO()); 
-      cpu.addIOOutput(port, romModuleHardware.getPIO());
-    }
-    
-    // set up the USART
-    usart = new Intel8251A("USART");
-    hardware.add(usart);
-    for (int port: Util.portIterator(0x1c, 0xfc)) {
-      cpu.addIOInput(port, usart);
-      cpu.addIOOutput(port, usart);
-    }
-
-    // set up the tape recorder XOR
-    xor = new XOR("XOR", 2);
-
-    // set up the PIT
-    pit = new Intel8253Mod("PIT", new boolean[] {false, true, false});
-    hardware.add(pit);
-    for (int port: Util.portIterator(0x5c, 0xfc)) {
-      cpu.addIOInput(port, pit);
-      cpu.addIOOutput(port, pit);
-    }
-
-    // set up the 1Hz frequency generator connected to Counter 2
-    rtcGenerator = new FrequencyGenerator("RTC_GENERATOR", 1024000, 1024000);
-    hardware.add(rtcGenerator);
-
-    // set up the Manchester decoder
-    decoder = new ManchesterDecoder("MANCHESTER_DECODER");
-    hardware.add(decoder);
-
-    // connect the USART and the tape recorder
+    // connect the tape recorder
     new IONode()
-      .add(usart.getCtsPin())
-      .add(usart.getRtsPin());
-    new IONode()
-      .add(usart.getTxdPin())
-      .add(xor.getInPin(0));
-    new IONode()
-      .add(pit.getOutPin(1))
-      .add(usart.getTxcPin())
-      .add(xor.getInPin(1));
-    new IONode()
-      .add(xor.getOutPin())
+      .add(primaryLatch.getOutPin(3))
       .add(tapeRecorderHardware.getInPin());
-    new IONode()
-      .add(tapeRecorderHardware.getOutPin())
-      .add(usart.getDsrPin())
-      .add(decoder.getInPin());
-    new IONode()
-      .add(decoder.getClockPin())
-      .add(usart.getRxcPin());
-    new IONode()
-      .add(decoder.getDataPin())
-      .add(usart.getRxdPin());
 
     // set up the sound interface
     new Sound(Constants.SOUND_SAMPLING_RATE, 2);
@@ -233,62 +190,27 @@ public class ComputerHardware {
     Parameters.sound.setMute(Sound.SPEAKER_CHANNEL,
       UserPreferences.isSpeakerMute());
     
-    // set up fixed frequency source and related logic
-    gen4k = new FrequencyGenerator("FREQUENCY_GENERATOR_4KHz", 0x100, 0x100);
-    hardware.add(gen4k);
-    div = new FrequencyDivider("FREQUNCY_DIVIDER", 4, false);
-    hardware.add(div);
-    pc0nand = new NAND("NAND_PC0", 2);
-    pc1nand = new NAND("NAND_PC1", 2);
-    pc2inv = new Invertor("INVERTOR_PC2");
-    speakerNand = new NAND("SPEAKER_NAND", 3);
-
-    // connect the 1Hz generator to Counter 2
-    new IONode()
-      .add(rtcGenerator.getOutPin())
-      .add(pit.getClockPin(2));
-
     // set up LEDs
-    yellowLEDMeter = new ProportionMeter("YELLOW_LED");
-    redLEDMeter = new ProportionMeter("RED_LED");
+    yellowLEDPin = new NegativeLEDPin(yellowLed);
+    redLEDPin = new NegativeLEDPin(redLed);
+    
+    // connect LEDs
+    new IONode()
+      .add(secondaryLatch.getOutPin(1))
+      .add(yellowLEDPin);
+    new IONode()
+      .add(secondaryLatch.getOutPin(0))
+      .add(green);
     
     // set up the speaker
-    speaker = new Speaker("SPEAKER");
+    // speaker = new Speaker("SPEAKER");
 
-    // connect speaker and LEDs
-    // new IONode()
-    //   .add(gen4k.getOutPin())
-    //   .add(pc1nand.getInPin(1))
-    //   .add(div.getInPin());
-    // new IONode()
-    //   .add(systemPIO.getPin(16 + 1))
-    //   .add(pc1nand.getInPin(0));
-    // new IONode()
-    //   .add(div.getOutPin())
-    //   .add(pc0nand.getInPin(1));
-    // new IONode()
-    //   .add(systemPIO.getPin(16))
-    //   .add(pc0nand.getInPin(0));
-    // new IONode()
-    //   .add(systemPIO.getPin(16 + 2))
-    //   .add(pc2inv.getInPin());
-    // new IONode()
-    //   .add(pc0nand.getOutPin())
-    //   .add(speakerNand.getInPin(0));
-    // new IONode()
-    //   .add(pc2inv.getOutPin())
-    //   .add(speakerNand.getInPin(1));
-    // new IONode()
-    //   .add(speakerNand.getOutPin())
-    //   .add(yellowLEDMeter.getInPin())
-    //   .add(speaker.getInPin());
-    // new IONode()
-    //   .add(systemPIO.getPin(16 + 3))
-    //   .add(redLEDMeter.getInPin());
-      
+    // reset the hardware
+    hardware.reset();
+    
     // load any startup images and snapshots
     new CommandLineProcessor(hardware);
-    
+
     log.fine("New Computer hardware object created");
   }
     
@@ -300,7 +222,7 @@ public class ComputerHardware {
       byte buffer[];
       if (CommandLineProcessor.fileNameROM == null) {
 	buffer = Files.readAllBytes(Paths.get(getClass()
-          .getResource("ROM/monitor-" + model + ".bin").toURI()));
+          .getResource("ROM/monitor.bin").toURI()));
       } else {
 	buffer =
 	  Files.readAllBytes(Paths.get(CommandLineProcessor.fileNameROM));
@@ -310,13 +232,12 @@ public class ComputerHardware {
 	log.fine("Empty ROM contents");
 	return;
       }
-      final int modelSize = ((model < 3) ? 0x1000 : 0x2000);
-      if (size > modelSize) {
+      if (size > 0x4000) {
 	throw new IOException("Wrong size");
       }
       final byte[] memoryArray =
 	Parameters.memoryDevice.getBlockByName("ROM").getMemory();
-      for (int addr = 0; addr < modelSize; addr++) {
+      for (int addr = 0; addr < 0x4000; addr++) {
 	memoryArray[addr] = ((addr < size) ? buffer[addr] : (byte)0xff);
       }
       log.fine(String.format("ROM contents read, size: 0x%04x", size));
@@ -330,42 +251,6 @@ public class ComputerHardware {
   }
 
   /**
-   * Loads the ROM module.
-   */
-  public void loadRMM() {
-    try {
-      byte buffer[];
-      if (CommandLineProcessor.fileNameRMM == null) {
-	buffer = Files.readAllBytes(Paths.get(getClass()
-          .getResource("ROM/basic-" + model + ".bin").toURI()));
-      } else {
-	buffer =
-	  Files.readAllBytes(Paths.get(CommandLineProcessor.fileNameRMM));
-      }
-      final int size = buffer.length;
-      if (size == 0) {
-	log.fine("Empty RMM contents");
-	return;
-      }
-      if (size > 0x8000) {
-	throw new IOException("Wrong size");
-      }
-      final byte[] memoryArray =
-	Parameters.memoryDevice.getBlockByName("RMM").getMemory();
-      for (int addr = 0; addr < 0x8000; addr++) {
-	memoryArray[addr] = ((addr < size) ? buffer[addr] : (byte)0xff);
-      }
-      log.fine(String.format("RMM contents read, size: 0x%04x", size));
-    } catch (final NullPointerException |
-	     URISyntaxException |
-	     IOException |
-	     IndexOutOfBoundsException exception) {
-      log.fine("Error reading RMM, exception: " + exception.getMessage());
-      throw Application.createError(this, "RMMLoad");
-    }
-  }
-
-  /**
    * Clears the RAM.
    */
   public void clearRAM() {
@@ -374,31 +259,13 @@ public class ComputerHardware {
   }
   
   /**
-   * Sets the model.
-   *
-   * @param computer the computer control object
-   * @param model    the model
-   */
-  public void setModel(final Computer computer, final int model) {
-    log.fine("Setting model: " + model);
-    assert (model >= 0) && (model < Constants.NUMBER_MODELS);
-    this.model = model;
-    marking.setState(model);
-    computer.getComputerHardware().getKeyboardHardware()
-      .getKeyboardLayout().modify(model);
-    computer.getKeyboardFrame().getKeyboardPanel().replaceKeys();
-    memory.setModel(model);
-    clearRAM();
-    loadROM();
-    loadRMM();
-    reset();
-  }
-
-  /**
    * Resets hardware.
    */
   public void reset() {
     hardware.reset();
+    clearRAM();
+    loadROM();
+    reset();
   }
   
   /**
