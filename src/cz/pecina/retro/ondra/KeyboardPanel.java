@@ -50,6 +50,10 @@ public class KeyboardPanel extends BackgroundFixedPane {
   private static final int KEY_GRID_X = 2;
   private static final int KEY_GRID_Y = 28;
 
+  // NMI button position
+  private static final int NMI_OFFSET_X = 14;
+  private static final int NMI_OFFSET_Y = 16;
+
   // LED positions
   private static final int YELLOW_LED_OFFSET_X = 18;
   private static final int YELLOW_LED_OFFSET_Y = 76;
@@ -105,6 +109,11 @@ public class KeyboardPanel extends BackgroundFixedPane {
     placeKeys();
     setShortcuts();
     log.finer("Keys set up");
+
+    // set up the NMI button
+    keyboardHardware.getNmiButton().place(this,
+					  NMI_OFFSET_X,
+					  NMI_OFFSET_Y);
 
     // set up LEDs
     keyboardHardware.getYellowLED().place(this,

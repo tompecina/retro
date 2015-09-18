@@ -67,6 +67,9 @@ public class KeyboardHardware {
   private final KeyboardKey[][] keys =
     new KeyboardKey[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
 
+  // the NMI button
+  private final NmiButton nmiButton = new NmiButton();
+
   // LEDs
   private final LED yellowLED = new LED("small", "yellow");
   private final LED greenLED = new LED("small", "green");
@@ -165,6 +168,15 @@ public class KeyboardHardware {
    */
   public KeyboardLayout getKeyboardLayout() {
     return keyboardLayout;
+  }
+
+  /**
+   * Gets the NMI button.
+   *
+   * @return the NMI button
+   */
+  public NmiButton getNmiButton() {
+    return nmiButton;
   }
 
   /**

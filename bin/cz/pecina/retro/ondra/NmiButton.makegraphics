@@ -1,0 +1,30 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+x=0
+y=0
+w=160
+h=160
+pg="-repage ${w}x$h+0+0"
+convert $opts -crop ${w}x$h+$x+$y $pg $src/nmibutton.png $dst/tmp.png
+for s in $seq; do
+    ww=$(($s*16))
+    hh=$(($s*16))
+    convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/nmi-$s-u.png
+done
+y=$(($y+$h))
+convert $opts -crop ${w}x$h+$x+$y $pg $src/nmibutton.png $dst/tmp.png
+for s in $seq; do
+    ww=$(($s*16))
+    hh=$(($s*16))
+    convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/nmi-$s-d.png
+done
+y=$(($y+$h))
+convert $opts -crop ${w}x$h+$x+$y $pg $src/nmibutton.png $dst/tmp.png
+for s in $seq; do
+    ww=$(($s*16))
+    hh=$(($s*16))
+    convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/nmi-$s-l.png
+done
+rm $dst/tmp*.png

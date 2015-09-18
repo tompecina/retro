@@ -496,7 +496,7 @@
     <srcfileset dir="${bin.dir}/${prefix}/${package}"
 		includes="KeyboardPanel.makegraphics"/>
     <srcfileset dir="${graphics.dir}/${package}"
-		includes="longmask.png"/>
+		includes="kbdmask.png"/>
     <srcfileset dir="${graphics.dir}/${package}"
 		includes="metal.png"/>
     <targetfilelist dir="${resources.dir}/${prefix}/${package}/KeyboardPanel"
@@ -524,6 +524,23 @@
   <target name="ondra.KeyboardKey"
 	  unless="avail.ondra.KeyboardKey">
     <exec executable="${bin.dir}/${prefix}/${package}/KeyboardKey.makegraphics"/>
+  </target>
+
+  <!-- ondra.NmiButton -->
+  <dependset>
+    <srcfileset refid="common.makegraphics"/>
+    <srcfileset dir="${bin.dir}/${prefix}/${package}"
+		includes="NmiButton.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/${package}"
+		includes="nmibutton.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/${package}/NmiButton"
+		    files="nmi-1-u.png"/>
+  </dependset>
+  <available file="${resources.dir}/${prefix}/${package}/NmiButton/nmi-1-u.png"
+	     property="avail.ondra.NmiButton"/>
+  <target name="ondra.NmiButton"
+	  unless="avail.ondra.NmiButton">
+    <exec executable="${bin.dir}/${prefix}/${package}/NmiButton.makegraphics"/>
   </target>
 
   <!-- ondra.IconButton -->
@@ -698,7 +715,7 @@
 
   <!-- graphics -->
   <target name="graphics"
-	  depends="prepare,gui.LED,gui.SSD,gui.SiSD,gui.ESD,gui.SignESD,gui.Digit,gui.CounterResetButton,gui.UniversalButton,gui.Knob,gui.Background,ondra.Marking,ondra.ComputerPanel,ondra.KeyboardPanel,ondra.KeyboardKey,ondra.IconButton,ondra.AboutLogo,ondra.AboutPhoto,ondra.AboutLicense,ondra.ApplicationIcons,trec.TapeRecorderPanel,trec.TapeRecorderButton,trec.VUMeter,jstick.JoystickPanel,jstick.JoystickButton"
+	  depends="prepare,gui.LED,gui.SSD,gui.SiSD,gui.ESD,gui.SignESD,gui.Digit,gui.CounterResetButton,gui.UniversalButton,gui.Knob,gui.Background,ondra.Marking,ondra.ComputerPanel,ondra.KeyboardPanel,ondra.KeyboardKey,ondra.NmiButton,ondra.IconButton,ondra.AboutLogo,ondra.AboutPhoto,ondra.AboutLicense,ondra.ApplicationIcons,trec.TapeRecorderPanel,trec.TapeRecorderButton,trec.VUMeter,jstick.JoystickPanel,jstick.JoystickButton"
 	  description="Create bitmaps"
 	  unless="nographics"/>
 
