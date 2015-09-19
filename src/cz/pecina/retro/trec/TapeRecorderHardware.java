@@ -78,6 +78,9 @@ public class TapeRecorderHardware implements CPUEventOwner {
   // output level
   private int output;
 
+  // remote pause flag
+  private boolean remotePause;
+
   // pulse counters for VU-meter
   private int outPulseCount, inPulseCount;
 
@@ -87,6 +90,9 @@ public class TapeRecorderHardware implements CPUEventOwner {
   // output pin
   private final OutPin outPin = new OutPin();
 
+  // remote pause pin
+  private final RemotePausePin remotePausePin = new RemotePausePin();
+  
   // button layout
   private final TapeRecorderButtonsLayout tapeRecorderButtonsLayout =
     new TapeRecorderButtonsLayout();
@@ -161,6 +167,15 @@ public class TapeRecorderHardware implements CPUEventOwner {
    */
   public IOPin getInPin() {
     return inPin;
+  }
+
+  /**
+   * Gets the remote pause pin.
+   *
+   * @return the remote pause pin
+   */
+  public IOPin getRemotePausePin() {
+    return remotePausePin;
   }
 
   /**
@@ -259,6 +274,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
 
   // input pin
   private class InPin extends IOPin {
+
     private int level;
     
     // for description see IOPin
@@ -267,7 +283,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
       final int newLevel = IONode.normalize(queryNode());
       if ((tapeRecorderState == TapeRecorderState.RECORD) &&
 	  (newLevel != level)) {
-	if (!pauseButton.isPressed()) {
+	if (!pauseButton.isPressed() && !remotePause) {
 	  update();
 	  if (pulseStart == -1) {
 	    pulseStart = position;
@@ -304,6 +320,27 @@ public class TapeRecorderHardware implements CPUEventOwner {
     }
   }
 
+  // remote pause pin
+  private class RemotePausePin extends IOPin {
+
+    // for description see IOPin
+    @Override
+    public void notifyChange() {
+      final boolean newLevel = (queryNode() == 0);
+      if (newLevel != remotePause) {
+        remotePause = newLevel;
+	if ((tapeRecorderState == TapeRecorderState.RECORD) &&
+	    !pauseButton.isPressed()) {
+	  if (remotePause) {
+	    recordingLED.setState(BLINK_ON, BLINK_OFF);
+	  } else {
+	    recordingLED.setState(true);
+	  }
+	}
+      }
+    }
+  }
+
   // schedule next pulse
   private void schedule() {
     update();
@@ -329,6 +366,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
     Parameters.sound.write(Sound.TAPE_RECORDER_CHANNEL, parameter == 1);
     if ((tapeRecorderState == TapeRecorderState.PLAY) &&
 	!pauseButton.isPressed() &&
+	!remotePause &&
 	(parameter == 0)) {
       schedule();
     }
@@ -338,7 +376,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
   // update position
   private void update() {
     final long newTime = getTime();
-    if (!pauseButton.isPressed() ||
+    if ((!pauseButton.isPressed() && !remotePause) ||
 	(tapeRecorderState == TapeRecorderState.REWIND) ||
 	(tapeRecorderState == TapeRecorderState.FF)) {
       position += (newTime - time) * speed;
@@ -384,7 +422,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
 	speed = 1;
 	recordButton.setPressed(true);
 	playButton.setPressed(true);
-	if (pauseButton.isPressed()) {
+	if (pauseButton.isPressed() || remotePause) {
 	  recordingLED.setState(BLINK_ON, BLINK_OFF);
 	} else {
 	  recordingLED.setState(true);
@@ -464,7 +502,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
     // for description see MouseListener
     @Override
     public void mousePressed(final MouseEvent event) {
-      if (tapeRecorderState == TapeRecorderState.RECORD) {
+      if ((tapeRecorderState == TapeRecorderState.RECORD) && !remotePause) {
 	if (pauseButton.isPressed()) {
 	  recordingLED.setState(BLINK_ON, BLINK_OFF);
 	} else {
@@ -508,7 +546,8 @@ public class TapeRecorderHardware implements CPUEventOwner {
       vumeter.setState(i);
     } else
     if ((tapeRecorderState == TapeRecorderState.PLAY) &&
-	!pauseButton.isPressed()) {
+	!pauseButton.isPressed() &&
+	!remotePause) {
       int i;
       for (i = 0; i < VUMeter.VUMETER_MAX; i++) {
   	if (inPulseCount < (tapeRecorderInterface.vuPlayConstant * i)) {

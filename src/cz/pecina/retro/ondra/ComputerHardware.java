@@ -189,6 +189,9 @@ public class ComputerHardware {
     new IONode()
       .add(primaryLatch.getOutPin(3))
       .add(tapeRecorderHardware.getInPin());
+    new IONode()
+      .add(secondaryLatch.getOutPin(4))
+      .add(tapeRecorderHardware.getRemotePausePin());
 
     // set up the sound interface
     new Sound(Constants.SOUND_SAMPLING_RATE, 2);

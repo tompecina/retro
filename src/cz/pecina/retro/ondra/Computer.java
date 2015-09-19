@@ -72,7 +72,7 @@ public class Computer implements Runnable {
   private PeripheralsFrame peripheralsFrame;
 
   // the tape recorder frame
-  // private TapeRecorderFrame tapeRecorderFrame;
+  private TapeRecorderFrame tapeRecorderFrame;
 
   // the About frame
   // private AboutFrame aboutFrame;
@@ -106,9 +106,9 @@ public class Computer implements Runnable {
       new KeyboardFrame(this, computerHardware.getKeyboardHardware());
     joystickFrame =
       new JoystickFrame(this);
-    // tapeRecorderFrame = new TapeRecorderFrame(
-    //   this,
-    //   computerHardware.getTapeRecorderHardware());
+    tapeRecorderFrame = new TapeRecorderFrame(
+      this,
+      computerHardware.getTapeRecorderHardware());
     peripheralsFrame = new PeripheralsFrame(this, computerHardware);
     settingsFrame = new SettingsFrame(this, peripheralsFrame.getPeripherals());
     resetFrame = new ResetFrame(this, computerHardware.getHardware());
@@ -289,8 +289,8 @@ public class Computer implements Runnable {
     // 	}
     // 	break;
     // }
-    // computerHardware.getTapeRecorderHardware().process();
-    // Parameters.sound.update();
+    computerHardware.getTapeRecorderHardware().process();
+    Parameters.sound.update();
     computerHardware.getKeyboardHardware().update();
     computerHardware.getDisplayHardware().refresh();
 

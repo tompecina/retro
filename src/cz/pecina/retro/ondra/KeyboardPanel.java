@@ -114,6 +114,7 @@ public class KeyboardPanel extends BackgroundFixedPane {
     keyboardHardware.getNmiButton().place(this,
 					  NMI_OFFSET_X,
 					  NMI_OFFSET_Y);
+    log.finer("NMI button set up");
 
     // set up LEDs
     keyboardHardware.getYellowLED().place(this,
