@@ -48,6 +48,9 @@ public class DisplayHardware extends Device implements IOElement {
   // the address
   private int address;
   
+  // number of displayed scanlines
+  private int scanLines;
+
   // the Enable pin
   private EnablePin enablePin = new EnablePin();
 
@@ -89,6 +92,13 @@ public class DisplayHardware extends Device implements IOElement {
   // for description see IOElement
   @Override
   public int portInput(final int port) {
+    if (address == 0) {
+      final int newScanLines = ((port << 1) & 0xff) | ((port >> 7) & 1);
+      if (newScanLines != scanLines) {
+	scanLines = newScanLines;
+	log.finer("Number of scan lines set to: " + scanLines);
+      }
+    }
     return 0xff;
   }
 
@@ -145,5 +155,14 @@ public class DisplayHardware extends Device implements IOElement {
    */
   public IOPin getAddressPin(final int n) {
     return addressPins[n];
+  }
+
+  // for description see Device
+  @Override
+  public void reset() {
+    scanLines = 0;
+    enablePin.notifyChange();
+    addressPins[0].notifyChange();
+    addressPins[1].notifyChange();
   }
 }

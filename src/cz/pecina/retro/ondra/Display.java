@@ -30,7 +30,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JComponent;
-import javax.swing.Timer;
 
 /**
  * Display of the Tesla Ondra SPO 186 computer.

@@ -137,10 +137,11 @@ public class KeyboardHardware {
     }
     int state = 0;
     for (int row = 0; row < NUMBER_MATRIX_ROWS; row++) {
-      if (buffer[row][column]) {
+      if (!buffer[row][column]) {
 	state |= 1 << row;
       }
     }
+    log.finest("State for column: " + column + " = " + state);
     return state;
   }
 

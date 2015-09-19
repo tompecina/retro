@@ -146,10 +146,12 @@ public class Computer implements Runnable {
     }
     busy = true;
 
-    	computerHardware.getCPU().exec(
-          Parameters.timerCycles * Parameters.speedUp,
-    	  0,
-    	  null);
+
+    computerHardware.getCPU().requestInterrupt(0);
+    computerHardware.getCPU().exec(
+      Parameters.timerCycles * Parameters.speedUp,
+      0,
+      null);
 
     // switch (debuggerState) {
     //   case HIDDEN:
