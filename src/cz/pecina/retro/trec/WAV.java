@@ -222,7 +222,7 @@ public class WAV extends TapeProcessor {
       for (int channel = 0; channel < channels; channel++) {
 	int value;
 	if (sampleSize == 8) {
-	  value = sample[channel];
+	  value = sample[channel] & 0xff;
 	} else if (bigEndian) {
 	  value = ((sample[channel * 2] & 0xff) << 8) |
 	    ((sample[(channel * 2) + 1]) & 0xff);
@@ -246,24 +246,29 @@ public class WAV extends TapeProcessor {
     }
     log.finer("Data converted to floats");
 
-    // calculate peak value
-    float peak = 0;
+    // calculate peak values
+    float min = Float.MAX_VALUE, max = Float.MIN_VALUE;
     for (float sample: floatBuffer) {
-      final float abs = Math.abs(sample);
-      if (abs > peak) {
-	peak = abs;
+      if (sample < min) {
+	min = sample;
+      }
+      if (sample > max) {
+	max = sample;
       }
     }
-    log.finer("Peak value calculated: " + peak);
+    log.finer("Peak values calculated: min: " + min + ", max: " + max);
 
-    // apply hysteresis with a 1/3 peak threshhold
-    final float threshhold = peak / 3;
+    // apply hysteresis with a 1/10 peak-to-peak threshhold
+    final float lowerThreshhold = min + ((max - min) / 10);
+    final float upperThreshhold = max - ((max - min) / 10);
+    log.finer("Threshholds: lower: " + lowerThreshhold +
+	      ", upper: " + upperThreshhold);
     final List<Boolean> booleanBuffer = new ArrayList<>();
     boolean level = false;
     for (float sample: floatBuffer) {
-      if (sample > threshhold) {
+      if (sample > upperThreshhold) {
 	level = true;
-      } else if (sample < -threshhold) {
+      } else if (sample < lowerThreshhold) {
 	level = false;
       }
       booleanBuffer.add(level);
