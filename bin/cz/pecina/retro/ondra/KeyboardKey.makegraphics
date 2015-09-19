@@ -59,8 +59,8 @@ key ctrl 416 0 16 11
 key num 432 0 16 11
 key space 448 0 73 11
 key enter 521 0 16 11
-key up_down 537 0 16 11
-key large_small 553 0 16 11
+key alt 537 0 16 11
+key shift 553 0 16 11
 key cs 569 0 16 11
 key up 585 0 16 11
 key left 601 0 16 11
