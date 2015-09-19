@@ -215,6 +215,11 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   protected boolean IFF2;
 
   /**
+   * The Temporary Interrupt Disable flag TID.
+   */
+  protected boolean TID;
+
+  /**
    * The Interrupt Mode.
    */
   protected int IM;
@@ -236,13 +241,24 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   protected int R7;
 
   /**
+   * The Halted flag.
+   */
+  protected boolean HALTED;
+
+  /**
    * The CPU cycle counter
    */
   protected long cycleCounter;
 
-  // aux flags
-  private boolean resetPending;
-  private int interruptPending = -1;
+  /**
+   * A mode-dependent interrupt vectoring information.
+   */
+  protected int interruptPending;
+
+  /**
+   * A non-maskable interrupt has been requested.
+   */
+  protected boolean nmiPending;
 
   /**
    * A table combining S, Z, Y and X flags.
@@ -572,6 +588,50 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	}
       });
 
+    add(new Register("TID") {
+	@Override
+	public String getValue() {
+	  return TID ? "1" : "0";
+	}
+	@Override
+	public void processValue(final String value) {
+	  TID = value.equals("1");
+	}
+      });
+
+    add(new Register("INT") {
+	@Override
+	public String getValue() {
+	  return String.valueOf(interruptPending);
+	}
+	@Override
+	public void processValue(final String value) {
+	  interruptPending = Integer.parseInt(value);
+	}
+      });
+
+    add(new Register("NMI") {
+	@Override
+	public String getValue() {
+	  return nmiPending ? "1" : "0";
+	}
+	@Override
+	public void processValue(final String value) {
+	  nmiPending = value.equals("1");
+	}
+      });
+
+    add(new Register("HALTED") {
+	@Override
+	public String getValue() {
+	  return HALTED ? "1" : "0";
+	}
+	@Override
+	public void processValue(final String value) {
+	  HALTED = value.equals("1");
+	}
+      });
+
     add(new Register("IM") {
 	@Override
 	public String getValue() {
@@ -666,32 +726,19 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   }
 
   /**
-   * Requests reset.  It will be executed before the next instruction
-   * is executed.
-   *
-   * @see #reset
-   */
-  public void requestReset() {
-    log.fine("Reset requested");
-    resetPending = true;
-  }
-
-  /**
-   * Performs reset.  It will be executed immediately.
-   *
-   * @see #requestReset
+   * Resets the CPU.
    */
   @Override
   public void reset() {
     PC = 0;
-    IFF1 = IFF2 = false;
+    IFF1 = IFF2 = TID = HALTED = false;
     IM = 0;
     R = R7 = I = 0;
     A = F = B = C = D = E = H = L =
       Aa = Fa = Ba = Ca = Da = Ea = Ha = La = 0xff;
     SP = IX = IY = 0xffff;
     WZ = WZa = 0;
-    resetPending = false;
+    nmiPending = false;
     interruptPending = -1;
     log.fine("Reset performed");
   }
@@ -699,26 +746,14 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   // for description see Processor
   @Override
   public void requestInterrupt(final int vector) {
-    assert (vector >= 0) && (vector < 8);
-    if (IFF1) {
-      interruptPending = vector;
-    }
+    interruptPending = vector;
   }
 
-  // for description see Processor
-  @Override
-  public void interrupt(final int vector) {
-    assert (vector >= 0) && (vector < 8);
-    if (IFF1) {
-      IFF1 = false;
-      decSP();
-      memory.setByte(SP, PC >> 8);
-      decSP();
-      memory.setByte(SP, PC & 0xff);
-      PC = 8 * vector;
-      cycleCounter += 11;
-    }
-    interruptPending = -1;
+  /**
+   * Requests a non-maskable interrupt.
+   */
+  public void requestNmi() {
+    nmiPending = true;
   }
 
   /**
@@ -1659,15 +1694,6 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   @Override
   public boolean isIE() {
     return IFF1;
-  }
-
-  /**
-   * Enables/disables interrupts.
-   *
-   * @param b if {@code true}, interrupts will be enabled
-   */
-  public void setIE(final boolean b) {
-    IFF1 = b;
   }
 
   /**
@@ -3436,6 +3462,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("HALT", "", 1, Processor.INS_HLT, new Executable() {
 	@Override
 	public int exec() {
+	  HALTED = true;
 	  return 4;
 	}
       }
@@ -6047,7 +6074,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("DI", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
-	  IFF1 = false;
+	  IFF1 = IFF2 = false;
 	  incPC();
 	  return 4;
 	}
@@ -6183,7 +6210,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
     new Opcode("EI", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
-	  IFF1 = true;
+	  IFF1 = IFF2 = TID = true;
 	  incPC();
 	  return 4;
 	}
@@ -26975,13 +27002,69 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 
     while (!suspended) {
       CPUScheduler.runSchedule(cycleCounter);
-      if (resetPending) {
-	reset();
-	break;
-      } else if (interruptPending != -1) {
-	interrupt(interruptPending);
-	break;
+      if (nmiPending) {
+	nmiPending = false;
+	R++;
+	IFF2 = IFF1;
+	IFF1 = false;
+	decSP();
+	memory.setByte(SP, PC >> 8);
+	decSP();
+	memory.setByte(SP, PC & 0xff);
+	PC = WZ = 0x0066;
+	cycleCounter += 11;
+      } else if ((interruptPending >= 0) && IFF1 && !TID) {
+	R++;
+	IFF1 = IFF2 = false;
+	if (HALTED) {
+	  HALTED = false;
+	  incPC();
+	}
+	switch (IM) {
+	  case 0:
+	    if ((interruptPending & 0xc7) == 0xc7) {  // RST
+	      PC = WZ = interruptPending & 0x38;
+	      cycleCounter += 13;
+	    } else if ((interruptPending & 0xff) == 0xcd) {  // CALL
+	      WZ = (interruptPending >> 8) & 0xffff;
+	      decSP();
+	      memory.setByte(SP, PC >> 8);
+	      decSP();
+	      memory.setByte(SP, PC & 0xff);
+	      PC = WZ;
+	      cycleCounter += 19;
+	    } else {  // something else, ignored
+	      log.finer(String.format("Unsupported interrupt vector: 0x%x",
+				      interruptPending));
+	      cycleCounter += 6;
+	    }
+	    break;
+	  case 1:
+	    decSP();
+	    memory.setByte(SP, PC >> 8);
+	    decSP();
+	    memory.setByte(SP, PC & 0xff);
+	    PC = WZ = 0x38;
+	    cycleCounter += 13;
+	    break;
+	  case 2:
+	    decSP();
+	    memory.setByte(SP, PC >> 8);
+	    decSP();
+	    memory.setByte(SP, PC & 0xff);
+	    WZ = (I << 8) + (interruptPending & 0xff);  // documented: 0xfe
+	    PC = memory.getByte(WZ);
+	    incWZ();
+	    PC = WZ = PC + (memory.getByte(WZ) << 8);
+	    cycleCounter += 19;
+	    break;
+	}
+	interruptPending = -1;
+      } else if (HALTED) {
+	R++;
+	cycleCounter++;
       } else {
+	TID = false;
 	int prefix = 0;
 	Opcode[] table = null;
 	int tb;

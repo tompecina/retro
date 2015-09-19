@@ -136,6 +136,8 @@ public class OutputLatch extends Device implements IOElement {
   // for description see IOElement
   @Override
   public void portOutput(final int port, int data) {
+    log.finest(String.format("Data written to output latch '%s': 0x%02x",
+			     name, data));
     register = data;
     notifyPins();
   }

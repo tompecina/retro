@@ -163,21 +163,19 @@ public interface Processor {
   public abstract void setPC(int n);
 
   /**
-   * Requests interrupt.  If enabled, it will be activated before
-   * the next instruction is executed.
+   * Requests maskable interrupt.
    *
-   * @param vector interrupt vector
-   * @see #interrupt
+   * @param vector the vectoring information, mode-dependent;
+   *               {@code -1} if no interrupt is requested
    */
-  public abstract void requestInterrupt(int vector);
+  public default void requestInterrupt(final int vector) {
+  }
 
   /**
-   * Performs interrupt.  If enabled, it will be executed immediately.
-   *
-   * @param vector interrupt vector
-   * @see #requestInterrupt
+   * Requests non-maskable interrupt.
    */
-  public abstract void interrupt(int vector);
+  public default void requestNmi() {
+  }
 
   /**
    * Gets {@code Disassembly} object.
