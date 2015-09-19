@@ -55,6 +55,9 @@ public class KeyboardHardware {
    */
   public static final int NUMBER_MATRIX_COLUMNS = 10;
 
+  // the computer hardware object
+  private ComputerHardware computerHardware;
+
   // matrices of key presses
   private final boolean[][] current =
     new boolean[NUMBER_MATRIX_ROWS][NUMBER_MATRIX_COLUMNS];
@@ -79,9 +82,13 @@ public class KeyboardHardware {
 
   /**
    * Creates the keyboard hardware object.
+   *
+   * @param computerHardware the computer hardware object
    */
-  public KeyboardHardware() {
+  public KeyboardHardware(final ComputerHardware computerHardware) {
     log.fine("New keyboard hardware creation started");
+    assert computerHardware != null;
+    this.computerHardware = computerHardware;
     keyboardLayout = new KeyboardLayout(this);
     for (KeyboardKey key: keyboardLayout.getKeys()) {
       if (key.getMatrixRow() != -1) {
@@ -98,6 +105,7 @@ public class KeyboardHardware {
 	}
       }
     }
+    nmiButton.addChangeListener(new NmiListener());
     log.fine("New keyboard hardware created");
   }
 
@@ -122,6 +130,19 @@ public class KeyboardHardware {
       log.finest("Pressed: " + pressed);
       current[row][column] = pressed;
       next[row][column] = next[row][column] || pressed;
+    }
+  }
+
+  // NMI listener
+  private class NmiListener implements ChangeListener {
+
+    // for description see ChangeListener
+    @Override
+    public void stateChanged(final ChangeEvent event) {
+      log.finer("NMI listener activated");
+      if (nmiButton.isPressed()) {
+	computerHardware.getCPU().requestNmi();
+      }
     }
   }
 

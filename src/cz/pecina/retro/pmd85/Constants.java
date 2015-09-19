@@ -44,7 +44,6 @@ public final class Constants {
    */
   public static final int DEFAULT_MODEL = 3;  // PMD 85-3
 
-
   /**
    * The sound sampling rate.
    */

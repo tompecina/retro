@@ -117,8 +117,8 @@ public class Computer implements Runnable {
     resetFrame = new ResetFrame(this, computerHardware.getHardware());
     // aboutFrame = new AboutFrame(this);
 
-    // reset all stateful hardware
-    computerHardware.reset();
+    // set the ROM version and reset all stateful hardware
+    computerHardware.setVersion(this, UserPreferences.getVersion());
 
     // start emulation
     new Timer(Parameters.timerPeriod, new TimerListener()).start();
@@ -145,7 +145,6 @@ public class Computer implements Runnable {
       return;
     }
     busy = true;
-
 
     computerHardware.getCPU().requestInterrupt(0);
     computerHardware.getCPU().exec(

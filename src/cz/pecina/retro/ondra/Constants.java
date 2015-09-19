@@ -29,6 +29,22 @@ package cz.pecina.retro.ondra;
 public final class Constants {
     
   /**
+   * Number of ROM versions.
+   */
+  public static final int NUMBER_VERSIONS = 3;
+
+  /**
+   * Array of ROM version strings.
+   */
+  public static final String[] VERSIONS =
+    {"Tesla Monitor V5.0", "Tesla BASIC-EXP V5.0", "ViLi Monitor V27"};
+
+  /**
+   * The default ROM version.
+   */
+  public static final int DEFAULT_VERSION = 0;  // Tesla Monitor V5.0
+
+  /**
    * The sound sampling rate.
    */
   public static int SOUND_SAMPLING_RATE = 16000;

@@ -69,6 +69,9 @@ public final class UserPreferences extends GeneralUserPreferences {
   private static boolean tapeRecorderMute, speakerMute;
   private static int tapeRecorderVolume, speakerVolume;
   
+  // the ROM version
+  private static int version;
+
   // keyboard shortcuts
   private static Shortcuts shortcuts;
 
@@ -122,6 +125,12 @@ public final class UserPreferences extends GeneralUserPreferences {
 	Parameters.preferences.putInt("speaker.volume", speakerVolume);
       }
       
+      version = Parameters.preferences.getInt("version", -1);
+      if (version == -1) {
+	version = Constants.DEFAULT_VERSION;
+	Parameters.preferences.putInt("version", version);
+      }
+
       try {
 	for (String key:  Parameters.preferences.keys()) {
 	  if (key.startsWith(SHORTCUT_PREFIX)) {
@@ -265,6 +274,33 @@ public final class UserPreferences extends GeneralUserPreferences {
     log.finer("Speaker volume retrieved from user preferences: " +
 	      speakerVolume);
     return speakerVolume;
+  }
+
+  /**
+   * Sets the ROM version.
+   *
+   * @param computer the computer object
+   * @param version  the ROM version
+   */
+  public static void setVersion(final Computer computer, final int version) {
+    assert computer != null;
+    assert (version >= 0) && (version < Constants.NUMBER_VERSIONS);
+    getPreferences();
+    UserPreferences.version = version;
+    Parameters.preferences.putInt("version", version);
+    computer.getComputerHardware().setVersion(computer, version);
+    log.fine("ROM version in user preferences set to: " + version);
+  }
+
+  /**
+   * Gets the ROM version.
+   *
+   * @return the ROM version
+   */
+  public static int getVersion() {
+    getPreferences();
+    log.finer("ROM version retrieved from user preferences: " + version);
+    return version;
   }
 
   /**

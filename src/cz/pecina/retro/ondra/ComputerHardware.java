@@ -65,6 +65,9 @@ public class ComputerHardware {
   // the general hardware
   private Hardware hardware;
 
+  // the ROM version
+  private int version;
+
   // the memory
   private OndraMemory memory;
 
@@ -127,7 +130,7 @@ public class ComputerHardware {
     }
 
     // set up the keyboard hardware
-    keyboardHardware = new KeyboardHardware();
+    keyboardHardware = new KeyboardHardware(this);
     
     // set up the joystick hardware
     joystickHardware = new JoystickHardware();
@@ -226,7 +229,7 @@ public class ComputerHardware {
       byte buffer[];
       if (CommandLineProcessor.fileNameROM == null) {
 	buffer = Files.readAllBytes(Paths.get(getClass()
-          .getResource("ROM/monitor.bin").toURI()));
+          .getResource("ROM/monitor-" + version + ".bin").toURI()));
       } else {
 	buffer =
 	  Files.readAllBytes(Paths.get(CommandLineProcessor.fileNameROM));
@@ -263,14 +266,36 @@ public class ComputerHardware {
   }
   
   /**
+   * Sets ROM version.
+   *
+   * @param computer the computer control object
+   * @param version  the ROM version
+   */
+  public void setVersion(final Computer computer, final int version) {
+    log.fine("Setting ROM version: " + version);
+    assert (version >= 0) && (version < Constants.NUMBER_VERSIONS);
+    this.version = version;
+    clearRAM();
+    loadROM();
+    reset();
+  }
+
+  /**
    * Resets hardware.
    */
   public void reset() {
     hardware.reset();
-    clearRAM();
-    loadROM();
   }
   
+  /**
+   * Gets the ROM version.
+   *
+   * @return the ROM version
+   */
+  public int getVersion() {
+    return version;
+  }
+
   /**
    * Gets the memory.
    *
