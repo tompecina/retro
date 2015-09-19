@@ -83,6 +83,7 @@ public class DisplayHardware extends Device implements IOElement {
    */
   public void refresh() {
     display.refresh();
+    log.finer("Display refreshed");
   }
   
   // for description see IOElement
@@ -104,6 +105,7 @@ public class DisplayHardware extends Device implements IOElement {
       if (newEnableFlag != enableFlag) {
 	enableFlag = newEnableFlag;
 	display.repaint();
+	log.finer("enableFlag: " + enableFlag);
       }
     }
   }
@@ -122,6 +124,7 @@ public class DisplayHardware extends Device implements IOElement {
     @Override
     public void notifyChange() {
       address = (address & ~(1 << n)) | (IONode.normalize(queryNode()) << n);
+      log.finer("Address: " + address);
     }
   }
 

@@ -149,16 +149,15 @@ public class Display {
    */
   public void setByte(final int address, final int data) {
     assert (address >= 0xc000) && (address < 0x10000);
-    final int stripe = (address >> 10) & 0x0f;
-    final int row = (address >> 6) & 0x0f;
-    final int column = address & 0x3f;
-    if (column < 0x30) {
-      if (log.isLoggable(Level.FINEST)) {
-	log.finest(String.format(
-          "Writing byte, address: 0x%04x, data: 0x%02x", address, data));
-      }
-      stripes[stripe].setByte(row, column, data);
+    final int tb = 0xff - (((address << 1) & 0xff) | ((address & 0x80) >> 7));
+    final int stripe = tb >> 4;
+    final int row = tb & 0x0f;
+    final int column = 0xff - (address >> 8);
+    if (log.isLoggable(Level.FINEST)) {
+      log.finest(String.format(
+        "Writing byte, address: 0x%04x, data: 0x%02x", address, data));
     }
+    stripes[stripe].setByte(row, column, data);
   }
 
   /**

@@ -186,7 +186,11 @@ public class OndraMemory
 
     @Override
     public void notifyChange() {
-      allRAMFlag = (queryNode() == 1);
+      final boolean newAllRAMFlag = (queryNode() == 1);
+      if (newAllRAMFlag != allRAMFlag) {
+	allRAMFlag = newAllRAMFlag;
+	log.finer("allRAMFlag: " + allRAMFlag);
+      }
     }
   }
 
@@ -208,7 +212,11 @@ public class OndraMemory
 
     @Override
     public void notifyChange() {
-      inPortFlag = (queryNode() == 1);
+      final boolean newInPortFlag = (queryNode() == 1);
+      if (newInPortFlag != inPortFlag) {
+	inPortFlag = newInPortFlag;
+	log.finer("inPortFlag: " + inPortFlag);
+      }
     }
   }
 
@@ -272,6 +280,10 @@ assert (address >= 0) && (address < RAM_SIZE);
     if ((allRAMFlag || (address >= 0x4000)) &&
 	(!inPortFlag || (address < 0xe000))) {
       ram[address] = (byte)data;
+    }
+
+    if (address >= Display.START_VIDEO) {
+      displayHardware.getDisplay().setByte(address, data);
     }
 
     if (log.isLoggable(Level.FINEST)) {

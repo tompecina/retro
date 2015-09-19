@@ -71,13 +71,13 @@ public class DisplayStripe extends JComponent implements Resizeable {
   public void setByte(final int row,
 		      final int column,
 		      final int pixels) {
+    if (log.isLoggable(Level.FINEST)) {
+      log.finest(String.format(
+        "Setting cell at (%d,%d) to 0x%02x",
+	row, column, pixels));
+    }
     assert (row >= 0) & (row < Display.STRIPE_HEIGHT);
     assert (column >= 0) & (column < Display.DISPLAY_WIDTH_CELLS);
-    if (log.isLoggable(Level.FINEST)) {
-      log.finest(String.format("Setting cell at (%d,%d) to 0x%02x, color: %s",
-			       row, column,
-			       pixels));
-    }
     if (this.pixels[row][column] != (byte)pixels) {
       if (log.isLoggable(Level.FINER)) {
 	log.finer(String.format(

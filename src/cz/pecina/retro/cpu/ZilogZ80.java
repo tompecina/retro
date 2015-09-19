@@ -5465,7 +5465,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  incPC();
 	  int port = memory.getByte(PC);
 	  for (IOElement t: outputPorts.get(port)) {
-	    t.portOutput(port, A);
+	    t.portOutput((A << 8) + port, A);
 	  }
 	  WZ = ((port + 1) & 0xff) + (A << 8);
 	  incPC();
@@ -5647,7 +5647,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  WZ = ((A << 8) + port + 1) & 0xffff;
 	  A = 0xff;
 	  for (IOElement t: inputPorts.get(port)) {
-	    A &= t.portInput(port);
+	    A &= t.portInput((A << 8) + port);
 	  }
 	  incPC();
 	  return 11;
@@ -12013,7 +12013,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  B = 0xff;
 	  for (IOElement t: inputPorts.get(C)) {
-	    B &= t.portInput(C);
+	    B &= t.portInput((B << 8) + C);
 	  }
 	  F5(B);
 	  CLEARHF();
@@ -12029,7 +12029,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  for (IOElement t: outputPorts.get(C)) {
-	    t.portOutput(C, B);
+	    t.portOutput((B << 8) + C, B);
 	  }
 	  incPC();
 	  return 12;
@@ -12167,7 +12167,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	  final int tb = C;
 	  C = 0xff;
 	  for (IOElement t: inputPorts.get(tb)) {
-	    C &= t.portInput(tb);
+	    C &= t.portInput((B << 8) + tb);
 	  }
 	  F5(C);
 	  CLEARHF();
@@ -12183,7 +12183,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  for (IOElement t: outputPorts.get(C)) {
-	    t.portOutput(C, C);
+	    t.portOutput((B << 8) + C, C);
 	  }
 	  incPC();
 	  return 12;
@@ -12319,7 +12319,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  D = 0xff;
 	  for (IOElement t: inputPorts.get(C)) {
-	    D &= t.portInput(C);
+	    D &= t.portInput((B << 8) + C);
 	  }
 	  F5(D);
 	  CLEARHF();
@@ -12335,7 +12335,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  for (IOElement t: outputPorts.get(C)) {
-	    t.portOutput(C, D);
+	    t.portOutput((B << 8) + C, D);
 	  }
 	  incPC();
 	  return 12;
@@ -12479,7 +12479,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  E = 0xff;
 	  for (IOElement t: inputPorts.get(C)) {
-	    E &= t.portInput(C);
+	    E &= t.portInput((B << 8) + C);
 	  }
 	  F5(E);
 	  CLEARHF();
@@ -12495,7 +12495,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  for (IOElement t: outputPorts.get(C)) {
-	    t.portOutput(C, E);
+	    t.portOutput((B << 8) + C, E);
 	  }
 	  incPC();
 	  return 12;
@@ -12639,7 +12639,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  H = 0xff;
 	  for (IOElement t: inputPorts.get(C)) {
-	    H &= t.portInput(C);
+	    H &= t.portInput((B << 8) + C);
 	  }
 	  F5(H);
 	  CLEARHF();
@@ -12655,7 +12655,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  for (IOElement t: outputPorts.get(C)) {
-	    t.portOutput(C, H);
+	    t.portOutput((B << 8) + C, H);
 	  }
 	  incPC();
 	  return 12;
@@ -12799,7 +12799,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  L = 0xff;
 	  for (IOElement t: inputPorts.get(C)) {
-	    L &= t.portInput(C);
+	    L &= t.portInput((B << 8) + C);
 	  }
 	  F5(L);
 	  CLEARHF();
@@ -12815,7 +12815,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  for (IOElement t: outputPorts.get(C)) {
-	    t.portOutput(C, L);
+	    t.portOutput((B << 8) + C, L);
 	  }
 	  incPC();
 	  return 12;
@@ -12959,7 +12959,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  int tb = 0xff;
 	  for (IOElement t: inputPorts.get(C)) {
-	    tb &= t.portInput(C);
+	    tb &= t.portInput((B << 8) + C);
 	  }
 	  F5(tb);
 	  CLEARHF();
@@ -12975,7 +12975,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  for (IOElement t: outputPorts.get(C)) {
-	    t.portOutput(C, 0);
+	    t.portOutput((B << 8) + C, 0);
 	  }
 	  incPC();
 	  return 12;
@@ -13103,7 +13103,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  A = 0xff;
 	  for (IOElement t: inputPorts.get(C)) {
-	    A &= t.portInput(C);
+	    A &= t.portInput((B << 8) + C);
 	  }
 	  F5(A);
 	  CLEARHF();
@@ -13120,7 +13120,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  for (IOElement t: outputPorts.get(C)) {
-	    t.portOutput(C, A);
+	    t.portOutput((B << 8) + C, A);
 	  }
 	  WZ = (BC() + 1) & 0xffff;
 	  incPC();
@@ -13334,13 +13334,13 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  WZ = (BC() + 1) & 0xffff;
+	  B--;
 	  int tb = 0xff;
 	  for (IOElement t: inputPorts.get(C)) {
-	    tb &= t.portInput(C);
+	    tb &= t.portInput((B << 8) + C);
 	  }
 	  memory.setByte(HL(), tb);
 	  incHL();
-	  B--;
 	  F4(B);
 	  final int tw = ((C + 1) & 0xff) + tb;
 	  if ((tb & SF) != 0) {
@@ -13375,7 +13375,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  int tb = memory.getByte(HL());
 	  for (IOElement t: outputPorts.get(C)) {
-	    t.portOutput(C, tb);
+	    t.portOutput((B << 8) + C, tb);
 	  }
 	  incHL();
 	  B--;
@@ -13494,13 +13494,13 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  WZ = (BC() - 1) & 0xffff;
+	  B--;
 	  int tb = 0xff;
 	  for (IOElement t: inputPorts.get(C)) {
-	    tb &= t.portInput(C);
+	    tb &= t.portInput((B << 8) + C);
 	  }
 	  memory.setByte(HL(), tb);
 	  decHL();
-	  B--;
 	  F4(B);
 	  final int tw = ((C - 1) & 0xff) + tb;
 	  if ((tb & SF) != 0) {
@@ -13535,7 +13535,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  int tb = memory.getByte(HL());
 	  for (IOElement t: outputPorts.get(C)) {
-	    t.portOutput(C, tb);
+	    t.portOutput((B << 8) + C, tb);
 	  }
 	  decHL();
 	  B--;
@@ -13664,13 +13664,13 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  WZ = (BC() + 1) & 0xffff;
+	  B--;
 	  int tb = 0xff;
 	  for (IOElement t: inputPorts.get(C)) {
-	    tb &= t.portInput(C);
+	    tb &= t.portInput((B << 8) + C);
 	  }
 	  memory.setByte(HL(), tb);
 	  incHL();
-	  B--;
 	  F4(B);
 	  final int tw = ((C + 1) & 0xff) + tb;
 	  if ((tb & SF) != 0) {
@@ -13711,7 +13711,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  int tb = memory.getByte(HL());
 	  for (IOElement t: outputPorts.get(C)) {
-	    t.portOutput(C, tb);
+	    t.portOutput((B << 8) + C, tb);
 	  }
 	  incHL();
 	  B--;
@@ -13846,13 +13846,13 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  WZ = (BC() - 1) & 0xffff;
+	  B--;
 	  int tb = 0xff;
 	  for (IOElement t: inputPorts.get(C)) {
-	    tb &= t.portInput(C);
+	    tb &= t.portInput((B << 8) + C);
 	  }
 	  memory.setByte(HL(), tb);
 	  decHL();
-	  B--;
 	  F4(B);
 	  final int tw = ((C - 1) & 0xff) + tb;
 	  if ((tb & SF) != 0) {
@@ -13893,7 +13893,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	public int exec() {
 	  int tb = memory.getByte(HL());
 	  for (IOElement t: outputPorts.get(C)) {
-	    t.portOutput(C, tb);
+	    t.portOutput((B << 8) + C, tb);
 	  }
 	  decHL();
 	  B--;
