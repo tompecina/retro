@@ -610,28 +610,6 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	}
       });
 
-    add(new Register("NMI") {
-	@Override
-	public String getValue() {
-	  return nmiPending ? "1" : "0";
-	}
-	@Override
-	public void processValue(final String value) {
-	  nmiPending = value.equals("1");
-	}
-      });
-
-    add(new Register("HALTED") {
-	@Override
-	public String getValue() {
-	  return HALTED ? "1" : "0";
-	}
-	@Override
-	public void processValue(final String value) {
-	  HALTED = value.equals("1");
-	}
-      });
-
     add(new Register("IM") {
 	@Override
 	public String getValue() {
@@ -651,6 +629,28 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public void processValue(final String value) {
 	  I = Integer.parseInt(value);
+	}
+      });
+
+    add(new Register("NMI") {
+	@Override
+	public String getValue() {
+	  return nmiPending ? "1" : "0";
+	}
+	@Override
+	public void processValue(final String value) {
+	  nmiPending = value.equals("1");
+	}
+      });
+
+    add(new Register("HALTED") {
+	@Override
+	public String getValue() {
+	  return HALTED ? "1" : "0";
+	}
+	@Override
+	public void processValue(final String value) {
+	  HALTED = value.equals("1");
 	}
       });
 
@@ -791,7 +791,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
    */
   protected void F2(final int v) {
     assert (v >= 0) && (v < 0x100);
-    F = (F & 0xd7) | (v & 0x28);
+    F = (F & ~0x28) | (v & 0x28);
   }
 
   /**
@@ -815,7 +815,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   protected void F22(final int sz, final int xy) {
     assert (sz >= 0) && (sz < 0x100);
     assert (xy >= 0) && (xy < 0x100);
-    F = (((F & 0x17) | TBL4[sz]) & 0xd7) | (xy & 0x28);
+    F = (((F & 0x17) | TBL4[sz]) & ~0x28) | (xy & 0x28);
   }
 
   /**
@@ -839,7 +839,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   protected void F32(final int szp, final int xy) {
     assert (szp >= 0) && (szp < 0x100);
     assert (xy >= 0) && (xy < 0x100);
-    F = (((F & 0x13) | TBL5[szp]) & 0xd7) | (xy & 0x28);
+    F = (((F & 0x13) | TBL5[szp]) & ~0x28) | (xy & 0x28);
   }
 
   /**
