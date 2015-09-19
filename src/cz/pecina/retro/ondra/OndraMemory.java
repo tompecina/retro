@@ -234,7 +234,7 @@ public class OndraMemory
    */
   public void refreshVideoRAM() {
     for (int address = Display.START_VIDEO; address < RAM_SIZE; address++) {
-      setByte(address, ram[address]);
+      setByte(address, ram[address] & 0xff);
     }
     log.fine("Video RAM refreshed");
   }
@@ -274,7 +274,7 @@ public class OndraMemory
   // for description see AbstractMemory
   @Override
   public void setByte(final int address, final int data) {
-assert (address >= 0) && (address < RAM_SIZE);
+    assert (address >= 0) && (address < RAM_SIZE);
     assert (data >= 0) && (data < 0x100);
 
     if ((allRAMFlag || (address >= 0x4000)) &&

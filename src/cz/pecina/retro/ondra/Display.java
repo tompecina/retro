@@ -82,8 +82,10 @@ public class Display {
   // custom color
   private OndraColor customColor;
 
-  // active color
-  private OndraColor color;
+  /**
+   * The currently active color.
+   */
+  public static OndraColor color = new OndraColor(Color.WHITE);
 
   // display stripes
   private DisplayStripe[] stripes = new DisplayStripe[NUMBER_STRIPES];
@@ -197,7 +199,7 @@ public class Display {
    *
    * @return the custom color
    */
-  public OndraColor getCustomColors() {
+  public OndraColor getCustomColor() {
     return customColor;
   }
 

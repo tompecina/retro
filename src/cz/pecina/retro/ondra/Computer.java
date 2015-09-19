@@ -54,7 +54,7 @@ public class Computer implements Runnable {
   private ComputerFrame computerFrame;
 
   // the settings frame
-  // private SettingsFrame settingsFrame;
+  private SettingsFrame settingsFrame;
 
   // the reset frame
   private ResetFrame resetFrame;
@@ -69,7 +69,7 @@ public class Computer implements Runnable {
   private JoystickFrame joystickFrame;
 
   // the peripherals frame
-  // private PeripheralsFrame peripheralsFrame;
+  private PeripheralsFrame peripheralsFrame;
 
   // the tape recorder frame
   // private TapeRecorderFrame tapeRecorderFrame;
@@ -79,9 +79,6 @@ public class Computer implements Runnable {
 
   // the icon layout
   private IconLayout iconLayout;
-
-  // the NMI button
-  // private KeyboardKey nmiButton;
 
   // true if run() running
   private boolean busy;
@@ -112,8 +109,8 @@ public class Computer implements Runnable {
     // tapeRecorderFrame = new TapeRecorderFrame(
     //   this,
     //   computerHardware.getTapeRecorderHardware());
-    // peripheralsFrame = new PeripheralsFrame(this, computerHardware);
-    // settingsFrame = new SettingsFrame(this, peripheralsFrame.getPeripherals());
+    peripheralsFrame = new PeripheralsFrame(this, computerHardware);
+    settingsFrame = new SettingsFrame(this, peripheralsFrame.getPeripherals());
     resetFrame = new ResetFrame(this, computerHardware.getHardware());
     // aboutFrame = new AboutFrame(this);
 

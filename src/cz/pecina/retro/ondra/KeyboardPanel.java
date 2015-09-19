@@ -33,7 +33,7 @@ import cz.pecina.retro.gui.LED;
 import cz.pecina.retro.gui.VariableLED;
 
 /**
- * The PMD 85 keyboard panel.
+ * The Tesla Ondra SPO 186 keyboard panel.
  *
  * @author @AUTHOR@
  * @version @VERSION@

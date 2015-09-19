@@ -36,7 +36,6 @@ public class OndraColor {
   private static final Logger log =
     Logger.getLogger(OndraColor.class.getName());
 
-
   /**
    * Number of color modes.
    */
