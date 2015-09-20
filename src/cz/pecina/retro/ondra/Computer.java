@@ -138,14 +138,17 @@ public class Computer implements Runnable {
 	
     if (busy) {
       log.fine("Processing took too long, timer event dismissed");
-    //   Parameters.sound.update();
+      Parameters.sound.update();
       return;
     }
     busy = true;
 
     computerHardware.getCPU().requestInterrupt(0);
     computerHardware.getCPU().exec(
-      Parameters.timerCycles * Parameters.speedUp,
+      (312 - (computerHardware.getDisplayHardware().getEnableFlag() ?
+	      computerHardware.getDisplayHardware().getScanLines() :
+	      0))
+        * 128 * Parameters.speedUp,
       0,
       null);
 

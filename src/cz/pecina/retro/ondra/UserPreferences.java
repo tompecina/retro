@@ -79,7 +79,7 @@ public final class UserPreferences extends GeneralUserPreferences {
   private static int colorMode;
 
   // the custom color
-  private static OndraColor customColor;
+  private static Color customColor;
 
   // tests if a key is in Parameters.preferences
   private static boolean hasKey(final String key) {
@@ -165,9 +165,9 @@ public final class UserPreferences extends GeneralUserPreferences {
 	Parameters.preferences.getInt("customColor", -1);
       customColor = (color == -1) ?
 	            OndraColor.DEFAULT_COLOR :
-	            new OndraColor(new Color(color));
+	            new Color(color);
       Parameters.preferences.putInt("customColor",
-				    customColor.getColor().getRGB());
+				    customColor.getRGB());
 
       retrieved = true;
     }
@@ -419,13 +419,13 @@ public final class UserPreferences extends GeneralUserPreferences {
    * @param customColor the custom color
    */
   public static void setCustomColor(final Computer computer,
-				    final OndraColor customColor) {
+				    final Color customColor) {
     assert computer != null;
     assert customColor != null;
     getPreferences();
     UserPreferences.customColor = customColor;
     Parameters.preferences.putInt("customColor",
-				  customColor.getColor().getRGB());
+				  customColor.getRGB());
     computer.getComputerHardware().getDisplayHardware().getDisplay()
       .setCustomColor(customColor);
     computer.getComputerHardware().getMemory().refreshVideoRAM();
@@ -437,7 +437,7 @@ public final class UserPreferences extends GeneralUserPreferences {
    *
    * @return the custom color
    */
-  public static OndraColor getCustomColor() {
+  public static Color getCustomColor() {
     getPreferences();
     log.finer("Custom color retrieved from user preferences");
     return customColor;

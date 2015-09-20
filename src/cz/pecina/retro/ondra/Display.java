@@ -83,7 +83,7 @@ public class Display {
   private int colorMode;
 
   // custom color
-  private OndraColor customColor;
+  private Color customColor;
 
   // pixel data
   private byte[][] pixels =
@@ -93,15 +93,15 @@ public class Display {
   private boolean changed[] = new boolean[NUMBER_STRIPES];
   
   /**
-   * The currently active color.
+   * The current color.
    */
-  public OndraColor color = new OndraColor(Color.WHITE);
+  public Color color;
 
   // display stripes
   private DisplayStripe[] stripes = new DisplayStripe[NUMBER_STRIPES];
   
   // set the active color
-  private void setActiveColor() {
+  public void setActiveColor() {
     switch (colorMode) {
       case 0:
 	color = OndraColor.WOB_COLOR;
@@ -109,11 +109,9 @@ public class Display {
       case 1:
 	color = OndraColor.GOB_COLOR;
 	break;
-      case 2:
-	color = OndraColor.DEFAULT_COLOR;
-	break;
       default:
 	color = customColor;
+	break;
     }
   }
   
@@ -133,6 +131,9 @@ public class Display {
     for (int stripe = 0; stripe < NUMBER_STRIPES; stripe++) {
       stripes[stripe] = new DisplayStripe(this, pixels, stripe * STRIPE_HEIGHT);
     }
+    colorMode = UserPreferences.getColorMode();
+    customColor = UserPreferences.getCustomColor();
+    setActiveColor();
     repaint();
     log.fine("Display created");
   }
@@ -213,7 +214,7 @@ public class Display {
    *
    * @param customColor the custom color
    */
-  public void setCustomColor(final OndraColor customColor) {
+  public void setCustomColor(final Color customColor) {
     log.fine("Setting custom color");
     assert customColor != null;
     this.customColor = customColor;
@@ -225,7 +226,7 @@ public class Display {
    *
    * @return the custom color
    */
-  public OndraColor getCustomColor() {
+  public Color getCustomColor() {
     return customColor;
   }
 

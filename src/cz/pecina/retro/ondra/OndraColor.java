@@ -25,12 +25,12 @@ import java.util.logging.Logger;
 import java.awt.Color;
 
 /**
- * Ondra color.
+ * Color constants.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class OndraColor {
+public final class OndraColor {
 
   // static logger
   private static final Logger log =
@@ -49,50 +49,18 @@ public class OndraColor {
   /**
    * White-on-black color mode.
    */
-  public static OndraColor WOB_COLOR = 
-    new OndraColor(new Color(0xffffff));
+  public static Color WOB_COLOR = new Color(0xffffff);
   
   /**
    * Green-on-black color mode.
    */
-  public static OndraColor GOB_COLOR = 
-    new OndraColor(new Color(0x80ff80));
-  
+  public static Color GOB_COLOR = new Color(0x80ff80);
+
   /**
    * Default custom color mode.
    */
-  public static OndraColor DEFAULT_COLOR = 
-    new OndraColor(new Color(0xffffff));
+  public static Color DEFAULT_COLOR = new Color(0xffffff);
 
-  // color
-  private Color color;
-
-  /**
-   * Creates a color object,
-   *
-   * @param color the color of the pixels
-   */
-  public OndraColor(final Color color) {
-    assert color != null;
-    this.color = color;
-    log.fine("New Ondra color created, color: " + color);
-  }
-
-  /**
-   * Sets the color.
-   *
-   * @param color the color of the pixels
-   */
-  public void setColor(final Color color) {
-    this.color = color;
-  }
-
-  /**
-   * Gets the color.
-   *
-   * @return the color of the pixels
-   */
-  public Color getColor() {
-    return color;
-  }
+  // default constructor disabled
+  private OndraColor() {}
 }

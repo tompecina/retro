@@ -126,7 +126,7 @@ public class DisplayStripe extends JComponent implements Resizeable {
     if (display.getDisplayHardware().getEnableFlag() && (drow >= 0)) {
       int p = pixels[drow][column];
       for (int i = 0; i < 8; i++) {
-	graphics.setColor(((p & 0x80) != 0) ? display.color.getColor() : Color.BLACK);
+	graphics.setColor(((p & 0x80) != 0) ? display.color : Color.BLACK);
 	graphics.fillRect(pixelSize * ((column * 8) + i),
 			  pixelSize * (row),
 			  pixelSize,

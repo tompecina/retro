@@ -66,10 +66,10 @@ public class SettingsDisplayPanel extends JPanel {
     new JRadioButton[OndraColor.NUMBER_COLOR_MODES];
 
   // the current custom color
-  private OndraColor currentCustomColor;
+  private Color currentCustomColor;
 
   // new custom color
-  private OndraColor customColor;
+  private Color customColor;
 
   // custom color swatch
   private Swatch swatch;
@@ -140,7 +140,7 @@ public class SettingsDisplayPanel extends JPanel {
       colorModeButtons[mode].setSelected(mode == currentColorMode);
     }
     currentCustomColor = customColor = UserPreferences.getCustomColor();
-    swatch.setColor(customColor.getColor());
+    swatch.setColor(customColor);
     log.fine("Widgets initialized");
   }
 
@@ -151,8 +151,8 @@ public class SettingsDisplayPanel extends JPanel {
     public void actionPerformed(final ActionEvent event) {
       final Color color = JColorChooser.showDialog(SettingsDisplayPanel.this,
         Application.getString(this, "settings.display.colorChooser.title"),
-	customColor.getColor());
-      customColor.setColor(color);
+	customColor);
+      customColor = color;
       swatch.setColor(color);
     }
   }

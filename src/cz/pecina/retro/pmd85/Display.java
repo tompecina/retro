@@ -119,6 +119,7 @@ public class Display extends Timer {
 	break;
       default:
 	colors = customColors;
+	break;
     }
   }
   
