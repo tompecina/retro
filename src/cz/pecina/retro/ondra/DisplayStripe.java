@@ -111,10 +111,10 @@ public class DisplayStripe extends JComponent implements Resizeable {
   }
 
   // paint one cell
-  private void paintCell(int row,
+  private void paintCell(final int row,
 			 final int column,
 			 final Graphics graphics) {
-    assert (row >= offset) && (row < (offset + Display.STRIPE_HEIGHT));
+    assert (row >= 0) && (row < Display.STRIPE_HEIGHT);
     assert (column >= 0) & (column < Display.DISPLAY_WIDTH_CELLS);
     assert graphics != null;
     if (log.isLoggable(Level.FINER)) {
@@ -122,13 +122,13 @@ public class DisplayStripe extends JComponent implements Resizeable {
     }
     final int pixelSize = GUI.getPixelSize();
     if (display.getDisplayHardware().getEnableFlag() &&
-	(row >= (Display.DISPLAY_HEIGHT -
-		 display.getDisplayHardware().getScanLines()))) {
-      int p = pixels[row][column];
+	((row + offset) >= (Display.DISPLAY_HEIGHT -
+			    display.getDisplayHardware().getScanLines()))) {
+      int p = pixels[row + offset][column];
       for (int i = 0; i < 8; i++) {
 	graphics.setColor(((p & 0x80) != 0) ? display.color.getColor() : Color.BLACK);
 	graphics.fillRect(pixelSize * ((column * 8) + i),
-			  pixelSize * (row - offset),
+			  pixelSize * (Display.STRIPE_HEIGHT - 1 - row),
 			  pixelSize,
 			  pixelSize);
 	p <<= 1;
@@ -136,7 +136,7 @@ public class DisplayStripe extends JComponent implements Resizeable {
     } else {
       graphics.setColor(Color.BLACK);
       graphics.fillRect(pixelSize * column * 8,
-			pixelSize * (row - offset),
+			pixelSize * (Display.STRIPE_HEIGHT - 1 - row),
 			pixelSize * 8,
 			pixelSize);
     }
@@ -149,7 +149,7 @@ public class DisplayStripe extends JComponent implements Resizeable {
     log.finest("Repainting display stripe");
     for (int row = 0; row < Display.STRIPE_HEIGHT; row++) {
       for (int column = 0; column < Display.DISPLAY_WIDTH_CELLS; column++) {
-	paintCell(row + offset, column, graphics);
+	paintCell(row, column, graphics);
       }
     }
     log.finest("Display stripe repainted");
