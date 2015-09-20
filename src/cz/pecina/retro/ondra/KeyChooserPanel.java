@@ -62,7 +62,7 @@ public class KeyChooserPanel extends BackgroundFixedPane {
   private Frame frame;
 
   // keys on the emulated keyboard
-  private ToggleButton buttons[] = new ToggleButton[KeyboardLayout.NUMBER_KEYS];
+  private ToggleButton buttons[] = new ToggleButton[KeyboardLayout.NUMBER_KEYS + 1];
   
   /**
    * Creates a panel containing the mock-up keyboard.
@@ -98,6 +98,16 @@ public class KeyChooserPanel extends BackgroundFixedPane {
       buttons[n] = button;
       log.finest("Button for key '" + key + "' placed");
     }
+    final ToggleButton button =
+      new ToggleButton("ondra/NmiButton/nmi-%d-%s.png",
+		       null,
+		       null);
+    button.setOnIcon(IconCache.get(String.format(button.getTemplate(),
+						 pixelSize,
+						 "l")));
+    button.setPressed(keys.contains(KeyboardLayout.NUMBER_KEYS));
+    button.place(this, NMI_OFFSET_X, NMI_OFFSET_Y);
+    buttons[KeyboardLayout.NUMBER_KEYS] = button;
     log.fine("KeyChooserPanel set up");
   }
 
@@ -108,7 +118,7 @@ public class KeyChooserPanel extends BackgroundFixedPane {
    */
   public NavigableSet<Integer> getKeys() {
     final NavigableSet<Integer> set = new TreeSet<>();
-    for (int n = 0; n < KeyboardLayout.NUMBER_KEYS; n++) {
+    for (int n = 0; n < (KeyboardLayout.NUMBER_KEYS + 1); n++) {
       if (buttons[n].isPressed()) {
 	set.add(n);
       }

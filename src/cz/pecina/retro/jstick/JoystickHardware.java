@@ -27,7 +27,7 @@ import javax.swing.event.ChangeEvent;
 
 import cz.pecina.retro.cpu.IOPin;
 
-import cz.pecina.retro.gui.PushButton;
+import cz.pecina.retro.gui.LockableButton;
 
 /**
  * Hardware of the universal joystick.
@@ -44,32 +44,32 @@ public class JoystickHardware {
   /**
    * The North button.
    */
-  public final PushButton northButton =
-    new PushButton("jstick/JoystickButton/N-%d-%s.png", null, null);
+  public final LockableButton northButton =
+    new LockableButton("jstick/JoystickButton/N-%d-%s.png", null, null);
 
   /**
    * The East button.
    */
-  public final PushButton eastButton =
-    new PushButton("jstick/JoystickButton/E-%d-%s.png", null, null);
+  public final LockableButton eastButton =
+    new LockableButton("jstick/JoystickButton/E-%d-%s.png", null, null);
 
   /**
    * The South button.
    */
-  public final PushButton southButton =
-    new PushButton("jstick/JoystickButton/S-%d-%s.png", null, null);
+  public final LockableButton southButton =
+    new LockableButton("jstick/JoystickButton/S-%d-%s.png", null, null);
 
   /**
    * The West button.
    */
-  public final PushButton westButton =
-    new PushButton("jstick/JoystickButton/W-%d-%s.png", null, null);
+  public final LockableButton westButton =
+    new LockableButton("jstick/JoystickButton/W-%d-%s.png", null, null);
 
   /**
    * The Fire button.
    */
-  public final PushButton fireButton =
-    new PushButton("jstick/JoystickButton/F-%d-%s.png", null, null);
+  public final LockableButton fireButton =
+    new LockableButton("jstick/JoystickButton/F-%d-%s.png", null, null);
  
   // button pins
   private final NorthPin northPin = new NorthPin();
@@ -103,9 +103,9 @@ public class JoystickHardware {
   // North listener
   private class NorthListener implements ChangeListener {
 
-    private PushButton key;
+    private LockableButton key;
     
-    public NorthListener(final PushButton key) {
+    public NorthListener(final LockableButton key) {
       super();
       assert key != null;
       this.key = key;
@@ -125,9 +125,9 @@ public class JoystickHardware {
   // East listener
   private class EastListener implements ChangeListener {
 
-    private PushButton key;
+    private LockableButton key;
     
-    public EastListener(final PushButton key) {
+    public EastListener(final LockableButton key) {
       super();
       assert key != null;
       this.key = key;
@@ -147,9 +147,9 @@ public class JoystickHardware {
   // South listener
   private class SouthListener implements ChangeListener {
 
-    private PushButton key;
+    private LockableButton key;
     
-    public SouthListener(final PushButton key) {
+    public SouthListener(final LockableButton key) {
       super();
       assert key != null;
       this.key = key;
@@ -169,9 +169,9 @@ public class JoystickHardware {
   // West listener
   private class WestListener implements ChangeListener {
 
-    private PushButton key;
+    private LockableButton key;
     
-    public WestListener(final PushButton key) {
+    public WestListener(final LockableButton key) {
       super();
       assert key != null;
       this.key = key;
@@ -191,9 +191,9 @@ public class JoystickHardware {
   // Fire listener
   private class FireListener implements ChangeListener {
 
-    private PushButton key;
+    private LockableButton key;
     
-    public FireListener(final PushButton key) {
+    public FireListener(final LockableButton key) {
       super();
       assert key != null;
       this.key = key;

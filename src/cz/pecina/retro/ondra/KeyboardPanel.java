@@ -63,32 +63,6 @@ public class KeyboardPanel extends BackgroundFixedPane {
   // enclosing frame
   private JFrame frame;
 
-  // place keys
-  private void placeKeys() {
-    for (KeyboardKey key: keyboardHardware.getKeyboardLayout().getKeys()) {
-      key.place(this,
-    		KEY_OFFSET_X + (key.getOffsetX() * KEY_GRID_X),
-    		KEY_OFFSET_Y + (key.getOffsetY() * KEY_GRID_Y));
-      log.finest("Key '" + key + "' added");
-    }
-    log.finer("All keys added");
-  }
-
-  /**
-   * Remove keys from the panel and re-place them.
-   */
-  public void replaceKeys() {
-    for (KeyboardKey key: keyboardHardware.getKeyboardLayout().getKeys()) {
-      remove(key);
-      key.place(this,
-    		KEY_OFFSET_X + (key.getOffsetX() * KEY_GRID_X),
-    		KEY_OFFSET_Y + (key.getOffsetY() * KEY_GRID_Y));
-      log.finest("Key '" + key + "' replaced");
-    }
-    repaint();
-    log.finer("All keys replaced");
-  }
-
   // keyboard hardware object
   private KeyboardHardware keyboardHardware;
 
@@ -106,8 +80,12 @@ public class KeyboardPanel extends BackgroundFixedPane {
     this.keyboardHardware = keyboardHardware;
 
     // set up keys
-    placeKeys();
-    setShortcuts();
+    for (KeyboardKey key: keyboardHardware.getKeyboardLayout().getKeys()) {
+      key.place(this,
+    		KEY_OFFSET_X + (key.getOffsetX() * KEY_GRID_X),
+    		KEY_OFFSET_Y + (key.getOffsetY() * KEY_GRID_Y));
+      log.finest("Key '" + key + "' added");
+    }
     log.finer("Keys set up");
 
     // set up the NMI button
@@ -115,6 +93,9 @@ public class KeyboardPanel extends BackgroundFixedPane {
 					  NMI_OFFSET_X,
 					  NMI_OFFSET_Y);
     log.finer("NMI button set up");
+
+    // set up keyboard shortcuts
+    setShortcuts();
 
     // set up LEDs
     keyboardHardware.getYellowLED().place(this,

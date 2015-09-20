@@ -31,6 +31,7 @@ import cz.pecina.retro.gui.BackgroundFixedPane;
 import cz.pecina.retro.gui.GUI;
 import cz.pecina.retro.gui.Shortcut;
 import cz.pecina.retro.gui.LED;
+import cz.pecina.retro.gui.LockableButton;
 
 /**
  * Keyboard shortcut listener.
@@ -72,8 +73,15 @@ public class ShortcutListener extends KeyAdapter {
       final NavigableSet<Integer> keys =
 	UserPreferences.getShortcuts().get(shortcut);
       for (int key: keys) {
-	final KeyboardKey button = layout.getKey(key);
-	log.finest("Processing key: " + key + ", button: " + button.getCap());
+	LockableButton button;
+	if (key < KeyboardLayout.NUMBER_KEYS) {
+	  button = layout.getKey(key);
+	  log.finest("Processing key: " + key +
+		     ", button: " + ((KeyboardKey)button).getCap());
+	} else {
+	  button = keyboardHardware.getNmiButton();
+	  log.finest("Processing NMI button");
+	}
 	if (!button.isLocked() && (button.isPressed() != action)) {
 	  button.setPressed(action);
 	}

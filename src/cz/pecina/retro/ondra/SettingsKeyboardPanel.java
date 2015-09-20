@@ -53,6 +53,7 @@ import cz.pecina.retro.gui.Shortcut;
 import cz.pecina.retro.gui.Shortcuts;
 import cz.pecina.retro.gui.ShortcutDialog;
 import cz.pecina.retro.gui.ConfirmationBox;
+import cz.pecina.retro.gui.LockableButton;
 
 /**
  * The Settings/Keyboard panel.
@@ -184,11 +185,21 @@ public class SettingsKeyboardPanel extends JPanel {
 
 	final JPanel keysPane =
 	  new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
+	LockableButton key;
+	JLabel keyLabel;
 	for (int i: shortcuts.get(shortcut)) {
-	  final KeyboardKey key = computer.getComputerHardware()
-	    .getKeyboardHardware().getKeyboardLayout().getKey(i);
-	  final JLabel keyLabel = new JLabel(IconCache.get(
-    	    String.format(key.getTemplate(), 2, "u")));
+	  if (i < KeyboardLayout.NUMBER_KEYS) {
+	    key = computer.getComputerHardware()
+	      .getKeyboardHardware().getKeyboardLayout().getKey(i);
+	    keyLabel = new JLabel(IconCache.get(
+    	      String.format(key.getTemplate(), 2, "u")));
+	  } else {
+	    key = computer.getComputerHardware()
+	      .getKeyboardHardware().getNmiButton();
+	    keyLabel = new JLabel(IconCache.get(
+    	      String.format(key.getTemplate(), 3, "u")));
+	  }
+	  keyLabel.setVerticalAlignment(JLabel.CENTER);
 	  keysPane.add(keyLabel);
 	}
 	final GridBagConstraints keysPaneConstraints =

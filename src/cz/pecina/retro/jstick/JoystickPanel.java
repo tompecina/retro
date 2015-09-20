@@ -40,16 +40,16 @@ public class JoystickPanel extends BackgroundFixedPane {
     Logger.getLogger(JoystickPanel.class.getName());
 
   // button positions
-  private static final int NORTH_OFFSET_X = 30;
-  private static final int NORTH_OFFSET_Y = 5;
-  private static final int EAST_OFFSET_X = 75;
-  private static final int EAST_OFFSET_Y = 30;
+  private static final int NORTH_OFFSET_X = 24;
+  private static final int NORTH_OFFSET_Y = 4;
+  private static final int EAST_OFFSET_X = 60;
+  private static final int EAST_OFFSET_Y = NORTH_OFFSET_X;
   private static final int SOUTH_OFFSET_X = NORTH_OFFSET_X;
-  private static final int SOUTH_OFFSET_Y = 75;
-  private static final int WEST_OFFSET_X = 5;
+  private static final int SOUTH_OFFSET_Y = EAST_OFFSET_X;
+  private static final int WEST_OFFSET_X = NORTH_OFFSET_Y;
   private static final int WEST_OFFSET_Y = EAST_OFFSET_Y;
-  private static final int FIRE_OFFSET_X = 35;
-  private static final int FIRE_OFFSET_Y = 35;
+  private static final int FIRE_OFFSET_X = 28;
+  private static final int FIRE_OFFSET_Y = FIRE_OFFSET_X;
 
   // the enclosing frame
   private JFrame frame;

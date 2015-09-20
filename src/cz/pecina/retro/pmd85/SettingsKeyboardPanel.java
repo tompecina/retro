@@ -189,6 +189,7 @@ public class SettingsKeyboardPanel extends JPanel {
 	    .getKeyboardHardware().getKeyboardLayout().getKey(i);
 	  final JLabel keyLabel = new JLabel(IconCache.get(
     	    String.format(key.getTemplate(), 2, "u")));
+	  keyLabel.setVerticalAlignment(JLabel.CENTER);
 	  keysPane.add(keyLabel);
 	}
 	final GridBagConstraints keysPaneConstraints =
