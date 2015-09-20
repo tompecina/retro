@@ -67,7 +67,7 @@ public class DisplayHardware extends Device implements IOElement {
     super(name);
     log.fine("Display hardware creation started");
     assert computerHardware != null;
-    display = new Display(computerHardware);
+    display = new Display(computerHardware, this);
     for (int i = 0; i < 2; i++) {
       addressPins[i] = new AddressPin(i);
     }
@@ -97,6 +97,7 @@ public class DisplayHardware extends Device implements IOElement {
       if (newScanLines != scanLines) {
 	scanLines = newScanLines;
 	log.finer("Number of scan lines set to: " + scanLines);
+	display.repaint();
       }
     }
     return 0xff;
@@ -155,6 +156,24 @@ public class DisplayHardware extends Device implements IOElement {
    */
   public IOPin getAddressPin(final int n) {
     return addressPins[n];
+  }
+
+  /**
+   * Gets the enable flag.
+   *
+   * @return the enable flag
+   */
+  public boolean getEnableFlag() {
+    return enableFlag;
+  }
+
+  /**
+   * Gets the number of visible scan lines.
+   *
+   * @return the number of visible scan lines
+   */
+  public int getScanLines() {
+    return scanLines;
   }
 
   // for description see Device

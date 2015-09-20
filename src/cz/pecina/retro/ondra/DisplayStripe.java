@@ -45,48 +45,40 @@ public class DisplayStripe extends JComponent implements Resizeable {
   private static final Logger log =
     Logger.getLogger(DisplayStripe.class.getName());
 
-  // changed flag
-  private boolean changed;
+  // the display object
+  private Display display;
+
+  // the display hardware object
+  private DisplayHardware displayHardware;
+
+  // vertical offset (i.e., the position of the first scan line)
+  private int offset;
   
   // pixel data
-  private byte[][] pixels =
-    new byte[Display.STRIPE_HEIGHT][Display.DISPLAY_WIDTH_CELLS];
+  private byte[][] pixels;
 
   /**
    * Creates an instance of a display stripe.
+   *
+   * @param display the display object
+   * @param pixels  pixel matrix containing the whole display area
+   * @param offset  the vertical offset (i.e., the position of
+   *                the first scan line)
    */
-  public DisplayStripe() {
+  public DisplayStripe(final Display display,
+		       final byte[][] pixels,
+		       final int offset) {
+    assert display != null;
+    assert pixels != null;
+    assert (offset >= 0) &&
+      (offset <= (Display.DISPLAY_HEIGHT - Display.STRIPE_HEIGHT));
+    this.display = display;
+    this.pixels = pixels;
+    this.offset = offset;
+    displayHardware = display.getDisplayHardware();
     redrawOnPixelResize();
     GUI.addResizeable(this);
-    log.fine("New display stripe created");
-  }
-
-  /**
-   * Writes one byte of memory-mapped data.
-   *
-   * @param row        the row, {@code 0-0xff}
-   * @param column     the column, {@code 0-0x2f}
-   * @param pixels     the pixel data
-   */
-  public void setByte(final int row,
-		      final int column,
-		      final int pixels) {
-    if (log.isLoggable(Level.FINEST)) {
-      log.finest(String.format(
-        "Setting cell at (%d,%d) to 0x%02x",
-	row, column, pixels));
-    }
-    assert (row >= 0) & (row < Display.STRIPE_HEIGHT);
-    assert (column >= 0) & (column < Display.DISPLAY_WIDTH_CELLS);
-    if (this.pixels[row][column] != (byte)pixels) {
-      if (log.isLoggable(Level.FINER)) {
-	log.finer(String.format(
-          "Writing byte, position (%d,%d), data: 0x%02x",
-	  row, column, pixels));
-      }
-      this.pixels[row][column] = (byte)pixels;
-      changed = true;
-    }
+    log.fine("New display stripe created, offset: " + offset);
   }
 
   /**
@@ -119,24 +111,33 @@ public class DisplayStripe extends JComponent implements Resizeable {
   }
 
   // paint one cell
-  private void paintCell(final int row,
+  private void paintCell(int row,
 			 final int column,
 			 final Graphics graphics) {
-    assert (row >= 0) & (row < Display.STRIPE_HEIGHT);
+    assert row < Display.STRIPE_HEIGHT;
     assert (column >= 0) & (column < Display.DISPLAY_WIDTH_CELLS);
     assert graphics != null;
     if (log.isLoggable(Level.FINER)) {
       log.finer("Painting cell at (" + row + "," + column + ")");
     }
+    row += offset;
     final int pixelSize = GUI.getPixelSize();
-    int p = pixels[row][column];
-    for (int i = 0; i < 8; i++) {
-      graphics.setColor(((p & 0x80) != 0) ? Display.color.getColor() : Color.BLACK);
-      graphics.fillRect(pixelSize * ((column * 8) + i),
+    if (row >= (Display.DISPLAY_HEIGHT - display.getDisplayHardware().getScanLines())) {
+      int p = pixels[row][column];
+      for (int i = 0; i < 8; i++) {
+	graphics.setColor(((p & 0x80) != 0) ? display.color.getColor() : Color.BLACK);
+	graphics.fillRect(pixelSize * ((column * 8) + i),
+			  pixelSize * row,
+			  pixelSize,
+			  pixelSize);
+	p <<= 1;
+      }
+    } else {
+      graphics.setColor(Color.RED);
+      graphics.fillRect(pixelSize * column * 8,
 			pixelSize * row,
-			pixelSize,
+			pixelSize * 8,
 			pixelSize);
-      p <<= 1;
     }
     log.finest("Cell repainted");
   }
@@ -151,18 +152,6 @@ public class DisplayStripe extends JComponent implements Resizeable {
       }
     }
     log.finest("Display stripe repainted");
-  }
-
-  /**
-   * Repaints the stripe only if it has changed.
-   */
-  public void refresh() {
-    if (changed) {
-      log.fine("Display stripe will be repainted due to change");
-      repaint();
-      changed = false;
-    }
-    log.finest("Display stripe refreshed");
   }
 
   // for description see Resizeable

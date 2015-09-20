@@ -207,10 +207,12 @@ public class ComputerHardware {
     // connect LEDs
     new IONode()
       .add(secondaryLatch.getOutPin(1))
-      .add(yellowLEDPin);
+      .add(yellowLEDPin)
+      .add(keyboardHardware.getYellowLEDPin());
     new IONode()
       .add(secondaryLatch.getOutPin(0))
-      .add(greenLEDPin);
+      .add(greenLEDPin)
+      .add(keyboardHardware.getGreenLEDPin());
     
     // set up the speaker
     // speaker = new Speaker("SPEAKER");

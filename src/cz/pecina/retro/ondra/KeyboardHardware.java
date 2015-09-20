@@ -30,6 +30,7 @@ import javax.swing.event.ChangeEvent;
 
 import cz.pecina.retro.cpu.IOPin;
 import cz.pecina.retro.cpu.IONode;
+import cz.pecina.retro.cpu.NegativeLEDPin;
 
 import cz.pecina.retro.gui.LED;
 
@@ -76,6 +77,12 @@ public class KeyboardHardware {
   // LEDs
   private final LED yellowLED = new LED("small", "yellow");
   private final LED greenLED = new LED("small", "green");
+
+  // LED pins
+  private final NegativeLEDPin yellowLEDPin =
+    new NegativeLEDPin(yellowLED);
+  private final NegativeLEDPin greenLEDPin =
+    new NegativeLEDPin(greenLED);
 
   // keyboard layout
   private KeyboardLayout keyboardLayout;
@@ -219,5 +226,23 @@ public class KeyboardHardware {
    */
   public LED getGreenLED() {
     return greenLED;
+  }
+
+  /**
+   * Gets the yellow LED pin.
+   *
+   * @return the yellow LED pin
+   */
+  public IOPin getYellowLEDPin() {
+    return yellowLEDPin;
+  }
+
+  /**
+   * Gets the green LED.
+   *
+   * @return the green LED
+   */
+  public IOPin getGreenLEDPin() {
+    return greenLEDPin;
   }
 }

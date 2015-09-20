@@ -76,16 +76,26 @@ public class Display {
   // the computer hardware object
   private ComputerHardware computerHardware;
 
+  // the display hardware object
+  private DisplayHardware displayHardware;
+
   // the color mode
   private int colorMode;
 
   // custom color
   private OndraColor customColor;
 
+  // pixel data
+  private byte[][] pixels =
+    new byte[Display.DISPLAY_HEIGHT][Display.DISPLAY_WIDTH_CELLS];
+
+  // changed flag
+  private boolean changed[] = new boolean[NUMBER_STRIPES];
+  
   /**
    * The currently active color.
    */
-  public static OndraColor color = new OndraColor(Color.WHITE);
+  public OndraColor color = new OndraColor(Color.WHITE);
 
   // display stripes
   private DisplayStripe[] stripes = new DisplayStripe[NUMBER_STRIPES];
@@ -111,14 +121,19 @@ public class Display {
    * Creates the display control object.
    *
    * @param computerHardware the computer hardware object
+   * @param displayHardware  the display hardware object
    */
-  public Display(final ComputerHardware computerHardware) {
+  public Display(final ComputerHardware computerHardware,
+		 final DisplayHardware displayHardware) {
     log.fine("Display creation started");
     assert computerHardware != null;
+    assert displayHardware != null;
     this.computerHardware = computerHardware;
+    this.displayHardware = displayHardware;
     for (int stripe = 0; stripe < NUMBER_STRIPES; stripe++) {
-      stripes[stripe] = new DisplayStripe();
+      stripes[stripe] = new DisplayStripe(this, pixels, stripe * STRIPE_HEIGHT);
     }
+    repaint();
     log.fine("Display created");
   }
 
@@ -127,7 +142,10 @@ public class Display {
    */
   public void refresh() {
     for (int stripe = 0; stripe < NUMBER_STRIPES; stripe++) {
-	stripes[stripe].refresh();
+      if (changed[stripe]) {
+	stripes[stripe].repaint();
+	changed[stripe] = false;
+      }
     }
     log.finest("Display refreshed");
   }
@@ -137,7 +155,8 @@ public class Display {
    */
   public void repaint() {
     for (int stripe = 0; stripe < NUMBER_STRIPES; stripe++) {
-	stripes[stripe].repaint();
+      stripes[stripe].repaint();
+      changed[stripe] = false;
     }
     log.finest("Display repainted");
   }
@@ -149,16 +168,19 @@ public class Display {
    * @param data    the byte to be written
    */
   public void setByte(final int address, final int data) {
-    assert (address >= 0xc000) && (address < 0x10000);
-    final int tb = 0xff - (((address << 1) & 0xff) | ((address & 0x80) >> 7));
-    final int stripe = tb >> 4;
-    final int row = tb & 0x0f;
+    assert (address >= START_VIDEO) && (address < 0x10000);
+    assert (data >= 0) && (data < 0x100);
+    final int row = ((address << 1) | (address >> 7)) & 0xff;
     final int column = 0xff - (address >> 8);
     if (log.isLoggable(Level.FINEST)) {
       log.finest(String.format(
-        "Writing byte, address: 0x%04x, data: 0x%02x", address, data));
+        "Writing byte, address: 0x%04x, data: 0x%02x, row: %d, column: %d",
+	address, data, row, column));
     }
-    stripes[stripe].setByte(row, column, data);
+    if (pixels[row][column] != (byte)data) {
+      pixels[row][column] = (byte)data;
+      changed[row >> 4] = true;
+    }
   }
 
   /**
@@ -222,5 +244,14 @@ public class Display {
 			    positionY + (STRIPE_HEIGHT * stripe));
     }
     log.finer("Display placed");
+  }
+
+  /**
+   * Gets the display hardware.
+   *
+   * @return the display hardware object
+   */
+  public DisplayHardware getDisplayHardware() {
+    return displayHardware;
   }
 }
