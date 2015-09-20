@@ -251,7 +251,7 @@
     <targetfilelist dir="${resources.dir}/${prefix}/${package}/ROM"
 		    files="monitor-2.bin"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/ROM/monitor.bin"
+  <available file="${resources.dir}/${prefix}/${package}/ROM/monitor-0.bin"
 	     property="avail.${package}.ROM"/>
   <target name="rom"
 	  unless="avail.${package}.ROM">

@@ -114,28 +114,29 @@ public class DisplayStripe extends JComponent implements Resizeable {
   private void paintCell(int row,
 			 final int column,
 			 final Graphics graphics) {
-    assert row < Display.STRIPE_HEIGHT;
+    assert (row >= offset) && (row < (offset + Display.STRIPE_HEIGHT));
     assert (column >= 0) & (column < Display.DISPLAY_WIDTH_CELLS);
     assert graphics != null;
     if (log.isLoggable(Level.FINER)) {
       log.finer("Painting cell at (" + row + "," + column + ")");
     }
-    row += offset;
     final int pixelSize = GUI.getPixelSize();
-    if (row >= (Display.DISPLAY_HEIGHT - display.getDisplayHardware().getScanLines())) {
+    if (display.getDisplayHardware().getEnableFlag() &&
+	(row >= (Display.DISPLAY_HEIGHT -
+		 display.getDisplayHardware().getScanLines()))) {
       int p = pixels[row][column];
       for (int i = 0; i < 8; i++) {
 	graphics.setColor(((p & 0x80) != 0) ? display.color.getColor() : Color.BLACK);
 	graphics.fillRect(pixelSize * ((column * 8) + i),
-			  pixelSize * row,
+			  pixelSize * (row - offset),
 			  pixelSize,
 			  pixelSize);
 	p <<= 1;
       }
     } else {
-      graphics.setColor(Color.RED);
+      graphics.setColor(Color.BLACK);
       graphics.fillRect(pixelSize * column * 8,
-			pixelSize * row,
+			pixelSize * (row - offset),
 			pixelSize * 8,
 			pixelSize);
     }
@@ -148,7 +149,7 @@ public class DisplayStripe extends JComponent implements Resizeable {
     log.finest("Repainting display stripe");
     for (int row = 0; row < Display.STRIPE_HEIGHT; row++) {
       for (int column = 0; column < Display.DISPLAY_WIDTH_CELLS; column++) {
-	paintCell(row, column, graphics);
+	paintCell(row + offset, column, graphics);
       }
     }
     log.finest("Display stripe repainted");

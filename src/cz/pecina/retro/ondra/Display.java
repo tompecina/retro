@@ -170,7 +170,7 @@ public class Display {
   public void setByte(final int address, final int data) {
     assert (address >= START_VIDEO) && (address < 0x10000);
     assert (data >= 0) && (data < 0x100);
-    final int row = ((address << 1) | (address >> 7)) & 0xff;
+    final int row = ((address << 1) & 0xfe) | ((address >> 7) & 1);
     final int column = 0xff - (address >> 8);
     if (log.isLoggable(Level.FINEST)) {
       log.finest(String.format(
@@ -239,9 +239,10 @@ public class Display {
     log.fine("Placing display, position: (" +
 	      positionX + "," + positionY + ")");
     for (int stripe = 0; stripe < NUMBER_STRIPES; stripe++) {
-      stripes[stripe].place(container,
-			    positionX,
-			    positionY + (STRIPE_HEIGHT * stripe));
+      stripes[NUMBER_STRIPES - 1 - stripe].place(
+        container,
+	positionX,
+	positionY + (STRIPE_HEIGHT * stripe));
     }
     log.finer("Display placed");
   }
