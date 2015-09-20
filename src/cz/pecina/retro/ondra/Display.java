@@ -179,7 +179,10 @@ public class Display {
     }
     if (pixels[row][column] != (byte)data) {
       pixels[row][column] = (byte)data;
-      changed[row >> 4] = true;
+      final int stripe = (row + DISPLAY_HEIGHT - 1 - displayHardware.getScanLines()) >> 4;
+      if (stripe < NUMBER_STRIPES) {
+	changed[stripe] = true;
+      }
     }
   }
 

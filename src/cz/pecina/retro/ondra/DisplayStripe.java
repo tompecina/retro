@@ -121,10 +121,9 @@ public class DisplayStripe extends JComponent implements Resizeable {
       log.finer("Painting cell at (" + row + "," + column + ")");
     }
     final int pixelSize = GUI.getPixelSize();
-    // if (display.getDisplayHardware().getEnableFlag() &&
-	((row + offset) >= (Display.DISPLAY_HEIGHT -
-			    display.getDisplayHardware().getScanLines()))) {
-      int p = pixels[row + offset][column];
+    final int drow = row + offset - Display.DISPLAY_HEIGHT + 1 + display.getDisplayHardware().getScanLines();
+    if (display.getDisplayHardware().getEnableFlag() && (drow >= 0)) {
+      int p = pixels[drow][column];
       for (int i = 0; i < 8; i++) {
 	graphics.setColor(((p & 0x80) != 0) ? display.color.getColor() : Color.BLACK);
 	graphics.fillRect(pixelSize * ((column * 8) + i),
@@ -133,13 +132,13 @@ public class DisplayStripe extends JComponent implements Resizeable {
 			  pixelSize);
 	p <<= 1;
       }
-    // } else {
-    //   graphics.setColor(Color.BLACK);
-    //   graphics.fillRect(pixelSize * column * 8,
-    // 			pixelSize * (Display.STRIPE_HEIGHT - 1 - row),
-    // 			pixelSize * 8,
-    // 			pixelSize);
-    // }
+    } else {
+      graphics.setColor(Color.BLACK);
+      graphics.fillRect(pixelSize * column * 8,
+    			pixelSize * (Display.STRIPE_HEIGHT - 1 - row),
+    			pixelSize * 8,
+    			pixelSize);
+    }
     log.finest("Cell repainted");
   }
 
