@@ -251,10 +251,10 @@ public class OndraMemory
       data = tapeRecorderHardware.getOutPin().query() << 7;
       if ((address & 0x0f) == 0x0b) {
 	data |=
-	  (IONode.normalize(joystickHardware.getNorthPin().query()) << 2) |
-	  IONode.normalize(joystickHardware.getEastPin().query()) |
-	  (IONode.normalize(joystickHardware.getSouthPin().query()) << 3) |
-	  (IONode.normalize(joystickHardware.getWestPin().query()) << 1) |
+	  (IONode.normalize(joystickHardware.getUpPin().query()) << 2) |
+	  IONode.normalize(joystickHardware.getRightPin().query()) |
+	  (IONode.normalize(joystickHardware.getDownPin().query()) << 3) |
+	  (IONode.normalize(joystickHardware.getLeftPin().query()) << 1) |
 	  (IONode.normalize(joystickHardware.getFirePin().query()) << 4);
       } else {
 	data |= keyboardHardware.getState(address & 0x0f);

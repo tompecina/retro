@@ -42,27 +42,27 @@ public class JoystickHardware {
     Logger.getLogger(JoystickHardware.class.getName());
 
   /**
-   * The North button.
+   * The Up button.
    */
-  public final LockableButton northButton =
+  public final LockableButton upButton =
     new LockableButton("jstick/JoystickButton/N-%d-%s.png", null, null);
 
   /**
-   * The East button.
+   * The Right button.
    */
-  public final LockableButton eastButton =
+  public final LockableButton rightButton =
     new LockableButton("jstick/JoystickButton/E-%d-%s.png", null, null);
 
   /**
-   * The South button.
+   * The Down button.
    */
-  public final LockableButton southButton =
+  public final LockableButton downButton =
     new LockableButton("jstick/JoystickButton/S-%d-%s.png", null, null);
 
   /**
-   * The West button.
+   * The Left button.
    */
-  public final LockableButton westButton =
+  public final LockableButton leftButton =
     new LockableButton("jstick/JoystickButton/W-%d-%s.png", null, null);
 
   /**
@@ -72,17 +72,17 @@ public class JoystickHardware {
     new LockableButton("jstick/JoystickButton/F-%d-%s.png", null, null);
  
   // button pins
-  private final NorthPin northPin = new NorthPin();
-  private final EastPin eastPin = new EastPin();
-  private final SouthPin southPin = new SouthPin();
-  private final WestPin westPin = new WestPin();
+  private final UpPin upPin = new UpPin();
+  private final RightPin rightPin = new RightPin();
+  private final DownPin downPin = new DownPin();
+  private final LeftPin leftPin = new LeftPin();
   private final FirePin firePin = new FirePin();
 
   // button presses
-  private boolean northBuffer, northCurrent, northNext;
-  private boolean eastBuffer, eastCurrent, eastNext;
-  private boolean southBuffer, southCurrent, southNext;
-  private boolean westBuffer, westCurrent, westNext;
+  private boolean upBuffer, upCurrent, upNext;
+  private boolean rightBuffer, rightCurrent, rightNext;
+  private boolean downBuffer, downCurrent, downNext;
+  private boolean leftBuffer, leftCurrent, leftNext;
   private boolean fireBuffer, fireCurrent, fireNext;
   
   /**
@@ -91,21 +91,21 @@ public class JoystickHardware {
   public JoystickHardware() {
     log.fine("New joystick hardware creation started");
 
-    northButton.addChangeListener(new NorthListener(northButton));
-    eastButton.addChangeListener(new EastListener(eastButton));
-    southButton.addChangeListener(new SouthListener(southButton));
-    westButton.addChangeListener(new WestListener(westButton));
+    upButton.addChangeListener(new UpListener(upButton));
+    rightButton.addChangeListener(new RightListener(rightButton));
+    downButton.addChangeListener(new DownListener(downButton));
+    leftButton.addChangeListener(new LeftListener(leftButton));
     fireButton.addChangeListener(new FireListener(fireButton));
 
     log.fine("New joystick hardware created");
   }
 
-  // North listener
-  private class NorthListener implements ChangeListener {
+  // Up listener
+  private class UpListener implements ChangeListener {
 
     private LockableButton key;
     
-    public NorthListener(final LockableButton key) {
+    public UpListener(final LockableButton key) {
       super();
       assert key != null;
       this.key = key;
@@ -114,20 +114,20 @@ public class JoystickHardware {
     // for description see ChangeListener
     @Override
     public void stateChanged(final ChangeEvent event) {
-      log.finer("North listener called");
+      log.finer("Up listener called");
       final boolean pressed = key.isPressed();
       log.finest("Pressed: " + pressed);
-      northCurrent = pressed;
-      northNext = northNext || pressed;
+      upCurrent = pressed;
+      upNext = upNext || pressed;
     }
   }
 
-  // East listener
-  private class EastListener implements ChangeListener {
+  // Right listener
+  private class RightListener implements ChangeListener {
 
     private LockableButton key;
     
-    public EastListener(final LockableButton key) {
+    public RightListener(final LockableButton key) {
       super();
       assert key != null;
       this.key = key;
@@ -136,20 +136,20 @@ public class JoystickHardware {
     // for description see ChangeListener
     @Override
     public void stateChanged(final ChangeEvent event) {
-      log.finer("East listener called");
+      log.finer("Right listener called");
       final boolean pressed = key.isPressed();
       log.finest("Pressed: " + pressed);
-      eastCurrent = pressed;
-      eastNext = eastNext || pressed;
+      rightCurrent = pressed;
+      rightNext = rightNext || pressed;
     }
   }
 
-  // South listener
-  private class SouthListener implements ChangeListener {
+  // Down listener
+  private class DownListener implements ChangeListener {
 
     private LockableButton key;
     
-    public SouthListener(final LockableButton key) {
+    public DownListener(final LockableButton key) {
       super();
       assert key != null;
       this.key = key;
@@ -158,20 +158,20 @@ public class JoystickHardware {
     // for description see ChangeListener
     @Override
     public void stateChanged(final ChangeEvent event) {
-      log.finer("South listener called");
+      log.finer("Down listener called");
       final boolean pressed = key.isPressed();
       log.finest("Pressed: " + pressed);
-      southCurrent = pressed;
-      southNext = southNext || pressed;
+      downCurrent = pressed;
+      downNext = downNext || pressed;
     }
   }
 
-  // West listener
-  private class WestListener implements ChangeListener {
+  // Left listener
+  private class LeftListener implements ChangeListener {
 
     private LockableButton key;
     
-    public WestListener(final LockableButton key) {
+    public LeftListener(final LockableButton key) {
       super();
       assert key != null;
       this.key = key;
@@ -180,11 +180,11 @@ public class JoystickHardware {
     // for description see ChangeListener
     @Override
     public void stateChanged(final ChangeEvent event) {
-      log.finer("West listener called");
+      log.finer("Left listener called");
       final boolean pressed = key.isPressed();
       log.finest("Pressed: " + pressed);
-      westCurrent = pressed;
-      westNext = westNext || pressed;
+      leftCurrent = pressed;
+      leftNext = leftNext || pressed;
     }
   }
 
@@ -221,55 +221,55 @@ public class JoystickHardware {
    * Updates the matrix of button presses.
    */
   public void updateBuffer() {
-    northBuffer = northNext;
-    northNext = northCurrent;
-    eastBuffer = eastNext;
-    eastNext = eastCurrent;
-    southBuffer = southNext;
-    southNext = southCurrent;
-    westBuffer = westNext;
-    westNext = westCurrent;
+    upBuffer = upNext;
+    upNext = upCurrent;
+    rightBuffer = rightNext;
+    rightNext = rightCurrent;
+    downBuffer = downNext;
+    downNext = downCurrent;
+    leftBuffer = leftNext;
+    leftNext = leftCurrent;
     fireBuffer = fireNext;
     fireNext = fireCurrent;
   }
 	
-  // North pin
-  private class NorthPin extends IOPin {
+  // Up pin
+  private class UpPin extends IOPin {
 
     // for description see IOPin
     @Override
     public int query() {
-      return northBuffer ? 0 : 1;
+      return upBuffer ? 0 : 1;
     }
   }
 
-  // East pin
-  private class EastPin extends IOPin {
+  // Right pin
+  private class RightPin extends IOPin {
 
     // for description see IOPin
     @Override
     public int query() {
-      return eastBuffer ? 0 : 1;
+      return rightBuffer ? 0 : 1;
     }
   }
 
-  // South pin
-  private class SouthPin extends IOPin {
+  // Down pin
+  private class DownPin extends IOPin {
 
     // for description see IOPin
     @Override
     public int query() {
-      return southBuffer ? 0 : 1;
+      return downBuffer ? 0 : 1;
     }
   }
 
-  // West pin
-  private class WestPin extends IOPin {
+  // Left pin
+  private class LeftPin extends IOPin {
 
     // for description see IOPin
     @Override
     public int query() {
-      return westBuffer ? 0 : 1;
+      return leftBuffer ? 0 : 1;
     }
   }
 
@@ -284,39 +284,39 @@ public class JoystickHardware {
   }
 
   /**
-   * Gets the North pin.
+   * Gets the Up pin.
    *
-   * @return the North pin.
+   * @return the Up pin.
    */
-  public IOPin getNorthPin() {
-    return northPin;
+  public IOPin getUpPin() {
+    return upPin;
   }
 
   /**
-   * Gets the East pin.
+   * Gets the Right pin.
    *
-   * @return the East pin.
+   * @return the Right pin.
    */
-  public IOPin getEastPin() {
-    return eastPin;
+  public IOPin getRightPin() {
+    return rightPin;
   }
 
   /**
-   * Gets the South pin.
+   * Gets the Down pin.
    *
-   * @return the South pin.
+   * @return the Down pin.
    */
-  public IOPin getSouthPin() {
-    return southPin;
+  public IOPin getDownPin() {
+    return downPin;
   }
 
   /**
-   * Gets the West pin.
+   * Gets the Left pin.
    *
-   * @return the West pin.
+   * @return the Left pin.
    */
-  public IOPin getWestPin() {
-    return westPin;
+  public IOPin getLeftPin() {
+    return leftPin;
   }
 
   /**

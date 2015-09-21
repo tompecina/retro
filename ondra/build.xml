@@ -704,9 +704,9 @@
     <srcfileset dir="${graphics.dir}/jstick"
 		includes="buttons.png"/>
     <targetfilelist dir="${resources.dir}/${prefix}/jstick/JoystickButton"
-		    files="N-1-u.png"/>
+		    files="up-1-u.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/jstick/JoystickButton/N-1-u.png"
+  <available file="${resources.dir}/${prefix}/jstick/JoystickButton/up-1-u.png"
 	     property="avail.jstick.JoystickButton"/>
   <target name="jstick.JoystickButton"
 	  unless="avail.jstick.JoystickButton">

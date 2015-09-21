@@ -29,9 +29,9 @@ function button {
      	convert $opts $filter -resize ${ww}x$hh $dst/tmp.png $dst/$1-$s-l.png
     done
 }
-button N 0 0 4 2
-button S 4 0 4 2
-button E 8 0 2 4
-button W 10 0 2 4
-button F 12 0 3 3
+button up 0 0 4 2
+button down 4 0 4 2
+button right 8 0 2 4
+button left 10 0 2 4
+button fire 12 0 3 3
 rm $dst/tmp*.png

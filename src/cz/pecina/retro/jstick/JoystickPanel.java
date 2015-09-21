@@ -40,14 +40,14 @@ public class JoystickPanel extends BackgroundFixedPane {
     Logger.getLogger(JoystickPanel.class.getName());
 
   // button positions
-  private static final int NORTH_OFFSET_X = 24;
-  private static final int NORTH_OFFSET_Y = 4;
-  private static final int EAST_OFFSET_X = 60;
-  private static final int EAST_OFFSET_Y = NORTH_OFFSET_X;
-  private static final int SOUTH_OFFSET_X = NORTH_OFFSET_X;
-  private static final int SOUTH_OFFSET_Y = EAST_OFFSET_X;
-  private static final int WEST_OFFSET_X = NORTH_OFFSET_Y;
-  private static final int WEST_OFFSET_Y = EAST_OFFSET_Y;
+  private static final int UP_OFFSET_X = 24;
+  private static final int UP_OFFSET_Y = 4;
+  private static final int RIGHT_OFFSET_X = 60;
+  private static final int RIGHT_OFFSET_Y = UP_OFFSET_X;
+  private static final int DOWN_OFFSET_X = UP_OFFSET_X;
+  private static final int DOWN_OFFSET_Y = RIGHT_OFFSET_X;
+  private static final int LEFT_OFFSET_X = UP_OFFSET_Y;
+  private static final int LEFT_OFFSET_Y = RIGHT_OFFSET_Y;
   private static final int FIRE_OFFSET_X = 28;
   private static final int FIRE_OFFSET_Y = FIRE_OFFSET_X;
 
@@ -74,10 +74,10 @@ public class JoystickPanel extends BackgroundFixedPane {
     this.joystickHardware = joystickHardware;
 
     // set up buttons
-    joystickHardware.northButton.place(this, NORTH_OFFSET_X, NORTH_OFFSET_Y);
-    joystickHardware.eastButton.place(this, EAST_OFFSET_X, EAST_OFFSET_Y);
-    joystickHardware.southButton.place(this, SOUTH_OFFSET_X, SOUTH_OFFSET_Y);
-    joystickHardware.westButton.place(this, WEST_OFFSET_X, WEST_OFFSET_Y);
+    joystickHardware.upButton.place(this, UP_OFFSET_X, UP_OFFSET_Y);
+    joystickHardware.rightButton.place(this, RIGHT_OFFSET_X, RIGHT_OFFSET_Y);
+    joystickHardware.downButton.place(this, DOWN_OFFSET_X, DOWN_OFFSET_Y);
+    joystickHardware.leftButton.place(this, LEFT_OFFSET_X, LEFT_OFFSET_Y);
     joystickHardware.fireButton.place(this, FIRE_OFFSET_X, FIRE_OFFSET_Y);
     log.finer("Buttons set up");
 
