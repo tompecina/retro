@@ -256,11 +256,13 @@ public class WAV extends TapeProcessor {
 	max = sample;
       }
     }
-    log.finer("Peak values calculated: min: " + min + ", max: " + max);
+    final float zero = (max + min) / 2;
+    log.finer("Peak values calculated: min: " + min +
+	      ", max: " + max + ", zero: " + zero);
 
     // apply hysteresis with a 1/10 peak-to-peak threshhold
-    final float lowerThreshhold = min + ((max - min) / 10);
-    final float upperThreshhold = max - ((max - min) / 10);
+    final float lowerThreshhold = zero + ((max - min) / 10);
+    final float upperThreshhold = zero - ((max - min) / 10);
     log.finer("Threshholds: lower: " + lowerThreshhold +
 	      ", upper: " + upperThreshhold);
     final List<Boolean> booleanBuffer = new ArrayList<>();
@@ -272,7 +274,7 @@ public class WAV extends TapeProcessor {
 	level = false;
       }
       booleanBuffer.add(level);
-      log.finest("Adding: " + level);
+      log.finest("Adding: " + sample + ", " + level);
     }
     log.finer("Hysteresis applied");
 

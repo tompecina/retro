@@ -43,7 +43,7 @@ import cz.pecina.retro.cpu.Intel8080A;
 import cz.pecina.retro.cpu.Intel8255A;
 import cz.pecina.retro.cpu.Intel8251A;
 import cz.pecina.retro.cpu.Intel8253;
-import cz.pecina.retro.cpu.Invertor;
+import cz.pecina.retro.cpu.Inverter;
 import cz.pecina.retro.cpu.NAND;
 import cz.pecina.retro.cpu.XOR;
 import cz.pecina.retro.cpu.FrequencyGenerator;
@@ -114,7 +114,7 @@ public class ComputerHardware {
 
   // the speaker & yellow LED logic
   private NAND pc0nand, pc1nand, speakerNand;
-  private Invertor pc2inv;
+  private Inverter pc2inv;
 
   // the tape recorder Manchester decoder
   private ManchesterDecoder decoder;
@@ -320,7 +320,7 @@ public class ComputerHardware {
     hardware.add(div);
     pc0nand = new NAND("NAND_PC0", 2);
     pc1nand = new NAND("NAND_PC1", 2);
-    pc2inv = new Invertor("INVERTOR_PC2");
+    pc2inv = new Inverter("INVERTER_PC2");
     speakerNand = new NAND("SPEAKER_NAND", 3);
 
     // connect the 1Hz generator to Counter 2

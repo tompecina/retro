@@ -42,6 +42,7 @@ import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.cpu.ZilogZ80;
 import cz.pecina.retro.cpu.OutputLatch;
 import cz.pecina.retro.cpu.NegativeLEDPin;
+import cz.pecina.retro.cpu.Inverter;
 
 import cz.pecina.retro.jstick.JoystickHardware;
 
@@ -94,6 +95,9 @@ public class ComputerHardware {
 
   // the tape recorder hardware
   private TapeRecorderHardware tapeRecorderHardware;
+
+  // the tape recorder inverter
+  private Inverter inv;
 
   // LEDs
   private final LED yellowLED =
@@ -185,9 +189,15 @@ public class ComputerHardware {
     new IONode().add(primaryLatch.getOutPin(4)).add(displayHardware.getAddressPin(0));
     new IONode().add(primaryLatch.getOutPin(5)).add(displayHardware.getAddressPin(1));
     
+    // set up the tape recorder inverter
+    inv = new Inverter("TapeRecorderInverter");
+    
     // connect the tape recorder
     new IONode()
       .add(primaryLatch.getOutPin(3))
+      .add(inv.getInPin());
+    new IONode()
+      .add(inv.getOutPin())
       .add(tapeRecorderHardware.getInPin());
     new IONode()
       .add(secondaryLatch.getOutPin(4))

@@ -355,6 +355,7 @@ public class TapeRecorderHardware implements CPUEventOwner {
 	time + entry.getKey() + entry.getValue() - position);
     }
     inPulseCount++;
+    System.out.println("Pulse schedule: " + position);
     log.finest("Pulse scheduled");
   }
 

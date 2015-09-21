@@ -1,4 +1,4 @@
-/* Invertor.java
+/* Inverter.java
  *
  * Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
  *
@@ -23,12 +23,12 @@ package cz.pecina.retro.cpu;
 import java.util.logging.Logger;
 
 /**
- * Invertor element.
+ * Inverter element.
  *
  * @author @AUTHOR@
  * @version @VERSION@
  */
-public class Invertor extends NAND {
+public class Inverter extends NAND {
 
   // dynamic logger, per device
   private Logger log;
@@ -47,9 +47,9 @@ public class Invertor extends NAND {
    *
    * @param name the name of the device
    */
-  public Invertor(final String name) {
+  public Inverter(final String name) {
     super(name, 1);
     log = Logger.getLogger(getClass().getName() + "." + name);
-    log.fine("New invertor creation completed: " + name);
+    log.fine("New inverter creation completed: " + name);
   }
 }

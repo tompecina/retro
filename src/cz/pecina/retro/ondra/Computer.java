@@ -147,14 +147,16 @@ public class Computer implements Runnable {
     }
     busy = true;
 
+    cpu.requestInterrupt(0);
     final long cycles =
       (312 - (computerHardware.getDisplayHardware().getEnableFlag() ?
 	      computerHardware.getDisplayHardware().getScanLines() :
 	      0))
       * 128;
-    cpu.requestInterrupt(0);
     cpu.exec(cycles * Parameters.speedUp, 0, null);
-    cpu.idle((Parameters.timerCycles - cycles) * Parameters.speedUp);
+    if (Parameters.timerCycles != cycles) {
+      cpu.idle((Parameters.timerCycles - cycles) * Parameters.speedUp);
+    }
 
     // switch (debuggerState) {
     //   case HIDDEN:
