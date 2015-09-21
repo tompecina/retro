@@ -45,31 +45,31 @@ public class JoystickHardware {
    * The Up button.
    */
   public final LockableButton upButton =
-    new LockableButton("jstick/JoystickButton/N-%d-%s.png", null, null);
+    new LockableButton("jstick/JoystickButton/up-%d-%s.png", null, null);
 
   /**
    * The Right button.
    */
   public final LockableButton rightButton =
-    new LockableButton("jstick/JoystickButton/E-%d-%s.png", null, null);
+    new LockableButton("jstick/JoystickButton/right-%d-%s.png", null, null);
 
   /**
    * The Down button.
    */
   public final LockableButton downButton =
-    new LockableButton("jstick/JoystickButton/S-%d-%s.png", null, null);
+    new LockableButton("jstick/JoystickButton/down-%d-%s.png", null, null);
 
   /**
    * The Left button.
    */
   public final LockableButton leftButton =
-    new LockableButton("jstick/JoystickButton/W-%d-%s.png", null, null);
+    new LockableButton("jstick/JoystickButton/left-%d-%s.png", null, null);
 
   /**
    * The Fire button.
    */
   public final LockableButton fireButton =
-    new LockableButton("jstick/JoystickButton/F-%d-%s.png", null, null);
+    new LockableButton("jstick/JoystickButton/fire-%d-%s.png", null, null);
  
   // button pins
   private final UpPin upPin = new UpPin();
