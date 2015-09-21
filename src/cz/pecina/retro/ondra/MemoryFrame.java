@@ -70,7 +70,7 @@ public class MemoryFrame extends HidingFrame {
 
     saveMemoryPlugins = new MemoryPlugin[] {
       /* new BasicMemoryPlugin(), */
-      /* new ScreenShotMemoryPlugin(computer.getComputerHardware()) */};
+      new ScreenShotMemoryPlugin(computer.getComputerHardware())};
     loadMemoryPlugins = new MemoryPlugin[] {
       /* new BasicMemoryPlugin() */};
     

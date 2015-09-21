@@ -329,12 +329,20 @@ public class TapeRecorderHardware implements CPUEventOwner {
       final boolean newLevel = (queryNode() == 0);
       if (newLevel != remotePause) {
         remotePause = newLevel;
-	if ((tapeRecorderState == TapeRecorderState.RECORD) &&
-	    !pauseButton.isPressed()) {
-	  if (remotePause) {
-	    recordingLED.setState(BLINK_ON, BLINK_OFF);
-	  } else {
-	    recordingLED.setState(true);
+	if (!pauseButton.isPressed()) {
+	  if (tapeRecorderState == TapeRecorderState.PLAY) {
+	    if (remotePause) {
+	      pausePlay();
+	    } else {
+	      resumePlay();
+	    }
+	  } else if (tapeRecorderState == TapeRecorderState.RECORD) {
+	    pulseStart = -1;
+	    if (remotePause) {
+	      recordingLED.setState(BLINK_ON, BLINK_OFF);
+	    } else {
+	      recordingLED.setState(true);
+	    }
 	  }
 	}
       }
@@ -353,9 +361,8 @@ public class TapeRecorderHardware implements CPUEventOwner {
       CPUScheduler.addEvent(
         this,
 	time + entry.getKey() + entry.getValue() - position);
+      inPulseCount++;
     }
-    inPulseCount++;
-    System.out.println("Pulse schedule: " + position);
     log.finest("Pulse scheduled");
   }
 
@@ -374,6 +381,32 @@ public class TapeRecorderHardware implements CPUEventOwner {
     log.finest("Event performed, output is now: " + output);
   }
 
+  // pause during replay
+  private void pausePlay() {
+    update();
+    CPUScheduler.removeAllEvents(this);
+    output = 0;
+    outPin.notifyChangeNode();
+    log.fine("Paused");
+  }
+
+  // resume during replay
+  private void resumePlay() {
+    update();
+    final Map.Entry<Long,Long> entry = tape.ceilingEntry(position + 1);
+    if (entry != null) {
+      CPUScheduler.addEvent(
+        this,
+	time + entry.getKey() - position,
+	1);
+      CPUScheduler.addEvent(
+        this,
+	time + entry.getKey() + entry.getValue() - position);
+      inPulseCount++;
+    }
+    log.fine("Unpaused");
+  }
+  
   // update position
   private void update() {
     final long newTime = getTime();
@@ -396,10 +429,13 @@ public class TapeRecorderHardware implements CPUEventOwner {
    */
   public void stop() {
     if (tapeRecorderState != TapeRecorderState.STOPPED) {
+      CPUScheduler.removeAllEvents(this);
       update();
       speed = 0;
       pulseStart = -1;
       inPulseCount = outPulseCount = 0;
+      output = 0;
+      outPin.notifyChangeNode();
       recordButton.setPressed(false);
       playButton.setPressed(false);
       rewindButton.setPressed(false);
@@ -407,7 +443,6 @@ public class TapeRecorderHardware implements CPUEventOwner {
       recordingLED.setState(false);
       Parameters.sound.write(Sound.TAPE_RECORDER_CHANNEL, false);
       tapeRecorderState = TapeRecorderState.STOPPED;
-      CPUScheduler.removeAllEvents(this);
       log.finer("Tape recorder stopped");
     }
   }
@@ -503,14 +538,22 @@ public class TapeRecorderHardware implements CPUEventOwner {
     // for description see MouseListener
     @Override
     public void mousePressed(final MouseEvent event) {
-      if ((tapeRecorderState == TapeRecorderState.RECORD) && !remotePause) {
-	if (pauseButton.isPressed()) {
-	  recordingLED.setState(BLINK_ON, BLINK_OFF);
-	} else {
-	  recordingLED.setState(true);
+      if (!remotePause) {
+	if (tapeRecorderState == TapeRecorderState.PLAY) {
+	  if (pauseButton.isPressed()) {
+	    pausePlay();
+	  } else {
+	    resumePlay();
+	  }
+	} else if (tapeRecorderState == TapeRecorderState.RECORD) {
+	  pulseStart = -1;
+	  if (pauseButton.isPressed()) {
+	    recordingLED.setState(BLINK_ON, BLINK_OFF);
+	  } else {
+	    recordingLED.setState(true);
+	  }
 	}
       }
-      log.fine("Pause button pressed");
     }
   }
   

@@ -105,7 +105,7 @@ public class Computer implements Runnable {
     			computerHardware.getDisplayHardware(),
     			computerHardware.getKeyboardHardware()
 			);
-    // memoryFrame = new MemoryFrame(this, computerHardware.getHardware());
+    memoryFrame = new MemoryFrame(this, computerHardware.getHardware());
     keyboardFrame =
       new KeyboardFrame(this, computerHardware.getKeyboardHardware());
     joystickFrame =

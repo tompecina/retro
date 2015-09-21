@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.pecina.retro.pmd85;
+package cz.pecina.retro.ondra;
 
 import java.util.logging.Logger;
 
@@ -56,8 +56,8 @@ public class ScreenShotMemoryPlugin implements MemoryPlugin {
   // the computer hardware object
   private ComputerHardware computerHardware;
 
-  // active colors
-  private PMDColor[] colors;
+  // active color
+  private Color color;
 
   // PNG extension filter
   private static FileNameExtensionFilter pngFilter =
@@ -95,42 +95,37 @@ public class ScreenShotMemoryPlugin implements MemoryPlugin {
     log.fine("Writing screenshot to a file: " + file.getName());
     final byte[] ram =
       Parameters.memoryDevice.getBlockByName("RAM").getMemory();
+    final int scanLines =
+      ((computerHardware.getDisplayHardware().getScanLines() + 0xff) & 0xff) + 1;
     final BufferedImage bi = new BufferedImage(
       Display.DISPLAY_WIDTH,
-      Display.DISPLAY_HEIGHT,
+      scanLines,
       BufferedImage.TYPE_INT_RGB);
     final Graphics2D graphics = bi.createGraphics();
     switch (UserPreferences.getColorMode()) {
       case 0:
-	if (computerHardware.getModel() < 3) {
-	  colors = PMDColor.WOB_COLORS[0];
-	} else {
-	  colors = PMDColor.WOB_COLORS[1];
-	}
+	color = OndraColor.WOB_COLOR;
 	break;
       case 1:
-	if (computerHardware.getModel() < 3) {
-	  colors = PMDColor.GOB_COLORS[0];
-	} else {
-	  colors = PMDColor.GOB_COLORS[1];
-	}
-	break;
-      case 2:
-	colors = PMDColor.DEFAULT_COLORS;
+	color = OndraColor.GOB_COLOR;
 	break;
       default:
-	colors = UserPreferences.getCustomColors();
+	color = UserPreferences.getCustomColor();
 	break;
     }
-    for (int row = 0; row < Display.DISPLAY_HEIGHT; row++) {
+    for (int row = Display.DISPLAY_HEIGHT - scanLines;
+	 row < Display.DISPLAY_HEIGHT;
+	 row++) {
       for (int column = 0; column < Display.DISPLAY_WIDTH_CELLS; column++) {
-	int b = ram[Display.START_VIDEO + (row * 64) + column];
-	for (int i = 0; i < 6; i++) {
-	  graphics.setColor(((b & 1) == 1) ?
-			    colors[b >> 6].getColor() :
-			    Color.BLACK);
-	  graphics.fillRect((column * 6) + i, row, 1, 1);
-	  b >>= 1;
+	int b =
+	  ram[0xffff - (row >> 1) - ((row & 1) << 7) - (column << 8)];
+	for (int i = 0; i < 8; i++) {
+	  graphics.setColor(((b & 0x80) != 0) ? color : Color.BLACK);
+	  graphics.fillRect((column * 8) + i,
+			    row - Display.DISPLAY_HEIGHT + scanLines,
+			    1,
+			    1);
+	  b <<= 1;
 	}
       }
     }

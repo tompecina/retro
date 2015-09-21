@@ -443,6 +443,7 @@ public class Load extends MemoryTab {
 	    plugins[pluginIndex].read(panel.getHardware(), file);
 	  }
 	} catch (final RuntimeException exception) {
+	  log.fine("Error, exception: " + exception.getMessage());
 	  errorBox(exception);
 	  return;
 	}

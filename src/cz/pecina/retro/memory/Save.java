@@ -579,6 +579,7 @@ public class Save extends MemoryTab {
 	    plugins[pluginIndex].write(panel.getHardware(), file);
 	  }
 	} catch (final RuntimeException exception) {
+	  log.fine("Error, exception: " + exception.getMessage());
 	  errorBox(exception);
 	  return;
 	}

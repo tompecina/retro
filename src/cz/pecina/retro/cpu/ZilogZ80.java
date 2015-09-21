@@ -27136,13 +27136,10 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   @Override
   public void idle(final long minCycles) {
     assert minCycles >= 0;
-    final long endCycleCounter = cycleCounter + minCycles;
 
-    while (!suspended) {
+    if (!suspended) {
+      cycleCounter += minCycles;
       CPUScheduler.runSchedule(cycleCounter);
-      if (++cycleCounter >= endCycleCounter) {
-	break;
-      }
     }
   }
 }
