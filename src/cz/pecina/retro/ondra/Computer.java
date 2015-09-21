@@ -83,6 +83,9 @@ public class Computer implements Runnable {
   // true if run() running
   private boolean busy;
 
+  // the CPU
+  private Processor cpu;
+
   /**
    * Creates a new computer control object.
    */
@@ -91,6 +94,7 @@ public class Computer implements Runnable {
     
     // set up the computer hardware
     computerHardware = new ComputerHardware();
+    cpu = computerHardware.getCPU();
 
     // set up the icons
     iconLayout = new IconLayout(this);
@@ -143,14 +147,14 @@ public class Computer implements Runnable {
     }
     busy = true;
 
-    computerHardware.getCPU().requestInterrupt(0);
-    computerHardware.getCPU().exec(
+    final long cycles =
       (312 - (computerHardware.getDisplayHardware().getEnableFlag() ?
 	      computerHardware.getDisplayHardware().getScanLines() :
 	      0))
-        * 128 * Parameters.speedUp,
-      0,
-      null);
+      * 128;
+    cpu.requestInterrupt(0);
+    cpu.exec(cycles * Parameters.speedUp, 0, null);
+    cpu.idle((Parameters.timerCycles - cycles) * Parameters.speedUp);
 
     // switch (debuggerState) {
     //   case HIDDEN:

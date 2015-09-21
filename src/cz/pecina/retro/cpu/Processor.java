@@ -218,12 +218,21 @@ public interface Processor {
    * @param mask        execution stops if the instruction matches mask
    * @param breakpoints set of breakpoints (may be {@code null})
    */
-  public abstract void exec(final long minCycles,
-			    final int mask,
-			    final Set<Integer> breakpoints);
+  public abstract void exec(long minCycles,
+			    int mask,
+			    Set<Integer> breakpoints);
 
   /**
    * Executes one instruction or a divisible part of it.
    */
-  public abstract void exec();
+  public default void exec() {
+    exec(1, 0, null);
+  }
+
+  /**
+   * Remains idle (e.g., during DMA).
+   *
+   * @param minCycles minimum number of program cycles to stay idle
+   */
+  public abstract void idle(final long minCycles);
 }
