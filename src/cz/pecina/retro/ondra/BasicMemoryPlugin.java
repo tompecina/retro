@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.pecina.retro.pmd85;
+package cz.pecina.retro.ondra;
 
 import java.util.logging.Logger;
 
@@ -38,7 +38,7 @@ import cz.pecina.retro.cpu.Hardware;
 import cz.pecina.retro.memory.MemoryPlugin;
 
 /**
- * Memory plugin for saving/loading BASIC-G programs.
+ * Memory plugin for saving/loading BASIC programs.
  *
  * @author @AUTHOR@
  * @version @VERSION@
@@ -79,34 +79,34 @@ public class BasicMemoryPlugin implements MemoryPlugin {
   // for description see MemoryPlugin
   @Override
   public void read(final Hardware hardware, final File file) {
-    log.fine("Reading BASIC-G program from a file: " + file.getName());
+    log.fine("Reading BASIC program from a file: " + file.getName());
     final byte[] ram =
       Parameters.memoryDevice.getBlockByName("RAM").getMemory();
     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-      Basic.encode(reader, ram, START_ADDRESS, END_ADDRESS);
+      Basic.encode(reader, ram);
     } catch (final IOException | BasicException exception) {
       log.fine("Error: " + exception.getMessage());
       throw Application.createError(this, "BASRead");
     }
-    log.finer("BASIC-G program read");
+    log.finer("BASIC program read");
   }
 
   // for description see MemoryPlugin
   @Override
   public void write(final Hardware hardware, final File file) {
-    log.fine("Writing BASIC-G program to a file: " + file.getName());
+    log.fine("Writing BASIC program to a file: " + file.getName());
     final byte[] ram =
       Parameters.memoryDevice.getBlockByName("RAM").getMemory();
     if ((ram[START_ADDRESS] | ram[START_ADDRESS + 1]) == (byte)0) {
       throw Application.createError(this, "BAS.noProgram");
     }
     try (PrintWriter writer = new PrintWriter(file)) {
-      Basic.decode(ram, writer, START_ADDRESS, END_ADDRESS);
+      Basic.decode(ram, writer);
     } catch (final IOException | BasicException exception) {
       log.fine("Error: " + exception.getMessage());
       throw Application.createError(this, "BASWrite");
     }
-    log.finer("BASIC-G program written");
+    log.finer("BASIC program written");
   }
 
   // for description see MemoryPlugin

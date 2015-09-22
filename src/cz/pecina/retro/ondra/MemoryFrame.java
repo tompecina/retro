@@ -69,10 +69,10 @@ public class MemoryFrame extends HidingFrame {
     this.hardware = hardware;
 
     saveMemoryPlugins = new MemoryPlugin[] {
-      /* new BasicMemoryPlugin(), */
+      new BasicMemoryPlugin(),
       new ScreenShotMemoryPlugin(computer.getComputerHardware())};
     loadMemoryPlugins = new MemoryPlugin[] {
-      /* new BasicMemoryPlugin() */};
+      new BasicMemoryPlugin()};
     
     memoryPanel = new MemoryPanel(this,
 				  hardware,

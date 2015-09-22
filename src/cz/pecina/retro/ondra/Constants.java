@@ -37,7 +37,7 @@ public final class Constants {
    * Array of ROM version strings.
    */
   public static final String[] VERSIONS =
-    {"Tesla Monitor V5.0", "Tesla BASIC-EXP V5.0", "ViLi Monitor V27"};
+    {"Tesla Monitor V5.0", "Tesla BASIC EXP V5.0/G", "ViLi Monitor V27"};
 
   /**
    * The default ROM version.
