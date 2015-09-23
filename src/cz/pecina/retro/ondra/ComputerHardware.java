@@ -82,7 +82,7 @@ public class ComputerHardware {
   private OutputLatch printerLatch;
   
   // the speaker
-  // private Speaker speaker;
+  private Speaker speaker;
 
   // the display hardware
   private DisplayHardware displayHardware;
@@ -96,8 +96,8 @@ public class ComputerHardware {
   // the tape recorder hardware
   private TapeRecorderHardware tapeRecorderHardware;
 
-  // the tape recorder inverter
-  private Inverter inv;
+  // the tape recorder input inverter
+  private Inverter inputInv;
 
   // LEDs
   private final LED yellowLED =
@@ -189,15 +189,15 @@ public class ComputerHardware {
     new IONode().add(primaryLatch.getOutPin(4)).add(displayHardware.getAddressPin(0));
     new IONode().add(primaryLatch.getOutPin(5)).add(displayHardware.getAddressPin(1));
     
-    // set up the tape recorder inverter
-    inv = new Inverter("TapeRecorderInverter");
+    // set up the tape recorder inverters
+    inputInv = new Inverter("TapeRecorderInputInverter");
     
     // connect the tape recorder
     new IONode()
       .add(primaryLatch.getOutPin(3))
-      .add(inv.getInPin());
+      .add(inputInv.getInPin());
     new IONode()
-      .add(inv.getOutPin())
+      .add(inputInv.getOutPin())
       .add(tapeRecorderHardware.getInPin());
     new IONode()
       .add(secondaryLatch.getOutPin(4))
@@ -225,7 +225,18 @@ public class ComputerHardware {
       .add(keyboardHardware.getGreenLEDPin());
     
     // set up the speaker
-    // speaker = new Speaker("SPEAKER");
+    speaker = new Speaker("SPEAKER");
+
+    // connect the speaker
+    new IONode()
+      .add(secondaryLatch.getOutPin(5))
+      .add(speaker.getInPin(0));
+    new IONode()
+      .add(secondaryLatch.getOutPin(6))
+      .add(speaker.getInPin(1));
+    new IONode()
+      .add(secondaryLatch.getOutPin(7))
+      .add(speaker.getInPin(2));
 
     // reset the hardware
     hardware.reset();

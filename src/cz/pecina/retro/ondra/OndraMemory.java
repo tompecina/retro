@@ -248,7 +248,7 @@ public class OndraMemory
     if (!allRAMFlag && (address < 0x4000)) {
       data = rom[address];
     } else if (inPortFlag && (address >= 0xe000)) {
-      data = tapeRecorderHardware.getOutPin().query() << 7;
+      data = ~tapeRecorderHardware.getOutPin().query() << 7;
       if ((address & 0x0f) == 0x0b) {
 	data |=
 	  (IONode.normalize(joystickHardware.getUpPin().query()) << 2) |
