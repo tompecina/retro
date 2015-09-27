@@ -27,9 +27,7 @@ import java.util.logging.Logger;
  * <p>
  * This is a register holding a value written to it indefinitely.
  * It can only be accessed by sensing the output pins, reading back the value
- * from a port is not possible.  It roughly corresponds to devices such as
- * Intel 8212 or Tesla MHB3212, the main difference being that it is not
- * tri-statable.
+ * from a port is not possible.  It roughly corresponds to Intel 8282.
  *
  * @author @AUTHOR@
  * @version @VERSION@

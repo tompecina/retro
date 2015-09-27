@@ -5463,7 +5463,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int port = memory.getByte(PC);
+	  final int port = memory.getByte(PC);
 	  for (IOElement t: outputPorts.get(port)) {
 	    t.portOutput((A << 8) + port, A);
 	  }
@@ -5643,12 +5643,13 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int port = memory.getByte(PC);
+	  final int port = memory.getByte(PC);
 	  WZ = ((A << 8) + port + 1) & 0xffff;
-	  A = 0xff;
+	  int tb = 0xff;
 	  for (IOElement t: inputPorts.get(port)) {
-	    A &= t.portInput((A << 8) + port);
+	    tb &= t.portInput((A << 8) + port);
 	  }
+	  A = tb;
 	  incPC();
 	  return 11;
 	}
@@ -27007,6 +27008,10 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
 	R++;
 	IFF2 = IFF1;
 	IFF1 = false;
+	if (HALTED) {
+	  HALTED = false;
+	  incPC();
+	}
 	decSP();
 	memory.setByte(SP, PC >> 8);
 	decSP();

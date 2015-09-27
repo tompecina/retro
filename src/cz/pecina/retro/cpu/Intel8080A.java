@@ -416,8 +416,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     }
   }
 
-  // for description see Processor
-  @Override
+  /**
+   * Performs interrupt.  If enabled, it will be executed immediately.
+   *
+   * @param vector interrupt vector
+   * @see #requestInterrupt
+   */
   public void interrupt(final int vector) {
     assert (vector >= 0) && (vector < 8);
     if (IE) {
@@ -4296,7 +4300,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int port = memory.getByte(PC);
+	  final int port = memory.getByte(PC);
 	  for (IOElement t: outputPorts.get(port)) {
 	    t.portOutput(port, A);
 	  }
@@ -4448,7 +4452,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	@Override
 	public int exec() {
 	  incPC();
-	  int port = memory.getByte(PC);
+	  final int port = memory.getByte(PC);
 	  A = 0xff;
 	  for (IOElement t: inputPorts.get(port)) {
 	    A &= t.portInput(port);
@@ -5368,7 +5372,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 
   // for description see Processor
   @Override
-  public void exec() {
-    exec(1, 0, null);
+  public void idle(final long minCycles) {
+    assert minCycles >= 0;
+
+    if (!suspended) {
+      cycleCounter += minCycles;
+      CPUScheduler.runSchedule(cycleCounter);
+    }
   }
 }

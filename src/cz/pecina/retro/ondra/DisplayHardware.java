@@ -96,7 +96,7 @@ public class DisplayHardware extends Device implements IOElement {
       final int newScanLines = ((port << 1) & 0xff) | ((port >> 7) & 1);
       if (newScanLines != scanLines) {
 	scanLines = newScanLines;
-	log.finer("Number of scan lines set to: " + scanLines);
+	log.fine("Number of scan lines set to: " + scanLines);
 	display.repaint();
       }
     }
@@ -116,7 +116,7 @@ public class DisplayHardware extends Device implements IOElement {
       if (newEnableFlag != enableFlag) {
 	enableFlag = newEnableFlag;
 	display.repaint();
-	log.finer("enableFlag: " + enableFlag);
+	log.fine("enableFlag: " + enableFlag);
       }
     }
   }
@@ -135,7 +135,7 @@ public class DisplayHardware extends Device implements IOElement {
     @Override
     public void notifyChange() {
       address = (address & ~(1 << n)) | (IONode.normalize(queryNode()) << n);
-      log.finer("Address: " + address);
+      log.fine("Address: " + address);
     }
   }
 
