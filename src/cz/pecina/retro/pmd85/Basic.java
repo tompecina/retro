@@ -288,9 +288,11 @@ public class Basic {
 	} else if (line.startsWith("DATA")) {
 	  inData = true;
 	  nextByte = DATA;
+	  line = line.substring(4);
 	} else if (ch == ':') {
 	  inData = false;
 	  nextByte = (int)ch;	    
+	  line = line.substring(1);
 	} else {
 	  int i = 0x80;
 	  if (!inData) {

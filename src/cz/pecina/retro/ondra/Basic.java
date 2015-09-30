@@ -188,6 +188,9 @@ public class Basic {
   // ! token
   private static final int EXCL = 0x90;
 
+  // DATA token
+  private static final int DATA = 0x83;
+
   // PRINT token - '?' is automatically converted to PRINT
   private static final int PRINT = 0x97;
 
@@ -271,6 +274,7 @@ public class Basic {
       ram[a++] = (byte)(lineNumber >> 8);
       boolean inRem = false;
       boolean inString = false;
+      boolean inData = false;
       while (!line.isEmpty()) {
 	final char ch = line.charAt(0);
 	int nextByte = 0;
@@ -290,18 +294,28 @@ public class Basic {
 	} else if (ch == '?') {
 	  nextByte = PRINT;
 	  line = line.substring(1);
+	} else if (line.startsWith("DATA")) {
+	  inData = true;
+	  nextByte = DATA;
+	  line = line.substring(4);
+	} else if (ch == ':') {
+	  inData = false;
+	  nextByte = (int)ch;	    
+	  line = line.substring(1);
 	} else {
-	  int i;
-	  for (i = 0; i < 0x80; i++) {
-	    final String token = TOKENS[i];
-	    if (token != null) {
-	      if (line.startsWith(token)) {
-		nextByte = 0x80 + i;
-		line = line.substring(token.length());
-		if (nextByte == REM) {
-		  inRem = true;
+	  int i = 0x80;
+	  if (!inData) {
+	    for (i = 0; i < 0x80; i++) {
+	      final String token = TOKENS[i];
+	      if (token != null) {
+		if (line.startsWith(token)) {
+		  nextByte = 0x80 + i;
+		  line = line.substring(token.length());
+		  if (nextByte == REM) {
+		    inRem = true;
+		  }
+		  break;
 		}
-		break;
 	      }
 	    }
 	  }
