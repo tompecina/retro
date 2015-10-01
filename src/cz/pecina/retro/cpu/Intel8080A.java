@@ -133,12 +133,12 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   /**
    * The Program Counter (PC).
    */
-  private int PC;
+  protected int PC;
 
   /**
    * The Stack Pointer (SP).
    */
-  private int SP;
+  protected int SP;
 
   /**
    * The Interrupt Enable (IE) flag.
@@ -146,13 +146,29 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   protected boolean IE;
 
   /**
+   * The Temporary Interrupt Disable flag TID.
+   */
+  protected boolean TID;
+
+  /**
+   * The Halted flag.
+   */
+  protected boolean HALTED;
+
+  /**
    * The CPU cycle counter
    */
   protected long cycleCounter;
 
-  // aux flags
-  private boolean resetPending;
-  private int interruptPending = -1;
+  /**
+   * The reset pending information (used by the debugger).
+   */
+  protected boolean resetPending;
+
+  /**
+   * The interrupt vectoring information.
+   */
+  protected int interruptPending;
 
   /**
    * A table combining S, Z and P flags.
@@ -323,6 +339,28 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
 	}
       });
 
+    add(new Register("TID") {
+	@Override
+	public String getValue() {
+	  return TID ? "1" : "0";
+	}
+	@Override
+	public void processValue(final String value) {
+	  TID = value.equals("1");
+	}
+      });
+
+    add(new Register("HALTED") {
+	@Override
+	public String getValue() {
+	  return HALTED ? "1" : "0";
+	}
+	@Override
+	public void processValue(final String value) {
+	  HALTED = value.equals("1");
+	}
+      });
+
     for (int i = 0; i < 0x100; i++) {
       inputPorts.add(new HashSet<IOElement>());
       outputPorts.add(new HashSet<IOElement>());
@@ -402,6 +440,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   @Override
   public void reset() {
     PC = 0;
+    IE = TID = HALTED = false;
     resetPending = false;
     interruptPending = -1;
     log.fine("Reset performed");
@@ -410,30 +449,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   // for description see Processor
   @Override
   public void requestInterrupt(final int vector) {
-    assert (vector >= 0) && (vector < 8);
-    if (IE) {
-      interruptPending = vector;
-    }
-  }
-
-  /**
-   * Performs interrupt.  If enabled, it will be executed immediately.
-   *
-   * @param vector interrupt vector
-   * @see #requestInterrupt
-   */
-  public void interrupt(final int vector) {
-    assert (vector >= 0) && (vector < 8);
-    if (IE) {
-      IE = false;
-      decSP();
-      memory.setByte(SP, PC >> 8);
-      decSP();
-      memory.setByte(SP, PC & 0xff);
-      PC = 8 * vector;
-      cycleCounter += 11;
-    }
-    interruptPending = -1;
+    interruptPending = vector;
   }
 
   /**
@@ -1014,15 +1030,6 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
   @Override
   public boolean isIE() {
     return IE;
-  }
-
-  /**
-   * Enables/disables interrupts.
-   *
-   * @param b if {@code true}, interrupts will be enabled
-   */
-  public void setIE(final boolean b) {
-    IE = b;
   }
 
   /**
@@ -2569,6 +2576,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("HLT", "", 1, Processor.INS_HLT, new Executable() {
 	@Override
 	public int exec() {
+	  HALTED = true;
 	  return 5;
 	}
       }
@@ -5041,7 +5049,7 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
     new Opcode("EI", "", 1, 0, new Executable() {
 	@Override
 	public int exec() {
-	  IE = true;
+	  IE = TID = true;
 	  incPC();
 	  return 4;
 	}
@@ -5348,10 +5356,32 @@ public class Intel8080A extends Device implements Processor, SystemClockSource {
       if (resetPending) {
 	reset();
 	break;
-      } else if (interruptPending != -1) {
-	interrupt(interruptPending);
-	break;
+      } else if ((interruptPending >= 0) && IE && !TID) {
+	IE = false;
+	if (HALTED) {
+	  HALTED = false;
+	  incPC();
+	}
+	if ((interruptPending & 0xc7) == 0xc7) {  // RST
+	  PC = interruptPending & 0x38;
+	  cycleCounter += 11;
+	} else if ((interruptPending & 0xff) == 0xcd) {  // CALL
+	  decSP();
+	  memory.setByte(SP, PC >> 8);
+	  decSP();
+	  memory.setByte(SP, PC & 0xff);
+	  PC = (interruptPending >> 8) & 0xffff;
+	  cycleCounter += 17;
+	} else {  // something else, ignored
+	  log.finer(String.format("Unsupported interrupt vector: 0x%x",
+				  interruptPending));
+	  cycleCounter += 4;
+	}
+	interruptPending = -1;
+      } else if (HALTED) {
+	cycleCounter++;
       } else {
+	TID = false;
 	final Opcode opcode = opcodes[memory.getByte(PC)];
 	if ((opcode.getType() & mask) != 0)
 	  break;
