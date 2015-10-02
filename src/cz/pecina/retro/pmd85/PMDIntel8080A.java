@@ -23,10 +23,7 @@ package cz.pecina.retro.pmd85;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Set;
-import java.util.HashSet;
 
 import cz.pecina.retro.cpu.Intel8080A;
 import cz.pecina.retro.cpu.Opcode;
