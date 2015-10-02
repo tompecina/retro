@@ -61,7 +61,7 @@ public class PMDIntel8080A extends Intel8080A {
      5,  // 10 = R5
     13,  // 11 = R5-R3-R3
     20,  // 12 = R5-R3-R3-W3-W3
-     8,  // 13 = R5-W3-W3
+    13,  // 13 = R5-W3-W3
     10   // 14 = R4-N3-N3
   };
 
