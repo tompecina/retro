@@ -47,23 +47,22 @@ public class PMDIntel8080A extends Intel8080A {
   private Logger log;
 
   // modified timing constants
-  private static final int[] TIMING = new int[] {
-     4,  //  0 = R4
-     7,  //  1 = R4-R3
-    11,  //  2 = R4-R3-R3
-    15,  //  3 = R4-R3-R3-R3
-    19,  //  4 = R4-R3-R3-R3-R3
-     8,  //  5 = R4-W3
-    10,  //  6 = R4-R3-W3
-    14,  //  7 = R4-R3-R3-W3
-    18,  //  8 = R4-R3-R3-W3-W3
-    20,  //  9 = R4-R3-R3-W3-W5
-     5,  // 10 = R5
-    13,  // 11 = R5-R3-R3
-    20,  // 12 = R5-R3-R3-W3-W3
-    13,  // 13 = R5-W3-W3
-    10   // 14 = R4-N3-N3
-  };
+  private static final int
+    TR4 = 4,
+    TR4R3 = 7,
+    TR4R3R3 = 11,
+    TR4R3R3R3 = 15,
+    TR4R3R3R3R3 = 19,
+    TR4W3 = 8,
+    TR4R3W3 = 10,
+    TR4R3R3W3 = 14,
+    TR4R3R3W3W3 = 18,
+    TR4R3R3W3W5 = 20,
+    TR5 = 5,
+    TR5R3R3 = 13,
+    TR5R3R3W3W3 = 20,
+    TR5W3W3 = 13,
+    TR4N3N3 = 10;
 
   /**
    * The main constructor.  Memory must be attached using
@@ -86,7 +85,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -100,7 +99,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incPC();
 	  B = memory.getByte(PC);
 	  incPC();
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -111,7 +110,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  memory.setByte(BC(), A);
 	  incPC();
-	  return TIMING[5] + (int)(cycleCounter & 1);
+	  return TR4W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -125,7 +124,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    B = (B + 1) & 0xff;
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -142,7 +141,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -159,7 +158,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -171,7 +170,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incPC();
 	  B = memory.getByte(PC);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -187,7 +186,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  }
 	  A = ((A << 1) | (F & 1)) & 0xff;
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -197,7 +196,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -215,7 +214,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    CLEARCF();
 	  }
 	  incPC();
-	  return TIMING[14] + (int)(cycleCounter & 1);
+	  return TR4N3N3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -226,7 +225,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  A = memory.getByte(BC());
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -240,7 +239,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    B = (B - 1) & 0xff;
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -257,7 +256,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -274,7 +273,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -286,7 +285,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incPC();
 	  C = memory.getByte(PC);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -302,7 +301,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  }
 	  A = ((A >> 1) | (F << 7)) & 0xff;
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -312,7 +311,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -326,7 +325,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incPC();
 	  D = memory.getByte(PC);
 	  incPC();
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -337,7 +336,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  memory.setByte(DE(), A);
 	  incPC();
-	  return TIMING[5] + (int)(cycleCounter & 1);
+	  return TR4W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -351,7 +350,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    D = (D + 1) & 0xff;
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -368,7 +367,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -385,7 +384,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -397,7 +396,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incPC();
 	  D = memory.getByte(PC);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -414,7 +413,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    CLEARCF();
 	  }
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -424,7 +423,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -442,7 +441,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    CLEARCF();
 	  }
 	  incPC();
-	  return TIMING[14] + (int)(cycleCounter & 1);
+	  return TR4N3N3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -453,7 +452,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  A = memory.getByte(DE());
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -467,7 +466,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    D = (D - 1) & 0xff;
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -484,7 +483,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -501,7 +500,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -513,7 +512,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incPC();
 	  E = memory.getByte(PC);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -530,7 +529,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    CLEARCF();
 	  }
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -540,7 +539,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -554,7 +553,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incPC();
 	  H = memory.getByte(PC);
 	  incPC();
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -568,7 +567,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  memory.setByte(tw, L);
 	  memory.setByte((tw + 1) & 0xffff, H);
 	  incPC(3);
-	  return TIMING[8] + (int)(cycleCounter & 1);
+	  return TR4R3R3W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -582,7 +581,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    H = (H + 1) & 0xff;
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -599,7 +598,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -616,7 +615,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -628,7 +627,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incPC();
 	  H = memory.getByte(PC);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -653,7 +652,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -663,7 +662,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -681,7 +680,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    CLEARCF();
 	  }
 	  incPC();
-	  return TIMING[14] + (int)(cycleCounter & 1);
+	  return TR4N3N3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -695,7 +694,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  L = memory.getByte(tw);
 	  H = memory.getByte((tw + 1) & 0xffff);
 	  incPC(3);
-	  return TIMING[4] + (int)(cycleCounter & 1);
+	  return TR4R3R3R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -709,7 +708,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    H = (H - 1) & 0xff;
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -726,7 +725,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -743,7 +742,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -755,7 +754,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incPC();
 	  L = memory.getByte(PC);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -766,7 +765,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  A = (~A) & 0xff;
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -776,7 +775,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -790,7 +789,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incPC();
 	  SP = tb + (memory.getByte(PC) << 8);
 	  incPC();
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -803,7 +802,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    (memory.getByte((PC + 2) & 0xffff) << 8);
 	  memory.setByte(tw, A);
 	  incPC(3);
-	  return TIMING[7] + (int)(cycleCounter & 1);
+	  return TR4R3R3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -814,7 +813,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  incSP();
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -836,7 +835,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[6] + (int)(cycleCounter & 1);
+	  return TR4R3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -858,7 +857,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[6] + (int)(cycleCounter & 1);
+	  return TR4R3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -871,7 +870,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incPC();
 	  memory.setByte(tw, memory.getByte(PC));
 	  incPC();
-	  return TIMING[6] + (int)(cycleCounter & 1);
+	  return TR4R3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -882,7 +881,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  SETCF();
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -892,7 +891,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -910,7 +909,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    CLEARCF();
 	  }
 	  incPC();
-	  return TIMING[14] + (int)(cycleCounter & 1);
+	  return TR4N3N3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -922,7 +921,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = memory.getByte((memory.getByte((PC + 1) & 0xffff)) +
 			     (memory.getByte((PC + 2) & 0xffff) << 8));
 	  incPC(3);
-	  return TIMING[3] + (int)(cycleCounter & 1);
+	  return TR4R3R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -933,7 +932,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  decSP();
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -950,7 +949,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -967,7 +966,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    SETACF();
 	  }
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -979,7 +978,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incPC();
 	  A = memory.getByte(PC);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -990,7 +989,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  F ^= CF;
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1000,7 +999,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1011,7 +1010,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  B = C;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1022,7 +1021,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  B = D;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1033,7 +1032,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  B = E;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1044,7 +1043,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  B = H;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1055,7 +1054,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  B = L;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1066,7 +1065,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  B = memory.getByte(HL());
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1077,7 +1076,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  B = A;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1088,7 +1087,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  C = B;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1098,7 +1097,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1109,7 +1108,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  C = D;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1120,7 +1119,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  C = E;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1131,7 +1130,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  C = H;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1142,7 +1141,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  C = L;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1154,7 +1153,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  C = memory.getByte(HL());
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1165,7 +1164,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  C = A;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1176,7 +1175,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  D = B;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1187,7 +1186,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  D = C;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1197,7 +1196,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1208,7 +1207,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  D = E;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1219,7 +1218,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  D = H;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1230,7 +1229,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  D = L;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1241,7 +1240,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  D = memory.getByte(HL());
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1252,7 +1251,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  D = A;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1263,7 +1262,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  E = B;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1274,7 +1273,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  E = C;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1285,7 +1284,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  E = D;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1295,7 +1294,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1306,7 +1305,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  E = H;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1317,7 +1316,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  E = L;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1328,7 +1327,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  E = memory.getByte(HL());
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1339,7 +1338,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  E = A;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1350,7 +1349,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  H = B;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1361,7 +1360,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  H = C;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1372,7 +1371,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  H = D;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1383,7 +1382,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  H = E;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1393,7 +1392,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1404,7 +1403,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  H = L;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1415,7 +1414,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  H = memory.getByte(HL());
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1426,7 +1425,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  H = A;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1437,7 +1436,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  L = B;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1448,7 +1447,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  L = C;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1459,7 +1458,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  L = D;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1470,7 +1469,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  L = E;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1481,7 +1480,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  L = H;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1491,7 +1490,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1502,7 +1501,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  L = memory.getByte(HL());
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1513,7 +1512,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  L = A;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1525,7 +1524,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  final int tw = HL();
 	  memory.setByte(tw, B);
 	  incPC();
-	  return TIMING[5] + (int)(cycleCounter & 1);
+	  return TR4W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1537,7 +1536,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  final int tw = HL();
 	  memory.setByte(tw, C);
 	  incPC();
-	  return TIMING[5] + (int)(cycleCounter & 1);
+	  return TR4W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1549,7 +1548,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  final int tw = HL();
 	  memory.setByte(tw, D);
 	  incPC();
-	  return TIMING[5] + (int)(cycleCounter & 1);
+	  return TR4W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1561,7 +1560,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  final int tw = HL();
 	  memory.setByte(tw, E);
 	  incPC();
-	  return TIMING[5] + (int)(cycleCounter & 1);
+	  return TR4W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1573,7 +1572,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  final int tw = HL();
 	  memory.setByte(tw, H);
 	  incPC();
-	  return TIMING[5] + (int)(cycleCounter & 1);
+	  return TR4W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1585,7 +1584,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  final int tw = HL();
 	  memory.setByte(tw, L);
 	  incPC();
-	  return TIMING[5] + (int)(cycleCounter & 1);
+	  return TR4W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1595,7 +1594,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  HALTED = true;
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1607,7 +1606,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  final int tw = HL();
 	  memory.setByte(tw, A);
 	  incPC();
-	  return TIMING[5] + (int)(cycleCounter & 1);
+	  return TR4W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1618,7 +1617,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  A = B;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1629,7 +1628,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  A = C;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1640,7 +1639,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  A = D;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1651,7 +1650,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  A = E;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1662,7 +1661,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  A = H;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1673,7 +1672,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  A = L;
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1684,7 +1683,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  A = memory.getByte(HL());
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1694,7 +1693,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1717,7 +1716,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1740,7 +1739,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1763,7 +1762,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1786,7 +1785,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1809,7 +1808,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1832,7 +1831,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1856,7 +1855,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1879,7 +1878,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1902,7 +1901,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1925,7 +1924,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1948,7 +1947,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1971,7 +1970,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -1994,7 +1993,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2017,7 +2016,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2041,7 +2040,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2064,7 +2063,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2087,7 +2086,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2110,7 +2109,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2133,7 +2132,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2156,7 +2155,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2179,7 +2178,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2202,7 +2201,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2226,7 +2225,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2261,7 +2260,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2284,7 +2283,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2307,7 +2306,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2330,7 +2329,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2353,7 +2352,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2376,7 +2375,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2400,7 +2399,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2423,7 +2422,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2441,7 +2440,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2459,7 +2458,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2477,7 +2476,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2495,7 +2494,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2513,7 +2512,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2531,7 +2530,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2550,7 +2549,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2567,7 +2566,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2581,7 +2580,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2595,7 +2594,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2609,7 +2608,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2623,7 +2622,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2637,7 +2636,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2651,7 +2650,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2665,7 +2664,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2677,7 +2676,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = 0;
 	  F = FMASK_OR | ZF | PF;
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2691,7 +2690,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2705,7 +2704,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2719,7 +2718,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2733,7 +2732,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2747,7 +2746,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2761,7 +2760,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2775,7 +2774,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2788,7 +2787,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2811,7 +2810,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  }
 	  F3(tw & 0xff);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2834,7 +2833,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  }
 	  F3(tw & 0xff);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2857,7 +2856,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  }
 	  F3(tw & 0xff);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2880,7 +2879,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  }
 	  F3(tw & 0xff);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2903,7 +2902,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  }
 	  F3(tw & 0xff);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2926,7 +2925,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  }
 	  F3(tw & 0xff);
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2949,7 +2948,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  }
 	  F3(tw & 0xff);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2960,7 +2959,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  F = FMASK_OR | ZF | PF | ACF;
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -2974,13 +2973,13 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  if (ZFSET()) {
 	    incPC();
-	    return TIMING[10] + (int)(cycleCounter & 1);
+	    return TR5 + (int)(cycleCounter & 1);
 	  } else {
 	    final int tb = memory.getByte(SP);
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -2995,7 +2994,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  B = memory.getByte(SP);
 	  incSP();
 	  incPC();
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3011,7 +3010,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    final int tb = memory.getByte(PC);
 	    PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
 	  }
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3023,7 +3022,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incPC();
 	  final int tb = memory.getByte(PC);
 	  PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3037,7 +3036,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  if (ZFSET()) {
 	    incPC(3);
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  } else {
 	    incPC();
 	    final int tb = memory.getByte(PC);
@@ -3049,7 +3048,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    decSP();
 	    memory.setByte(SP, PC & 0xff);
 	    PC = tw;
-	    return TIMING[12] + (int)(cycleCounter & 1);
+	    return TR5R3R3W3W3 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -3064,7 +3063,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, C);
 	  incPC();
-	  return TIMING[13] + (int)(cycleCounter & 1);
+	  return TR5W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3089,7 +3088,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3107,7 +3106,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, PC & 0xff);
 	  PC = 0x0000;
-	  return TIMING[13] + (int)(cycleCounter & 1);
+	  return TR5W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3124,10 +3123,10 @@ public class PMDIntel8080A extends Intel8080A {
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  } else {
 	    incPC();
-	    return TIMING[10] + (int)(cycleCounter & 1);
+	    return TR5 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -3144,7 +3143,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incSP();
 	  PC = tb + (memory.getByte(SP) << 8);
 	  incSP();
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3160,7 +3159,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  } else {
 	    incPC(3);
 	  }
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3173,7 +3172,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incPC();
 	  final int tb = memory.getByte(PC);
 	  PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3196,10 +3195,10 @@ public class PMDIntel8080A extends Intel8080A {
 	    decSP();
 	    memory.setByte(SP, PC & 0xff);
 	    PC = tw;
-	    return TIMING[12] + (int)(cycleCounter & 1);
+	    return TR5R3R3W3W3 + (int)(cycleCounter & 1);
 	  } else {
 	    incPC(3);
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -3222,7 +3221,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, PC & 0xff);
 	  PC = tw;
-	  return TIMING[12] + (int)(cycleCounter & 1);
+	  return TR5R3R3W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3247,7 +3246,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3265,7 +3264,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, PC & 0xff);
 	  PC = 0x0008;
-	  return TIMING[13] + (int)(cycleCounter & 1);
+	  return TR5W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3279,13 +3278,13 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  if (CFSET()) {
 	    incPC();
-	    return TIMING[10] + (int)(cycleCounter & 1);
+	    return TR5 + (int)(cycleCounter & 1);
 	  } else {
 	    final int tb = memory.getByte(SP);
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -3300,7 +3299,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  D = memory.getByte(SP);
 	  incSP();
 	  incPC();
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3316,7 +3315,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    final int tb = memory.getByte(PC);
 	    PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
 	  }
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3331,7 +3330,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    t.portOutput(port, A);
 	  }
 	  incPC();
-	  return TIMING[6] + (int)(cycleCounter & 1);
+	  return TR4R3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3345,7 +3344,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  if (CFSET()) {
 	    incPC(3);
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  } else {
 	    incPC();
 	    final int tb = memory.getByte(PC);
@@ -3357,7 +3356,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    decSP();
 	    memory.setByte(SP, PC & 0xff);
 	    PC = tw;
-	    return TIMING[12] + (int)(cycleCounter & 1);
+	    return TR5R3R3W3W3 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -3372,7 +3371,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, E);
 	  incPC();
-	  return TIMING[13] + (int)(cycleCounter & 1);
+	  return TR5W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3397,7 +3396,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3415,7 +3414,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, PC & 0xff);
 	  PC = 0x0010;
-	  return TIMING[13] + (int)(cycleCounter & 1);
+	  return TR5W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3432,10 +3431,10 @@ public class PMDIntel8080A extends Intel8080A {
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  } else {
 	    incPC();
-	    return TIMING[10] + (int)(cycleCounter & 1);
+	    return TR5 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -3452,7 +3451,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  incSP();
 	  PC = tb + (memory.getByte(SP) << 8);
 	  incSP();
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3468,7 +3467,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  } else {
 	    incPC(3);
 	  }
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3484,7 +3483,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    A &= t.portInput(port);
 	  }
 	  incPC();
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3507,10 +3506,10 @@ public class PMDIntel8080A extends Intel8080A {
 	    decSP();
 	    memory.setByte(SP, PC & 0xff);
 	    PC = tw;
-	    return TIMING[12] + (int)(cycleCounter & 1);
+	    return TR5R3R3W3W3 + (int)(cycleCounter & 1);
 	  } else {
 	    incPC(3);
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -3533,7 +3532,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, PC & 0xff);
 	  PC = tw;
-	  return TIMING[12] + (int)(cycleCounter & 1);
+	  return TR5R3R3W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3558,7 +3557,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = tw & 0xff;
 	  F3(A);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3576,7 +3575,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, PC & 0xff);
 	  PC = 0x0018;
-	  return TIMING[13] + (int)(cycleCounter & 1);
+	  return TR5W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3590,13 +3589,13 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  if (PE()) {
 	    incPC();
-	    return TIMING[10] + (int)(cycleCounter & 1);
+	    return TR5 + (int)(cycleCounter & 1);
 	  } else {
 	    final int tb = memory.getByte(SP);
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -3611,7 +3610,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  H = memory.getByte(SP);
 	  incSP();
 	  incPC();
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3627,7 +3626,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    final int tb = memory.getByte(PC);
 	    PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
 	  }
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3647,7 +3646,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  memory.setByte(tw, H);
 	  H = tb;
 	  incPC();
-	  return TIMING[9] + (int)(cycleCounter & 1);
+	  return TR4R3R3W3W5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3661,7 +3660,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  if (PE()) {
 	    incPC(3);
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  } else {
 	    incPC();
 	    final int tb = memory.getByte(PC);
@@ -3673,7 +3672,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    decSP();
 	    memory.setByte(SP, PC & 0xff);
 	    PC = tw;
-	    return TIMING[12] + (int)(cycleCounter & 1);
+	    return TR5R3R3W3W3 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -3688,7 +3687,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, L);
 	  incPC();
-	  return TIMING[13] + (int)(cycleCounter & 1);
+	  return TR5W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3708,7 +3707,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3726,7 +3725,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, PC & 0xff);
 	  PC = 0x0020;
-	  return TIMING[13] + (int)(cycleCounter & 1);
+	  return TR5W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3743,10 +3742,10 @@ public class PMDIntel8080A extends Intel8080A {
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  } else {
 	    incPC();
-	    return TIMING[10] + (int)(cycleCounter & 1);
+	    return TR5 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -3757,7 +3756,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  PC = HL();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3773,7 +3772,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  } else {
 	    incPC(3);
 	  }
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3789,7 +3788,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  L = E;
 	  E = tb;
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3812,10 +3811,10 @@ public class PMDIntel8080A extends Intel8080A {
 	    decSP();
 	    memory.setByte(SP, PC & 0xff);
 	    PC = tw;
-	    return TIMING[12] + (int)(cycleCounter & 1);
+	    return TR5R3R3W3W3 + (int)(cycleCounter & 1);
 	  } else {
 	    incPC(3);
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -3838,7 +3837,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, PC & 0xff);
 	  PC = tw;
-	  return TIMING[12] + (int)(cycleCounter & 1);
+	  return TR5R3R3W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3853,7 +3852,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3871,7 +3870,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, PC & 0xff);
 	  PC = 0x0028;
-	  return TIMING[13] + (int)(cycleCounter & 1);
+	  return TR5W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3885,13 +3884,13 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  if (SFSET()) {
 	    incPC();
-	    return TIMING[10] + (int)(cycleCounter & 1);
+	    return TR5 + (int)(cycleCounter & 1);
 	  } else {
 	    final int tb = memory.getByte(SP);
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -3906,7 +3905,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = memory.getByte(SP);
 	  incSP();
 	  incPC();
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3925,7 +3924,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    final int tb = memory.getByte(PC);
 	    PC = tb + (memory.getByte((PC + 1) & 0xffff) << 8);
 	  }
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3936,7 +3935,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  IE = false;
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3950,7 +3949,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  if (SFSET()) {
 	    incPC(3);
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  } else {
 	    incPC();
 	    final int tb = memory.getByte(PC);
@@ -3962,7 +3961,7 @@ public class PMDIntel8080A extends Intel8080A {
 	    decSP();
 	    memory.setByte(SP, PC & 0xff);
 	    PC = tw;
-	    return TIMING[12] + (int)(cycleCounter & 1);
+	    return TR5R3R3W3W3 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -3977,7 +3976,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, F);
 	  incPC();
-	  return TIMING[13] + (int)(cycleCounter & 1);
+	  return TR5W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -3992,7 +3991,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  CLEARCF();
 	  F3(A);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -4010,7 +4009,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, PC & 0xff);
 	  PC = 0x0030;
-	  return TIMING[13] + (int)(cycleCounter & 1);
+	  return TR5W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -4027,10 +4026,10 @@ public class PMDIntel8080A extends Intel8080A {
 	    incSP();
 	    PC = tb + (memory.getByte(SP) << 8);
 	    incSP();
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  } else {
 	    incPC();
-	    return TIMING[10] + (int)(cycleCounter & 1);
+	    return TR5 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -4042,7 +4041,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  SP = HL();
 	  incPC();
-	  return TIMING[10] + (int)(cycleCounter & 1);
+	  return TR5 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -4058,7 +4057,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  } else {
 	    incPC(3);
 	  }
-	  return TIMING[2] + (int)(cycleCounter & 1);
+	  return TR4R3R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -4069,7 +4068,7 @@ public class PMDIntel8080A extends Intel8080A {
 	public int exec() {
 	  IE = TID = true;
 	  incPC();
-	  return TIMING[0] + (int)(cycleCounter & 1);
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -4092,10 +4091,10 @@ public class PMDIntel8080A extends Intel8080A {
 	    decSP();
 	    memory.setByte(SP, PC & 0xff);
 	    PC = tw;
-	    return TIMING[12] + (int)(cycleCounter & 1);
+	    return TR5R3R3W3W3 + (int)(cycleCounter & 1);
 	  } else {
 	    incPC(3);
-	    return TIMING[11] + (int)(cycleCounter & 1);
+	    return TR5R3R3 + (int)(cycleCounter & 1);
 	  }
 	}
       }
@@ -4118,7 +4117,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, PC & 0xff);
 	  PC = tw;
-	  return TIMING[12] + (int)(cycleCounter & 1);
+	  return TR5R3R3W3W3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -4142,7 +4141,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  }
 	  F3(tw & 0xff);
 	  incPC();
-	  return TIMING[1] + (int)(cycleCounter & 1);
+	  return TR4R3 + (int)(cycleCounter & 1);
 	}
       }
       ),
@@ -4160,7 +4159,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  decSP();
 	  memory.setByte(SP, PC & 0xff);
 	  PC = 0x0038;
-	  return TIMING[13] + (int)(cycleCounter & 1);
+	  return TR5W3W3 + (int)(cycleCounter & 1);
 	}
       }
       )
@@ -4187,18 +4186,18 @@ public class PMDIntel8080A extends Intel8080A {
 	}
 	if ((interruptPending & 0xc7) == 0xc7) {  // RST
 	  PC = interruptPending & 0x38;
-	  cycleCounter += TIMING[13] + (int)(cycleCounter & 1);
+	  cycleCounter += TR5W3W3 + (int)(cycleCounter & 1);
 	} else if ((interruptPending & 0xff) == 0xcd) {  // CALL
 	  decSP();
 	  memory.setByte(SP, PC >> 8);
 	  decSP();
 	  memory.setByte(SP, PC & 0xff);
 	  PC = (interruptPending >> 8) & 0xffff;
-	  cycleCounter += TIMING[12] + (int)(cycleCounter & 1);
+	  cycleCounter += TR5R3R3W3W3 + (int)(cycleCounter & 1);
 	} else {  // something else, ignored
 	  log.finer(String.format("Unsupported interrupt vector: 0x%x",
 				  interruptPending));
-	  cycleCounter += TIMING[0] + (int)(cycleCounter & 1);
+	  cycleCounter += TR4 + (int)(cycleCounter & 1);
 	}
 	interruptPending = -1;
       } else if (HALTED) {
