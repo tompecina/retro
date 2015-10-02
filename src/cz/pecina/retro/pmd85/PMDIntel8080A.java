@@ -62,7 +62,8 @@ public class PMDIntel8080A extends Intel8080A {
     TR5R3R3 = 13,
     TR5R3R3W3W3 = 20,
     TR5W3W3 = 13,
-    TR4N3N3 = 10;
+    TR4N3N3 = 10,
+    TR4N1 = 5;
 
   /**
    * The main constructor.  Memory must be attached using
@@ -1594,7 +1595,7 @@ public class PMDIntel8080A extends Intel8080A {
 	@Override
 	public int exec() {
 	  HALTED = true;
-	  return TR5 + (int)(cycleCounter & 1);
+	  return TR4N1 + (int)(cycleCounter & 1);
 	}
       }
       ),
