@@ -116,7 +116,7 @@ public class Opcode {
    *
    * @return the duration of the instruction in system clock units
    */
-  int exec() {
+  public int exec() {
     final int duration = exec.exec();
     if (log.isLoggable(Level.FINEST))
       log.finest("Instruction executed, mnemo: " + mnemo +

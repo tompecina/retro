@@ -169,7 +169,7 @@ public class ComputerHardware {
     Parameters.memoryObject = memory;
 	
     // set up CPU
-    cpu = new Intel8080A("CPU");
+    cpu = new PMDIntel8080A("CPU");
     hardware.add(cpu);
     Parameters.systemClockSource = cpu;
     Parameters.cpu = cpu;
