@@ -58,7 +58,7 @@ public class PMDIntel8080A extends Intel8080A {
     TR5 = 5,
     TR5R3R3 = 13,
     TR5R3R3W3W3 = 20,
-    TR5W3W3 = 13,
+    TR5W3W3 = 12,
     TR4N3N3 = 10,
     TR4N1 = 5;
 
