@@ -45,6 +45,8 @@ start:
 
 	mvi	a,50h
 	out	ct
+	xra	a
+	out	c1
 		
 	xra	a
 l1:	sta	ins
@@ -115,13 +117,18 @@ l4:	push	h
 	pop	psw
 	lxi	b,aux
 	lxi	d,aux
-	mvi	a,0
-	out	c1
+	nop
+	in	c1
+	sta	res
 pre:	ds	1
 ins:	ds	1
 post:	ds	2	
-cont:	in	c1
-	cma
+cont:	nop
+	in	c1
+	mov	b,a
+	lda	res
+	sub	b
+	sbi	15h
 	db	31h
 sptr:	ds	2
 	lxi	h,crcval
@@ -130,6 +137,7 @@ sptr:	ds	2
 	ret
 
 aux:	ds	2
+res:	ds	1
 crcval:	ds	4
 
 
