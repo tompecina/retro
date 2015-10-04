@@ -20,7 +20,10 @@ rstn	macro	n
 	
 c1	equ	5dh
 ct	equ	5fh
+kb	equ	0f5h
 
+debug	equ	0
+	
 msg1:	db	"TESLA PMD 85 CPU TIMING TEST"
 eol:	db	10,13,'$'
 	
@@ -64,6 +67,15 @@ l1:	sta	ins
 	lxi	d,eol
 	mvi	c,9
 	call	bdos
+l8:	in	kb
+	ani	20h
+	jz	l8
+	in	kb
+	ani	40h
+	jnz	l2
+l9:	in	kb
+	ani	20h
+	jnz	l9
 l2:	lda	ins
 	inr	a
 	jnz	l1
@@ -209,10 +221,16 @@ bdos2:	mov	a, c
 	jz	outstr
 	ret
 outch:	mov	a, e
+	if	debug
+	out	0
+	endif
 	jmp	8500h
 outstr:	ldax	d
 	cpi	'$'
 	rz
+	if	debug
+	out	0
+	endif
 	call	8500h
 	inx	d
 	jmp	outstr

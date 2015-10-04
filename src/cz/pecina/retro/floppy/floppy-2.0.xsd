@@ -5,19 +5,25 @@
     <xs:complexType>
       <xs:sequence>
 	<xs:element name="write_protect" type="xs:boolean"/>
-	<xs:element name="track" maxOccurs="unbounded">
+	<xs:element name="head" maxOccurs="unbounded">
 	  <xs:complexType>
 	    <xs:sequence>
-	      <xs:element name="sector" maxOccurs="unbounded">
+	      <xs:element name="cylinder" maxOccurs="unbounded">
 		<xs:complexType>
 		  <xs:sequence>
-		    <xs:element name="bytes" maxOccurs="unbounded">
+		    <xs:element name="sector" maxOccurs="unbounded">
 		      <xs:complexType>
-			<xs:simpleContent>
-			  <xs:extension base="xs:hexBinary">
-			    <xs:attribute name="count" type="xs:positiveInteger" default="1"/>
-			  </xs:extension>
-			</xs:simpleContent>
+			<xs:sequence>
+			  <xs:element name="bytes" maxOccurs="unbounded">
+			    <xs:complexType>
+			      <xs:simpleContent>
+				<xs:extension base="xs:hexBinary">
+				  <xs:attribute name="count" type="xs:positiveInteger" default="1"/>
+				</xs:extension>
+			      </xs:simpleContent>
+			    </xs:complexType>
+			  </xs:element>
+			</xs:sequence>
 		      </xs:complexType>
 		    </xs:element>
 		  </xs:sequence>
@@ -28,8 +34,9 @@
 	</xs:element>
       </xs:sequence>
       <xs:attribute name="version" use="required" type="xs:NMTOKEN" fixed="2.0"/>
-      <xs:attribute name="tracks" use="required" type="xs:positiveInteger"/>
-      <xs:attribute name="sectors_per_track" use="required" type="xs:positiveInteger"/>
+      <xs:attribute name="heads" use="required" type="xs:positiveInteger"/>
+      <xs:attribute name="cylinders" use="required" type="xs:positiveInteger"/>
+      <xs:attribute name="sectors_per_cylinder" use="required" type="xs:positiveInteger"/>
       <xs:attribute name="bytes_per_sector" use="required" type="xs:positiveInteger"/>
     </xs:complexType>
   </xs:element>
