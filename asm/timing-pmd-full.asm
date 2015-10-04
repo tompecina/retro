@@ -78,22 +78,17 @@ run:	sta	pre
 	dcr	a
 	mov	b,a
 	rm
-	lxi	h,5ddbh
-	lxi	d,0
+	lxi	h,0
 	jz	l3
-	lxi	h,0dbffh
-	lxi	d,5dh
+	lxi	h,0ffh
 	dcr	a
 	jz	l3
 	lxi	h,cont
-	lxi	d,5ddbh
 	lda	ins
 	rlc
 	jc	l3
 	lxi	h,aux
 l3:	shld	post
-	xchg
-	shld	post + 2
 	lxi	h,0
 	dad	sp
 	shld	sptr
@@ -112,8 +107,9 @@ l4:	push	h
 	out	c1
 pre:	ds	1
 ins:	ds	1
-post:	ds	4
-cont:	cma
+post:	ds	2	
+cont:	in	c1
+	cma
 	db	31h
 sptr:	ds	2
 	lxi	h,crcval
