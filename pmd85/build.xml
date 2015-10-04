@@ -137,6 +137,8 @@
 		includes="${properties.files}"/>
     <srcfileset dir="${src.dir}/${prefix}/dboutput"
 		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/floppy"
+		includes="${properties.files}"/>
     <targetfilelist dir="${resources.dir}/${prefix}/${package}"
 		    files="${properties.files}"/>
     <targetfilelist dir="${resources.dir}/${prefix}/common"
@@ -152,6 +154,8 @@
     <targetfilelist dir="${resources.dir}/${prefix}/peripherals"
 		    files="${properties.files}"/>
     <targetfilelist dir="${resources.dir}/${prefix}/dboutput"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/floppy"
 		    files="${properties.files}"/>
   </dependset>
   <available file="${resources.dir}/${prefix}/${package}/TextResources.properties"
@@ -228,6 +232,15 @@
     <apply executable="native2ascii"
 	   dest="${resources.dir}/${prefix}/dboutput">
       <fileset dir="${src.dir}/${prefix}/dboutput"
+	       includes="${properties.files}"/>
+      <srcfile/>
+      <targetfile/>
+      <identitymapper/>
+    </apply>
+    <mkdir dir="${resources.dir}/${prefix}/floppy"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/floppy">
+      <fileset dir="${src.dir}/${prefix}/floppy"
 	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
@@ -739,6 +752,10 @@
     </copy>
     <copy todir="${build.classes.dir}/${prefix}/trec">
       <fileset dir="${src.dir}/${prefix}/trec"
+	       includes="*.xsd"/>
+    </copy>
+    <copy todir="${build.classes.dir}/${prefix}/floppy">
+      <fileset dir="${src.dir}/${prefix}/floppy"
 	       includes="*.xsd"/>
     </copy>
   </target>
