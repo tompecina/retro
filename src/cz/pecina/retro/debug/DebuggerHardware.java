@@ -303,7 +303,7 @@ public class DebuggerHardware {
    * @return {@code List} of breakpoints
    */
   public List<Integer> getBreakpointValues() {
-    return new ArrayList<Integer>(breakpointValues);
+    return breakpointValues;
   }
 
   // converts Long to 16-bit unsigned integer
