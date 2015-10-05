@@ -26997,7 +26997,7 @@ public class ZilogZ80 extends Device implements Processor, SystemClockSource {
   @Override
   public void exec(final long minCycles,
 		   final int mask,
-		   final Set<Integer> breakpoints) {
+		   final List<Integer> breakpoints) {
     assert minCycles >= 0;
     final long endCycleCounter = cycleCounter + minCycles;
 

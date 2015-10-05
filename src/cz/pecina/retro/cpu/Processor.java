@@ -20,7 +20,7 @@
 
 package cz.pecina.retro.cpu;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * CPU capable of maintaining memory, I/O space, reset condition,
@@ -216,11 +216,11 @@ public interface Processor {
    *
    * @param minCycles   minimum number of program cycles to execute
    * @param mask        execution stops if the instruction matches mask
-   * @param breakpoints set of breakpoints (may be {@code null})
+   * @param breakpoints list of breakpoints (may be {@code null})
    */
   public abstract void exec(long minCycles,
 			    int mask,
-			    Set<Integer> breakpoints);
+			    List<Integer> breakpoints);
 
   /**
    * Executes one instruction or a divisible part of it.

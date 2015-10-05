@@ -23,7 +23,7 @@ package cz.pecina.retro.pmd85;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-import java.util.Set;
+import java.util.List;
 
 import cz.pecina.retro.cpu.Intel8080A;
 import cz.pecina.retro.cpu.Opcode;
@@ -4167,7 +4167,7 @@ public class PMDIntel8080A extends Intel8080A {
   @Override
   public void exec(final long minCycles,
 		   final int mask,
-		   final Set<Integer> breakpoints) {
+		   final List<Integer> breakpoints) {
     assert minCycles >= 0;
     final long endCycleCounter = cycleCounter + minCycles;
 

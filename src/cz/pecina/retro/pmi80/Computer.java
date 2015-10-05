@@ -250,7 +250,8 @@ public class Computer {
     	}
     	if (interruptButton.isPressed()) {
     	  if (!interruptButtonPressed) {
-    	    computerHardware.getCPU().interrupt(7);
+    	    // computerHardware.getCPU().interrupt(7);  -- this must be fixed!
+    	    computerHardware.getCPU().requestInterrupt(7);
     	    interruptButtonPressed = true;
     	    computerHardware.getDebuggerHardware().activate();
     	    break;

@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.regex.MatchResult;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -352,7 +352,7 @@ public class Basic {
     Parameters.cpu.resume();
     Parameters.cpu.exec(Integer.MAX_VALUE,
 			0,
-			new HashSet<Integer>() {{add(breakPoint);}});
+			new ArrayList<Integer>() {{add(breakPoint);}});
     Parameters.cpu.suspend();
     Parameters.cpu.setPC(pc);
 			
