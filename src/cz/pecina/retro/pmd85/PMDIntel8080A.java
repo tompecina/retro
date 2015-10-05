@@ -2235,7 +2235,7 @@ public class PMDIntel8080A extends Intel8080A {
 	  A = 0;
 	  F = FMASK_OR | ZF | PF | ACF;
 	  incPC();
-	  return 4;
+	  return TR4 + (int)(cycleCounter & 1);
 	}
       }
       ),
