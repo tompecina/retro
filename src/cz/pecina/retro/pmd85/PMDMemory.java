@@ -395,14 +395,14 @@ public class PMDMemory
 	  data = ram[address];
 	} else if (resetFlag) {
 	  if (address < 0x4000) {
-	    data = rom[address & 0x1fff];
-	  } else if ((address >= 0x8000) && (address < 0xa000)) {
+	    data = rom[address & 0x0fff];
+	  } else if ((address >= 0x8000) && (address < 0x9000)) {
 	    data = rom[(address - 0x8000) & 0x0fff];
 	  } else {
 	    data = ram[address];
 	  }
 	} else {
-	  if ((address >= 0x8000) && (address < 0xa000)) {
+	  if ((address >= 0x8000) && (address < 0x9000)) {
 	    data = rom[(address - 0x8000) & 0x0fff];
 	  } else {
 	    data = ram[address];

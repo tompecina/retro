@@ -313,7 +313,7 @@ public final class PMDUtil {
   }
   
   /**
-   * Writes a long pause (2500ms) to the tape.
+   * Writes a long pause (5000ms) to the tape.
    * <p>
    * The duration of the pause is rounded up to an integer number of slots.
    *
@@ -328,7 +328,7 @@ public final class PMDUtil {
 			       final TapeRecorderInterface ifc
 			       ) throws TapeException {
     log.fine("Writing long pause");
-    return pause(tape, start, (2500L * ifc.tapeSampleRate) / 1000L);
+    return pause(tape, start, (5000L * ifc.tapeSampleRate) / 1000L);
   }
   
   /**

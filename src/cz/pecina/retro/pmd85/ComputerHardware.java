@@ -316,7 +316,7 @@ public class ComputerHardware {
     // set up fixed frequency source and related logic
     gen4k = new FrequencyGenerator("FREQUENCY_GENERATOR_4KHz", 0x100, 0x100);
     hardware.add(gen4k);
-    div = new FrequencyDivider("FREQUNCY_DIVIDER", 4, false);
+    div = new FrequencyDivider("FREQUENCY_DIVIDER_4KHz_TO_1KHz", 4, false);
     hardware.add(div);
     pc0nand = new NAND("NAND_PC0", 2);
     pc1nand = new NAND("NAND_PC1", 2);

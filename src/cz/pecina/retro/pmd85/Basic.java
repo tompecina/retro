@@ -217,6 +217,13 @@ public class Basic {
   private static final Pattern LINE_NUMBER_PATTERN =
     Pattern.compile("^(\\d+) *(\\D.*)$");
     
+  // check if BASIC-G interpreter is loaded
+  private static boolean isLoaded(final byte[] ram) {
+    final boolean r = (ram[0] == (byte)0x21) && (ram[1] == (byte)0x82);
+    log.finer("Basic " + (r ? "" : "not ") + "loaded");
+    return r;
+  }
+  
   /**
    * Encodes BASIC-G program in text to RAM.
    *
@@ -239,6 +246,9 @@ public class Basic {
     assert ram != null;
     assert (startAddress >= 0) && (startAddress < ram.length);
     assert (endAddress > startAddress) && (endAddress < ram.length);
+    if (!isLoaded(ram)) {
+      throw new BasicException("BASIC-G not loaded");
+    }
     String line;
     int a = startAddress, nextLineAddress;
     while ((line = reader.readLine()) != null) {
@@ -381,6 +391,9 @@ public class Basic {
     assert ram != null;
     assert (startAddress >= 0) && (startAddress < ram.length);
     assert (endAddress > startAddress) && (endAddress < ram.length);
+    if (!isLoaded(ram)) {
+      throw new BasicException("BASIC-G not loaded");
+    }
     int a = startAddress;
     while (true) {
       check(a + 1, endAddress);
