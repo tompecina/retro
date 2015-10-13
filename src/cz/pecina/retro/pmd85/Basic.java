@@ -159,7 +159,7 @@ public class Basic {
     /* 0xe8 */ "HEX$",
     /* 0xe9 */ "DEG",
     /* 0xea */ "WINDOW",
-    /* 0xeb */ "BEN",
+    /* 0xeb */ "REN",
     /* 0xec */ null,
     /* 0xed */ null,
     /* 0xee */ null,
