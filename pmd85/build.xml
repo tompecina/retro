@@ -131,6 +131,8 @@
 		includes="${properties.files}"/>
     <srcfileset dir="${src.dir}/${prefix}/trec"
 		includes="${properties.files}"/>
+    <srcfileset dir="${src.dir}/${prefix}/drec"
+		includes="${properties.files}"/>
     <srcfileset dir="${src.dir}/${prefix}/debug"
 		includes="${properties.files}"/>
     <srcfileset dir="${src.dir}/${prefix}/peripherals"
@@ -148,6 +150,8 @@
     <targetfilelist dir="${resources.dir}/${prefix}/memory"
 		    files="${properties.files}"/>
     <targetfilelist dir="${resources.dir}/${prefix}/trec"
+		    files="${properties.files}"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/drec"
 		    files="${properties.files}"/>
     <targetfilelist dir="${resources.dir}/${prefix}/debug"
 		    files="${properties.files}"/>
@@ -205,6 +209,15 @@
     <apply executable="native2ascii"
 	   dest="${resources.dir}/${prefix}/trec">
       <fileset dir="${src.dir}/${prefix}/trec"
+	       includes="${properties.files}"/>
+      <srcfile/>
+      <targetfile/>
+      <identitymapper/>
+    </apply>
+    <mkdir dir="${resources.dir}/${prefix}/drec"/>
+    <apply executable="native2ascii"
+	   dest="${resources.dir}/${prefix}/drec">
+      <fileset dir="${src.dir}/${prefix}/drec"
 	       includes="${properties.files}"/>
       <srcfile/>
       <targetfile/>
@@ -733,6 +746,9 @@
     <copy todir="${build.classes.dir}/${prefix}/trec">
       <fileset dir="${resources.dir}/${prefix}/trec"/>
     </copy>
+    <copy todir="${build.classes.dir}/${prefix}/drec">
+      <fileset dir="${resources.dir}/${prefix}/drec"/>
+    </copy>
     <copy todir="${build.classes.dir}/${prefix}/debug">
       <fileset dir="${resources.dir}/${prefix}/debug"/>
     </copy>
@@ -752,6 +768,10 @@
     </copy>
     <copy todir="${build.classes.dir}/${prefix}/trec">
       <fileset dir="${src.dir}/${prefix}/trec"
+	       includes="*.xsd"/>
+    </copy>
+    <copy todir="${build.classes.dir}/${prefix}/drec">
+      <fileset dir="${src.dir}/${prefix}/drec"
 	       includes="*.xsd"/>
     </copy>
     <copy todir="${build.classes.dir}/${prefix}/floppy">

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML Schema for retro emulators <http://retro.pecina.cz/> -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="datatape">
+    <xs:complexType>
+      <xs:sequence>
+	<xs:element name="pulse" minOccurs="0" maxOccurs="unbounded">
+	  <xs:complexType>
+	    <xs:attribute name="position" use="required" type="xs:nonNegativeInteger"/>
+	    <xs:attribute name="level" use="required" type="xs:boolean"/>
+	  </xs:complexType>
+	</xs:element>
+      </xs:sequence>
+      <xs:attribute name="version" use="required" type="xs:NMTOKEN" fixed="2.0"/>
+      <xs:attribute name="length" use="required" type="xs:positiveInteger"/>
+      <xs:attribute name="unit" use="required" type="xs:token" fixed="um"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

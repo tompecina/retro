@@ -404,7 +404,7 @@ computermove() {
       m = i;
       *p = 1;
       if (win() == 1) {
-	/* winning moves found, make it */
+	/* winning move found, make it */
 	n = 0;
 	break;
       }
