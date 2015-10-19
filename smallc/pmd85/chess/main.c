@@ -25,7 +25,6 @@
 main() {
   int r, f;
   erase();
-  /* draw_piece(2, 21); */
   for (r = 0; r < 8; r++)
     for (f = 0; f < 8; f++)
       draw_piece(0, 21 + f * 10 + r);
@@ -65,4 +64,6 @@ main() {
   draw_piece(7, 55);
   draw_piece(16, 64);
   draw_piece(17, 65);
+  draw_border();
+  draw_labels();
 }

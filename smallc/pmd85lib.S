@@ -23,8 +23,29 @@
 	.section .text
 
 ; ==============================================================================
-; Constants
+; PMD 85 addresses
+	
 PRTOUT	equ	0x8500
+MONIT	equ	0x8c40	
+	
+; ==============================================================================
+; _monit - return to monitor
+;
+	.global _monit
+_monit:
+	jp	MONIT
+
+; ==============================================================================
+; _prtout - print character
+; 
+;   input:  $1 - character
+;
+	.global	_prtout
+_prtout:
+	ld	hl,2
+	add	hl,sp
+	ld	a,(hl)		; character -> A
+	jp	PRTOUT
 	
 ; ==============================================================================
 ; _erase - clear screen
@@ -33,12 +54,5 @@ PRTOUT	equ	0x8500
 _erase:
 	ld	a,0x1c
 	jp	PRTOUT
-	
-; ==============================================================================
-; _monit - return to monitor
-;
-	.global _monit
-_monit:
-	jp	0x8c40	
 	
 	.end

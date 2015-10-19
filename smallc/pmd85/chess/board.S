@@ -23,8 +23,76 @@
 ; ==============================================================================
 ; Constants
 	
-ULC	equ	0xc810		; the upper left corner
+ULC	equ	0xce15		; the upper left corner
+	
+; ==============================================================================
+; PMD 85 addresses
+	
+PRTOUT	equ	0x8500			
+CURSOR	equ	0xc03e
 
+; ==============================================================================
+; _draw_border - draw border
+; 
+	.global	_draw_border
+_draw_border:
+	ld	hl,ULC - 64
+	ld	de,ULC + (16 * 8 * 64)
+	ld	a,0x3f
+	ld	c,3 * 8
+1:	ld	(hl),a
+	ld	(de),a
+	inc	hl
+	inc	de
+	dec	c
+	jp	nz,1b
+	ld	de,64
+	ld	hl,ULC - 65
+	ld	a,0x20
+	call	1f
+	ld	hl,ULC + (3 * 8) - 64
+	ld	a,1
+1:	ld	c,(16 * 8) + 2
+1:	ld	(hl),a
+	add	hl,de
+	dec	c
+	jp	nz,1b
+	ret
+
+; ==============================================================================
+; _draw_labels - draw labels
+; 
+	.global	_draw_labels
+_draw_labels:
+	ld	hl,ULC - (2 * 64) + 1
+	ld	a,'A'
+1:	call	2f
+	ld	de,((16 * 9) + 1) * 64
+	add	hl,de
+	call	2f
+	ld	de,3 - (((16 * 9) + 1) * 64)
+	add	hl,de
+	inc	a
+	cp	'I'
+	jp	nz,1b
+	ld	hl, ULC + (14 * 64) - 2
+	ld	a,'8'
+1:	call	2f
+	ld	de,(3 * 8) + 3
+	add	hl,de
+	call	2f
+	ld	de,(16 * 64) - (3 * 8) - 3
+	add	hl,de
+	dec	a
+	cp	'0'
+	jp	nz,1b
+	ret
+2:	ld	(CURSOR),hl
+	push	af
+	call	PRTOUT
+	pop	af
+	ret
+	
 ; ==============================================================================
 ; _draw_piece - draw piece
 ; 
