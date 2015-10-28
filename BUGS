@@ -37,3 +37,5 @@ KNOWN BUGS AND ESSENTIAL NEW FEATURES
  
 * Display does not get repainted automatically when getting into view; this
   may or may not be fixable (a window/frame event driver?).
+
+* Debugger should reset the HALT flag if PC is manually changed.
