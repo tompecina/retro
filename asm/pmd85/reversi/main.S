@@ -26,6 +26,16 @@
 main:
 	ld	sp,0x7f00
 	call	add_glyphs
+	ld	hl,0xc000
+	ld	bc,0x3010
+	ld	a,0x7f
+	call	rect
+	ld	hl,label_reversi
+	ld	de,0xc082
+	ld	a,0x7f
+	ld	(COLOR),a
+1:	call	label
+	jp	1b
 ;; 	ld	c,0
 ;; 	ld	de,res
 ;; 1:	ld	hl,testboard

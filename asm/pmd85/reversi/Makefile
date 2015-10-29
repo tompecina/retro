@@ -1,6 +1,6 @@
 APPL = reversi
 MCU = z80
-OBJ = main.o game.o util.o glyphs.o
+OBJ = main.o game.o util.o glyphs.o labels.o
 AS = as-z80
 LD = ld-z80
 OBJCOPY = objcopy-z80
@@ -15,7 +15,7 @@ build: $(APPL).out $(APPL).hex
 $(APPL).out: $(OBJ)
 	$(LD) $(LDFLAGS) $(OBJ) -o $@
 
-%.o: %.S reversi.inc
+%.o: %.S reversi.inc ../glyphs.inc
 	$(AS) $(ASFLAGS) -c $< -o $@ -a=$*.lst
 
 %.S: %.s

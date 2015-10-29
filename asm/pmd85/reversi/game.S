@@ -126,7 +126,7 @@ score_board:
 	ex	de,hl
 
 ; count all disks and frontier disks and calculate value differential
-	push	hl		; stack: <board>
+	push	hl
 	ld	de,sqv		; DE = ptr in square values
 	ld	c,0		; C = square offset
 4:	ld	a,(hl)
@@ -156,9 +156,9 @@ score_board:
 2:	inc	hl
 	ex	(sp),hl
 	push	hl
-	ld	hl,(diff)
+	ld	hl,(tmp)
 	add	hl,de
-	ld	(diff),hl
+	ld	(tmp),hl
 	ld	hl,dirs
 6:	ld	b,(hl)		; B = limit
 	inc	hl
@@ -208,7 +208,7 @@ score_board:
 	ld	a,c
 	cp	64
 	jp	nz,4b
-	ld	hl,(diff)
+	ld	hl,(tmp)
 	push	hl
 	ex	de,hl
 	ld	hl,8
@@ -262,7 +262,6 @@ score_board:
 
 ; count corner and next-to-corner disks
 1:	ld	bc,crns
-	;; <board>
 3:	ld	a,(bc)
 	cp	END
 	jp	z,1f
@@ -281,18 +280,15 @@ score_board:
 	jp	nz,4f
 	inc	(hl)
 	jp	5f
-4:	;; <board>
-	ld	h,3
+4:	ld	h,3
 6:	ld	a,(bc)
 	inc	bc
 	pop	de
 	push	de
 	push	de
-	;; <board> <board>
 	ld	e,a
 	ld	d,0
 	ex	(sp),hl		; HL = board
-	;; <counter> <board>
 	add	hl,de
 	ld	a,(hl)		; A = next-to-corner
 	or	a
@@ -303,7 +299,6 @@ score_board:
 	inc	hl
 7:	inc	(hl)
 4:	pop	af		; A = counter
-	;; <board>
 	ld	h,a
 	dec	h
 	jp	nz,6b
@@ -314,7 +309,6 @@ score_board:
 	jp	3b	
 1:	ld	hl,(mycd)	; L = my corner disks
 				; H = opponent's corner moves
-	;; <board>
 	ld	a,l
 	sub	h
 	call	signex
@@ -366,62 +360,6 @@ score_board:
 1:	ld	hl,(score)
 	ret
 
-	;; jp	$
-	
-;; 	ld	(front),hl
-;; 	pop	hl
-;; 	ld	bc,0
-;; 	ld	d,b
-;; 	ld	e,b
-;; 	call	3f
-;; 	ld	de,7
-;; 	call	3f
-;; 	ld	de,56
-;; 	call	3f
-;; 	ld	de,63
-;; 	call	3f
-;; 	ld	a,b
-;; 	sub	c
-;; 	ld	l,a
-;; 	ld	a,0
-;; 	sbc	a
-;; 	ld	h,a
-;; 	ld	de,25
-;; 	call	ccmul
-;; 	ld	(cor),hl
-
-	
-	
-;; 2:	push	hl		; process adjacent square
-;; 	add	hl,de
-;; 	ld	a,(hl)
-;; 	pop	hl
-;; 	or	a
-;; 	ret	nz		; not empty, CY = 0
-;; 	ld	a,(hl)
-;; 	dec	a
-;; 	ex	de,hl
-;; 	ld	hl,mft
-;; 	jp	z,1f
-;; 	inc	hl
-;; 1:	inc	(hl)
-;; 	ex	de,hl
-;; 	scf			; empty, CY = 1
-;; 	ret
-
-;; 3:	push	hl
-;; 	add	hl,de
-;; 	ld	a,(hl)
-;; 	pop	hl
-;; 	cp	1
-;; 	jp	nz,1f
-;; 	inc	b
-;; 	ret
-;; 1:	cp	-1
-;; 	ret	nz
-;; 	inc	c
-;; 	ret
-
 ; score += HL
 2:	ex	de,hl
 	ld	hl,(score)
@@ -429,17 +367,6 @@ score_board:
 	ld	(score),hl
 	ret
 	
-;; 3:	add	hl,bc		; process corner
-;; 	ld	a,(hl)
-;; 	dec	a
-;; 	jp	nz,1f
-;; 	inc	de
-;; 	ret
-;; 1:	dec	a
-;; 	ret	nz
-;; 	dec	de
-;; 	ret
-
 ; count legal moves
 3:	ld	c,0
 2:	push	hl
@@ -542,8 +469,7 @@ myncd:	ds	1
 opncd:	ds	1
 mymd:	ds	1
 opmd:	ds	1
-diff:	ds	2
-pdiff:	ds	2
+tmp:	ds	2
 len:	equ	$ - var
 revb:	ds	64
 	

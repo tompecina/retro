@@ -1,4 +1,4 @@
-; glyphs.S
+; pmd85.inc
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,19 +18,9 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Character glyphs.
+; Tesla PMD 85 - include file.
 
-	.include "reversi.inc"
-	
 ; ==============================================================================
-; Page selectors
+; Constants
 ;
-SEL_20	equ	0
-SEL_40	equ	0
-SEL_60	equ	1
-SEL_C0	equ	1
-SEL_E0	equ	1
-
-	.include "../glyphs.inc"
-
-	.end
+COLOR	equ	0xc03a
