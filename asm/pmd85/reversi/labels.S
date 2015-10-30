@@ -61,18 +61,19 @@ label:
 	ret
 	
 ; ==============================================================================
-; rect - display simple filled rectangle
+; rect - draw simple filled rectangle
 ; 
 ;   input:  HL - destination
 ;           C - number of rows (lines)
 ;           B - number of columns (cells)
-;           A - mask
+;           (COLOR) - mask
 ; 
 ;   uses:   all
 ; 
 	.global	rect
 rect:
-	push	bc
+	ld	a,(COLOR)
+3:	push	bc
 	push	hl
 2:	ld	(hl),a
 	inc	hl
@@ -86,7 +87,25 @@ rect:
 	ld	d,c
 	pop	bc
 	ld	c,d
-	jp	rect
+	jp	3b
+	
+; ==============================================================================
+; prtstr - display zero-terminated string
+; 
+;   input:  (HL) - string
+;           (CURSOR) - destination
+;           (COLOR) - mask
+; 
+;   uses:   A, H, L
+; 
+	.global	prtstr
+prtstr:
+	ld	a,(hl)
+	or	a
+	ret	z
+	call	PRTOUT
+	inc	hl
+	jp	prtstr	
 	
 ; ==============================================================================
 ; Label "REVERSI 1.0"

@@ -21,6 +21,10 @@
 ; Tesla PMD 85 - include file.
 
 ; ==============================================================================
-; Constants
+; PMD 85 addresses
 ;
+PRTOUT	equ	0x8500
+ECHO	equ	0x8584
+MONIT	equ	0x8c40
 COLOR	equ	0xc03a
+CURSOR	equ	0xc03e

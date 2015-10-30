@@ -24,18 +24,53 @@
 
 	.global	main
 main:
+	di
 	ld	sp,0x7f00
 	call	add_glyphs
+
+	xor	a
+	ld	(COLOR),a
+	ld	a,0x1c
+	call	PRTOUT
+	call	draw_labels
+	call	draw_board
+	ld	a,1
+	ld	c,0x1b
+	call	draw_shape
+	ld	a,1
+	ld	c,0x24
+	call	draw_shape
+	ld	a,2
+	ld	c,0x1c
+	call	draw_shape
+	ld	a,2
+	ld	c,0x23
+	call	draw_shape
+	ld	a,3
+	ld	c,0x32
+	call	draw_shape
+
+	jp	$
+	
 	ld	hl,0xc000
 	ld	bc,0x3010
-	ld	a,0x7f
+	ld	a,0x3f
+	ld	(COLOR),a
 	call	rect
 	ld	hl,label_reversi
 	ld	de,0xc082
-	ld	a,0x7f
-	ld	(COLOR),a
-1:	call	label
-	jp	1b
+	call	label
+
+	jp	$
+	
+	ld	hl,0xd000
+	ld	(CURSOR),hl
+	ld	hl,credits
+	call	prtstr
+	jp	$
+credits:
+	db	"(C) 2015 Tom", 'A' + 0x80, 'S' + 0x80, " Pecina"
+	db	" <tomas@pecina.cz>", 0
 ;; 	ld	c,0
 ;; 	ld	de,res
 ;; 1:	ld	hl,testboard

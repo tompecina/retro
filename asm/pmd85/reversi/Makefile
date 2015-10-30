@@ -1,6 +1,6 @@
 APPL = reversi
 MCU = z80
-OBJ = main.o game.o util.o glyphs.o labels.o
+OBJ = main.o game.o util.o glyphs.o labels.o board.o
 AS = as-z80
 LD = ld-z80
 OBJCOPY = objcopy-z80
