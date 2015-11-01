@@ -53,82 +53,486 @@ count_bits:
 	dec	b
 	jp	nz,1b
 	ret
+
+; ==============================================================================
+; dir_pat - create directions pattern in situ
+; 
+;   input:  (HL) - pattern
+; 
+;   uses:   A, B, C, H, L
+; 
+	.global	dir_pat
+dir_pat:
+	ld	b,0
+	ld	a,(hl)
+	ld	(hl),b
+	inc	hl
+	.rept	7
+	add	a,a
+	ld	c,(hl)
+	ld	(hl),a
+	ld	a,c
+	inc	hl
+	.endr
+	ld	a,(hl)
+	ld	(hl),b
+	inc	hl
+	.rept	7
+	ld	c,(hl)
+	ld	(hl),a
+	ld	a,c
+	inc	hl
+	.endr
+	ld	a,(hl)
+	ld	(hl),b
+	inc	hl
+	.rept	7
+	or	a
+	rra
+	ld	c,(hl)
+	ld	(hl),a
+	ld	a,c
+	inc	hl
+	.endr
+	.rept	8
+	ld	a,(hl)
+	add	a,a
+	ld	(hl),a
+	inc	hl
+	.endr
+	.rept	8
+	ld	a,(hl)
+	or	a
+	rra
+	ld	(hl),a
+	inc	hl
+	.endr
+	ld	c,23
+	add	hl,bc
+	ld	a,(hl)
+	ld	(hl),b
+	dec	hl
+	.rept	7
+	or	a
+	rra
+	ld	c,(hl)
+	ld	(hl),a
+	ld	a,c
+	dec	hl
+	.endr
+	ld	a,(hl)
+	ld	(hl),b
+	dec	hl
+	.rept	7
+	ld	c,(hl)
+	ld	(hl),a
+	ld	a,c
+	dec	hl
+	.endr
+	ld	a,(hl)
+	ld	(hl),b
+	dec	hl
+	.rept	7
+	add	a,a
+	ld	c,(hl)
+	ld	(hl),a
+	ld	a,c
+	dec	hl
+	.endr
+	ret
 	
 ; ==============================================================================
-; legal - check if move is legal
+; all_legal - create array of all legal moves
 ; 
-;   input:  (HL) - board
-;           C - row * 8 + column 
+;   input:  (HL) - array of my disks
+;           (DE) - array of opponent's disks
 ; 
-;   output: CY - illegal move
+;   output: (HL) - array of legal moves
 ; 
 ;   uses:   all
 ; 
-	.global	legal
-legal:
-	ld	b,0
-	add	hl,bc		; HL = ptr in board
-	ld	a,(hl)
-	or	a
-	scf
-	ret	nz		; not empty, illegal move
+	.global	all_legal
+all_legal:
+
+; create array of empty squares
+	push	de
 	push	hl
-	ld	hl,dirs		; HL = dirs
-	jp	1f
-2:	pop	bc
-	pop	hl
-3:	ex	(sp),hl		; HL = ptr in dirs
-1:	ld	a,(hl)
-	ld	b,a		; B = limit
-	dec	a
-	jp	z,2f
-	inc	hl
-	ld	e,(hl)
-	inc	hl
-	ld	d,(hl)		; DE = delta
-	inc	hl
-	ex	(sp),hl		; HL = ptr in board
-	ld	a,c
-	xor	b
-	and	RMASK
-	jp	z,3b		; row limit
-	ld	a,c
-	xor	b
-	and	CMASK
-	jp	z,3b		; column limit
-	push	hl
+	ld	bc,sfield
 	push	bc
-	add	hl,de
-	ld	a,(hl)
-	cp	2
-	jp	nz,2b		; not opponent's disk
-4:	ld	a,c
-	add	a,e
-	ld	c,a
-	xor	b
-	and	RMASK
-	jp	z,2b		; row limit
-	ld	a,c
-	xor	b
-	and	CMASK
-	jp	z,2b		; column limit
-	add	hl,de
-	ld	a,(hl)
+	ld	a,8
+1:	push	af
+	ld	a,(de)
+	inc	de
+	or	(hl)
+	inc	hl
+	cpl
+	ld	(bc),a
+	inc	bc
+	pop	af
 	dec	a
-	jp	z,4f
+	jp	nz,1b
+
+; extend to whole sfield
+	pop	hl
+	ld	d,7
+	call	2f
+
+; populate mfield and ofield
+	pop	hl
+	ld	bc,mfield
+	ld	d,8
+	call	2f
+	pop	hl
+	ld	bc,ofield
+	ld	d,8
+	call	2f
+
+; zero larray
+	ld	hl,larray
+	ld	b,8
+	call	zerofill
+
+; check sfield
+	call	3f
+		
+; shift mfield and ofield
+	ld	hl,mfield
+	call	dir_pat
+	ld	hl,ofield
+	call	dir_pat
+
+; update sfield
+5:	ld	hl,sfield
+	ld	de,ofield
+	ld	b,64
+1:	ld	a,(de)
+	inc	de
+	and	(hl)
+	ld	(hl),a
+	inc	hl
+	dec	b
+	jp	nz,1b 
+
+; check sfield
+	call	3f
+
+; shift mfield and ofield
+	ld	hl,mfield
+	call	dir_pat
+	ld	hl,ofield
+	call	dir_pat
+
+; update larray
+	ld	hl,sfield
+	ld	bc,mfield
+	ld	a,8
+4:	push	af
+	ld	a,8
+	ld	de,larray
+1:	push	af
+	ld	a,(bc)
+	inc	bc
+	and	(hl)
+	inc	hl
+	ex	de,hl
+	or	(hl)
+	ld	(hl),a
+	inc	hl
+	ex	de,hl
+	pop	af
 	dec	a
-	jp	nz,2b		; empty square
+	jp	nz,1b
+	pop	af
+	dec	a
+	jp	z,1f
 	jp	4b
-4:	xor	a		; my disk, move is legal
+1:	jp	5b
+	
+; extend array to field
+2:	push	hl
+	ld	e,8
+1:	ld	a,(hl)
+	inc	hl
+	ld	(bc),a
+	inc	bc
+	dec	e
+	jp	nz,1b
+	pop	hl
+	dec	d
+	jp	nz,2b
+	ret
+
+; check sfield and return if zero
+3:	ld	hl,sfield
+	ld	b,64
+1:	ld	a,(hl)
+	inc	hl
+	or	a
+	ret	nz
+	dec	b
+	jp	nz,1b
+	inc	sp
+	inc	sp
+7:	ld	hl,larray
+	ret
+	
+; ==============================================================================
+; one_legal - check if move is legal and return an array of captured disks
+; 
+;   input:  (HL) - array of my disks
+;           (DE) - array of opponent's disks
+;           C - move
+; 
+;   output: CY - on illegal move
+;           (HL) - array of captured disk numbers in different directions
+; 
+;   uses:   all
+; 
+	.global	one_legal
+one_legal:
+	
+; populate mfield and ofield
+	push	bc
+	push	de
+	ld	bc,mfield
+	ld	d,8
+	call	2b
+	pop	hl
+	ld	bc,ofield
+	ld	d,8
+	call	2b
+
+; zero larray
+	ld	hl,larray
+	ld	b,8
+	call	zerofill
+	
+; square to offset and mask
 	pop	bc
-	pop	hl
-	pop	hl
+	call	sq2rc
+	ld	a,1
+1:	dec	c
+	jp	m,1f
+	add	a,a
+	jp	1b
+1:	ld	c,a
+
+; apply offset
+	ld	hl,mfield
+	ld	e,b
+	ld	d,0
+	add	hl,de
+	ld	(mptr),hl
+	ld	hl,ofield
+	add	hl,de
+	ld	(optr),hl
+
+; check if square empty
+	ld	hl,(mptr)
+	ld	a,(hl)
+	cpl
+	and	c
+	jp	z,2f
+	ld	hl,(optr)
+	ld	a,(hl)
+	cpl
+	and	c
+	jp	z,2f
+	
+; shift mfield and ofield
+6:	ld	d,c
+	ld	hl,mfield
+	call	dir_pat
+	ld	hl,ofield
+	call	dir_pat
+	ld	c,d
+
+; update larray
+	ld	b,8
+	ld	hl,larray
+	push	hl
+	ld	hl,(optr)
+	ex	de,hl
+	ld	hl,(mptr)
+1:	ex	(sp),hl
+	ld	a,(hl)
+	rla
+	jp	c,3f
+	ex	(sp),hl
+	ld	a,(de)
+	or	(hl)
+	and	c
+	ex	(sp),hl
+	jp	z,4f
+	ld	a,(de)
+	and	c
+	jp	z,5f
+	inc	(hl)
+	jp	3f
+5:	ld	a,(hl)
+	or	0x80
+	ld	(hl),a
+	jp	3f
+4:	ld	(hl),0x80
+3:	inc	hl
+	ex	(sp),hl
+	push	bc
+	ld	bc,8
+	add	hl,bc
+	ex	de,hl
+	add	hl,bc
+	ex	de,hl
+	pop	bc
+	dec	b
+	jp	nz,1b
+	inc	sp
+	inc	sp
+	
+; check if done
+	ld	hl,larray
+	ld	b,8
+1:	ld	a,(hl)
+	inc	hl
+	rla
+	jp	nc,6b
+	dec	b
+	jp	nz,1b
+
+; clear flags in larray
+	ld	hl,larray
+	ld	b,8
+	ld	c,0x7f
+1:	ld	a,(hl)
+	and	c
+	ld	(hl),a
+	inc	hl
+	dec	b
+	jp	nz,1b
+	or	a
+	jp	7b
+
+; illegal move
+2:	scf
 	ret
-1:	pop	bc		; illegal move
-	pop	hl
-2:	pop	hl
-	scf
+	
+; ==============================================================================
+; rc2sq - compress square
+; 
+;   input:  B - row
+;	    C - column
+; 
+;   output: C - square
+; 
+;   uses:   A
+; 
+	.global	rc2sq
+rc2sq:
+	ld	a,b
+	add	a,a
+	add	a,a
+	add	a,a
+	or	c
+	ld	c,a
 	ret
+	
+; ==============================================================================
+; sq2rc - decompress square
+; 
+;   input:  C - square
+; 
+;   output: B - row
+;	    C - column
+; 
+;   uses:   A
+; 
+	.global	sq2rc
+sq2rc:
+	ld	a,c
+	rra
+	rra
+	rra
+	and	0x07
+	ld	b,a
+	ld	a,c
+	and	0x07
+	ld	c,a
+	ret
+	
+;; ; ==============================================================================
+;; ; legal - check if move is legal
+;; ; 
+;; ;   input:  (HL) - board
+;; ;           C - row * 8 + column 
+;; ; 
+;; ;   output: CY - illegal move
+;; ; 
+;; ;   uses:   all
+;; ; 
+;; 	.global	legal
+;; legal:
+;; 	ld	b,0
+;; 	add	hl,bc		; HL = ptr in board
+;; 	ld	a,(hl)
+;; 	or	a
+;; 	scf
+;; 	ret	nz		; not empty, illegal move
+;; 	push	hl
+;; 	ld	hl,dirs		; HL = dirs
+;; 	jp	1f
+;; 2:	pop	bc
+;; 	pop	hl
+;; 3:	ex	(sp),hl		; HL = ptr in dirs
+;; 1:	ld	a,(hl)
+;; 	ld	b,a		; B = limit
+;; 	dec	a
+;; 	jp	z,2f
+;; 	inc	hl
+;; 	ld	e,(hl)
+;; 	inc	hl
+;; 	ld	d,(hl)		; DE = delta
+;; 	inc	hl
+;; 	ex	(sp),hl		; HL = ptr in board
+;; 	ld	a,c
+;; 	xor	b
+;; 	and	RMASK
+;; 	jp	z,3b		; row limit
+;; 	ld	a,c
+;; 	xor	b
+;; 	and	CMASK
+;; 	jp	z,3b		; column limit
+;; 	push	hl
+;; 	push	bc
+;; 	add	hl,de
+;; 	ld	a,(hl)
+;; 	cp	2
+;; 	jp	nz,2b		; not opponent's disk
+;; 4:	ld	a,c
+;; 	add	a,e
+;; 	ld	c,a
+;; 	xor	b
+;; 	and	RMASK
+;; 	jp	z,2b		; row limit
+;; 	ld	a,c
+;; 	xor	b
+;; 	and	CMASK
+;; 	jp	z,2b		; column limit
+;; 	add	hl,de
+;; 	ld	a,(hl)
+;; 	dec	a
+;; 	jp	z,4f
+;; 	dec	a
+;; 	jp	nz,2b		; empty square
+;; 	jp	4b
+;; 4:	xor	a		; my disk, move is legal
+;; 	pop	bc
+;; 	pop	hl
+;; 	pop	hl
+;; 	ret
+;; 1:	pop	bc		; illegal move
+;; 	pop	hl
+;; 2:	pop	hl
+;; 	scf
+;; 	ret
 
 ; ==============================================================================
 ; score_board - calculate board score, based on
@@ -518,6 +922,13 @@ opmd:	ds	1
 tmp:	ds	2
 len:	equ	$ - var
 revb:	ds	64
+mptr:	ds	2
+optr:	ds	2
+field:	ds	64
+sfield:	ds	64
+mfield:	ds	64
+ofield:	ds	64
+larray:	ds	8
 	
 	.end
  

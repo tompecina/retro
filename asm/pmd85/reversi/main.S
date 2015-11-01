@@ -24,8 +24,68 @@
 
 	.global	main
 main:
-	di
 	ld	sp,0x7f00
+
+	ld	hl,mf
+	ld	de,of
+	ld	c,0x00
+	call	one_legal
+
+	ld	hl,mf
+	ld	de,of
+	ld	c,0x01
+	call	one_legal
+
+	ld	hl,mf
+	ld	de,of
+	ld	c,0x05
+	call	one_legal
+
+	ld	hl,mf
+	ld	de,of
+	ld	c,0x0d
+	call	one_legal
+
+	ld	hl,mf
+	ld	de,of
+	ld	c,0x13
+	call	one_legal
+
+	jp	$
+	
+	ld	hl,mf
+	ld	de,of
+	call	all_legal
+	jp	$
+	
+
+mf:	.byte	0x08, 0x00, 0x00, 0x10, 0x08, 0x00, 0x00, 0x00
+of:	.byte	0x16, 0x1e, 0x00, 0x08, 0x10, 0x00, 0x00, 0x00
+
+
+2:	push	hl
+	ld	e,8
+1:	ld	a,(hl)
+	inc	hl
+	ld	(bc),a
+	inc	bc
+	dec	e
+	jp	nz,1b
+	pop	hl
+	dec	d
+	jp	nz,2b
+	ret
+
+
+
+
+
+
+
+
+
+
+	di
 	call	add_glyphs
 
 	xor	a
@@ -34,23 +94,137 @@ main:
 	call	PRTOUT
 	call	draw_labels
 	call	draw_board
-	ld	a,1
+	ld	c,64
+1:	push	bc
+	ld	hl,BLANK_SQUARE
+	call	draw_shape
+	pop	bc
+	dec	c
+	jp	p,1b
+	ld	hl,BLACK_DISK
 	ld	c,0x1b
 	call	draw_shape
-	ld	a,1
+	ld	hl,BLACK_DISK
 	ld	c,0x24
 	call	draw_shape
-	ld	a,2
+	ld	hl,WHITE_DISK
 	ld	c,0x1c
 	call	draw_shape
-	ld	a,2
+	ld	hl,WHITE_DISK
 	ld	c,0x23
 	call	draw_shape
-	ld	a,3
+	ld	hl,BLANK_CURSOR
 	ld	c,0x32
 	call	draw_shape
+	ld	hl,BLACK_CURSOR
+	ld	c,0x11
+	call	draw_shape
+	ld	hl,WHITE_CURSOR
+	ld	c,0x19
+	call	draw_shape
+	ld	hl,BLACK_TURNED1
+	ld	c,0x33
+	call	draw_shape
+	ld	hl,BLACK_TURNED2
+	ld	c,0x34
+	call	draw_shape
+	ld	hl,HALF_TURNED
+	ld	c,0x35
+	call	draw_shape
+	ld	hl,WHITE_TURNED1
+	ld	c,0x36
+	call	draw_shape
+	ld	hl,WHITE_TURNED2
+	ld	c,0x37
+	call	draw_shape
 
-	jp	$
+2:	ld	c,0
+1:	push	bc
+	call	anim_b2w
+	pop	bc
+	inc	c
+	ld	a,c
+	cp	64
+	jp	nz,1b
+
+	ld	c,0
+1:	push	bc
+	call	anim_w2b
+	pop	bc
+	inc	c
+	ld	a,c
+	cp	64
+	jp	nz,1b
+
+	jp	2b
+1:	
+	ld	hl,WHITE_DISK
+	ld	c,0x24
+	call	draw_shape
+	call	animpause
+	ld	hl,WHITE_TURNED1
+	ld	c,0x24
+	call	draw_shape
+	call	animpause
+	ld	hl,WHITE_TURNED2
+	ld	c,0x24
+	call	draw_shape
+	call	animpause
+	ld	hl,HALF_TURNED
+	ld	c,0x24
+	call	draw_shape
+	call	animpause
+	ld	hl,BLACK_TURNED2
+	ld	c,0x24
+	call	draw_shape
+	call	animpause
+	ld	hl,BLACK_TURNED1
+	ld	c,0x24
+	call	draw_shape
+	call	animpause
+	ld	hl,BLACK_DISK
+	ld	c,0x24
+	call	draw_shape
+	call	pause
+	ld	hl,BLACK_TURNED1
+	ld	c,0x24
+	call	draw_shape
+	call	animpause
+	ld	hl,BLACK_TURNED2
+	ld	c,0x24
+	call	draw_shape
+	call	animpause
+	ld	hl,HALF_TURNED
+	ld	c,0x24
+	call	draw_shape
+	call	animpause
+	ld	hl,WHITE_TURNED2
+	ld	c,0x24
+	call	draw_shape
+	call	animpause
+	ld	hl,WHITE_TURNED1
+	ld	c,0x24
+	call	draw_shape
+	call	animpause
+	ld	hl,WHITE_DISK
+	ld	c,0x24
+	call	draw_shape
+	call	pause
+	
+	
+	jp	1b
+
+pause:	ld	hl,40000
+1:	dec	hl
+	ld	a,h
+	or	l
+	jp	nz,1b
+	ret
+
+
+animpause:
+	ld	hl,3000
+	jp	1b
 	
 	ld	hl,0xc000
 	ld	bc,0x3010
