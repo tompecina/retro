@@ -47,20 +47,38 @@ main:
 	call	draw_board
 
 	ld	hl,0xd000
-	ld	a,'c' + 0x80
+	ld	a,'('
 	call	wrchar
 	inc	hl
-	ld	a,'e'
+	ld	a,'&'
 	call	wrchar
 	inc	hl
-	ld	a,'r'
+	ld	a,'@'
 	call	wrchar
 	inc	hl
-	ld	a,'n'
+	ld	a,'G'
 	call	wrchar
 	inc	hl
-	ld	a,'Y' + 0x80
+	ld	a,'i'
 	call	wrchar
+	inc	hl
+	ld	a,'l'
+	call	wrchar
+	inc	hl
+	ld	a,0xc4
+	call	wrchar
+	inc	hl
+	ld	a,0xc9
+	call	wrchar
+	inc	hl
+	ld	a,0xcb
+	call	wrchar
+	inc	hl
+	ld	a,0xcc
+	call	wrchar
+	ld	a,')'
+	call	wrchar
+	inc	hl
 
 
 	ld	hl,black

@@ -23,6 +23,11 @@
 ; ==============================================================================
 ; PMD 85 addresses
 ;
+	.equiv	SYSPIO_PA, 0xf4
+	.equiv	SYSPIO_PB, 0xf5
+	.equiv	SYSPIO_PC, 0xf6
+	.equiv	SYSPIO_CTRL, 0xf7
+	
 	.equiv	PMD_PRTOUT, 0x8500
 	.equiv	PMD_ECHO, 0x8584
 	.equiv	PMD_MONIT, 0x8c40
@@ -30,4 +35,6 @@
 	.equiv	COLOR, 0xc03a
 	.equiv	CURSOR, 0xc03e
 	.equiv	TASCII, 0xc0b0
-	.equiv	STACK, 0xc13e	
+	.equiv	ASCII, 0xc134
+	.equiv	STACK, 0xc13e
+	.equiv	OLDKEY, 0xc178
