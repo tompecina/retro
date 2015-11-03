@@ -25,12 +25,12 @@
 ; ==============================================================================
 ; Page selectors
 ;
-SEL_20	equ	0
-SEL_40	equ	0
-SEL_60	equ	1
-SEL_C0	equ	1
-SEL_E0	equ	1
+	.equiv	SEL_20, 1
+	.equiv	SEL_40, 1
+	.equiv	SEL_60, 1
+	.equiv	SEL_C0, 1
+	.equiv	SEL_E0, 1
 
-	.include "../glyphs.inc"
+	.include "../glyphs10.inc"
 
 	.end

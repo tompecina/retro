@@ -25,9 +25,9 @@
 ; ==============================================================================
 ; Constants
 ;
-END	equ	0x01
-RMASK	equ	0xb8
-CMASK	equ	0x47
+	.equiv	END, 0x7f
+	.equiv	RMASK, 0xb8
+	.equiv	CMASK, 0x47
 
 ; ==============================================================================
 ; count_bits - count bits in an 8-byte array
@@ -271,8 +271,7 @@ all_legal:
 	ret	nz
 	dec	b
 	jp	nz,1b
-	inc	sp
-	inc	sp
+	pop	hl
 7:	ld	hl,larray
 	ret
 	
@@ -309,13 +308,7 @@ one_legal:
 	
 ; square to offset and mask
 	pop	bc
-	call	sq2rc
-	ld	a,1
-1:	dec	c
-	jp	m,1f
-	add	a,a
-	jp	1b
-1:	ld	c,a
+	call	sq2om
 
 ; apply offset
 	ld	hl,mfield
@@ -385,8 +378,7 @@ one_legal:
 	pop	bc
 	dec	b
 	jp	nz,1b
-	inc	sp
-	inc	sp
+	pop	hl
 	
 ; check if done
 	ld	hl,larray
@@ -457,6 +449,221 @@ sq2rc:
 	and	0x07
 	ld	c,a
 	ret
+	
+; ==============================================================================
+; sq2om - square to offset and mask
+; 
+;   input:  C - square
+; 
+;   output: B - offset (row)
+;	    C - mask (1 << column)
+; 
+;   uses:   A
+; 
+	.global	sq2om
+sq2om:
+	call	sq2rc
+	ld	a,1
+1:	dec	c
+	jp	m,1f
+	add	a,a
+	jp	1b
+1:	ld	c,a
+	ret
+	
+; ==============================================================================
+; make_move - perform one move
+; 
+;   input:  (HL) - array of black disks
+;           (DE) - array of white disks
+;           C - move (must be legal)
+;           B - =0 black to move
+;               =1 white to move
+; 
+;   output:  updated arrays
+; 
+;   uses:   all
+; 
+	.global	make_move
+make_move:
+
+; check for pass
+	ld	a,c
+	or	a
+	ret	m
+	
+; if white's turn, switch arrays
+	ld	a,b
+	or	a
+	jp	z,1f
+	ex	de,hl
+	
+; get counters
+1:	push	hl
+	push	de
+	push	hl
+	push	bc
+	call	one_legal
+	pop	bc
+	
+; convert square number
+	call	sq2om
+	
+; calculate initial pointer
+	ex	(sp),hl
+	ld	e,b
+	ld	d,0
+	add	hl,de
+	ld	a,(hl)
+	or	c
+	ld	(hl),a
+	pop	de
+
+; direction 0 (NW)
+	push	hl
+	push	bc
+	ld	a,(de)
+	ld	b,a
+1:	dec	b
+	jp	m,1f
+	dec	hl
+	ld	a,c
+	rrca
+	ld	c,a
+	or	(hl)
+	ld	(hl),a
+	jp	1b
+1:	inc	de
+	pop	bc
+	pop	hl
+	
+; direction 1 (N)
+	push	hl
+	ld	a,(de)
+	ld	b,a
+1:	dec	b
+	jp	m,1f
+	dec	hl
+	ld	a,c
+	or	(hl)
+	ld	(hl),a
+	jp	1b
+1:	inc	de
+	pop	hl
+	
+; direction 2 (NE)
+	push	hl
+	push	bc
+	ld	a,(de)
+	ld	b,a
+1:	dec	b
+	jp	m,1f
+	dec	hl
+	ld	a,c
+	rlca
+	ld	c,a
+	or	(hl)
+	ld	(hl),a
+	jp	1b
+1:	inc	de
+	pop	bc
+	pop	hl
+	
+; direction 3 (W)
+	push	bc
+	ld	a,(de)
+	ld	b,a
+1:	dec	b
+	jp	m,1f
+	ld	a,c
+	rrca
+	ld	c,a
+	or	(hl)
+	ld	(hl),a
+	jp	1b
+1:	inc	de
+	pop	bc
+	
+; direction 4 (E)
+	push	bc
+	ld	a,(de)
+	ld	b,a
+1:	dec	b
+	jp	m,1f
+	ld	a,c
+	rlca
+	ld	c,a
+	or	(hl)
+	ld	(hl),a
+	jp	1b
+1:	inc	de
+	pop	bc
+	
+; direction 5 (SW)
+	push	hl
+	push	bc
+	ld	a,(de)
+	ld	b,a
+1:	dec	b
+	jp	m,1f
+	inc	hl
+	ld	a,c
+	rrca
+	ld	c,a
+	or	(hl)
+	ld	(hl),a
+	jp	1b
+1:	inc	de
+	pop	bc
+	pop	hl
+	
+; direction 6 (S)
+	push	hl
+	ld	a,(de)
+	ld	b,a
+1:	dec	b
+	jp	m,1f
+	inc	hl
+	ld	a,c
+	or	(hl)
+	ld	(hl),a
+	jp	1b
+1:	inc	de
+	pop	hl
+	
+; direction 7 (SE)
+	ld	a,(de)
+	ld	b,a
+1:	dec	b
+	jp	m,1f
+	inc	hl
+	ld	a,c
+	rlca
+	ld	c,a
+	or	(hl)
+	ld	(hl),a
+	jp	1b
+	
+; adjust opponent's disks
+2:	pop	hl
+1:	pop	hl
+	pop	de
+	ld	c,8
+1:	ld	a,(de)
+	cpl
+	and	(hl)
+	ld	(hl),a
+	inc	hl
+	inc	de
+	dec	c
+	jp	nz,1b
+	ret
+	
+;; ; ==============================================================================
+;; ; Direction offsets and rotations
+;; ; 
+;; dir_or:
+;; 	.byte	0x05, 0x04, 0x06, 0x01, 0x02, 0x09, 0x08, 0x0a, 0
 	
 ;; ; ==============================================================================
 ;; ; legal - check if move is legal
@@ -908,7 +1115,7 @@ bitcounts:
 ; Variables
 ; 
 score:	ds	2
-var	equ	$
+	.equiv	var, $
 myd:	ds	1
 opd:	ds	1
 myfd:	ds	1
@@ -920,7 +1127,7 @@ opncd:	ds	1
 mymd:	ds	1
 opmd:	ds	1
 tmp:	ds	2
-len:	equ	$ - var
+	.equiv	len,$ - var
 revb:	ds	64
 mptr:	ds	2
 optr:	ds	2

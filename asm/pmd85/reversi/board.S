@@ -25,7 +25,7 @@
 ; ==============================================================================
 ; Constants
 	
-ULC	equ	0xce15		; the upper left corner
+	.equiv	ULC, 0xce15	; the upper left corner
 	
 ; ==============================================================================
 ; draw_board - draw board
@@ -110,7 +110,7 @@ draw_labels:
 	jp	nz,1b
 	ret
 2:	push	af
-	call	ECHO
+	call	wrchar
 	pop	af
 	ret
 	
@@ -212,11 +212,7 @@ animate:
 	push	de
 	push	bc
 	call	draw_shape
-	ld	hl,2000
-1:	dec	hl
-	ld	a,h
-	or	l
-	jp	nz,1b
+	call	anim_pause
 	pop	bc
 	pop	de
 	pop	hl
@@ -224,6 +220,151 @@ animate:
 	ret	z
 	add	hl,de
 	jp	animate
+	
+; ==============================================================================
+; anim_pause - animation pause
+; 
+;   uses:   A, H, L
+; 
+	.global	anim_pause
+anim_pause:
+	ld	hl,2000
+1:	dec	hl
+	ld	a,h
+	or	l
+	jp	nz,1b
+	ret
+	
+; ==============================================================================
+; long_anim_pause - longer animation pause
+; 
+;   uses:   A, H, L
+; 
+	.global	long_anim_pause
+long_anim_pause:
+	ld	hl,5000
+	jp	1b
+	
+; ==============================================================================
+; draw_pos - draw position
+; 
+;   input:  (HL) - array of black disks
+;           (DE) - array of white disks
+; 
+;   uses:   all
+; 
+	.global	draw_pos
+draw_pos:
+	ld	b,0
+4:	ld	a,(hl)
+	push	hl
+	ld	h,a
+	ld	a,(de)
+	push	de
+	ld	l,a
+	ld	c,7
+3:	add	hl,hl
+	push	hl
+	jp	nc,1f
+	ld	hl,BLACK_DISK
+	jp	2f
+1:	ld	a,h
+	rra
+	ld	hl,WHITE_DISK
+	jp	c,2f
+	ld	hl,BLANK_SQUARE
+2:	push	bc
+	call	rc2sq
+	call	draw_shape
+	pop	bc
+	pop	hl
+	dec	c
+	jp	p,3b
+	pop	de
+	pop	hl
+	inc	hl
+	inc	de
+	inc	b
+	ld	a,b
+	cp	8
+	jp	nz,4b
+	ret
+	
+; ==============================================================================
+; anim_move - animate move
+; 
+;   input:  (HL) - array of black disks
+;           (DE) - array of white disks
+;           C - move (must be legal)
+;           B - =0 black to move
+;               =1 white to move
+; 
+;   uses:   all
+; 
+	.global	anim_move
+anim_move:
+	ld	a,c
+	or	a
+	ret	m
+	push	hl
+	push	de
+	push	bc
+	ld	a,b
+	or	a
+	jp	z,1f
+	ld	hl,WHITE_DISK
+	jp	2f
+1:	ld	hl,BLACK_DISK
+2:	call	draw_shape
+	call	long_anim_pause
+	pop	bc
+	pop	de
+	pop	hl
+	ld	a,b
+	or	a
+	jp	z,1f
+	ex	de,hl
+1:	push	bc
+	call	one_legal
+	pop	bc
+	ld	de,dir_offsets
+2:	ld	a,(de)
+	or	a
+	ret	z
+	inc	de
+	push	de
+	ld	d,a
+	ld	e,(hl)
+	inc	hl
+	push	hl
+	push	bc
+1:	dec	e
+	jp	m,1f
+	ld	a,c
+	add	a,d
+	ld	c,a
+	ld	a,b
+	or	a
+	push	de
+	push	bc
+	push	af
+	call	z,anim_w2b
+	pop	af
+	call	nz,anim_b2w
+	call	long_anim_pause
+	pop	bc
+	pop	de
+	jp	1b
+1:	pop	bc
+	pop	hl
+	pop	de
+	jp	2b
+	
+; ==============================================================================
+; Direction offsets
+; 
+dir_offsets:
+	.byte	-9, -8, -7, -1, 1, 7, 8, 9, 0
 	
 ; ==============================================================================
 ; Shapes

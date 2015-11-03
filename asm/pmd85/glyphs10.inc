@@ -28,27 +28,27 @@
 	.global add_glyphs
 add_glyphs:	
 	.if SEL_20
-	ld	hl,glyphs20 + 8
+	ld	hl,glyphs20 + 10
 	ld	(0xc0b2),hl
 	.endif
 
 	.if SEL_40
-	ld	hl,glyphs40 + 8
+	ld	hl,glyphs40 + 10
 	ld	(0xc0b4),hl
 	.endif
 
 	.if SEL_60
-	ld	hl,glyphs60 + 8
+	ld	hl,glyphs60 + 10
 	ld	(0xc0b6),hl
 	.endif
 
 	.if SEL_C0
-	ld	hl,glyphsC0 + 8
+	ld	hl,glyphsC0 + 10
 	ld	(0xc0bc),hl
 	.endif
 
 	.if SEL_E0
-	ld	hl,glyphsE0 + 8
+	ld	hl,glyphsE0 + 10
 	ld	(0xc0be),hl
 	.endif
 
@@ -1841,3 +1841,16 @@ glyphsE0:
 	.byte	0x00	; ......
 	.byte	0x00	; ......
 	.endif
+
+	.global	undef_glyph
+undef_glyph:
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x1c	; ..###.
+	.byte	0x14	; ..#.#.
+	.byte	0x1c	; ..###.
+	.byte	0x00	; ......

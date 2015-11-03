@@ -24,8 +24,216 @@
 
 	.global	main
 main:
+	di
 	ld	sp,0x7f00
+	
+	call	add_glyphs
 
+	xor	a
+	ld	(COLOR),a
+	ld	a,0x1c
+	call	PMD_PRTOUT
+	ld	hl,0xc000
+	ld	bc,0x3010
+	;; ld	a,0x3f
+	;; ld	(COLOR),a
+	;; call	rect
+	ld	hl,label_reversi
+	ld	de,0xc190
+	call	label
+	xor	a
+	ld	(COLOR),a
+	call	draw_labels
+	call	draw_board
+
+	ld	hl,0xd000
+	ld	a,'c' + 0x80
+	call	wrchar
+	inc	hl
+	ld	a,'e'
+	call	wrchar
+	inc	hl
+	ld	a,'r'
+	call	wrchar
+	inc	hl
+	ld	a,'n'
+	call	wrchar
+	inc	hl
+	ld	a,'Y' + 0x80
+	call	wrchar
+
+
+	ld	hl,black
+	ld	de,white
+	call	draw_pos
+
+	ld	hl,black
+	ld	de,white
+	ld	c,0x13
+	ld	b,0
+	call	anim_move
+	ld	hl,black
+	ld	de,white
+	ld	c,0x13
+	ld	b,0
+	call	make_move
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+
+	ld	hl,black
+	ld	de,white
+	ld	c,0x22
+	ld	b,1
+	call	anim_move
+	ld	hl,black
+	ld	de,white
+	ld	c,0x22
+	ld	b,1
+	call	make_move
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+
+	ld	hl,black
+	ld	de,white
+	ld	c,0x04
+	ld	b,0
+	call	anim_move
+	ld	hl,black
+	ld	de,white
+	ld	c,0x04
+	ld	b,0
+	call	make_move
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+
+	ld	hl,black
+	ld	de,white
+	ld	c,0x06
+	ld	b,1
+	call	anim_move
+	ld	hl,black
+	ld	de,white
+	ld	c,0x06
+	ld	b,1
+	call	make_move
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+
+	ld	hl,black
+	ld	de,white
+	ld	c,0x2a
+	ld	b,0
+	call	anim_move
+	ld	hl,black
+	ld	de,white
+	ld	c,0x2a
+	ld	b,0
+	call	make_move
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+
+	ld	hl,black
+	ld	de,white
+	ld	c,0x09
+	ld	b,1
+	call	anim_move
+	ld	hl,black
+	ld	de,white
+	ld	c,0x09
+	ld	b,1
+	call	make_move
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+
+	ld	hl,black
+	ld	de,white
+	ld	c,0x05
+	ld	b,0
+	call	anim_move
+	ld	hl,black
+	ld	de,white
+	ld	c,0x05
+	ld	b,0
+	call	make_move
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+
+	ld	hl,black
+	ld	de,white
+	ld	c,0x00
+	ld	b,1
+	call	anim_move
+	ld	hl,black
+	ld	de,white
+	ld	c,0x00
+	ld	b,1
+	call	make_move
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+
+	ld	hl,black
+	ld	de,white
+	ld	c,0x08
+	ld	b,0
+	call	anim_move
+	ld	hl,black
+	ld	de,white
+	ld	c,0x08
+	ld	b,0
+	call	make_move
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+
+	ld	hl,black
+	ld	de,white
+	ld	c,0x10
+	ld	b,1
+	call	anim_move
+	ld	hl,black
+	ld	de,white
+	ld	c,0x10
+	ld	b,1
+	call	make_move
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+	call	long_anim_pause
+
+	
+	jp	$
+
+black:	.byte	0x0e, 0x00, 0x80, 0x10, 0x08, 0x00, 0x00, 0x00
+white:	.byte	0x00, 0x3c, 0x70, 0x08, 0x10, 0x00, 0x00, 0x00
+
+	
 	ld	hl,mf
 	ld	de,of
 	ld	c,0x00
@@ -243,7 +451,7 @@ animpause:
 	call	prtstr
 	jp	$
 credits:
-	db	"(C) 2015 Tom", 'A' + 0x80, 'S' + 0x80, " Pecina"
+	db	"(C) 2015 Tom", 'A' + 0x80, 'S' + 0x80, " Pecina", 0
 	db	" <tomas@pecina.cz>", 0
 ;; 	ld	c,0
 ;; 	ld	de,res
