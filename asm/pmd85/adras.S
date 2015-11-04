@@ -20,7 +20,7 @@
 
 ; Copy of original monitor's ADRAS, which is not available in PMD 85-1.
 
-	.include "../pmd85.inc"
+	.include "pmd85.inc"
 	
 ; ==============================================================================
 ; adras - return glyph address
@@ -61,7 +61,7 @@ adras:
 	ld	a,h
 	inc	a
 	ret	nz
-	ld	h,undef_char + 8
+	ld	hl,undef_glyph + 8
 	ret
 
 	.end

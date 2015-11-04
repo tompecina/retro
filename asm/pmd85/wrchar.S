@@ -21,7 +21,7 @@
 ; Modified WRCHAR, with ADRAS (not available in PMD 85-1).  In addition,
 ; this version is interrupt-compatible as it does not use the stack pointer.
 
-	.include "../pmd85.inc"
+	.include "pmd85.inc"
 	
 ; ==============================================================================
 ; wrchar - write character

@@ -57,6 +57,8 @@ add_glyphs:
 ; ==============================================================================
 ; Glyphs
 ;
+	.data
+	
 	.if SEL_20
 	.global glyphs20
 glyphs20:
@@ -1253,9 +1255,9 @@ glyphsC0:
 	.byte	0x0c	; ..##..
 	.byte	0x00	; ......
 	; cb
-	.byte	0x00	; ......
-	.byte	0x20	; .....#
-	.byte	0x16	; .##.#.
+	.byte	0x08	; ...#..
+	.byte	0x04	; ..#...
+	.byte	0x06	; .##...
 	.byte	0x04	; ..#...
 	.byte	0x04	; ..#...
 	.byte	0x04	; ..#...
@@ -1854,3 +1856,6 @@ undef_glyph:
 	.byte	0x14	; ..#.#.
 	.byte	0x1c	; ..###.
 	.byte	0x00	; ......
+
+	.text
+	

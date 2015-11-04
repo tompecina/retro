@@ -1,4 +1,4 @@
-; game.S
+; labels.S
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -103,13 +103,14 @@ prtstr:
 	ld	a,(hl)
 	or	a
 	ret	z
-	call	PRTOUT
+	call	PMD_PRTOUT
 	inc	hl
 	jp	prtstr	
 	
 ; ==============================================================================
 ; Label "REVERSI 1.0"
 ;
+	.data
 	.global	label_reversi
 label_reversi:
 	.byte	12, 15

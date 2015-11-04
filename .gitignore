@@ -20,6 +20,7 @@ hs_err_pid*
 *.hex
 *.bin
 *.lst
+*.map
 *.p
 *.o
 *.out

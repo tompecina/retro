@@ -1,19 +1,19 @@
 APPL = reversi
 MCU = z80
-OBJ = main.o game.o util.o glyphs.o labels.o board.o ../adras10.o ../wrchar10.o
+OBJ = main.o game.o util.o glyphs.o labels.o board.o ../adras10.o ../wrchar10.o ../beep.o ../waits.o ../inkey.o
 AS = as-z80
 LD = ld-z80
 OBJCOPY = objcopy-z80
-ASFLAGS = -g -z80
-LDFLAGS = -g -r --section-start=.text=0x0000
+ASFLAGS = -z80 -I ..
+LDFLAGS = --section-start=.text=0x0000
 
-build: $(APPL).out $(APPL).hex
+build: $(APPL).bin $(APPL).hex
 
-%.hex: %.out
-	$(OBJCOPY) -O ihex $< $@
+%.hex: %.bin
+	$(OBJCOPY) -I binary -O ihex $< $@
 
-$(APPL).out: $(OBJ)
-	$(LD) $(LDFLAGS) $(OBJ) -o $@
+$(APPL).bin: $(OBJ)
+	$(LD) $(LDFLAGS) $(OBJ) -o $@ -Map=$(APPL).map
 
 %.o: %.S reversi.inc ../pmd85.inc ../glyphs10.inc
 	$(AS) $(ASFLAGS) -c $< -o $@ -a=$*.lst
@@ -22,7 +22,7 @@ $(APPL).out: $(OBJ)
 	mv $< $@
 
 clean:
-	rm -f *.o *.lst $(APPL).out $(APPL).hex
+	rm -f *.o *.lst $(APPL).bin $(APPL).hex
 
 .SUFFIXES:
 

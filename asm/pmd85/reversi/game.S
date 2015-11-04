@@ -662,6 +662,7 @@ make_move:
 ;; ; ==============================================================================
 ;; ; Direction offsets and rotations
 ;; ; 
+	;; .data
 ;; dir_or:
 ;; 	.byte	0x05, 0x04, 0x06, 0x01, 0x02, 0x09, 0x08, 0x0a, 0
 	
@@ -1008,7 +1009,7 @@ score_board:
 2:	push	hl
 	push	de
 	push	bc
-	call	legal
+	call	all_legal
 	pop	bc
 	pop	hl
 	pop	de
@@ -1048,6 +1049,7 @@ rev_board:
 ; ==============================================================================
 ; Directions
 ; 
+	.data
 dirs:
 	.byte	0x00
 	.word	-9
@@ -1070,6 +1072,7 @@ dirs:
 ; ==============================================================================
 ; Corners
 ; 
+	.data
 crns:
 	.byte	0, 1, 8, 9
 	.byte	7, 6, 14, 15
@@ -1080,6 +1083,7 @@ crns:
 ; ==============================================================================
 ; Square values
 ; 
+	.data
 sqv:
 	.word	20, -20, -3, 3, 11, -11, 8, -8, 8, -8, 11, -11, -3, 3, 20, -20
 	.word	-3, 3, -7, 7, -4, 4, 1, -1, 1, -1, -4, 4, -7, 7, -3, 3
@@ -1093,6 +1097,7 @@ sqv:
 ; ==============================================================================
 ; Bit counts
 ; 
+	.data
 bitcounts:
 	.byte	0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4
 	.byte	1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5
@@ -1114,28 +1119,30 @@ bitcounts:
 ; ==============================================================================
 ; Variables
 ; 
-score:	ds	2
-	.equiv	var, $
-myd:	ds	1
-opd:	ds	1
-myfd:	ds	1
-opfd:	ds	1
-mycd:	ds	1
-opcd:	ds	1
-myncd:	ds	1
-opncd:	ds	1
-mymd:	ds	1
-opmd:	ds	1
-tmp:	ds	2
-	.equiv	len,$ - var
-revb:	ds	64
-mptr:	ds	2
-optr:	ds	2
-field:	ds	64
-sfield:	ds	64
-mfield:	ds	64
-ofield:	ds	64
-larray:	ds	8
+	.bss
+
+score:	.skip	2
+	.equiv	var, .
+myd:	.skip	1
+opd:	.skip	1
+myfd:	.skip	1
+opfd:	.skip	1
+mycd:	.skip	1
+opcd:	.skip	1
+myncd:	.skip	1
+opncd:	.skip	1
+mymd:	.skip	1
+opmd:	.skip	1
+tmp:	.skip	2
+	.equiv	len,. - var
+revb:	.skip	64
+mptr:	.skip	2
+optr:	.skip	2
+field:	.skip	64
+sfield:	.skip	64
+mfield:	.skip	64
+ofield:	.skip	64
+larray:	.skip	8
 	
 	.end
  

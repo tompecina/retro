@@ -20,7 +20,7 @@
 
 ; Copy of original monitor's ADRAS, modified for 10-cell glyphs.
 
-	.include "../pmd85.inc"
+	.include "pmd85.inc"
 	
 ; ==============================================================================
 ; adras - return glyph address
@@ -63,7 +63,7 @@ adras:
 	ld	a,h
 	inc	a
 	ret	nz
-	ld	h,undef_char + 10
+	ld	hl,undef_glyph + 10
 	ret
 
 	.end

@@ -24,9 +24,12 @@
 
 	.global	main
 main:
-	di
-	ld	sp,0x7f00
-	
+	call	set_kmap
+1:	call	inkey
+	jp	z,main
+	call	0x8125
+	jp	1b
+
 	call	add_glyphs
 
 	xor	a
@@ -76,6 +79,7 @@ main:
 	inc	hl
 	ld	a,0xcc
 	call	wrchar
+	inc	hl
 	ld	a,')'
 	call	wrchar
 	inc	hl
@@ -317,7 +321,7 @@ of:	.byte	0x16, 0x1e, 0x00, 0x08, 0x10, 0x00, 0x00, 0x00
 	xor	a
 	ld	(COLOR),a
 	ld	a,0x1c
-	call	PRTOUT
+	call	PMD_PRTOUT
 	call	draw_labels
 	call	draw_board
 	ld	c,64
