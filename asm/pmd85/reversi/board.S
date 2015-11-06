@@ -32,6 +32,7 @@
 ; 
 ;   uses:   all
 ; 
+	.text
 	.global	draw_board
 draw_board:
 	ld	hl,ULC
@@ -84,6 +85,7 @@ draw_board:
 ; 
 ;   uses:   A, D, E, H, L
 ; 
+	.text
 	.global	draw_labels
 draw_labels:
 	ld	hl,ULC - 127
@@ -122,6 +124,7 @@ draw_labels:
 ;
 ;   uses:   all
 ; 
+	.text
 	.global	draw_shape
 draw_shape:
 	push	hl
@@ -176,9 +179,10 @@ draw_shape:
 ; 
 ;   uses:   all
 ; 
+	.text
 	.global	anim_b2w
 anim_b2w:
-	ld	hl,BLACK_DISK
+	ld	hl,BLACK_DISC
 	ld	de,51
 	jp	1f
 	
@@ -189,12 +193,13 @@ anim_b2w:
 ; 
 ;   uses:   all
 ; 
+	.text
 	.global	anim_w2b
 anim_w2b:
-	ld	hl,WHITE_DISK
+	ld	hl,WHITE_DISC
 	ld	de,-51
 1:	ld	b,9
-	; fall through
+	jp	animate
 	
 ; ==============================================================================
 ; animate - animate shape transition
@@ -206,6 +211,7 @@ anim_w2b:
 ;
 ;   uses:   all
 ; 
+	.text
 	.global	animate
 animate:
 	push	hl
@@ -226,6 +232,7 @@ animate:
 ; 
 ;   uses:   A, H, L
 ; 
+	.text
 	.global	anim_pause
 anim_pause:
 	ld	hl,2000
@@ -240,6 +247,7 @@ anim_pause:
 ; 
 ;   uses:   A, H, L
 ; 
+	.text
 	.global	long_anim_pause
 long_anim_pause:
 	ld	hl,5000
@@ -248,11 +256,12 @@ long_anim_pause:
 ; ==============================================================================
 ; draw_pos - draw position
 ; 
-;   input:  (HL) - array of black disks
-;           (DE) - array of white disks
+;   input:  (HL) - array of black discs
+;           (DE) - array of white discs
 ; 
 ;   uses:   all
 ; 
+	.text
 	.global	draw_pos
 draw_pos:
 	ld	b,0
@@ -266,11 +275,11 @@ draw_pos:
 3:	add	hl,hl
 	push	hl
 	jp	nc,1f
-	ld	hl,BLACK_DISK
+	ld	hl,BLACK_DISC
 	jp	2f
 1:	ld	a,h
 	rra
-	ld	hl,WHITE_DISK
+	ld	hl,WHITE_DISC
 	jp	c,2f
 	ld	hl,BLANK_SQUARE
 2:	push	bc
@@ -293,14 +302,15 @@ draw_pos:
 ; ==============================================================================
 ; anim_move - animate move
 ; 
-;   input:  (HL) - array of black disks
-;           (DE) - array of white disks
+;   input:  (HL) - array of black discs
+;           (DE) - array of white discs
 ;           C - move (must be legal)
 ;           B - =0 black to move
 ;               =1 white to move
 ; 
 ;   uses:   all
 ; 
+	.text
 	.global	anim_move
 anim_move:
 	ld	a,c
@@ -312,9 +322,9 @@ anim_move:
 	ld	a,b
 	or	a
 	jp	z,1f
-	ld	hl,WHITE_DISK
+	ld	hl,WHITE_DISC
 	jp	2f
-1:	ld	hl,BLACK_DISK
+1:	ld	hl,BLACK_DISC
 2:	call	draw_shape
 	call	long_anim_pause
 	pop	bc
@@ -393,9 +403,9 @@ BLANK_SQUARE:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 
-; black disk
-	.global	BLACK_DISK
-BLACK_DISK:
+; black disc
+	.global	BLACK_DISC
+BLACK_DISC:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x1c, 0x00
 	.byte	0x00, 0x23, 0x01
@@ -414,7 +424,7 @@ BLACK_DISK:
 	.byte	0x00, 0x1c, 0x00
 	.byte	0x00, 0x00, 0x00
 
-; black disk, turned 1
+; black disc, turned 1
 	.global	BLACK_TURNED1
 BLACK_TURNED1:
 	.byte	0x00, 0x00, 0x00
@@ -435,7 +445,7 @@ BLACK_TURNED1:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 
-; black disk, turned 2
+; black disc, turned 2
 	.global	BLACK_TURNED2
 BLACK_TURNED2:
 	.byte	0x00, 0x00, 0x00
@@ -456,7 +466,7 @@ BLACK_TURNED2:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 
-; black disk, turned 3
+; black disc, turned 3
 	.global	BLACK_TURNED3
 BLACK_TURNED3:
 	.byte	0x00, 0x00, 0x00
@@ -477,7 +487,7 @@ BLACK_TURNED3:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 
-; disk, half turned
+; disc, half turned
 	.global	HALF_TURNED
 HALF_TURNED:
 	.byte	0x00, 0x00, 0x00
@@ -498,7 +508,7 @@ HALF_TURNED:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 
-; white disk, turned 3
+; white disc, turned 3
 	.global	WHITE_TURNED3
 WHITE_TURNED3:
 	.byte	0x00, 0x00, 0x00
@@ -519,7 +529,7 @@ WHITE_TURNED3:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 
-; white disk, turned 2
+; white disc, turned 2
 	.global	WHITE_TURNED2
 WHITE_TURNED2:
 	.byte	0x00, 0x00, 0x00
@@ -540,7 +550,7 @@ WHITE_TURNED2:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 
-; white disk, turned 1
+; white disc, turned 1
 	.global	WHITE_TURNED1
 WHITE_TURNED1:
 	.byte	0x00, 0x00, 0x00
@@ -561,9 +571,9 @@ WHITE_TURNED1:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 
-; white disk
-	.global	WHITE_DISK
-WHITE_DISK:
+; white disc
+	.global	WHITE_DISC
+WHITE_DISC:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x1c, 0x00
 	.byte	0x00, 0x3f, 0x01
@@ -603,7 +613,7 @@ BLANK_CURSOR:
 	.byte	0x14, 0x15, 0x15
 	.byte	0x2a, 0x2a, 0x2a
 	
-; cursor on black disk
+; cursor on black disc
 	.global	BLACK_CURSOR
 BLACK_CURSOR:
 	.byte	0x2a, 0x2a, 0x2a
@@ -624,7 +634,7 @@ BLACK_CURSOR:
 	.byte	0x14, 0x3f, 0x15
 	.byte	0x2a, 0x2a, 0x2a
 
-; cursor on white disk
+; cursor on white disc
 	.global	WHITE_CURSOR
 WHITE_CURSOR:
 	.byte	0x2a, 0x2a, 0x2a
@@ -646,4 +656,3 @@ WHITE_CURSOR:
 	.byte	0x2a, 0x2a, 0x2a
 	
 	.end
- 

@@ -32,6 +32,7 @@
 ; 
 ;   uses:   A
 ; 
+	.text
 	.global	wrchar
 wrchar:
 	push	bc

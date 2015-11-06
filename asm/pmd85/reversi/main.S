@@ -22,13 +22,31 @@
 
 	.include "reversi.inc"
 
+	.text
 	.global	main
 main:
-	call	set_kmap
-1:	call	inkey
-	jp	z,main
-	call	0x8125
+	ld	sp,0x7f00
+	ld	hl,black
+	ld	de,white
+	call	count_cdiscs
+
+	jp	.
+
+	
+1:	call	init_rvt
+	ld	a,'.'
+	call	0x8500
 	jp	1b
+	
+	ld	hl,0x5555
+	ld	c,2
+	call	udiv16_8
+	
+;; 	call	set_kmap
+;; 1:	call	inkey
+;; 	jp	z,main
+;; 	call	0x8125
+;; 	jp	1b
 
 	call	add_glyphs
 
@@ -252,8 +270,8 @@ main:
 	
 	jp	$
 
-black:	.byte	0x0e, 0x00, 0x80, 0x10, 0x08, 0x00, 0x00, 0x00
-white:	.byte	0x00, 0x3c, 0x70, 0x08, 0x10, 0x00, 0x00, 0x00
+black:	.byte	0x0e, 0x00, 0x80, 0x10, 0x08, 0x00, 0xc0, 0x00
+white:	.byte	0x00, 0x3c, 0x70, 0x08, 0x10, 0x00, 0x00, 0xc0
 
 	
 	ld	hl,mf
@@ -331,16 +349,16 @@ of:	.byte	0x16, 0x1e, 0x00, 0x08, 0x10, 0x00, 0x00, 0x00
 	pop	bc
 	dec	c
 	jp	p,1b
-	ld	hl,BLACK_DISK
+	ld	hl,BLACK_DISC
 	ld	c,0x1b
 	call	draw_shape
-	ld	hl,BLACK_DISK
+	ld	hl,BLACK_DISC
 	ld	c,0x24
 	call	draw_shape
-	ld	hl,WHITE_DISK
+	ld	hl,WHITE_DISC
 	ld	c,0x1c
 	call	draw_shape
-	ld	hl,WHITE_DISK
+	ld	hl,WHITE_DISC
 	ld	c,0x23
 	call	draw_shape
 	ld	hl,BLANK_CURSOR
@@ -388,7 +406,7 @@ of:	.byte	0x16, 0x1e, 0x00, 0x08, 0x10, 0x00, 0x00, 0x00
 
 	jp	2b
 1:	
-	ld	hl,WHITE_DISK
+	ld	hl,WHITE_DISC
 	ld	c,0x24
 	call	draw_shape
 	call	animpause
@@ -412,7 +430,7 @@ of:	.byte	0x16, 0x1e, 0x00, 0x08, 0x10, 0x00, 0x00, 0x00
 	ld	c,0x24
 	call	draw_shape
 	call	animpause
-	ld	hl,BLACK_DISK
+	ld	hl,BLACK_DISC
 	ld	c,0x24
 	call	draw_shape
 	call	pause
@@ -436,7 +454,7 @@ of:	.byte	0x16, 0x1e, 0x00, 0x08, 0x10, 0x00, 0x00, 0x00
 	ld	c,0x24
 	call	draw_shape
 	call	animpause
-	ld	hl,WHITE_DISK
+	ld	hl,WHITE_DISC
 	ld	c,0x24
 	call	draw_shape
 	call	pause

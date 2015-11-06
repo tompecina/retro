@@ -32,6 +32,7 @@
 ; 
 ;   uses:   A, B, H, L
 ; 
+	.text
 	.global	zerofill
 zerofill:
 	xor	a
@@ -52,6 +53,7 @@ fill:
 ; 
 ;   uses:   A, B, C, D, E
 ; 
+	.text
 	.global	mul16
 mul16:
 	ld      b,h
@@ -89,8 +91,9 @@ mul16:
 ;   output: HL = DE / HL
 ;           DE = DE % HL
 ; 
-;   uses:   A, B, C
+;   uses:   all
 ; 
+	.text
 	.global	div16
 div16:	ld      b,h
         ld      c,l
@@ -129,9 +132,27 @@ div16:	ld      b,h
 3:	pop     af
         ret	p
         call    deneg
-        ex	de,hl
-        call    deneg
-        ex	de,hl
+	jp	hlneg
+	
+; ==============================================================================
+; hlneg - negate HL
+; 
+;   input:  HL
+; 
+;   output: HL = -HL
+; 
+;   uses:   A
+; 
+	.text
+	.global	hlneg
+hlneg:
+        ld      a,h
+        cpl
+        ld      h,a
+        ld      a,l
+        cpl
+        ld      l,a
+        inc     hl
         ret
 	
 ; ==============================================================================
@@ -143,6 +164,7 @@ div16:	ld      b,h
 ; 
 ;   uses:   A
 ; 
+	.text
 	.global	deneg
 deneg:
         ld      a,d
@@ -163,6 +185,7 @@ deneg:
 ; 
 ;   uses:   A
 ; 
+	.text
 	.global	bcneg
 bcneg:
         ld      a,b
@@ -180,9 +203,11 @@ bcneg:
 ;   input:  DE
 ; 
 ;   output: DE = DE << 1
+;           Z if DE == 0
 ; 
 ;   uses:   A
 ; 
+	.text
 	.global	rdel
 rdel:
 	ld      a,e
@@ -203,6 +228,7 @@ rdel:
 ; 
 ;   uses:   A
 ; 
+	.text
 	.global	cmpbcde
 cmpbcde:
         ld      a,e
@@ -220,6 +246,7 @@ cmpbcde:
 ; 
 ;   uses:   A, B
 ; 
+	.text
 	.global	shrhlb
 shrhlb:
 	ld	a,h
@@ -235,7 +262,7 @@ shrhlb:
 	ret
 
 ; ==============================================================================
-; signex - sign-extend A to HL
+; signexhl - sign-extend A to HL
 ; 
 ;   input:  A
 ; 
@@ -243,8 +270,9 @@ shrhlb:
 ; 
 ;   uses:   A
 ; 
-	.global	signex
-signex:
+	.text
+	.global	signexhl
+signexhl:
 	ld	l,a
 	rla
 	ld	h,0
@@ -252,5 +280,60 @@ signex:
 	dec	h
 	ret
 
+; ==============================================================================
+; signexde - sign-extend A to DE
+; 
+;   input:  A
+; 
+;   output: HL = A
+; 
+;   uses:   A
+; 
+	.text
+	.global	signexde
+signexde:
+	ld	e,a
+	rla
+	ld	d,0
+	ret	nc
+	dec	d
+	ret
+
+; ==============================================================================
+; udiv16_8 - unsigned 16-bit/8-bit division
+; 
+;   input:  HL, C
+; 
+;   output: HL = HL / C
+;           DE = HL % C
+; 
+;   uses:   all
+; 
+	.text
+	.global	udiv16_8
+udiv16_8:
+        ld      de,0
+	ld      b,16
+1:	add     hl,hl
+        call    rdel
+        jp	z,2f
+        ld      a,e
+        sub     c
+        ld      a,d
+        sbc     a,0
+        jp	m,2f
+        ld      a,l
+        or      1
+        ld      l,a
+        ld      a,e
+        sub     c
+        ld      e,a
+        ld      a,d
+        sbc     a,0
+        ld      d,a
+2:	dec     b
+        jp	nz,1b
+	ret
+	
 	.end
  

@@ -38,6 +38,7 @@
 ; 
 ;   uses:   B, D, E, H, L
 ; 
+	.text
 	.global	count_bits
 count_bits:
 	ld	de,bitcounts
@@ -53,7 +54,356 @@ count_bits:
 	dec	b
 	jp	nz,1b
 	ret
+	
+; ==============================================================================
+; init_rvt - initialize table of row values
+; 
+;   output: (rbvt) - initialized table
+; 
+;   uses:   all
+;
+	.text
+	.global	init_rvt
+init_rvt:
+	ld	hl,sqv
+	push	hl
+	ld	de,rvt
+	ld	h,4
+4:	ld	l,0
+3:	ld	c,0
+	ld	a,l
+	ld	b,8
+	ex	(sp),hl
+	push	hl
+2:	rra
+	jp	nc,1f
+	push	af
+	ld	a,(hl)
+	add	a,c
+	ld	c,a
+	pop	af
+1:	inc	hl
+	dec	b
+	jp	nz,2b
+	ld	a,c
+	ld	(de),a
+	inc	de
+	pop	hl
+	ex	(sp),hl
+	inc	l
+	jp	nz,3b
+	dec	h
+	jp	z,1f
+	ex	(sp),hl
+	ld	bc,8
+	add	hl,bc
+	ex	(sp),hl
+	jp	4b
+1:	pop	hl
+	ret
 
+	.lcomm	rvt, 1024
+	
+; ==============================================================================
+; calc_tbv - calculate total board square value
+; 
+;   input:  (HL) - array of my discs
+;           (DE) - array of opponent's discs
+; 
+;   output: HL - my total board square value
+;           DE - opponent's total board square value
+; 
+;   uses:   all
+; 
+	.text
+	.global	calc_tbv
+calc_tbv:
+	ld	b,h
+	ld	c,l
+	ld	hl,0
+	ld	(myval),hl
+	ld	(opval),hl
+	ld	hl,rvt
+	ld	a,4
+1:	call	2f
+	inc	h
+	dec	a
+	jp	nz,1b
+	ld	a,4
+1:	dec	h
+	call	2f
+	dec	a
+	jp	nz,1b
+	ld	hl,(opval)
+	ex	de,hl
+	ld	hl,(myval)
+	ret
+2:	push	af
+	push	hl
+	push	de
+	ld	a,(bc)
+	ld	e,a
+	ld	d,0
+	add	hl,de
+	ld	a,(hl)
+	call	signexde
+	ld	hl,(myval)
+	add	hl,de
+	ld	(myval),hl
+	pop	de
+	pop	hl
+	push	hl
+	push	de
+	ld	a,(de)
+	ld	e,a
+	ld	d,0
+	add	hl,de
+	ld	a,(hl)
+	call	signexde
+	ld	hl,(opval)
+	add	hl,de
+	ld	(opval),hl
+	pop	de	
+	pop	hl
+	pop	af
+	inc	bc
+	inc	de
+	ret
+	
+	.lcomm	myval, 2
+	.lcomm	opval, 2
+	
+; ==============================================================================
+; count_fdiscs - count frontier discs
+; 
+;   input:  (HL) - array of my discs
+;           (DE) - array of opponent's discs
+; 
+;   output: B - number of my frontier discs
+;           C - number of opponent's frontier discs
+; 
+;   uses:   all
+; 
+	.text
+	.global	count_fdiscs
+count_fdiscs:
+	xor	a
+	ld	(myfd),a
+	ld	(opfd),a
+	push	hl
+	push	de
+	ld	bc,tarray
+	ld	a,8
+1:	push	af
+	ld	a,(de)
+	or	(hl)
+	cpl
+	push	bc
+	ld	b,a
+	add	a,a
+	or	b
+	ld	c,a
+	ld	a,b
+	rra
+	or	c
+	pop	bc
+	ld	(bc),a
+	inc	hl
+	inc	de
+	inc	bc
+	pop	af
+	dec	a
+	jp	nz,1b
+	ld	hl,tarray
+	ld	bc,0x0700
+	ld	d,(hl)
+1:	inc	hl
+	ld	e,(hl)
+	ld	a,c
+	or	d
+	or	e
+	dec	hl
+	ld	(hl),a
+	inc	hl
+	ld	c,d
+	ld	d,e
+	ld	e,(hl)
+	dec	b
+	jp	nz,1b
+	ld	a,c
+	or	d
+	ld	(hl),a
+	pop	de
+	pop	hl
+	ld	bc,tarray
+	ld	a,8
+1:	push	af
+	ld	a,(bc)
+	and	(hl)
+	inc	hl
+	push	hl
+	push	de
+	ld	hl,bitcounts
+	ld	e,a
+	ld	d,0
+	add	hl,de
+	ld	a,(hl)
+	ld	hl,myfd
+	add	a,(hl)
+	ld	(hl),a
+	pop	hl
+	ld	a,(bc)
+	and	(hl)
+	inc	hl
+	push	hl
+	ld	hl,bitcounts
+	ld	e,a
+	add	hl,de
+	ld	a,(hl)
+	ld	hl,opfd
+	add	a,(hl)
+	ld	(hl),a
+	pop	de
+	pop	hl
+	inc	bc
+	pop	af
+	dec	a
+	jp	nz,1b
+	ld	a,(myfd)
+	ld	b,a
+	ld	a,(opfd)
+	ld	c,a
+	ret
+	
+	.lcomm	tarray, 8
+	.lcomm	myfd, 1
+	.lcomm	opfd, 1
+	
+; ==============================================================================
+; count_cdiscs - count corner and next-to-empty-corner discs
+; 
+;   input:  (HL) - array of my discs
+;           (DE) - array of opponent's discs
+; 
+;   output: B - number of my corner discs
+;           C - number of opponent's corner discs
+;           D - number of my next-to-empty-corner discs
+;           E - number of opponent's next-to-empty-corner discs
+; 
+;   uses:   all
+; 
+	.text
+	.global	count_cdiscs
+count_cdiscs:
+	xor	a
+	ld	(mycd),a
+	ld	(opcd),a
+	ld	(myncd),a
+	ld	(opncd),a
+	push	hl
+	push	de
+	ld	b,(hl)
+	inc	hl
+	ld	c,(hl)
+	ex	de,hl
+	ld	a,(hl)
+	inc	hl
+	ld	e,(hl)
+	ld	d,a
+	call	2f
+	pop	hl
+	pop	de
+	ld	bc,7
+	add	hl,bc
+	ex	de,hl
+	add	hl,bc
+	ld	b,(hl)
+	inc	hl
+	ld	c,(hl)
+	ex	de,hl
+	ld	a,(hl)
+	inc	hl
+	ld	e,(hl)
+	ld	d,a
+	call	2f
+	ld	a,(mycd)
+	ld	b,a
+	ld	a,(opcd)
+	ld	c,a
+	ld	a,(myncd)
+	ld	d,a
+	ld	a,(opncd)
+	ld	e,a
+	ret
+2:	push	bc
+	push	de
+	call	2f
+	pop	de
+	pop	bc
+	ld	a,b
+	rlca
+	rlca
+	ld	h,a
+	ld	a,b
+	rla
+	ld	a,h
+	rla
+	ld	a,c
+	rlca
+	rlca
+	ld	c,a
+	ld	a,d
+	rlca
+	rlca
+	ld	h,a
+	ld	a,d
+	rla
+	ld	a,h
+	rla
+	ld	a,e
+	rlca
+	rlca
+	ld	e,a
+2:	ld	a,b
+	rra
+	jp	nc,1f
+	ld	hl,mycd
+	inc	(hl)
+	ret
+1:	ld	a,d
+	rra
+	jp	nc,1f
+	ld	hl,opcd
+	inc	(hl)
+	ret
+1:	ld	hl,opncd
+	rra
+	jp	nc,1f
+	inc	(hl)
+1:	ld	a,e
+	rra
+	jp	nc,1f
+	inc	(hl)
+1:	ld	hl,myncd
+	ld	a,b
+	rra
+	rra
+	jp	nc,1f
+	inc	(hl)
+1:	ld	a,c
+	rra
+	jp	nc,1f
+	inc	(hl)
+1:	rra
+	ret	nc
+	inc	(hl)
+	ret
+	
+	.lcomm	mycd, 1
+	.lcomm	opcd, 1
+	.lcomm	myncd, 1
+	.lcomm	opncd, 1
+	
 ; ==============================================================================
 ; dir_pat - create directions pattern in situ
 ; 
@@ -61,6 +411,7 @@ count_bits:
 ; 
 ;   uses:   A, B, C, H, L
 ; 
+	.text
 	.global	dir_pat
 dir_pat:
 	ld	b,0
@@ -144,13 +495,14 @@ dir_pat:
 ; ==============================================================================
 ; all_legal - create array of all legal moves
 ; 
-;   input:  (HL) - array of my disks
-;           (DE) - array of opponent's disks
+;   input:  (HL) - array of my discs
+;           (DE) - array of opponent's discs
 ; 
 ;   output: (HL) - array of legal moves
 ; 
 ;   uses:   all
 ; 
+	.text
 	.global	all_legal
 all_legal:
 
@@ -276,17 +628,18 @@ all_legal:
 	ret
 	
 ; ==============================================================================
-; one_legal - check if move is legal and return an array of captured disks
+; one_legal - check if move is legal and return an array of captured discs
 ; 
-;   input:  (HL) - array of my disks
-;           (DE) - array of opponent's disks
+;   input:  (HL) - array of my discs
+;           (DE) - array of opponent's discs
 ;           C - move
 ; 
 ;   output: CY - on illegal move
-;           (HL) - array of captured disk numbers in different directions
+;           (HL) - array of captured disc numbers in different directions
 ; 
 ;   uses:   all
 ; 
+	.text
 	.global	one_legal
 one_legal:
 	
@@ -417,6 +770,7 @@ one_legal:
 ; 
 ;   uses:   A
 ; 
+	.text
 	.global	rc2sq
 rc2sq:
 	ld	a,b
@@ -437,6 +791,7 @@ rc2sq:
 ; 
 ;   uses:   A
 ; 
+	.text
 	.global	sq2rc
 sq2rc:
 	ld	a,c
@@ -460,6 +815,7 @@ sq2rc:
 ; 
 ;   uses:   A
 ; 
+	.text
 	.global	sq2om
 sq2om:
 	call	sq2rc
@@ -474,8 +830,8 @@ sq2om:
 ; ==============================================================================
 ; make_move - perform one move
 ; 
-;   input:  (HL) - array of black disks
-;           (DE) - array of white disks
+;   input:  (HL) - array of black discs
+;           (DE) - array of white discs
 ;           C - move (must be legal)
 ;           B - =0 black to move
 ;               =1 white to move
@@ -484,6 +840,7 @@ sq2om:
 ; 
 ;   uses:   all
 ; 
+	.text
 	.global	make_move
 make_move:
 
@@ -644,7 +1001,7 @@ make_move:
 	ld	(hl),a
 	jp	1b
 	
-; adjust opponent's disks
+; adjust opponent's discs
 2:	pop	hl
 1:	pop	hl
 	pop	de
@@ -676,6 +1033,7 @@ make_move:
 ;; ; 
 ;; ;   uses:   all
 ;; ; 
+;; 	.text
 ;; 	.global	legal
 ;; legal:
 ;; 	ld	b,0
@@ -713,7 +1071,7 @@ make_move:
 ;; 	add	hl,de
 ;; 	ld	a,(hl)
 ;; 	cp	2
-;; 	jp	nz,2b		; not opponent's disk
+;; 	jp	nz,2b		; not opponent's disc
 ;; 4:	ld	a,c
 ;; 	add	a,e
 ;; 	ld	c,a
@@ -731,7 +1089,7 @@ make_move:
 ;; 	dec	a
 ;; 	jp	nz,2b		; empty square
 ;; 	jp	4b
-;; 4:	xor	a		; my disk, move is legal
+;; 4:	xor	a		; my disc, move is legal
 ;; 	pop	bc
 ;; 	pop	hl
 ;; 	pop	hl
@@ -744,7 +1102,7 @@ make_move:
 
 ; ==============================================================================
 ; score_board - calculate board score, based on
-;               <https://github.com/kartikkukreja/blog>.
+;               <https://github.com/kartikkukreja/blog-codes>.
 ; 
 ;   input:  (HL) - board
 ; 
@@ -752,6 +1110,7 @@ make_move:
 ; 
 ;   uses:   all
 ; 
+	.text
 	.global	score_board
 score_board:
 	
@@ -762,14 +1121,14 @@ score_board:
 	call	zerofill
 	ex	de,hl
 
-; count all disks and frontier disks and calculate value differential
+; count all discs and frontier discs and calculate value differential
 	push	hl
 	ld	de,sqv		; DE = ptr in square values
 	ld	c,0		; C = square offset
 4:	ld	a,(hl)
 	dec	a
 	jp	nz,1f
-	push	hl		; my disk
+	push	hl		; my disc
 	ld	hl,myd
 	inc	(hl)
 	ex	de,hl
@@ -781,7 +1140,7 @@ score_board:
 	jp	2f
 1:	dec	a
 	jp	nz,1f
-	push	hl		; opponent's disk
+	push	hl		; opponent's disc
 	ld	hl,opd
 	inc	(hl)
 	ex	de,hl
@@ -832,7 +1191,7 @@ score_board:
 	ld	hl,myfd
 	jp	z,5f
 	inc	hl
-5:	inc	(hl)		; increment frontier disks counter
+5:	inc	(hl)		; increment frontier discs counter
 3:	pop	hl
 	pop	de
 	jp	2f
@@ -853,8 +1212,8 @@ score_board:
 	pop	de
 	add	hl,de
 	ld	(score),hl
-	ld	hl,(myd)	; L = my disks
-				; H = opponent's disks
+	ld	hl,(myd)	; L = my discs
+				; H = opponent's discs
 	ld	a,l
 	cp	h
 	jp	z,1f
@@ -863,7 +1222,7 @@ score_board:
 3:	xor	a
 	sub	h
 4:	push	hl
-	call	signex
+	call	signexhl
 	ld	de,125
 	call	mul16
 	ex	de,hl
@@ -874,8 +1233,8 @@ score_board:
 	ld	h,0
 	call	div16
 	call	2f
-1:	ld	hl,(myfd)	; L = my frontier disks
-				; H = opponent's frontier disks
+1:	ld	hl,(myfd)	; L = my frontier discs
+				; H = opponent's frontier discs
 	ld	a,l
 	cp	h
 	jp	z,1f
@@ -885,7 +1244,7 @@ score_board:
 	jp	4f
 3:	ld	a,h
 4:	push	hl
-	call	signex
+	call	signexhl
 	ld	de,930
 	call	mul16
 	ex	de,hl
@@ -897,7 +1256,7 @@ score_board:
 	call	div16
 	call	2f
 
-; count corner and next-to-corner disks
+; count corner and next-to-corner discs
 1:	ld	bc,crns
 3:	ld	a,(bc)
 	cp	END
@@ -944,19 +1303,19 @@ score_board:
 	inc	bc
 	inc	bc
 	jp	3b	
-1:	ld	hl,(mycd)	; L = my corner disks
+1:	ld	hl,(mycd)	; L = my corner discs
 				; H = opponent's corner moves
 	ld	a,l
 	sub	h
-	call	signex
+	call	signexhl
 	ld	de,2505
 	call	mul16
 	call	2f
-	ld	hl,(mycd)	; L = my next-to-corner disks
+	ld	hl,(mycd)	; L = my next-to-corner discs
 				; H = opponent's next-to-corner moves
 	ld	a,h
 	sub	l
-	call	signex
+	call	signexhl
 	ld	de,597
 	call	mul16
 	call	2f
@@ -982,7 +1341,7 @@ score_board:
 5:	xor	a
 	sub	h
 4:	push	hl
-	call	signex
+	call	signexhl
 	ld	de,987
 	call	mul16
 	ex	de,hl
@@ -1032,6 +1391,7 @@ score_board:
 ; 
 ;   uses:   all
 ; 
+	.text
 	.global	rev_board
 rev_board:
 	ld	bc,0x0340
@@ -1080,19 +1440,29 @@ crns:
 	.byte	63, 54, 55, 62
 	.byte	END
 	
+;; ; ==============================================================================
+;; ; Square values
+;; ; 
+;; 	.data
+;; sqv:
+;; 	.word	20, -20, -3, 3, 11, -11, 8, -8, 8, -8, 11, -11, -3, 3, 20, -20
+;; 	.word	-3, 3, -7, 7, -4, 4, 1, -1, 1, -1, -4, 4, -7, 7, -3, 3
+;; 	.word	11, -11, -4, 4, 2, -2, 2, -2, 2, -2, 2, -2, -4, 4, 11, -11
+;; 	.word	8, -8, 1, -1, 2, -2, -3, 3, -3, 3, 2, -2, 1, -1, 8, -8
+;; 	.word	8, -8, 1, -1, 2, -2, -3, 3, -3, 3, 2, -2, 1, -1, 8, -8
+;; 	.word	11, -11, -4, 4, 2, -2, 2, -2, 2, -2, 2, -2, -4, 4, 11, -11
+;; 	.word	-3, 3, -7, 7, -4, 4, 1, -1, 1, -1, -4, 4, -7, 7, -3, 3
+;; 	.word	20, -20, -3, 3, 11, -11, 8, -8, 8, -8, 11, -11, -3, 3, 20, -20
+
 ; ==============================================================================
 ; Square values
 ; 
 	.data
 sqv:
-	.word	20, -20, -3, 3, 11, -11, 8, -8, 8, -8, 11, -11, -3, 3, 20, -20
-	.word	-3, 3, -7, 7, -4, 4, 1, -1, 1, -1, -4, 4, -7, 7, -3, 3
-	.word	11, -11, -4, 4, 2, -2, 2, -2, 2, -2, 2, -2, -4, 4, 11, -11
-	.word	8, -8, 1, -1, 2, -2, -3, 3, -3, 3, 2, -2, 1, -1, 8, -8
-	.word	8, -8, 1, -1, 2, -2, -3, 3, -3, 3, 2, -2, 1, -1, 8, -8
-	.word	11, -11, -4, 4, 2, -2, 2, -2, 2, -2, 2, -2, -4, 4, 11, -11
-	.word	-3, 3, -7, 7, -4, 4, 1, -1, 1, -1, -4, 4, -7, 7, -3, 3
-	.word	20, -20, -3, 3, 11, -11, 8, -8, 8, -8, 11, -11, -3, 3, 20, -20
+	.byte	20, -20, -3, 3, 11, -11, 8, -8, 8, -8, 11, -11, -3, 3, 20, -20
+	.byte	-3, 3, -7, 7, -4, 4, 1, -1, 1, -1, -4, 4, -7, 7, -3, 3
+	.byte	11, -11, -4, 4, 2, -2, 2, -2, 2, -2, 2, -2, -4, 4, 11, -11
+	.byte	8, -8, 1, -1, 2, -2, -3, 3, -3, 3, 2, -2, 1, -1, 8, -8
 
 ; ==============================================================================
 ; Bit counts
@@ -1125,12 +1495,16 @@ score:	.skip	2
 	.equiv	var, .
 myd:	.skip	1
 opd:	.skip	1
-myfd:	.skip	1
-opfd:	.skip	1
-mycd:	.skip	1
-opcd:	.skip	1
-myncd:	.skip	1
-opncd:	.skip	1
+;; 	.global	myfd
+;; myfd:	.skip	1
+;; 	.global	opfd
+;; opfd:	.skip	1
+;; myval:	.skip	1
+;; opval:	.skip	1
+;; mycd:	.skip	1
+;; opcd:	.skip	1
+;; myncd:	.skip	1
+;; opncd:	.skip	1
 mymd:	.skip	1
 opmd:	.skip	1
 tmp:	.skip	2

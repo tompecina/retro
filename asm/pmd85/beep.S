@@ -27,6 +27,7 @@
 ; 
 ;   uses:   A
 ; 
+	.text
 	.global	bepuk
 bepuk:
 	in	a,(SYSPIO_PC)
@@ -39,6 +40,7 @@ bepuk:
 ; 
 ;   uses:   A
 ; 
+	.text
 	.global	beclr
 beclr:
 	in	a,(SYSPIO_PC)
@@ -54,6 +56,7 @@ beclr:
 ; 
 ;   uses:   A, B, D, H, L
 ; 
+	.text
 	.global beep, beclr
 beep:
 	ld	hl,(BEEDT)

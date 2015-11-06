@@ -32,6 +32,7 @@
 ; 
 ;   uses:   all
 ; 
+	.text
 	.global	adras
 adras:
 	ld	b,a

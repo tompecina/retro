@@ -31,6 +31,7 @@
 ; 
 ;   uses:   all
 ; 
+	.text
 	.global	label
 label:
 	ld	c,(hl)		; C = rows
@@ -70,6 +71,7 @@ label:
 ; 
 ;   uses:   all
 ; 
+	.text
 	.global	rect
 rect:
 	ld	a,(COLOR)
@@ -98,6 +100,7 @@ rect:
 ; 
 ;   uses:   A, H, L
 ; 
+	.text
 	.global	prtstr
 prtstr:
 	ld	a,(hl)

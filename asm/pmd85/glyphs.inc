@@ -25,6 +25,7 @@
 ;
 ;   uses:   H, L
 ;
+	.text
 	.global add_glyphs
 add_glyphs:	
 	.if SEL_20

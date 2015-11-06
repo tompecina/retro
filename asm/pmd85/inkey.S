@@ -30,6 +30,7 @@
 ; 
 ;   uses:   all
 ; 
+	.text
 	.global inkey
 inkey:
 	ld	hl,(OLDKEY)
@@ -109,6 +110,7 @@ inkey:
 ; 
 ;   uses:   A, H, L
 ;
+	.text
 	.global	set_kmap
 set_kmap:
 	ld	hl,0x8000
@@ -133,6 +135,7 @@ set_kmap:
 ; 
 ;   uses:   A
 ;
+	.text
 	.global	set_kmap1
 set_kmap1:
 	ld	a,'['
@@ -146,6 +149,7 @@ set_kmap1:
 ; 
 ;   uses:   A
 ;
+	.text
 	.global	set_kmap2
 set_kmap2:
 	ld	a,']'

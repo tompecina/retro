@@ -29,6 +29,7 @@
 ; 
 ;   uses:   A, D
 ; 
+	.text
 	.global waits
 waits:
 	.rept	4
