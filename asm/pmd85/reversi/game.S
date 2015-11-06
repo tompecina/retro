@@ -588,8 +588,27 @@ all_legal:
 	ld	d,7
 	call	2f
 
-; populate mfield and ofield
+; zero larray
+	ld	hl,larray
+	ld	b,8
+	call	zerofill
+
+; check sfield
+	ld	hl,sfield
+	ld	b,8
+1:	ld	a,(hl)
+	inc	hl
+	or	a
+	jp	nz,1f
+	dec	b
+	jp	nz,1b
 	pop	hl
+	pop	hl
+	ld	hl,larray
+	ret
+		
+; populate mfield and ofield
+1:	pop	hl
 	ld	bc,mfield
 	ld	d,8
 	call	2f
@@ -598,14 +617,6 @@ all_legal:
 	ld	d,8
 	call	2f
 
-; zero larray
-	ld	hl,larray
-	ld	b,8
-	call	zerofill
-
-; check sfield
-	call	3f
-		
 ; shift mfield and ofield
 	ld	hl,mfield
 	call	dir_pat
