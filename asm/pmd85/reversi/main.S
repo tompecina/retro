@@ -26,9 +26,35 @@
 	.global	main
 main:
 	ld	sp,0x7f00
+
+1:
+	.rept	10
 	ld	hl,black
 	ld	de,white
-	call	count_cdiscs
+	call	score_board
+	.endr
+	
+	ld	a,'.'
+	call	0x8500
+
+	jp	1b
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	ld	hl,black
+	ld	de,white
+	call	count_moves
 
 	jp	.
 
@@ -270,9 +296,39 @@ main:
 	
 	jp	$
 
-black:	.byte	0x0e, 0x00, 0x80, 0x10, 0x08, 0x00, 0xc0, 0x00
-white:	.byte	0x00, 0x3c, 0x70, 0x08, 0x10, 0x00, 0x00, 0xc0
+black:	.byte	0x0f, 0x03, 0x80, 0x10, 0x08, 0x00, 0xc0, 0x00
+white:	.byte	0x40, 0x7c, 0x70, 0x08, 0x10, 0x00, 0x02, 0x40
 
+	/*
+	
+	B B B B - - W -
+	B B W W W W W -
+	- - - - W W W B
+	- - - W B - - -
+	- - - B W - - -
+	- - - - - - - -
+	- W - - - - B B
+	- - - - - - W -
+
+	B B B B * * W *
+	B B W W W W W *
+	- * * * W W W B
+	- - * W B * * -
+	- - - B W * - -
+	- - - - * - - -
+	- W - - - - B B
+	- - - - - - W -
+
+	B B B B - - W -
+	B B W W W W W -
+	- - - - W W W B
+	- - - W B * - -
+	- - * B W - - -
+	- - * * - - * -
+	- W - - - - B B
+	- - - - - - W -
+
+	*/
 	
 	ld	hl,mf
 	ld	de,of
