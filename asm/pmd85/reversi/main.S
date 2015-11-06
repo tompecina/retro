@@ -26,11 +26,12 @@
 	.global	main
 main:
 	ld	sp,0x7f00
-
+	call	init_rvt
+	
 1:
 	.rept	10
-	ld	hl,black
-	ld	de,white
+	ld	hl,blt
+	ld	de,wht
 	call	score_board
 	.endr
 	
@@ -40,8 +41,17 @@ main:
 	jp	1b
 
 
+blt:	.byte	0x04, 0x00, 0x00, 0x10, 0x0e, 0x04, 0x98, 0x00
+wht:	.byte	0x02, 0x00, 0x02, 0x0a, 0x10, 0x08, 0x60, 0xc0
 
-
+	;; .byte	0, 2, 1, 0, 0, 0, 0, 0
+	;; .byte	0, 0, 0, 0, 0, 0, 0, 0
+	;; .byte	0, 2, 0, 0, 0, 0, 0, 0
+	;; .byte	0, 2, 0, 2, 1, 0, 0, 0
+	;; .byte	0, 1, 1, 1, 2, 0, 0, 0
+	;; .byte	0, 0, 1, 2, 0, 0, 0, 0
+	;; .byte	0, 0, 0, 1, 1, 2, 2, 1
+	;; .byte	0, 0, 0, 0, 0, 0, 2, 2
 
 
 

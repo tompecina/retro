@@ -685,7 +685,12 @@ all_legal:
 	pop	hl
 7:	ld	hl,larray
 	ret
-	
+
+	.lcomm	sfield, 64
+	.lcomm	mfield, 64
+	.lcomm	ofield, 64
+	.lcomm	larray, 8
+
 ; ==============================================================================
 ; one_legal - check if move is legal and return an array of captured discs
 ; 
@@ -818,6 +823,9 @@ one_legal:
 ; illegal move
 2:	scf
 	ret
+	
+	.lcomm	mptr, 2
+	.lcomm	optr, 2
 	
 ; ==============================================================================
 ; rc2sq - compress square
@@ -1262,38 +1270,6 @@ bitcounts:
 	.byte	3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7
 	.byte	3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7
 	.byte	4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8
-
-; ==============================================================================
-; Variables
-; 
-	.bss
-
-;; score:	.skip	2
-	.equiv	var, .
-;; myd:	.skip	1
-;; opd:	.skip	1
-;; 	.global	myfd
-;; myfd:	.skip	1
-;; 	.global	opfd
-;; opfd:	.skip	1
-;; myval:	.skip	1
-;; opval:	.skip	1
-;; mycd:	.skip	1
-;; opcd:	.skip	1
-;; myncd:	.skip	1
-;; opncd:	.skip	1
-;; mymd:	.skip	1
-;; opmd:	.skip	1
-tmp:	.skip	2
-	.equiv	len,. - var
-revb:	.skip	64
-mptr:	.skip	2
-optr:	.skip	2
-field:	.skip	64
-sfield:	.skip	64
-mfield:	.skip	64
-ofield:	.skip	64
-larray:	.skip	8
 	
 	.end
  
