@@ -569,7 +569,6 @@ all_legal:
 	push	de
 	push	hl
 	ld	bc,sfield
-	push	bc
 	ld	a,8
 1:	push	af
 	ld	a,(de)
@@ -584,7 +583,7 @@ all_legal:
 	jp	nz,1b
 
 ; extend to whole sfield
-	pop	hl
+	ld	hl,sfield
 	ld	d,7
 	call	2f
 
