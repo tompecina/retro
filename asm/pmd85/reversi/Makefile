@@ -15,8 +15,8 @@ build: $(APPL).bin $(APPL).hex
 $(APPL).bin: $(OBJ)
 	$(LD) $(LDFLAGS) $(OBJ) -o $@ -Map=$(APPL).map
 
-%.o: %.S reversi.inc ../pmd85.inc ../glyphs10.inc
-	$(AS) $(ASFLAGS) -c $< -o $@ -a=$*.lst
+%.o: %.S reversi.inc ../pmd85.inc ../glyphs10.inc Makefile
+	$(AS) $(ASFLAGS) -c $< -o $@ -aglms=$*.lst
 
 %.S: %.s
 	mv $< $@

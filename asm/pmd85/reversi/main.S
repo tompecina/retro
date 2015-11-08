@@ -34,8 +34,8 @@ main:
 	.rept	9
 	push	hl
 	push	de
-	call	all_legal
-	;; call	score_board
+	;; call	all_legal
+	call	score_board
 	pop	hl
 	pop	de
 	ld	bc,16

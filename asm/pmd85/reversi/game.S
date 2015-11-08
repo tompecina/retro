@@ -464,16 +464,41 @@ count_moves:
 	.lcomm	opm, 1
 	
 ; ==============================================================================
-; dir_pat - create directions pattern in situ
+; dir_pat,dir_pat_full - create directions pattern in situ
 ; 
 ;   input:  (HL) - pattern
+; 	    C - selector (only dir_pat)
 ; 
-;   uses:   A, B, C, H, L
+;   uses:   all
 ; 
 	.text
-	.global	dir_pat
+	.global	dir_pat, dir_pat_full
+
+	.macro	chksel	popaf,pushaf
+2:	.if	\popaf
+	pop	af
+	.endif
+	or	a
+	ret	z
+	rra
+	.if	\pushaf
+	push	af
+	.endif
+	jp	c,1f
+	add	hl,de
+	jp	2f
+1:
+	.endm
+	
+dir_pat_full:
+	ld	c,0xff
 dir_pat:
+	ld	a,c
+	ld	de,8
 	ld	b,0
+	
+; direction 0 (NW)
+	chksel	0,1
 	ld	a,(hl)
 	ld	(hl),b
 	inc	hl
@@ -484,6 +509,9 @@ dir_pat:
 	ld	a,c
 	inc	hl
 	.endr
+	
+; direction 1 (N)
+	chksel	1,1
 	ld	a,(hl)
 	ld	(hl),b
 	inc	hl
@@ -493,6 +521,9 @@ dir_pat:
 	ld	a,c
 	inc	hl
 	.endr
+	
+; direction 2 (NE)
+	chksel	1,1
 	ld	a,(hl)
 	ld	(hl),b
 	inc	hl
@@ -504,12 +535,18 @@ dir_pat:
 	ld	a,c
 	inc	hl
 	.endr
+	
+; direction 3 (W)
+	chksel	1,1
 	.rept	8
 	ld	a,(hl)
 	add	a,a
 	ld	(hl),a
 	inc	hl
 	.endr
+	
+; direction 4 (E)
+	chksel	1,1
 	.rept	8
 	ld	a,(hl)
 	or	a
@@ -517,8 +554,41 @@ dir_pat:
 	ld	(hl),a
 	inc	hl
 	.endr
-	ld	c,23
+	
+; direction 5 (SW)
+2:	ld	c,7
 	add	hl,bc
+	ld	de,-8
+	chksel	1,1
+	ld	a,(hl)
+	ld	(hl),b
+	dec	hl
+	.rept	7
+	add	a,a
+	ld	c,(hl)
+	ld	(hl),a
+	ld	a,c
+	dec	hl
+	.endr
+	
+; direction 6 (S)
+2:	ld	c,16
+	add	hl,bc
+	chksel	1,1
+	ld	a,(hl)
+	ld	(hl),b
+	dec	hl
+	.rept	7
+	ld	c,(hl)
+	ld	(hl),a
+	ld	a,c
+	dec	hl
+	.endr
+	
+; direction 7 (SE)
+2:	ld	c,16
+	add	hl,bc
+	chksel	1,0
 	ld	a,(hl)
 	ld	(hl),b
 	dec	hl
@@ -530,26 +600,7 @@ dir_pat:
 	ld	a,c
 	dec	hl
 	.endr
-	ld	a,(hl)
-	ld	(hl),b
-	dec	hl
-	.rept	7
-	ld	c,(hl)
-	ld	(hl),a
-	ld	a,c
-	dec	hl
-	.endr
-	ld	a,(hl)
-	ld	(hl),b
-	dec	hl
-	.rept	7
-	add	a,a
-	ld	c,(hl)
-	ld	(hl),a
-	ld	a,c
-	dec	hl
-	.endr
-	ret
+2:	ret
 	
 ; ==============================================================================
 ; all_legal - create array of all legal moves
@@ -592,7 +643,7 @@ all_legal:
 	ld	b,8
 	call	zerofill
 
-; check sfield
+; check sfield and return if no empty squares
 	ld	hl,sfield
 	ld	b,8
 1:	ld	a,(hl)
@@ -618,38 +669,108 @@ all_legal:
 
 ; shift mfield and ofield
 	ld	hl,mfield
-	call	dir_pat
+	call	dir_pat_full
 	ld	hl,ofield
-	call	dir_pat
+	call	dir_pat_full
+
+; set initial selector
+	ld	c,0xff
 
 ; update sfield
-5:	ld	hl,sfield
+5:	push	bc
+	ld	hl,sfield
 	ld	de,ofield
-	ld	b,64
-1:	ld	a,(de)
-	inc	de
+	ld	a,c
+3:	or	a
+	jp	z,3f
+	rra
+	jp	nc,4f
+	push	af
+	ld	bc,larray
+	ld	a,8
+1:	push	af
+	ld	a,(bc)
+	inc	bc
+	cpl
 	and	(hl)
+	ex	de,hl
+	and	(hl)
+	inc	hl
+	ex	de,hl
 	ld	(hl),a
 	inc	hl
+	pop	af
+	dec	a
+	jp	nz,1b
+	pop	af
+	jp	3b
+4:	ld	bc,8
+	ex	de,hl
+	add	hl,bc
+	ex	de,hl
+	add	hl,bc
+	jp	3b
+3:	pop	bc
+
+; check sfield, set selector and return if zero
+	ld	hl,sfield
+	ld	de,8
+	ld	a,c
+	ld	c,0x80
+3:	rra
+	push	af
+	jp	nc,4f
+	push	hl
+	ld	b,e
+1:	ld	a,(hl)
+	inc	hl
+	or	a
+	jp	nz,1f
 	dec	b
-	jp	nz,1b 
-
-; check sfield
-	call	3f
-
+	jp	nz,1b
+	inc	sp
+	inc	sp
+	jp	6f		; CY is still 0
+1:	pop	hl
+	scf
+4:	rla
+	add	hl,de
+	rra
+6:	ld	a,c
+	rra
+	ld	c,a
+	jp	c,1f
+	pop	af
+	jp	3b
+1:	pop	af
+	ld	a,c
+	or	a
+	jp	nz,1f
+	ld	hl,larray
+	ret
+	
 ; shift mfield and ofield
-	ld	hl,mfield
+1:	ld	hl,mfield
+	push	bc
 	call	dir_pat
 	ld	hl,ofield
+	pop	bc
+	push	bc
 	call	dir_pat
+	pop	bc
 
 ; update larray
+	push	bc	
 	ld	hl,sfield
+	ld	a,c
 	ld	bc,mfield
-	ld	a,8
-4:	push	af
-	ld	a,8
+4:	or	a
+	jp	z,4f
+	rra
+	jp	nc,3f
+	push	af
 	ld	de,larray
+	ld	a,8
 1:	push	af
 	ld	a,(bc)
 	inc	bc
@@ -664,10 +785,17 @@ all_legal:
 	dec	a
 	jp	nz,1b
 	pop	af
-	dec	a
-	jp	z,1f
 	jp	4b
-1:	jp	5b
+3:	ld	de,8
+	add	hl,de
+	ex	de,hl
+	add	hl,bc
+	ld	b,h
+	ld	c,l
+	ex	de,hl
+	jp	4b
+4:	pop	bc
+	jp	5b
 	
 ; extend array to field
 2:	push	hl
@@ -681,19 +809,6 @@ all_legal:
 	pop	hl
 	dec	d
 	jp	nz,2b
-	ret
-
-; check sfield and return if zero
-3:	ld	hl,sfield
-	ld	b,64
-1:	ld	a,(hl)
-	inc	hl
-	or	a
-	ret	nz
-	dec	b
-	jp	nz,1b
-	pop	hl
-7:	ld	hl,larray
 	ret
 
 	.lcomm	sfield, 64
@@ -760,12 +875,12 @@ one_legal:
 	jp	z,2f
 	
 ; shift mfield and ofield
-6:	ld	d,c
+6:	push	bc
 	ld	hl,mfield
-	call	dir_pat
+	call	dir_pat_full
 	ld	hl,ofield
-	call	dir_pat
-	ld	c,d
+	call	dir_pat_full
+	pop	bc
 
 ; update larray
 	ld	b,8
@@ -828,7 +943,8 @@ one_legal:
 	dec	b
 	jp	nz,1b
 	or	a
-	jp	7b
+	ld	hl,larray
+	ret
 
 ; illegal move
 2:	scf
@@ -1159,11 +1275,11 @@ score_board:
 	ld	h,0
 	call	div16
 	call	2f
-	pop	de
+1:	pop	de
 	pop	hl
 	
 ; count frontier discs
-1:	push	hl
+	push	hl
 	push	de
 	call	count_fdiscs	; B = my frontier discs
 				; C = opponent's frontier discs
@@ -1187,11 +1303,11 @@ score_board:
 	ld	h,0
 	call	div16
 	call	2f
-	pop	de
+1:	pop	de
 	pop	hl
 
 ; count corner and next-to-empty-corner discs
-1:	push	hl
+	push	hl
 	push	de
 	call	count_cdiscs	; B - my corner discs
 				; C - opponent's corner discs
@@ -1224,7 +1340,8 @@ score_board:
 	jp	4f
 5:	xor	a
 	sub	c
-4:	push	bc
+4:
+	push	bc
 	call	signexhl
 	ld	de,987
 	call	mul16
