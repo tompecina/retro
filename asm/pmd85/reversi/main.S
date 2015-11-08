@@ -26,7 +26,34 @@
 	.global	main
 main:
 	ld	sp,0x7f00
-	call	init_rvt
+	call	draw_board
+	
+1:
+	ld	hl,bd
+	ld	de,bd + 8
+	push	hl
+	push	de
+	call	draw_pos
+	pop	de
+	pop	hl
+	call	lpause
+	push	hl
+	push	de
+	call	neswflip
+	pop	de
+	pop	hl
+	jp	1b
+
+lpause:	push	hl
+	.rept	15
+	call	long_anim_pause
+	.endr
+	pop	hl
+	ret
+
+
+	;; call	init_rvt
+	;; call	init_hash
 	
 1:
 	ld	hl,bd
@@ -35,7 +62,8 @@ main:
 	push	hl
 	push	de
 	;; call	all_legal
-	call	score_board
+	;; call	score_board
+	;; call	zobrist_hash
 	pop	hl
 	pop	de
 	ld	bc,16
