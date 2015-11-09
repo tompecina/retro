@@ -1091,6 +1091,20 @@ sq2rc:
 	.global	sq2om
 sq2om:
 	call	sq2rc
+	jp	c2m
+	
+; ==============================================================================
+; c2m - column to mask
+; 
+;   input:  C - column
+; 
+;   output: C - mask (1 << column)
+; 
+;   uses:   A
+; 
+	.text
+	.global	c2m
+c2m:	
 	ld	a,1
 1:	dec	c
 	jp	m,1f
@@ -1710,6 +1724,42 @@ verflip:
 	dec	hl
 	dec	b
 	jp	nz,1b
+	ret
+	
+; ==============================================================================
+; getsquare - get state of selected square
+; 
+;   input:  (HL) - array of black discs
+;           (DE) - array of white discs
+;   	    B - row
+;	    C - column
+; 
+;   output: A =0 empty
+;             =1 black
+;             =2 white
+; 
+;   uses:   all
+; 
+	.text
+	.global	getsquare
+getsquare:
+	call	c2m
+	ld	a,c
+	ld	c,b
+	ld	b,0
+	add	hl,bc
+	ex	de,hl
+	add	hl,bc
+	ld	c,a
+	ld	a,(de)
+	and	c
+	ld	a,1
+	ret	nz
+	ld	a,(hl)
+	and	c
+	ld	a,2
+	ret	nz
+	xor	a
 	ret
 	
 	.end

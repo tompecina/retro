@@ -26,6 +26,24 @@
 	.global	main
 main:
 	ld	sp,0x7f00
+	call	add_glyphs
+	call	draw_labels
+	call	draw_board
+	call	init_game
+	call	player_select
+
+	jp	.
+	
+	call	draw_board
+	ld	hl,bd
+	ld	de,bd + 8
+	push	hl
+	push	de
+	call	draw_pos
+	pop	de
+	pop	hl
+
+	
 	call	draw_board
 	
 1:

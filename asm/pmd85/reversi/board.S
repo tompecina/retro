@@ -173,211 +173,6 @@ draw_shape:
 	jp	1b
 	
 ; ==============================================================================
-; anim_b2w - animate black-to-white
-; 
-;   input:  C - square
-; 
-;   uses:   all
-; 
-	.text
-	.global	anim_b2w
-anim_b2w:
-	ld	hl,BLACK_DISC
-	ld	de,51
-	jp	1f
-	
-; ==============================================================================
-; anim_w2b - animate white-to-black
-; 
-;   input:  C - square
-; 
-;   uses:   all
-; 
-	.text
-	.global	anim_w2b
-anim_w2b:
-	ld	hl,WHITE_DISC
-	ld	de,-51
-1:	ld	b,9
-	jp	animate
-	
-; ==============================================================================
-; animate - animate shape transition
-; 
-;   input:  (HL) - initial shape
-;           DE - difference (normally 51 or -51)
-;           B - number of shapes
-;           C - square
-;
-;   uses:   all
-; 
-	.text
-	.global	animate
-animate:
-	push	hl
-	push	de
-	push	bc
-	call	draw_shape
-	call	anim_pause
-	pop	bc
-	pop	de
-	pop	hl
-	dec	b
-	ret	z
-	add	hl,de
-	jp	animate
-	
-; ==============================================================================
-; anim_pause - animation pause
-; 
-;   uses:   A, H, L
-; 
-	.text
-	.global	anim_pause
-anim_pause:
-	ld	hl,2000
-1:	dec	hl
-	ld	a,h
-	or	l
-	jp	nz,1b
-	ret
-	
-; ==============================================================================
-; long_anim_pause - longer animation pause
-; 
-;   uses:   A, H, L
-; 
-	.text
-	.global	long_anim_pause
-long_anim_pause:
-	ld	hl,5000
-	jp	1b
-	
-; ==============================================================================
-; draw_pos - draw position
-; 
-;   input:  (HL) - array of black discs
-;           (DE) - array of white discs
-; 
-;   uses:   all
-; 
-	.text
-	.global	draw_pos
-draw_pos:
-	ld	b,0
-4:	ld	a,(hl)
-	push	hl
-	ld	h,a
-	ld	a,(de)
-	push	de
-	ld	l,a
-	ld	c,7
-3:	add	hl,hl
-	push	hl
-	jp	nc,1f
-	ld	hl,BLACK_DISC
-	jp	2f
-1:	ld	a,h
-	rra
-	ld	hl,WHITE_DISC
-	jp	c,2f
-	ld	hl,BLANK_SQUARE
-2:	push	bc
-	call	rc2sq
-	call	draw_shape
-	pop	bc
-	pop	hl
-	dec	c
-	jp	p,3b
-	pop	de
-	pop	hl
-	inc	hl
-	inc	de
-	inc	b
-	ld	a,b
-	cp	8
-	jp	nz,4b
-	ret
-	
-; ==============================================================================
-; anim_move - animate move
-; 
-;   input:  (HL) - array of black discs
-;           (DE) - array of white discs
-;           C - move (must be legal)
-;           B - =0 black to move
-;               =1 white to move
-; 
-;   uses:   all
-; 
-	.text
-	.global	anim_move
-anim_move:
-	ld	a,c
-	or	a
-	ret	m
-	push	hl
-	push	de
-	push	bc
-	ld	a,b
-	or	a
-	jp	z,1f
-	ld	hl,WHITE_DISC
-	jp	2f
-1:	ld	hl,BLACK_DISC
-2:	call	draw_shape
-	call	long_anim_pause
-	pop	bc
-	pop	de
-	pop	hl
-	ld	a,b
-	or	a
-	jp	z,1f
-	ex	de,hl
-1:	push	bc
-	call	one_legal
-	pop	bc
-	ld	de,dir_offsets
-2:	ld	a,(de)
-	or	a
-	ret	z
-	inc	de
-	push	de
-	ld	d,a
-	ld	e,(hl)
-	inc	hl
-	push	hl
-	push	bc
-1:	dec	e
-	jp	m,1f
-	ld	a,c
-	add	a,d
-	ld	c,a
-	ld	a,b
-	or	a
-	push	de
-	push	bc
-	push	af
-	call	z,anim_w2b
-	pop	af
-	call	nz,anim_b2w
-	call	long_anim_pause
-	pop	bc
-	pop	de
-	jp	1b
-1:	pop	bc
-	pop	hl
-	pop	de
-	jp	2b
-	
-; ==============================================================================
-; Direction offsets
-; 
-	.data
-dir_offsets:
-	.byte	-9, -8, -7, -1, 1, 7, 8, 9, 0
-	
-; ==============================================================================
 ; Shapes
 
 	.data
@@ -654,5 +449,360 @@ WHITE_CURSOR:
 	.byte	0x2a, 0x3f, 0x2b
 	.byte	0x14, 0x3f, 0x15
 	.byte	0x2a, 0x2a, 0x2a
+	
+; ==============================================================================
+; anim_b2w - animate black-to-white
+; 
+;   input:  C - square
+; 
+;   uses:   all
+; 
+	.text
+	.global	anim_b2w
+anim_b2w:
+	ld	hl,BLACK_DISC
+	ld	de,51
+	jp	1f
+	
+; ==============================================================================
+; anim_w2b - animate white-to-black
+; 
+;   input:  C - square
+; 
+;   uses:   all
+; 
+	.text
+	.global	anim_w2b
+anim_w2b:
+	ld	hl,WHITE_DISC
+	ld	de,-51
+1:	ld	b,9
+	jp	animate
+	
+; ==============================================================================
+; animate - animate shape transition
+; 
+;   input:  (HL) - initial shape
+;           DE - difference (normally 51 or -51)
+;           B - number of shapes
+;           C - square
+;
+;   uses:   all
+; 
+	.text
+	.global	animate
+animate:
+	push	hl
+	push	de
+	push	bc
+	call	draw_shape
+	call	anim_pause
+	pop	bc
+	pop	de
+	pop	hl
+	dec	b
+	ret	z
+	add	hl,de
+	jp	animate
+	
+; ==============================================================================
+; anim_pause - animation pause
+; 
+;   uses:   A, H, L
+; 
+	.text
+	.global	anim_pause
+anim_pause:
+	ld	hl,2000
+1:	dec	hl
+	ld	a,h
+	or	l
+	jp	nz,1b
+	ret
+	
+; ==============================================================================
+; long_anim_pause - longer animation pause
+; 
+;   uses:   A, H, L
+; 
+	.text
+	.global	long_anim_pause
+long_anim_pause:
+	ld	hl,5000
+	jp	1b
+	
+; ==============================================================================
+; draw_pos - draw position
+; 
+;   input:  (black) - array of black discs
+;           (white) - array of white discs
+; 
+;   uses:   all
+; 
+	.text
+	.global	draw_pos
+draw_pos:
+	ld	hl,black
+	ld	de,white
+	ld	b,0
+4:	ld	a,(hl)
+	push	hl
+	ld	h,a
+	ld	a,(de)
+	push	de
+	ld	l,a
+	ld	c,7
+3:	add	hl,hl
+	push	hl
+	jp	nc,1f
+	ld	hl,BLACK_DISC
+	jp	2f
+1:	ld	a,h
+	rra
+	ld	hl,WHITE_DISC
+	jp	c,2f
+	ld	hl,BLANK_SQUARE
+2:	push	bc
+	call	rc2sq
+	call	draw_shape
+	pop	bc
+	pop	hl
+	dec	c
+	jp	p,3b
+	pop	de
+	pop	hl
+	inc	hl
+	inc	de
+	inc	b
+	ld	a,b
+	cp	8
+	jp	nz,4b
+	ret
+	
+; ==============================================================================
+; anim_move - animate move
+; 
+;   input:  (HL) - array of black discs
+;           (DE) - array of white discs
+;           C - move (must be legal)
+;           B - =0 black to move
+;               =1 white to move
+; 
+;   uses:   all
+; 
+	.text
+	.global	anim_move
+anim_move:
+	ld	a,c
+	or	a
+	ret	m
+	push	hl
+	push	de
+	push	bc
+	ld	a,b
+	or	a
+	jp	z,1f
+	ld	hl,WHITE_DISC
+	jp	2f
+1:	ld	hl,BLACK_DISC
+2:	call	draw_shape
+	call	long_anim_pause
+	pop	bc
+	pop	de
+	pop	hl
+	ld	a,b
+	or	a
+	jp	z,1f
+	ex	de,hl
+1:	push	bc
+	call	one_legal
+	pop	bc
+	ld	de,dir_offsets
+2:	ld	a,(de)
+	or	a
+	ret	z
+	inc	de
+	push	de
+	ld	d,a
+	ld	e,(hl)
+	inc	hl
+	push	hl
+	push	bc
+1:	dec	e
+	jp	m,1f
+	ld	a,c
+	add	a,d
+	ld	c,a
+	ld	a,b
+	or	a
+	push	de
+	push	bc
+	push	af
+	call	z,anim_w2b
+	pop	af
+	call	nz,anim_b2w
+	call	long_anim_pause
+	pop	bc
+	pop	de
+	jp	1b
+1:	pop	bc
+	pop	hl
+	pop	de
+	jp	2b
+	
+; ==============================================================================
+; Direction offsets
+; 
+	.data
+dir_offsets:
+	.byte	-9, -8, -7, -1, 1, 7, 8, 9, 0
+	
+; ==============================================================================
+; init_game - initialize game
+; 
+;   uses:   A, B, H, L
+; 
+	.text
+	.global	init_game
+init_game:
+	ld	hl,black
+	ld	b,8
+	call	zerofill
+	ld	hl,white
+	ld	b,8
+	call	zerofill
+	ld	a,0x10
+	ld	(black + 3),a
+	ld	(white + 4),a
+	ld	a,0x08
+	ld	(black + 4),a
+	ld	(white + 3),a
+	xor	a
+	ld	(cur_row),a
+	ld	(cur_col),a
+	jp	draw_pos
+
+	.lcomm	black, 8
+	.lcomm	white, 8
+	.lcomm	cur_row, 1
+	.lcomm	cur_col, 1
+	
+; ==============================================================================
+; player_select - let player select square
+; 
+;   input:  (black) - array of black discs
+;           (white) - array of white discs
+;           (cur_row) - cursor row
+;           (cur_col) - cursor column
+; 
+;   output: C - square selected
+;           (cur_row) - new cursor row
+;           (cur_col) - new cursor column
+;           A =0 selection confirmed with EOL
+;             >0 scan code of the key 
+; 
+;   uses:   all
+; 
+	.text
+	.global	player_select
+player_select:
+	call	shcur
+1:	call	inkey
+	jp	z,1b
+	cp	KEOL
+	jp	nz,1f
+	xor	a
+2:	call	hdcur
+	push	af
+	ld	a,(cur_row)
+	ld	b,a
+	ld	a,(cur_col)
+	ld	c,a
+	call	rc2sq
+	pop	af
+	ret
+1:	cp	'A'
+	jp	c,1f
+	cp	'H' + 1
+	jp	nc,1f
+	sub	'A'
+3:	call	hdcur
+	ld	(cur_col),a
+	jp	player_select
+1:	cp	'a'
+	jp	c,1f
+	cp	'h' + 1
+	jp	nc,1f
+	sub	'a'
+	jp	3b
+1:	cp	'1'
+	jp	c,1f
+	cp	'8' + 1
+	jp	nc,1f
+	sub	'1'
+	call	hdcur
+	ld	(cur_row),a
+	jp	player_select
+1:	cp	KLEFT
+	jp	nz,1f
+	call	hdcur
+	ld	a,(cur_col)
+	dec	a
+	jp	m,player_select
+3:	ld	(cur_col),a
+	jp	player_select
+1:	cp	KRIGHT
+	jp	nz,1f
+1:	ld	a,(cur_col)
+	inc	a
+	cp	8
+	jp	z,player_select
+	jp	3b
+1:	cp	KHOME
+	jp	nz,1f
+	call	hdcur
+	ld	a,(cur_row)
+	dec	a
+	jp	m,player_select
+3:	ld	(cur_row),a
+	jp	player_select
+1:	cp	KEND
+	jp	nz,2b
+	call	hdcur
+	ld	a,(cur_row)
+	inc	a
+	cp	8
+	jp	z,player_select
+	jp	3b
+shcur:	call	getsq
+	ld	hl,BLACK_CURSOR
+	dec	a
+	jp	z,1f
+	ld	hl,WHITE_CURSOR
+	dec	a
+	jp	z,1f
+	ld	hl,BLANK_CURSOR
+1:	call	rc2sq
+	jp	draw_shape
+hdcur:	push	af
+	call	getsq
+	ld	hl,BLACK_DISC
+	dec	a
+	jp	z,1f
+	ld	hl,WHITE_DISC
+	dec	a
+	jp	z,1f
+	ld	hl,BLANK_SQUARE
+1:	call	rc2sq
+	call	draw_shape
+	pop	af
+	ret
+getsq:	ld	a,(cur_row)
+	ld	b,a
+	ld	a,(cur_col)
+	ld	c,a
+	ld	hl,black
+	ld	de,white
+	jp	getsquare
 	
 	.end
