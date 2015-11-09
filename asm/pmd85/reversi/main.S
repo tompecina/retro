@@ -27,6 +27,20 @@
 main:
 	ld	sp,0x7f00
 	call	add_glyphs
+	call	erase
+
+1:	ld	hl,credits
+	call	prtstr
+	jp	1b
+
+	
+
+
+
+
+
+
+
 	call	draw_labels
 	call	draw_board
 	call	init_game
@@ -164,19 +178,19 @@ bd:
 	call	add_glyphs
 
 	xor	a
-	ld	(COLOR),a
+	ld	(color),a
 	ld	a,0x1c
 	call	PMD_PRTOUT
 	ld	hl,0xc000
 	ld	bc,0x3010
 	;; ld	a,0x3f
-	;; ld	(COLOR),a
+	;; ld	(color),a
 	;; call	rect
 	ld	hl,label_reversi
 	ld	de,0xc190
 	call	label
 	xor	a
-	ld	(COLOR),a
+	ld	(color),a
 	call	draw_labels
 	call	draw_board
 
@@ -480,7 +494,7 @@ of:	.byte	0x16, 0x1e, 0x00, 0x08, 0x10, 0x00, 0x00, 0x00
 	call	add_glyphs
 
 	xor	a
-	ld	(COLOR),a
+	ld	(color),a
 	ld	a,0x1c
 	call	PMD_PRTOUT
 	call	draw_labels
@@ -620,7 +634,7 @@ animpause:
 	ld	hl,0xc000
 	ld	bc,0x3010
 	ld	a,0x3f
-	ld	(COLOR),a
+	ld	(color),a
 	call	rect
 	ld	hl,label_reversi
 	ld	de,0xc082
@@ -629,12 +643,12 @@ animpause:
 	jp	$
 	
 	ld	hl,0xd000
-	ld	(CURSOR),hl
+	ld	(cursor),hl
 	ld	hl,credits
 	call	prtstr
 	jp	$
 credits:
-	db	"(C) 2015 Tom", 'A' + 0x80, 'S' + 0x80, " Pecina", 0
+	db	'(', 'c' + 0x80, ") 2015 Tom", 'A' + 0x80, 'S' + 0x80, " Pecina", 0
 	db	" <tomas@pecina.cz>", 0
 ;; 	ld	c,0
 ;; 	ld	de,res

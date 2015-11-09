@@ -28,6 +28,7 @@
 ; 
 ;   input:  A - character code
 ; 	    HL - cursor address
+; 	    (color) - color mask
 ; 
 ;   uses:   A
 ; 
@@ -45,7 +46,7 @@ wrchar:
 	add	hl,bc
 	ld	b,a
 	ld	c,8
-	ld	a,(COLOR)
+	ld	a,(color)
 	ld	b,a
 1:	dec	de
 	ld	a,(de)

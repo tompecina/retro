@@ -31,19 +31,37 @@
 ; ==============================================================================
 ; PMD 85 addresses
 ;
+	
+; monitor
 	.equiv	PMD_PRTOUT, 0x8500
 	.equiv	PMD_ECHO, 0x8584
 	.equiv	PMD_MONIT, 0x8c40
 
-	.equiv	COLOR, 0xc03a
-	.equiv	BEEPPOS, 0xc03b
-	.equiv	CURSOR, 0xc03e
-	.equiv	TASCII, 0xc0b0
-	.equiv	BEEDT, 0xc130
-	.equiv	ASCII, 0xc134
-	.equiv	STACK, 0xc13e
-	.equiv	OLDKEY, 0xc178
+; video RAM
+	.equiv	PMD_COLOR, 0xc03a
+	.equiv	PMD_BEEPPOS, 0xc03b
+	.equiv	PMD_CURSOR, 0xc03e
+	.equiv	PMD_TASCII, 0xc0b0
+	.equiv	PMD_IIROLL, 0xc0f4
+	.equiv	PMD_RSIRRAD, 0xc0f5
+	.equiv	PMD_POROLL, 0xc0f6
+	.equiv	PMD_CURROLL, 0xc0f8
+	.equiv	PMD_VYSKA, 0xc0fa
+	.equiv	PMD_ENLNW, 0xc0fb
+	.equiv	PMD_RADSIR, 0xc0fc
+	.equiv	PMD_BEEDT, 0xc130
+	.equiv	PMD_ASCII, 0xc134
+	.equiv	PMD_STACK, 0xc13e
+	.equiv	PMD_OLDKEY, 0xc178
 
+; ==============================================================================
+; ASCII codes
+;
+	.equiv	CR, 0x0d
+	.equiv	LF, 0x0a
+	.equiv	BS, 0x08
+	.equiv	CLS, 0x1c
+	
 ; ==============================================================================
 ; Key codes
 ;

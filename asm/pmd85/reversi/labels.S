@@ -27,7 +27,7 @@
 ; 
 ;   input:  (HL) - label data
 ;           DE - destination
-;           (COLOR) - mask
+;           (color) - color mask
 ; 
 ;   uses:   all
 ; 
@@ -40,7 +40,7 @@ label:
 	inc	hl
 2:	push	bc
 	push	de
-1:	ld	a,(COLOR)
+1:	ld	a,(color)
 	xor	(hl)
 	inc	hl
 	ld	(de),a
@@ -67,14 +67,14 @@ label:
 ;   input:  HL - destination
 ;           C - number of rows (lines)
 ;           B - number of columns (cells)
-;           (COLOR) - mask
+;           (color) - color mask
 ; 
 ;   uses:   all
 ; 
 	.text
 	.global	rect
 rect:
-	ld	a,(COLOR)
+	ld	a,(color)
 3:	push	bc
 	push	hl
 2:	ld	(hl),a
@@ -95,8 +95,8 @@ rect:
 ; prtstr - display zero-terminated string
 ; 
 ;   input:  (HL) - string
-;           (CURSOR) - destination
-;           (COLOR) - mask
+;           (cursor) - destination
+;           (color) - color mask
 ; 
 ;   uses:   A, H, L
 ; 
@@ -106,7 +106,7 @@ prtstr:
 	ld	a,(hl)
 	or	a
 	ret	z
-	call	PMD_PRTOUT
+	call	prtout
 	inc	hl
 	jp	prtstr	
 	

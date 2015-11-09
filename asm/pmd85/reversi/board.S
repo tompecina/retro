@@ -776,7 +776,7 @@ player_select:
 	jp	z,4b
 	jp	3b
 1:	cp	KRRIGHT
-	jp	5b
+	jp	z,5b
 	jp	2b
 shcur:	call	getsq
 	ld	hl,BLACK_CURSOR

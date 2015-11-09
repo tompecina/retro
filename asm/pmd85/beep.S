@@ -51,7 +51,7 @@ beclr:
 ; ==============================================================================
 ; beep,bell - beep according to a pattern
 ; 
-;   input:  (BEEDT) - pattern (for beep)
+;   input:  (beedt) - pattern (for beep)
 ;           (HL) - pattern (for bell)
 ; 
 ;   uses:   A, B, D, H, L
@@ -59,7 +59,7 @@ beclr:
 	.text
 	.global beep, beclr
 beep:
-	ld	hl,(BEEDT)
+	ld	hl,(beedt)
 bell:
 	call	beclr
 	ld	b,a
@@ -73,5 +73,7 @@ bell:
 	call	waits
 	inc	hl
 	jp	bell
+	
+	.lcomm	beedt, 2
 	
 	.end

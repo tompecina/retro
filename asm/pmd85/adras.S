@@ -26,7 +26,7 @@
 ; adras - return glyph address
 ; 
 ;   input:  A - character code
-; 	    (TASCII) - table of glyphs
+; 	    (tascii) - table of glyphs
 ; 
 ;   output: HL - glyph address + 8
 ; 
@@ -52,7 +52,7 @@ adras:
 	add	a,a
 	add	a,a
 	ld	c,a
-	ld	de,TASCII
+	ld	de,tascii
 	add	hl,de
 	ld	d,(hl)
 	inc	hl

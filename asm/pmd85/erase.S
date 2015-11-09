@@ -1,4 +1,4 @@
-; adras10.S
+; erase.S
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,53 +18,50 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Copy of original monitor's ADRAS, modified for 10-cell glyphs.
+; Copy of original monitor's routine.
 
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; adras - return glyph address
+; erase/part_erase - clear display/part of display
 ; 
-;   input:  A - character code
-; 	    (tascii) - table of glyphs
+;   input:  HL - new cursor address (only part_erase)
+; 	    DE - address of the topmost scanline to clear + 1 (only part_erase)
+; 	    B - number of scanlines to clear (only part_erase)
+; 	    (cursor) - cursor address
+; 	    (color) - new color mask for the erased area
+;   	    (radsir) - line height
 ; 
-;   output: HL - glyph address + 8
-; 
-;   uses:   all
+;   uses:   A
 ; 
 	.text
-	.global	adras
-adras:
-	ld	b,a
-	and	0x1f
+	.global	erase, part_erase
+erase:
+	ld	bc, 0x0c280
+	ld	de, 0x0c030
+	ld	hl,(radsir)
+	add	hl,bc
+	ld	b,0
+part_erase:
+	ld	(cursor),hl
+	ld	a,(color)
+	ld	hl,0
+	add	hl,sp
+	ex	de,hl
+	ld	sp,hl
 	ld	c,a
 	ld	a,b
-	sub	c
-	rrca
-	rrca
-	rrca
-	rrca
-	ld	l,a
-	ld	h,0
-	ld	b,h
-	ld	a,c
-	add	a,a
-	ld	d,a
-	add	a,a
-	add	a,a
-	add	a,d
-	ld	c,a
-	ld	de,tascii
-	add	hl,de
-	ld	d,(hl)
-	inc	hl
-	ld	h,(hl)
-	ld	l,d
-	add	hl,bc
-	ld	a,h
-	inc	a
-	ret	nz
-	ld	hl,undef_glyph + 10
+	ld	b,c
+1:	.rept	24
+	push	bc
+	.endr
+	ld	sp,0x0040
+	add	hl,sp
+	ld	sp,hl
+	dec	a
+	jp	nz,1b
+	ex	de,hl
+	ld	sp,hl
 	ret
 
 	.end

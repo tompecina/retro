@@ -21,7 +21,7 @@
 ; Character glyphs 6x10 - include file.
 
 ; ==============================================================================
-; add_glyphs - add glyphs
+; add_glyphs - add missing glyphs and reset video parameters
 ;
 ;   uses:   H, L
 ;
@@ -30,30 +30,62 @@
 add_glyphs:	
 	.if SEL_20
 	ld	hl,glyphs20 + 10
-	ld	(0xc0b2),hl
+	ld	(tascii + 0x02),hl
 	.endif
 
 	.if SEL_40
 	ld	hl,glyphs40 + 10
-	ld	(0xc0b4),hl
+	ld	(tascii + 0x04),hl
 	.endif
 
 	.if SEL_60
 	ld	hl,glyphs60 + 10
-	ld	(0xc0b6),hl
+	ld	(tascii + 0x06),hl
 	.endif
 
 	.if SEL_C0
 	ld	hl,glyphsC0 + 10
-	ld	(0xc0bc),hl
+	ld	(tascii + 0x0c),hl
 	.endif
 
 	.if SEL_E0
 	ld	hl,glyphsE0 + 10
-	ld	(0xc0be),hl
+	ld	(tascii + 0x0e),hl
 	.endif
 
+	xor	a
+	ld	(color),a
+	ld	hl,0x2c0
+	ld	(radsir),hl
+	ld	a,11
+	ld	(rsirrad),a
+	ld	a,0xfb
+	ld	(vyska),a
+	ld	hl,0xfab0
+	ld	(poroll),hl
+	ld	a,9
+	ld	(rsirrad),a
+	ld	hl,0xfd00
+	ld	(curroll),hl
+	ld	a,0x30
+	ld	(enlnw),a
+	ld	a,0xea
+	ld	(iiroll),a
 	ret
+	
+	.global	tascii, cursor, color, radsir, vyska, poroll, rsirrad
+	.global curroll, enlnw, iiroll
+
+	.lcomm	tascii, 16
+	.lcomm	cursor, 2
+	.lcomm	color, 1
+	.lcomm	radsir, 2
+	.lcomm	vyska, 1
+	.lcomm	poroll, 2
+	.lcomm	rsirrad, 1
+	.lcomm	curroll, 2
+	.lcomm	enlnw, 1
+	.lcomm	iiroll, 1
 	
 ; ==============================================================================
 ; Glyphs

@@ -33,7 +33,7 @@
 	.text
 	.global inkey
 inkey:
-	ld	hl,(OLDKEY)
+	ld	hl,(oldkey)
 	dec	h
 	jp	m,6f
 1:	in	a,(SYSPIO_PB)
@@ -41,7 +41,7 @@ inkey:
 	cp	l
 	jp	nz,5f
 	jp	3f
-2:	ld	(OLDKEY),hl
+2:	ld	(oldkey),hl
 	xor	a
 	ret
 3:	dec	b
@@ -52,7 +52,7 @@ inkey:
 	in	a,(SYSPIO_PA)
 	and	0x0f
 	ld	e,a
-4:	ld	(OLDKEY),HL
+4:	ld	(oldkey),hl
 	ld	a,l
 	and	0x3f
 	ld	d,a
@@ -79,7 +79,7 @@ inkey:
 	rlca
 	and	0x80
 	or	(hl)
-1:	ld	(ASCII),A
+1:	ld	(ascii),a
 	ret
 5:	ld	e,0
 1:	in	a,(SYSPIO_PB)
@@ -95,8 +95,8 @@ inkey:
 	in	a,(SYSPIO_PA)
 	and	0xf0
 	or	e
-	out	(SYSPIO_PA),A
-	in	A,(SYSPIO_PB)
+	out	(SYSPIO_PA),a
+	in	a,(SYSPIO_PB)
 	and	0x7f
 	ld	l,a
 	cpl
@@ -105,6 +105,9 @@ inkey:
 	ld	h,80
 	jp	4b
 
+	.lcomm	oldkey, 2
+	.lcomm	ascii, 1
+	
 ; ==============================================================================
 ; keymap - keyboard map
 ; 
