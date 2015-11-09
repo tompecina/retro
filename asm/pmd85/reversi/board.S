@@ -707,8 +707,8 @@ init_game:
 	.global	player_select
 player_select:
 	call	shcur
-1:	call	inkey
-	jp	z,1b
+4:	call	inkey
+	jp	z,4b
 	cp	KEOL
 	jp	nz,1f
 	xor	a
@@ -745,35 +745,39 @@ player_select:
 	jp	player_select
 1:	cp	KLEFT
 	jp	nz,1f
-	call	hdcur
 	ld	a,(cur_col)
 	dec	a
-	jp	m,player_select
-3:	ld	(cur_col),a
+	jp	m,4b
+3:	call	hdcur
+	ld	(cur_col),a
 	jp	player_select
 1:	cp	KRIGHT
 	jp	nz,1f
-1:	ld	a,(cur_col)
+	ld	a,(cur_col)
 	inc	a
 	cp	8
-	jp	z,player_select
+	jp	z,4b
 	jp	3b
 1:	cp	KHOME
 	jp	nz,1f
-	call	hdcur
-	ld	a,(cur_row)
+5:	ld	a,(cur_row)
 	dec	a
-	jp	m,player_select
-3:	ld	(cur_row),a
+	jp	m,4b
+3:	call	hdcur
+	ld	(cur_row),a
 	jp	player_select
-1:	cp	KEND
-	jp	nz,2b
-	call	hdcur
-	ld	a,(cur_row)
+1:	cp	KLLEFT
+	jp	z,5b
+	cp	KEND
+	jp	nz,1f
+5:	ld	a,(cur_row)
 	inc	a
 	cp	8
-	jp	z,player_select
+	jp	z,4b
 	jp	3b
+1:	cp	KRRIGHT
+	jp	5b
+	jp	2b
 shcur:	call	getsq
 	ld	hl,BLACK_CURSOR
 	dec	a
@@ -803,6 +807,9 @@ getsq:	ld	a,(cur_row)
 	ld	c,a
 	ld	hl,black
 	ld	de,white
-	jp	getsquare
+	push	bc
+	call	getsquare
+	pop	bc
+	ret
 	
 	.end
