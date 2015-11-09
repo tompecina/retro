@@ -75,7 +75,6 @@ add_glyphs:
 	
 	.global	tascii, cursor, color, radsir, vyska, poroll, rsirrad
 	.global curroll, enlnw, iiroll
-
 	.lcomm	tascii, 16
 	.lcomm	cursor, 2
 	.lcomm	color, 1

@@ -92,25 +92,6 @@ rect:
 	jp	3b
 	
 ; ==============================================================================
-; prtstr - display zero-terminated string
-; 
-;   input:  (HL) - string
-;           (cursor) - destination
-;           (color) - color mask
-; 
-;   uses:   A, H, L
-; 
-	.text
-	.global	prtstr
-prtstr:
-	ld	a,(hl)
-	or	a
-	ret	z
-	call	prtout
-	inc	hl
-	jp	prtstr	
-	
-; ==============================================================================
 ; Label "REVERSI 1.0"
 ;
 	.data

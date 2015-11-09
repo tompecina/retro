@@ -1578,6 +1578,94 @@ zobrist_hash:
 	.lcomm	hash, 2
 	
 ; ==============================================================================
+; rotate90 - rotate the board clockwise
+; 
+;   input:  (HL) - array of black discs
+;           (DE) - array of white discs
+; 
+;   output: rotated board
+; 
+;   uses:   all
+; 
+	.text
+	.global	rotate90
+rotate90:
+	push	de
+	call	1f
+	pop	hl
+1:	ld	a,8
+1:	push	af
+	ld	a,(hl)
+	inc	hl
+	ld	de,tmprot
+	ld	b,8
+2:	rra
+	ld	c,a
+	ld	a,(de)
+	rla
+	ld	(de),a
+	inc	de
+	ld	a,c
+	dec	b
+	jp	nz,2b
+	pop	af
+	dec	a
+	jp	nz,1b
+	ld	b,8
+1:	dec	hl
+	dec	de
+	ld	a,(de)
+	ld	(hl),a
+	dec	b
+	jp	nz,1b
+	ret
+	
+	.lcomm	tmprot, 8
+	
+; ==============================================================================
+; rotate270 - rotate the board counterclockwise
+; 
+;   input:  (HL) - array of black discs
+;           (DE) - array of white discs
+; 
+;   output: rotated board
+; 
+;   uses:   all
+; 
+	.text
+	.global	rotate270
+rotate270:
+	push	de
+	call	1f
+	pop	hl
+1:	ld	a,8
+1:	push	af
+	ld	a,(hl)
+	inc	hl
+	ld	de,tmprot
+	ld	b,8
+2:	rla
+	ld	c,a
+	ld	a,(de)
+	rra
+	ld	(de),a
+	inc	de
+	ld	a,c
+	dec	b
+	jp	nz,2b
+	pop	af
+	dec	a
+	jp	nz,1b
+	ld	b,8
+1:	dec	hl
+	dec	de
+	ld	a,(de)
+	ld	(hl),a
+	dec	b
+	jp	nz,1b
+	ret
+	
+; ==============================================================================
 ; nwseflip - flip the board in situ along the NW-SE diagonal
 ; 
 ;   input:  (HL) - array of black discs
@@ -1619,8 +1707,6 @@ nwseflip:
 	dec	b
 	jp	nz,1b
 	ret
-	
-	.lcomm	tmprot, 8
 	
 ; ==============================================================================
 ; neswflip - flip the board in situ along the NW-SW diagonal

@@ -26,7 +26,7 @@
 ; erase/part_erase - clear display/part of display
 ; 
 ;   input:  HL - new cursor address (only part_erase)
-; 	    DE - address of the topmost scanline to clear + 1 (only part_erase)
+; 	    DE - end of the topmost scanline to clear + 1 (only part_erase)
 ; 	    B - number of scanlines to clear (only part_erase)
 ; 	    (cursor) - cursor address
 ; 	    (color) - new color mask for the erased area

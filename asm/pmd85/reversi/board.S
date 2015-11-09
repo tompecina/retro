@@ -25,7 +25,8 @@
 ; ==============================================================================
 ; Constants
 	
-	.equiv	ULC, 0xce15	; the upper left corner
+	.equiv	ULC, 0xce15		; upper left corner of the board
+	.equiv	MSGAREA, 0xffc0		; position of the notification area
 	
 ; ==============================================================================
 ; draw_board - draw board
@@ -682,6 +683,7 @@ init_game:
 	ld	(cur_col),a
 	jp	draw_pos
 
+	.global	black, white
 	.lcomm	black, 8
 	.lcomm	white, 8
 	.lcomm	cur_row, 1
@@ -709,6 +711,9 @@ player_select:
 	call	shcur
 4:	call	inkey
 	jp	z,4b
+	push	af
+	call	clear_msg
+	pop	af
 	cp	KEOL
 	jp	nz,1f
 	xor	a
@@ -812,4 +817,64 @@ getsq:	ld	a,(cur_row)
 	pop	bc
 	ret
 	
+; ==============================================================================
+; prtstr - display zero-terminated string
+; 
+;   input:  (HL) - string
+;           (cursor) - destination
+;           (color) - color mask
+; 
+;   uses:   A, H, L
+; 
+	.text
+	.global	prtstr
+prtstr:
+	ld	a,(hl)
+	or	a
+	ret	z
+	call	prtout
+	inc	hl
+	jp	prtstr	
+	
+; ==============================================================================
+; clear_msg - clear the notification area
+; 
+;   uses:   A, B, D, E, H, L
+; 
+	.text
+	.global	clear_msg
+clear_msg:
+	ld	a,(msg)
+	or	a
+	ret	z
+	ld	hl,MSGAREA
+	ld	de,MSGAREA + 0x30 - (64 * 11)
+	ld	b,10
+	call	part_erase
+	xor	a
+	ld	(msg),a
+	ret
+
+	.lcomm	msg, 1
+	
+; ==============================================================================
+; disp_msg - display message in the notification area
+; 
+;   input:  (HL) - string
+;           (color) - color mask
+; 
+;   uses:   A, D, E, H, L
+; 
+	.text
+	.global	disp_msg
+disp_msg:
+	ex	de, hl
+	ld	hl,MSGAREA
+	ld	(cursor),hl
+	ex	de, hl
+	call	prtstr
+	ld	a,1
+	ld	(msg),a
+	ret
+
 	.end

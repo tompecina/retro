@@ -28,52 +28,56 @@ main:
 	ld	sp,0x7f00
 	call	add_glyphs
 	call	erase
+	call	clear_msg
+	
+;; 1:	ld	hl,credits
+;; 	call	disp_msg
 
-1:	ld	hl,credits
-	call	prtstr
-	jp	1b
+;; 	call	draw_labels
+;; 	call	draw_board
+;; 	call	init_game
+;; 	call	player_select
+
+;; 	jp	.
+	
+;; 	call	draw_board
+;; 	ld	hl,bd
+;; 	ld	de,bd + 8
+;; 	push	hl
+;; 	push	de
+;; 	call	draw_pos
+;; 	pop	de
+;; 	pop	hl
 
 	
-
-
-
-
-
-
-
 	call	draw_labels
 	call	draw_board
-	call	init_game
-	call	player_select
 
-	jp	.
-	
-	call	draw_board
-	ld	hl,bd
+	ld	hl,black
+	ld	de,bd
+	ld	b,8
+1:	ld	a,(de)
+	inc	de
+	ld	(hl),a
+	inc	hl
+	dec	b
+	jp	nz,1b
+	ld	hl,white
 	ld	de,bd + 8
-	push	hl
-	push	de
-	call	draw_pos
-	pop	de
-	pop	hl
-
-	
-	call	draw_board
+	ld	b,8
+1:	ld	a,(de)
+	inc	de
+	ld	(hl),a
+	inc	hl
+	dec	b
+	jp	nz,1b
 	
 1:
-	ld	hl,bd
-	ld	de,bd + 8
-	push	hl
-	push	de
 	call	draw_pos
-	pop	de
-	pop	hl
 	call	lpause
-	push	hl
-	push	de
-	call	neswflip
-	pop	de
-	pop	hl
+	ld	hl,black
+	ld	de,white
+	call	rotate270
 	jp	1b
 
 lpause:	push	hl
@@ -397,8 +401,8 @@ bd:
 	
 	jp	$
 
-black:	.byte	0x0f, 0x03, 0x80, 0x10, 0x08, 0x00, 0xc0, 0x00
-white:	.byte	0x40, 0x7c, 0x70, 0x08, 0x10, 0x00, 0x02, 0x40
+;; black:	.byte	0x0f, 0x03, 0x80, 0x10, 0x08, 0x00, 0xc0, 0x00
+;; white:	.byte	0x40, 0x7c, 0x70, 0x08, 0x10, 0x00, 0x02, 0x40
 
 	/*
 	
