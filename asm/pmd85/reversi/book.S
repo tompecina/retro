@@ -23,7 +23,104 @@
 	.include "reversi.inc"
 	
 ; ==============================================================================
-; Positions
+; lookup_book - lookup next move in the book
+; 
+;   input:  (HL) - array of black discs
+;           (DE) - array of white discs
+; 
+;   output: C - move
+; 	    CY not found
+; 
+;   uses:   all
+; 
+	.text
+	.global	lookup_book
+lookup_book:
+	push	de
+	ld	de,tmpbl
+	push	de
+	ld	b,8
+	call	copy8
+	pop	de
+	pop	hl
+	ld	de,tmpwh
+	ld	b,8
+	call	copy8
+	ld	hl,bcrc
+	ld	a,8
+1:	push	af
+	push	hl
+	call	3f
+	call	board_crc24
+	ex	de,hl
+	pop	hl
+	ld	(hl),e
+	inc	hl
+	ld	(hl),d
+	inc	hl
+	ld	(hl),c
+	inc	hl
+	pop	af
+	push	af
+	push	hl
+	cp	5
+	call	z,3f
+	call	z,verflip
+	call	3f
+	call	rotate90
+	pop	hl
+	pop	af
+	dec	a
+	jp	nz,1b
+	jp	1f
+3:	ld	hl,tmpbl
+	ld	de,tmpwh
+	ret
+1:	ld	hl,book
+2:	ld	a,(hl)
+	inc	hl
+	or	a
+	jp	p,1f
+	scf
+	ret
+1:	ld	c,a
+2:	ld	de,bcrc
+	ld	b,8
+1:	call	3f
+	jp	nz,1f
+	call	3f
+	jp	nz,4f
+	call	3f
+	jp	nz,5f
+	jp	2f
+1:	inc	de
+	inc	hl
+4:	inc	de
+	inc	hl
+5:	dec	b
+	jp	z,2b
+	jp	1b
+3:	ld	a,(de)
+	inc	de
+	cp	(hl)
+	inc	hl
+	ret
+2:	ld	a,b
+	cp	8
+	ret	z
+	call	move_rotate270
+	ld	a,b
+	cp	4
+	call	z,move_verflip
+	inc	b
+	jp	2b
+	
+	.lcomm	tmpbl, 8
+	.lcomm	tmpwh, 8
+	.lcomm	bcrc, 24
+	
+; ==============================================================================
+; Boards
 ; 
 	.data
 	.global	book

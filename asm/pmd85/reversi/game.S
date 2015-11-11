@@ -1470,34 +1470,6 @@ sqv:
 	.byte	8, -8, 1, -1, 2, -2, -3, 3, -3, 3, 2, -2, 1, -1, 8, -8
 
 ; ==============================================================================
-; crc16 - update the CRC-16-CCITT checksum
-; 
-;   input:  HL - initial CRC
-; 	    A - input byte
-; 
-;   output: HL - updated CRC
-; 
-;   uses:   A, B
-; 
-	.text
-	.global	crc16
-crc16:
-	xor	h
-	ld	h,a
-	ld	b,8
-2:	add	hl,hl
-	jp	nc,1f
-	ld	a,h
-	xor	0x10
-	ld	h,a
-	ld	a,l
-	xor	0x21
-	ld	l,a
-1:	dec	b
-	jp	nz,2b
-	ret
-	
-; ==============================================================================
 ; init_hash - initialize the hash table
 ; 
 ;   output: (hashtbl) - initialized table
@@ -1578,7 +1550,36 @@ zobrist_hash:
 	.lcomm	hash, 2
 	
 ; ==============================================================================
-; rotate90 - rotate the board clockwise
+; board_crc24 - get the board CRC-24
+; 
+;   input:  (HL) - array of black discs
+;           (DE) - array of white discs
+; 
+;   output: CHL - CRC-24 of the board
+; 
+;   uses:   all
+; 
+	.text
+	.global	board_crc24
+board_crc24:
+	push	de
+	push	hl
+	call	init_crc24
+	pop	de
+	call	2f
+	pop	de
+2:	ld	a,8
+1:	push	af
+	ld	a,(de)
+	inc	de
+	call	crc24
+	pop	af
+	dec	a
+	jp	nz,1b
+	ret
+	
+; ==============================================================================
+; rotate90 - rotate the board in situ clockwise
 ; 
 ;   input:  (HL) - array of black discs
 ;           (DE) - array of white discs
@@ -1623,7 +1624,37 @@ rotate90:
 	.lcomm	tmprot, 8
 	
 ; ==============================================================================
-; rotate270 - rotate the board counterclockwise
+; move_rotate90 - rotate move clockwise
+; 
+;   input:  C - move
+; 
+;   output: C - rotated move
+; 
+;   uses:   A
+; 
+	.text
+	.global	move_rotate90
+move_rotate90:
+	ld	a,0x3f
+	sub	c
+	rra
+	rra
+	rra
+	and	0x07
+	push	bc
+	ld	b,a
+	ld	a,c
+	rla
+	rla
+	rla
+r1:	and	0x38
+	or	b
+	pop	bc
+	ld	c,a
+	ret
+	
+; ==============================================================================
+; rotate270 - rotate the board in situ counterclockwise
 ; 
 ;   input:  (HL) - array of black discs
 ;           (DE) - array of white discs
@@ -1664,6 +1695,32 @@ rotate270:
 	dec	b
 	jp	nz,1b
 	ret
+	
+; ==============================================================================
+; move_rotate270 - rotate move counterclockwise
+; 
+;   input:  C - move
+; 
+;   output: C - rotated move
+; 
+;   uses:   A
+; 
+	.text
+	.global	move_rotate270
+move_rotate270:
+	ld	a,c
+	rra
+	rra
+	rra
+	and	0x07
+	push	bc
+	ld	b,a
+	ld	a,0x07
+	sub	c
+	rla
+	rla
+	rla
+	jp	r1
 	
 ; ==============================================================================
 ; nwseflip - flip the board in situ along the NW-SE diagonal
@@ -1709,6 +1766,31 @@ nwseflip:
 	ret
 	
 ; ==============================================================================
+; move_nwseflip - flip move along the NW-SE diagonal
+; 
+;   input:  C - move
+; 
+;   output: C - flipped move
+; 
+;   uses:   A
+; 
+	.text
+	.global	move_nwseflip
+move_nwseflip:
+	ld	a,c
+	rra
+	rra
+	rra
+	and	0x07
+	push	bc
+	ld	b,a
+	ld	a,c
+	rla
+	rla
+	rla
+	jp	r1
+	
+; ==============================================================================
 ; neswflip - flip the board in situ along the NW-SW diagonal
 ; 
 ;   input:  (HL) - array of black discs
@@ -1752,6 +1834,33 @@ neswflip:
 	ret
 	
 ; ==============================================================================
+; move_neswflip - flip move along the NW-SE diagonal
+; 
+;   input:  C - move
+; 
+;   output: C - flipped move
+; 
+;   uses:   A
+; 
+	.text
+	.global	move_neswflip
+move_neswflip:
+	ld	a,0x3f
+	sub	c
+	rra
+	rra
+	rra
+	and	0x07
+	push	bc
+	ld	b,a
+	ld	a,0x07
+	sub	c
+	rla
+	rla
+	rla
+	jp	r1
+	
+; ==============================================================================
 ; horflip - flip board in situ horizontally
 ; 
 ;   input:  (HL) - array of black discs
@@ -1779,6 +1888,26 @@ horflip:
 	dec	a
 	jp	nz,1b
 	ret
+	
+; ==============================================================================
+; move_horflip - flip move horizontally
+; 
+;   input:  C - move
+; 
+;   output: C - flipped move
+; 
+;   uses:   A
+; 
+	.text
+	.global	move_horflip
+move_horflip:
+	ld	a,0x07
+	sub	c
+	and	0x07
+	push	bc
+	ld	b,a
+	ld	a,c
+	jp	r1
 	
 ; ==============================================================================
 ; verflip - flip board in situ vertically
@@ -1811,6 +1940,26 @@ verflip:
 	dec	b
 	jp	nz,1b
 	ret
+	
+; ==============================================================================
+; move_verflip - flip move vertically
+; 
+;   input:  C - move
+; 
+;   output: C - flipped move
+; 
+;   uses:   A
+; 
+	.text
+	.global	move_verflip
+move_verflip:
+	ld	a,c
+	and	0x07
+	push	bc
+	ld	b,a
+	ld	a,0x3f
+	sub	c
+	jp	r1
 	
 ; ==============================================================================
 ; getsquare - get state of selected square

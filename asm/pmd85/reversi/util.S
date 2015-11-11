@@ -45,6 +45,48 @@ fill:
 	ret
 	
 ; ==============================================================================
+; copy8 - copy area
+; 
+;   input:  (HL) - source area
+;           (DE) - destination area
+;           B - number of bytes (1-256)
+; 
+;   uses:   A, B, D, E, H, L
+; 
+	.text
+	.global	copy8
+copy8:
+	ld	a,(hl)
+	ld	(de),a
+	inc	hl
+	inc	de
+	dec	b
+	jp	nz,copy8
+	ret
+	
+; ==============================================================================
+; copy16 - copy area
+; 
+;   input:  (HL) - source area
+;           (DE) - destination area
+;           BC - number of bytes (1-65536)
+; 
+;   uses:   all
+; 
+	.text
+	.global	copy16
+copy16:
+	ld	a,(hl)
+	ld	(de),a
+	inc	hl
+	inc	de
+	dec	bc
+	ld	a,b
+	or	c
+	jp	nz,copy16
+	ret
+	
+; ==============================================================================
 ; mul16 - signed 16-bit multiplication
 ; 
 ;   input:  HL, DE
@@ -333,6 +375,82 @@ udiv16_8:
         ld      d,a
 2:	dec     b
         jp	nz,1b
+	ret
+	
+; ==============================================================================
+; crc16 - update CRC-16-CCITT
+; 
+;   input:  HL - initial CRC
+; 	    A - input byte
+; 
+;   output: HL - updated CRC
+; 
+;   uses:   A, B
+; 
+	.text
+	.global	crc16
+crc16:
+	xor	h
+	ld	h,a
+	ld	b,8
+2:	add	hl,hl
+	jp	nc,1f
+	ld	a,h
+	xor	0x10
+	ld	h,a
+	ld	a,l
+	xor	0x21
+	ld	l,a
+1:	dec	b
+	jp	nz,2b
+	ret
+	
+; ==============================================================================
+; init_crc24 - initialize CRC-24
+; 
+;   output: CHL - initial CRC
+; 
+;   uses:   -
+; 
+	.text
+	.global	init_crc24
+init_crc24:
+	ld	c,0xb7
+	ld	hl,0x04ce
+	ret
+	
+; ==============================================================================
+; crc24 - update CRC-24
+; 
+;   input:  CHL - initial CRC
+; 	    A - input byte
+; 
+;   output: CHL - updated CRC
+; 
+;   uses:   A, B
+; 
+	.text
+	.global	crc24
+crc24:
+	xor	c
+	ld	c,a
+	ld	b,8
+2:	add	hl,hl
+	ld	a,c
+	rla
+	ld	c,a
+	jp	nc,1f
+	ld	a,c
+	xor	0x86
+	ld	c,a
+	ld	a,h
+	xor	0x4c
+	ld	h,a
+	ld	a,l
+	xor	0xfb
+	ld	l,a
+1:	dec	b
+	jp	nz,2b
 	ret
 	
 	.end
