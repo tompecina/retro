@@ -77,7 +77,7 @@ lookup_book:
 	ld	de,tmpwh
 	ret
 1:	ld	hl,book
-2:	ld	a,(hl)
+6:	ld	a,(hl)
 	inc	hl
 	or	a
 	jp	p,1f
@@ -86,25 +86,25 @@ lookup_book:
 1:	ld	c,a
 2:	ld	de,bcrc
 	ld	b,8
-1:	call	3f
-	jp	nz,1f
-	call	3f
-	jp	nz,4f
-	call	3f
-	jp	nz,5f
-	jp	2f
-1:	inc	de
-	inc	hl
-4:	inc	de
-	inc	hl
-5:	dec	b
-	jp	z,2b
-	jp	1b
-3:	ld	a,(de)
+3:	push	hl
+	.irp	label, 1f, 4f, 5f
+	ld	a,(de)
 	inc	de
 	cp	(hl)
 	inc	hl
-	ret
+	jp	nz,\label
+	.endr
+	pop	de
+	jp	2f
+1:	inc	de
+4:	inc	de
+5:	pop	hl
+	dec	b
+	jp	nz,3b
+	inc	hl
+	inc	hl
+	inc	hl
+	jp	6b
 2:	ld	a,b
 	cp	8
 	ret	z

@@ -73,9 +73,8 @@ add_glyphs:
 	ld	(iiroll),a
 	ret
 	
-	.global	tascii, cursor, color, radsir, vyska, poroll, rsirrad
+	.global	cursor, color, radsir, vyska, poroll, rsirrad
 	.global curroll, enlnw, iiroll
-	.lcomm	tascii, 16
 	.lcomm	cursor, 2
 	.lcomm	color, 1
 	.lcomm	radsir, 2
@@ -85,6 +84,16 @@ add_glyphs:
 	.lcomm	curroll, 2
 	.lcomm	enlnw, 1
 	.lcomm	iiroll, 1
+	
+; ==============================================================================
+; Glyphs map
+;
+	.data
+	.global	tascii
+tascii:
+	.rept	8
+	.word	0xff00
+	.endr
 	
 ; ==============================================================================
 ; Glyphs
