@@ -1,4 +1,4 @@
-; adras.S
+; adras10.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,7 +18,7 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Copy of original monitor's ADRAS, which is not available in PMD 85-1.
+; Copy of original monitor's ADRAS, modified for 10-cell glyphs.
 
 	.include "pmd85.inc"
 	
@@ -49,8 +49,10 @@ adras:
 	ld	b,h
 	ld	a,c
 	add	a,a
+	ld	d,a
 	add	a,a
 	add	a,a
+	add	a,d
 	ld	c,a
 	ld	de,tascii
 	add	hl,de
@@ -62,7 +64,7 @@ adras:
 	ld	a,h
 	inc	a
 	ret	nz
-	ld	hl,undef_glyph + 8
+	ld	hl,undef_glyph + 10
 	ret
 
 	.end

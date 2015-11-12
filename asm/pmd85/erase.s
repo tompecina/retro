@@ -1,4 +1,4 @@
-; waits.S
+; erase.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -23,22 +23,45 @@
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; waits - waiting loop
+; erase/part_erase - clear display/part of display
 ; 
-;   input:  A, D - waiting time (A * 43.5usec + D * 10msec)
+;   input:  HL - new cursor address (only part_erase)
+; 	    DE - end of the topmost scanline to clear + 1 (only part_erase)
+; 	    B - number of scanlines to clear (only part_erase)
+; 	    (cursor) - cursor address
+; 	    (color) - new color mask for the erased area
+;   	    (radsir) - line height
 ; 
-;   uses:   A, D
+;   uses:   A
 ; 
 	.text
-	.global waits
-waits:
-	.rept	4
-	ex	(sp),hl
+	.global	erase, part_erase
+erase:
+	ld	bc, 0x0c280
+	ld	de, 0x0c030
+	ld	hl,(radsir)
+	add	hl,bc
+	ld	b,0
+part_erase:
+	ld	(cursor),hl
+	ld	a,(color)
+	ld	hl,0
+	add	hl,sp
+	ex	de,hl
+	ld	sp,hl
+	ld	c,a
+	ld	a,b
+	ld	b,c
+1:	.rept	24
+	push	bc
 	.endr
+	ld	sp,0x0040
+	add	hl,sp
+	ld	sp,hl
 	dec	a
-	jp	nz,waits
-	dec	d
-	jp	nz,waits
+	jp	nz,1b
+	ex	de,hl
+	ld	sp,hl
 	ret
-	
+
 	.end

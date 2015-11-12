@@ -1,4 +1,4 @@
-; util.S
+; util.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;

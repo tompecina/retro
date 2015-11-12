@@ -1,4 +1,4 @@
-; beep.S
+; adras.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,62 +18,51 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Copy of original monitor's beeper routines.
+; Copy of original monitor's ADRAS, which is not available in PMD 85-1.
 
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; bepuk - invert beep and yellow LED pin
+; adras - return glyph address
 ; 
-;   uses:   A
+;   input:  A - character code
+; 	    (tascii) - table of glyphs
 ; 
-	.text
-	.global	bepuk
-bepuk:
-	in	a,(SYSPIO_PC)
-	xor	0x02
-	out	(SYSPIO_PC),a
-	ret
-
-; ==============================================================================
-; beclr - beeper off
+;   output: HL - glyph address + 8
 ; 
-;   uses:   A
+;   uses:   all
 ; 
 	.text
-	.global	beclr
-beclr:
-	in	a,(SYSPIO_PC)
-	and	0xfc
-	out	(SYSPIO_PC),a
-	ret
-
-; ==============================================================================
-; beep,bell - beep according to a pattern
-; 
-;   input:  (beedt) - pattern (for beep)
-;           (HL) - pattern (for bell)
-; 
-;   uses:   A, B, D, H, L
-; 
-	.text
-	.global beep, beclr
-beep:
-	ld	hl,(beedt)
-bell:
-	call	beclr
+	.global	adras
+adras:
 	ld	b,a
-	ld	a,(hl)
-	cp	-1
-	ret	z
-	or	b
-	out	(SYSPIO_PC),A
-	inc	hl
+	and	0x1f
+	ld	c,a
+	ld	a,b
+	sub	c
+	rrca
+	rrca
+	rrca
+	rrca
+	ld	l,a
+	ld	h,0
+	ld	b,h
+	ld	a,c
+	add	a,a
+	add	a,a
+	add	a,a
+	ld	c,a
+	ld	de,tascii
+	add	hl,de
 	ld	d,(hl)
-	call	waits
 	inc	hl
-	jp	bell
-	
-	.lcomm	beedt, 2
-	
+	ld	h,(hl)
+	ld	l,d
+	add	hl,bc
+	ld	a,h
+	inc	a
+	ret	nz
+	ld	hl,undef_glyph + 8
+	ret
+
 	.end

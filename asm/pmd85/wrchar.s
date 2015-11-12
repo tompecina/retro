@@ -1,4 +1,4 @@
-; adras10.S
+; wrchar.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,53 +18,50 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Copy of original monitor's ADRAS, modified for 10-cell glyphs.
+; Modified WRCHAR, with ADRAS (not available in PMD 85-1).  In addition,
+; this version is interrupt-compatible as it does not use the stack pointer.
 
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; adras - return glyph address
+; wrchar - write character
 ; 
 ;   input:  A - character code
-; 	    (tascii) - table of glyphs
+; 	    HL - cursor address
+; 	    (color) - color mask
 ; 
-;   output: HL - glyph address + 8
-; 
-;   uses:   all
+;   uses:   A
 ; 
 	.text
-	.global	adras
-adras:
-	ld	b,a
-	and	0x1f
-	ld	c,a
-	ld	a,b
-	sub	c
-	rrca
-	rrca
-	rrca
-	rrca
-	ld	l,a
-	ld	h,0
-	ld	b,h
-	ld	a,c
-	add	a,a
-	ld	d,a
-	add	a,a
-	add	a,a
-	add	a,d
-	ld	c,a
-	ld	de,tascii
-	add	hl,de
-	ld	d,(hl)
-	inc	hl
-	ld	h,(hl)
-	ld	l,d
+	.global	wrchar
+wrchar:
+	push	bc
+	push	de
+	push	hl
+	call	adras
+	ex	de,hl
+	pop	hl
+	push	hl
+	ld	bc,-128
 	add	hl,bc
-	ld	a,h
-	inc	a
-	ret	nz
-	ld	hl,undef_glyph + 10
+	ld	b,a
+	ld	c,8
+	ld	a,(color)
+	ld	b,a
+1:	dec	de
+	ld	a,(de)
+	xor	b
+	ld	(hl),a
+	push	de
+	ld	de,-64
+	add	hl,de
+	pop	de
+	dec	c
+	jp	nz,1b
+	ld	(hl),b
+	pop	hl
+	pop	de
+	pop	bc
 	ret
 
 	.end

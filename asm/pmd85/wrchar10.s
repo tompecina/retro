@@ -1,4 +1,4 @@
-; glyphs.S
+; wrchar10.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,19 +18,51 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Character glyphs.
+; Modified WRCHAR, with ADRAS (not available in PMD 85-1) and for 10-cell
+; glyphs.  In addition, this version is interrupt-compatible as it does not
+; use the stack pointer.
 
-	.include "reversi.inc"
+	.include "pmd85.inc"
 	
 ; ==============================================================================
-; Page selectors
-;
-	.equiv	SEL_20, 1
-	.equiv	SEL_40, 1
-	.equiv	SEL_60, 1
-	.equiv	SEL_C0, 1
-	.equiv	SEL_E0, 1
-
-	.include "../glyphs10.inc"
+; wrchar - write character
+; 
+;   input:  A - character code
+; 	    HL - cursor address
+; 	    (color) - color mask
+; 
+;   uses:   A
+; 
+	.text
+	.global	wrchar
+wrchar:
+	push	bc
+	push	de
+	push	hl
+	call	adras
+	ex	de,hl
+	pop	hl
+	push	hl
+	ld	bc,-128
+	add	hl,bc
+	ld	b,a
+	ld	c,10
+	ld	a,(color)
+	ld	b,a
+1:	dec	de
+	ld	a,(de)
+	xor	b
+	ld	(hl),a
+	push	de
+	ld	de,-64
+	add	hl,de
+	pop	de
+	dec	c
+	jp	nz,1b
+	ld	(hl),b
+	pop	hl
+	pop	de
+	pop	bc
+	ret
 
 	.end

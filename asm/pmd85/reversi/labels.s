@@ -1,4 +1,4 @@
-; labels.S
+; labels.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;

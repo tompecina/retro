@@ -1,4 +1,4 @@
-; wrchar10.S
+; waits.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,51 +18,27 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Modified WRCHAR, with ADRAS (not available in PMD 85-1) and for 10-cell
-; glyphs.  In addition, this version is interrupt-compatible as it does not
-; use the stack pointer.
+; Copy of original monitor's routine.
 
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; wrchar - write character
+; waits - waiting loop
 ; 
-;   input:  A - character code
-; 	    HL - cursor address
-; 	    (color) - color mask
+;   input:  A, D - waiting time (A * 43.5usec + D * 10msec)
 ; 
-;   uses:   A
+;   uses:   A, D
 ; 
 	.text
-	.global	wrchar
-wrchar:
-	push	bc
-	push	de
-	push	hl
-	call	adras
-	ex	de,hl
-	pop	hl
-	push	hl
-	ld	bc,-128
-	add	hl,bc
-	ld	b,a
-	ld	c,10
-	ld	a,(color)
-	ld	b,a
-1:	dec	de
-	ld	a,(de)
-	xor	b
-	ld	(hl),a
-	push	de
-	ld	de,-64
-	add	hl,de
-	pop	de
-	dec	c
-	jp	nz,1b
-	ld	(hl),b
-	pop	hl
-	pop	de
-	pop	bc
+	.global waits
+waits:
+	.rept	4
+	ex	(sp),hl
+	.endr
+	dec	a
+	jp	nz,waits
+	dec	d
+	jp	nz,waits
 	ret
-
+	
 	.end

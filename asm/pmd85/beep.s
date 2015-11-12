@@ -1,4 +1,4 @@
-; wrchar.S
+; beep.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,50 +18,62 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Modified WRCHAR, with ADRAS (not available in PMD 85-1).  In addition,
-; this version is interrupt-compatible as it does not use the stack pointer.
+; Copy of original monitor's beeper routines.
 
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; wrchar - write character
-; 
-;   input:  A - character code
-; 	    HL - cursor address
-; 	    (color) - color mask
+; bepuk - invert beep and yellow LED pin
 ; 
 ;   uses:   A
 ; 
 	.text
-	.global	wrchar
-wrchar:
-	push	bc
-	push	de
-	push	hl
-	call	adras
-	ex	de,hl
-	pop	hl
-	push	hl
-	ld	bc,-128
-	add	hl,bc
-	ld	b,a
-	ld	c,8
-	ld	a,(color)
-	ld	b,a
-1:	dec	de
-	ld	a,(de)
-	xor	b
-	ld	(hl),a
-	push	de
-	ld	de,-64
-	add	hl,de
-	pop	de
-	dec	c
-	jp	nz,1b
-	ld	(hl),b
-	pop	hl
-	pop	de
-	pop	bc
+	.global	bepuk
+bepuk:
+	in	a,(SYSPIO_PC)
+	xor	0x02
+	out	(SYSPIO_PC),a
 	ret
 
+; ==============================================================================
+; beclr - beeper off
+; 
+;   uses:   A
+; 
+	.text
+	.global	beclr
+beclr:
+	in	a,(SYSPIO_PC)
+	and	0xfc
+	out	(SYSPIO_PC),a
+	ret
+
+; ==============================================================================
+; beep,bell - beep according to a pattern
+; 
+;   input:  (beedt) - pattern (for beep)
+;           (HL) - pattern (for bell)
+; 
+;   uses:   A, B, D, H, L
+; 
+	.text
+	.global beep, beclr
+beep:
+	ld	hl,(beedt)
+bell:
+	call	beclr
+	ld	b,a
+	ld	a,(hl)
+	cp	-1
+	ret	z
+	or	b
+	out	(SYSPIO_PC),A
+	inc	hl
+	ld	d,(hl)
+	call	waits
+	inc	hl
+	jp	bell
+	
+	.lcomm	beedt, 2
+	
 	.end

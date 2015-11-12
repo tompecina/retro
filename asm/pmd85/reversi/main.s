@@ -1,4 +1,4 @@
-; main.S
+; main.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;

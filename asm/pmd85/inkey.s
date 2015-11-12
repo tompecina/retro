@@ -1,4 +1,4 @@
-; inkey.S
+; inkey.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;

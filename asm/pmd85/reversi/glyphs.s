@@ -1,4 +1,4 @@
-; erase.S
+; glyphs.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,50 +18,19 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Copy of original monitor's routine.
+; Character glyphs.
 
-	.include "pmd85.inc"
+	.include "reversi.inc"
 	
 ; ==============================================================================
-; erase/part_erase - clear display/part of display
-; 
-;   input:  HL - new cursor address (only part_erase)
-; 	    DE - end of the topmost scanline to clear + 1 (only part_erase)
-; 	    B - number of scanlines to clear (only part_erase)
-; 	    (cursor) - cursor address
-; 	    (color) - new color mask for the erased area
-;   	    (radsir) - line height
-; 
-;   uses:   A
-; 
-	.text
-	.global	erase, part_erase
-erase:
-	ld	bc, 0x0c280
-	ld	de, 0x0c030
-	ld	hl,(radsir)
-	add	hl,bc
-	ld	b,0
-part_erase:
-	ld	(cursor),hl
-	ld	a,(color)
-	ld	hl,0
-	add	hl,sp
-	ex	de,hl
-	ld	sp,hl
-	ld	c,a
-	ld	a,b
-	ld	b,c
-1:	.rept	24
-	push	bc
-	.endr
-	ld	sp,0x0040
-	add	hl,sp
-	ld	sp,hl
-	dec	a
-	jp	nz,1b
-	ex	de,hl
-	ld	sp,hl
-	ret
+; Page selectors
+;
+	.equiv	SEL_20, 1
+	.equiv	SEL_40, 1
+	.equiv	SEL_60, 1
+	.equiv	SEL_C0, 1
+	.equiv	SEL_E0, 1
+
+	.include "../glyphs10.inc"
 
 	.end
