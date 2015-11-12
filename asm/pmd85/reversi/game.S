@@ -1647,11 +1647,72 @@ move_rotate90:
 	rla
 	rla
 	rla
-r1:	and	0x38
+.L1:	and	0x38
 	or	b
 	pop	bc
 	ld	c,a
 	ret
+	
+; ==============================================================================
+; rotate180 - rotate the board in situ by 180 degrees
+; 
+;   input:  (HL) - array of black discs
+;           (DE) - array of white discs
+; 
+;   output: rotated board
+; 
+;   uses:   all
+; 
+	.text
+	.global	rotate180
+rotate180:
+	push	de
+	call	1f
+	pop	hl
+1:	ld	d,h
+	ld	e,l
+	ld	bc,7
+	add	hl,bc
+	ld	b,4
+1:	ld	a,(de)
+	call	1f
+	ld	c,(hl)
+	ld	(hl),a
+	ld	a,c
+	call	1f
+	ld	(de),a
+	inc	de
+	dec	hl
+	dec	b
+	jp	nz,1b
+	ret
+1:	push	hl
+	push	de
+	call	reflect_byte
+	pop	de
+	pop	hl
+	ret
+	
+; ==============================================================================
+; move_rotate180 - rotate move by 180 degrees
+; 
+;   input:  C - move
+; 
+;   output: C - rotated move
+; 
+;   uses:   A
+; 
+	.text
+	.global	move_rotate180
+move_rotate180:
+	ld	a,0x07
+	sub	c
+	and	0x07
+	push	bc
+	ld	b,a
+	ld	a,0x3f
+	sub	c
+	jp	.L1
 	
 ; ==============================================================================
 ; rotate270 - rotate the board in situ counterclockwise
@@ -1720,7 +1781,108 @@ move_rotate270:
 	rla
 	rla
 	rla
-	jp	r1
+	jp	.L1
+	
+; ==============================================================================
+; horflip - flip board in situ horizontally
+; 
+;   input:  (HL) - array of black discs
+;           (DE) - array of white discs
+; 
+;   output: flipped board
+; 
+;   uses:   all
+; 
+	.text
+	.global	horflip
+horflip:
+	push	de
+	call	1f
+	pop	hl
+1:	ld	b,h
+	ld	c,l
+	ld	a,8
+1:	push	af
+	ld	a,(bc)
+	call	reflect_byte
+	ld	(bc),a
+	inc	bc
+	pop	af
+	dec	a
+	jp	nz,1b
+	ret
+	
+; ==============================================================================
+; move_horflip - flip move horizontally
+; 
+;   input:  C - move
+; 
+;   output: C - flipped move
+; 
+;   uses:   A
+; 
+	.text
+	.global	move_horflip
+move_horflip:
+	ld	a,0x07
+	sub	c
+	and	0x07
+	push	bc
+	ld	b,a
+	ld	a,c
+	jp	.L1
+	
+; ==============================================================================
+; verflip - flip board in situ vertically
+; 
+;   input:  (HL) - array of black discs
+;           (DE) - array of white discs
+; 
+;   output: flipped board
+; 
+;   uses:   all
+; 
+	.text
+	.global	verflip
+verflip:
+	push	de
+	call	1f
+	pop	hl
+1:	ld	d,h
+	ld	e,l
+	ld	bc,7
+	add	hl,bc
+	ld	b,4
+1:	ld	a,(de)
+	ld	c,(hl)
+	ld	(hl),a
+	ld	a,c
+	ld	(de),a
+	inc	de
+	dec	hl
+	dec	b
+	jp	nz,1b
+	ret
+	
+; ==============================================================================
+; move_verflip - flip move vertically
+; 
+;   input:  C - move
+; 
+;   output: C - flipped move
+; 
+;   uses:   A
+; 
+	.text
+	.global	move_verflip
+move_verflip:
+	ld	a,c
+	and	0x07
+	push	bc
+	ld	b,a
+	ld	a,0x3f
+	sub	c
+	jp	.L1
 	
 ; ==============================================================================
 ; nwseflip - flip the board in situ along the NW-SE diagonal
@@ -1788,7 +1950,7 @@ move_nwseflip:
 	rla
 	rla
 	rla
-	jp	r1
+	jp	.L1
 	
 ; ==============================================================================
 ; neswflip - flip the board in situ along the NW-SW diagonal
@@ -1858,108 +2020,7 @@ move_neswflip:
 	rla
 	rla
 	rla
-	jp	r1
-	
-; ==============================================================================
-; horflip - flip board in situ horizontally
-; 
-;   input:  (HL) - array of black discs
-;           (DE) - array of white discs
-; 
-;   output: flipped board
-; 
-;   uses:   all
-; 
-	.text
-	.global	horflip
-horflip:
-	push	de
-	call	1f
-	pop	hl
-1:	ld	b,h
-	ld	c,l
-	ld	a,8
-1:	push	af
-	ld	a,(bc)
-	call	reflect_byte
-	ld	(bc),a
-	inc	bc
-	pop	af
-	dec	a
-	jp	nz,1b
-	ret
-	
-; ==============================================================================
-; move_horflip - flip move horizontally
-; 
-;   input:  C - move
-; 
-;   output: C - flipped move
-; 
-;   uses:   A
-; 
-	.text
-	.global	move_horflip
-move_horflip:
-	ld	a,0x07
-	sub	c
-	and	0x07
-	push	bc
-	ld	b,a
-	ld	a,c
-	jp	r1
-	
-; ==============================================================================
-; verflip - flip board in situ vertically
-; 
-;   input:  (HL) - array of black discs
-;           (DE) - array of white discs
-; 
-;   output: flipped board
-; 
-;   uses:   all
-; 
-	.text
-	.global	verflip
-verflip:
-	push	de
-	call	1f
-	pop	hl
-1:	ld	d,h
-	ld	e,l
-	ld	bc,7
-	add	hl,bc
-	ld	b,4
-1:	ld	a,(de)
-	ld	c,(hl)
-	ld	(hl),a
-	ld	a,c
-	ld	(de),a
-	inc	de
-	dec	hl
-	dec	b
-	jp	nz,1b
-	ret
-	
-; ==============================================================================
-; move_verflip - flip move vertically
-; 
-;   input:  C - move
-; 
-;   output: C - flipped move
-; 
-;   uses:   A
-; 
-	.text
-	.global	move_verflip
-move_verflip:
-	ld	a,c
-	and	0x07
-	push	bc
-	ld	b,a
-	ld	a,0x3f
-	sub	c
-	jp	r1
+	jp	.L1
 	
 ; ==============================================================================
 ; getsquare - get state of selected square
