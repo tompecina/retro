@@ -27,6 +27,30 @@
 main:
 	ld	sp,0x7f00
 
+	ld	hl,-24
+	add	hl,sp
+	ld	sp,hl
+	ex	de,hl
+	ld	hl,ttbl
+	ld	b,16
+	call	copy8
+	ex	de,hl
+	ld	(hl),1
+	inc	hl
+	ld	de,0x8000
+	ld	(hl),e
+	inc	hl
+	ld	(hl),d
+	inc	hl
+	ld	de,0x7fff
+	ld	(hl),e
+	inc	hl
+	ld	(hl),d
+	inc	hl
+	ld	(hl),1
+	call	minimax
+	jp	.
+	
 ;; 2:	ld	c,0
 ;; 1:	push	bc
 ;; 	call	move_verflip

@@ -39,3 +39,5 @@ KNOWN BUGS AND ESSENTIAL NEW FEATURES
   may or may not be fixable (a window/frame event driver?).
 
 * Debugger should reset the HALT flag if PC is manually changed.
+
+* Video of PMD 85 must be refreshed on closing the Memory window.

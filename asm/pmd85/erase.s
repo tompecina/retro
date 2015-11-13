@@ -32,7 +32,7 @@
 ; 	    (color) - new color mask for the erased area
 ;   	    (radsir) - line height
 ; 
-;   uses:   A
+;   uses:   all
 ; 
 	.text
 	.global	erase, part_erase

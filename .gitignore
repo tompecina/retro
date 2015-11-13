@@ -24,7 +24,6 @@ hs_err_pid*
 *.p
 *.o
 *.out
-*.s
 *.pmd
 *.ptp
 *.wav

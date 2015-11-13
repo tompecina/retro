@@ -155,7 +155,7 @@ div16:	ld      b,h
 1:	add     hl,hl
         call    rdel
         jp	z,2f
-        call    cmpbcde
+        call    ucmpbcde
         jp	m,2f
         ld      a,l
         or      1
@@ -262,7 +262,7 @@ rdel:
         ret
 	
 ; ==============================================================================
-; cmpbcde - compare BC and DE
+; ucmpbcde - compare BC and DE (unsigned)
 ; 
 ;   input:  BC, DE
 ; 
@@ -271,13 +271,37 @@ rdel:
 ;   uses:   A
 ; 
 	.text
-	.global	cmpbcde
-cmpbcde:
+	.global	ucmpbcde
+ucmpbcde:
         ld      a,e
         sub     c
         ld      a,d
         sbc     a,b
         ret
+
+; ==============================================================================
+; cmphlde - compare HL and DE (signed)
+; 
+;   input:  HL, DE
+; 
+;   output: F = (DE - HL)
+; 
+;   uses:   A, E
+; 
+	.text
+	.global	cmphlde
+cmphlde:
+	ld	a,e
+	sub	l
+	ld	e,a
+	ld	a,d
+	sbc	a,h
+	jp	m,1f
+	or	e
+	ret
+1:	or	e
+	scf
+	ret
 
 ; ==============================================================================
 ; shrhlb - signed 16-bit right shift

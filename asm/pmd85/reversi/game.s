@@ -1304,7 +1304,7 @@ make_move:
 	
 ; ==============================================================================
 ; score_board - calculate board score, based on
-;               <https://github.com/kartikkukreja/blog-codes>.
+;               <https://github.com/kartikkukreja/blog-codes>
 ; 
 ;   input:  (HL) - array of my discs
 ;           (DE) - array of opponent's discs
@@ -1321,6 +1321,55 @@ score_board:
 	push	hl
 	ld	hl,0
 	ld	(score),hl
+	pop	hl
+
+; count legal moves
+	push	hl
+	push	de
+	call	count_moves	; B = my moves
+				; C = opponent's moves
+	ld	a,b
+	or	c
+	jp	nz,1f
+	pop	de
+	pop	hl
+	call	count_discs	; B = my discs
+				; C = opponent's discs
+	ld	a,b
+	sub	c
+	jp	z,2f
+	jp	c,3f
+	ld	hl,0x7ffe - 64	; I win
+	ld	b,0
+	jp	4f
+3:	ld	hl,0x8001 + 64	; I lose
+	ld	b,0xff
+4:	ld	c,a
+	add	hl,bc
+	ret
+2:	ld	hl,0		; draw
+	ret
+1:	ld	a,b
+	cp	c
+	jp	z,1f
+	jp	c,5f
+	jp	4f
+5:	xor	a
+	sub	c
+4:
+	push	bc
+	call	signexhl
+	ld	de,987
+	call	mul16
+	ex	de,hl
+	pop	bc
+	ld	a,c
+	add	a,b
+	ld	l,a
+	ld	h,0
+	call	div16
+	call	2f
+	pop	de
 	pop	hl
 
 ; calculate total board value differential
@@ -1400,8 +1449,6 @@ score_board:
 	pop	hl
 
 ; count corner and next-to-empty-corner discs
-	push	hl
-	push	de
 	call	count_cdiscs	; B - my corner discs
 				; C - opponent's corner discs
 				; D - my next-to-empty-corner discs
@@ -1419,32 +1466,6 @@ score_board:
 	call	signexhl
 	ld	de,597
 	call	mul16
-	call	2f
-	pop	de
-	pop	hl
-
-; count legal moves
-	call	count_moves	; B = my moves
-				; C = opponent's moves
-	ld	a,b
-	cp	c
-	jp	z,1f
-	jp	c,5f
-	jp	4f
-5:	xor	a
-	sub	c
-4:
-	push	bc
-	call	signexhl
-	ld	de,987
-	call	mul16
-	ex	de,hl
-	pop	bc
-	ld	a,c
-	add	a,b
-	ld	l,a
-	ld	h,0
-	call	div16
 	call	2f
 
 1:	ld	hl,(score)
