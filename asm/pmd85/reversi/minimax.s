@@ -23,7 +23,7 @@
 	.include "reversi.inc"
 	
 ; ==============================================================================
-; minimax - calculate value of the best/worst variant
+; minimax - calculate value of the best variant
 ; 
 ;   input:  (BC) - parameter block:
 ;   	      +0 - my discs
@@ -103,28 +103,37 @@ minimax:
 	dec	de
 
 ; check for sentinel
-5:	pop	hl
+5:	ex	(sp),hl
+	;; <-/best move>
 	ld	a,h
 	or	a
 	jp	m,2f
 	
 ; convert move
 	push	bc
+	;; <old-pb> <-/best move>
 	ld	b,h
 	ld	c,l
 	call	rc2sq
 	ld	a,c
 	pop	bc
+	;; <-/best move>
+	pop	hl
+	;; -
+	ld	h,a
 	
 ; copy board
 	push	de
-	push	af
+	;; <value>
+	push	hl
+	;; <current/best move> <value>
 	ld	hl,myo + pblen
 	add	hl,bc
 	ex	de,hl
 	ld	hl,opo
 	add	hl,bc
 	push	bc
+	;; <old-pb> <current/best move> <value>
 	ld	b,8
 	call	copy8
 	ld	bc,-16
@@ -146,33 +155,70 @@ minimax:
 	cpl
 	ld	(de),a		; maxmin
 	pop	bc
+	;; <current/best move> <value>
 	
 ; perform move
+	pop	hl
+	;; <value>
+	push	hl
+	;; <current/best move> <value>
+	ld	a,h
 	ld	hl,opo + pblen
 	add	hl,bc
 	ex	de,hl
 	ld	hl,myo + pblen
 	add	hl,bc
-	pop	af
-	push	af
 	push	bc
+	;; <old-pb> <current/best move> <value>
 	ld	c,a
 	ld	b,1
 	call	make_move
 
 ; call itself recursively
 	pop	bc
+	;; <current/best move> <value>
 	push	bc
+	;; <old-pb> <current/best move> <value>
 	ld	hl,pblen
 	add	hl,bc
 	ld	b,h
 	ld	c,l
 	call	minimax
+
+; check maxmin
+	pop	bc
+	;; <current/best move> <value>
+	ex	de,hl
+	ld	hl,mmo
+	add	hl,bc
+	ld	a,(hl)
+	or	a
+	jp	z,6f
+	
+; maximize
+	pop	hl
+	;; <value>
+	ex	(sp),hl
+	;; <current/best move>
+	push	de
+	;; <new value> <current/best move>
+	call	cmphlde
+	pop	de
+	;; <current/best move>
+	jp	m,1f
+	ex	de,hl
+	pop	hl
+	;; -
+	ld	l,h
+1:	
 	
 	jp	.
+
+; minimize
+6:	pop	de
 	
 	
-2:	
+2:	pop	hl
 	
 ; (HL) = my discs, (DE) = opponent's discs
 3:	ld	hl,opo
