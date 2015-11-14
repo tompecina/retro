@@ -26,3 +26,6 @@
 ; Constants
 ; 
 	.equiv	PASS, 0xff
+	.equiv	POSINF, 0x7fff
+	.equiv	NEGINF, 0x8000
+	

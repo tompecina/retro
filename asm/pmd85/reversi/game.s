@@ -1339,10 +1339,10 @@ score_board:
 	sub	c
 	jp	z,2f
 	jp	c,3f
-	ld	hl,0x7ffe - 64	; I win
+	ld	hl,POSINF - 65	; I win
 	ld	b,0
 	jp	4f
-3:	ld	hl,0x8001 + 64	; I lose
+3:	ld	hl,NEGINF + 65	; I lose
 	ld	b,0xff
 4:	ld	c,a
 	add	hl,bc

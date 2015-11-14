@@ -34,7 +34,7 @@
 ;	    	      =0x00 minimize
 ; 
 ;   output: HL - value
-; 	    C - best move (only valid if maximize and depth > 0)
+; 	    C - best move (only if maximize and depth > 0)
 ; 
 ;   uses:   all
 ; 
@@ -43,7 +43,7 @@
 minimax:
 	
 ; BC = initial SP
-	ld	hl,0
+	ld	hl,lvlen + 2
 	add	hl,sp
 	ld	b,h
 	ld	c,l
@@ -103,13 +103,12 @@ minimax:
 	add	hl,bc
 	ld	a,(hl)
 	or	a
-	jp	z,1f
-	ld	de,0x8000
-	jp	2f
-1:	ld	de,0x7fff
+	ld	de,NEGINF
+	jp	nz,5f
+	dec	de
 
 ; check for sentinel
-2:	pop	hl
+5:	pop	hl
 	ld	a,h
 	or	a
 	jp	m,2f
@@ -122,11 +121,15 @@ minimax:
 	ld	a,c
 	pop	bc
 	
-; make room for new parameters
-	ld	hl,-parlen
+; create new stack frame
+	ld	hl,-sflen
 	add	hl,sp
 	ld	sp,hl
 
+; push local variables
+	push	de
+	push	bc
+	
 ; copy board
 	ld	hl,my
 	add	hl,bc
@@ -147,13 +150,16 @@ minimax:
 	ld	b,8
 	call	copy8
 	
+; perform move
+	
+	
 ; set remaining parameters
 	ld	bc,8
 	ex	de,hl
 	add	hl,bc
 	ld	a,(de)
 	dec	a
-	ld	(hl),de		; depth = depth - 1
+	ld	(hl),a		; depth = depth - 1
 	ld	b,4
 	call	copy8		; alpha, beta
 	ld	a,(hl)
@@ -182,14 +188,18 @@ minimax:
 	jp	nz,1b
 1:	pop	hl
 	ret
+
+	.equiv	lvlen, 4	; length of pushed local variables
 	
-	.equiv	my, 2
-	.equiv	op, 10
-	.equiv	depth, 18 
-	.equiv	alpha, 19
-	.equiv	beta, 21
-	.equiv	maxmin, 23
-	.equiv	parlen, 24
+; stack frame
+	.struct	0
+my:	.skip	8
+op:	.skip	8
+depth:	.skip	1
+alpha:	.skip	2
+beta:	.skip	2
+maxmin:	.skip	1
+sflen:
 	
 	.end
  

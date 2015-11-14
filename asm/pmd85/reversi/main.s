@@ -27,7 +27,7 @@
 main:
 	ld	sp,0x7f00
 
-	ld	hl,-24
+	ld	hl,-22
 	add	hl,sp
 	ld	sp,hl
 	ex	de,hl
@@ -37,17 +37,19 @@ main:
 	ex	de,hl
 	ld	(hl),1
 	inc	hl
-	ld	de,0x8000
+	ld	de,NEGINF
 	ld	(hl),e
 	inc	hl
 	ld	(hl),d
 	inc	hl
-	ld	de,0x7fff
+	ld	de,POSINF
 	ld	(hl),e
 	inc	hl
 	ld	(hl),d
 	inc	hl
 	ld	(hl),0xff
+	push	hl
+	push	hl
 	call	minimax
 	jp	.
 	
