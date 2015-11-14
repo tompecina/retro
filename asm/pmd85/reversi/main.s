@@ -27,30 +27,13 @@
 main:
 	ld	sp,0x7f00
 
-	ld	hl,-22
-	add	hl,sp
-	ld	sp,hl
-	ex	de,hl
-	ld	hl,ttbl
-	ld	b,16
+	ld	hl,inpb
+	ld	de,heap
+	push	de
+	ld	b,pblen
 	call	copy8
-	ex	de,hl
-	ld	(hl),1
-	inc	hl
-	ld	de,NEGINF
-	ld	(hl),e
-	inc	hl
-	ld	(hl),d
-	inc	hl
-	ld	de,POSINF
-	ld	(hl),e
-	inc	hl
-	ld	(hl),d
-	inc	hl
-	ld	(hl),0xff
-	push	hl
-	push	hl
-	push	hl
+	
+	pop	bc
 	call	minimax
 	jp	.
 	
@@ -64,14 +47,17 @@ main:
 ;; 	jp	nz,1b
 ;; 	jp	2b
 	
-	ld	hl,ttbl
-	ld	de,ttwh
-	call	lookup_book
-	jp	.
+	;; ld	hl,ttbl
+	;; ld	de,ttwh
+	;; call	lookup_book
+	;; jp	.
 
-ttbl:	.byte	0x00, 0x00, 0x00, 0x08, 0x1c, 0x00, 0x00, 0x00
-ttwh:	.byte	0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00
-
+inpb:	.byte	0x00, 0x00, 0x00, 0x08, 0x10, 0x00, 0x00, 0x00
+	.byte	0x00, 0x00, 0x00, 0x10, 0x08, 0x00, 0x00, 0x00
+	.byte	1
+	.word	MINWORD, MAXWORD
+	.byte	0xff
+	
 	call	add_glyphs
 	call	erase
 	call	clear_msg

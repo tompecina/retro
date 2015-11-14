@@ -1,4 +1,4 @@
-; reversi.inc
+; heap.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,14 +18,16 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; The header file.
+; The heap.
 
-	.include "../pmd85.inc"
+	.include "reversi.inc"
 	
 ; ==============================================================================
-; Constants
+; heap
 ; 
-	.equiv	PASS, 0xff
-	.equiv	MAXWORD, 0x7fff
-	.equiv	MINWORD, 0x8000
+	.bss
+	.global	heap
+heap:
+
+	.end
 	

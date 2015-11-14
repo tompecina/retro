@@ -25,13 +25,14 @@
 ; ==============================================================================
 ; minimax - calculate value of the best/worst variant
 ; 
-;   input:  (SP+2) - my discs
-;	    (SP+10) - opponents discs
-;	    (SP+18) - search depth
-;	    (SP+19) - alpha
-;	    (SP+21) - beta
-;	    (SP+23) - =0xff maximize
-;	    	      =0x00 minimize
+;   input:  (BC) - parameter block:
+;   	      +0 - my discs
+;	      +8 - opponents discs
+;	      +16 - search depth
+;	      +17 - alpha
+;	      +19 - beta
+;	      +21 - =0xff maximize
+;	    	    =0x00 minimize
 ; 
 ;   output: HL - value
 ; 	    C - best move (only if maximize and depth > 0)
@@ -42,14 +43,8 @@
 	.global	minimax
 minimax:
 	
-; BC = initial SP
-	ld	hl,lvlen + 2
-	add	hl,sp
-	ld	b,h
-	ld	c,l
-
 ; check if depth > 0
-	ld	hl,depth
+	ld	hl,depo
 	add	hl,bc
 	ld	a,(hl)
 	or	a
@@ -64,10 +59,10 @@ minimax:
 	pop	bc
 	call	4f
 	jp	nz,1f
-	ld	hl,my		; no legal moves
+	ld	hl,myo		; no legal moves
 	add	hl,bc
 	ex	de,hl
-	ld	hl,op
+	ld	hl,opo
 	add	hl,bc
 	push	bc
 	call	all_legal
@@ -98,12 +93,12 @@ minimax:
 	cp	8
 	jp	nz,2b
 	
-; set initial V
-	ld	hl,maxmin
+; set initial value
+	ld	hl,mmo
 	add	hl,bc
 	ld	a,(hl)
 	or	a
-	ld	de,NEGINF
+	ld	de,MINWORD
 	jp	nz,5f
 	dec	de
 
@@ -121,57 +116,69 @@ minimax:
 	ld	a,c
 	pop	bc
 	
-; create new stack frame
-	ld	hl,-sflen
-	add	hl,sp
-	ld	sp,hl
-
-; push local variables
-	push	de
-	push	bc
-	
 ; copy board
-	ld	hl,op + lvlen
-	add	hl,sp
-	ex	de,hl
-	ld	hl,my
-	add	hl,bc
+	push	de
 	push	af
+	ld	hl,myo + pblen
+	add	hl,bc
+	ex	de,hl
+	ld	hl,opo
+	add	hl,bc
 	push	bc
 	ld	b,8
 	call	copy8
-	push	hl
-	ld	de,-16
-	add	hl,de
-	ex	de,hl
-	pop	hl
+	ld	bc,-16
+	add	hl,bc
 	ld	b,8
 	call	copy8
-	
-; perform move
-	
+	ld	bc,8
+	add	hl,bc
 	
 ; set remaining parameters
-	ld	bc,8
-	ex	de,hl
-	add	hl,bc
-	ld	a,(de)
+	ld	a,(hl)
 	dec	a
-	ld	(hl),a		; depth = depth - 1
+	ld	(de),a		; depth = depth - 1
+	inc	hl
+	inc	de
 	ld	b,4
 	call	copy8		; alpha, beta
 	ld	a,(hl)
 	cpl
 	ld	(de),a		; maxmin
+	pop	bc
+	
+; perform move
+	ld	hl,opo + pblen
+	add	hl,bc
+	ex	de,hl
+	ld	hl,myo + pblen
+	add	hl,bc
+	pop	af
+	push	af
+	push	bc
+	ld	c,a
+	ld	b,1
+	call	make_move
+
+; call itself recursively
+	pop	bc
+	push	bc
+	ld	hl,pblen
+	add	hl,bc
+	ld	b,h
+	ld	c,l
+	call	minimax
+	
+	jp	.
 	
 	
 2:	
 	
 ; (HL) = my discs, (DE) = opponent's discs
-3:	ld	hl,op
+3:	ld	hl,opo
 	add	hl,bc
 	ex	de,hl
-	ld	hl,my
+	ld	hl,myo
 	add	hl,bc
 	ret
 
@@ -187,17 +194,16 @@ minimax:
 1:	pop	hl
 	ret
 
-	.equiv	lvlen, 4	; length of pushed local variables
-	
-; stack frame
+; parameter block
+	.global	myo, opo, depo, alphao, betao, mmo, pblen
 	.struct	0
-my:	.skip	8
-op:	.skip	8
-depth:	.skip	1
-alpha:	.skip	2
-beta:	.skip	2
-maxmin:	.skip	1
-sflen:
+myo:	.skip	8
+opo:	.skip	8
+depo:	.skip	1
+alphao:	.skip	2
+betao:	.skip	2
+mmo:	.skip	1
+pblen:
 	
 	.end
  

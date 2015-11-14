@@ -1116,11 +1116,11 @@ c2m:
 ; ==============================================================================
 ; make_move - perform one move
 ; 
-;   input:  (HL) - array of black discs
-;           (DE) - array of white discs
+;   input:  (HL) - array of black/white discs
+;           (DE) - array of white/black discs
 ;           C - move (must be legal)
-;           B - =0 black to move
-;               =1 white to move
+;           B - =0 black/white to move
+;               =1 white/black to move
 ; 
 ;   output:  updated arrays
 ; 
@@ -1339,10 +1339,10 @@ score_board:
 	sub	c
 	jp	z,2f
 	jp	c,3f
-	ld	hl,POSINF - 65	; I win
+	ld	hl,MAXWORD - 65	; I win
 	ld	b,0
 	jp	4f
-3:	ld	hl,NEGINF + 65	; I lose
+3:	ld	hl,MINWORD + 65	; I lose
 	ld	b,0xff
 4:	ld	c,a
 	add	hl,bc
