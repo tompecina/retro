@@ -30,8 +30,8 @@
 ;	    (SP+18) - search depth
 ;	    (SP+19) - alpha
 ;	    (SP+21) - beta
-;	    (SP+23) - =0 minimize
-;	    	      =1 maximize
+;	    (SP+23) - =0xff maximize
+;	    	      =0x00 minimize
 ; 
 ;   output: HL - value
 ; 	    C - best move (only valid if maximize and depth > 0)
@@ -59,7 +59,9 @@ minimax:
 	
 ; check if terminal position
 1:	call	3f
+	push	bc
 	call	all_legal
+	pop	bc
 	call	4f
 	jp	nz,1f
 	ld	hl,my		; no legal moves
@@ -67,7 +69,9 @@ minimax:
 	ex	de,hl
 	ld	hl,op
 	add	hl,bc
+	push	bc
 	call	all_legal
+	pop	bc
 	call	4f
 	jp	nz,1f
 	call	3f		; terminal position
@@ -93,8 +97,71 @@ minimax:
 	ld	a,d
 	cp	8
 	jp	nz,2b
+	
+; set initial V
+	ld	hl,maxmin
+	add	hl,bc
+	ld	a,(hl)
+	or	a
+	jp	z,1f
+	ld	de,0x8000
+	jp	2f
+1:	ld	de,0x7fff
 
-	jp	.
+; check for sentinel
+2:	pop	hl
+	ld	a,h
+	or	a
+	jp	m,2f
+	
+; convert move
+	push	bc
+	ld	b,h
+	ld	c,l
+	call	rc2sq
+	ld	a,c
+	pop	bc
+	
+; make room for new parameters
+	ld	hl,-parlen
+	add	hl,sp
+	ld	sp,hl
+
+; copy board
+	ld	hl,my
+	add	hl,bc
+	push	hl
+	ld	hl,op
+	add	hl,sp
+	ex	de,hl
+	ex	(sp),hl
+	push	af
+	push	bc
+	ld	b,8
+	call	copy8
+	push	hl
+	ld	de,-16
+	add	hl,de
+	ex	de,hl
+	pop	hl
+	ld	b,8
+	call	copy8
+	
+; set remaining parameters
+	ld	bc,8
+	ex	de,hl
+	add	hl,bc
+	ld	a,(de)
+	dec	a
+	ld	(hl),de		; depth = depth - 1
+	ld	b,4
+	call	copy8		; alpha, beta
+	ld	a,(hl)
+	cpl
+	ld	(de),a		; maxmin
+	
+	
+2:	
 	
 ; (HL) = my discs, (DE) = opponent's discs
 3:	ld	hl,op

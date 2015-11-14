@@ -47,7 +47,7 @@ main:
 	inc	hl
 	ld	(hl),d
 	inc	hl
-	ld	(hl),1
+	ld	(hl),0xff
 	call	minimax
 	jp	.
 	
