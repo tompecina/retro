@@ -50,6 +50,7 @@ main:
 	ld	(hl),0xff
 	push	hl
 	push	hl
+	push	hl
 	call	minimax
 	jp	.
 	

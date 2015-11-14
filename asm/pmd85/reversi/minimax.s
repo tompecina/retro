@@ -131,13 +131,11 @@ minimax:
 	push	bc
 	
 ; copy board
-	ld	hl,my
-	add	hl,bc
-	push	hl
-	ld	hl,op
+	ld	hl,op + lvlen
 	add	hl,sp
 	ex	de,hl
-	ex	(sp),hl
+	ld	hl,my
+	add	hl,bc
 	push	af
 	push	bc
 	ld	b,8
