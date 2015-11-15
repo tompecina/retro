@@ -104,39 +104,31 @@ minimax:
 
 ; check for sentinel
 5:	ex	(sp),hl
-	;; <-/best move>
 	ld	a,h
 	or	a
 	jp	p,1f
 	pop	bc
-	;; -
 	ret
 	
 ; convert move
 1:	push	bc
-	;; <old-pb> <-/best move>
 	ld	b,h
 	ld	c,l
 	call	rc2sq
 	ld	a,c
 	pop	bc
-	;; <-/best move>
 	pop	hl
-	;; -
 	ld	h,a
 	
 ; copy board
 	push	de
-	;; <value>
 	push	hl
-	;; <current/best move> <value>
 	ld	hl,myo + pblen
 	add	hl,bc
 	ex	de,hl
 	ld	hl,opo
 	add	hl,bc
 	push	bc
-	;; <old-pb> <current/best move> <value>
 	ld	b,8
 	call	copy8
 	ld	bc,-16
@@ -158,13 +150,10 @@ minimax:
 	cpl
 	ld	(de),a		; maxmin
 	pop	bc
-	;; <current/best move> <value>
 	
 ; perform move
 	pop	hl
-	;; <value>
 	push	hl
-	;; <current/best move> <value>
 	ld	a,h
 	ld	hl,opo + pblen
 	add	hl,bc
@@ -172,16 +161,13 @@ minimax:
 	ld	hl,myo + pblen
 	add	hl,bc
 	push	bc
-	;; <old-pb> <current/best move> <value>
 	ld	c,a
 	ld	b,1
 	call	make_move
 
 ; call itself recursively
 	pop	bc
-	;; <current/best move> <value>
 	push	bc
-	;; <old-pb> <current/best move> <value>
 	ld	hl,pblen
 	add	hl,bc
 	ld	b,h
@@ -190,7 +176,6 @@ minimax:
 
 ; check maxmin
 	pop	bc
-	;; <current/best move> <value>
 	ex	de,hl
 	ld	hl,mmo
 	add	hl,bc
@@ -200,37 +185,29 @@ minimax:
 	
 ; maximize
 	pop	hl
-	;; <value>
 	ex	(sp),hl
-	;; <current/best move>
 	call	scmphlde	; value > new value ?
 	jp	c,1f
 	pop	hl
-	;; -
 	ld	l,h
 	push	hl
-	;; <current/best move>
-	jp	7f
+	jp	2f
 1:	ex	de,hl
-7:	ld	hl,alphao
+2:	ld	hl,alphao
 	add	hl,bc
 	push	hl
-	;; <ptr-alpha> <current/best move>
 	push	hl
-	;; <ptr-alpha> <ptr-alpha> <current/best move>
 	ld	a,(hl)
 	inc	hl
 	ld	h,(hl)
 	ld	l,a
 	call	scmphlde	; alpha > value ?
-	;; <ptr-alpha> <current/best move>
 	pop	hl
 	jp	c,1f
 	ld	(hl),e
 	inc	hl
 	ld	(hl),d
 1:	pop	hl
-	;; <current/best move>
 	ld	e,(hl)
 	inc	hl
 	ld	d,(hl)
@@ -242,14 +219,10 @@ minimax:
 	ex	de,hl
 	call	scmphlde	; alpha > beta ?
 	ex	de,hl
-	jp	c,7f
+9:	jp	c,7f
 8:	pop	hl
 	jp	5b
 
-; minimize
-6:	pop	de
-
-	
 ; break
 7:	ex	(sp),hl
 	ld	a,h
@@ -257,6 +230,46 @@ minimax:
 	jp	z,7b
 	pop	hl
 	jp	8b
+	
+; minimize
+6:	pop	hl
+	ex	(sp),hl
+	ex	de,hl
+	call	scmphlde	; value < new value ?
+	ex	de,hl
+	jp	c,1f
+	pop	hl
+	ld	l,h
+	push	hl
+	jp	2f
+1:	ex	de,hl
+2:	ld	hl,betao
+	add	hl,bc
+	push	hl
+	ld	a,(hl)
+	inc	hl
+	ld	h,(hl)
+	ld	l,a
+	ex	de,hl
+	call	scmphlde	; beta < value ?
+	ex	de,hl
+	pop	hl
+	jp	c,1f
+	ld	(hl),e
+	inc	hl
+	ld	(hl),d
+1:	ld	hl,alphao
+	add	hl,bc
+	ld	e,(hl)
+	inc	hl
+	ld	d,(hl)
+	inc	hl
+	ld	a,(hl)
+	inc	hl
+	ld	h,(hl)
+	ld	l,a
+	call	scmphlde	; alpha < beta ?
+	jp	9b
 	
 ; (HL) = my discs, (DE) = opponent's discs
 3:	ld	hl,opo
@@ -290,4 +303,3 @@ mmo:	.skip	1
 pblen:
 	
 	.end
- 
