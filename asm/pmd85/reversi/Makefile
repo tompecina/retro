@@ -22,7 +22,7 @@ $(APPL).bin: $(OBJ)
 	$(AS) $(ASFLAGS) -c $< -o $@ -aglms=$*.lst
 
 clean:
-	rm -f *.o *.lst $(APPL).bin $(APPL).hex
+	rm -f *.o *.lst $(APPL).bin $(APPL).hex $(APPL).map
 
 .SUFFIXES:
 
