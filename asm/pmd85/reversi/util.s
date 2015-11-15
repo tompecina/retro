@@ -280,27 +280,25 @@ ucmpbcde:
         ret
 
 ; ==============================================================================
-; cmphlde - compare HL and DE (signed)
+; scmphlde - compare HL and DE (signed)
 ; 
 ;   input:  HL, DE
 ; 
-;   output: F = (DE - HL)
+;   output: CZ if HL > DE
 ; 
-;   uses:   A, E
+;   uses:   A
 ; 
 	.text
-	.global	cmphlde
-cmphlde:
+	.global	scmphlde
+scmphlde:
 	ld	a,e
 	sub	l
-	ld	e,a
 	ld	a,d
 	sbc	a,h
-	jp	m,1f
-	or	e
-	ret
-1:	or	e
-	scf
+	rra
+	xor	h
+	xor	d
+	rla
 	ret
 
 ; ==============================================================================

@@ -107,10 +107,13 @@ minimax:
 	;; <-/best move>
 	ld	a,h
 	or	a
-	jp	m,2f
+	jp	p,1f
+	pop	bc
+	;; -
+	ret
 	
 ; convert move
-	push	bc
+1:	push	bc
 	;; <old-pb> <-/best move>
 	ld	b,h
 	ld	c,l
@@ -200,25 +203,60 @@ minimax:
 	;; <value>
 	ex	(sp),hl
 	;; <current/best move>
-	push	de
-	;; <new value> <current/best move>
-	call	cmphlde
-	pop	de
-	;; <current/best move>
-	jp	m,1f
-	ex	de,hl
+	call	scmphlde	; value > new value ?
+	jp	c,1f
 	pop	hl
 	;; -
 	ld	l,h
-1:	
-	
-	jp	.
+	push	hl
+	;; <current/best move>
+	jp	7f
+1:	ex	de,hl
+7:	ld	hl,alphao
+	add	hl,bc
+	push	hl
+	;; <ptr-alpha> <current/best move>
+	push	hl
+	;; <ptr-alpha> <ptr-alpha> <current/best move>
+	ld	a,(hl)
+	inc	hl
+	ld	h,(hl)
+	ld	l,a
+	call	scmphlde	; alpha > value ?
+	;; <ptr-alpha> <current/best move>
+	pop	hl
+	jp	c,1f
+	ld	(hl),e
+	inc	hl
+	ld	(hl),d
+1:	pop	hl
+	;; <current/best move>
+	ld	e,(hl)
+	inc	hl
+	ld	d,(hl)
+	inc	hl
+	ld	a,(hl)
+	inc	hl
+	ld	h,(hl)
+	ld	l,a
+	ex	de,hl
+	call	scmphlde	; alpha > beta ?
+	ex	de,hl
+	jp	c,7f
+8:	pop	hl
+	jp	5b
 
 ; minimize
 6:	pop	de
+
 	
-	
-2:	pop	hl
+; break
+7:	ex	(sp),hl
+	ld	a,h
+	cp	0xff
+	jp	z,7b
+	pop	hl
+	jp	8b
 	
 ; (HL) = my discs, (DE) = opponent's discs
 3:	ld	hl,opo
