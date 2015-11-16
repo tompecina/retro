@@ -35,7 +35,7 @@
 ;   uses:   all
 ; 
 	.text
-	.global	erase, part_erase
+	.globl	erase, part_erase
 erase:
 	ld	bc, 0x0c280
 	ld	de, 0x0c030

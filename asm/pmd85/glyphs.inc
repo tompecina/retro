@@ -26,7 +26,7 @@
 ;   uses:   H, L
 ;
 	.text
-	.global add_glyphs
+	.globl	add_glyphs
 add_glyphs:	
 	.if SEL_20
 	ld	hl,glyphs20 + 8
@@ -71,8 +71,8 @@ add_glyphs:
 	ld	(iiroll),a
 	ret
 
-	.global	cursor, color, radsir, vyska, poroll, rsirrad
-	.global curroll, enlnw, iiroll
+	.globl	cursor, color, radsir, vyska, poroll, rsirrad
+	.globl	curroll, enlnw, iiroll
 	.lcomm	cursor, 2
 	.lcomm	color, 1
 	.lcomm	radsir, 2
@@ -87,7 +87,7 @@ add_glyphs:
 ; Glyphs map
 ;
 	.data
-	.global	tascii
+	.globl	tascii
 tascii:
 	.rept	8
 	.word	0xff00
@@ -99,7 +99,7 @@ tascii:
 	.data
 	
 	.if SEL_20
-	.global glyphs20
+	.globl	glyphs20
 glyphs20:
 	; 20
 	.byte	0x00	; ......
@@ -392,7 +392,7 @@ glyphs20:
 	.endif
 
 	.if SEL_40
-	.global glyphs40
+	.globl	glyphs40
 glyphs40:	
 	; 40
 	.byte	0x1c	; ..###.
@@ -685,7 +685,7 @@ glyphs40:
 	.endif
 
 	.if SEL_60
-	.global glyphs60
+	.globl	glyphs60
 glyphs60:	
 	; 60
 	.byte	0x04	; ..#...
@@ -978,7 +978,7 @@ glyphs60:
 	.endif
 
 	.if SEL_C0
-	.global glyphsC0
+	.globl	glyphsC0
 glyphsC0:	
 	; c0
 	.byte	0x10	; ....#.
@@ -1271,7 +1271,7 @@ glyphsC0:
 	.endif
 
 	.if SEL_E0
-	.global glyphsE0
+	.globl	glyphsE0
 glyphsE0:	
 	; e0
 	.byte	0x00	; ......
@@ -1563,7 +1563,7 @@ glyphsE0:
 	.byte	0x00	; ......
 	.endif
 
-	.global	undef_glyph
+	.globl	undef_glyph
 undef_glyph:
 	.byte	0x00	; ......
 	.byte	0x00	; ......

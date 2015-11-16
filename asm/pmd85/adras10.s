@@ -33,7 +33,7 @@
 ;   uses:   all
 ; 
 	.text
-	.global	adras
+	.globl	adras
 adras:
 	ld	b,a
 	and	0x1f

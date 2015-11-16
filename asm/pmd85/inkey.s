@@ -31,7 +31,7 @@
 ;   uses:   all
 ; 
 	.text
-	.global inkey
+	.globl	inkey
 inkey:
 	ld	hl,(oldkey)
 	dec	h
@@ -152,7 +152,7 @@ kmp2:	.byte	']'
 ;   uses:   A, H, L
 ;
 	.text
-	.global	set_kmap
+	.globl	set_kmap
 set_kmap:
 	ld	hl,0x8000
 	ld	a,(hl)
@@ -177,7 +177,7 @@ set_kmap:
 ;   uses:   A
 ;
 	.text
-	.global	set_kmap1
+	.globl	set_kmap1
 set_kmap1:
 	ld	a,'['
 	ld	(kmp1),a
@@ -191,7 +191,7 @@ set_kmap1:
 ;   uses:   A
 ;
 	.text
-	.global	set_kmap2
+	.globl	set_kmap2
 set_kmap2:
 	ld	a,']'
 	ld	(kmp1),a

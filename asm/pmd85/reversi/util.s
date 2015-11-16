@@ -33,10 +33,10 @@
 ;   uses:   A, B, H, L
 ; 
 	.text
-	.global	zerofill
+	.globl	zerofill
 zerofill:
 	xor	a
-	.global	fill
+	.globl	fill
 fill:
 	ld	(hl),a
 	inc	hl
@@ -54,7 +54,7 @@ fill:
 ;   uses:   A, B, D, E, H, L
 ; 
 	.text
-	.global	copy8
+	.globl	copy8
 copy8:
 	ld	a,(hl)
 	ld	(de),a
@@ -74,7 +74,7 @@ copy8:
 ;   uses:   all
 ; 
 	.text
-	.global	copy16
+	.globl	copy16
 copy16:
 	ld	a,(hl)
 	ld	(de),a
@@ -96,7 +96,7 @@ copy16:
 ;   uses:   A, B, C, D, E
 ; 
 	.text
-	.global	mul16
+	.globl	mul16
 mul16:
 	ld      b,h
         ld      c,l
@@ -136,7 +136,7 @@ mul16:
 ;   uses:   all
 ; 
 	.text
-	.global	div16
+	.globl	div16
 div16:	ld      b,h
         ld      c,l
         ld      a,d
@@ -186,7 +186,7 @@ div16:	ld      b,h
 ;   uses:   A
 ; 
 	.text
-	.global	hlneg
+	.globl	hlneg
 hlneg:
         ld      a,h
         cpl
@@ -207,7 +207,7 @@ hlneg:
 ;   uses:   A
 ; 
 	.text
-	.global	deneg
+	.globl	deneg
 deneg:
         ld      a,d
         cpl
@@ -228,7 +228,7 @@ deneg:
 ;   uses:   A
 ; 
 	.text
-	.global	bcneg
+	.globl	bcneg
 bcneg:
         ld      a,b
         cpl
@@ -250,7 +250,7 @@ bcneg:
 ;   uses:   A
 ; 
 	.text
-	.global	rdel
+	.globl	rdel
 rdel:
 	ld      a,e
         rla
@@ -271,7 +271,7 @@ rdel:
 ;   uses:   A
 ; 
 	.text
-	.global	ucmpbcde
+	.globl	ucmpbcde
 ucmpbcde:
         ld      a,e
         sub     c
@@ -284,12 +284,12 @@ ucmpbcde:
 ; 
 ;   input:  HL, DE
 ; 
-;   output: CZ if HL > DE
+;   output: CY if HL > DE
 ; 
 ;   uses:   A
 ; 
 	.text
-	.global	scmphlde
+	.globl	scmphlde
 scmphlde:
 	ld	a,e
 	sub	l
@@ -298,6 +298,28 @@ scmphlde:
 	rra
 	xor	h
 	xor	d
+	rla
+	ret
+
+; ==============================================================================
+; scmpdehl - compare DE and HL (signed)
+; 
+;   input:  HL, DE
+; 
+;   output: CY if DE > HL
+; 
+;   uses:   A
+; 
+	.text
+	.globl	scmpdehl
+scmpdehl:
+	ld	a,l
+	sub	e
+	ld	a,h
+	sbc	a,d
+	rra
+	xor	d
+	xor	h
 	rla
 	ret
 
@@ -311,7 +333,7 @@ scmphlde:
 ;   uses:   A, B
 ; 
 	.text
-	.global	shrhlb
+	.globl	shrhlb
 shrhlb:
 	ld	a,h
 	rla
@@ -335,7 +357,7 @@ shrhlb:
 ;   uses:   A
 ; 
 	.text
-	.global	signexhl
+	.globl	signexhl
 signexhl:
 	ld	l,a
 	rla
@@ -354,7 +376,7 @@ signexhl:
 ;   uses:   A
 ; 
 	.text
-	.global	signexde
+	.globl	signexde
 signexde:
 	ld	e,a
 	rla
@@ -374,7 +396,7 @@ signexde:
 ;   uses:   all
 ; 
 	.text
-	.global	udiv16_8
+	.globl	udiv16_8
 udiv16_8:
         ld      de,0
 	ld      b,16
@@ -410,7 +432,7 @@ udiv16_8:
 ;   uses:   A, B
 ; 
 	.text
-	.global	crc16
+	.globl	crc16
 crc16:
 	xor	h
 	ld	h,a
@@ -435,7 +457,7 @@ crc16:
 ;   uses:   -
 ; 
 	.text
-	.global	init_crc24
+	.globl	init_crc24
 init_crc24:
 	ld	c,0xb7
 	ld	hl,0x04ce
@@ -452,7 +474,7 @@ init_crc24:
 ;   uses:   A, B
 ; 
 	.text
-	.global	crc24
+	.globl	crc24
 crc24:
 	xor	c
 	ld	c,a

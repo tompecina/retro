@@ -30,7 +30,7 @@
 ;   uses:   A, D
 ; 
 	.text
-	.global waits
+	.globl	waits
 waits:
 	.rept	4
 	ex	(sp),hl

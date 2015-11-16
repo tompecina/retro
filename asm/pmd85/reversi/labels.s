@@ -32,7 +32,7 @@
 ;   uses:   all
 ; 
 	.text
-	.global	label
+	.globl	label
 label:
 	ld	c,(hl)		; C = rows
 	inc	hl
@@ -72,7 +72,7 @@ label:
 ;   uses:   all
 ; 
 	.text
-	.global	rect
+	.globl	rect
 rect:
 	ld	a,(color)
 3:	push	bc
@@ -95,7 +95,7 @@ rect:
 ; Label "REVERSI 1.0"
 ;
 	.data
-	.global	label_reversi
+	.globl	label_reversi
 label_reversi:
 	.byte	12, 15
 	.byte	0x3f, 0x31, 0x3f, 0x0c, 0x0c, 0x3f, 0x33, 0x1f

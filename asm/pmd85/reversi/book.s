@@ -34,7 +34,7 @@
 ;   uses:   all
 ; 
 	.text
-	.global	lookup_book
+	.globl	lookup_book
 lookup_book:
 	push	de
 	ld	de,tmpbl
@@ -123,7 +123,6 @@ lookup_book:
 ; Boards
 ; 
 	.data
-	.global	book
 book:	
 	.byte	0x13, 0x88, 0x6c, 0x42
 	.byte	0x14, 0xed, 0xcb, 0xaa

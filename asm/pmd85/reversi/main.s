@@ -23,7 +23,7 @@
 	.include "reversi.inc"
 
 	.text
-	.global	main
+	.globl	main
 main:
 	ld	sp,0x7f00
 	jp	9f
@@ -217,14 +217,14 @@ bd:
 	xor	a
 	ld	(color),a
 	ld	a,0x1c
-	call	PMD_PRTOUT
+	call	prtout
 	ld	hl,0xc000
 	ld	bc,0x3010
 	;; ld	a,0x3f
 	;; ld	(color),a
 	;; call	rect
 	ld	hl,label_reversi
-	ld	de,0xc190
+	ld	de,0xc100
 	call	label
 	xor	a
 	ld	(color),a
@@ -232,49 +232,23 @@ bd:
 	call	draw_board
 
 	ld	hl,0xd000
-	ld	a,'('
-	call	wrchar
-	inc	hl
-	ld	a,'&'
-	call	wrchar
-	inc	hl
-	ld	a,'@'
-	call	wrchar
-	inc	hl
-	ld	a,'G'
-	call	wrchar
-	inc	hl
-	ld	a,'i'
-	call	wrchar
-	inc	hl
-	ld	a,'l'
-	call	wrchar
-	inc	hl
-	ld	a,0xc4
-	call	wrchar
-	inc	hl
-	ld	a,0xc9
-	call	wrchar
-	inc	hl
-	ld	a,0xcb
-	call	wrchar
-	inc	hl
-	ld	a,0xcc
-	call	wrchar
-	inc	hl
-	ld	a,')'
-	call	wrchar
-	inc	hl
-
-
-	ld	hl,0xd400
 	ld	(cursor),hl
-	ld	hl,OVL
+	ld	hl,BW
 	call	prtstr
-	ld	hl,0xd701
+
+	ld	hl,0xc418
 	ld	(cursor),hl
-	ld	hl,KONEC
+	ld	hl,credits
 	call	prtstr
+	
+	ld	hl,0xd800
+	ld	(cursor),hl
+	ld	hl,LEGEND
+	call	prtstr
+	;; ld	hl,0xd701
+	;; ld	(cursor),hl
+	;; ld	hl,KONEC
+	;; call	prtstr
 	
 	
 
@@ -448,8 +422,21 @@ bd:
 inbl:	.byte	0x00, 0x00, 0x00, 0x10, 0x08, 0x00, 0x00, 0x00
 inwh:	.byte	0x00, 0x00, 0x00, 0x08, 0x10, 0x00, 0x00, 0x00
 
-OVL:	.asciz	"OVL\xe1D\xe1N\xe9:"
-KONEC:	.asciz	"Q - konec"
+BW:	db	"  ", 0xe3, "ERN", 0xf9, " - B" , 0xe9, "L", 0xf9, CR
+	db	"      2 - 2", 0
+	
+LEGEND:	db	"OVL", 0xe1, "D", 0xe1, "N", 0xe9, ":", CR
+	db	" ", 0xd3, "ipky - kursor", CR
+	db	"  nebo p", 0xd2, 0xc9, "mo:", CR
+	db	" A-H - ", 0xd2, "ada", CR
+	db	" 1-8 - sloupec", CR
+	db	" EOL - tah", CR
+	db	" N - nov", 0xc1, " hra", CR
+	db	" U - tah zp", 0xc5, "t", CR
+	db	" W - prohodit", CR
+	db	" K1-K9 - obt", 0xc9, 0xda, "nost", CR
+	db	" S - zvuk", CR
+	db	" Q - konec", 0
 	
 	/*
 	

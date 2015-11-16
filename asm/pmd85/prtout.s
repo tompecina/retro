@@ -37,7 +37,7 @@
 ;   uses:   A
 ; 
 	.text
-	.global	prtout, newline
+	.globl	prtout, newline
 newline:
 	ld	a,CR
 prtout:
@@ -99,7 +99,7 @@ prtout:
 ;   uses:   all
 ; 
 	.text
-	.global	scroll
+	.globl	scroll
 scroll:
 	ld	hl,0
 	add	hl,sp

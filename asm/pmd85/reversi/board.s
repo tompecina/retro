@@ -25,7 +25,7 @@
 ; ==============================================================================
 ; Constants
 	
-	.equiv	ULC, 0xce15		; upper left corner of the board
+	.equiv	ULC, 0xce16		; upper left corner of the board
 	.equiv	MSGAREA, 0xffc0		; position of the notification area
 	
 ; ==============================================================================
@@ -34,7 +34,7 @@
 ;   uses:   all
 ; 
 	.text
-	.global	draw_board
+	.globl	draw_board
 draw_board:
 	ld	hl,ULC
 	call	2f
@@ -87,7 +87,7 @@ draw_board:
 ;   uses:   A, D, E, H, L
 ; 
 	.text
-	.global	draw_labels
+	.globl	draw_labels
 draw_labels:
 	ld	hl,ULC - 127
 	ld	a,'A'
@@ -126,7 +126,7 @@ draw_labels:
 ;   uses:   all
 ; 
 	.text
-	.global	draw_shape
+	.globl	draw_shape
 draw_shape:
 	push	hl
 	ld	b,c
@@ -179,7 +179,7 @@ draw_shape:
 	.data
 	
 ; blank square
-	.global	BLANK_SQUARE
+	.globl	BLANK_SQUARE
 BLANK_SQUARE:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -200,7 +200,7 @@ BLANK_SQUARE:
 	.byte	0x00, 0x00, 0x00
 
 ; black disc
-	.global	BLACK_DISC
+	.globl	BLACK_DISC
 BLACK_DISC:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x1c, 0x00
@@ -221,7 +221,7 @@ BLACK_DISC:
 	.byte	0x00, 0x00, 0x00
 
 ; black disc, turned 1
-	.global	BLACK_TURNED1
+	.globl	BLACK_TURNED1
 BLACK_TURNED1:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -242,7 +242,7 @@ BLACK_TURNED1:
 	.byte	0x00, 0x00, 0x00
 
 ; black disc, turned 2
-	.global	BLACK_TURNED2
+	.globl	BLACK_TURNED2
 BLACK_TURNED2:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -263,7 +263,7 @@ BLACK_TURNED2:
 	.byte	0x00, 0x00, 0x00
 
 ; black disc, turned 3
-	.global	BLACK_TURNED3
+	.globl	BLACK_TURNED3
 BLACK_TURNED3:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -284,7 +284,7 @@ BLACK_TURNED3:
 	.byte	0x00, 0x00, 0x00
 
 ; disc, half turned
-	.global	HALF_TURNED
+	.globl	HALF_TURNED
 HALF_TURNED:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -305,7 +305,7 @@ HALF_TURNED:
 	.byte	0x00, 0x00, 0x00
 
 ; white disc, turned 3
-	.global	WHITE_TURNED3
+	.globl	WHITE_TURNED3
 WHITE_TURNED3:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -326,7 +326,7 @@ WHITE_TURNED3:
 	.byte	0x00, 0x00, 0x00
 
 ; white disc, turned 2
-	.global	WHITE_TURNED2
+	.globl	WHITE_TURNED2
 WHITE_TURNED2:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -347,7 +347,7 @@ WHITE_TURNED2:
 	.byte	0x00, 0x00, 0x00
 
 ; white disc, turned 1
-	.global	WHITE_TURNED1
+	.globl	WHITE_TURNED1
 WHITE_TURNED1:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -368,7 +368,7 @@ WHITE_TURNED1:
 	.byte	0x00, 0x00, 0x00
 
 ; white disc
-	.global	WHITE_DISC
+	.globl	WHITE_DISC
 WHITE_DISC:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x1c, 0x00
@@ -389,7 +389,7 @@ WHITE_DISC:
 	.byte	0x00, 0x00, 0x00
 
 ; cursor on blank square
-	.global	BLANK_CURSOR
+	.globl	BLANK_CURSOR
 BLANK_CURSOR:
 	.byte	0x2a, 0x2a, 0x2a
 	.byte	0x14, 0x15, 0x15
@@ -410,7 +410,7 @@ BLANK_CURSOR:
 	.byte	0x2a, 0x2a, 0x2a
 	
 ; cursor on black disc
-	.global	BLACK_CURSOR
+	.globl	BLACK_CURSOR
 BLACK_CURSOR:
 	.byte	0x2a, 0x2a, 0x2a
 	.byte	0x14, 0x3f, 0x15
@@ -431,7 +431,7 @@ BLACK_CURSOR:
 	.byte	0x2a, 0x2a, 0x2a
 
 ; cursor on white disc
-	.global	WHITE_CURSOR
+	.globl	WHITE_CURSOR
 WHITE_CURSOR:
 	.byte	0x2a, 0x2a, 0x2a
 	.byte	0x14, 0x3f, 0x15
@@ -459,7 +459,7 @@ WHITE_CURSOR:
 ;   uses:   all
 ; 
 	.text
-	.global	anim_b2w
+	.globl	anim_b2w
 anim_b2w:
 	ld	hl,BLACK_DISC
 	ld	de,51
@@ -473,7 +473,7 @@ anim_b2w:
 ;   uses:   all
 ; 
 	.text
-	.global	anim_w2b
+	.globl	anim_w2b
 anim_w2b:
 	ld	hl,WHITE_DISC
 	ld	de,-51
@@ -491,7 +491,7 @@ anim_w2b:
 ;   uses:   all
 ; 
 	.text
-	.global	animate
+	.globl	animate
 animate:
 	push	hl
 	push	de
@@ -512,7 +512,7 @@ animate:
 ;   uses:   A, H, L
 ; 
 	.text
-	.global	anim_pause
+	.globl	anim_pause
 anim_pause:
 	ld	hl,2000
 1:	dec	hl
@@ -527,7 +527,7 @@ anim_pause:
 ;   uses:   A, H, L
 ; 
 	.text
-	.global	long_anim_pause
+	.globl	long_anim_pause
 long_anim_pause:
 	ld	hl,5000
 	jp	1b
@@ -541,7 +541,7 @@ long_anim_pause:
 ;   uses:   all
 ; 
 	.text
-	.global	draw_pos
+	.globl	draw_pos
 draw_pos:
 	ld	hl,black
 	ld	de,white
@@ -592,7 +592,7 @@ draw_pos:
 ;   uses:   all
 ; 
 	.text
-	.global	anim_move
+	.globl	anim_move
 anim_move:
 	ld	a,c
 	or	a
@@ -664,7 +664,7 @@ dir_offsets:
 ;   uses:   A, B, H, L
 ; 
 	.text
-	.global	init_game
+	.globl	init_game
 init_game:
 	ld	hl,black
 	ld	b,8
@@ -683,7 +683,7 @@ init_game:
 	ld	(cur_col),a
 	jp	draw_pos
 
-	.global	black, white
+	.globl	black, white
 	.lcomm	black, 8
 	.lcomm	white, 8
 	.lcomm	cur_row, 1
@@ -706,7 +706,7 @@ init_game:
 ;   uses:   all
 ; 
 	.text
-	.global	player_select
+	.globl	player_select
 player_select:
 	call	shcur
 4:	call	inkey
@@ -827,7 +827,7 @@ getsq:	ld	a,(cur_row)
 ;   uses:   A, H, L
 ; 
 	.text
-	.global	prtstr
+	.globl	prtstr
 prtstr:
 	ld	a,(hl)
 	or	a
@@ -842,7 +842,7 @@ prtstr:
 ;   uses:   A, B, D, E, H, L
 ; 
 	.text
-	.global	clear_msg
+	.globl	clear_msg
 clear_msg:
 	ld	a,(msg)
 	or	a
@@ -866,7 +866,7 @@ clear_msg:
 ;   uses:   A, D, E, H, L
 ; 
 	.text
-	.global	disp_msg
+	.globl	disp_msg
 disp_msg:
 	ex	de, hl
 	ld	hl,MSGAREA

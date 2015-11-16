@@ -28,7 +28,7 @@
 ;   uses:   A
 ; 
 	.text
-	.global	bepuk
+	.globl	bepuk
 bepuk:
 	in	a,(SYSPIO_PC)
 	xor	0x02
@@ -41,7 +41,7 @@ bepuk:
 ;   uses:   A
 ; 
 	.text
-	.global	beclr
+	.globl	beclr
 beclr:
 	in	a,(SYSPIO_PC)
 	and	0xfc
@@ -57,7 +57,7 @@ beclr:
 ;   uses:   A, B, D, H, L
 ; 
 	.text
-	.global beep, beclr
+	.globl	beep, beclr
 beep:
 	ld	hl,(beedt)
 bell:

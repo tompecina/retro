@@ -34,7 +34,7 @@
 ;   uses:   A
 ; 
 	.text
-	.global	wrchar
+	.globl	wrchar
 wrchar:
 	push	bc
 	push	de

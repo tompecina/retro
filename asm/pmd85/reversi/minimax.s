@@ -40,7 +40,7 @@
 ;   uses:   all
 ; 
 	.text
-	.global	minimax
+	.globl	minimax
 minimax:
 	
 ; check if depth > 0
@@ -216,9 +216,7 @@ minimax:
 	inc	hl
 	ld	h,(hl)
 	ld	l,a
-	ex	de,hl
-	call	scmphlde	; alpha > beta ?
-	ex	de,hl
+	call	scmpdehl	; alpha > beta ?
 9:	jp	c,7f
 8:	pop	hl
 	jp	5b
@@ -234,9 +232,7 @@ minimax:
 ; minimize
 6:	pop	hl
 	ex	(sp),hl
-	ex	de,hl
-	call	scmphlde	; value < new value ?
-	ex	de,hl
+	call	scmpdehl	; value < new value ?
 	jp	c,1f
 	pop	hl
 	ld	l,h
@@ -250,9 +246,7 @@ minimax:
 	inc	hl
 	ld	h,(hl)
 	ld	l,a
-	ex	de,hl
-	call	scmphlde	; beta < value ?
-	ex	de,hl
+	call	scmpdehl	; beta < value ?
 	pop	hl
 	jp	c,1f
 	ld	(hl),e
@@ -292,7 +286,7 @@ minimax:
 	ret
 
 ; parameter block
-	.global	myo, opo, depo, alphao, betao, mmo, pblen
+	.globl	myo, opo, depo, alphao, betao, mmo, pblen
 	.struct	0
 myo:	.skip	8
 opo:	.skip	8

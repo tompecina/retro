@@ -26,7 +26,7 @@
 ; heap
 ; 
 	.bss
-	.global	heap
+	.globl	heap
 heap:
 
 	.end

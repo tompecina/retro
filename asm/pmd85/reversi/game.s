@@ -39,7 +39,7 @@
 ;   uses:   B, D, E, H, L
 ; 
 	.text
-	.global	count_bits
+	.globl	count_bits
 count_bits:
 	ld	de,bitcounts
 	ld	b,8
@@ -87,7 +87,7 @@ bitcounts:
 ;   uses:   D, E, H, L
 ; 
 	.text
-	.global	reflect_byte
+	.globl	reflect_byte
 reflect_byte:
 	ld	hl,byterefl
 	ld	e,a
@@ -142,7 +142,7 @@ byterefl:
 ;   uses:   all
 ;
 	.text
-	.global	init_rvt
+	.globl	init_rvt
 init_rvt:
 	ld	hl,sqv
 	push	hl
@@ -195,7 +195,7 @@ init_rvt:
 ;   uses:   all
 ; 
 	.text
-	.global	calc_tbv
+	.globl	calc_tbv
 calc_tbv:
 	ld	b,h
 	ld	c,l
@@ -264,7 +264,7 @@ calc_tbv:
 ;   uses:   B, D, E, H, L
 ; 
 	.text
-	.global	count_discs
+	.globl	count_discs
 count_discs:
 	push	de
 	call	count_bits
@@ -292,7 +292,7 @@ count_discs:
 ;   uses:   all
 ; 
 	.text
-	.global	count_fdiscs
+	.globl	count_fdiscs
 count_fdiscs:
 	xor	a
 	ld	(myfd),a
@@ -400,7 +400,7 @@ count_fdiscs:
 ;   uses:   all
 ; 
 	.text
-	.global	count_cdiscs
+	.globl	count_cdiscs
 count_cdiscs:
 	xor	a
 	ld	(mycd),a
@@ -522,7 +522,7 @@ count_cdiscs:
 ;   uses:   all
 ; 
 	.text
-	.global	count_moves
+	.globl	count_moves
 count_moves:
 	push	hl
 	push	de
@@ -551,7 +551,7 @@ count_moves:
 ;   uses:   all
 ; 
 	.text
-	.global	dir_pat, dir_pat_full
+	.globl	dir_pat, dir_pat_full
 
 	.macro	chksel	popaf,pushaf
 2:	.if	\popaf
@@ -692,7 +692,7 @@ dir_pat:
 ;   uses:   all
 ; 
 	.text
-	.global	all_legal
+	.globl	all_legal
 all_legal:
 
 ; create array of empty squares
@@ -908,7 +908,7 @@ all_legal:
 ;   uses:   all
 ; 
 	.text
-	.global	one_legal
+	.globl	one_legal
 one_legal:
 	
 ; populate mfield and ofield
@@ -1043,7 +1043,7 @@ one_legal:
 ;   uses:   A
 ; 
 	.text
-	.global	rc2sq
+	.globl	rc2sq
 rc2sq:
 	ld	a,b
 	add	a,a
@@ -1064,7 +1064,7 @@ rc2sq:
 ;   uses:   A
 ; 
 	.text
-	.global	sq2rc
+	.globl	sq2rc
 sq2rc:
 	ld	a,c
 	rra
@@ -1088,7 +1088,7 @@ sq2rc:
 ;   uses:   A
 ; 
 	.text
-	.global	sq2om
+	.globl	sq2om
 sq2om:
 	call	sq2rc
 	jp	c2m
@@ -1103,7 +1103,7 @@ sq2om:
 ;   uses:   A
 ; 
 	.text
-	.global	c2m
+	.globl	c2m
 c2m:	
 	ld	a,1
 1:	dec	c
@@ -1127,7 +1127,7 @@ c2m:
 ;   uses:   all
 ; 
 	.text
-	.global	make_move
+	.globl	make_move
 make_move:
 
 ; check for pass
@@ -1314,7 +1314,7 @@ make_move:
 ;   uses:   all
 ; 
 	.text
-	.global	score_board
+	.globl	score_board
 score_board:
 	
 ; reset score
@@ -1498,7 +1498,7 @@ sqv:
 ;   uses:   all
 ;
 	.text
-	.global	init_hash
+	.globl	init_hash
 init_hash:
 	ld	de,hashtbl
 	ld	hl,0x55aa
@@ -1528,7 +1528,7 @@ init_hash:
 ;   uses:   all
 ; 
 	.text
-	.global	zobrist_hash
+	.globl	zobrist_hash
 zobrist_hash:
 	ld	bc,hashtbl
 	ex	de,hl
@@ -1581,7 +1581,7 @@ zobrist_hash:
 ;   uses:   all
 ; 
 	.text
-	.global	board_crc24
+	.globl	board_crc24
 board_crc24:
 	push	de
 	push	hl
@@ -1610,7 +1610,7 @@ board_crc24:
 ;   uses:   all
 ; 
 	.text
-	.global	rotate90
+	.globl	rotate90
 rotate90:
 	push	de
 	call	1f
@@ -1654,7 +1654,7 @@ rotate90:
 ;   uses:   A
 ; 
 	.text
-	.global	move_rotate90
+	.globl	move_rotate90
 move_rotate90:
 	ld	a,0x3f
 	sub	c
@@ -1685,7 +1685,7 @@ move_rotate90:
 ;   uses:   all
 ; 
 	.text
-	.global	rotate180
+	.globl	rotate180
 rotate180:
 	push	de
 	call	1f
@@ -1724,7 +1724,7 @@ rotate180:
 ;   uses:   A
 ; 
 	.text
-	.global	move_rotate180
+	.globl	move_rotate180
 move_rotate180:
 	ld	a,0x07
 	sub	c
@@ -1746,7 +1746,7 @@ move_rotate180:
 ;   uses:   all
 ; 
 	.text
-	.global	rotate270
+	.globl	rotate270
 rotate270:
 	push	de
 	call	1f
@@ -1788,7 +1788,7 @@ rotate270:
 ;   uses:   A
 ; 
 	.text
-	.global	move_rotate270
+	.globl	move_rotate270
 move_rotate270:
 	ld	a,c
 	rra
@@ -1815,7 +1815,7 @@ move_rotate270:
 ;   uses:   all
 ; 
 	.text
-	.global	horflip
+	.globl	horflip
 horflip:
 	push	de
 	call	1f
@@ -1843,7 +1843,7 @@ horflip:
 ;   uses:   A
 ; 
 	.text
-	.global	move_horflip
+	.globl	move_horflip
 move_horflip:
 	ld	a,0x07
 	sub	c
@@ -1864,7 +1864,7 @@ move_horflip:
 ;   uses:   all
 ; 
 	.text
-	.global	verflip
+	.globl	verflip
 verflip:
 	push	de
 	call	1f
@@ -1895,7 +1895,7 @@ verflip:
 ;   uses:   A
 ; 
 	.text
-	.global	move_verflip
+	.globl	move_verflip
 move_verflip:
 	ld	a,c
 	and	0x07
@@ -1916,7 +1916,7 @@ move_verflip:
 ;   uses:   all
 ; 
 	.text
-	.global	nwseflip
+	.globl	nwseflip
 nwseflip:
 	push	de
 	call	1f
@@ -1958,7 +1958,7 @@ nwseflip:
 ;   uses:   A
 ; 
 	.text
-	.global	move_nwseflip
+	.globl	move_nwseflip
 move_nwseflip:
 	ld	a,c
 	rra
@@ -1984,7 +1984,7 @@ move_nwseflip:
 ;   uses:   all
 ; 
 	.text
-	.global	neswflip
+	.globl	neswflip
 neswflip:
 	push	de
 	call	1f
@@ -2026,7 +2026,7 @@ neswflip:
 ;   uses:   A
 ; 
 	.text
-	.global	move_neswflip
+	.globl	move_neswflip
 move_neswflip:
 	ld	a,0x3f
 	sub	c
@@ -2058,7 +2058,7 @@ move_neswflip:
 ;   uses:   all
 ; 
 	.text
-	.global	getsquare
+	.globl	getsquare
 getsquare:
 	call	c2m
 	ld	a,c
