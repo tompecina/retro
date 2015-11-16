@@ -49,10 +49,8 @@ adras:
 	ld	b,h
 	ld	a,c
 	add	a,a
-	ld	d,a
 	add	a,a
-	add	a,a
-	add	a,d
+	add	a,c
 	ld	c,a
 	ld	de,tascii
 	add	hl,de
@@ -60,6 +58,7 @@ adras:
 	inc	hl
 	ld	h,(hl)
 	ld	l,d
+	add	hl,bc
 	add	hl,bc
 	ld	a,h
 	inc	a

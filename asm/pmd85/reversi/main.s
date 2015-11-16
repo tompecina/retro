@@ -26,7 +26,8 @@
 	.global	main
 main:
 	ld	sp,0x7f00
-
+	jp	9f
+	
 	ld	hl,inpb
 	ld	de,heap
 	push	de
@@ -211,7 +212,7 @@ bd:
 ;; 	call	0x8125
 ;; 	jp	1b
 
-	call	add_glyphs
+9:	call	add_glyphs
 
 	xor	a
 	ld	(color),a
@@ -265,6 +266,17 @@ bd:
 	call	wrchar
 	inc	hl
 
+
+	ld	hl,0xd400
+	ld	(cursor),hl
+	ld	hl,OVL
+	call	prtstr
+	ld	hl,0xd701
+	ld	(cursor),hl
+	ld	hl,KONEC
+	call	prtstr
+	
+	
 
 	ld	hl,black
 	ld	de,white
@@ -436,6 +448,9 @@ bd:
 inbl:	.byte	0x00, 0x00, 0x00, 0x10, 0x08, 0x00, 0x00, 0x00
 inwh:	.byte	0x00, 0x00, 0x00, 0x08, 0x10, 0x00, 0x00, 0x00
 
+OVL:	.asciz	"OVL\xe1D\xe1N\xe9:"
+KONEC:	.asciz	"Q - konec"
+	
 	/*
 	
 	B B B B - - W -
