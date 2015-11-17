@@ -25,15 +25,15 @@ $(APPL)-cs.bin: main-cs.o $(OBJ)
 $(APPL)-sk.bin: main-sk.o $(OBJ)
 	$(LD) $(LDFLAGS) main-sk.o $(OBJ) -o $@ -Map=$(APPL)-sk.map
 
-main-en.o: main.s reversi.inc lang-en.inc ../pmd85.inc \
+main-en.o: main.s reversi.inc ../pmd85.inc lang-en.inc \
 	../glyphs10.inc Makefile
 	$(AS) $(ASFLAGS) --defsym en=1 -c $< -o $@ -aglms=main-en.lst
 
-main-cs.o: main.s reversi.inc lang-cs.inc ../pmd85.inc \
+main-cs.o: main.s reversi.inc ../pmd85.inc lang-cs.inc \
 	../glyphs10.inc Makefile
 	$(AS) $(ASFLAGS) --defsym cs=1 -c $< -o $@ -aglms=main-cs.lst
 
-main-sk.o: main.s reversi.inc lang-sk.inc ../pmd85.inc \
+main-sk.o: main.s reversi.inc ../pmd85.inc lang-sk.inc \
 	../glyphs10.inc Makefile
 	$(AS) $(ASFLAGS) --defsym sk=1 -c $< -o $@ -aglms=main-sk.lst
 
