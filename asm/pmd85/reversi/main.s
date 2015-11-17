@@ -95,7 +95,7 @@ main:
 	.lcomm	compcol, 1
 
 ; ==============================================================================
-; Display depth/difficulty
+; Display depth/level
 ;
 disp_depth:
 	ld	a,(depth)

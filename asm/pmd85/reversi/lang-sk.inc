@@ -27,10 +27,10 @@
 	.equiv	CRPOS, 0xca19
 	.equiv	LEGPOS, 0xc700
 	.equiv	BCPOS, 0xc700
-	.equiv	WCPOS, 0xc70f
-	.equiv	BSPOS, 0xc9c5
-	.equiv	WSPOS, 0xc9ca
-	.equiv	DPPOS, 0xcf4b
+	.equiv	WCPOS, 0xc711
+	.equiv	BSPOS, 0xc9c6
+	.equiv	WSPOS, 0xc9cb
+	.equiv	DPPOS, 0xcf48
 	.equiv	SNPOS, 0xd206
 	
 ; ==============================================================================
@@ -46,21 +46,21 @@ credits:
 	.data
 legend:
 	db	"  ", 0xe3, "IERNY - BIELY", CR
-	db	"        -", CR, CR
-	db	"Obt", 0xc9, 0xda, "nost:", CR
+	db	"         -", CR, CR
+	db	0xf5, "rove", 0xce, ":", CR
 	db	"Zvuk:", CR, CR, VT, VT, VT, VT
-	db	"OVL", 0xe1, "D", 0xe1, "N", 0xe9, ":", CR, VT, VT, VT, VT
-	db	" kursorov", 0xd7, " kl", 0xc1, "vesy", CR
-	db	"  nebo p", 0xd2, 0xc9, "mo:", CR
-	db	" 1-8 - ", 0xd2, "ada", CR
-	db	" A-H - sloupec", CR, VT, VT, VT, VT, VT
-	db	" EOL - tah", CR
+	db	"OVL", 0xe1, "DANIE:", CR, VT, VT, VT, VT
+	db	" kurzorov", 0xd7, " kl", 0xc1, "vesy", CR
+	db	"  alebo priamo:", CR
+	db	" 1-8 - rad", CR
+	db	" A-H - st", 0xcb, "pec", CR, VT, VT, VT, VT, VT
+	db	" EOL - ", 0xd4, "ah", CR
 	db	" N - nov", 0xc1, " hra", CR
-	db	" U - vr", 0xc1, "tit tah", CR
-	db	" W - vym", 0xc5, "nit strany", CR
-	db	" K1-K", '0' + MAX_DEPTH, " - obt", 0xc9, 0xda, "nost", CR
+	db	" U - vr", 0xc1, "ti", 0xd4, " tah", CR
+	db	" W - vymeni", 0xd4, " strany", CR
+	db	" K1-K", '0' + MAX_DEPTH, " - ", 0xd5, "rove", 0xce, CR
 	db	" S - zvuk", CR
-	db	" Q - konec", 0
+	db	" Q - koniec", 0
 
 ; ==============================================================================
 ; On/off strings

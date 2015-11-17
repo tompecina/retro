@@ -30,7 +30,7 @@
 	.equiv	WCPOS, 0xc70f
 	.equiv	BSPOS, 0xc9c5
 	.equiv	WSPOS, 0xc9ca
-	.equiv	DPPOS, 0xcf4b
+	.equiv	DPPOS, 0xcf48
 	.equiv	SNPOS, 0xd206
 	
 ; ==============================================================================
@@ -47,7 +47,7 @@ credits:
 legend:
 	db	"  ", 0xe3, "ERN", 0xf9, " - B" , 0xe9, "L", 0xf9, CR
 	db	"        -", CR, CR
-	db	"Obt", 0xc9, 0xda, "nost:", CR
+	db	0xf5, "rove", 0xce, ":", CR
 	db	"Zvuk:", CR, CR, VT, VT, VT, VT
 	db	"OVL", 0xe1, "D", 0xe1, "N", 0xe9, ":", CR, VT, VT, VT, VT
 	db	" kursorov", 0xd7, " kl", 0xc1, "vesy", CR
@@ -58,7 +58,7 @@ legend:
 	db	" N - nov", 0xc1, " hra", CR
 	db	" U - vr", 0xc1, "tit tah", CR
 	db	" W - vym", 0xc5, "nit strany", CR
-	db	" K1-K", '0' + MAX_DEPTH, " - obt", 0xc9, 0xda, "nost", CR
+	db	" K1-K", '0' + MAX_DEPTH, " - ", 0xd5, "rove", 0xce, CR
 	db	" S - zvuk", CR
 	db	" Q - konec", 0
 

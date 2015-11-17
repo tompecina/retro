@@ -896,12 +896,12 @@ glyphs80:
 	.equiv	COMP_ICON, 0x80
 	; 80
 	.byte	0x00	; ......
+	.byte	0x00	; ......
 	.byte	0x3f	; ######
 	.byte	0x21	; #....#
 	.byte	0x21	; #....#
 	.byte	0x21	; #....#
 	.byte	0x3f	; ######
-	.byte	0x0c	; ..##..
 	.byte	0x0c	; ..##..
 	.byte	0x3f	; ######
 	.byte	0x00	; ......
