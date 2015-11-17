@@ -23,6 +23,18 @@
 	.include "pmd85.inc"
 	
 ; ==============================================================================
+; init_kbd - initialize keyboard routines
+; 
+;   uses:   H, L
+; 
+	.text
+	.globl	init_kbd
+init_kbd:
+	ld	hl,0x007f
+	ld	(oldkey),hl
+	ret
+	
+; ==============================================================================
 ; inkey - test keyboard without waiting
 ; 
 ;   output: Z - no key pressed
@@ -169,7 +181,7 @@ set_kmap:
 	ld	a,(hl)
 	cp	0x03
 	jp	nz,set_kmap2
-	; fall through
+	jp	set_kmap1
 	
 ; ==============================================================================
 ; set_kmap1 - modify keymap for PMD 85-1

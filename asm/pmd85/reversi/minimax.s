@@ -34,14 +34,22 @@
 ;	      +21 - =0xff maximize
 ;	    	    =0x00 minimize
 ; 
-;   output: HL - value
+;   output: Z - no key pressed
+;           HL - value
 ; 	    C - best move (only if maximize and depth > 0)
+;             or
+;           NZ - key pressed
+; 	    A - ASCII code of the key
 ; 
 ;   uses:   all
 ; 
 	.text
 	.globl	minimax
 minimax:
+
+; check for key
+	call	inkey
+	ret	nz
 	
 ; check if depth > 0
 	ld	hl,depo
@@ -50,7 +58,9 @@ minimax:
 	or	a
 	jp	nz,1f
 	call	3f		; depth = 0
-	jp	score_board
+	call	score_board
+	xor	a		; Z = 0
+	ret
 	
 ; check if terminal position
 1:	call	3f
@@ -72,6 +82,7 @@ minimax:
 	call	3f		; terminal position
 	call	score_board
 	ld	c,PASS
+	xor	a		; Z = 0
 	ret
 	
 ; push legal moves
@@ -173,7 +184,8 @@ minimax:
 	ld	b,h
 	ld	c,l
 	call	minimax
-
+	ret	nz
+	
 ; check maxmin
 	pop	bc
 	ex	de,hl

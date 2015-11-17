@@ -52,6 +52,8 @@ main:
 	ld	sp,0x7000
 	call	init_btbl
 	call	init_rvt
+	call	init_kbd
+	call	set_kmap
 	call	add_glyphs
 	call	add_cust_glyphs
 	call	erase
