@@ -20,28 +20,28 @@ $(APPL)-en.bin: main-en.o $(OBJ)
 	$(LD) $(LDFLAGS) main-en.o $(OBJ) -o $@ -Map=$(APPL)-en.map
 
 $(APPL)-cs.bin: main-cs.o $(OBJ)
-	$(LD) $(LDFLAGS) main-cs.o $(OBJ) -o $@ -Map=$(APPL)-en.map
+	$(LD) $(LDFLAGS) main-cs.o $(OBJ) -o $@ -Map=$(APPL)-cs.map
 
 $(APPL)-sk.bin: main-sk.o $(OBJ)
-	$(LD) $(LDFLAGS) main-sk.o $(OBJ) -o $@ -Map=$(APPL)-en.map
+	$(LD) $(LDFLAGS) main-sk.o $(OBJ) -o $@ -Map=$(APPL)-sk.map
 
 main-en.o: main.s reversi.inc lang-en.inc ../pmd85.inc \
 	../glyphs10.inc Makefile
-	$(AS) $(ASFLAGS) --defsym en=1 -c $< -o $@ -aglms=$*.lst
+	$(AS) $(ASFLAGS) --defsym en=1 -c $< -o $@ -aglms=main-en.lst
 
 main-cs.o: main.s reversi.inc lang-cs.inc ../pmd85.inc \
 	../glyphs10.inc Makefile
-	$(AS) $(ASFLAGS) --defsym cs=1 -c $< -o $@ -aglms=$*.lst
+	$(AS) $(ASFLAGS) --defsym cs=1 -c $< -o $@ -aglms=main-cs.lst
 
 main-sk.o: main.s reversi.inc lang-sk.inc ../pmd85.inc \
 	../glyphs10.inc Makefile
-	$(AS) $(ASFLAGS) --defsym sk=1 -c $< -o $@ -aglms=$*.lst
+	$(AS) $(ASFLAGS) --defsym sk=1 -c $< -o $@ -aglms=main-sk.lst
 
 %.o: %.s reversi.inc ../pmd85.inc ../glyphs10.inc Makefile
 	$(AS) $(ASFLAGS) -c $< -o $@ -aglms=$*.lst
 
 clean:
-	rm -f *.o *.lst $(APPL).bin $(APPL).hex $(APPL).map
+	rm -f *.o *.lst $(APPL)*.bin $(APPL)*.hex $(APPL)*.map
 
 .SUFFIXES:
 
