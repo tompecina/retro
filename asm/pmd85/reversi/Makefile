@@ -1,6 +1,6 @@
 APPL = reversi
 MCU = z80
-OBJ = game.o util.o glyphs.o labels.o board.o book.o minimax.o\
+OBJ = game.o util.o glyphs.o labels.o board.o book.o minimax.o \
 	../adras10.o ../wrchar10.o ../beep.o ../waits.o ../inkey.o \
 	../inklav.o ../erase.o ../prtout.o \
 	heap.o
