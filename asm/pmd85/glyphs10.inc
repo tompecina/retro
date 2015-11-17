@@ -57,14 +57,12 @@ add_glyphs:
 	ld	(color),a
 	ld	hl,0x2c0
 	ld	(radsir),hl
-	ld	a,11
+	ld	a,9
 	ld	(rsirrad),a
 	ld	a,0xfb
 	ld	(vyska),a
 	ld	hl,0xfab0
 	ld	(poroll),hl
-	ld	a,9
-	ld	(rsirrad),a
 	ld	hl,0xfd00
 	ld	(curroll),hl
 	ld	a,0x30
