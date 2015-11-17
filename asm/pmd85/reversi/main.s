@@ -83,7 +83,8 @@ main:
 	call	init_game
 	call	disp_score
 
-	ld	a,0xff
+	ld	hl,msg_color
+	call	get_conf	
 	ld	(compcol),a
 	call	disp_compcol
 	

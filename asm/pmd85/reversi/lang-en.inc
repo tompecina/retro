@@ -66,5 +66,25 @@ legend:
 ; On/off strings
 ;
 	.data
-off:	db	"off", 0
-on:	db	"on ", 0
+off:	.asciz	"off"
+on:	.asciz	"on "
+
+; ==============================================================================
+; Control keys
+;
+	.globl	KEY_YES, KEY_NO
+	.equiv	KEY_YES, 'Y'
+	.equiv	KEY_NO, 'N'
+
+	.equiv	KEY_NEW, 'N'
+	.equiv	KEY_UNDO, 'U'
+	.equiv	KEY_SWITCH, 'W'
+	.equiv	KEY_SOUND, 'S'
+	.equiv	KEY_QUIT, 'Q'
+	
+; ==============================================================================
+; Prompts
+;
+	.data
+msg_color:
+	db	"Do you wish to play black? (Y/N)", 0

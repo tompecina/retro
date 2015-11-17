@@ -56,15 +56,36 @@ legend:
 	db	" A-H - sloupec", CR, VT, VT, VT, VT, VT
 	db	" EOL - tah", CR
 	db	" N - nov", 0xc1, " hra", CR
-	db	" U - vr", 0xc1, "tit tah", CR
-	db	" W - vym", 0xc5, "nit strany", CR
+	db	" V - vr", 0xc1, "tit tah", CR
+	db	" S - vym", 0xc5, "nit strany", CR
 	db	" K1-K", '0' + MAX_DEPTH, " - ", 0xd5, "rove", 0xce, CR
-	db	" S - zvuk", CR
-	db	" Q - konec", 0
+	db	" Z - zvuk", CR
+	db	" K - konec", 0
 
 ; ==============================================================================
 ; On/off strings
 ;
 	.data
-off:	db	"vyp", 0
-on:	db	"zap", 0
+off:	.asciz	"vyp"
+on:	.asciz	"zap"
+
+; ==============================================================================
+; Control keys
+;
+	.globl	KEY_YES, KEY_NO
+	.equiv	KEY_YES, 'A'
+	.equiv	KEY_NO, 'N'
+
+	.equiv	KEY_NEW, 'N'
+	.equiv	KEY_UNDO, 'V'
+	.equiv	KEY_SWITCH, 'S'
+	.equiv	KEY_SOUND, 'Z'
+	.equiv	KEY_QUIT, 'K'
+	
+; ==============================================================================
+; Prompts
+;
+	.data
+msg_color:
+	db	"P", 0xd2, "ejete si hr" , 0xe1, "t s ", 0xc3, "ern", 0xd9
+	db	"mi? (A/N)", 0

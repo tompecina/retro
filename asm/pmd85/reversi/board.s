@@ -876,6 +876,33 @@ disp_msg:
 	ret
 
 ; ==============================================================================
+; get_conf - display prompt and wait for confirmation
+; 
+;   input:  (HL) - prompt
+;           (color) - color mask
+; 
+;   output: Z answer is YES
+; 
+;   uses:   A, B, D, E, H, L
+; 
+	.text
+	.globl	get_conf
+get_conf:
+	call	disp_msg
+1:	call	inklav
+	cp	KEY_YES
+	jp	z,1f
+	cp	KEY_NO
+	jp	z,2f
+	jp	1b
+1:	call	clear_msg
+	or	0xff
+	ret
+2:	call	clear_msg
+	xor	a
+	ret
+	
+; ==============================================================================
 ; add_cust_glyphs - add custom glyphs
 ;
 ;   uses:   H, L
