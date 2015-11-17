@@ -30,39 +30,29 @@
 	.equiv	CMASK, 0x47
 
 ; ==============================================================================
-; init_btbl - initialize the bit manipulation tables
+; init_btbl - initialize the bit count table
 ; 
-;   output: (bitcounts) and (bitrefl) populated
+;   output: (bitcounts) populated
 ; 
-;   uses:   all
+;   uses:   A, B, C, H, L
 ; 
 	.text
 	.globl	init_btbl
 init_btbl:
 	ld	hl,bitcounts
-	ld	de,byterefl
-	xor	a
-1:	push	af
-	push	de
-	ld	bc,0x0080
-3:	rla
-	jp	nc,2f
-	inc	b
-2:	ld	d,a
+	ld	c,0
+3:	ld	b,0
 	ld	a,c
+1:	or	a
+	jp	z,2f
 	rra
-	ld	c,a
-	ld	a,d
-	jp	nc,3b
-	ld	(hl),b
+	jp	nc,1b
+	inc	b
+	jp	1b
+2:	ld	(hl),b
 	inc	hl
-	pop	de
-	ld	a,c
-	ld	(de),a
-	inc	de
-	pop	af
-	inc	a
-	jp	nz,1b
+	inc	c
+	jp	nz,3b
 	ret
 	
 ; ==============================================================================
@@ -92,27 +82,6 @@ count_bits:
 	ret
 
 	.lcomm	bitcounts, 256
-	
-; ==============================================================================
-; reflect_byte - reverse bit order of a byte
-; 
-;   input:  A - input byte
-; 
-;   output: A = A reflected
-; 
-;   uses:   D, E, H, L
-; 
-	.text
-	.globl	reflect_byte
-reflect_byte:
-	ld	hl,byterefl
-	ld	e,a
-	ld	d,0
-	add	hl,de
-	ld	a,(hl)
-	ret
-
-	.lcomm	byterefl, 256
 	
 ; ==============================================================================
 ; init_rvt - initialize table of row values
