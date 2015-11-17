@@ -52,13 +52,13 @@ legend:
 	db	"CONTROLS:", CR, VT, VT, VT, VT
 	db	" arrow keys", CR
 	db	"  or directly:", CR
-	db	" 1-8 - rank", CR
-	db	" A-H - file", CR, VT, VT, VT, VT, VT
+	db	" 1", THR_ICON, "8 - row", CR
+	db	" A", THR_ICON, "H - column", CR, VT, VT, VT, VT, VT
 	db	" EOL - move", CR
 	db	" N - new game", CR
 	db	" U - undo move", CR
 	db	" W - switch sides", CR
-	db	" K1-K", '0' + MAX_DEPTH, " - level", CR
+	db	" K1", THR_ICON, "K", '0' + MAX_DEPTH, " - level", CR
 	db	" S - sound", CR
 	db	" Q - quit", 0
 

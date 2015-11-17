@@ -87,5 +87,5 @@ on:	.asciz	"zap"
 ;
 	.data
 msg_color:
-	db	"P", 0xd2, "ejete si hr" , 0xe1, "t s ", 0xc3, "ern", 0xd9
+	db	"P", 0xd2, "ejete si hr" , 0xc1, "t s ", 0xc3, "ern", 0xd9
 	db	"mi? (A/N)", 0
