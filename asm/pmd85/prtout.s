@@ -64,7 +64,14 @@ prtout:
 	jp	z,erase
 	cp	LF
 	ret	z
-	cp	BS
+	cp	VT
+	jp	nz,1f
+	ld	hl,(cursor)
+	ld	de,0x0040
+	add	hl,de
+	ld	(cursor),hl
+	ret
+1:	cp	BS
 	ret	z		; BS is not supported
 	ld	c,a
 	ld	a,(cursor)

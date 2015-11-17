@@ -65,28 +65,6 @@ copy8:
 	ret
 	
 ; ==============================================================================
-; copy16 - copy area
-; 
-;   input:  (HL) - source area
-;           (DE) - destination area
-;           BC - number of bytes (1-65536)
-; 
-;   uses:   all
-; 
-	.text
-	.globl	copy16
-copy16:
-	ld	a,(hl)
-	ld	(de),a
-	inc	hl
-	inc	de
-	dec	bc
-	ld	a,b
-	or	c
-	jp	nz,copy16
-	ret
-	
-; ==============================================================================
 ; mul16 - signed 16-bit multiplication
 ; 
 ;   input:  HL, DE
@@ -324,30 +302,6 @@ scmpdehl:
 	ret
 
 ; ==============================================================================
-; shrhlb - signed 16-bit right shift
-; 
-;   input:  HL, B
-; 
-;   output: HL = HL >> B
-; 
-;   uses:   A, B
-; 
-	.text
-	.globl	shrhlb
-shrhlb:
-	ld	a,h
-	rla
-	ld	a,h
-	rra
-	ld	h,a
-	ld	a,l
-	rra
-	ld	l,a
-	dec	b
-	jp	nz,shrhlb
-	ret
-
-; ==============================================================================
 ; signexhl - sign-extend A to HL
 ; 
 ;   input:  A
@@ -386,67 +340,36 @@ signexde:
 	ret
 
 ; ==============================================================================
-; udiv16_8 - unsigned 16-bit/8-bit division
+; udiv8 - unsigned 8-bit division
 ; 
-;   input:  HL, C
+;   input:  E, C
 ; 
-;   output: HL = HL / C
-;           DE = HL % C
+;   output: E = E / C
+;           C = E % C
 ; 
-;   uses:   all
-; 
-	.text
-	.globl	udiv16_8
-udiv16_8:
-        ld      de,0
-	ld      b,16
-1:	add     hl,hl
-        call    rdel
-        jp	z,2f
-        ld      a,e
-        sub     c
-        ld      a,d
-        sbc     a,0
-        jp	m,2f
-        ld      a,l
-        or      1
-        ld      l,a
-        ld      a,e
-        sub     c
-        ld      e,a
-        ld      a,d
-        sbc     a,0
-        ld      d,a
-2:	dec     b
-        jp	nz,1b
-	ret
-	
-; ==============================================================================
-; crc16 - update CRC-16-CCITT
-; 
-;   input:  HL - initial CRC
-; 	    A - input byte
-; 
-;   output: HL - updated CRC
-; 
-;   uses:   A, B
+;   uses:   A, B, D
 ; 
 	.text
-	.globl	crc16
-crc16:
-	xor	h
-	ld	h,a
+	.globl	udiv8
+udiv8:
+	ld	d,0
 	ld	b,8
-2:	add	hl,hl
-	jp	nc,1f
-	ld	a,h
-	xor	0x10
-	ld	h,a
-	ld	a,l
-	xor	0x21
-	ld	l,a
-1:	dec	b
-	jp	nz,2b
+1:	ld	a,e
+	rla
+	ld	e,a
+	ld	a,d
+	rla
+	sub	c
+	jp	nc,2f
+	add	a,c
+2:	ld	d,a
+	dec	b
+	jp	nz,1b
+	ld	c,a
+	ld	a,e
+	rla
+	cpl
+	ld	e,a
 	ret
 	
 ; ==============================================================================
@@ -498,4 +421,3 @@ crc24:
 	ret
 	
 	.end
- 

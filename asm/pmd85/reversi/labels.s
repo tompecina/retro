@@ -23,7 +23,7 @@
 	.include "reversi.inc"
 	
 ; ==============================================================================
-; label - display label
+; draw_label - display label
 ; 
 ;   input:  (HL) - label data
 ;           DE - destination
@@ -32,8 +32,8 @@
 ;   uses:   all
 ; 
 	.text
-	.globl	label
-label:
+	.globl	draw_label
+draw_label:
 	ld	c,(hl)		; C = rows
 	inc	hl
 	ld	b,(hl)		; B = columns
@@ -60,36 +60,6 @@ label:
 1:	pop	hl
 	pop	hl
 	ret
-	
-; ==============================================================================
-; rect - draw simple filled rectangle
-; 
-;   input:  HL - destination
-;           C - number of rows (lines)
-;           B - number of columns (cells)
-;           (color) - color mask
-; 
-;   uses:   all
-; 
-	.text
-	.globl	rect
-rect:
-	ld	a,(color)
-3:	push	bc
-	push	hl
-2:	ld	(hl),a
-	inc	hl
-	dec	b
-	jp	nz,2b
-	dec	c
-	jp	z,1b
-	pop	hl
-	ld	de,64
-	add	hl,de
-	ld	d,c
-	pop	bc
-	ld	c,d
-	jp	3b
 	
 ; ==============================================================================
 ; Label "REVERSI 1.0"
@@ -124,4 +94,3 @@ label_reversi:
 	.byte	0x38, 0x07, 0x06, 0x00, 0x0c, 0x23, 0x07
 	
 	.end
- 

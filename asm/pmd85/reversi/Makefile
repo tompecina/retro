@@ -1,6 +1,6 @@
 APPL = reversi
 MCU = z80
-OBJ = main.o game.o util.o glyphs.o labels.o board.o book.o minimax.o\
+OBJ = game.o util.o glyphs.o labels.o board.o book.o minimax.o\
 	../adras10.o ../wrchar10.o ../beep.o ../waits.o ../inkey.o \
 	../erase.o ../prtout.o \
 	heap.o
@@ -10,13 +10,32 @@ OBJCOPY = objcopy-z80
 ASFLAGS = -z80 -I ..
 LDFLAGS = --section-start=.text=0x0000
 
-build: $(APPL).bin $(APPL).hex
+build: $(APPL)-en.bin $(APPL)-en.hex $(APPL)-cs.bin $(APPL)-cs.hex \
+	$(APPL)-sk.bin $(APPL)-sk.hex
 
 %.hex: %.bin
 	$(OBJCOPY) -I binary -O ihex $< $@
 
-$(APPL).bin: $(OBJ)
-	$(LD) $(LDFLAGS) $(OBJ) -o $@ -Map=$(APPL).map
+$(APPL)-en.bin: main-en.o $(OBJ)
+	$(LD) $(LDFLAGS) main-en.o $(OBJ) -o $@ -Map=$(APPL)-en.map
+
+$(APPL)-cs.bin: main-cs.o $(OBJ)
+	$(LD) $(LDFLAGS) main-cs.o $(OBJ) -o $@ -Map=$(APPL)-en.map
+
+$(APPL)-sk.bin: main-sk.o $(OBJ)
+	$(LD) $(LDFLAGS) main-sk.o $(OBJ) -o $@ -Map=$(APPL)-en.map
+
+main-en.o: main.s reversi.inc lang-en.inc ../pmd85.inc \
+	../glyphs10.inc Makefile
+	$(AS) $(ASFLAGS) --defsym en=1 -c $< -o $@ -aglms=$*.lst
+
+main-cs.o: main.s reversi.inc lang-cs.inc ../pmd85.inc \
+	../glyphs10.inc Makefile
+	$(AS) $(ASFLAGS) --defsym cs=1 -c $< -o $@ -aglms=$*.lst
+
+main-sk.o: main.s reversi.inc lang-sk.inc ../pmd85.inc \
+	../glyphs10.inc Makefile
+	$(AS) $(ASFLAGS) --defsym sk=1 -c $< -o $@ -aglms=$*.lst
 
 %.o: %.s reversi.inc ../pmd85.inc ../glyphs10.inc Makefile
 	$(AS) $(ASFLAGS) -c $< -o $@ -aglms=$*.lst

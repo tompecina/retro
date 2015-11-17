@@ -25,7 +25,7 @@
 ; ==============================================================================
 ; Constants
 	
-	.equiv	ULC, 0xce16		; upper left corner of the board
+	.equiv	ULC, 0xd116		; upper left corner of the board
 	.equiv	MSGAREA, 0xffc0		; position of the notification area
 	
 ; ==============================================================================
@@ -126,7 +126,6 @@ draw_labels:
 ;   uses:   all
 ; 
 	.text
-	.globl	draw_shape
 draw_shape:
 	push	hl
 	ld	b,c
@@ -179,8 +178,7 @@ draw_shape:
 	.data
 	
 ; blank square
-	.globl	BLANK_SQUARE
-BLANK_SQUARE:
+blank_square:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -200,8 +198,7 @@ BLANK_SQUARE:
 	.byte	0x00, 0x00, 0x00
 
 ; black disc
-	.globl	BLACK_DISC
-BLACK_DISC:
+black_disc:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x1c, 0x00
 	.byte	0x00, 0x23, 0x01
@@ -221,8 +218,7 @@ BLACK_DISC:
 	.byte	0x00, 0x00, 0x00
 
 ; black disc, turned 1
-	.globl	BLACK_TURNED1
-BLACK_TURNED1:
+black_turned1:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -242,8 +238,7 @@ BLACK_TURNED1:
 	.byte	0x00, 0x00, 0x00
 
 ; black disc, turned 2
-	.globl	BLACK_TURNED2
-BLACK_TURNED2:
+black_turned2:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -263,8 +258,8 @@ BLACK_TURNED2:
 	.byte	0x00, 0x00, 0x00
 
 ; black disc, turned 3
-	.globl	BLACK_TURNED3
-BLACK_TURNED3:
+	.globl	black_turned3
+black_turned3:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -284,8 +279,7 @@ BLACK_TURNED3:
 	.byte	0x00, 0x00, 0x00
 
 ; disc, half turned
-	.globl	HALF_TURNED
-HALF_TURNED:
+half_turned:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -305,8 +299,7 @@ HALF_TURNED:
 	.byte	0x00, 0x00, 0x00
 
 ; white disc, turned 3
-	.globl	WHITE_TURNED3
-WHITE_TURNED3:
+white_turned3:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -326,8 +319,7 @@ WHITE_TURNED3:
 	.byte	0x00, 0x00, 0x00
 
 ; white disc, turned 2
-	.globl	WHITE_TURNED2
-WHITE_TURNED2:
+white_turned2:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -347,8 +339,7 @@ WHITE_TURNED2:
 	.byte	0x00, 0x00, 0x00
 
 ; white disc, turned 1
-	.globl	WHITE_TURNED1
-WHITE_TURNED1:
+white_turned1:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00
@@ -368,8 +359,7 @@ WHITE_TURNED1:
 	.byte	0x00, 0x00, 0x00
 
 ; white disc
-	.globl	WHITE_DISC
-WHITE_DISC:
+white_disc:
 	.byte	0x00, 0x00, 0x00
 	.byte	0x00, 0x1c, 0x00
 	.byte	0x00, 0x3f, 0x01
@@ -389,8 +379,7 @@ WHITE_DISC:
 	.byte	0x00, 0x00, 0x00
 
 ; cursor on blank square
-	.globl	BLANK_CURSOR
-BLANK_CURSOR:
+blank_cursor:
 	.byte	0x2a, 0x2a, 0x2a
 	.byte	0x14, 0x15, 0x15
 	.byte	0x2a, 0x2a, 0x2a
@@ -409,9 +398,8 @@ BLANK_CURSOR:
 	.byte	0x14, 0x15, 0x15
 	.byte	0x2a, 0x2a, 0x2a
 	
-; cursor on black disc
-	.globl	BLACK_CURSOR
-BLACK_CURSOR:
+; cursor under black disc
+black_cursor:
 	.byte	0x2a, 0x2a, 0x2a
 	.byte	0x14, 0x3f, 0x15
 	.byte	0x2a, 0x23, 0x2b
@@ -430,9 +418,8 @@ BLACK_CURSOR:
 	.byte	0x14, 0x3f, 0x15
 	.byte	0x2a, 0x2a, 0x2a
 
-; cursor on white disc
-	.globl	WHITE_CURSOR
-WHITE_CURSOR:
+; cursor under white disc
+white_cursor:
 	.byte	0x2a, 0x2a, 0x2a
 	.byte	0x14, 0x3f, 0x15
 	.byte	0x2a, 0x3f, 0x2b
@@ -461,7 +448,7 @@ WHITE_CURSOR:
 	.text
 	.globl	anim_b2w
 anim_b2w:
-	ld	hl,BLACK_DISC
+	ld	hl,black_disc
 	ld	de,51
 	jp	1f
 	
@@ -475,7 +462,7 @@ anim_b2w:
 	.text
 	.globl	anim_w2b
 anim_w2b:
-	ld	hl,WHITE_DISC
+	ld	hl,white_disc
 	ld	de,-51
 1:	ld	b,9
 	jp	animate
@@ -556,13 +543,13 @@ draw_pos:
 3:	add	hl,hl
 	push	hl
 	jp	nc,1f
-	ld	hl,BLACK_DISC
+	ld	hl,black_disc
 	jp	2f
 1:	ld	a,h
 	rra
-	ld	hl,WHITE_DISC
+	ld	hl,white_disc
 	jp	c,2f
-	ld	hl,BLANK_SQUARE
+	ld	hl,blank_square
 2:	push	bc
 	call	rc2sq
 	call	draw_shape
@@ -603,9 +590,9 @@ anim_move:
 	ld	a,b
 	or	a
 	jp	z,1f
-	ld	hl,WHITE_DISC
+	ld	hl,white_disc
 	jp	2f
-1:	ld	hl,BLACK_DISC
+1:	ld	hl,black_disc
 2:	call	draw_shape
 	call	long_anim_pause
 	pop	bc
@@ -683,9 +670,6 @@ init_game:
 	ld	(cur_col),a
 	jp	draw_pos
 
-	.globl	black, white
-	.lcomm	black, 8
-	.lcomm	white, 8
 	.lcomm	cur_row, 1
 	.lcomm	cur_col, 1
 	
@@ -784,24 +768,24 @@ player_select:
 	jp	z,5b
 	jp	2b
 shcur:	call	getsq
-	ld	hl,BLACK_CURSOR
+	ld	hl,black_cursor
 	dec	a
 	jp	z,1f
-	ld	hl,WHITE_CURSOR
+	ld	hl,white_cursor
 	dec	a
 	jp	z,1f
-	ld	hl,BLANK_CURSOR
+	ld	hl,blank_cursor
 1:	call	rc2sq
 	jp	draw_shape
 hdcur:	push	af
 	call	getsq
-	ld	hl,BLACK_DISC
+	ld	hl,black_disc
 	dec	a
 	jp	z,1f
-	ld	hl,WHITE_DISC
+	ld	hl,white_disc
 	dec	a
 	jp	z,1f
-	ld	hl,BLANK_SQUARE
+	ld	hl,blank_square
 1:	call	rc2sq
 	call	draw_shape
 	pop	af
@@ -818,23 +802,40 @@ getsq:	ld	a,(cur_row)
 	ret
 	
 ; ==============================================================================
-; prtstr - display zero-terminated string
+; write - display one character
 ; 
-;   input:  (HL) - string
-;           (cursor) - destination
+;   input:  A - character
+;           (HL) - destination
 ;           (color) - color mask
 ; 
 ;   uses:   A, H, L
 ; 
 	.text
-	.globl	prtstr
-prtstr:
-	ld	a,(hl)
+	.globl	write
+write:
+	ld	(cursor),hl
+	jp	prtout
+	
+; ==============================================================================
+; writeln - display zero-terminated string
+; 
+;   input:  (HL) - string
+;           (DE) - destination
+;           (color) - color mask
+; 
+;   uses:   A, H, L
+; 
+	.text
+	.globl	writeln
+writeln:
+	ex	de,hl
+	ld	(cursor),hl
+1:	ld	a,(de)
 	or	a
 	ret	z
 	call	prtout
-	inc	hl
-	jp	prtstr	
+	inc	de
+	jp	1b
 	
 ; ==============================================================================
 ; clear_msg - clear the notification area
@@ -868,13 +869,41 @@ clear_msg:
 	.text
 	.globl	disp_msg
 disp_msg:
-	ex	de, hl
-	ld	hl,MSGAREA
-	ld	(cursor),hl
-	ex	de, hl
-	call	prtstr
+	ld	de,MSGAREA
+	call	writeln
 	ld	a,1
 	ld	(msg),a
 	ret
+
+; ==============================================================================
+; add_cust_glyphs - add custom glyphs
+;
+;   uses:   H, L
+;
+	.text
+	.globl	add_cust_glyphs
+add_cust_glyphs:	
+	ld	hl,glyphs80 + 10
+	ld	(tascii + 0x08),hl
+	ret
+	
+; ==============================================================================
+; Custom glyphs
+;
+	.data
+glyphs80:
+	.globl	COMP_ICON
+	.equiv	COMP_ICON, 0x80
+	; 80
+	.byte	0x00	; ......
+	.byte	0x3f	; ######
+	.byte	0x21	; #....#
+	.byte	0x21	; #....#
+	.byte	0x21	; #....#
+	.byte	0x3f	; ######
+	.byte	0x0c	; ..##..
+	.byte	0x0c	; ..##..
+	.byte	0x3f	; ######
+	.byte	0x00	; ......
 
 	.end

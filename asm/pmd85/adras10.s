@@ -56,14 +56,16 @@ adras:
 	add	hl,de
 	ld	d,(hl)
 	inc	hl
-	ld	h,(hl)
+	ld	a,(hl)
+	ld	hl,undef_glyph + 10
+	cp	0xff
+	ret	z
 	ld	l,d
+	ld	h,a
 	add	hl,bc
 	add	hl,bc
 	ld	a,h
 	inc	a
-	ret	nz
-	ld	hl,undef_glyph + 10
 	ret
 
 	.end
