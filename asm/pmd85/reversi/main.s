@@ -93,16 +93,16 @@ mainloop:
 	ld	hl,black
 	ld	de,white
 	ld	a,(tomove)
-	jp	nz,1f
+	or	a
+	jp	z,1f
 	ex	de,hl
 1:	call	count_moves
 	ld	a,b
 	or	c
-	;; jp	nz,1f
+	jp	nz,1f
 	ld	hl,black
 	ld	de,white
 	call	count_discs
-	ld	bc,0x0405	; DEBUG
 	ld	a,b
 	cp	c
 	jp	nz,2f
@@ -153,8 +153,45 @@ mainloop:
 	call	clevel
 	call	quit
 	jp	2b
-1:	
+
+1:	ld	a,(tomove)
+	ld	b,a
+	ld	a,(compcol)
+	cp	b
+	jp	z,1f
+2:	call	player_select
+	or	a
+	jp	nz,2f
+	ld	hl,black
+	ld	de,white
+	ld	a,(tomove)
+	or	a
+	jp	z,3f
+	ex	de,hl
+3:	push	bc
+	call	one_legal
+	pop	bc
+	jp	nc,3f
+	ld	hl,msg_badmove
+	call	disp_msg
+	call	errbeep
+	jp	2b
+3:	ld	hl,moves
+	ld	d,0
+	ld	a,(moven)
+	ld	e,a
+	inc	a
+	ld	(moven),a
+	add	hl,de
+	ld	a,(tomove)
+	and	0x80
+	or	c
+	ld	(hl),a
 	
+
+2:
+	
+1:	
 	jp	.
 	
 dsc:	call	prep_score
@@ -291,6 +328,7 @@ quit:	cp	KEY_QUIT
 ; ==============================================================================
 ; Display level
 ;
+	.text
 disp_level:
 	ld	a,(level)
 	add	a,'0'
@@ -306,6 +344,7 @@ disp_level:
 ;
 ;   uses:   A, D, E, H, L
 ; 
+	.text
 disp_onoff:
 	ex	de,hl
 	or	a
@@ -318,6 +357,7 @@ disp_onoff:
 ; ==============================================================================
 ; Display sound setting
 ;
+	.text
 disp_sound:
 	ld	a,(sound)
 	ld	hl,SNPOS
@@ -332,6 +372,7 @@ disp_sound:
 ;
 ;   uses:   A, D
 ;
+	.text
 prep_score:
 	ld	e,a
 	ld	c,10
@@ -347,6 +388,7 @@ prep_score:
 ; ==============================================================================
 ; Display current score
 ;
+	.text
 disp_score:	
 	ld	hl,black
 	ld	de,white
@@ -382,6 +424,7 @@ disp_score:
 ; ==============================================================================
 ; Display computer color icon
 ;
+	.text
 disp_compcol:
 	ld	h,COMP_ICON
 	ld	d,' '
@@ -395,5 +438,19 @@ disp_compcol:
 	ld	a,d
 	ld	hl,WCPOS
 	jp	write
+	
+; ==============================================================================
+; Error beep
+;
+	.text
+errbeep:
+	ld	a,(sound)
+	or	a
+	ret	z
+	ld	hl,erbdt
+	jp	bell
+
+	.data
+erbdt:	.byte	2, 8, 0, 8, 2, 8, 0xff
 	
 	.end

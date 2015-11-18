@@ -57,7 +57,7 @@ beclr:
 ;   uses:   A, B, D, H, L
 ; 
 	.text
-	.globl	beep, beclr
+	.globl	beep, bell
 beep:
 	ld	hl,(beedt)
 bell:

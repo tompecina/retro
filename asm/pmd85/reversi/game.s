@@ -960,17 +960,21 @@ one_legal:
 	dec	b
 	jp	nz,1b
 
-; clear flags in larray
+; clear flags in larray and check for legality
 	ld	hl,larray
-	ld	b,8
-	ld	c,0x7f
+	ld	bc,0x087f
+	ld	d,0
 1:	ld	a,(hl)
 	and	c
 	ld	(hl),a
+	or	d
+	ld	d,a
 	inc	hl
 	dec	b
 	jp	nz,1b
+	ld	a,d
 	or	a
+	jp	z,2f
 	ld	hl,larray
 	ret
 

@@ -87,14 +87,16 @@ on:	.asciz	"on "
 ;
 	.data
 msg_color:
-	db	"Do you wish to play black? (Y/N)", 0
+	.asciz	"Do you wish to play black? (Y/N)"
 msg_draw:
-	db	"A draw, final score: 32-32", 0
+	.asciz	"A draw, final score: 32-32"
 msg_bwin:
-	db	"Black wins, final score: ", 0
+	.asciz	"Black wins, final score: "
 msg_wwin:
-	db	"White wins, final score: ", 0
+	.asciz	"White wins, final score: "
 msg_quit:
-	db	"Do you really wish to end the program? (Y/N)", 0
+	.asciz	"Do you really wish to end the program? (Y/N)"
 msg_new:	
-	db	"Do you really wish to start a new game? (Y/N)", 0
+	.asciz	"Do you really wish to start a new game? (Y/N)"
+msg_badmove:
+	.asciz	"Bad move"

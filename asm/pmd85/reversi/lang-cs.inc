@@ -102,3 +102,5 @@ msg_quit:
 msg_new:
 	db	"Opravdu si p", 0xd2, "ejete za", 0xc3, 0xc9
 	db	"t novou hru? (A/N)", 0
+msg_badmove:
+	db	"Nedovolen", 0xd9, " tah", 0
