@@ -30,7 +30,7 @@
 	.equiv	WCPOS, 0xc711
 	.equiv	BSPOS, 0xc9c6
 	.equiv	WSPOS, 0xc9cb
-	.equiv	DPPOS, 0xcf48
+	.equiv	LVPOS, 0xcf48
 	.equiv	SNPOS, 0xd206
 	
 ; ==============================================================================
@@ -51,14 +51,14 @@ legend:
 	db	"Zvuk:", CR, CR, VT, VT, VT, VT
 	db	"OVL", 0xe1, "DANIE:", CR, VT, VT, VT, VT
 	db	" kurzorov", 0xd7, " kl", 0xc1, "vesy", CR
-	db	"  alebo priamo:", CR
+	db	"  alebo", CR
 	db	" 1-8 - rad", CR
 	db	" A-H - st", 0xcb, "pec", CR, VT, VT, VT, VT, VT
 	db	" EOL - ", 0xd4, "ah", CR
 	db	" N - nov", 0xc1, " hra", CR
 	db	" V - vr", 0xc1, "ti", 0xd4, " ", 0xd4, "ah", CR
 	db	" S - vymeni", 0xd4, " strany", CR
-	db	" K1-K", '0' + MAX_DEPTH, " - ", 0xd5, "rove", 0xce, CR
+	db	" K1-K", '0' + MAXLEVEL, " - ", 0xd5, "rove", 0xce, CR
 	db	" Z - zvuk", CR
 	db	" K - koniec", 0
 
@@ -89,3 +89,18 @@ on:	.asciz	"zap"
 msg_color:
 	db	0xfa, "el" , 0xc1, "te si hra", 0xd4, " s ", 0xc3
 	db	"iernymi? (A/N)", 0
+msg_draw:
+	db	"Rem", 0xc9, "za, kone", 0xd7, "n", 0xc5, " sk", 0xcf
+	db	"re: 32-32", 0
+msg_bwin:
+	db	0xe3, "ierny vyhr", 0xc1, "l, kone", 0xc3, "n", 0xd7
+	db	" sk", 0xcf, "re: ", 0
+msg_wwin:
+	db	"Biely vyhr", 0xc1, "l, kone", 0xc3, "n", 0xd7
+	db	" sk", 0xcf, "re: ", 0
+msg_quit:
+	db	"Naozaj si ", 0xda, "el", 0xc1, "te program ukonči", 0xd4
+	db	"? (A/N)", 0
+msg_new:
+	db	"Naozaj si ", 0xda, "el", 0xc1, "te za", 0xc3, "a", 0xd4
+	db	"nov", 0xd5, " hru? (A/N)", 0

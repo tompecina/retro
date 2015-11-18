@@ -646,13 +646,16 @@ dir_offsets:
 	.byte	-9, -8, -7, -1, 1, 7, 8, 9, 0
 	
 ; ==============================================================================
-; init_game - initialize game
+; init_pos - initialize position
+; 
+;   input:  (black) - array of black discs
+;           (white) - array of white discs
 ; 
 ;   uses:   A, B, H, L
 ; 
 	.text
-	.globl	init_game
-init_game:
+	.globl	init_pos
+init_pos:
 	ld	hl,black
 	ld	b,8
 	call	zerofill
@@ -665,9 +668,22 @@ init_game:
 	ld	a,0x08
 	ld	(black + 4),a
 	ld	(white + 3),a
+	ret
+	
+; ==============================================================================
+; init_game - initialize game
+; 
+;   uses:   A, B, H, L
+; 
+	.text
+	.globl	init_game
+init_game:
+	call	init_pos
 	xor	a
 	ld	(cur_row),a
 	ld	(cur_col),a
+	ld	(tomove),a
+	ld	(moven),a
 	jp	draw_pos
 
 	.lcomm	cur_row, 1
@@ -715,15 +731,9 @@ player_select:
 	cp	'H' + 1
 	jp	nc,1f
 	sub	'A'
-3:	call	hdcur
+	call	hdcur
 	ld	(cur_col),a
 	jp	player_select
-1:	cp	'a'
-	jp	c,1f
-	cp	'h' + 1
-	jp	nc,1f
-	sub	'a'
-	jp	3b
 1:	cp	'1'
 	jp	c,1f
 	cp	'8' + 1
@@ -933,8 +943,8 @@ glyphs80:
 	.byte	0x3f	; ######
 	.byte	0x00	; ......
 	
-	.globl	THR_ICON
-	.equiv	THR_ICON, 0x81
+	.globl	OBELUS
+	.equiv	OBELUS, 0x81
 	; 81
 	.byte	0x00	; ......
 	.byte	0x00	; ......

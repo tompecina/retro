@@ -91,3 +91,6 @@
 	.equiv	KDEL, 0x1d
 	.equiv	KCD, 0x1e
 	.equiv	KSHOME, 0x1f
+	.irp	i, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+	.equiv	KK\i, 0x88 + \i
+	.endr

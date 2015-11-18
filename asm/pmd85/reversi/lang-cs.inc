@@ -30,7 +30,7 @@
 	.equiv	WCPOS, 0xc70f
 	.equiv	BSPOS, 0xc9c5
 	.equiv	WSPOS, 0xc9ca
-	.equiv	DPPOS, 0xcf48
+	.equiv	LVPOS, 0xcf48
 	.equiv	SNPOS, 0xd206
 	
 ; ==============================================================================
@@ -51,14 +51,14 @@ legend:
 	db	"Zvuk:", CR, CR, VT, VT, VT, VT
 	db	"OVL", 0xe1, "D", 0xe1, "N", 0xe9, ":", CR, VT, VT, VT, VT
 	db	" kursorov", 0xd7, " kl", 0xc1, "vesy", CR
-	db	"  nebo p", 0xd2, 0xc9, "mo:", CR
+	db	"  nebo", CR
 	db	" 1-8 - ", 0xd2, "ada", CR
 	db	" A-H - sloupec", CR, VT, VT, VT, VT, VT
 	db	" EOL - tah", CR
 	db	" N - nov", 0xc1, " hra", CR
 	db	" V - vr", 0xc1, "tit tah", CR
 	db	" S - vym", 0xc5, "nit strany", CR
-	db	" K1-K", '0' + MAX_DEPTH, " - ", 0xd5, "rove", 0xce, CR
+	db	" K1-K", '0' + MAXLEVEL, " - ", 0xd5, "rove", 0xce, CR
 	db	" Z - zvuk", CR
 	db	" K - konec", 0
 
@@ -89,3 +89,16 @@ on:	.asciz	"zap"
 msg_color:
 	db	"P", 0xd2, "ejete si hr" , 0xc1, "t s ", 0xc3, "ern", 0xd9
 	db	"mi? (A/N)", 0
+msg_draw:
+	db	"Remisa, kone", 0xc3, "n", 0xd7, " skore: 32-32", 0
+msg_bwin:
+	db	0xe3, "ern", 0xd9, " vyhr", 0xc1, "l, kone", 0xc3, "n", 0xd7
+	db	" skore: ", 0
+msg_wwin:
+	db	"B", 0xc9, "l", 0xd9, " vyhr", 0xc1, "l, kone", 0xc3, "n", 0xd7
+	db	" skore: ", 0
+msg_quit:
+	db	"Opravdu si p", 0xd2, "ejete program ukon", 0xc3, "it? (A/N)", 0
+msg_new:
+	db	"Opravdu si p", 0xd2, "ejete za", 0xc3, 0xc9
+	db	"t novou hru? (A/N)", 0

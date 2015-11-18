@@ -40,7 +40,7 @@
 ; ==============================================================================
 ; Constants
 ;
-	.equiv	MAX_DEPTH, 5	; maximum depth
+	.equiv	MAXLEVEL, 5	; maximum level
 	
 ; ==============================================================================
 ; Main entry point of the program
@@ -73,37 +73,228 @@ main:
 	call	writeln
 
 	ld	a,2
-	ld	(depth),a
-	call	disp_depth
+	ld	(level),a
+	call	disp_level
 
 	ld	a,0xff
 	ld	(sound),a
 	call	disp_sound
 
-	call	init_game
+new:	call	init_game
 	call	disp_score
 
 	ld	hl,msg_color
-	call	get_conf	
+	;; call	get_conf	
+	ld	a,0xff		; DEBUG
 	ld	(compcol),a
 	call	disp_compcol
 	
+mainloop:
+	ld	hl,black
+	ld	de,white
+	ld	a,(tomove)
+	jp	nz,1f
+	ex	de,hl
+1:	call	count_moves
+	ld	a,b
+	or	c
+	;; jp	nz,1f
+	ld	hl,black
+	ld	de,white
+	call	count_discs
+	ld	bc,0x0405	; DEBUG
+	ld	a,b
+	cp	c
+	jp	nz,2f
+	ld	hl,msg_draw
+	jp	3f
+2:	ld	hl,msg_bwin
+	jp	nc,2f
+	ld	hl,msg_wwin
+2:	ld	de,dial
+2:	ld	a,(hl)
+	or	a
+	jp	z,5f
+	inc	hl
+	ld	(de),a
+	inc	de
+	jp	2b
+5:	ex	de,hl
+	ld	a,64
+	sub	b
+	sub	c
+	ld	d,a
+	ld	a,b
+	cp	c
+	jp	c,2f
+	ld	a,b
+	add	a,d
+	ld	b,a
+	jp	5f
+2:	ld	a,c
+	add	a,d
+	ld	c,a
+5:	push	bc
+	ld	a,b
+	call	dsc
+	ld	(hl),'-'
+	inc	hl
+	pop	bc
+	ld	a,c
+	call	dsc
+	ld	(hl),0
+	ld	hl,dial
+3:	call	disp_msg
+2:	call	inklav
+	call	newnc
+	call	undo
+	call	switch
+	call	tsound
+	call	clevel
+	call	quit
+	jp	2b
+1:	
+	
 	jp	.
+	
+dsc:	call	prep_score
+	ld	a,b
+	cp	'0'
+	jp	z,1f
+	ld	(hl),b
+	inc	hl
+1:	ld	(hl),c
+	inc	hl
+	ret
 
-	.globl	black, white
+newnc:	cp	KEY_NEW
+	ret	nz
+2:	pop	hl
+	jp	new
+
+newc:	cp	KEY_NEW
+	ret	nz
+	push	af
+	ld	hl,msg_new
+	call	get_conf
+	jp	nz,1f
+	pop	af
+	ret
+1:	pop	af
+	jp	2b
+	
+undo:	cp	KEY_UNDO
+	ret	nz
+	pop	hl
+	ld	a,(moven)
+	ld	e,a
+	ld	d,0
+	ld	hl,moves - 1
+	add	hl,de
+	ld	a,(compcol)
+	ld	d,a
+	ld	a,(tomove)
+	xor	d
+	ld	d,a
+1:	ld	a,e
+	or	a
+	jp	z,1f
+	dec	e
+	ld	a,(hl)
+	dec	hl
+	xor	d
+	and	0x80
+	jp	z,1b
+1:	ld	hl,moven
+	ld	a,e
+	cp	(hl)
+	jp	z,mainloop	; no moves to be undone
+	ld	(hl),e
+	call	init_pos
+	ld	hl,moves
+1:	dec	e
+	jp	m,1f
+	ld	a,(hl)
+	inc	hl
+	push	hl
+	push	de
+	ld	hl,black
+	ld	de,white
+	rla
+	ld	c,a
+	ld	a,0
+	rla
+	ld	b,a
+	ld	a,c
+	rra
+	ld	b,a
+	call	make_move
+	pop	de
+	pop	hl
+	jp	1b
+1:	ld	hl,black
+	ld	de,white
+	call	draw_pos
+	jp	mainloop	
+	
+toggle:	ld	a,(hl)
+	cpl
+	ld	(hl),a
+	ret
+	
+switch:	cp	KEY_SWITCH
+	ret	nz
+	ld	hl,compcol
+	call	toggle
+	call	disp_compcol
+	xor	a
+	ret
+	
+tsound:	cp	KEY_SOUND
+	ret	nz
+	ld	hl,sound
+	call	toggle
+	call	disp_sound
+	xor	a
+	ret
+
+clevel:	cp	KK1
+	ret	c
+	cp	KK1 + MAXLEVEL
+	ret	nc
+	sub	KK0
+	ld	(level),a
+	call	disp_level
+	xor	a
+	ret
+	
+quit:	cp	KEY_QUIT
+	ret	nz
+	ld	hl,msg_quit
+	call	get_conf
+	ret	z
+	call	erase
+	jp	PMD_MONIT
+	
+	.globl	black, white, tomove, moven
 	.lcomm	black, 8
 	.lcomm	white, 8
-	.lcomm	depth, 1
+	.lcomm	level, 1
 	.lcomm	sound, 1
-	.lcomm	compcol, 1
+	.lcomm	compcol, 1	; 0 - computer plays black
+				; 0xff - computer plays white
+	.lcomm	tomove, 1	; 0 - black, 0xff - white
+	.lcomm	moven, 1
+	.lcomm	moves, 64	; white moves have bit 7 set
+	.lcomm	dial, 49
 
 ; ==============================================================================
-; Display depth/level
+; Display level
 ;
-disp_depth:
-	ld	a,(depth)
+disp_level:
+	ld	a,(level)
 	add	a,'0'
-	ld	hl,DPPOS
+	ld	hl,LVPOS
 	jp	write
 	
 ; ==============================================================================
@@ -137,7 +328,7 @@ disp_sound:
 ; 
 ;   input:  A - score
 ; 
-;   output: BC - representation as digits
+;   output: BC - representation of A as decimal digits
 ;
 ;   uses:   A, D
 ;

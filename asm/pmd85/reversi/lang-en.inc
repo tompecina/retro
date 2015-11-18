@@ -30,7 +30,7 @@
 	.equiv	WCPOS, 0xc710
 	.equiv	BSPOS, 0xc9c5
 	.equiv	WSPOS, 0xc9ca
-	.equiv	DPPOS, 0xcf47
+	.equiv	LVPOS, 0xcf47
 	.equiv	SNPOS, 0xd207
 	
 ; ==============================================================================
@@ -51,14 +51,14 @@ legend:
 	db	"Sound:", CR, CR, VT, VT, VT, VT
 	db	"CONTROLS:", CR, VT, VT, VT, VT
 	db	" arrow keys", CR
-	db	"  or directly:", CR
-	db	" 1", THR_ICON, "8 - row", CR
-	db	" A", THR_ICON, "H - column", CR, VT, VT, VT, VT, VT
+	db	"  or", CR
+	db	" 1", OBELUS, "8 - row", CR
+	db	" A", OBELUS, "H - column", CR, VT, VT, VT, VT, VT
 	db	" EOL - move", CR
 	db	" N - new game", CR
 	db	" U - undo move", CR
 	db	" W - switch sides", CR
-	db	" K1", THR_ICON, "K", '0' + MAX_DEPTH, " - level", CR
+	db	" K1", OBELUS, "K", '0' + MAXLEVEL, " - level", CR
 	db	" S - sound", CR
 	db	" Q - quit", 0
 
@@ -88,3 +88,13 @@ on:	.asciz	"on "
 	.data
 msg_color:
 	db	"Do you wish to play black? (Y/N)", 0
+msg_draw:
+	db	"A draw, final score: 32-32", 0
+msg_bwin:
+	db	"Black wins, final score: ", 0
+msg_wwin:
+	db	"White wins, final score: ", 0
+msg_quit:
+	db	"Do you really wish to end the program? (Y/N)", 0
+msg_new:	
+	db	"Do you really wish to start a new game? (Y/N)", 0
