@@ -72,9 +72,10 @@ on:	.asciz	"on "
 ; ==============================================================================
 ; Control keys
 ;
-	.globl	KEY_YES, KEY_NO
+	.globl	KEY_YES, KEY_NO, KEY_ENTER
 	.equiv	KEY_YES, 'Y'
 	.equiv	KEY_NO, 'N'
+	.equiv	KEY_ENTER, KEOL
 
 	.equiv	KEY_NEW, 'N'
 	.equiv	KEY_UNDO, 'U'
@@ -100,3 +101,7 @@ msg_new:
 	.asciz	"Do you really wish to start a new game? (Y/N)"
 msg_badmove:
 	.asciz	"Bad move"
+msg_ppass:
+	.asciz	"You have no moves, please press EOL"
+msg_cpass:
+	.asciz	"The computer has no moves, your turn again"

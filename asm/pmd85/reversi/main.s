@@ -90,13 +90,8 @@ new:	call	init_game
 	call	disp_compcol
 	
 mainloop:
-	ld	hl,black
-	ld	de,white
-	ld	a,(tomove)
-	or	a
-	jp	z,1f
-	ex	de,hl
-1:	call	count_moves
+	call	fhd
+	call	count_moves
 	ld	a,b
 	or	c
 	jp	nz,1f
@@ -153,13 +148,23 @@ mainloop:
 	call	clevel
 	call	quit
 	jp	2b
-
 1:	ld	a,(tomove)
 	ld	b,a
 	ld	a,(compcol)
 	cp	b
 	jp	z,1f
-2:	call	player_select
+2:	call	fhd
+	call	count_discs
+	ld	a,b
+	or	a
+	jp	nz,7f
+	ld	hl,msg_ppass
+	call	get_ack
+6:	ld	a,(tomove)
+	cpl
+	ld	(tomove),a
+	jp	mainloop
+7:	call	player_select
 	or	a
 	jp	nz,2f
 	ld	hl,black
@@ -171,27 +176,54 @@ mainloop:
 3:	push	bc
 	call	one_legal
 	pop	bc
-	jp	nc,3f
+	jp	nc,8f
 	ld	hl,msg_badmove
 	call	disp_msg
 	call	errbeep
-	jp	2b
-3:	ld	hl,moves
+	jp	7b
+8:	ld	hl,moven
+	ld	e,(hl)
 	ld	d,0
-	ld	a,(moven)
-	ld	e,a
-	inc	a
-	ld	(moven),a
+	inc	(hl)
+	ld	hl,moves
 	add	hl,de
 	ld	a,(tomove)
+	ld	b,a
 	and	0x80
 	or	c
 	ld	(hl),a
-	
-
-2:
-	
+	ld	hl,black
+	ld	de,white
+	push	bc
+	call	anim_move
+	pop	bc
+	ld	hl,black
+	ld	de,white
+	call	make_move
+	jp	6b
+2:	call	newc
+	call	undo
+	call	switch
+	call	tsound
+	call	clevel
+	call	quit
+	jp	7b
+1:	call	fhd
+	call	count_moves
+	ld	a,c
+	or	c
+	jp	nz,1f
+	ld	hl,msg_cpass
+	call	disp_msg
+	jp	7b
+1:	ld	a,(moven)
+	cp	BOOK_DEPTH
+	jp	nc,1f
+	call	fdh
+	call	lookup_book
+	jp	8b
 1:	
+	
 	jp	.
 	
 dsc:	call	prep_score
@@ -204,6 +236,18 @@ dsc:	call	prep_score
 	inc	hl
 	ret
 
+fhd:	ld	hl,black
+	ld	de,white
+	ld	a,(tomove)
+	or	a
+	ret	z
+	ex	de,hl
+	ret
+
+fdh:	call	fhd
+	ex	de,hl
+	ret
+	
 newnc:	cp	KEY_NEW
 	ret	nz
 2:	pop	hl

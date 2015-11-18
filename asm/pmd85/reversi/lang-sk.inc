@@ -72,9 +72,10 @@ on:	.asciz	"zap"
 ; ==============================================================================
 ; Control keys
 ;
-	.globl	KEY_YES, KEY_NO
+	.globl	KEY_YES, KEY_NO, KEY_ENTER
 	.equiv	KEY_YES, 'A'
 	.equiv	KEY_NO, 'N'
+	.equiv	KEY_ENTER, KEOL
 	
 	.equiv	KEY_NEW, 'N'
 	.equiv	KEY_UNDO, 'V'
@@ -106,3 +107,9 @@ msg_new:
 	db	"nov", 0xd5, " hru? (A/N)", 0
 msg_badmove:
 	db	"Nedovolen", 0xd9, " ", 0xd4, "ah", 0
+msg_ppass:
+	db	"Nem", 0xc1, "te ", 0xda, "iaden ", 0xd4, "ah, pros"
+	db	0xc9, "m, stla", 0xc3, "te EOL", 0
+msg_cpass:
+	db	"Po", 0xc3, 0xc9, "ta", 0xc3, "nem", 0xc1, " ", 0xda, 0xc1
+	db	"den ", 0xd4, "ah, pokra", 0xc3, "ujte v hre", 0

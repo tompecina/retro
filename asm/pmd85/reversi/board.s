@@ -574,7 +574,7 @@ draw_pos:
 ;           (DE) - array of white discs
 ;           C - move (must be legal)
 ;           B - =0 black to move
-;               =1 white to move
+;               >0 white to move
 ; 
 ;   uses:   all
 ; 
@@ -886,7 +886,7 @@ disp_msg:
 	ret
 
 ; ==============================================================================
-; get_conf - display prompt and wait for confirmation
+; get_conf - display prompt and wait for confirmation (Y/N)
 ; 
 ;   input:  (HL) - prompt
 ;           (color) - color mask
@@ -911,6 +911,23 @@ get_conf:
 2:	call	clear_msg
 	xor	a
 	ret
+	
+; ==============================================================================
+; get_ack - display prompt and wait for acknowledgement (Enter)
+; 
+;   input:  (HL) - prompt
+;           (color) - color mask
+; 
+;   uses:   A, B, D, E, H, L
+; 
+	.text
+	.globl	get_ack
+get_ack:
+	call	disp_msg
+1:	call	inklav
+	cp	KEY_ENTER
+	jp	nz,1b
+	jp	clear_msg
 	
 ; ==============================================================================
 ; add_cust_glyphs - add custom glyphs

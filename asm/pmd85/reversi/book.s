@@ -23,7 +23,7 @@
 	.include "reversi.inc"
 	
 ; ==============================================================================
-; lookup_book - lookup next move in the book
+; lookup_book - look up next move in the book
 ; 
 ;   input:  (HL) - array of black discs
 ;           (DE) - array of white discs
@@ -122,6 +122,8 @@ lookup_book:
 ; ==============================================================================
 ; Boards
 ; 
+	.globl	BOOK_DEPTH
+	.equiv	BOOK_DEPTH, 6
 	.data
 book:	
 	.byte	0x13, 0x88, 0x6c, 0x42
