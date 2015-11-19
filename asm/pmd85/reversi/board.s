@@ -582,8 +582,8 @@ draw_pos:
 	.globl	anim_move
 anim_move:
 	ld	a,c
-	or	a
-	ret	m
+	cp	PASS
+	ret	z
 	push	hl
 	push	de
 	push	bc
@@ -709,8 +709,7 @@ init_game:
 	.globl	player_select
 player_select:
 	call	shcur
-4:	call	inkey
-	jp	z,4b
+4:	call	inklav
 	push	af
 	call	clr_msg
 	pop	af
@@ -859,7 +858,7 @@ clr_msg:
 	or	a
 	ret	z
 	ld	hl,MSGAREA
-	ld	de,MSGAREA + 0x30 - (64 * 11)
+	ld	de,MSGAREA + 48 - (64 * 11)
 	ld	b,10
 	call	part_erase
 	xor	a
@@ -874,11 +873,14 @@ clr_msg:
 ;   input:  (HL) - string
 ;           (color) - color mask
 ; 
-;   uses:   A, D, E, H, L
+;   uses:   all
 ; 
 	.text
 	.globl	disp_msg
 disp_msg:
+	push	hl
+	call	clr_msg
+	pop	hl
 	ld	de,MSGAREA
 	call	writeln
 	ld	a,1

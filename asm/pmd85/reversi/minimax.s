@@ -78,8 +78,12 @@ minimax:
 	call	all_legal
 	pop	bc
 	call	4f
-	jp	nz,1f
-	call	3f		; terminal position
+	jp	z,2f
+	ld	h,0xff
+	push	hl
+	ld	hl,0x7f7f
+	jp	10f
+2:	call	3f		; terminal position
 	call	score_board
 	ld	c,PASS
 	xor	a		; Z = 0
@@ -134,7 +138,7 @@ minimax:
 	ld	h,a
 	
 ; copy board
-	push	de
+10:	push	de
 	push	hl
 	ld	hl,myo + pblen
 	add	hl,bc
@@ -181,7 +185,7 @@ minimax:
 ; call itself recursively
 	pop	bc
 	push	bc
-	ld	hl,pblen
+10:	ld	hl,pblen
 	add	hl,bc
 	ld	b,h
 	ld	c,l

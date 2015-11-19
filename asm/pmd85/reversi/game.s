@@ -1085,8 +1085,8 @@ make_move:
 
 ; check for pass
 	ld	a,c
-	or	a
-	ret	m
+	cp	PASS
+	ret	z
 	
 ; if white's turn, switch arrays
 	ld	a,b

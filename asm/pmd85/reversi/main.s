@@ -96,7 +96,7 @@ mainloop:
 	call	disp_score
 	
 ; check for end of game
-	call	fhd
+	call	fhdn
 	call	count_moves
 	ld	a,b
 	or	c
@@ -185,9 +185,7 @@ mainloop:
 	
 ; toggle current player
 6:	ld	hl,tomove
-	ld	a,(hl)
-	cpl
-	ld	(hl),a
+	call	toggle
 	jp	mainloop
 	
 ; let player select move
@@ -250,7 +248,7 @@ mainloop:
 ; computer must pass
 	ld	hl,msg_cpass
 	call	disp_msg
-	jp	7b
+	jp	6b
 	
 ; check book
 1:	ld	a,(moven)

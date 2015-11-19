@@ -25,7 +25,7 @@
 ; ==============================================================================
 ; Constants
 ; 
-	.equiv	PASS, 0xff
+	.equiv	PASS, 0x7f
 	.equiv	MAXWORD, 0x7fff
 	.equiv	MINWORD, 0x8000
 	
