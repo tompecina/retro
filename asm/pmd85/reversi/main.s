@@ -184,9 +184,10 @@ mainloop:
 	call	get_ack
 	
 ; toggle current player
-6:	ld	a,(tomove)
+6:	ld	hl,tomove
+	ld	a,(hl)
 	cpl
-	ld	(tomove),a
+	ld	(hl),a
 	jp	mainloop
 	
 ; let player select move
