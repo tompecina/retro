@@ -84,8 +84,7 @@ new:	call	init_game
 	call	disp_score
 
 	ld	hl,msg_color
-	;; call	get_conf	
-	ld	a,0xff		; DEBUG
+	call	get_conf	
 	ld	(compcol),a
 	call	disp_compcol
 	
@@ -207,11 +206,11 @@ mainloop:
 	call	tsound
 	call	clevel
 	call	quit
-	jp	7b
+	jp	mainloop
 1:	call	fhd
 	call	count_moves
 	ld	a,c
-	or	c
+	or	a
 	jp	nz,1f
 	ld	hl,msg_cpass
 	call	disp_msg
@@ -219,12 +218,40 @@ mainloop:
 1:	ld	a,(moven)
 	cp	BOOK_DEPTH
 	jp	nc,1f
-	call	fdh
+	call	fhdn
 	call	lookup_book
+	jp	nc,8b
+1:	call	fdh
+	push	de
+	ld	de,heap
+	ld	b,8
+	call	copy8
+	pop	hl
+	ld	b,8
+	call	copy8
+	ex	de,hl
+	ld	a,(level)
+	ld	(hl),a
+	inc	hl
+	ld	(hl),MINWORD & 0xff
+	inc	hl
+	ld	(hl),MINWORD >> 8
+	inc	hl
+	ld	(hl),MAXWORD & 0xff
+	inc	hl
+	ld	(hl),MAXWORD >> 8
+	inc	hl
+	ld	(hl),0xff
+	ld	hl,msg_think
+	call	disp_msg
+	call	redon
+	ld	bc,heap
+	call	minimax
+	call	redoff
+	call	clr_msg
+	call	stdbeep
+	jp	nz,2b
 	jp	8b
-1:	
-	
-	jp	.
 	
 dsc:	call	prep_score
 	ld	a,b
@@ -236,8 +263,11 @@ dsc:	call	prep_score
 	inc	hl
 	ret
 
-fhd:	ld	hl,black
+fhdn:	ld	hl,black
 	ld	de,white
+	ret
+	
+fhd:	call	fhdn
 	ld	a,(tomove)
 	or	a
 	ret	z
@@ -484,14 +514,25 @@ disp_compcol:
 	jp	write
 	
 ; ==============================================================================
+; Standard (alert) beep
+;
+	.text
+stdbeep:
+	ld	hl,stbdt
+	jp	pbp
+
+	.data
+stbdt:	.byte	2, 16, 0xff
+	
+; ==============================================================================
 ; Error beep
 ;
 	.text
 errbeep:
-	ld	a,(sound)
+	ld	hl,erbdt
+pbp:	ld	a,(sound)
 	or	a
 	ret	z
-	ld	hl,erbdt
 	jp	bell
 
 	.data

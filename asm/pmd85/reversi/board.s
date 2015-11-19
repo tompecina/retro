@@ -712,7 +712,7 @@ player_select:
 4:	call	inkey
 	jp	z,4b
 	push	af
-	call	clear_msg
+	call	clr_msg
 	pop	af
 	cp	KEOL
 	jp	nz,1f
@@ -848,13 +848,13 @@ writeln:
 	jp	1b
 	
 ; ==============================================================================
-; clear_msg - clear the notification area
+; clr_msg - clear the notification area
 ; 
 ;   uses:   A, B, D, E, H, L
 ; 
 	.text
-	.globl	clear_msg
-clear_msg:
+	.globl	clr_msg
+clr_msg:
 	ld	a,(msg)
 	or	a
 	ret	z
@@ -905,10 +905,10 @@ get_conf:
 	cp	KEY_NO
 	jp	z,2f
 	jp	1b
-1:	call	clear_msg
+1:	call	clr_msg
 	or	0xff
 	ret
-2:	call	clear_msg
+2:	call	clr_msg
 	xor	a
 	ret
 	
@@ -927,7 +927,31 @@ get_ack:
 1:	call	inklav
 	cp	KEY_ENTER
 	jp	nz,1b
-	jp	clear_msg
+	jp	clr_msg
+	
+; ==============================================================================
+; Red LED on
+; 
+;   uses:   A
+;
+	.text
+	.globl	redon
+redon:
+	ld	a,0x07
+	out	(SYSPIO_CTRL),a
+	ret
+	
+; ==============================================================================
+; Red LED off
+;
+;   uses:   A
+;
+	.text
+	.globl	redoff
+redoff:
+	ld	a,0x06
+	out	(SYSPIO_CTRL),a
+	ret
 	
 ; ==============================================================================
 ; add_cust_glyphs - add custom glyphs

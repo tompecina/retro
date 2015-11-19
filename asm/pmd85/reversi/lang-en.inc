@@ -105,3 +105,5 @@ msg_ppass:
 	.asciz	"You have no moves, please press EOL"
 msg_cpass:
 	.asciz	"The computer has no moves, your turn again"
+msg_think:
+	.asciz	"Thinking..."

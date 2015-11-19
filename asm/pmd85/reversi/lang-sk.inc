@@ -113,3 +113,5 @@ msg_ppass:
 msg_cpass:
 	db	"Po", 0xc3, 0xc9, "ta", 0xc3, "nem", 0xc1, " ", 0xda, 0xc1
 	db	"den ", 0xd4, "ah, pokra", 0xc3, "ujte v hre", 0
+msg_think:
+	db	"Prem", 0xd9, 0xd3, "lam...", 0
