@@ -850,7 +850,7 @@ writeln:
 ; ==============================================================================
 ; clr_msg - clear the notification area
 ; 
-;   uses:   A, B, D, E, H, L
+;   uses:   all
 ; 
 	.text
 	.globl	clr_msg

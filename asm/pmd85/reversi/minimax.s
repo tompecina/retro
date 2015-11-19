@@ -119,6 +119,8 @@ minimax:
 	or	a
 	jp	p,1f
 	pop	bc
+	ex	de,hl
+	xor	a
 	ret
 	
 ; convert move

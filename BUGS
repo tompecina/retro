@@ -41,3 +41,5 @@ KNOWN BUGS AND ESSENTIAL NEW FEATURES
 * Debugger should reset the HALT flag if PC is manually changed.
 
 * Video of PMD 85 must be refreshed on closing the Memory window.
+
+* Debugger turns red LED off; it obviously shoulnd't.

@@ -260,7 +260,7 @@ mainloop:
 	jp	nc,8b
 	
 ; position not in book, call minimax
-1:	call	fdh
+1:	call	fhd
 	push	de
 	ld	de,heap
 	ld	b,8
@@ -286,10 +286,14 @@ mainloop:
 	call	redon
 	ld	bc,heap
 	call	minimax
+	push	af
+	push	bc
 	call	redoff
 	call	clr_msg
-	call	stdbeep
+	pop	bc
+	pop	af
 	jp	nz,2b
+	call	stdbeep
 	jp	8b
 
 ; process score
@@ -303,12 +307,12 @@ dsc:	call	prep_score
 	inc	hl
 	ret
 
-; set HL = black, DE = white
+; set (HL) = black, (DE) = white
 fhdn:	ld	hl,black
 	ld	de,white
 	ret
 	
-; set HL = current player, DE = other player
+; set (HL) = current player, (DE) = other player
 fhd:	call	fhdn
 	ld	a,(tomove)
 	or	a
@@ -316,7 +320,7 @@ fhd:	call	fhdn
 	ex	de,hl
 	ret
 
-; set DE = current player, HL = other player
+; set (DE) = current player, (HL) = other player
 fdh:	call	fhd
 	ex	de,hl
 	ret
