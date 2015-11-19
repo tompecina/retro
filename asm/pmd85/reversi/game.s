@@ -1073,7 +1073,7 @@ c2m:
 ;           (DE) - array of white/black discs
 ;           C - move (must be legal)
 ;           B - =0 black/white to move
-;               =1 white/black to move
+;               >0 white/black to move
 ; 
 ;   output:  updated arrays
 ; 

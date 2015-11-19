@@ -48,6 +48,8 @@
 	.text
 	.globl	main
 main:
+
+; initialize
 	di
 	ld	sp,0x7000
 	call	init_btbl
@@ -80,6 +82,7 @@ main:
 	ld	(sound),a
 	call	disp_sound
 
+; start new game
 new:	call	init_game
 	call	disp_score
 
@@ -88,24 +91,35 @@ new:	call	init_game
 	ld	(compcol),a
 	call	disp_compcol
 	
+; display current score
 mainloop:
+	call	disp_score
+	
+; check for end of game
 	call	fhd
 	call	count_moves
 	ld	a,b
 	or	c
 	jp	nz,1f
-	ld	hl,black
-	ld	de,white
+	
+; game ended
+	call	fhdn
 	call	count_discs
 	ld	a,b
 	cp	c
 	jp	nz,2f
+	
+; draw
 	ld	hl,msg_draw
 	jp	3f
+	
+; black/white wins
 2:	ld	hl,msg_bwin
 	jp	nc,2f
 	ld	hl,msg_wwin
 2:	ld	de,dial
+	
+; copy fixed part of final message
 2:	ld	a,(hl)
 	or	a
 	jp	z,5f
@@ -113,6 +127,8 @@ mainloop:
 	ld	(de),a
 	inc	de
 	jp	2b
+	
+; calculate final score
 5:	ex	de,hl
 	ld	a,64
 	sub	b
@@ -128,6 +144,8 @@ mainloop:
 2:	ld	a,c
 	add	a,d
 	ld	c,a
+	
+; append final score
 5:	push	bc
 	ld	a,b
 	call	dsc
@@ -138,36 +156,46 @@ mainloop:
 	call	dsc
 	ld	(hl),0
 	ld	hl,dial
+
+; display end message
 3:	call	disp_msg
 2:	call	inklav
 	call	newnc
 	call	undo
-	call	switch
-	call	tsound
-	call	clevel
-	call	quit
+	call	opt
 	jp	2b
+
+; game not ended
 1:	ld	a,(tomove)
 	ld	b,a
 	ld	a,(compcol)
 	cp	b
 	jp	z,1f
+
+; current player is human
 2:	call	fhd
-	call	count_discs
+	call	count_moves
 	ld	a,b
 	or	a
 	jp	nz,7f
+	
+; player must pass
 	ld	hl,msg_ppass
 	call	get_ack
+	
+; toggle current player
 6:	ld	a,(tomove)
 	cpl
 	ld	(tomove),a
 	jp	mainloop
+	
+; let player select move
 7:	call	player_select
 	or	a
 	jp	nz,2f
-	ld	hl,black
-	ld	de,white
+	
+; player selected move - check if legal
+	call	fhdn
 	ld	a,(tomove)
 	or	a
 	jp	z,3f
@@ -176,10 +204,14 @@ mainloop:
 	call	one_legal
 	pop	bc
 	jp	nc,8f
+
+; illegal move
 	ld	hl,msg_badmove
 	call	disp_msg
 	call	errbeep
 	jp	7b
+	
+; record move
 8:	ld	hl,moven
 	ld	e,(hl)
 	ld	d,0
@@ -191,36 +223,43 @@ mainloop:
 	and	0x80
 	or	c
 	ld	(hl),a
-	ld	hl,black
-	ld	de,white
+	
+; make move
+	call	fhdn
 	push	bc
 	call	anim_move
 	pop	bc
-	ld	hl,black
-	ld	de,white
+	call	fhdn
 	call	make_move
 	jp	6b
+	
+; player did not select move
 2:	call	newc
 	call	undo
-	call	switch
-	call	tsound
-	call	clevel
-	call	quit
+	call	opt
 	jp	mainloop
+
+; current player is computer
 1:	call	fhd
 	call	count_moves
 	ld	a,c
 	or	a
 	jp	nz,1f
+	
+; computer must pass
 	ld	hl,msg_cpass
 	call	disp_msg
 	jp	7b
+	
+; check book
 1:	ld	a,(moven)
 	cp	BOOK_DEPTH
 	jp	nc,1f
 	call	fhdn
 	call	lookup_book
 	jp	nc,8b
+	
+; position not in book, call minimax
 1:	call	fdh
 	push	de
 	ld	de,heap
@@ -252,7 +291,8 @@ mainloop:
 	call	stdbeep
 	jp	nz,2b
 	jp	8b
-	
+
+; process score
 dsc:	call	prep_score
 	ld	a,b
 	cp	'0'
@@ -263,10 +303,12 @@ dsc:	call	prep_score
 	inc	hl
 	ret
 
+; set HL = black, DE = white
 fhdn:	ld	hl,black
 	ld	de,white
 	ret
 	
+; set HL = current player, DE = other player
 fhd:	call	fhdn
 	ld	a,(tomove)
 	or	a
@@ -274,15 +316,18 @@ fhd:	call	fhdn
 	ex	de,hl
 	ret
 
+; set DE = current player, HL = other player
 fdh:	call	fhd
 	ex	de,hl
 	ret
 	
+; new game (no confirmation)
 newnc:	cp	KEY_NEW
 	ret	nz
 2:	pop	hl
 	jp	new
-
+	
+; new game (with confirmation)
 newc:	cp	KEY_NEW
 	ret	nz
 	push	af
@@ -293,10 +338,10 @@ newc:	cp	KEY_NEW
 	ret
 1:	pop	af
 	jp	2b
-	
+
+; undo move
 undo:	cp	KEY_UNDO
 	ret	nz
-	pop	hl
 	ld	a,(moven)
 	ld	e,a
 	ld	d,0
@@ -304,55 +349,55 @@ undo:	cp	KEY_UNDO
 	add	hl,de
 	ld	a,(compcol)
 	ld	d,a
-	ld	a,(tomove)
-	xor	d
-	ld	d,a
-1:	ld	a,e
-	or	a
-	jp	z,1f
-	dec	e
+1:	dec	e
+	ld	a,0
+	ret	m		; no moves to be undone
 	ld	a,(hl)
 	dec	hl
 	xor	d
 	and	0x80
 	jp	z,1b
-1:	ld	hl,moven
-	ld	a,e
-	cp	(hl)
-	jp	z,mainloop	; no moves to be undone
-	ld	(hl),e
+1:	ld	a,e
+	ld	(moven),a
 	call	init_pos
 	ld	hl,moves
 1:	dec	e
 	jp	m,1f
 	ld	a,(hl)
+	and	0x7f
+	ld	c,a
+	ld	a,(hl)
+	and	0x80
+	ld	b,a
 	inc	hl
 	push	hl
 	push	de
-	ld	hl,black
-	ld	de,white
-	rla
-	ld	c,a
-	ld	a,0
-	rla
-	ld	b,a
-	ld	a,c
-	rra
-	ld	b,a
+	call	fhdn
 	call	make_move
 	pop	de
 	pop	hl
 	jp	1b
-1:	ld	hl,black
-	ld	de,white
+1:	call	fhdn
 	call	draw_pos
+	ld	a,(compcol)
+	cpl
+	ld	(tomove),a
+	pop	hl		; discard return address
 	jp	mainloop	
 	
+; process repeated controls
+opt:	call	switch
+	call	tsound
+	call	clevel
+	jp	quit
+	
+; toggle (HL)
 toggle:	ld	a,(hl)
 	cpl
 	ld	(hl),a
 	ret
 	
+; switch sides
 switch:	cp	KEY_SWITCH
 	ret	nz
 	ld	hl,compcol
@@ -361,6 +406,7 @@ switch:	cp	KEY_SWITCH
 	xor	a
 	ret
 	
+; toggle sound
 tsound:	cp	KEY_SOUND
 	ret	nz
 	ld	hl,sound
@@ -369,6 +415,7 @@ tsound:	cp	KEY_SOUND
 	xor	a
 	ret
 
+; change level
 clevel:	cp	KK1
 	ret	c
 	cp	KK1 + MAXLEVEL
@@ -379,6 +426,7 @@ clevel:	cp	KK1
 	xor	a
 	ret
 	
+; quit (with confirmation)
 quit:	cp	KEY_QUIT
 	ret	nz
 	ld	hl,msg_quit
@@ -463,9 +511,8 @@ prep_score:
 ; Display current score
 ;
 	.text
-disp_score:	
-	ld	hl,black
-	ld	de,white
+disp_score:
+	call	fhdn
 	call	count_discs
 	push	bc
 	ld	a,b
