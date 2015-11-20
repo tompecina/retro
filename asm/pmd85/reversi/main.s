@@ -241,7 +241,7 @@ mainloop:
 ; current player is computer
 1:	call	fhd
 	call	count_moves
-	ld	a,c
+	ld	a,b
 	or	a
 	jp	nz,1f
 	

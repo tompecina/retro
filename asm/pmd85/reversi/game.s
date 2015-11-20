@@ -1284,6 +1284,8 @@ score_board:
 	ld	a,b
 	or	c
 	jp	nz,1f
+
+; no legal moves
 	pop	de
 	pop	hl
 	call	count_discs	; B = my discs
@@ -1302,6 +1304,8 @@ score_board:
 	ret
 2:	ld	hl,0		; draw
 	ret
+
+; at least one legal move for either side
 1:	ld	a,b
 	cp	c
 	jp	z,1f

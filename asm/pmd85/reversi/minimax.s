@@ -48,8 +48,18 @@
 minimax:
 
 ; check for key
-	call	inkey
-	ret	nz
+	.if	DEBUG
+	call	log
+	.asciz	"in minimax, frame:"
+	ld	h,b
+	ld	l,c
+	call	loghex2
+	call	lognl
+	.endif
+	;; push	bc
+	;; call	inkey
+	;; pop	bc
+	;; ret	nz
 	
 ; check if depth > 0
 	ld	hl,depo
@@ -190,11 +200,20 @@ minimax:
 	ld	b,h
 	ld	c,l
 	call	minimax
-	ret	nz
+	pop	bc
+	jp	z,1f
+
+; interrupted, empty stack and return
+	pop	hl
+	pop	de
+11:	pop	hl
+	inc	h
+	jp	nz,11b
+	or	a
+	ret
 	
 ; check maxmin
-	pop	bc
-	ex	de,hl
+1:	ex	de,hl
 	ld	hl,mmo
 	add	hl,bc
 	ld	a,(hl)

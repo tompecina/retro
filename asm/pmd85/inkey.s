@@ -92,6 +92,7 @@ inkey:
 	and	0x80
 	or	(hl)
 1:	ld	(ascii),a
+	or	a
 	ret
 5:	ld	e,0
 1:	in	a,(SYSPIO_PB)

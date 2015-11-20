@@ -25,7 +25,7 @@
 ; ==============================================================================
 ; waits - waiting loop
 ; 
-;   input:  A, D - waiting time (A * 43.5usec + D * 10msec)
+;   input:  A, D - delay (A * 43.5usec + D * 10msec)
 ; 
 ;   uses:   A, D
 ; 

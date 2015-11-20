@@ -33,6 +33,7 @@
 ;
 	
 ; monitor
+	.equiv	PMD_PREVO2, 0x813b
 	.equiv	PMD_PRTOUT, 0x8500
 	.equiv	PMD_ECHO, 0x8584
 	.equiv	PMD_MONIT, 0x8c40
@@ -94,3 +95,8 @@
 	.irp	i, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 	.equiv	KK\i, 0x88 + \i
 	.endr
+
+; ==============================================================================
+; Debugging
+;
+	.equiv	DEBUG, 1
