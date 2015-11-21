@@ -175,7 +175,7 @@ mainloop:
 ; current player is human
 2:	call	fhd
 	call	count_moves
-	ld	a,b
+	ld	a,h
 	or	a
 	jp	nz,7f
 	
@@ -241,7 +241,7 @@ mainloop:
 ; current player is computer
 1:	call	fhd
 	call	count_moves
-	ld	a,b
+	ld	a,h
 	or	a
 	jp	nz,1f
 	

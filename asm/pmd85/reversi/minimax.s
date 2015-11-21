@@ -54,6 +54,12 @@ minimax:
 	ld	h,b
 	ld	l,c
 	call	loghex2
+	call	log
+	.asciz	", depth:"
+	ld	hl,depo
+	add	hl,bc
+	ld	a,(hl)
+	call	loghex1
 	call	lognl
 	.endif
 	;; push	bc
@@ -69,6 +75,12 @@ minimax:
 	jp	nz,1f
 	call	3f		; depth = 0
 	call	score_board
+	.if	DEBUG
+	call	log
+	.asciz	" exiting, depth:00, score:"
+	call	loghex2
+	call	lognl
+	.endif
 	xor	a		; Z = 0
 	ret
 	
@@ -96,6 +108,12 @@ minimax:
 2:	call	3f		; terminal position
 	call	score_board
 	ld	c,PASS
+	.if	DEBUG
+	call	log
+	.asciz	" exiting, terminal position, score:"
+	call	loghex2
+	call	lognl
+	.endif
 	xor	a		; Z = 0
 	ret
 	
@@ -124,16 +142,32 @@ minimax:
 	ld	a,(hl)
 	or	a
 	ld	de,MINWORD
-	jp	nz,5f
+	jp	nz,55f
 	dec	de
-
+55:	.if	DEBUG
+	call	log
+	.asciz	" initial value:"
+	push	hl
+	ld	h,d
+	ld	l,e
+	call	loghex2
+	pop	hl
+	call	lognl
+	.endif
+	
 ; check for sentinel
 5:	ex	(sp),hl
 	ld	a,h
 	or	a
 	jp	p,1f
 	pop	bc
-	ex	de,hl
+13:	ex	de,hl
+	.if	DEBUG
+	call	log
+	.asciz	" exiting, score:"
+	call	loghex2
+	call	lognl
+	.endif
 	xor	a
 	ret
 	
@@ -195,11 +229,17 @@ minimax:
 ; call itself recursively
 	pop	bc
 	push	bc
-10:	ld	hl,pblen
+	ld	hl,pblen
 	add	hl,bc
 	ld	b,h
 	ld	c,l
 	call	minimax
+	.if	DEBUG
+	call	log
+	.asciz	" new value:"
+	call	loghex2
+	call	lognl
+	.endif
 	pop	bc
 	jp	z,1f
 
@@ -223,13 +263,34 @@ minimax:
 ; maximize
 	pop	hl
 	ex	(sp),hl
+	.if	DEBUG
+	call	log
+	.asciz	" maximizing, value:"
+	call	loghex2
+	call	log
+	.asciz	" new value:"
+	push	hl
+	ld	h,d
+	ld	l,e
+	call	loghex2
+	pop	hl
+	call	lognl
+	.endif
 	call	scmphlde	; value > new value ?
 	jp	c,1f
+	.if	DEBUG
+	call	logmsg
+	.asciz	" value <= new value"
+	.endif
 	pop	hl
 	ld	l,h
 	push	hl
 	jp	2f
-1:	ex	de,hl
+1:	.if	DEBUG
+	call	logmsg
+	.asciz	" value > new value"
+	.endif
+	ex	de,hl
 2:	ld	hl,alphao
 	add	hl,bc
 	push	hl
@@ -238,13 +299,24 @@ minimax:
 	inc	hl
 	ld	h,(hl)
 	ld	l,a
-	call	scmphlde	; alpha > value ?
+	.if	DEBUG
+	call	log
+	.asciz	" alpha:"
+	call	loghex2
+	call	lognl
+	.endif
+	call	scmpdehl	; alpha > value ?
 	pop	hl
-	jp	c,1f
+	jp	nc,1f
+	.if	DEBUG
+	call	logmsg
+	.asciz	" alpha set to value"
+	.endif
 	ld	(hl),e
 	inc	hl
 	ld	(hl),d
 1:	pop	hl
+9:	push	de
 	ld	e,(hl)
 	inc	hl
 	ld	d,(hl)
@@ -254,28 +326,57 @@ minimax:
 	ld	h,(hl)
 	ld	l,a
 	call	scmpdehl	; alpha > beta ?
-9:	jp	c,7f
+	pop	de
+	jp	c,7f
 8:	pop	hl
 	jp	5b
 
 ; break
-7:	ex	(sp),hl
-	ld	a,h
-	cp	0xff
-	jp	z,7b
+7:	.if	DEBUG
+	call	logmsg
+	.asciz	" breaking (alpha > beta)"
+	.endif
 	pop	hl
-	jp	8b
+12:	ex	(sp),hl
+	ld	a,h
+	ex	(sp),hl
+	inc	sp
+	inc	sp
+	or	a
+	jp	p,12b
+	jp	13b
 	
 ; minimize
 6:	pop	hl
 	ex	(sp),hl
+	.if	DEBUG
+	call	log
+	.asciz	" minimizing, value:"
+	call	loghex2
+	call	log
+	.asciz	" new value:"
+	push	hl
+	ld	h,d
+	ld	l,e
+	call	loghex2
+	pop	hl
+	call	lognl
+	.endif
 	call	scmpdehl	; value < new value ?
 	jp	c,1f
+	.if	DEBUG
+	call	logmsg
+	.asciz	" value >= new value"
+	.endif
 	pop	hl
 	ld	l,h
 	push	hl
 	jp	2f
-1:	ex	de,hl
+1:	.if	DEBUG
+	call	logmsg
+	.asciz	" value < new value"
+	.endif
+	ex	de,hl
 2:	ld	hl,betao
 	add	hl,bc
 	push	hl
@@ -283,23 +384,24 @@ minimax:
 	inc	hl
 	ld	h,(hl)
 	ld	l,a
-	call	scmpdehl	; beta < value ?
+	.if	DEBUG
+	call	log
+	.asciz	" beta:"
+	call	loghex2
+	call	lognl
+	.endif
+	call	scmphlde	; beta < value ?
 	pop	hl
-	jp	c,1f
+	jp	nc,1f
+	.if	DEBUG
+	call	logmsg
+	.asciz	" beta set to value"
+	.endif
 	ld	(hl),e
 	inc	hl
 	ld	(hl),d
 1:	ld	hl,alphao
 	add	hl,bc
-	ld	e,(hl)
-	inc	hl
-	ld	d,(hl)
-	inc	hl
-	ld	a,(hl)
-	inc	hl
-	ld	h,(hl)
-	ld	l,a
-	call	scmphlde	; alpha < beta ?
 	jp	9b
 	
 ; (HL) = my discs, (DE) = opponent's discs
