@@ -48,24 +48,10 @@
 minimax:
 
 ; check for key
-	.if	DEBUG
-	call	log
-	.asciz	"in minimax, frame:"
-	ld	h,b
-	ld	l,c
-	call	loghex2
-	call	log
-	.asciz	", depth:"
-	ld	hl,depo
-	add	hl,bc
-	ld	a,(hl)
-	call	loghex1
-	call	lognl
-	.endif
-	;; push	bc
-	;; call	inkey
-	;; pop	bc
-	;; ret	nz
+	push	bc
+	call	inkey
+	pop	bc
+	ret	nz
 	
 ; check if depth > 0
 	ld	hl,depo
@@ -75,12 +61,6 @@ minimax:
 	jp	nz,1f
 	call	3f		; depth = 0
 	call	score_board
-	.if	DEBUG
-	call	log
-	.asciz	" exiting, depth:00, score:"
-	call	loghex2
-	call	lognl
-	.endif
 	xor	a		; Z = 0
 	ret
 	
@@ -108,12 +88,6 @@ minimax:
 2:	call	3f		; terminal position
 	call	score_board
 	ld	c,PASS
-	.if	DEBUG
-	call	log
-	.asciz	" exiting, terminal position, score:"
-	call	loghex2
-	call	lognl
-	.endif
 	xor	a		; Z = 0
 	ret
 	
@@ -142,18 +116,8 @@ minimax:
 	ld	a,(hl)
 	or	a
 	ld	de,MINWORD
-	jp	nz,55f
+	jp	nz,5f
 	dec	de
-55:	.if	DEBUG
-	call	log
-	.asciz	" initial value:"
-	push	hl
-	ld	h,d
-	ld	l,e
-	call	loghex2
-	pop	hl
-	call	lognl
-	.endif
 	
 ; check for sentinel
 5:	ex	(sp),hl
@@ -162,12 +126,6 @@ minimax:
 	jp	p,1f
 	pop	bc
 13:	ex	de,hl
-	.if	DEBUG
-	call	log
-	.asciz	" exiting, score:"
-	call	loghex2
-	call	lognl
-	.endif
 	xor	a
 	ret
 	
@@ -234,12 +192,6 @@ minimax:
 	ld	b,h
 	ld	c,l
 	call	minimax
-	.if	DEBUG
-	call	log
-	.asciz	" new value:"
-	call	loghex2
-	call	lognl
-	.endif
 	pop	bc
 	jp	z,1f
 
@@ -263,34 +215,13 @@ minimax:
 ; maximize
 	pop	hl
 	ex	(sp),hl
-	.if	DEBUG
-	call	log
-	.asciz	" maximizing, value:"
-	call	loghex2
-	call	log
-	.asciz	" new value:"
-	push	hl
-	ld	h,d
-	ld	l,e
-	call	loghex2
-	pop	hl
-	call	lognl
-	.endif
 	call	scmphlde	; value > new value ?
 	jp	c,1f
-	.if	DEBUG
-	call	logmsg
-	.asciz	" value <= new value"
-	.endif
 	pop	hl
 	ld	l,h
 	push	hl
 	jp	2f
-1:	.if	DEBUG
-	call	logmsg
-	.asciz	" value > new value"
-	.endif
-	ex	de,hl
+1:	ex	de,hl
 2:	ld	hl,alphao
 	add	hl,bc
 	push	hl
@@ -299,19 +230,9 @@ minimax:
 	inc	hl
 	ld	h,(hl)
 	ld	l,a
-	.if	DEBUG
-	call	log
-	.asciz	" alpha:"
-	call	loghex2
-	call	lognl
-	.endif
 	call	scmpdehl	; alpha > value ?
 	pop	hl
 	jp	nc,1f
-	.if	DEBUG
-	call	logmsg
-	.asciz	" alpha set to value"
-	.endif
 	ld	(hl),e
 	inc	hl
 	ld	(hl),d
@@ -332,11 +253,7 @@ minimax:
 	jp	5b
 
 ; break
-7:	.if	DEBUG
-	call	logmsg
-	.asciz	" breaking (alpha > beta)"
-	.endif
-	pop	hl
+7:	pop	hl
 12:	ex	(sp),hl
 	ld	a,h
 	ex	(sp),hl
@@ -349,34 +266,13 @@ minimax:
 ; minimize
 6:	pop	hl
 	ex	(sp),hl
-	.if	DEBUG
-	call	log
-	.asciz	" minimizing, value:"
-	call	loghex2
-	call	log
-	.asciz	" new value:"
-	push	hl
-	ld	h,d
-	ld	l,e
-	call	loghex2
-	pop	hl
-	call	lognl
-	.endif
 	call	scmpdehl	; value < new value ?
 	jp	c,1f
-	.if	DEBUG
-	call	logmsg
-	.asciz	" value >= new value"
-	.endif
 	pop	hl
 	ld	l,h
 	push	hl
 	jp	2f
-1:	.if	DEBUG
-	call	logmsg
-	.asciz	" value < new value"
-	.endif
-	ex	de,hl
+1:	ex	de,hl
 2:	ld	hl,betao
 	add	hl,bc
 	push	hl
@@ -384,19 +280,9 @@ minimax:
 	inc	hl
 	ld	h,(hl)
 	ld	l,a
-	.if	DEBUG
-	call	log
-	.asciz	" beta:"
-	call	loghex2
-	call	lognl
-	.endif
 	call	scmphlde	; beta < value ?
 	pop	hl
 	jp	nc,1f
-	.if	DEBUG
-	call	logmsg
-	.asciz	" beta set to value"
-	.endif
 	ld	(hl),e
 	inc	hl
 	ld	(hl),d

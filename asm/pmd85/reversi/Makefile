@@ -1,17 +1,22 @@
 APPL = reversi
-MCU = z80
 OBJ = game.o util.o glyphs.o labels.o board.o book.o minimax.o \
 	../adras10.o ../wrchar10.o ../beep.o ../waits.o ../inkey.o \
 	../inklav.o ../erase.o ../prtout.o ../debug.o \
 	heap.o
 AS = as-z80
 LD = ld-z80
+BTP = bin2ptp
 OBJCOPY = objcopy-z80
 ASFLAGS = -z80 -I ..
 LDFLAGS = --section-start=.text=0x0000
 
 build: $(APPL)-en.bin $(APPL)-en.hex $(APPL)-cs.bin $(APPL)-cs.hex \
-	$(APPL)-sk.bin $(APPL)-sk.hex
+	$(APPL)-sk.bin $(APPL)-sk.hex $(APPL).ptp
+
+$(APPL).ptp: $(APPL)-en.bin $(APPL)-cs.bin $(APPL)-sk.bin
+	$(BTP) -n 0 -m REVER-EN -o $@ $(APPL)-en.bin
+	$(BTP) -append -n 1 -m REVER-CS -o $@ $(APPL)-cs.bin
+	$(BTP) -append -n 2 -m REVER-SK -o $@ $(APPL)-sk.bin
 
 %.hex: %.bin
 	$(OBJCOPY) -I binary -O ihex $< $@
