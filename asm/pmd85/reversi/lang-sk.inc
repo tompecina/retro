@@ -104,7 +104,7 @@ msg_quit:
 	db	"? (A/N)", 0
 msg_new:
 	db	"Naozaj si ", 0xda, "el", 0xc1, "te za", 0xc3, "a", 0xd4
-	db	"nov", 0xd5, " hru? (A/N)", 0
+	db	" nov", 0xd5, " hru? (A/N)", 0
 msg_badmove:
 	db	"Nedovolen", 0xd9, " ", 0xd4, "ah", 0
 msg_ppass:

@@ -100,7 +100,7 @@ draw_labels:
 	inc	a
 	cp	'I'
 	jp	nz,1b
-	ld	hl, ULC + 894
+	ld	hl,ULC + 894
 	ld	a,'1'
 1:	call	2f
 	ld	de,27
