@@ -43,7 +43,8 @@ main-sk.o: main.s reversi.inc ../pmd85.inc ../glyphs10.inc lang-sk.inc Makefile
 	$(AS) $(ASFLAGS) -c $< -o $@ -aglms=$*.lst
 
 clean:
-	rm -f *.o *.lst $(APPL)*.bin $(APPL)*.hex $(APPL)*.map
+	rm -f *.o *.lst $(APPL)*.bin $(APPL)*.hex $(APPL)*.map \
+	../*.o ../*.lst ../*.map
 
 .SUFFIXES:
 
