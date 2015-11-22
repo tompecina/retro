@@ -94,10 +94,10 @@ msg_draw:
 	db	"Rem", 0xc9, "za, kone", 0xd7, "n", 0xc5, " sk", 0xcf
 	db	"re: 32-32", 0
 msg_bwin:
-	db	0xe3, "ierny vyhr", 0xc1, "l, kone", 0xc3, "n", 0xd7
+	db	0xe3, "ierny vyhral, kone", 0xc3, "n", 0xd7
 	db	" sk", 0xcf, "re: ", 0
 msg_wwin:
-	db	"Biely vyhr", 0xc1, "l, kone", 0xc3, "n", 0xd7
+	db	"Biely vyhral, kone", 0xc3, "n", 0xd7
 	db	" sk", 0xcf, "re: ", 0
 msg_quit:
 	db	"Naozaj si ", 0xda, "el", 0xc1, "te program ukonči", 0xd4

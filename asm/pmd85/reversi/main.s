@@ -568,8 +568,11 @@ disp_compcol:
 ;
 	.text
 stdbeep:
+	ld	a,(sound)
+	or	a
+	ret	z
 	ld	hl,stbdt
-	jp	pbp
+	jp	bell
 
 	.data
 stbdt:	.byte	2, 16, 0xff
@@ -580,9 +583,6 @@ stbdt:	.byte	2, 16, 0xff
 	.text
 errbeep:
 	ld	hl,erbdt
-pbp:	ld	a,(sound)
-	or	a
-	ret	z
 	jp	bell
 
 	.data
