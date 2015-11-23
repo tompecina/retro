@@ -55,16 +55,34 @@ main:
 	call	set_kmap
 	call	add_glyphs
 	call	add_cust_glyphs
-	nop
 	call	prep_digits
 	call	erase
 	call	draw_board
-	.irp	n, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
-	ld	hl,digits + \n * (3 * 18)
-	ld	c,\n
-	call	draw_shape
+	.irp	c, 0, 1
+	.irp	n, 0, 1, 2, 3, 4, 5, 6, 7, 8
+	ld	b,\n
+	ld	c,\n + (\c * 9)
+	ld	e,\c << 6
+	call	draw_digit
 	.endr
+	.endr
+	ld	c,13
+	ld	e,0
+	call	draw_excl
+	ld	c,14
+	ld	e,0
+	call	draw_excl
+	ld	c,14
+	call	clr_excl
+	ld	c,11
+	call	draw_cursor
+	ld	c,12
+	call	draw_cursor
+	ld	c,13
+	call	draw_cursor
+	ld	c,12
+	call	clr_cursor
 	
-	jp	.
+	jp	0
 
 	.end

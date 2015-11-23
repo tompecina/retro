@@ -25,7 +25,7 @@
 ; ==============================================================================
 ; Constants
 	
-	.equiv	ULC, 0xc005		; upper left corner of the board
+	.equiv	ULC, 0xc006		; upper left corner of the board
 	.equiv	MSGAREA, 0xffc0		; position of the notification area
 	
 ; ==============================================================================
@@ -121,41 +121,49 @@ sq2rc:
 	ret
 	
 ; ==============================================================================
-; draw_shape - draw shape
+; draw_digit - draw digit
 ; 
-;   input:  (HL) - shape
+;   input:  B - digit
 ;           C - square
+;           E - color mask
 ;
 ;   uses:   all
 ; 
 	.text
-	.global	draw_shape
-draw_shape:
-	push	hl
-	ld	hl,ULC + 321
+	.global	draw_digit
+draw_digit:
+	push	de
+	ld	a,b
+	add	a,a
+	ld	b,a
+	add	a,a
+	add	a,a
+	add	a,a
+	add	a,b
+	ld	e,a
+	ld	d,0
+	ld	hl,digits
+	add	hl,de
+	add	hl,de
+	ex	de,hl
+	ld	hl,ULC + 322
 	call	sq2a
-	pop	de
+	pop	bc
 	ld	b,18
 1:	ld	a,(de)
-	ld	c,a
-	ld	a,(hl)
-	and	1
-	or	c
+	xor	c
 	ld	(hl),a
 	inc	hl
 	inc	de
 	ld	a,(de)
-	ld	(hl),a
-	inc	hl
-	inc	de
-	ld	a,(de)
+	xor	c
 	ld	(hl),a
 	dec	b
 	ret	z
-	ld	a,b
-	ld	bc,62
+	push	bc
+	ld	bc,63
 	add	hl,bc
-	ld	b,a
+	pop	bc
 	inc	de
 	jp	1b
 sq2a:	call	sq2rc
@@ -173,6 +181,67 @@ sq2a:	call	sq2rc
 	ret
 	
 ; ==============================================================================
+; draw_excl - draw exclamation mark
+; 
+;   input:  C - square
+;           E - color mask
+;
+;   uses:   all
+; 
+	.text
+	.global	draw_excl
+draw_excl:
+	ld	hl,ULC + 833
+	call	sq2a
+	ld	c,e
+	ld	de,excl
+	ld	b,7
+1:	ld	a,(de)
+	xor	c
+	ld	(hl),a
+	dec	b
+	ret	z
+	push	bc
+	ld	bc,64
+	add	hl,bc
+	pop	bc
+	inc	de
+	jp	1b
+	
+; ==============================================================================
+; Exclamation mark
+;
+	.data
+excl:	.byte	0x04	; ..#...
+	.byte	0x04	; ..#...
+	.byte	0x04	; ..#...
+	.byte	0x04	; ..#...
+	.byte	0x04	; ..#...
+	.byte	0x00	; ......
+	.byte	0x04	; ..#...
+	
+; ==============================================================================
+; clr_excl - clear exclamation mark
+; 
+;   input:  C - square
+;
+;   uses:   all
+; 
+	.text
+	.global	clr_excl
+clr_excl:
+	ld	hl,ULC + 833
+	call	sq2a
+	ld	b,7
+	ld	de,64
+	xor	a
+1:	ld	(hl),a
+	dec	b
+	ret	z
+	add	hl,de
+	jp	1b
+	
+; ==============================================================================
 ; prep_digits - prepare digits
 ; 
 ;   uses:   all
@@ -181,26 +250,19 @@ sq2a:	call	sq2rc
 	.globl	prep_digits
 prep_digits:
 	ld	hl,digits
-	ld	c,0x00
-	call	3f
-	ld	c,0x40
-3:	ld	de,rdigits
-	ld	b,9
+	ld	bc,0x0900
+	ld	de,rdigits
 1:	push	bc
 	call	2f
 	ld	b,12
-3:	ld	(hl),c
-	inc	hl
-	ld	a,(de)
+3:	ld	a,(de)
 	and	0x3f
-	or	c
 	ld	(hl),a
 	inc	hl
 	ld	a,(de)
 	rlca
 	rlca
 	and	0x03
-	or	c
 	ld	(hl),a
 	inc	hl
 	inc	de
@@ -213,7 +275,7 @@ prep_digits:
 	jp	nz,1b
 	ret
 2:	push	bc
-	ld	b,6
+	ld	b,4
 1:	ld	(hl),c
 	inc	hl
 	dec	b
@@ -222,14 +284,14 @@ prep_digits:
 	ret
 
 	.globl	digits
-	.lcomm	digits, 972
+	.lcomm	digits, 324
 	
 ; ==============================================================================
 ; Raw digits
-
+;
 	.data
 rdigits:	
-	
+
 ; 1
 	.byte	0x18	; ...##...
 	.byte	0x1c	; ..###...
@@ -348,6 +410,116 @@ rdigits:
 	.byte	0xff	; ########
 	.byte	0x7e	; .######.
 
+; ==============================================================================
+; draw_cursor - draw cursor
+; 
+;   input:  C - square
+;
+;   uses:   all
+; 
+	.text
+	.global	draw_cursor
+draw_cursor:
+	ld	hl,ULC + 193
+	call	sq2a
+	ld	(hl),0x0f
+	dec	hl
+	ld	bc,0x0520
+	call	1f
+	ld	de,-317
+	add	hl,de
+	ld	(hl),0x38
+	inc	hl
+	ld	a,(hl)
+	or	0x03
+	ld	(hl),a
+	ld	de,64
+	add	hl,de
+	ld	bc,0x0402
+	call	2f
+	ld	de,700
+	add	hl,de
+	ld	bc,0x0420
+	call	1f
+	ld	a,(hl)
+	or	c
+	ld	(hl),a
+	inc	hl
+	ld	(hl),0x0f
+	ld	de,-253
+	add	hl,de
+	ld	bc,0x0402
+	call	1f
+	ld	a,(hl)
+	or	0x03
+	ld	(hl),a
+	dec	hl
+	ld	(hl),0x38
+	ret
+1:	ld	de,64
+2:	ld	a,(hl)
+	or	c
+	ld	(hl),a
+	add	hl,de
+	dec	b
+	jp	nz,2b
+	ret
+	
+; ==============================================================================
+; clr_cursor - clear cursor
+; 
+;   input:  C - square
+;
+;   uses:   all
+; 
+	.text
+	.global	clr_cursor
+clr_cursor:
+	ld	hl,ULC + 193
+	call	sq2a
+	ld	(hl),0
+	dec	hl
+	ld	bc,0x05df
+	call	1f
+	ld	de,-317
+	add	hl,de
+	ld	(hl),0
+	inc	hl
+	ld	a,(hl)
+	and	0xfc
+	ld	(hl),a
+	ld	de,64
+	add	hl,de
+	ld	bc,0x04fd
+	call	2f
+	ld	de,700
+	add	hl,de
+	ld	bc,0x04df
+	call	1f
+	ld	a,(hl)
+	and	c
+	ld	(hl),a
+	inc	hl
+	ld	(hl),0
+	ld	de,-253
+	add	hl,de
+	ld	bc,0x04fd
+	call	1f
+	ld	a,(hl)
+	and	0xfc
+	ld	(hl),a
+	dec	hl
+	ld	(hl),0
+	ret
+1:	ld	de,64
+2:	ld	a,(hl)
+	and	c
+	ld	(hl),a
+	add	hl,de
+	dec	b
+	jp	nz,2b
+	ret
+	
 ; ==============================================================================
 ; add_cust_glyphs - add custom glyphs
 ;

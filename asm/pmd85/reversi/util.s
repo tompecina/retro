@@ -71,7 +71,7 @@ copy8:
 ; 
 ;   output: HL = HL * DE
 ; 
-;   uses:   A, B, C, D, E
+;   uses:   all
 ; 
 	.text
 	.globl	mul16
