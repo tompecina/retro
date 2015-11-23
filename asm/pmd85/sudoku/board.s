@@ -25,7 +25,7 @@
 ; ==============================================================================
 ; Constants
 	
-	.equiv	ULC, 0xc006		; upper left corner of the board
+	.equiv	ULC, 0xc4c6		; upper left corner of the board
 	.equiv	MSGAREA, 0xffc0		; position of the notification area
 	
 ; ==============================================================================
@@ -135,21 +135,20 @@ draw_digit:
 	push	de
 	ld	a,b
 	add	a,a
+	add	a,a
+	add	a,a
 	ld	b,a
-	add	a,a
-	add	a,a
 	add	a,a
 	add	a,b
 	ld	e,a
 	ld	d,0
 	ld	hl,digits
 	add	hl,de
-	add	hl,de
 	ex	de,hl
-	ld	hl,ULC + 322
+	ld	hl,ULC + 514
 	call	sq2a
 	pop	bc
-	ld	b,18
+	ld	b,12
 1:	ld	a,(de)
 	xor	c
 	ld	(hl),a
@@ -242,173 +241,128 @@ clr_excl:
 	jp	1b
 	
 ; ==============================================================================
-; prep_digits - prepare digits
-; 
-;   uses:   all
-; 
-	.text
-	.globl	prep_digits
-prep_digits:
-	ld	hl,digits
-	ld	bc,0x0900
-	ld	de,rdigits
-1:	push	bc
-	call	2f
-	ld	b,12
-3:	ld	a,(de)
-	and	0x3f
-	ld	(hl),a
-	inc	hl
-	ld	a,(de)
-	rlca
-	rlca
-	and	0x03
-	ld	(hl),a
-	inc	hl
-	inc	de
-	dec	b
-	jp	nz,3b
-	call	2f
-	call	2f
-	pop	bc
-	dec	b
-	jp	nz,1b
-	ret
-2:	push	bc
-	ld	b,4
-1:	ld	(hl),c
-	inc	hl
-	dec	b
-	jp	nz,1b
-	pop	bc
-	ret
-
-	.globl	digits
-	.lcomm	digits, 324
-	
-; ==============================================================================
-; Raw digits
+; Digits
 ;
 	.data
-rdigits:	
+digits:	
 
 ; 1
-	.byte	0x18	; ...##...
-	.byte	0x1c	; ..###...
-	.byte	0x1e	; .####...
-	.byte	0x18	; ...##...
-	.byte	0x18	; ...##...
-	.byte	0x18	; ...##...
-	.byte	0x18	; ...##...
-	.byte	0x18	; ...##...
-	.byte	0x18	; ...##...
-	.byte	0x18	; ...##...
-	.byte	0x18	; ...##...
-	.byte	0x18	; ...##...
+	.word	0x0018	; ...##...
+	.word	0x001c	; ..###...
+	.word	0x001e	; .####...
+	.word	0x0018	; ...##...
+	.word	0x0018	; ...##...
+	.word	0x0018	; ...##...
+	.word	0x0018	; ...##...
+	.word	0x0018	; ...##...
+	.word	0x0018	; ...##...
+	.word	0x0018	; ...##...
+	.word	0x0018	; ...##...
+	.word	0x0018	; ...##...
 ; 2
-	.byte	0x7e	; .######.
-	.byte	0xff	; ########
-	.byte	0xc3	; ##....##
-	.byte	0xc0	; ......##
-	.byte	0xe0	; .....###
-	.byte	0x70	; ....###.
-	.byte	0x38	; ...###..
-	.byte	0x1c	; ..###...
-	.byte	0x0e	; .###....
-	.byte	0x07	; ###.....
-	.byte	0xff	; ########
-	.byte	0xff	; ########
+	.word	0x013e	; .######.
+	.word	0x033f	; ########
+	.word	0x0303	; ##....##
+	.word	0x0300	; ......##
+	.word	0x0320	; .....###
+	.word	0x0130	; ....###.
+	.word	0x0038	; ...###..
+	.word	0x001c	; ..###...
+	.word	0x000e	; .###....
+	.word	0x0007	; ###.....
+	.word	0x033f	; ########
+	.word	0x033f	; ########
 ; 3
-	.byte	0x7e	; .######.
-	.byte	0xff	; ########
-	.byte	0xc3	; ##....##
-	.byte	0xc0	; ......##
-	.byte	0xc0	; ......##
-	.byte	0x70	; ....###.
-	.byte	0x70	; ....###.
-	.byte	0xc0	; ......##
-	.byte	0xc0	; ......##
-	.byte	0xc3	; ##....##
-	.byte	0xff	; ########
-	.byte	0x7e	; .######.
+	.word	0x013e	; .######.
+	.word	0x033f	; ########
+	.word	0x0303	; ##....##
+	.word	0x0300	; ......##
+	.word	0x0300	; ......##
+	.word	0x0130	; ....###.
+	.word	0x0130	; ....###.
+	.word	0x0300	; ......##
+	.word	0x0300	; ......##
+	.word	0x0303	; ##....##
+	.word	0x033f	; ########
+	.word	0x013e	; .######.
 ; 4
-	.byte	0xc0	; ......##
-	.byte	0xe0	; .....###
-	.byte	0xf0	; ....####
-	.byte	0xf8	; ...#####
-	.byte	0xdc	; ..###.##
-	.byte	0xce	; .###..##
-	.byte	0xc7	; ###...##
-	.byte	0xff	; ########
-	.byte	0xff	; ########
-	.byte	0xc0	; ......##
-	.byte	0xc0	; ......##
-	.byte	0xc0	; ......##
+	.word	0x0300	; ......##
+	.word	0x0320	; .....###
+	.word	0x0330	; ....####
+	.word	0x0338	; ...#####
+	.word	0x031c	; ..###.##
+	.word	0x030e	; .###..##
+	.word	0x0307	; ###...##
+	.word	0x033f	; ########
+	.word	0x033f	; ########
+	.word	0x0300	; ......##
+	.word	0x0300	; ......##
+	.word	0x0300	; ......##
 ; 5
-	.byte	0xff	; ########
-	.byte	0xff	; ########
-	.byte	0x03	; ##......
-	.byte	0x03	; ##......
-	.byte	0x03	; ##......
-	.byte	0x7f	; #######.
-	.byte	0xff	; ########
-	.byte	0xc0	; ......##
-	.byte	0xc0	; ......##
-	.byte	0xc3	; ##....##
-	.byte	0xff	; ########
-	.byte	0x7e	; .######.
+	.word	0x033f	; ########
+	.word	0x033f	; ########
+	.word	0x0003	; ##......
+	.word	0x0003	; ##......
+	.word	0x0003	; ##......
+	.word	0x013f	; #######.
+	.word	0x033f	; ########
+	.word	0x0300	; ......##
+	.word	0x0300	; ......##
+	.word	0x0303	; ##....##
+	.word	0x033f	; ########
+	.word	0x013e	; .######.
 ; 6
-	.byte	0x7e	; .######.
-	.byte	0xff	; ########
-	.byte	0xc3	; ##....##
-	.byte	0x03	; ##......
-	.byte	0x03	; ##......
-	.byte	0x7f	; #######.
-	.byte	0xff	; ########
-	.byte	0xc3	; ##....##
-	.byte	0xc3	; ##....##
-	.byte	0xc3	; ##....##
-	.byte	0xff	; ########
-	.byte	0x7e	; .######.
+	.word	0x013e	; .######.
+	.word	0x033f	; ########
+	.word	0x0303	; ##....##
+	.word	0x0003	; ##......
+	.word	0x0003	; ##......
+	.word	0x013f	; #######.
+	.word	0x033f	; ########
+	.word	0x0303	; ##....##
+	.word	0x0303	; ##....##
+	.word	0x0303	; ##....##
+	.word	0x033f	; ########
+	.word	0x013e	; .######.
 ; 7
-	.byte	0xff	; ########
-	.byte	0xff	; ########
-	.byte	0xc0	; ......##
-	.byte	0xe0	; .....###
-	.byte	0x70	; ....###.
-	.byte	0x38	; ...###..
-	.byte	0x1c	; ..###...
-	.byte	0x0c	; ..##...
-	.byte	0x0c	; ..##...
-	.byte	0x0c	; ..##...
-	.byte	0x0c	; ..##...
-	.byte	0x0c	; ..##...
+	.word	0x033f	; ########
+	.word	0x033f	; ########
+	.word	0x0300	; ......##
+	.word	0x0320	; .....###
+	.word	0x0130	; ....###.
+	.word	0x0038	; ...###..
+	.word	0x001c	; ..###...
+	.word	0x000c	; ..##...
+	.word	0x000c	; ..##...
+	.word	0x000c	; ..##...
+	.word	0x000c	; ..##...
+	.word	0x000c	; ..##...
 ; 8
-	.byte	0x7e	; .######.
-	.byte	0xff	; ########
-	.byte	0xc3	; ##....##
-	.byte	0xc3	; ##....##
-	.byte	0xc3	; ##....##
-	.byte	0x7e	; .######.
-	.byte	0x7e	; .######.
-	.byte	0xc3	; ##....##
-	.byte	0xc3	; ##....##
-	.byte	0xc3	; ##....##
-	.byte	0xff	; ########
-	.byte	0x7e	; .######.
+	.word	0x013e	; .######.
+	.word	0x033f	; ########
+	.word	0x0303	; ##....##
+	.word	0x0303	; ##....##
+	.word	0x0303	; ##....##
+	.word	0x013e	; .######.
+	.word	0x013e	; .######.
+	.word	0x0303	; ##....##
+	.word	0x0303	; ##....##
+	.word	0x0303	; ##....##
+	.word	0x033f	; ########
+	.word	0x013e	; .######.
 ; 9
-	.byte	0x7e	; .######.
-	.byte	0xff	; ########
-	.byte	0xc3	; ##....##
-	.byte	0xc3	; ##....##
-	.byte	0xc3	; ##....##
-	.byte	0xff	; ########
-	.byte	0xfe	; .#######
-	.byte	0xc0	; ......##
-	.byte	0xc0	; ......##
-	.byte	0xc3	; ##....##
-	.byte	0xff	; ########
-	.byte	0x7e	; .######.
+	.word	0x013e	; .######.
+	.word	0x033f	; ########
+	.word	0x0303	; ##....##
+	.word	0x0303	; ##....##
+	.word	0x0303	; ##....##
+	.word	0x033f	; ########
+	.word	0x033e	; .#######
+	.word	0x0300	; ......##
+	.word	0x0300	; ......##
+	.word	0x0303	; ##....##
+	.word	0x033f	; ########
+	.word	0x013e	; .######.
 
 ; ==============================================================================
 ; draw_cursor - draw cursor
@@ -521,6 +475,83 @@ clr_cursor:
 	ret
 	
 ; ==============================================================================
+; write - display one character
+; 
+;   input:  A - character
+;           (HL) - destination
+;           (color) - color mask
+; 
+;   uses:   A, H, L
+; 
+	.text
+	.globl	write
+write:
+	ld	(cursor),hl
+	jp	prtout
+	
+; ==============================================================================
+; writeln - display zero-terminated string
+; 
+;   input:  (HL) - string
+;           (DE) - destination
+;           (color) - color mask
+; 
+;   uses:   A, H, L
+; 
+	.text
+	.globl	writeln
+writeln:
+	ex	de,hl
+	ld	(cursor),hl
+1:	ld	a,(de)
+	or	a
+	ret	z
+	call	prtout
+	inc	de
+	jp	1b
+	
+; ==============================================================================
+; clr_msg - clear the notification area
+; 
+;   uses:   all
+; 
+	.text
+	.globl	clr_msg
+clr_msg:
+	ld	a,(msg)
+	or	a
+	ret	z
+	ld	hl,MSGAREA
+	ld	de,MSGAREA + 48 - (64 * 11)
+	ld	b,10
+	call	part_erase
+	xor	a
+	ld	(msg),a
+	ret
+
+	.lcomm	msg, 1
+	
+; ==============================================================================
+; disp_msg - display message in the notification area
+; 
+;   input:  (HL) - string
+;           (color) - color mask
+; 
+;   uses:   all
+; 
+	.text
+	.globl	disp_msg
+disp_msg:
+	push	hl
+	call	clr_msg
+	pop	hl
+	ld	de,MSGAREA
+	call	writeln
+	ld	a,1
+	ld	(msg),a
+	ret
+
+; ==============================================================================
 ; add_cust_glyphs - add custom glyphs
 ;
 ;   uses:   H, L
@@ -549,6 +580,20 @@ glyphs80:
 	.byte	0x00	; ......
 	.byte	0x08	; ...#..
 	.byte	0x00	; ......
+	.byte	0x00	; ......
+
+	.globl	ONEDOT
+	.equiv	ONEDOT, 0x81
+	; 80
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x04	; ..#...
+	.byte	0x06	; .##...
+	.byte	0x04	; ..#...
+	.byte	0x04	; ..#...
+	.byte	0x04	; ..#...
+	.byte	0x04	; ..#...
+	.byte	0x2e	; .###.#
 	.byte	0x00	; ......
 
 	.end

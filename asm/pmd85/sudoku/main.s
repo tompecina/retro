@@ -55,7 +55,6 @@ main:
 	call	set_kmap
 	call	add_glyphs
 	call	add_cust_glyphs
-	call	prep_digits
 	call	erase
 	call	draw_board
 	.irp	c, 0, 1
@@ -82,7 +81,17 @@ main:
 	call	draw_cursor
 	ld	c,12
 	call	clr_cursor
+	ld	hl,teststring
+	call	disp_msg
+	ld	hl,sudoku
+	ld	de,0xc3d4
+	call	writeln
 	
 	jp	0
 
+teststring:
+	.asciz	"Test string Test string Test string Test string"
+sudoku:
+	db	"SUDOKU ", ONEDOT, "0", 0
+	
 	.end
