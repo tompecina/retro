@@ -1,5 +1,5 @@
-APPL = reversi
-OBJ = game.o util.o glyphs.o labels.o board.o book.o minimax.o \
+APPL = sudoku
+OBJ = glyphs.o board.o util.o \
 	../adras10.o ../wrchar10.o ../beep.o ../waits.o ../inkey.o \
 	../inklav.o ../erase.o ../prtout.o ../debug.o \
 	heap.o
@@ -14,9 +14,9 @@ build: $(APPL)-en.bin $(APPL)-en.hex $(APPL)-cs.bin $(APPL)-cs.hex \
 	$(APPL)-sk.bin $(APPL)-sk.hex $(APPL).ptp
 
 $(APPL).ptp: $(APPL)-en.bin $(APPL)-cs.bin $(APPL)-sk.bin
-	$(BTP) -n 0 -m REVER-EN -o $@ $(APPL)-en.bin
-	$(BTP) -append -n 1 -m REVER-CS -o $@ $(APPL)-cs.bin
-	$(BTP) -append -n 2 -m REVER-SK -o $@ $(APPL)-sk.bin
+	$(BTP) -n 0 -m SUDOK-EN -o $@ $(APPL)-en.bin
+	$(BTP) -append -n 1 -m SUDOK-CS -o $@ $(APPL)-cs.bin
+	$(BTP) -append -n 2 -m SUDOK-SK -o $@ $(APPL)-sk.bin
 
 %.hex: %.bin
 	$(OBJCOPY) -I binary -O ihex $< $@

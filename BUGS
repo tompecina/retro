@@ -45,3 +45,5 @@ KNOWN BUGS AND ESSENTIAL NEW FEATURES
 * Debugger turns red LED off; it obviously shoulnd't.
 
 * MGSV on model 3 broken.
+
+* Colors on PNG screenshot are not displayed correctly.
