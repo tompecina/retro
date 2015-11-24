@@ -180,72 +180,24 @@ sq2a:	call	sq2rc
 	ret
 	
 ; ==============================================================================
-; draw_excl - draw exclamation mark
-; 
-;   input:  C - square
-;           E - color mask
-;
-;   uses:   all
-; 
-	.text
-	.global	draw_excl
-draw_excl:
-	ld	hl,ULC + 833
-	call	sq2a
-	ld	c,e
-	ld	de,excl
-	ld	b,7
-1:	ld	a,(de)
-	xor	c
-	ld	(hl),a
-	dec	b
-	ret	z
-	push	bc
-	ld	bc,64
-	add	hl,bc
-	pop	bc
-	inc	de
-	jp	1b
-	
-; ==============================================================================
-; Exclamation mark
-;
-	.data
-excl:	.byte	0x04	; ..#...
-	.byte	0x04	; ..#...
-	.byte	0x04	; ..#...
-	.byte	0x04	; ..#...
-	.byte	0x04	; ..#...
-	.byte	0x00	; ......
-	.byte	0x04	; ..#...
-	
-; ==============================================================================
-; clr_excl - clear exclamation mark
-; 
-;   input:  C - square
-;
-;   uses:   all
-; 
-	.text
-	.global	clr_excl
-clr_excl:
-	ld	hl,ULC + 833
-	call	sq2a
-	ld	b,7
-	ld	de,64
-	xor	a
-1:	ld	(hl),a
-	dec	b
-	ret	z
-	add	hl,de
-	jp	1b
-	
-; ==============================================================================
 ; Digits
 ;
 	.data
 digits:	
 
+; blank
+	.word	0x0000	; ........
+	.word	0x0000	; ........
+	.word	0x0000	; ........
+	.word	0x0000	; ........
+	.word	0x0000	; ........
+	.word	0x0000	; ........
+	.word	0x0000	; ........
+	.word	0x0000	; ........
+	.word	0x0000	; ........
+	.word	0x0000	; ........
+	.word	0x0000	; ........
+	.word	0x0000	; ........
 ; 1
 	.word	0x0018	; ...##...
 	.word	0x001c	; ..###...
@@ -286,18 +238,18 @@ digits:
 	.word	0x033f	; ########
 	.word	0x013e	; .######.
 ; 4
-	.word	0x0300	; ......##
-	.word	0x0320	; .....###
-	.word	0x0330	; ....####
-	.word	0x0338	; ...#####
-	.word	0x031c	; ..###.##
-	.word	0x030e	; .###..##
-	.word	0x0307	; ###...##
+	.word	0x0120	; .....##.
+	.word	0x0130	; ....###.
+	.word	0x0138	; ...####.
+	.word	0x013c	; ..#####.
+	.word	0x012e	; .###.##.
+	.word	0x0127	; ###..##.
+	.word	0x0123	; ##...##.
 	.word	0x033f	; ########
 	.word	0x033f	; ########
-	.word	0x0300	; ......##
-	.word	0x0300	; ......##
-	.word	0x0300	; ......##
+	.word	0x0120	; .....##.
+	.word	0x0120	; .....##.
+	.word	0x0120	; .....##.
 ; 5
 	.word	0x033f	; ########
 	.word	0x033f	; ########
@@ -364,6 +316,67 @@ digits:
 	.word	0x033f	; ########
 	.word	0x013e	; .######.
 
+; ==============================================================================
+; draw_excl - draw exclamation mark
+; 
+;   input:  C - square
+;           E - color mask
+;
+;   uses:   all
+; 
+	.text
+	.global	draw_excl
+draw_excl:
+	ld	hl,ULC + 833
+	call	sq2a
+	ld	c,e
+	ld	de,excl
+	ld	b,7
+1:	ld	a,(de)
+	xor	c
+	ld	(hl),a
+	dec	b
+	ret	z
+	push	bc
+	ld	bc,64
+	add	hl,bc
+	pop	bc
+	inc	de
+	jp	1b
+	
+; ==============================================================================
+; Exclamation mark
+;
+	.data
+excl:	.byte	0x04	; ..#...
+	.byte	0x04	; ..#...
+	.byte	0x04	; ..#...
+	.byte	0x04	; ..#...
+	.byte	0x04	; ..#...
+	.byte	0x00	; ......
+	.byte	0x04	; ..#...
+	
+; ==============================================================================
+; clr_excl - clear exclamation mark
+; 
+;   input:  C - square
+;
+;   uses:   all
+; 
+	.text
+	.global	clr_excl
+clr_excl:
+	ld	hl,ULC + 833
+	call	sq2a
+	ld	b,7
+	ld	de,64
+	xor	a
+1:	ld	(hl),a
+	dec	b
+	ret	z
+	add	hl,de
+	jp	1b
+	
 ; ==============================================================================
 ; draw_cursor - draw cursor
 ; 
@@ -473,6 +486,37 @@ clr_cursor:
 	dec	b
 	jp	nz,2b
 	ret
+	
+; ==============================================================================
+; disp_puzzle - display puzzle
+; 
+;   input:  HL - puzzle
+;
+;   uses:   all
+; 
+	.text
+	.global	disp_puzzle
+disp_puzzle:
+	ld	c,0
+1:	ld	a,(hl)
+	and	0x80
+	ld	e,0
+	jp	z,2f
+	ld	e,0x40
+2:	ld	a,(hl)
+	inc	hl
+	and	0x7f
+	ld	b,a
+	push	bc
+	push	hl
+	call	draw_digit
+	pop	hl
+	pop	bc
+	inc	c
+	ld	a,c
+	cp	81
+	jp	nz,1b
+	ret	
 	
 ; ==============================================================================
 ; write - display one character

@@ -57,41 +57,24 @@ main:
 	call	add_cust_glyphs
 	call	erase
 	call	draw_board
-	.irp	c, 0, 1
-	.irp	n, 0, 1, 2, 3, 4, 5, 6, 7, 8
-	ld	b,\n
-	ld	c,\n + (\c * 9)
-	ld	e,\c << 6
-	call	draw_digit
-	.endr
-	.endr
-	ld	c,13
-	ld	e,0
-	call	draw_excl
-	ld	c,14
-	ld	e,0
-	call	draw_excl
-	ld	c,14
-	call	clr_excl
-	ld	c,11
-	call	draw_cursor
-	ld	c,12
-	call	draw_cursor
-	ld	c,13
-	call	draw_cursor
-	ld	c,12
-	call	clr_cursor
-	ld	hl,teststring
 	call	disp_msg
 	ld	hl,sudoku
-	ld	de,0xc3d4
+	ld	de,0xc394
 	call	writeln
+
+	ld	hl,tp
+	ld	b,0
+	ld	c,0
+	call	dec_puzzle
+	ld	hl,tp
+	call	disp_puzzle
 	
 	jp	0
 
-teststring:
-	.asciz	"Test string Test string Test string Test string"
 sudoku:
 	db	"SUDOKU ", ONEDOT, "0", 0
+	
+	.lcomm	tp, 81
+	
 	
 	.end

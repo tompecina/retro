@@ -1,0 +1,8 @@
+#! /bin/bash
+
+n=128
+l='simple easy intermediate expert'
+
+for ll in $l; do
+    qqwing --generate $n --difficulty $ll --one-line
+done
