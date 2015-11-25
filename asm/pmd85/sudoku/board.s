@@ -121,6 +121,28 @@ sq2rc:
 	ret
 	
 ; ==============================================================================
+; rc2sq - compress square
+; 
+;   input:  B - row
+;	    C - column
+; 
+;   output: C - square
+; 
+;   uses:   A
+; 
+	.text
+	.globl	rc2sq
+rc2sq:
+	ld	a,b
+	add	a,a
+	add	a,a
+	add	a,a
+	add	a,b
+	add	a,c
+	ld	c,a
+	ret
+	
+; ==============================================================================
 ; draw_digit - draw digit
 ; 
 ;   input:  B - digit

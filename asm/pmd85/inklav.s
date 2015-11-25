@@ -27,7 +27,7 @@
 ; 
 ;   output: A - ASCII code of the key
 ; 
-;   uses:   A
+;   uses:   -
 ; 
 	.text
 	.globl	inklav

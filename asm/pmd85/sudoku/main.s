@@ -51,6 +51,8 @@ main:
 ; initialize
 	di
 	ld	sp,0x7000
+	call	start_ct1
+	call	init_maps
 	call	init_kbd
 	call	set_kmap
 	call	add_glyphs
@@ -61,20 +63,30 @@ main:
 	ld	hl,sudoku
 	ld	de,0xc394
 	call	writeln
+	ld	hl,seed
 
 	ld	hl,tp
 	ld	b,0
 	ld	c,0
 	call	dec_puzzle
+
 	ld	hl,tp
+	ld	de,tr
+	ld	bc,map
+	call	permute
+
+	ld	hl,tr
 	call	disp_puzzle
 	
 	jp	0
 
 sudoku:
 	db	"SUDOKU ", ONEDOT, "0", 0
+
+map:
+	.byte	5, 9, 1, 8, 4, 6, 2, 7, 3
 	
 	.lcomm	tp, 81
-	
-	
+	.lcomm	tr, 81
+
 	.end

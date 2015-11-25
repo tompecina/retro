@@ -1,5 +1,5 @@
 APPL = sudoku
-OBJ = glyphs.o board.o util.o puzzles.o \
+OBJ = glyphs.o board.o util.o puzzles.o transform.o random.o \
 	../adras10.o ../wrchar10.o ../beep.o ../waits.o ../inkey.o \
 	../inklav.o ../erase.o ../prtout.o ../debug.o \
 	heap.o

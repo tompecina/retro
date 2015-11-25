@@ -27,6 +27,11 @@
 	.equiv	SYSPIO_PB, 0xf5
 	.equiv	SYSPIO_PC, 0xf6
 	.equiv	SYSPIO_CTRL, 0xf7
+
+	.equiv	PIT_0, 0x5c
+	.equiv	PIT_1, 0x5d
+	.equiv	PIT_2, 0x5e
+	.equiv	PIT_CTRL, 0x5f
 	
 ; ==============================================================================
 ; PMD 85 addresses
