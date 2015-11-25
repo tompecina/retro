@@ -51,6 +51,9 @@ main:
 ; initialize
 	di
 	ld	sp,0x7000
+
+	call	transform_puzzle
+
 	call	start_ct1
 	call	init_maps
 	call	init_kbd

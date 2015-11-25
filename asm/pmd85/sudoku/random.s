@@ -183,5 +183,122 @@ inklav_rnd:
 	pop	hl
 	pop	af
 	ret
+
+; ==============================================================================
+; transform_puzzle - transform puzzle using seed
+; 
+;   input:  (HL) - puzzle
+;           (seed) - PRNG value used for the transformation
+; 
+;   output: (HL) - transformed puzzle
+; 
+;   uses:   all
+; 
+	.text
+	.globl	transform_puzzle
+transform_puzzle:
+	call	lcg
+
+; prepare permutation map
+	ld	hl,tperm1
+	push	hl
+	ld	a,(seed)
+	push	af
+	and	0x1f
+	ld	e,a
+	ld	c,9
+	call	udiv8
+	ld	(hl),c
+	inc	hl
+	pop	af
+	rlca
+	rlca
+	rlca
+	and	0x07
+	ld	(hl),a
+	inc	hl
+	ld	a,(seed + 1)
+	push	af
+	and	0x0f
+	ld	e,a
+	ld	c,7
+	call	udiv8
+	ld	(hl),c
+	inc	hl
+	pop	af
+	rlca
+	rlca
+	rlca
+	rlca
+	and	0x0f
+	ld	e,a
+	ld	c,6
+	call	udiv8
+	ld	(hl),c
+	inc	hl
+	ld	a,(seed + 2)
+	push	af
+	push	af
+	and	0x0f
+	ld	e,a
+	ld	c,5
+	call	udiv8
+	ld	(hl),c
+	inc	hl
+	pop	af
+	rlca
+	rlca
+	and	0x03
+	ld	(hl),a
+	inc	hl
+	ld	a,(seed + 3)
+	and	0x0f
+	ld	e,a
+	ld	c,3
+	call	udiv8
+	ld	(hl),c
+	inc	hl
+	pop	af
+	rra
+	rra
+	rra
+	rra
+	and	0x01
+	ld	(hl),a
+	inc	hl
+	ld	(hl),0
+	ld	hl,tperm2
+	push	hl
+	ld	b,1
+1:	ld	(hl),b
+	inc	hl
+	inc	b
+	ld	a,b
+	cp	10
+	jp	nz,1b
+	pop	de
+	pop	hl
+	ld	bc,0x0900	
+2:	push	hl
+	ld	l,(hl)
+	ld	h,c
+	add	hl,de
+1:	ld	a,(hl)
+	or	a
+	jp	nz,1f
+	inc	hl
+	jp	1b
+1:	ld	(hl),c
+	pop	hl
+	ld	(hl),a
+	inc	hl
+	dec	b
+	jp	nz,2b
+	
+	
+	jp	.
+
+	.lcomm	tperm1, 9
+	.lcomm	tperm2, 9
 	
 	.end

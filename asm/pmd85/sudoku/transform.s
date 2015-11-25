@@ -56,7 +56,7 @@ transform:
 	ret
 	
 ; ==============================================================================
-; init_maps - initialize transformation maps
+; init_maps - populate transformation maps
 ; 
 ;   output: (rmaps) - populated rotation maps
 ; 
@@ -65,7 +65,9 @@ transform:
 	.text
 	.globl	init_maps
 init_maps:
-	ld	hl,rmaps
+	
+; populate rotation maps
+	ld	hl,rotmaps
 	push	hl
 	xor	a
 1:	ld	(hl),a
@@ -80,8 +82,112 @@ init_maps:
 	call	flip
 	ld	b,3
 	call	rot90
+
+; populate band maps
+	ld	bc,bpat
+	ld	de,bmaps
+1:	ld	a,(bc)
+	or	a
+	jp	m,1f
+	inc	bc
+	push	bc
+	ld	h,0
+	ld	l,a
+	push	de
+	ld	de,rotmaps
+	add	hl,de
+	pop	de
+	ld	b,27
+	call	copy8
+	pop	bc
+	jp	1b
+	
+; populate stack maps
+1:	ld	hl,rotmaps
+	ld	de,tempmap
+	ld	b,81
+	call	copy8
+	ld	hl,tempmap
+	call	swap
+	ld	bc,bpat
+	ld	de,smaps
+1:	ld	a,(bc)
+	or	a
+	jp	m,1f
+	inc	bc
+	push	bc
+	ld	h,0
+	ld	l,a
+	push	de
+	ld	de,tempmap
+	add	hl,de
+	pop	de
+	ld	b,27
+	call	copy8
+	pop	bc
+	jp	1b
+1:	ld	hl,smaps
+	ld	a,6
+1:	push	af
+	call	swap
+	pop	af
+	dec	a
+	jp	nz,1b
+	
+; populate row maps
+	ld	bc,rpat
+	ld	de,rmaps
+1:	ld	a,(bc)
+	or	a
+	jp	m,1f
+	inc	bc
+	push	bc
+	ld	h,0
+	ld	l,a
+	push	de
+	ld	de,rotmaps
+	add	hl,de
+	pop	de
+	ld	b,9
+	call	copy8
+	pop	bc
+	jp	1b
+	
+; populate column maps
+1:	ld	hl,rotmaps
+	ld	de,tempmap
+	ld	b,81
+	call	copy8
+	ld	hl,tempmap
+	call	swap
+	ld	bc,rpat
+	ld	de,cmaps
+1:	ld	a,(bc)
+	or	a
+	jp	m,1f
+	inc	bc
+	push	bc
+	ld	h,0
+	ld	l,a
+	push	de
+	ld	de,tempmap
+	add	hl,de
+	pop	de
+	ld	b,9
+	call	copy8
+	pop	bc
+	jp	1b
+1:	ld	hl,cmaps
+	ld	a,18
+1:	push	af
+	call	swap
+	pop	af
+	dec	a
+	jp	nz,1b
+	
 	ret
 
+; rotate clockwise B times, (HL) -> (DE) -> (DE + 81) -> ...
 rot90:	ld	c,0
 1:	push	bc
 	call	sq2rc
@@ -112,6 +218,7 @@ rot90:	ld	c,0
 	jp	nz,rot90
 	ret
 
+; flip vertically in situ, (HL) -> (HL)
 flip:	push	hl
 	push	de
 	ld	d,h
@@ -141,7 +248,73 @@ flip:	push	hl
 	pop	hl
 	ret
 
-	.lcomm	rmaps, 81 * 8
+; swap rows and columns in situ, (HL) -> (HL)
+swap:	ld	d,h
+	ld	e,l
+	ld	c,0
+2:	push	bc
+	call	sq2rc
+	ld	a,b
+	cp	c
+	jp	nc,1f
+	ld	b,c
+	ld	c,a
+	call	rc2sq
+	ld	a,(hl)
+	push	hl
+	ld	h,0
+	ld	l,c
+	add	hl,de
+	ld	b,(hl)
+	ld	(hl),a
+	pop	hl
+	ld	(hl),b
+1:	inc	hl
+	pop	bc
+	inc	c
+	ld	a,c
+	cp	81
+	jp	nz,2b
+	ret
+		
+	.lcomm	rotmaps, 81 * 8
+	.lcomm	bmaps, 81 * 6
+	.lcomm	smaps, 81 * 6
+	.lcomm	rmaps, 81 * 18
+	.lcomm	cmaps, 81 * 18
+	.lcomm	tempmap, 81
+	
+	.data
+	
+; band swapping pattern
+bpat:	.byte	0, 27, 54
+	.byte	0, 54, 27
+	.byte	27, 0, 54
+	.byte	27, 54, 0
+	.byte	54, 0, 27
+	.byte	54, 27, 0
+	.byte	-1
+
+; row swapping pattern
+rpat:	.byte	0, 9, 18, 27, 36, 45, 54, 63, 72
+	.byte	0, 18, 9, 27, 36, 45, 54, 63, 72
+	.byte	9, 0, 18, 27, 36, 45, 54, 63, 72
+	.byte	9, 18, 0, 27, 36, 45, 54, 63, 72
+	.byte	18, 0, 9, 27, 36, 45, 54, 63, 72
+	.byte	18, 9, 0, 27, 36, 45, 54, 63, 72
+	.byte	0, 9, 18, 27, 36, 45, 54, 63, 72
+	.byte	0, 9, 18, 27, 45, 36, 54, 63, 72
+	.byte	0, 9, 18, 36, 27, 45, 54, 63, 72
+	.byte	0, 9, 18, 36, 45, 27, 54, 63, 72
+	.byte	0, 9, 18, 45, 27, 36, 54, 63, 72
+	.byte	0, 9, 18, 45, 36, 27, 54, 63, 72
+	.byte	0, 9, 18, 27, 36, 45, 54, 63, 72
+	.byte	0, 9, 18, 27, 36, 45, 54, 72, 63
+	.byte	0, 9, 18, 27, 36, 45, 63, 54, 72
+	.byte	0, 9, 18, 27, 36, 45, 63, 72, 54
+	.byte	0, 9, 18, 27, 36, 45, 72, 54, 63
+	.byte	0, 9, 18, 27, 36, 45, 72, 63, 54
+	.byte	-1
 
 ; ==============================================================================
 ; permute - transform puzzle using a permutation map
