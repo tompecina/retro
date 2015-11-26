@@ -193,6 +193,24 @@ inklav_rnd:
 	ret
 
 ; ==============================================================================
+; get_rnd_puzzle - get random puzzle using seed
+; 
+;   input:  (HL) - destination
+;	    B - difficulty level
+; 
+;   output: (HL) - random puzzle
+; 
+;   uses:   all
+; 
+	.text
+	.globl	get_rnd_puzzle
+get_rnd_puzzle:
+	ld	a,(seed + 9)
+	and	0x7f
+	ld	c,a
+	jp	get_puzzle
+	
+; ==============================================================================
 ; randomize_puzzle - transform puzzle using seed
 ; 
 ;   input:  (HL) - puzzle

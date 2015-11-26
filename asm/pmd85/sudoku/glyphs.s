@@ -29,7 +29,7 @@
 	.equiv	SEL_40, 1
 	.equiv	SEL_60, 1
 	.equiv	SEL_C0, 1
-	.equiv	SEL_E0, 1
+	.equiv	SEL_E0, 0
 
 	.include "../glyphs10.inc"
 

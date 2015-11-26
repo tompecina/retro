@@ -27,6 +27,7 @@
 	
 	.equiv	ULC, 0xc4c6		; upper left corner of the board
 	.equiv	MSGAREA, 0xffc0		; position of the notification area
+	.equiv	MARKCOLOR, 0		; mark color mask
 	
 ; ==============================================================================
 ; draw_board - draw board
@@ -339,7 +340,7 @@ digits:
 	.word	0x013e	; .######.
 
 ; ==============================================================================
-; draw_excl - draw exclamation mark
+; draw_mark - draw exclamation mark
 ; 
 ;   input:  C - square
 ;           E - color mask
@@ -347,12 +348,12 @@ digits:
 ;   uses:   all
 ; 
 	.text
-	.global	draw_excl
-draw_excl:
+	.global	draw_mark
+draw_mark:
 	ld	hl,ULC + 833
 	call	sq2a
 	ld	c,e
-	ld	de,excl
+	ld	de,mark
 	ld	b,7
 1:	ld	a,(de)
 	xor	c
@@ -370,7 +371,7 @@ draw_excl:
 ; Exclamation mark
 ;
 	.data
-excl:	.byte	0x04	; ..#...
+mark:	.byte	0x04	; ..#...
 	.byte	0x04	; ..#...
 	.byte	0x04	; ..#...
 	.byte	0x04	; ..#...
@@ -379,15 +380,15 @@ excl:	.byte	0x04	; ..#...
 	.byte	0x04	; ..#...
 	
 ; ==============================================================================
-; clr_excl - clear exclamation mark
+; clr_mark - clear exclamation mark
 ; 
 ;   input:  C - square
 ;
 ;   uses:   all
 ; 
 	.text
-	.global	clr_excl
-clr_excl:
+	.global	clr_mark
+clr_mark:
 	ld	hl,ULC + 833
 	call	sq2a
 	ld	b,7
@@ -512,7 +513,7 @@ clr_cursor:
 ; ==============================================================================
 ; disp_puzzle - display puzzle
 ; 
-;   input:  HL - puzzle
+;   input:  (HL) - puzzle
 ;
 ;   uses:   all
 ; 
@@ -539,6 +540,183 @@ disp_puzzle:
 	cp	81
 	jp	nz,1b
 	ret	
+	
+; ==============================================================================
+; disp_marks - display marks
+; 
+;   input:  (HL) - marks
+;
+;   uses:   all
+; 
+	.text
+	.global	disp_marks
+disp_marks:
+	ld	c,0
+1:	ld	a,(hl)
+	inc	hl
+	or	a
+	push	hl
+	push	bc
+	push	af
+	call	z,clr_mark
+	pop	af
+	ld	e,MARKCOLOR
+	call	nz,draw_mark
+	pop	bc
+	pop	hl
+	inc	c
+	ld	a,c
+	cp	81
+	jp	nz,1b
+	ret
+	
+; ==============================================================================
+; upd_marks - update and display marks
+; 
+;   input:  (HL) - old marks
+;   	    (DE) - new marks
+; 
+;   output: (HL) - new marks
+;
+;   uses:   all
+; 
+	.text
+	.global	upd_marks
+upd_marks:
+	ld	c,0
+1:	ld	a,(de)
+	cp	(hl)
+	jp	z,2f
+	ld	a,(de)
+	ld	(hl),a
+	or	a
+	push	hl
+	push	de
+	push	bc
+	push	af
+	call	z,clr_mark
+	pop	af
+	ld	e,MARKCOLOR
+	call	nz,draw_mark
+	pop	bc
+	pop	de
+	pop	hl
+2:	inc	hl
+	inc	de
+	inc	c
+	ld	a,c
+	cp	81
+	jp	nz,1b
+	ret
+	
+; ==============================================================================
+; init_cursor - initialize cursor
+; 
+;   uses:   all
+; 
+	.text
+	.globl	init_cursor
+init_cursor:
+	xor	a
+	ld	(cur_row),a
+	ld	(cur_col),a
+	ld	c,a
+	jp	draw_cursor
+	
+	.lcomm	cur_row, 1
+	.lcomm	cur_col, 1
+	
+; ==============================================================================
+; show_cursor - show cursor
+; 
+;   uses:   all
+; 
+	.text
+	.globl	show_cursor
+show_cursor:
+	call	getrc
+	jp	draw_cursor
+getrc:	ld	(cur_row),a
+	ld	b,a
+	ld	(cur_col),a
+	ld	c,a
+	jp	rc2sq
+	
+; ==============================================================================
+; hide_cursor - hide cursor
+; 
+;   uses:   all
+; 
+	.text
+	.globl	hide_cursor
+hide_cursor:
+	call	getrc
+	jp	clr_cursor
+	
+; ==============================================================================
+; player_select - let player select square
+; 
+;   input:  (cur_row) - cursor row
+;           (cur_col) - cursor column
+; 
+;   output: C - square selected
+;           (cur_row) - new cursor row
+;           (cur_col) - new cursor column
+;           A - scan code of the key 
+; 
+;   uses:   all
+; 
+	.text
+	.globl	player_select
+player_select:
+	call	inklav_rnd
+	push	af
+	call	clr_msg
+	pop	af
+	cp	KLEFT
+	jp	nz,1f
+	ld	a,(cur_col)
+	dec	a
+	jp	m,player_select
+3:	push	af
+	call	hide_cursor
+	pop	af
+	ld	(cur_col),a
+2:	call	show_cursor
+	jp	player_select
+1:	cp	KRIGHT
+	jp	nz,1f
+	ld	a,(cur_col)
+	inc	a
+	cp	9
+	jp	z,player_select
+	jp	3b
+1:	cp	KHOME
+	jp	nz,1f
+5:	ld	a,(cur_row)
+	dec	a
+	jp	m,player_select
+3:	push	af
+	call	hide_cursor
+	pop	af
+4:	ld	(cur_row),a
+	call	show_cursor
+	jp	player_select
+1:	cp	KLLEFT
+	jp	z,5b
+	cp	KEND
+	jp	nz,1f
+5:	ld	a,(cur_row)
+	inc	a
+	cp	9
+	jp	z,player_select
+	jp	3b
+1:	cp	KRRIGHT
+	jp	z,5b
+	push	af
+	call	getrc
+	pop	af
+	ret
 	
 ; ==============================================================================
 ; write - display one character
@@ -913,5 +1091,108 @@ get_dups:
 	.lcomm	tdup, 1
 	.lcomm	tpuzzle, 2
 	.lcomm	ndup, 1
+	
+; ==============================================================================
+; check_puzzle - check if all squares are filled in
+; 
+;   input:  (HL) - puzzle
+; 
+;   output: NZ if all squares are filled in
+; 
+;   uses:   A, B, H, L
+; 
+	.text
+	.globl	check_puzzle
+check_puzzle:
+	ld	b,81
+1:	ld	a,(hl)
+	inc	hl
+	or	a
+	ret	z
+	dec	b
+	jp	nz,1b
+	inc	b
+	ret
+	
+; ==============================================================================
+; errbeep - Error beep
+; 
+;   uses:   A, B, D, H, L
+;
+	.text
+	.globl	errbeep
+errbeep:
+	ld	hl,erbdt
+	jp	bell
+
+	.data
+erbdt:	.byte	2, 8, 0, 8, 2, 8, 0xff
+	
+; ==============================================================================
+; conv_time - convert time to string
+; 
+;   input:  HL - time in seconds
+;	    (DE) - destination
+; 
+;   output: (DE) updated
+; 
+;   uses:   all
+; 
+	.text
+	.globl	conv_time
+conv_time:
+	ld	a,h
+	or	l
+	jp	nz,1f
+	ld	hl,tmerr
+	ld	b,5
+	jp	copy8
+1:	ld	b,d
+	ld	c,e
+	push	bc
+	ld	c,60
+	call	udiv16_8
+	pop	bc
+	push	de
+	ld	d,0xff
+	push	de
+1:	push	bc
+	ld	c,10
+	call	udiv16_8
+	pop	bc
+	ld	a,h
+	or	l
+	jp	z,1f
+	push	de
+	jp	1b
+1:	ld	a,'0'
+	add	a,e
+	ld	(bc),a
+	inc	bc
+	pop	de
+	inc	d
+	jp	nz,1b
+	ld	a,':'
+	ld	(bc),a
+	inc	bc
+	pop	hl
+	push	bc
+	ld	c,10
+	call	udiv16_8
+	pop	bc
+	ld	a,l
+	add	a,'0'
+	ld	(bc),a
+	inc	bc
+	ld	a,e
+	add	a,'0'
+	ld	(bc),a
+	inc	bc
+	xor	a
+	ld	(bc),a
+	ret
+	
+	.data
+tmerr:	.asciz	"?:??"
 	
 	.end

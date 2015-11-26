@@ -104,36 +104,27 @@ mul16:
         jp      1b
 
 ; ==============================================================================
-; div16 - signed 16-bit division
+; udiv16_8 - unsigned 16-bit/8-bit division
 ; 
-;   input:  HL, DE
+;   input:  HL, C
 ; 
-;   output: HL = DE / HL
-;           DE = DE % HL
+;   output: HL = HL / C
+;           DE = HL % C
 ; 
 ;   uses:   all
 ; 
 	.text
-	.globl	div16
-div16:	ld      b,h
-        ld      c,l
-        ld      a,d
-        xor     b
-        push    af
-        ld      a,d
-        or      a
-        call	m,deneg
-        ld      a,b
-        or      a
-        call	m,bcneg
-        ld      a,16
-        push    af
-        ex	de,hl
+	.globl	udiv16_8
+udiv16_8:
         ld      de,0
+	ld      b,16
 1:	add     hl,hl
         call    rdel
         jp	z,2f
-        call    ucmpbcde
+        ld      a,e
+        sub     c
+        ld      a,d
+        sbc     a,0
         jp	m,2f
         ld      a,l
         or      1
@@ -142,80 +133,11 @@ div16:	ld      b,h
         sub     c
         ld      e,a
         ld      a,d
-        sbc     a,b
+        sbc     a,0
         ld      d,a
-2:	pop     af
-        dec     a
-        jp	z,3f
-        push    af
-        jp      1b
-3:	pop     af
-        ret	p
-        call    deneg
-	jp	hlneg
-	
-; ==============================================================================
-; hlneg - negate HL
-; 
-;   input:  HL
-; 
-;   output: HL = -HL
-; 
-;   uses:   A
-; 
-	.text
-	.globl	hlneg
-hlneg:
-        ld      a,h
-        cpl
-        ld      h,a
-        ld      a,l
-        cpl
-        ld      l,a
-        inc     hl
-        ret
-	
-; ==============================================================================
-; deneg - negate DE
-; 
-;   input:  DE
-; 
-;   output: DE = -DE
-; 
-;   uses:   A
-; 
-	.text
-	.globl	deneg
-deneg:
-        ld      a,d
-        cpl
-        ld      d,a
-        ld      a,e
-        cpl
-        ld      e,a
-        inc     de
-        ret
-	
-; ==============================================================================
-; bcneg - negate BC
-; 
-;   input:  BC
-; 
-;   output: BC = -BC
-; 
-;   uses:   A
-; 
-	.text
-	.globl	bcneg
-bcneg:
-        ld      a,b
-        cpl
-        ld      b,a
-        ld      a,c
-        cpl
-        ld      c,a
-        inc     bc
-        ret
+2:	dec     b
+        jp	nz,1b
+	ret
 	
 ; ==============================================================================
 ; rdel - rotate DE left

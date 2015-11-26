@@ -36,6 +36,13 @@
 	.equiv	KEY_QUIT, 'Q'
 	
 ; ==============================================================================
+; Labels
+;
+	.data
+lbl_sudoku:
+	db	"SUDOKU ", ONEDOT, "0", 0
+	
+; ==============================================================================
 ; Prompts
 ;
 	.data
@@ -51,3 +58,5 @@ msg_quit:
 	.asciz	"Do you really wish to end the program? (Y/N)"
 msg_new:	
 	.asciz	"Do you really wish to create a new puzzle? (Y/N)"
+msg_sqerr:
+	.asciz	"This square cannot be edited"

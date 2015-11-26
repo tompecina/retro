@@ -51,6 +51,19 @@ main:
 ; initialize
 	di
 	ld	sp,0x7000
+
+
+	ld	hl,10000
+	ld	de,ttt
+	call	conv_time
+
+	jp	0
+
+ttt:	.skip	10
+
+
+
+
 	call	init_kbd
 	call	set_kmap
 	call	add_glyphs
@@ -66,37 +79,26 @@ main:
 1:	call	start_ct2
 	call	init_maps
 	call	init_gmap
-	
-	ld	b,0
-	ld	c,0
-	ld	hl,tp
-	call	get_puzzle
-
-	ld	hl,tp
-	ld	de,td
-	call	get_dups
-
-	jp	0
-
-	ld	hl,tp
-	call	randomize_puzzle
-
 	call	draw_board
-	call	disp_msg
-	ld	hl,sudoku
+	ld	hl,lbl_sudoku
 	ld	de,0xc394
 	call	writeln
-	ld	hl,seed
+	ld	hl,msg_select
+	call	disp_msg
+2:	call	inklav_rnd
+	cp	'0'
+	jp	c,1f
+	cp	'3' + 1
+	jp	c,1f
+	jp	2f
+1:	call	errbeep
+	jp	2b
+2:	sub	'0'
 
-	ld	hl,tp
-	call	disp_puzzle
 	
-	jp	0
 
-sudoku:
-	db	"SUDOKU ", ONEDOT, "0", 0
 
-	.lcomm	tp, 81
-	.lcomm	td, 81
+	.lcomm	puzzle, 81
+	.lcomm	marks, 81
 
 	.end

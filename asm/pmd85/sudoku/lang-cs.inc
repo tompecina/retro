@@ -36,6 +36,13 @@
 	.equiv	KEY_QUIT, 'K'
 	
 ; ==============================================================================
+; Labels
+;
+	.data
+lbl_sudoku:
+	db	"SUDOKU ", ONEDOT, "0", 0
+	
+; ==============================================================================
 ; Prompts
 ;
 	.data
@@ -54,3 +61,5 @@ msg_quit:
 msg_new:
 	db	"Opravdu si p", 0xd2, "ejete vytvo", 0xc3, 0xc9
 	db	"t nov", 0xd7, " sudoku? (A/N)", 0
+msg_sqerr:
+	.asciz	"Toto pole nelze editovat"

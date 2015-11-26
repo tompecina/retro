@@ -36,6 +36,13 @@
 	.equiv	KEY_QUIT, 'K'
 	
 ; ==============================================================================
+; Labels
+;
+	.data
+lbl_sudoku:
+	db	"SUDOKU ", ONEDOT, "0", 0
+	
+; ==============================================================================
 ; Prompts
 ;
 	.data
@@ -55,3 +62,5 @@ msg_quit:
 msg_new:
 	db	"Naozaj si ", 0xda, "el", 0xc1, "te vytvo", 0xd2
 	db	"i", 0xd4, " nov", 0xd7, " sudoku? (A/N)", 0
+msg_sqerr:
+	db	"Toto pole nie je mo", 0xda, "n", 0xd7, " editova", 0xd4, 0

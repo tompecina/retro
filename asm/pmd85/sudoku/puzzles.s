@@ -32,7 +32,7 @@
 ; ==============================================================================
 ; get_puzzle - decompress puzzle
 ; 
-;   input:  B - difficulty
+;   input:  B - difficulty level
 ; 	    C - puzzle number
 ; 	    HL - destination address
 ; 
