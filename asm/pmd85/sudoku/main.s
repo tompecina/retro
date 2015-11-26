@@ -51,16 +51,29 @@ main:
 ; initialize
 	di
 	ld	sp,0x7000
-
-	call	transform_puzzle
-
-	call	start_ct1
-	call	init_maps
 	call	init_kbd
 	call	set_kmap
 	call	add_glyphs
 	call	add_cust_glyphs
 	call	erase
+	call	start_ct1
+	jp	nc,1f
+	ld	hl,msg_hwerr
+	call	get_ack
+	call	rel_ct1
+	call	erase
+	jp	PMD_MONIT
+1:	call	start_ct2
+	call	init_maps
+	call	init_gmap
+	
+	ld	b,0
+	ld	c,0
+	ld	hl,tp
+	call	get_puzzle
+	ld	hl,tp
+	call	randomize_puzzle
+
 	call	draw_board
 	call	disp_msg
 	ld	hl,sudoku
@@ -69,16 +82,6 @@ main:
 	ld	hl,seed
 
 	ld	hl,tp
-	ld	b,0
-	ld	c,0
-	call	dec_puzzle
-
-	ld	hl,tp
-	ld	de,tr
-	ld	bc,map
-	call	permute
-
-	ld	hl,tr
 	call	disp_puzzle
 	
 	jp	0
@@ -86,10 +89,6 @@ main:
 sudoku:
 	db	"SUDOKU ", ONEDOT, "0", 0
 
-map:
-	.byte	5, 9, 1, 8, 4, 6, 2, 7, 3
-	
 	.lcomm	tp, 81
-	.lcomm	tr, 81
 
 	.end

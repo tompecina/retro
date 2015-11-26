@@ -39,3 +39,15 @@
 ; Prompts
 ;
 	.data
+msg_hwerr:
+	.asciz	"Hardware error, please press EOL to quit"
+msg_select:
+	db	"Select difficulty level (1", 0x80, "4)", 0
+msg_start:
+	db	"Controls: arrows, 1", 0x80, "9, DEL, N(ew), Q(uit)", 0
+msg_done:
+	.asciz	"Congratulations! Your time: "
+msg_quit:
+	.asciz	"Do you really wish to end the program? (Y/N)"
+msg_new:	
+	.asciz	"Do you really wish to create a new puzzle? (Y/N)"

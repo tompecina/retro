@@ -25,6 +25,8 @@
 ; ==============================================================================
 ; start_ct1 - start PIT Counter 1, used by PRNG
 ; 
+;   output: CY - failure
+; 
 ;   uses:   A
 ;
 	.text
@@ -35,6 +37,12 @@ start_ct1:
 	xor	a
 	out	(PIT_1),a
 	out	(PIT_1),a
+	in	a,(PIT_1)
+	cp	0xff
+	in	a,(PIT_1)
+	ccf
+	ret	z
+	or	a
 	ret
 	
 ; ==============================================================================
@@ -185,7 +193,7 @@ inklav_rnd:
 	ret
 
 ; ==============================================================================
-; transform_puzzle - transform puzzle using seed
+; randomize_puzzle - transform puzzle using seed
 ; 
 ;   input:  (HL) - puzzle
 ;           (seed) - PRNG value used for the transformation
@@ -195,10 +203,14 @@ inklav_rnd:
 ;   uses:   all
 ; 
 	.text
-	.globl	transform_puzzle
-transform_puzzle:
+	.globl	randomize_puzzle
+randomize_puzzle:
+	
+; run LCG
+	push	hl
+	push	hl
 	call	lcg
-
+	
 ; prepare permutation map
 	ld	hl,tperm1
 	push	hl
@@ -295,10 +307,130 @@ transform_puzzle:
 	dec	b
 	jp	nz,2b
 	
+; apply permutation map
+	pop	hl
+	ld	de,tpuzzle1
+	ld	bc,tperm1
+	call	permute
 	
-	jp	.
+	
+; apply rotation map
+	ld	a,(seed + 4)
+	and	0x07
+	ld	l,a
+	ld	h,0
+	ld	de,81
+	call	mul16
+	ld	de,rotmaps
+	add	hl,de
+	ld	b,h
+	ld	c,l
+	ld	hl,tpuzzle1
+	ld	de,tpuzzle2
+	call	transform
+	
+; apply band swap map
+	ld	a,(seed + 5)
+	and	0x0f
+	ld	e,a
+	ld	c,6
+	call	udiv8
+	ld	l,c
+	ld	h,0
+	ld	de,81
+	call	mul16
+	ld	de,bmaps
+	add	hl,de
+	ld	b,h
+	ld	c,l
+	ld	hl,tpuzzle2
+	ld	de,tpuzzle1
+	call	transform
+
+; apply stack swap map
+	ld	a,(seed + 5)
+	rra
+	rra
+	rra
+	rra
+	and	0x0f
+	ld	e,a
+	ld	c,6
+	call	udiv8
+	ld	l,c
+	ld	h,0
+	ld	de,81
+	call	mul16
+	ld	de,smaps
+	add	hl,de
+	ld	b,h
+	ld	c,l
+	ld	hl,tpuzzle1
+	ld	de,tpuzzle2
+	call	transform
+
+; apply row and column swap maps
+	ld	hl,rmaps
+	ld	de,cmaps
+	ld	a,(seed + 6)
+	call	1f
+	ld	hl,rmaps + (6 * 81)
+	ld	de,cmaps + (6 * 81)
+	ld	a,(seed + 7)
+	call	1f
+	ld	hl,rmaps + (12 * 81)
+	ld	de,cmaps + (12 * 81)
+	ld	a,(seed + 8)
+	call	1f
+
+; copy puzzle back to (HL)
+	ld	hl,tpuzzle2
+	pop	de
+	ld	b,81
+	jp	copy8
+
+1:	push	de
+	push	af
+	push	hl
+	and	0x0f
+	ld	e,a
+	ld	c,6
+	call	udiv8
+	ld	l,c
+	ld	h,0
+	ld	de,81
+	call	mul16
+	pop	de
+	add	hl,de
+	ld	b,h
+	ld	c,l
+	ld	hl,tpuzzle2
+	ld	de,tpuzzle1
+	call	transform
+	pop	af
+	rra
+	rra
+	rra
+	rra
+	and	0x0f
+	ld	e,a
+	ld	c,6
+	call	udiv8
+	ld	l,c
+	ld	h,0
+	ld	de,81
+	call	mul16
+	pop	de
+	add	hl,de
+	ld	b,h
+	ld	c,l
+	ld	hl,tpuzzle1
+	ld	de,tpuzzle2
+	jp	transform
 
 	.lcomm	tperm1, 9
 	.lcomm	tperm2, 9
+	.lcomm	tpuzzle1, 81
+	.lcomm	tpuzzle2, 81
 	
 	.end

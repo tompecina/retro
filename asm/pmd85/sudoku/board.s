@@ -618,6 +618,50 @@ disp_msg:
 	ret
 
 ; ==============================================================================
+; get_conf - display prompt and wait for confirmation (Y/N)
+; 
+;   input:  (HL) - prompt
+;           (color) - color mask
+; 
+;   output: Z answer is YES
+; 
+;   uses:   A, B, D, E, H, L
+; 
+	.text
+	.globl	get_conf
+get_conf:
+	call	disp_msg
+1:	call	inklav_rnd
+	cp	KEY_YES
+	jp	z,1f
+	cp	KEY_NO
+	jp	z,2f
+	jp	1b
+1:	call	clr_msg
+	or	0xff
+	ret
+2:	call	clr_msg
+	xor	a
+	ret
+	
+; ==============================================================================
+; get_ack - display prompt and wait for acknowledgement (Enter)
+; 
+;   input:  (HL) - prompt
+;           (color) - color mask
+; 
+;   uses:   A, B, D, E, H, L
+; 
+	.text
+	.globl	get_ack
+get_ack:
+	call	disp_msg
+1:	call	inklav_rnd
+	cp	KEY_ENTER
+	jp	nz,1b
+	jp	clr_msg
+	
+; ==============================================================================
 ; add_cust_glyphs - add custom glyphs
 ;
 ;   uses:   H, L
@@ -662,4 +706,135 @@ glyphs80:
 	.byte	0x2e	; .###.#
 	.byte	0x00	; ......
 
+; ==============================================================================
+; start_ct2 - start PIT Counter 2, used as timer
+; 
+;   uses:   A
+;
+	.text
+	.globl	start_ct2
+start_ct2:
+	ld	a,0xb0
+	out	(PIT_CTRL),a
+	xor	a
+	out	(PIT_2),a
+	out	(PIT_2),a
+	ret
+	
+; ==============================================================================
+; init_gmap - populate group map
+; 
+;   output: (gmap) - populated group map
+; 
+;   uses:   all
+; 
+	.text
+	.globl	init_gmap
+init_gmap:
+	
+; populate grp
+	ld	hl,grp
+	ld	c,0
+1:	ld	(hl),c
+	inc	hl
+	inc	c
+	ld	a,c
+	cp	81
+	jp	nz,1b
+	ld	c,0
+1:	ld	d,c
+	call	sq2rc
+	ld	a,b
+	ld	b,c
+	ld	c,a
+	call	rc2sq
+	ld	(hl),c
+	inc	hl
+	ld	c,d
+	inc	c
+	ld	a,c
+	cp	81
+	jp	nz,1b
+	ex	de,hl
+	ld	hl,boxes
+	ld	b,81
+	call	copy8
+
+; process grp
+	ld	hl,gmap
+	ld	(pend),hl
+	ld	b,0
+4:	ld	hl,(pend)
+	ld	(pbeg),hl
+	ld	hl,grp
+	ld	c,27
+2:	push	hl
+	ld	d,9
+1:	ld	a,(hl)
+	cp	b
+	jp	z,1f
+	inc	hl
+	dec	d
+	jp	nz,1b
+3:	pop	hl
+	ld	de,9
+	add	hl,de
+	dec	c
+	jp	nz,2b
+	inc	b
+	ld	a,b
+	cp	81
+	jp	nz,4b
+	ret
+1:	pop	hl
+	push	hl
+	push	bc
+	ld	c,9
+2:	ld	a,(hl)
+	inc	hl
+	push	hl
+	cp	b
+	jp	z,1f
+	ld	e,a
+	ld	hl,(pbeg)
+4:	ld	a,(pend)
+	cp	l
+	jp	z,5f
+	ld	a,(hl)
+	cp	e
+	jp	z,1f
+	inc	hl
+	jp	4b
+5:	ld	(hl),e
+	inc	hl
+	ld	(pend),hl
+1:	pop	hl
+	dec	c
+	jp	nz,2b
+	pop	bc
+	jp	3b
+	
+	
+	.lcomm	grp, 81 * 3
+	.lcomm	gmap, 81 * 20
+	.lcomm	pbeg, 2
+	.lcomm	pend, 2
+
+	
+; ==============================================================================
+; Boxes
+; 
+	.data
+boxes:	.byte	0x00, 0x01, 0x02, 0x09, 0x0a, 0x0b, 0x12, 0x13, 0x14
+	.byte	0x03, 0x04, 0x05, 0x0c, 0x0d, 0x0e, 0x15, 0x16, 0x17
+	.byte	0x06, 0x07, 0x08, 0x0f, 0x10, 0x11, 0x18, 0x19, 0x1a
+	.byte	0x1b, 0x1c, 0x1d, 0x24, 0x25, 0x26, 0x2d, 0x2e, 0x2f
+	.byte	0x1e, 0x1f, 0x20, 0x27, 0x28, 0x29, 0x30, 0x31, 0x32
+	.byte	0x21, 0x22, 0x23, 0x2a, 0x2b, 0x2c, 0x33, 0x34, 0x35
+	.byte	0x36, 0x37, 0x38, 0x3f, 0x40, 0x41, 0x48, 0x49, 0x4a
+	.byte	0x39, 0x3a, 0x3b, 0x42, 0x43, 0x44, 0x4b, 0x4c, 0x4d
+	.byte	0x3c, 0x3d, 0x3e, 0x45, 0x46, 0x47, 0x4e, 0x4f, 0x50
+	
+	
+	
 	.end

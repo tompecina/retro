@@ -39,3 +39,18 @@
 ; Prompts
 ;
 	.data
+msg_hwerr:
+	db	"Vadn", 0xd9, " hardware, pros", 0xc9, "m, stiskn", 0xc5
+	db	"te EOL", 0
+msg_select:
+	db	"Zvolte obt", 0xc9, 0xda, "nost (1-4)", 0
+msg_start:
+	db	"Ovl", 0xc1, "d", 0xc1, "n", 0xc9, ": ", 0xd3
+	db	"ipky, 0-9, DEL, N(ov", 0xd7, "), K(onec)", 0
+msg_done:
+	db	"Blahop", 0xd2, "eji! V", 0xc1, 0xd3, " ", 0xc3, "as: "
+msg_quit:
+	db	"Opravdu si p", 0xd2, "ejete program ukon", 0xc3, "it? (A/N)", 0
+msg_new:
+	db	"Opravdu si p", 0xd2, "ejete vytvo", 0xc3, 0xc9
+	db	"t nov", 0xd7, " sudoku? (A/N)", 0

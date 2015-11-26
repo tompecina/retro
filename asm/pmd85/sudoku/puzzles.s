@@ -30,7 +30,7 @@
 	.equiv	NUMP, 128	; number of puzzles for each difficulty
 	
 ; ==============================================================================
-; dec_puzzle - decompress puzzle
+; get_puzzle - decompress puzzle
 ; 
 ;   input:  B - difficulty
 ; 	    C - puzzle number
@@ -41,8 +41,8 @@
 ;   uses:   all
 ; 
 	.text
-	.globl	dec_puzzle
-dec_puzzle:
+	.globl	get_puzzle
+get_puzzle:
 	
 ; get address
 	push	hl

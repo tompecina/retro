@@ -47,3 +47,5 @@ KNOWN BUGS AND ESSENTIAL NEW FEATURES
 * MGSV on model 3 broken.
 
 * Colors on PNG screenshot are not displayed correctly.
+
+* Debugger displays should be updated on closing the Memory window.

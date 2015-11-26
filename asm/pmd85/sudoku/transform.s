@@ -276,7 +276,8 @@ swap:	ld	d,h
 	cp	81
 	jp	nz,2b
 	ret
-		
+
+	.globl	rotmaps, bmaps, smaps, rmaps, cmaps
 	.lcomm	rotmaps, 81 * 8
 	.lcomm	bmaps, 81 * 6
 	.lcomm	smaps, 81 * 6
@@ -284,9 +285,10 @@ swap:	ld	d,h
 	.lcomm	cmaps, 81 * 18
 	.lcomm	tempmap, 81
 	
+; ==============================================================================
+; Band swapping pattern
+; 
 	.data
-	
-; band swapping pattern
 bpat:	.byte	0, 27, 54
 	.byte	0, 54, 27
 	.byte	27, 0, 54
@@ -295,7 +297,10 @@ bpat:	.byte	0, 27, 54
 	.byte	54, 27, 0
 	.byte	-1
 
-; row swapping pattern
+; ==============================================================================
+; Row swapping pattern
+; 
+	.data
 rpat:	.byte	0, 9, 18, 27, 36, 45, 54, 63, 72
 	.byte	0, 18, 9, 27, 36, 45, 54, 63, 72
 	.byte	9, 0, 18, 27, 36, 45, 54, 63, 72
@@ -330,6 +335,7 @@ rpat:	.byte	0, 9, 18, 27, 36, 45, 54, 63, 72
 	.text
 	.globl	permute
 permute:
+	dec	bc
 	ld	a,81
 1:	push	af
 	ld	a,(hl)
@@ -341,8 +347,8 @@ permute:
 	add	hl,bc
 	ld	a,(hl)
 	pop	hl
-	ld	(de),a
-2:	inc	hl
+2:	ld	(de),a
+	inc	hl
 	inc	de
 	pop	af
 	dec	a
