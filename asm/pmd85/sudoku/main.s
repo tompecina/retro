@@ -71,6 +71,13 @@ main:
 	ld	c,0
 	ld	hl,tp
 	call	get_puzzle
+
+	ld	hl,tp
+	ld	de,td
+	call	get_dups
+
+	jp	0
+
 	ld	hl,tp
 	call	randomize_puzzle
 
@@ -90,5 +97,6 @@ sudoku:
 	db	"SUDOKU ", ONEDOT, "0", 0
 
 	.lcomm	tp, 81
+	.lcomm	td, 81
 
 	.end

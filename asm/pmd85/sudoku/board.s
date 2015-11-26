@@ -835,6 +835,83 @@ boxes:	.byte	0x00, 0x01, 0x02, 0x09, 0x0a, 0x0b, 0x12, 0x13, 0x14
 	.byte	0x39, 0x3a, 0x3b, 0x42, 0x43, 0x44, 0x4b, 0x4c, 0x4d
 	.byte	0x3c, 0x3d, 0x3e, 0x45, 0x46, 0x47, 0x4e, 0x4f, 0x50
 	
-	
+; ==============================================================================
+; get_dups - get map of duplicate squares
+; 
+;   input:  (HL) - puzzle
+;           (DE) - destination for map of duplicates
+; 
+;   output: A - number of duplicates
+;   	    NZ if any duplicates
+;   	    (DE) - map of duplicates
+; 
+;   uses:   all
+; 
+	.text
+	.globl	get_dups
+get_dups:
+	xor	a
+	ld	(ndup),a
+	ex	de,hl
+	ld	b,81
+	push	hl
+	call	zerofill
+	pop	hl
+	ex	de,hl
+	ld	(tpuzzle),hl
+	ld	b,0
+3:	ld	a,(hl)
+	or	a
+	jp	z,4f
+	ld	(tdup),a
+	push	hl
+	push	de
+	ld	a,b
+	add	a,a
+	ld	l,a
+	ld	h,0
+	add	hl,hl
+	ld	d,h
+	ld	e,l
+	add	hl,hl
+	add	hl,hl
+	add	hl,de
+	ld	de,gmap
+	add	hl,de
+	ld	c,20
+2:	ld	e,(hl)
+	ld	d,0
+	push	hl
+	ld	hl,(tpuzzle)
+	add	hl,de
+	ld	a,(tdup)
+	xor	(hl)
+	and	0x7f
+	pop	hl
+	jp	z,2f
+	inc	hl
+	dec	c
+	jp	nz,2b
+	pop	de
+	jp	1f
+2:	pop	de
+	ld	a,0xff
+	ld	(de),a
+	ld	hl,ndup
+	inc	(hl)
+1:	pop	hl
+4:	inc	hl
+	inc	de
+	inc	b
+	ld	a,b
+	cp	81
+	jp	nz,3b
+	ld	a,(ndup)
+	or	a
+	ret
+
+	.lcomm	tdup, 1
+	.lcomm	tpuzzle, 2
+	.lcomm	ndup, 1
 	
 	.end
