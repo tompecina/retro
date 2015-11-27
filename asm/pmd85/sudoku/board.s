@@ -153,7 +153,7 @@ rc2sq:
 ;   uses:   all
 ; 
 	.text
-	.global	draw_digit
+	.globl	draw_digit
 draw_digit:
 	push	de
 	ld	a,b
@@ -348,7 +348,7 @@ digits:
 ;   uses:   all
 ; 
 	.text
-	.global	draw_mark
+	.globl	draw_mark
 draw_mark:
 	ld	hl,ULC + 833
 	call	sq2a
@@ -387,7 +387,7 @@ mark:	.byte	0x04	; ..#...
 ;   uses:   all
 ; 
 	.text
-	.global	clr_mark
+	.globl	clr_mark
 clr_mark:
 	ld	hl,ULC + 833
 	call	sq2a
@@ -408,7 +408,7 @@ clr_mark:
 ;   uses:   all
 ; 
 	.text
-	.global	draw_cursor
+	.globl	draw_cursor
 draw_cursor:
 	ld	hl,ULC + 193
 	call	sq2a
@@ -463,7 +463,7 @@ draw_cursor:
 ;   uses:   all
 ; 
 	.text
-	.global	clr_cursor
+	.globl	clr_cursor
 clr_cursor:
 	ld	hl,ULC + 193
 	call	sq2a
@@ -518,7 +518,7 @@ clr_cursor:
 ;   uses:   all
 ; 
 	.text
-	.global	disp_puzzle
+	.globl	disp_puzzle
 disp_puzzle:
 	ld	c,0
 1:	ld	a,(hl)
@@ -549,7 +549,7 @@ disp_puzzle:
 ;   uses:   all
 ; 
 	.text
-	.global	disp_marks
+	.globl	disp_marks
 disp_marks:
 	ld	c,0
 1:	ld	a,(hl)
@@ -581,7 +581,7 @@ disp_marks:
 ;   uses:   all
 ; 
 	.text
-	.global	upd_marks
+	.globl	upd_marks
 upd_marks:
 	ld	c,0
 1:	ld	a,(de)
@@ -627,6 +627,22 @@ init_cursor:
 	.lcomm	cur_col, 1
 	
 ; ==============================================================================
+; getcurp - get cursor position
+; 
+;   output: C - column
+; 
+;   uses:   A
+; 
+	.text
+	.globl	getcurp
+getcurp:
+	ld	a,(cur_row)
+	ld	b,a
+	ld	a,(cur_col)
+	ld	c,a
+	jp	rc2sq
+	
+; ==============================================================================
 ; show_cursor - show cursor
 ; 
 ;   uses:   all
@@ -634,13 +650,8 @@ init_cursor:
 	.text
 	.globl	show_cursor
 show_cursor:
-	call	getrc
+	call	getcurp
 	jp	draw_cursor
-getrc:	ld	(cur_row),a
-	ld	b,a
-	ld	(cur_col),a
-	ld	c,a
-	jp	rc2sq
 	
 ; ==============================================================================
 ; hide_cursor - hide cursor
@@ -650,7 +661,7 @@ getrc:	ld	(cur_row),a
 	.text
 	.globl	hide_cursor
 hide_cursor:
-	call	getrc
+	call	getcurp
 	jp	clr_cursor
 	
 ; ==============================================================================
@@ -714,7 +725,7 @@ player_select:
 1:	cp	KRRIGHT
 	jp	z,5b
 	push	af
-	call	getrc
+	call	getcurp
 	pop	af
 	ret
 	
@@ -872,7 +883,7 @@ glyphs80:
 
 	.globl	ONEDOT
 	.equiv	ONEDOT, 0x81
-	; 80
+	; 81
 	.byte	0x00	; ......
 	.byte	0x00	; ......
 	.byte	0x04	; ..#...
@@ -884,6 +895,20 @@ glyphs80:
 	.byte	0x2e	; .###.#
 	.byte	0x00	; ......
 
+	.globl	TIMECOL
+	.equiv	TIMECOL, 0x82
+	; 82
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x08	; ...#..
+	.byte	0x00	; ......
+	.byte	0x08	; ...#..
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	
 ; ==============================================================================
 ; start_ct2 - start PIT Counter 2, used as timer
 ; 
@@ -897,6 +922,24 @@ start_ct2:
 	xor	a
 	out	(PIT_2),a
 	out	(PIT_2),a
+	ret
+	
+; ==============================================================================
+; read_ct2 - read PIT Counter 2 value
+; 
+;   output: HL - counter value
+; 
+;   uses:   A
+;
+	.text
+	.globl	read_ct2
+read_ct2:
+	ld	a,0xd0
+	out	(PIT_CTRL),a
+	in	a,(PIT_2)
+	ld	l,a
+	in	a,(PIT_2)
+	ld	h,a
 	ret
 	
 ; ==============================================================================
@@ -1172,7 +1215,7 @@ conv_time:
 	pop	de
 	inc	d
 	jp	nz,1b
-	ld	a,':'
+	ld	a,TIMECOL
 	ld	(bc),a
 	inc	bc
 	pop	hl
@@ -1193,6 +1236,6 @@ conv_time:
 	ret
 	
 	.data
-tmerr:	.asciz	"?:??"
+tmerr:	db	"?", TIMECOL, "??", 0
 	
 	.end

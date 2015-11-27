@@ -49,14 +49,16 @@ lbl_sudoku:
 msg_hwerr:
 	.asciz	"Hardware error, please press EOL to quit"
 msg_select:
-	db	"Select difficulty level (0", OBELUS, "3)", 0
+	db	"          Select difficulty level (0", OBELUS, "3)", 0
 msg_start:
-	db	"Controls: arrows, 1", OBELUS, "9, DEL, N(ew), Q(uit)", 0
+	db	"     Controls: arrows, 1", OBELUS, "9, DEL, N-ew, Q-uit", 0
 msg_done:
-	.asciz	"Congratulations! Your time: "
+	.ascii	"        Congratulations! Your time: "
+ph_tmr:
+	.skip	8
 msg_quit:
-	.asciz	"Do you really wish to end the program? (Y/N)"
+	.asciz	"  Do you really wish to end the program? (Y/N)"
 msg_new:	
-	.asciz	"Do you really wish to create a new puzzle? (Y/N)"
+	.asciz	"Do you really wish to start a new puzzle? (Y/N)"
 msg_sqerr:
-	.asciz	"This square cannot be edited"
+	.asciz	"          This square cannot be edited"

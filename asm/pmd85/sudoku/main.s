@@ -48,25 +48,24 @@
 	.text
 	.globl	main
 main:
-
-; initialize
 	di
 	ld	sp,0x7000
 	call	init_kbd
 	call	set_kmap
 	call	add_glyphs
 	call	add_cust_glyphs
-	call	erase
 	call	start_ct1
 	jp	nc,1f
+	call	erase
 	ld	hl,msg_hwerr
 	call	get_ack
-	call	rel_ct1
+quit:	call	rel_ct1
 	call	erase
 	jp	PMD_MONIT
 1:	call	start_ct2
 	call	init_maps
 	call	init_gmap
+new:	call	erase
 	call	draw_board
 	ld	hl,lbl_sudoku
 	ld	de,POS_SUDOKU
@@ -83,11 +82,12 @@ main:
 	jp	2b
 2:	sub	'0'
 	ld	b,a
-	ld	hl,puzzle
-	push	hl
 	push	bc
+	call	clr_msg
 	call	lcg
 	pop	bc
+	ld	hl,puzzle
+	push	hl
 	call	get_rnd_puzzle
 	pop	hl
 	push	hl
@@ -101,13 +101,85 @@ main:
 	call	disp_puzzle
 	pop	de
 	call	disp_marks
-
-	jp	0
-	
-	
-
+	call	init_cursor
+	ld	hl,msg_start
+	call	disp_msg
+	call	read_ct2
+	ld	(timer),hl
+loop:	call	player_select
+	cp	'1'
+	jp	c,1f
+	cp	'9' + 1
+	jp	nc,1f
+	sub	'0'
+3:	ld	b,0
+	ld	hl,puzzle
+	add	hl,bc
+	ld	b,a
+	ld	a,(hl)
+	or	a
+	jp	z,2f
+	rla
+	jp	c,2f
+	ld	hl,msg_sqerr
+	call	disp_msg
+	call	errbeep
+	jp	loop
+2:	ld	a,b
+	xor	0x80
+	ld	(hl),a
+	ld	e,0x40
+	call	draw_digit
+	ld	hl,puzzle
+	ld	de,newmarks
+	push	hl
+	call	get_dups
+	pop	hl
+	push	af
+	ld	hl,marks
+	ld	de,newmarks
+	call	upd_marks
+	pop	af
+	jp	nz,loop
+	ld	hl,puzzle
+	call	check_puzzle
+	jp	z,loop
+	call	hide_cursor
+	call	read_ct2
+	ex	de,hl
+	ld	hl,(timer)
+	ld	a,l
+	sub	e
+	ld	l,a
+	ld	a,h
+	sbc	a,d
+	ld	h,a
+	ld	de,ph_tmr
+	call	conv_time
+	ld	hl,msg_done
+	call	disp_msg
+	call	inklav_rnd
+	jp	new
+1:	cp	KDEL
+	jp	nz,1f
+	ld	a,0x80
+	jp	3b
+1:	cp	KEY_NEW
+	jp	nz,1f
+	ld	hl,msg_new
+	call	get_conf
+	jp	nz,new
+	jp	loop
+1:	cp	KEY_QUIT
+	jp	nz,loop
+	ld	hl,msg_quit
+	call	get_conf
+	jp	nz,quit
+	jp	loop
 
 	.lcomm	puzzle, 81
 	.lcomm	marks, 81
-
+	.lcomm	newmarks, 81
+	.lcomm	timer, 2
+	
 	.end

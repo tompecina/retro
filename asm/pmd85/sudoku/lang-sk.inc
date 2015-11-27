@@ -50,17 +50,22 @@ msg_hwerr:
 	db	"Vadn", 0xd9, " hardv", 0xd7, "r, pros", 0xc9, "m, stla", 0xc3
 	db	"te EOL", 0
 msg_select:
-	db	"Zvo", 0xcc, "te obtia", 0xda, "nos", 0xd4, " (0-3)", 0
+	db	"             Zvo", 0xcc, "te obtia", 0xda, "nos", 0xd4
+	db	" (0-3)", 0
 msg_start:
-	db	"Ovl", 0xc1, "danie: ", 0xd3, 0xc9
-	db	"pky, 1-9, DEL, N(ov", 0xd7, "), K(oniec)", 0
+	db	"   Ovl", 0xc1, "danie: ", 0xd3, 0xc9
+	db	"pky, 1-9, DEL, N-ov", 0xd7, ", K-oniec", 0
 msg_done:
-	db	"Blaho", 0xda, "el", 0xc1, "m! V", 0xc1, 0xd3, " ", 0xc3, "as: "
+	db	"            Blaho", 0xda, "el", 0xc1, "m! V", 0xc1, 0xd3
+	db	" ", 0xc3, "as: "
+ph_tmr:
+	.skip	8
 msg_quit:
-	db	"Naozaj si ", 0xda, "el", 0xc1, "te program ukonči", 0xd4
-	db	"? (A/N)", 0
+	db	"     Naozaj si ", 0xda, "el", 0xc1, "te program ukon", 0xc3
+	db	"i", 0xd4, "? (A/N)", 0
 msg_new:
-	db	"Naozaj si ", 0xda, "el", 0xc1, "te vytvo", 0xd2
-	db	"i", 0xd4, " nov", 0xd7, " sudoku? (A/N)", 0
+	db	"  Naozaj si ", 0xda, "el", 0xc1, "te vytvori", 0xd4
+	db	" nov", 0xd7, " sudoku? (A/N)", 0
 msg_sqerr:
-	db	"Toto pole nie je mo", 0xda, "n", 0xd7, " editova", 0xd4, 0
+	db	"         Toto pole nie je mo", 0xda, "n", 0xd7
+	db	" editova", 0xd4, 0
