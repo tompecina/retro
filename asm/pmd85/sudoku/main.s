@@ -40,6 +40,7 @@
 ; ==============================================================================
 ; Constants
 ;
+	.equiv	POS_SUDOKU, 0xc394
 	
 ; ==============================================================================
 ; Main entry point of the program
@@ -51,19 +52,6 @@ main:
 ; initialize
 	di
 	ld	sp,0x7000
-
-
-	ld	hl,10000
-	ld	de,ttt
-	call	conv_time
-
-	jp	0
-
-ttt:	.skip	10
-
-
-
-
 	call	init_kbd
 	call	set_kmap
 	call	add_glyphs
@@ -81,7 +69,7 @@ ttt:	.skip	10
 	call	init_gmap
 	call	draw_board
 	ld	hl,lbl_sudoku
-	ld	de,0xc394
+	ld	de,POS_SUDOKU
 	call	writeln
 	ld	hl,msg_select
 	call	disp_msg
@@ -89,12 +77,33 @@ ttt:	.skip	10
 	cp	'0'
 	jp	c,1f
 	cp	'3' + 1
-	jp	c,1f
+	jp	nc,1f
 	jp	2f
 1:	call	errbeep
 	jp	2b
 2:	sub	'0'
+	ld	b,a
+	ld	hl,puzzle
+	push	hl
+	push	bc
+	call	lcg
+	pop	bc
+	call	get_rnd_puzzle
+	pop	hl
+	push	hl
+	call	randomize_puzzle
+	pop	hl
+	ld	de,marks
+	push	de
+	push	hl
+	call	get_dups
+	pop	hl
+	call	disp_puzzle
+	pop	de
+	call	disp_marks
 
+	jp	0
+	
 	
 
 

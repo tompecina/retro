@@ -49,9 +49,9 @@ lbl_sudoku:
 msg_hwerr:
 	.asciz	"Hardware error, please press EOL to quit"
 msg_select:
-	db	"Select difficulty level (1", 0x80, "4)", 0
+	db	"Select difficulty level (0", OBELUS, "3)", 0
 msg_start:
-	db	"Controls: arrows, 1", 0x80, "9, DEL, N(ew), Q(uit)", 0
+	db	"Controls: arrows, 1", OBELUS, "9, DEL, N(ew), Q(uit)", 0
 msg_done:
 	.asciz	"Congratulations! Your time: "
 msg_quit:

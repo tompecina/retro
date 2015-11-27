@@ -65,6 +65,7 @@ get_puzzle:
 	inc	de
 	rla
 	jp	nc,2b
+	dec	hl
 	jp	1b
 	
 ; reset destination

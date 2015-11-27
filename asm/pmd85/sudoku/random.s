@@ -224,12 +224,9 @@ get_rnd_puzzle:
 	.globl	randomize_puzzle
 randomize_puzzle:
 	
-; run LCG
-	push	hl
-	push	hl
-	call	lcg
-	
 ; prepare permutation map
+	push	hl
+	push	hl
 	ld	hl,tperm1
 	push	hl
 	ld	a,(seed)

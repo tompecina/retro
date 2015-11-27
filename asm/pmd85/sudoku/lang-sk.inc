@@ -50,7 +50,7 @@ msg_hwerr:
 	db	"Vadn", 0xd9, " hardv", 0xd7, "r, pros", 0xc9, "m, stla", 0xc3
 	db	"te EOL", 0
 msg_select:
-	db	"Zvo", 0xcc, "te obtia", 0xda, "nos", 0xd4, " (1-4)", 0
+	db	"Zvo", 0xcc, "te obtia", 0xda, "nos", 0xd4, " (0-3)", 0
 msg_start:
 	db	"Ovl", 0xc1, "danie: ", 0xd3, 0xc9
 	db	"pky, 1-9, DEL, N(ov", 0xd7, "), K(oniec)", 0

@@ -50,7 +50,7 @@ msg_hwerr:
 	db	"Vadn", 0xd9, " hardware, pros", 0xc9, "m, stiskn", 0xc5
 	db	"te EOL", 0
 msg_select:
-	db	"Zvolte obt", 0xc9, 0xda, "nost (1-4)", 0
+	db	"Zvolte obt", 0xc9, 0xda, "nost (0-3)", 0
 msg_start:
 	db	"Ovl", 0xc1, "d", 0xc1, "n", 0xc9, ": ", 0xd3
 	db	"ipky, 0-9, DEL, N(ov", 0xd7, "), K(onec)", 0
