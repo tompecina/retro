@@ -152,7 +152,7 @@ lcg:
 	.data
 	.globl	seed
 seed:	.octa	0x89a31454abe0d9453a542d11015f6cb4
-seedp:	.byte	7
+seedp:	.byte	15
 consta:	.octa	47026247687942121848144207491837418733
 
 ; ==============================================================================
@@ -171,7 +171,7 @@ inklav_rnd:
 	push	de
 	ld	a,(seedp)
 	inc	a
-	cp	8
+	cp	16
 	jp	c,1f
 	xor	a
 1:	ld	(seedp),a
@@ -235,14 +235,14 @@ randomize_puzzle:
 	ld	e,a
 	ld	c,9
 	call	udiv8
-	ld	(hl),c
+	ld	(hl),c		; 0-8
 	inc	hl
 	pop	af
 	rlca
 	rlca
 	rlca
 	and	0x07
-	ld	(hl),a
+	ld	(hl),a		; 0-7
 	inc	hl
 	ld	a,(seed + 1)
 	push	af
@@ -250,50 +250,47 @@ randomize_puzzle:
 	ld	e,a
 	ld	c,7
 	call	udiv8
-	ld	(hl),c
+	ld	(hl),c		; 0-6
 	inc	hl
 	pop	af
-	rlca
-	rlca
-	rlca
-	rlca
+	rra
+	rra
+	rra
+	rra
 	and	0x0f
 	ld	e,a
 	ld	c,6
 	call	udiv8
-	ld	(hl),c
+	ld	(hl),c		; 0-5
 	inc	hl
 	ld	a,(seed + 2)
-	push	af
 	push	af
 	and	0x0f
 	ld	e,a
 	ld	c,5
 	call	udiv8
-	ld	(hl),c
+	ld	(hl),c		; 0-4
 	inc	hl
 	pop	af
 	rlca
 	rlca
+	push	af
 	and	0x03
-	ld	(hl),a
+	ld	(hl),a		; 0-3
 	inc	hl
 	ld	a,(seed + 3)
 	and	0x0f
 	ld	e,a
 	ld	c,3
-	call	udiv8
+	call	udiv8		; 0-2
 	ld	(hl),c
 	inc	hl
 	pop	af
-	rra
-	rra
-	rra
-	rra
+	rlca
 	and	0x01
-	ld	(hl),a
+	ld	(hl),a		; 0-1
 	inc	hl
-	ld	(hl),0
+	ld	(hl),0		; 0
 	ld	hl,tperm2
 	push	hl
 	ld	b,1
@@ -305,7 +302,7 @@ randomize_puzzle:
 	jp	nz,1b
 	pop	de
 	pop	hl
-	ld	bc,0x0900	
+	ld	bc,0x0900
 2:	push	hl
 	ld	l,(hl)
 	ld	h,c
