@@ -50,13 +50,6 @@
 main:
 	di
 	ld	sp,0x7000
-
-	;; call	start_ct1
-	call	lcg
-	call	randomize_puzzle
-
-	jp	.
-
 	call	init_kbd
 	call	set_kmap
 	call	add_glyphs

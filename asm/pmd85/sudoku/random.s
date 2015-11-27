@@ -205,7 +205,7 @@ inklav_rnd:
 	.text
 	.globl	get_rnd_puzzle
 get_rnd_puzzle:
-	ld	a,(seed + 9)
+	ld	a,(seed + 15)
 	and	0x7f
 	ld	c,a
 	jp	get_puzzle
@@ -229,7 +229,7 @@ randomize_puzzle:
 	push	hl
 	ld	hl,tperm1
 	push	hl
-	ld	a,(seed)
+	ld	a,(seed + 5)
 	push	af
 	and	0x1f
 	ld	e,a
@@ -244,7 +244,7 @@ randomize_puzzle:
 	and	0x07
 	ld	(hl),a		; 0-7
 	inc	hl
-	ld	a,(seed + 1)
+	ld	a,(seed + 6)
 	push	af
 	and	0x0f
 	ld	e,a
@@ -263,7 +263,7 @@ randomize_puzzle:
 	call	udiv8
 	ld	(hl),c		; 0-5
 	inc	hl
-	ld	a,(seed + 2)
+	ld	a,(seed + 7)
 	push	af
 	and	0x0f
 	ld	e,a
@@ -278,7 +278,7 @@ randomize_puzzle:
 	and	0x03
 	ld	(hl),a		; 0-3
 	inc	hl
-	ld	a,(seed + 3)
+	ld	a,(seed + 8)
 	and	0x0f
 	ld	e,a
 	ld	c,3
@@ -318,7 +318,7 @@ randomize_puzzle:
 	inc	hl
 	dec	b
 	jp	nz,2b
-	
+
 ; apply permutation map
 	pop	hl
 	ld	de,tpuzzle1
@@ -327,7 +327,7 @@ randomize_puzzle:
 	
 	
 ; apply rotation map
-	ld	a,(seed + 4)
+	ld	a,(seed + 9)
 	and	0x07
 	ld	l,a
 	ld	h,0
@@ -342,7 +342,7 @@ randomize_puzzle:
 	call	transform
 	
 ; apply band swap map
-	ld	a,(seed + 5)
+	ld	a,(seed + 10)
 	and	0x0f
 	ld	e,a
 	ld	c,6
@@ -360,7 +360,7 @@ randomize_puzzle:
 	call	transform
 
 ; apply stack swap map
-	ld	a,(seed + 5)
+	ld	a,(seed + 11)
 	rra
 	rra
 	rra
@@ -384,15 +384,15 @@ randomize_puzzle:
 ; apply row and column swap maps
 	ld	hl,rmaps
 	ld	de,cmaps
-	ld	a,(seed + 6)
+	ld	a,(seed + 12)
 	call	1f
 	ld	hl,rmaps + (6 * 81)
 	ld	de,cmaps + (6 * 81)
-	ld	a,(seed + 7)
+	ld	a,(seed + 13)
 	call	1f
 	ld	hl,rmaps + (12 * 81)
 	ld	de,cmaps + (12 * 81)
-	ld	a,(seed + 8)
+	ld	a,(seed + 14)
 	call	1f
 
 ; copy puzzle back to (HL)
