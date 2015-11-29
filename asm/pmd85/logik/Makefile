@@ -1,7 +1,7 @@
 APPL = logik
 OBJ = board.o glyphs.o util.o random.o \
 	../adras10.o ../wrchar10.o ../beep.o ../waits.o ../inkey.o \
-	../inklav.o ../erase.o ../prtout.o ../debug.o \
+	../inklav.o ../erase.o ../prtout.o ../sedit.o ../debug.o \
 	heap.o
 AS = as-z80
 LD = ld-z80

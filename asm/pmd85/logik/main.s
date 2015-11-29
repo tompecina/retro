@@ -51,6 +51,22 @@ main:
 	ld	sp,0x7000
 	call	add_glyphs
 	call	erase
+
+
+	ld	hl,string
+	ld	de,0xfc05
+	call	writeln
+	
+	ld	bc,0x0101
+	ld	hl,buffer
+	ld	de,0
+	call	sedit
+
+	jp	0
+
+	.lcomm	buffer, 49
+
+string:	.asciz	"Zadejte c: "
 	
 	ld	a,1
 	ld	b,0
@@ -88,6 +104,10 @@ main:
 	xor	a
 	call	draw_digit
 	pop	bc
+	push	bc
+	xor	a
+	call	draw_pin
+	pop	bc
 	inc	c
 	ld	a,c
 	cp	5
@@ -105,6 +125,21 @@ main:
 	ld	a,2
 	ld	b,0
 	ld	c,1
+	call	draw_pin
+
+	ld	a,0
+	ld	b,0
+	ld	c,2
+	call	draw_pin
+
+	ld	a,0
+	ld	b,0
+	ld	c,3
+	call	draw_pin
+
+	ld	a,0
+	ld	b,0
+	ld	c,4
 	call	draw_pin
 
 	ld	a,1

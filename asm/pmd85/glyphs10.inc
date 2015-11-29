@@ -1157,16 +1157,16 @@ glyphs60:
 	.byte	0x00	; ......
 	.byte	0x00	; ......
 	; 7f
-	.byte	0x00	; ......
-	.byte	0x00	; ......
-	.byte	0x3e	; .#####
-	.byte	0x3e	; .#####
-	.byte	0x3e	; .#####
-	.byte	0x3e	; .#####
-	.byte	0x3e	; .#####
-	.byte	0x3e	; .#####
-	.byte	0x3e	; .#####
-	.byte	0x00	; ......
+	.byte	0x3f	; ######
+	.byte	0x3f	; ######
+	.byte	0x3f	; ######
+	.byte	0x3f	; ######
+	.byte	0x3f	; ######
+	.byte	0x3f	; ######
+	.byte	0x3f	; ######
+	.byte	0x3f	; ######
+	.byte	0x3f	; ######
+	.byte	0x3f	; ######
 	.endif
 
 	.if SEL_C0
