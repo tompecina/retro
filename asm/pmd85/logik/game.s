@@ -80,5 +80,50 @@ count_bits:
 
 	.lcomm	bitcounts, 256
 	
+; ==============================================================================
+; compare - compare codes
+; 
+;   input:  HL, DE - codes
+; 
+;   output: A - result, (black_pins << 3) | white_pins
+; 
+;   uses:   all
+; 
+	.text
+	.globl	compare
+compare:
+	push	hl
+	ld	b,0
+	ld	a,h
+	xor	d
+	ld	h,a
+	ld	a,l
+	xor	e
+	ld	l,a
+	add	hl,hl
+	ld	a,h
+	add	hl,hl
+	and	0xe0
+	jp	nz,1f
+	inc	b
+1:	ld	a,h
+	and	0x38
+	jp	nz,1f
+	inc	b
+1:	ld	a,h
+	and	0x03
+	jp	nz,1f
+	inc	b
+1:	ld	a,l
+	and	0xe0
+	jp	nz,1f
+	inc	b
+1:	ld	a,l
+	and	0x1c
+	jp	nz,1f
+	inc	b
+1:	
+	
+	
 	
 	.end

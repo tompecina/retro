@@ -281,7 +281,7 @@ draw_pin:
 ; ==============================================================================
 ; draw_pins - draw line of pins
 ; 
-;   input:  A - (blacks << 3) | whites
+;   input:  A - (black_pins << 3) | white_pins
 ;           B - line
 ;
 ;   uses:   all
