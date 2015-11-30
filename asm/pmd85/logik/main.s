@@ -49,127 +49,6 @@
 main:
 	di
 	ld	sp,0x7000
-
-	call	add_glyphs
-	call	erase
-
-
-	ld	hl,string
-	ld	de,0xfc05
-	call	writeln
-	
-	ld	bc,0x0101
-	ld	hl,buffer
-	ld	de,0
-	call	sedit
-
-	jp	0
-
-	.lcomm	buffer, 49
-
-string:	.asciz	"Zadejte c: "
-	
-	ld	a,1
-	ld	b,0
-	ld	c,0
-	call	draw_digit
-	
-	ld	a,2
-	ld	b,0
-	ld	c,1
-	call	draw_digit
-	
-	ld	a,3
-	ld	b,1
-	ld	c,0
-	call	draw_digit
-	
-	ld	a,8
-	ld	b,1
-	ld	c,2
-	call	draw_digit
-	
-	ld	a,2
-	ld	b,0
-	ld	c,3
-	call	draw_digit
-	
-	ld	a,5
-	ld	b,0
-	ld	c,4
-	call	draw_digit
-	
-	ld	b,2
-1:	ld	c,0
-2:	push	bc
-	xor	a
-	call	draw_digit
-	pop	bc
-	push	bc
-	xor	a
-	call	draw_pin
-	pop	bc
-	inc	c
-	ld	a,c
-	cp	5
-	jp	nz,2b
-	inc	b
-	ld	a,b
-	cp	12
-	jp	nz,1b
-
-	ld	a,1
-	ld	b,0
-	ld	c,0
-	call	draw_pin
-
-	ld	a,2
-	ld	b,0
-	ld	c,1
-	call	draw_pin
-
-	ld	a,0
-	ld	b,0
-	ld	c,2
-	call	draw_pin
-
-	ld	a,0
-	ld	b,0
-	ld	c,3
-	call	draw_pin
-
-	ld	a,0
-	ld	b,0
-	ld	c,4
-	call	draw_pin
-
-	ld	a,1
-	ld	b,1
-	ld	c,0
-	call	draw_pin
-
-	ld	a,1
-	ld	b,1
-	ld	c,1
-	call	draw_pin
-
-	ld	a,1
-	ld	b,1
-	ld	c,2
-	call	draw_pin
-
-	ld	a,1
-	ld	b,1
-	ld	c,3
-	call	draw_pin
-
-	ld	a,1
-	ld	b,1
-	ld	c,4
-	call	draw_pin
-
-	jp	0
-
 	call	init_kbd
 	call	set_kmap
 	call	add_glyphs
@@ -182,8 +61,18 @@ string:	.asciz	"Zadejte c: "
 quit:	call	rel_ct1
 	call	erase
 	jp	PMD_MONIT
-1:
+1:	call	erase
 
-	call	erase
+	ld	hl,label_logik
+	ld	de,LRPOS
+	call	draw_label
+
+	ld	hl,credits
+	ld	de,CRPOS
+	call	writeln
+
+	call	draw_board
+	
+	jp	0
 
 	.end

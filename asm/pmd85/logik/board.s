@@ -25,8 +25,10 @@
 ; ==============================================================================
 ; Constants
 	
-	.equiv	ULC, 0xc005		; upper left corner of the board
+	.equiv	ULC, 0xc014		; upper left corner of the board
 	.equiv	MSGAREA, 0xffc0		; position of the notification area
+	.equiv	ATTEMPTS, 10		; maximum number of attempts
+	.equiv	POSITIONS, 5		; number of positions
 	
 ; ==============================================================================
 ; draw_board - draw board
@@ -36,6 +38,23 @@
 	.text
 	.globl	draw_board
 draw_board:
+	ld	b,ATTEMPTS
+2:	ld	c,POSITIONS
+1:	xor	a
+	push	bc
+	call	draw_digit
+	pop	bc
+	xor	a
+	push	bc
+	call	draw_pin
+	pop	bc
+	dec	c
+	jp	nz,1b
+	dec	b
+	jp	nz,2b
+	ret
+	
+	
 ;; 	ld	hl,ULC
 ;; 	call	7f
 ;; 	call	7f

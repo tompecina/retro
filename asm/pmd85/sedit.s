@@ -45,25 +45,81 @@ sedit:	inc	b
 	ld	(nchar),a
 	call	shcur
 2:	call	indcall
-	dw	ikf
+	.word	ikf
 	cp	KEOL
 	jp	nz,1f
 	ld	a,(nchar)
-	inc	c
 	cp	b
 	jp	c,2b
-
-	
-	
+	ld	(hl),0
+	ld	c,a
+	ret
 1:	cp	KLEFT
 	jp	nz,1f
-
+3:	ld	a,(nchar)
+	dec	a
+	jp	m,2b
+	ld	(nchar),a
+	push	hl
+	ld	hl,(cursor)
+	dec	hl
+	ld	(cursor),hl
+	call	hdcur
+	dec	hl
+	ld	(cursor),hl
+	pop	hl
+	call	shcur
+	jp	2b
+1:	cp	KDEL
+	jp	z,3b
 1:	cp	KCLR
 	jp	nz,1f
-
-1:	
-
-	
+	ld	a,(nchar)
+3:	or	a
+	jp	z,2b
+	ld	d,a
+	push	hl
+	ld	hl,(cursor)
+	dec	hl
+	ld	(cursor),hl
+	call	hdcur
+	dec	hl
+	ld	(cursor),hl
+	call	shcur
+	pop	hl
+	dec	hl
+	ld	a,d
+	dec	a
+	ld	(nchar),a
+	jp	3b
+1:	ld	d,a
+	ld	a,(nchar)
+	cp	c
+	jp	z,2b
+	push	hl
+	ld	hl,nchar
+	push	bc
+	ld	c,(hl)
+	ld	a,d
+	call	indcall
+	.word	vf
+	pop	bc
+	pop	hl
+	jp	c,2b
+	ld	(hl),d
+	inc	hl
+	ld	a,(nchar)
+	inc	a
+	ld	(nchar),a
+	push	hl
+	ld	hl,(cursor)
+	dec	hl
+	ld	(cursor),hl
+	pop	hl
+	ld	a,d
+	call	prtout
+	call	shcur
+	jp	2b
 shcur:	ld	a,0x7f
 	jp	prtout
 hdcur:	ld	a,' '

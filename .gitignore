@@ -1,3 +1,4 @@
+
 *.class
 
 # Mobile Tools for Java (J2ME)
@@ -39,4 +40,6 @@ hs_err_pid*
 
 # Misc
 /pmi80.xml
-/aux
+/pmd85.xml
+/ondra.xml
+aux
