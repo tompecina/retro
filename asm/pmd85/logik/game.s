@@ -1,4 +1,4 @@
-; main.s
+; game.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,65 +18,67 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; The game of Logik (Super Mastermind) for Tesla PMD 85.
+; Various game related routines.
 
 	.include "logik.inc"
-
-; ==============================================================================
-; Langage file inclusion
-;
-	.ifdef	en
-	.include "lang-en.inc"
-	.endif
-
-	.ifdef	cs
-	.include "lang-cs.inc"
-	.endif
-
-	.ifdef	sk
-	.include "lang-sk.inc"
-	.endif
 	
 ; ==============================================================================
 ; Constants
 ;
+
+; ==============================================================================
+; init_btbl - initialize the bit count table
+; 
+;   output: (bitcounts) populated
+; 
+;   uses:   A, B, C, H, L
+; 
+	.text
+	.globl	init_btbl
+init_btbl:
+	ld	hl,bitcounts
+	ld	c,0
+3:	ld	b,0
+	ld	a,c
+1:	or	a
+	jp	z,2f
+	rra
+	jp	nc,1b
+	inc	b
+	jp	1b
+2:	ld	(hl),b
+	inc	hl
+	inc	c
+	jp	nz,3b
+	ret
 	
 ; ==============================================================================
-; Main entry point of the program
-;
+; count_bits - count bits in an 8-byte array
+; 
+;   input:  (HL) - array
+; 
+;   output: A - number of bits
+; 
+;   uses:   B, D, E, H, L
+; 
 	.text
-	.globl	main
-main:
-	di
-	ld	sp,0x7000
-	call	init_kbd
-	call	set_kmap
-	call	add_glyphs
-	call	add_cust_glyphs
-	call	start_ct1
-	jp	nc,1f
-	call	erase
-	ld	hl,msg_hwerr
-	call	get_ack
-quit:	call	rel_ct1
-	call	erase
-	jp	PMD_MONIT
-1:	call	erase
+	.globl	count_bits
+count_bits:
+	ld	de,bitcounts
+	ld	b,8
+	xor	a
+1:	push	hl
+	ld	l,(hl)
+	ld	h,0
+	add	hl,de
+	add	a,(hl)
+	pop	hl
+	inc	hl
+	dec	b
+	jp	nz,1b
+	ret
 
-	ld	hl,label_logik
-	ld	de,LRPOS
-	call	draw_label
-
-	ld	hl,credits
-	ld	de,CRPOS
-	call	writeln
-
-	call	draw_board
-
-	ld	a,0x19
-	ld	b,2
-	call	draw_pins
+	.lcomm	bitcounts, 256
 	
-	jp	0
-
+	
 	.end

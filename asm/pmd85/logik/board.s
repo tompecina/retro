@@ -25,7 +25,7 @@
 ; ==============================================================================
 ; Constants
 	
-	.equiv	ULC, 0xc014		; upper left corner of the board
+	.equiv	ULC, 0xc516		; upper left corner of the board
 	.equiv	MSGAREA, 0xffc0		; position of the notification area
 	.equiv	ATTEMPTS, 10		; maximum number of attempts
 	.equiv	POSITIONS, 5		; number of positions
@@ -38,8 +38,8 @@
 	.text
 	.globl	draw_board
 draw_board:
-	ld	b,ATTEMPTS
-2:	ld	c,POSITIONS
+	ld	b,0
+2:	ld	c,0
 1:	xor	a
 	push	bc
 	call	draw_digit
@@ -48,74 +48,15 @@ draw_board:
 	push	bc
 	call	draw_pin
 	pop	bc
-	dec	c
+	inc	c
+	ld	a,c
+	cp	POSITIONS
 	jp	nz,1b
-	dec	b
+	inc	b
+	ld	a,b
+	cp	ATTEMPTS
 	jp	nz,2b
 	ret
-	
-	
-;; 	ld	hl,ULC
-;; 	call	7f
-;; 	call	7f
-;; 	ld	a,3
-;; 1:	push	af
-;; 	call	5f
-;; 	call	6f
-;; 	call	5f
-;; 	call	6f
-;; 	call	5f
-;; 	call	7f
-;; 	pop	af
-;; 	dec	a
-;; 	jp	nz,1b
-;; 7:	ld	(hl),0x3c		; solid line
-;; 	inc	hl
-;; 	ld	bc,(35 << 8) | 0x3f
-;; 1:	ld	(hl),c
-;; 	inc	hl
-;; 	dec	b
-;; 	jp	nz,1b
-;; 	ld	(hl),0x1f
-;; 2:	ld	de,28
-;; 	add	hl,de
-;; 	ret
-;; 5:	ld	a,5
-;; 1:	call	3f
-;; 	call	4f
-;; 	dec	a
-;; 	jp	nz,1b
-;; 	call	3f
-;; 	ret
-;; 3:	call	7f
-;; 	call	7f
-;; 7:	ld	(hl),0x0c		; odd line
-;; 	ld	de,12
-;; 	ld	bc,(2 << 8) | 0x08
-;; 1:	add	hl,de
-;; 	ld	(hl),0x08
-;; 	dec	b
-;; 	jp	nz,1b
-;; 	add	hl,de
-;; 	ld	(hl),0x18
-;; 	jp	2b
-;; 4:	ld	(hl),0x0c		; even line
-;; 	ld	de,4
-;; 	ld	bc,(8 << 8) | 0x08
-;; 	jp	1b
-;; 6:	ld	(hl),0x0c		; dotted line
-;; 	inc	hl
-;; 	ld	bc,(17 << 8) | 0x22
-;; 1:	ld	(hl),c
-;; 	inc	hl
-;; 	ld	(hl),0x08
-;; 	inc	hl
-;; 	dec	b
-;; 	jp	nz,1b
-;; 	ld	(hl),c
-;; 	inc	hl
-;; 	ld	(hl),0x18
-;; 	jp	2b
 	
 ; ==============================================================================
 ; draw_digit - draw digit
@@ -301,7 +242,7 @@ digits:
 	.word	0x013e	; .######.
 
 ; ==============================================================================
-; draw_pin - draw pin
+; draw_pin - draw one pin
 ; 
 ;   input:  A - color (0 = blank, 1 = black, 2 = white)
 ;           B - line
@@ -336,6 +277,41 @@ draw_pin:
 	ex	de,hl
 	ld	a,7
 	jp	ddig
+	
+; ==============================================================================
+; draw_pins - draw line of pins
+; 
+;   input:  A - (blacks << 3) | whites
+;           B - line
+;
+;   uses:   all
+; 
+	.text
+	.globl	draw_pins
+draw_pins:
+	push	af
+	rra
+	rra
+	rra
+	ld	c,0
+	ld	d,1
+	call	1f
+	pop	af
+	ld	d,2
+1:	and	0x07
+1:	dec	a
+	ret	m
+	push	af
+	push	bc
+	push	de
+	ld	a,d
+	call	draw_pin
+	pop	de
+	pop	bc
+	pop	af
+	inc	c
+	jp	1b
+	
 	
 ; ==============================================================================
 ; Pins
