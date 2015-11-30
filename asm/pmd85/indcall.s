@@ -1,4 +1,4 @@
-; sedit.s
+; indcall.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,64 +18,39 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Simple editing.
+; Indirect call.
 
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; sedit - enter string with simple editing facilities
+; indcall - call indirectly addressed routine
 ; 
-;   input:  (cursor) - cursor address
-; 	    (color) - color mask
-;   	    B - minimum number of characters
-;   	    C - maximum number of characters
-;   	    (HL) - buffer (with capacity of at least C + 1)
-;   	    (ikf) - inklav funcion
-;   	    (vf) - validation function (A = char, C = position -> CY if invalid)
+;   input:  ((SP)) - call address
 ; 
-;   output: (HL) - zero-terminated entry
-;   	    C - number of characters
-; 
-;   uses:   all
+;   uses:   -
 ; 
 	.text
-	.globl	sedit
-sedit:	inc	b
-	xor	a
-	ld	(nchar),a
-	call	shcur
-2:	call	indcall
-	dw	ikf
-	cp	KEOL
-	jp	nz,1f
-	ld	a,(nchar)
-	inc	c
-	cp	b
-	jp	c,2b
-
-	
-	
-1:	cp	KLEFT
-	jp	nz,1f
-
-1:	cp	KCLR
-	jp	nz,1f
-
-1:	
-
-	
-shcur:	ld	a,0x7f
-	jp	prtout
-hdcur:	ld	a,' '
-	jp	prtout
-svf:	cp	0x20
+	.globl	indcall
+indcall:
+	ld	(thl),hl
+	ex	de,hl
+	ex	(sp),hl
+	ld	e,(hl)
+	inc	hl
+	ld	d,(hl)
+	inc	hl
+	ex	(sp),hl
+	ex	de,hl
+	push	af
+	ld	a,(hl)
+	inc	hl
+	ld	h,(hl)
+	ld	l,a
+	pop	af
+	push	hl
+	ld	hl,(thl)
 	ret
 
-	.lcomm	nchar, 1
-
-	.data
-	.globl	ikf, vf
-ikf:	.word	inklav
-vf:	.word	svf
+	.lcomm	thl, 2
 	
 	.end

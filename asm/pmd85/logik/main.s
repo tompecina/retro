@@ -49,6 +49,7 @@
 main:
 	di
 	ld	sp,0x7000
+
 	call	add_glyphs
 	call	erase
 
