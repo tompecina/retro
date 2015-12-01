@@ -66,4 +66,4 @@ msg_new:
 	db	" Opravdu si p", 0xd2, "ejete vytvo", 0xd2, "it nov", 0xd7
 	db	" sudoku? (A/N)", 0
 msg_sqerr:
-	.asciz	"                Toto pole nelze editovat"
+	.asciz	"             Toto pole nelze editovat"
