@@ -53,12 +53,16 @@ credits:
 ; Prompts
 ;
 	.data
+	.globl	msg_yguess
 msg_hwerr:
 	db	"Vadn", 0xd9, " hardv", 0xd7, "r, pros", 0xc9, "m, stla", 0xc3
 	db	"te EOL", 0
 msg_quit:
-	db	"     Naozaj si ", 0xda, "el", 0xc1, "te program ukon", 0xc3
+	db	"Naozaj si ", 0xda, "el", 0xc1, "te program ukon", 0xc3
 	db	"i", 0xd4, "? (A/N)", 0
 msg_new:
-	db	"  Naozaj si ", 0xda, "el", 0xc1, "te za", 0xc3, "a", 0xd4
+	db	"Naozaj si ", 0xda, "el", 0xc1, "te za", 0xc3, "a", 0xd4
 	db	" nov", 0xd5, " hru? (A/N)", 0
+msg_yguess:
+	db	"Zadajte kombin", 0xc1, "ciu: 1-", '0' + COLORS
+	db	", ", LEFT1, LEFT2, ", ", RIGHT1, RIGHT2, ", DEL, CLR, EOL", 0

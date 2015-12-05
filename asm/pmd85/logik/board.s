@@ -25,10 +25,12 @@
 ; ==============================================================================
 ; Constants
 	
+	.globl	COLORS
 	.equiv	ULC, 0xc516		; upper left corner of the board
 	.equiv	MSGAREA, 0xffc0		; position of the notification area
 	.equiv	ATTEMPTS, 10		; maximum number of attempts
 	.equiv	POSITIONS, 5		; number of positions
+	.equiv	COLORS, 8		; number of colors
 	
 ; ==============================================================================
 ; draw_board - draw board
@@ -130,116 +132,116 @@ digits:
 	.word	0x0000	; ........
 	.word	0x0000	; ........
 	.word	0x0000	; ........
-	.word	0x0048	; ...*....
+	.word	0x0060	; ...*....
 	.word	0x0000	; ........
 	.word	0x0000	; ........
 	.word	0x0000	; ........
 	.word	0x0000	; ........
 	.word	0x0000	; ........
 ; 1
-	.word	0x0018	; ...##...
-	.word	0x001c	; ..###...
-	.word	0x001e	; .####...
-	.word	0x0018	; ...##...
-	.word	0x0018	; ...##...
-	.word	0x0018	; ...##...
-	.word	0x0018	; ...##...
-	.word	0x0018	; ...##...
-	.word	0x0018	; ...##...
-	.word	0x0018	; ...##...
-	.word	0x0018	; ...##...
-	.word	0x0018	; ...##...
+	.word	0x0120	; ...##...
+	.word	0x0130	; ..###...
+	.word	0x0138	; .####...
+	.word	0x0120	; ...##...
+	.word	0x0120	; ...##...
+	.word	0x0120	; ...##...
+	.word	0x0120	; ...##...
+	.word	0x0120	; ...##...
+	.word	0x0120	; ...##...
+	.word	0x0120	; ...##...
+	.word	0x0120	; ...##...
+	.word	0x0120	; ...##...
 ; 2
-	.word	0x013e	; .######.
-	.word	0x033f	; ########
-	.word	0x0303	; ##....##
-	.word	0x0300	; ......##
-	.word	0x0320	; .....###
-	.word	0x0130	; ....###.
-	.word	0x0038	; ...###..
-	.word	0x001c	; ..###...
-	.word	0x000e	; .###....
-	.word	0x0007	; ###.....
-	.word	0x033f	; ########
-	.word	0x033f	; ########
+	.word	0x0738	; .######.
+	.word	0x0f3c	; ########
+	.word	0x0c0c	; ##....##
+	.word	0x0c00	; ......##
+	.word	0x0e00	; .....###
+	.word	0x0700	; ....###.
+	.word	0x0320	; ...###..
+	.word	0x0130	; ..###...
+	.word	0x0038	; .###....
+	.word	0x001c	; ###.....
+	.word	0x0f3c	; ########
+	.word	0x0f3c	; ########
 ; 3
-	.word	0x013e	; .######.
-	.word	0x033f	; ########
-	.word	0x0303	; ##....##
-	.word	0x0300	; ......##
-	.word	0x0300	; ......##
-	.word	0x0130	; ....###.
-	.word	0x0130	; ....###.
-	.word	0x0300	; ......##
-	.word	0x0300	; ......##
-	.word	0x0303	; ##....##
-	.word	0x033f	; ########
-	.word	0x013e	; .######.
+	.word	0x0738	; .######.
+	.word	0x0f3c	; ########
+	.word	0x0c0c	; ##....##
+	.word	0x0c00	; ......##
+	.word	0x0c00	; ......##
+	.word	0x0700	; ....###.
+	.word	0x0700	; ....###.
+	.word	0x0c00	; ......##
+	.word	0x0c00	; ......##
+	.word	0x0c0c	; ##....##
+	.word	0x0f3c	; ########
+	.word	0x0738	; .######.
 ; 4
-	.word	0x0120	; .....##.
-	.word	0x0130	; ....###.
-	.word	0x0138	; ...####.
-	.word	0x013c	; ..#####.
-	.word	0x012e	; .###.##.
-	.word	0x0127	; ###..##.
-	.word	0x0123	; ##...##.
-	.word	0x033f	; ########
-	.word	0x033f	; ########
-	.word	0x0120	; .....##.
-	.word	0x0120	; .....##.
-	.word	0x0120	; .....##.
+	.word	0x0600	; .....##.
+	.word	0x0700	; ....###.
+	.word	0x0720	; ...####.
+	.word	0x0730	; ..#####.
+	.word	0x0638	; .###.##.
+	.word	0x061c	; ###..##.
+	.word	0x060c	; ##...##.
+	.word	0x0f3c	; ########
+	.word	0x0f3c	; ########
+	.word	0x0600	; .....##.
+	.word	0x0600	; .....##.
+	.word	0x0600	; .....##.
 ; 5
-	.word	0x033f	; ########
-	.word	0x033f	; ########
-	.word	0x0003	; ##......
-	.word	0x0003	; ##......
-	.word	0x0003	; ##......
-	.word	0x013f	; #######.
-	.word	0x033f	; ########
-	.word	0x0300	; ......##
-	.word	0x0300	; ......##
-	.word	0x0303	; ##....##
-	.word	0x033f	; ########
-	.word	0x013e	; .######.
+	.word	0x0f3c	; ########
+	.word	0x0f3c	; ########
+	.word	0x000c	; ##......
+	.word	0x000c	; ##......
+	.word	0x000c	; ##......
+	.word	0x073c	; #######.
+	.word	0x0f3c	; ########
+	.word	0x0c00	; ......##
+	.word	0x0c00	; ......##
+	.word	0x0c0c	; ##....##
+	.word	0x0f3c	; ########
+	.word	0x0738	; .######.
 ; 6
-	.word	0x013e	; .######.
-	.word	0x033f	; ########
-	.word	0x0303	; ##....##
-	.word	0x0003	; ##......
-	.word	0x0003	; ##......
-	.word	0x013f	; #######.
-	.word	0x033f	; ########
-	.word	0x0303	; ##....##
-	.word	0x0303	; ##....##
-	.word	0x0303	; ##....##
-	.word	0x033f	; ########
-	.word	0x013e	; .######.
+	.word	0x0738	; .######.
+	.word	0x0f3c	; ########
+	.word	0x0c0c	; ##....##
+	.word	0x000c	; ##......
+	.word	0x000c	; ##......
+	.word	0x073c	; #######.
+	.word	0x0f3c	; ########
+	.word	0x0c0c	; ##....##
+	.word	0x0c0c	; ##....##
+	.word	0x0c0c	; ##....##
+	.word	0x0f3c	; ########
+	.word	0x0738	; .######.
 ; 7
-	.word	0x033f	; ########
-	.word	0x033f	; ########
-	.word	0x0300	; ......##
-	.word	0x0320	; .....###
-	.word	0x0130	; ....###.
-	.word	0x0038	; ...###..
-	.word	0x001c	; ..###...
-	.word	0x000c	; ..##...
-	.word	0x000c	; ..##...
-	.word	0x000c	; ..##...
-	.word	0x000c	; ..##...
-	.word	0x000c	; ..##...
+	.word	0x0f3c	; ########
+	.word	0x0f3c	; ########
+	.word	0x0c00	; ......##
+	.word	0x0e00	; .....###
+	.word	0x0700	; ....###.
+	.word	0x0320	; ...###..
+	.word	0x0130	; ..###...
+	.word	0x0030	; ..##...
+	.word	0x0030	; ..##...
+	.word	0x0030	; ..##...
+	.word	0x0030	; ..##...
+	.word	0x0030	; ..##...
 ; 8
-	.word	0x013e	; .######.
-	.word	0x033f	; ########
-	.word	0x0303	; ##....##
-	.word	0x0303	; ##....##
-	.word	0x0303	; ##....##
-	.word	0x013e	; .######.
-	.word	0x013e	; .######.
-	.word	0x0303	; ##....##
-	.word	0x0303	; ##....##
-	.word	0x0303	; ##....##
-	.word	0x033f	; ########
-	.word	0x013e	; .######.
+	.word	0x0738	; .######.
+	.word	0x0f3c	; ########
+	.word	0x0c0c	; ##....##
+	.word	0x0c0c	; ##....##
+	.word	0x0c0c	; ##....##
+	.word	0x0738	; .######.
+	.word	0x0738	; .######.
+	.word	0x0c0c	; ##....##
+	.word	0x0c0c	; ##....##
+	.word	0x0c0c	; ##....##
+	.word	0x0f3c	; ########
+	.word	0x0738	; .######.
 
 ; ==============================================================================
 ; draw_pin - draw one pin
@@ -347,57 +349,43 @@ pins:
 ; ==============================================================================
 ; draw_cursor - draw cursor
 ; 
-;   input:  C - square
+;   input:  B - line
+;           C - position
 ;
 ;   uses:   all
 ; 
 	.text
 	.globl	draw_cursor
 draw_cursor:
-;; 	ld	hl,ULC + 193
-;; 	call	sq2a
-;; 	ld	(hl),0x0f
-;; 	dec	hl
-;; 	ld	bc,0x0520
-;; 	call	1f
-;; 	ld	de,-317
-;; 	add	hl,de
-;; 	ld	(hl),0x38
-;; 	inc	hl
-;; 	ld	a,(hl)
-;; 	or	0x03
-;; 	ld	(hl),a
-;; 	ld	de,64
-;; 	add	hl,de
-;; 	ld	bc,0x0402
-;; 	call	2f
-;; 	ld	de,700
-;; 	add	hl,de
-;; 	ld	bc,0x0420
-;; 	call	1f
-;; 	ld	a,(hl)
-;; 	or	c
-;; 	ld	(hl),a
-;; 	inc	hl
-;; 	ld	(hl),0x0f
-;; 	ld	de,-253
-;; 	add	hl,de
-;; 	ld	bc,0x0402
-;; 	call	1f
-;; 	ld	a,(hl)
-;; 	or	0x03
-;; 	ld	(hl),a
-;; 	dec	hl
-;; 	ld	(hl),0x38
-;; 	ret
-;; 1:	ld	de,64
-;; 2:	ld	a,(hl)
-;; 	or	c
-;; 	ld	(hl),a
-;; 	add	hl,de
-;; 	dec	b
-;; 	jp	nz,2b
-;; 	ret
+	call	getln
+	ld	a,c
+	add	a,a
+	add	a,c
+	ld	e,a
+	ld	d,0
+	add	hl,de
+	ld	de,ULC + 831
+	add	hl,de
+	ld	de,61
+	ld	b,3
+1:	ld	a,(hl)
+	or	0x20
+	ld	(hl),a
+	inc	hl
+	inc	hl
+	inc	hl
+	ld	a,(hl)
+	or	0x01
+	ld	(hl),a
+	add	hl,de
+	dec	b
+	jp	nz,1b
+	ld	de,-63
+	add	hl,de
+	ld	(hl),0x3f
+	inc	hl
+	ld	(hl),0x3f
+	ret
 	
 ; ==============================================================================
 ; clr_cursor - clear cursor
@@ -409,123 +397,159 @@ draw_cursor:
 	.text
 	.globl	clr_cursor
 clr_cursor:
-;; 	ld	hl,ULC + 193
-;; 	call	sq2a
-;; 	ld	(hl),0
-;; 	dec	hl
-;; 	ld	bc,0x05df
-;; 	call	1f
-;; 	ld	de,-317
-;; 	add	hl,de
-;; 	ld	(hl),0
-;; 	inc	hl
-;; 	ld	a,(hl)
-;; 	and	0xfc
-;; 	ld	(hl),a
-;; 	ld	de,64
-;; 	add	hl,de
-;; 	ld	bc,0x04fd
-;; 	call	2f
-;; 	ld	de,700
-;; 	add	hl,de
-;; 	ld	bc,0x04df
-;; 	call	1f
-;; 	ld	a,(hl)
-;; 	and	c
-;; 	ld	(hl),a
-;; 	inc	hl
-;; 	ld	(hl),0
-;; 	ld	de,-253
-;; 	add	hl,de
-;; 	ld	bc,0x04fd
-;; 	call	1f
-;; 	ld	a,(hl)
-;; 	and	0xfc
-;; 	ld	(hl),a
-;; 	dec	hl
-;; 	ld	(hl),0
-;; 	ret
-;; 1:	ld	de,64
-;; 2:	ld	a,(hl)
-;; 	and	c
-;; 	ld	(hl),a
-;; 	add	hl,de
-;; 	dec	b
-;; 	jp	nz,2b
-;; 	ret
+	call	getln
+	ld	a,c
+	add	a,a
+	add	a,c
+	ld	e,a
+	ld	d,0
+	add	hl,de
+	ld	de,ULC + 831
+	add	hl,de
+	ld	de,61
+	ld	b,3
+1:	ld	a,(hl)
+	and	0x1f
+	ld	(hl),a
+	inc	hl
+	inc	hl
+	inc	hl
+	ld	a,(hl)
+	and	0x3e
+	ld	(hl),a
+	add	hl,de
+	dec	b
+	jp	nz,1b
+	ld	de,-63
+	add	hl,de
+	ld	(hl),b
+	inc	hl
+	ld	(hl),b
+	ret
 	
 ; ==============================================================================
-; init_cursor - initialize cursor
+; player_select - let player enter guess
 ; 
-;   uses:   all
+;   input:  B - line
 ; 
-	.text
-	.globl	init_cursor
-init_cursor:
-	xor	a
-	ld	(cur_row),a
-	ld	(cur_col),a
-	ld	c,a
-	jp	draw_cursor
-	
-	.lcomm	cur_row, 1
-	.lcomm	cur_col, 1
-	
-; ==============================================================================
-; getcurp - get cursor position
-; 
-;   output: C - column
-; 
-;   uses:   A
-; 
-	.text
-	.globl	getcurp
-getcurp:
-	;; ld	a,(cur_row)
-	;; ld	b,a
-	;; ld	a,(cur_col)
-	;; ld	c,a
-	;; jp	rc2sq
-	
-; ==============================================================================
-; show_cursor - show cursor
-; 
-;   uses:   all
-; 
-	.text
-	.globl	show_cursor
-show_cursor:
-	call	getcurp
-	jp	draw_cursor
-	
-; ==============================================================================
-; hide_cursor - hide cursor
-; 
-;   uses:   all
-; 
-	.text
-	.globl	hide_cursor
-hide_cursor:
-	call	getcurp
-	jp	clr_cursor
-	
-; ==============================================================================
-; player_select - let player select square
-; 
-;   input:  (cur_row) - cursor row
-;           (cur_col) - cursor column
-; 
-;   output: C - square selected
-;           (cur_row) - new cursor row
-;           (cur_col) - new cursor column
-;           A - scan code of the key 
+;   output: (HL) - player's guess
 ; 
 ;   uses:   all
 ; 
 	.text
 	.globl	player_select
 player_select:
+	push	bc
+	ld	hl,msg_yguess
+	call	disp_msg
+	pop	bc
+5:	ld	hl,guess
+	push	hl
+	ld	c,POSITIONS
+1:	ld	(hl),0xff
+	inc	hl
+	dec	c
+	jp	nz,1b
+	push	bc
+	call	draw_cursor
+	pop	bc
+	pop	hl
+2:	push	hl
+	push	bc	
+	call	inklav_rnd
+	push	af
+	call	clr_msg
+	pop	af
+	pop	bc
+	pop	hl
+	cp	KEY_ENTER
+	jp	nz,1f
+	push	bc
+	ld	de,guess
+	ld	c,POSITIONS
+3:	ld	a,(de)
+	inc	de
+	or	a
+	jp	p,4f
+	push	hl
+	call	errbeep
+	pop	hl
+	pop	bc
+	jp	2b
+4:	dec	c
+	jp	nz,3b
+	pop	bc
+	call	clr_cursor
+	ld	hl,guess
+	ret
+1:	cp	KLEFT
+	jp	nz,1f
+	ld	a,c
+	or	a
+	jp	z,2b
+	dec	hl
+	push	hl
+	push	bc
+	call	clr_cursor
+	pop	bc
+	dec	c
+3:	push	bc
+	call	draw_cursor
+	pop	bc
+	pop	hl
+	jp	2b
+1:	cp	KRIGHT
+	jp	nz,1f
+4:	ld	a,c
+	cp	POSITIONS - 1
+	jp	z,2b
+	inc	hl
+	push	hl
+	push	bc
+	call	clr_cursor
+	pop	bc
+	inc	c
+	jp	3b
+1:	cp	KDEL
+	jp	nz,1f
+	ld	(hl),0xff
+	push	hl
+	push	bc
+	xor	a
+	call	draw_digit
+	pop	bc
+	pop	hl
+	jp	2b
+1:	cp	KCLR
+	jp	nz,1f
+	push	bc
+	call	clr_cursor
+	pop	bc
+	ld	c,0
+3:	push	bc
+	xor	a
+	call	draw_digit
+	pop	bc
+	inc	c
+	ld	a,c
+	cp	POSITIONS
+	jp	nz,3b
+	jp	5b
+1:	sub	'1'
+	jp	c,2b
+	cp	COLORS
+	jp	nc,2b
+	ld	(hl),a
+	push	hl
+	push	bc
+	inc	a
+	call	draw_digit
+	pop	bc
+	pop	hl
+	jp	4b
 	
+	.lcomm	guess, POSITIONS
+
 ; ==============================================================================
 ; write - display one character
 ; 
@@ -678,18 +702,60 @@ glyphs80:
 	.byte	0x00	; ......
 	.byte	0x00	; ......
 
-	.globl	ONEDOT
-	.equiv	ONEDOT, 0x81
+	.globl	LEFT1
+	.equiv	LEFT1, 0x81
 	; 81
 	.byte	0x00	; ......
 	.byte	0x00	; ......
-	.byte	0x04	; ..#...
-	.byte	0x06	; .##...
-	.byte	0x04	; ..#...
-	.byte	0x04	; ..#...
-	.byte	0x04	; ..#...
-	.byte	0x04	; ..#...
-	.byte	0x2e	; .###.#
+	.byte	0x00	; ......
+	.byte	0x08	; ...#..
+	.byte	0x0c	; ..##..
+	.byte	0x3e	; .#####
+	.byte	0x0c	; ..##..
+	.byte	0x08	; ...#..
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+
+	.globl	LEFT2
+	.equiv	LEFT2, 0x82
+	; 82
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x3f	; ######
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+
+	.globl	RIGHT1
+	.equiv	RIGHT1, 0x83
+	; 83
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x3e	; .#####
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+
+	.globl	RIGHT2
+	.equiv	RIGHT2, 0x84
+	; 84
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x08	; ...#..
+	.byte	0x18	; ...##.
+	.byte	0x3f	; ######
+	.byte	0x18	; ...##.
+	.byte	0x08	; ...#..
+	.byte	0x00	; ......
 	.byte	0x00	; ......
 
 ; ==============================================================================

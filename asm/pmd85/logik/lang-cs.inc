@@ -52,12 +52,16 @@ credits:
 ; Prompts
 ;
 	.data
+	.globl	msg_yguess
 msg_hwerr:
 	db	"Vadn", 0xd9, " hardware, pros", 0xc9, "m, stiskn", 0xc5
 	db	"te EOL", 0
 msg_quit:
-	db	"   Opravdu si p", 0xd2, "ejete program ukon", 0xc3
+	db	"Opravdu si p", 0xd2, "ejete program ukon", 0xc3
 	db	"it? (A/N)", 0
 msg_new:
-	db	" Opravdu si p", 0xd2, "ejete za", 0xc3, 0xc9
-	db	"  novou hru? (A/N)", 0
+	db	"Opravdu si p", 0xd2, "ejete za", 0xc3, 0xc9
+	db	" novou hru? (A/N)", 0
+msg_yguess:
+	db	"Zadejte kombinaci: 1-", '0' + COLORS, ", ", LEFT1, LEFT2
+	db	", ", RIGHT1, RIGHT2, ", DEL, CLR, EOL", 0

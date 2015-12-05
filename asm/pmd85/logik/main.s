@@ -74,9 +74,8 @@ quit:	call	rel_ct1
 
 	call	draw_board
 
-	ld	a,0x19
 	ld	b,2
-	call	draw_pins
+	call	player_select
 	
 	jp	0
 

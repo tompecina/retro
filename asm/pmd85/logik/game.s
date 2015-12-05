@@ -81,49 +81,317 @@ count_bits:
 	.lcomm	bitcounts, 256
 	
 ; ==============================================================================
-; compare - compare codes
+; Matching macros
+; 
+	
+; masks
+	.equiv	MASK0, 0x07
+	.equiv	MASK1, 0x38
+	.equiv	MASK2, 0xe0
+	.equiv	MASK3, 0x0e
+	.equiv	MASK4, 0x70
+	.equiv	BMASK0, 0x01
+	.equiv	BMASK1, 0x02
+	.equiv	BMASK2, 0x04
+	.equiv	BMASK3, 0x08
+	.equiv	BMASK4, 0x10
+
+; load first color
+	.macro	ldpos	p
+	.if	\p < 2
+	ld	a,e
+	.elseif	\p == 2
+	ld	a,d
+	rra
+	ld	a,e
+	rra
+	.else
+	ld	a,d
+	.endif
+	.endm
+
+; compare to second color
+	.macro	xorpos	p
+	.if	\p < 2
+	xor	l
+	.elseif	\p == 2
+	xor	b
+	.else
+	xor	h
+	.endif
+	.endm
+	
+; align colors
+	.macro	alpos	p,q
+	.if	\p != \q
+	.if	\p == 0
+	.if	\q == 1
+	rla
+	rla
+	rla
+	.elseif	\q == 2
+	rrca
+	rrca
+	rrca
+	.elseif	\q == 3
+	rla
+	.else
+	rla
+	rla
+	rla
+	rla
+	.endif
+	.elseif	\p == 1
+	.if	\q == 0
+	rra
+	rra
+	rra
+	.elseif	\q == 2
+	rla
+	rla
+	.elseif	\q == 3
+	rra
+	rra
+	.else
+	rla
+	.endif
+	.elseif	\p == 2
+	.if	\q == 0
+	rlca
+	rlca
+	rlca
+	.elseif	\q == 1
+	rra
+	rra
+	.elseif	\q == 3
+	rra
+	rra
+	rra
+	rra
+	.else
+	rra
+	.endif
+	.elseif	\p == 3
+	.if	\q == 0
+	rra
+	.elseif	\q == 1
+	rla
+	rla
+	.elseif	\q == 2
+	rla
+	rla
+	rla
+	rla
+	.else
+	rla
+	rla
+	rla
+	.endif
+	.else
+	.if	\q == 0
+	rra
+	rra
+	rra
+	rra
+	.elseif	\q == 1
+	rra
+	.elseif	\q == 2
+	rla
+	.else
+	rra
+	rra
+	rra
+	.endif
+	.endif
+	.endif
+	.endm
+	
+; process black pins, count
+	.macro	black1	p
+	ldpos	\p
+	xorpos	\p
+	and	MASK\p
+	jp	nz,1f
+	inc	c
+	ld	a,b
+	or	BMASK\p
+	ld	b,a
+1:	
+	.endm
+
+; process black pins, check
+	.macro	black2	p
+	ldpos	\p
+	xorpos	\p
+	and	MASK\p
+	jp	nz,1f
+	dec	c
+	.if	\p < 4
+	ret	m
+	.else
+	ret	nz
+	.endif
+	ld	a,b
+	or	BMASK\p
+	ld	b,a
+1:	
+	.endm
+
+; process white pins, count
+	.macro	white1	p,q
+	ld	a,b
+	and	BMASK\q
+	jp	nz,1f
+	ldpos	\p
+	alpos	\p,\q
+	xorpos	\q
+	and	MASK\q
+	jp	nz,1f
+	inc	c
+	ld	a,b
+	or	BMASK\q
+	ld	b,a
+	jp	2f
+1:
+	.endm
+
+; process white pins, check
+	.macro	white2	p,q
+	ld	a,b
+	and	BMASK\q
+	jp	nz,1f
+	ldpos	\p
+	alpos	\p,\q
+	xorpos	\q
+	and	MASK\q
+	jp	nz,1f
+	dec	c
+	ret	m
+	ld	a,b
+	or	BMASK\q
+	ld	b,a
+	jp	2f
+1:
+	.endm
+
+; ==============================================================================
+; match - compare codes
 ; 
 ;   input:  HL, DE - codes
 ; 
-;   output: A - result, (black_pins << 3) | white_pins
+;   output: C - result, (black_pins << 3) | white_pins
 ; 
-;   uses:   all
+;   uses:   A, B
 ; 
 	.text
-	.globl	compare
-compare:
-	push	hl
-	ld	b,0
+	.globl	match
+match:
+
+; prepare counter
+	ld	c,0
+
+; prepare Position 2 & bit mask
 	ld	a,h
-	xor	d
-	ld	h,a
+	rra
 	ld	a,l
-	xor	e
-	ld	l,a
-	add	hl,hl
+	rra
+	and	0xe0
+	ld	b,a
+
+; process black pins
+	.irpc	p,"01234"
+	black1	\p
+	.endr
+	
+; update counter
+	ld	a,c
+	add	a,a
+	add	a,a
+	add	a,a
+	ld	c,a
+	
+; save mask
+	ld	a,b
+	ld	(temp),a
+	
+; process white pins
+	.irpc	p,"01234"
+	ld	a,(temp)
+	and	BMASK\p
+	jp	nz,2f
+	.irpc	q,"01234"
+	.if	\p != \q
+	white1	\p,\q
+	.endif
+	.endr
+2:
+	.endr
+	
+; done
+	ret
+
+	.lcomm	temp, 1
+	
+; ==============================================================================
+; check_match - compare codes and check against expected result
+; 
+;   input:  HL, DE - codes
+;   	    A - expected result, (black_pins << 3) | white_pins
+; 
+;   output: Z on match
+; 
+;   uses:   A, B, C
+; 
+	.text
+	.globl	check_match
+check_match:
+
+; prepare black pins counter
+	ld	(temp),a
+	rra
+	rra
+	rra
+	and	0x07
+	ld	c,a
+
+; prepare Position 2 & bit mask
 	ld	a,h
-	add	hl,hl
+	rra
+	ld	a,l
+	rra
 	and	0xe0
-	jp	nz,1f
-	inc	b
-1:	ld	a,h
-	and	0x38
-	jp	nz,1f
-	inc	b
-1:	ld	a,h
-	and	0x03
-	jp	nz,1f
-	inc	b
-1:	ld	a,l
-	and	0xe0
-	jp	nz,1f
-	inc	b
-1:	ld	a,l
-	and	0x1c
-	jp	nz,1f
-	inc	b
-1:	
+	ld	b,a
+
+; process black pins
+	.irpc	p,"01234"
+	black2	\p
+	.endr
 	
+; prepare white pins counter
+	ld	a,(temp)
+	and	0x07
+	ld	c,a
+
+; save mask
+	ld	a,b
+	ld	(temp),a
 	
+; process white pins
+	.irpc	p,"01234"
+	ld	a,(temp)
+	and	BMASK\p
+	jp	nz,2f
+	.irpc	q,"01234"
+	.if	\p != \q
+	white2	\p,\q
+	.endif
+	.endr
+2:
+	.endr
 	
+; report match
+	ld	a,c
+	or	a
+	ret
+
 	.end

@@ -53,9 +53,13 @@ credits:
 ; Prompts
 ;
 	.data
+	.globl	msg_yguess
 msg_hwerr:
 	.asciz	"Hardware error, please press EOL to quit"
 msg_quit:
-	.asciz	"  Do you really wish to end the program? (Y/N)"
+	.asciz	"Do you really wish to end the program? (Y/N)"
 msg_new:	
 	.asciz	"Do you really wish to start a new game? (Y/N)"
+msg_yguess:
+	db	"Enter your guess: 1", OBELUS, '0' + COLORS, ", ", LEFT1, LEFT2
+	db	", ", RIGHT1, RIGHT2, ", DEL, CLR, EOL", 0
