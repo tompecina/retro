@@ -23,7 +23,7 @@
 	.include "reversi.inc"
 
 ; ==============================================================================
-; Langage file inclusion
+; Language file inclusion
 ;
 	.ifdef	en
 	.include "lang-en.inc"

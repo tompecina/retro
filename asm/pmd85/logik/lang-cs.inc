@@ -23,8 +23,13 @@
 ; ==============================================================================
 ; Constants
 	
-	.equiv	LRPOS, 0xc404
-	.equiv	CRPOS, 0xcb00
+	.equiv	LRPOS, 0xc204
+	.equiv	CRPOS, 0xc900
+	.equiv	DSPOS, 0xd200
+	.equiv	RNDPOS, 0xd206
+	.equiv	RNDSPOS, 0xd208
+	.equiv	PSCPOS, 0xd789
+	.equiv	CSCPOS, 0xdb09
 	
 ; ==============================================================================
 ; Credits
@@ -47,12 +52,16 @@ credits:
 ; ==============================================================================
 ; Labels
 ;
+lbl_desc:
+	db	"Kolo:  /", CR, CR
+	db	"Hr", 0xc1, 0xc3, ":", CR, VT, VT, VT
+	db	"Po", 0xc3, 0xc9, "ta", 0xc3, ":", 0
 	
 ; ==============================================================================
 ; Prompts
 ;
 	.data
-	.globl	msg_yguess
+	.globl	msg_yguess, msg_bpegs, msg_wpegs, msg_confirm, msg_errpegs
 msg_hwerr:
 	db	"Vadn", 0xd9, " hardware, pros", 0xc9, "m, stiskn", 0xc5
 	db	"te EOL", 0
@@ -65,3 +74,37 @@ msg_new:
 msg_yguess:
 	db	"Zadejte kombinaci: 1-", '0' + COLORS, ", ", LEFT1, LEFT2
 	db	", ", RIGHT1, RIGHT2, ", DEL, CLR, EOL", 0
+msg_bpegs:
+	db	0xe3, "ern", 0xd9, "ch? ", 0
+msg_wpegs:
+	db	"  B", 0xc9, "l", 0xd9, "ch? ", 0
+msg_confirm:
+	db	"  V po", 0xd2, 0xc1, "dku? (A/N)", 0
+msg_errpegs:
+	db	"Nedovolen", 0xc1, " kombinace, stiskn", 0xc5
+	db	"te EOL a opravte", 0
+msg_nrnds:
+	db	"Po", 0xc3, "et kol (1-8)? ", 0
+msg_prep:
+	db	"Sestavte kod a stiskn", 0xc5, "te EOL", 0
+msg_startg:
+	db	"Po", 0xc3, 0xc9, "ta", 0xc3, " sestavil kod, stiskn", 0xc5
+	db	"te EOL", 0
+msg_out:
+	db	"Pokusy vy", 0xc3, "erp", 0xc1, "ny, po", 0xc3, 0xc9, "ta", 0xc3
+	db	" si p", 0xd2, "ipisuje 11 bod", 0xca, 0
+msg_corr:
+	db	"Spr", 0xc1, "vn", 0xc5, "po", 0xc3, 0xc9, "ta", 0xc3
+	db	" si p", 0xd2, "ipisuje ", 0
+msg_corr1:
+	.asciz	"1 bod"
+	.irpc	n, "234"
+msg_corr\n:
+	.asciz	"\n body"
+	.endr
+	.irpc	n, "56789"
+msg_corr\n:
+	db	"\n bod", 0xca, 0
+	.endr
+msg_corr10:
+	db	"10 bod", 0xca, 0

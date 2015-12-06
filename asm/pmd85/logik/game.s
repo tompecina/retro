@@ -206,7 +206,7 @@ count_bits:
 	.endif
 	.endm
 	
-; process black pins, count
+; process black pegs, count
 	.macro	black1	p
 	ldpos	\p
 	xorpos	\p
@@ -219,7 +219,7 @@ count_bits:
 1:	
 	.endm
 
-; process black pins, check
+; process black pegs, check
 	.macro	black2	p
 	ldpos	\p
 	xorpos	\p
@@ -237,7 +237,7 @@ count_bits:
 1:	
 	.endm
 
-; process white pins, count
+; process white pegs, count
 	.macro	white1	p,q
 	ld	a,b
 	and	BMASK\q
@@ -255,7 +255,7 @@ count_bits:
 1:
 	.endm
 
-; process white pins, check
+; process white pegs, check
 	.macro	white2	p,q
 	ld	a,b
 	and	BMASK\q
@@ -279,7 +279,7 @@ count_bits:
 ; 
 ;   input:  HL, DE - codes
 ; 
-;   output: C - result, (black_pins << 3) | white_pins
+;   output: C - result, (black_pegs << 3) | white_pegs
 ; 
 ;   uses:   A, B
 ; 
@@ -298,7 +298,7 @@ match:
 	and	0xe0
 	ld	b,a
 
-; process black pins
+; process black pegs
 	.irpc	p,"01234"
 	black1	\p
 	.endr
@@ -314,7 +314,7 @@ match:
 	ld	a,b
 	ld	(temp),a
 	
-; process white pins
+; process white pegs
 	.irpc	p,"01234"
 	ld	a,(temp)
 	and	BMASK\p
@@ -336,7 +336,7 @@ match:
 ; check_match - compare codes and check against expected result
 ; 
 ;   input:  HL, DE - codes
-;   	    A - expected result, (black_pins << 3) | white_pins
+;   	    A - expected result, (black_pegs << 3) | white_pegs
 ; 
 ;   output: Z on match
 ; 
@@ -346,7 +346,7 @@ match:
 	.globl	check_match
 check_match:
 
-; prepare black pins counter
+; prepare black pegs counter
 	ld	(temp),a
 	rra
 	rra
@@ -362,12 +362,12 @@ check_match:
 	and	0xe0
 	ld	b,a
 
-; process black pins
+; process black pegs
 	.irpc	p,"01234"
 	black2	\p
 	.endr
 	
-; prepare white pins counter
+; prepare white pegs counter
 	ld	a,(temp)
 	and	0x07
 	ld	c,a
@@ -376,7 +376,7 @@ check_match:
 	ld	a,b
 	ld	(temp),a
 	
-; process white pins
+; process white pegs
 	.irpc	p,"01234"
 	ld	a,(temp)
 	and	BMASK\p
@@ -394,4 +394,146 @@ check_match:
 	or	a
 	ret
 
+; ==============================================================================
+; select_code - select pseudorandom code
+; 
+;   input:  (seed) - PRNG seed
+; 
+;   output: (seed) updated
+;	    HL - code
+; 
+;   uses:   all
+; 
+	.text
+	.globl	select_code
+select_code:
+	call	lcg
+	ld	hl,(seed + 14)
+	ld	a,h
+	and	0x7f
+	ld	h,a
+	ret
+	
+; ==============================================================================
+; init_map - initalize pseudorandom transformation (mapping)
+; 
+;   input:  (seed) - PRNG seed
+; 
+;   output: (seed) updated
+;	    (cmap) - color map
+;	    (pmap) - position map
+; 
+;   uses:   all
+; 
+	.text
+	.globl	init_map
+init_map:
+	call	lcg
+	ld	hl,cmap
+	push	hl
+	ld	a,(seed + 15)
+	push	af
+	and	0x07
+	ld	(hl),a		; 0-7
+	inc	hl
+	ld	a,(seed + 14)
+	ld	e,a
+	ld	c,7
+	call	udiv8
+	ld	(hl),c		; 0-6
+	inc	hl
+	ld	a,(seed + 13)
+	ld	e,a
+	ld	c,6
+	call	udiv8
+	ld	(hl),c		; 0-5
+	inc	hl
+	ld	a,(seed + 12)
+	ld	e,a
+	ld	c,5
+	call	udiv8
+	ld	(hl),c		; 0-4
+	inc	hl
+	pop	af
+	push	af
+	rra
+	rra
+	rra
+	rra
+	and	0x03
+	ld	(hl),a		; 0-3
+	inc	hl
+	ld	a,(seed + 11)
+	ld	e,a
+	ld	c,3
+	call	udiv8
+	ld	(hl),c		; 0-2
+	inc	hl
+	pop	af
+	rlca
+	and	0x01
+	ld	(hl),a		; 0-1
+	inc	hl
+	ld	(hl),0		; 0
+	pop	de	
+	ld	b,COLORS
+	call	1f
+	ld	hl,pmap
+	push	hl
+	ld	a,(seed + 10)
+	ld	e,a
+	ld	c,5
+	call	udiv8
+	ld	(hl),c		; 0-4
+	inc	hl
+	ld	a,(seed + 9)
+	push	af
+	and	0x03
+	ld	(hl),a		; 0-3
+	inc	hl
+	ld	a,(seed + 8)
+	ld	e,a
+	ld	c,3
+	call	udiv8
+	ld	(hl),c		; 0-2
+	inc	hl
+	pop	af
+	rlca
+	and	0x01
+	ld	(hl),a		; 0-1
+	inc	hl
+	ld	(hl),0		; 0
+	pop	de
+	ld	b,POSITIONS
+1:	ld	hl,tperm
+	push	hl
+	ld	c,0
+1:	ld	(hl),c
+	inc	hl
+	inc	c
+	dec	b
+	jp	nz,1b
+	ex	de,hl
+	pop	de
+2:	push	hl
+	ld	l,(hl)
+	ld	h,b
+	add	hl,de
+1:	ld	a,(hl)
+	or	a
+	jp	p,1f
+	inc	hl
+	jp	1b
+1:	ld	(hl),0xff
+	pop	hl
+	ld	(hl),a
+	inc	hl
+	dec	c
+	jp	nz,2b
+	ret
+
+	.lcomm	cmap, 8
+	.lcomm	pmap, 5
+	.lcomm	tperm, 8
+	
 	.end

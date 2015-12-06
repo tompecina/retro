@@ -25,8 +25,8 @@
 ; ==============================================================================
 ; Constants
 	
-	.globl	COLORS
-	.equiv	ULC, 0xc516		; upper left corner of the board
+	.globl	COLORS, ATTEMPTS, POSITIONS
+	.equiv	ULC, 0xc216		; upper left corner of the board
 	.equiv	MSGAREA, 0xffc0		; position of the notification area
 	.equiv	ATTEMPTS, 10		; maximum number of attempts
 	.equiv	POSITIONS, 5		; number of positions
@@ -48,7 +48,7 @@ draw_board:
 	pop	bc
 	xor	a
 	push	bc
-	call	draw_pin
+	call	draw_peg
 	pop	bc
 	inc	c
 	ld	a,c
@@ -114,7 +114,7 @@ ddig:	ld	bc,63
 getln:	push	bc
 	ld	d,0
 	ld	e,b
-	ld	hl,1280
+	ld	hl,1472
 	call	mul16
 	pop	bc
 	ret
@@ -244,7 +244,7 @@ digits:
 	.word	0x0738	; .######.
 
 ; ==============================================================================
-; draw_pin - draw one pin
+; draw_peg - draw one peg
 ; 
 ;   input:  A - color (0 = blank, 1 = black, 2 = white)
 ;           B - line
@@ -253,8 +253,8 @@ digits:
 ;   uses:   all
 ; 
 	.text
-	.globl	draw_pin
-draw_pin:
+	.globl	draw_peg
+draw_peg:
 	push	af
 	call	getln
 	ld	a,c
@@ -274,23 +274,23 @@ draw_pin:
 	sub	c
 	ld	c,a
 	ld	b,0
-	ld	hl,pins
+	ld	hl,pegs
 	add	hl,bc
 	ex	de,hl
 	ld	a,7
 	jp	ddig
 	
 ; ==============================================================================
-; draw_pins - draw line of pins
+; draw_pegs - draw line of pegs
 ; 
-;   input:  A - (black_pins << 3) | white_pins
+;   input:  A - (black_pegs << 3) | white_pegs
 ;           B - line
 ;
 ;   uses:   all
 ; 
 	.text
-	.globl	draw_pins
-draw_pins:
+	.globl	draw_pegs
+draw_pegs:
 	push	af
 	rra
 	rra
@@ -307,7 +307,7 @@ draw_pins:
 	push	bc
 	push	de
 	ld	a,d
-	call	draw_pin
+	call	draw_peg
 	pop	de
 	pop	bc
 	pop	af
@@ -316,10 +316,10 @@ draw_pins:
 	
 	
 ; ==============================================================================
-; Pins
+; Pegs
 ;
 	.data
-pins:	
+pegs:	
 
 ; blank
 	.word	0x0000	; .....,.
@@ -432,7 +432,7 @@ clr_cursor:
 ; 
 ;   input:  B - line
 ; 
-;   output: (HL) - player's guess
+;   output: HL - player's guess
 ; 
 ;   uses:   all
 ; 
@@ -480,7 +480,18 @@ player_select:
 	jp	nz,3b
 	pop	bc
 	call	clr_cursor
-	ld	hl,guess
+	ld	de,guess
+	ld	b,POSITIONS
+	ld	l,0
+4:	add	hl,hl
+	add	hl,hl
+	add	hl,hl
+	ld	a,(de)
+	inc	de
+	or	l
+	ld	l,a
+	dec	b
+	jp	nz,4b
 	ret
 1:	cp	KLEFT
 	jp	nz,1f
@@ -551,6 +562,74 @@ player_select:
 	.lcomm	guess, POSITIONS
 
 ; ==============================================================================
+; player_score - let player enter score
+; 
+;   output: A - score entered
+; 
+;   uses:   all
+; 
+	.text
+	.globl	player_score
+player_score:
+	ld	hl, msg_bpegs
+	call	disp_msg
+	ld	hl,inklav_rnd
+	ld	(ikf),hl
+	ld	hl,valp
+	ld	(vf),hl
+	ld	bc,0x0101
+	ld	hl,kbdbuffer
+	push	hl
+	push	bc
+	call	sedit
+	ld	a,(kbdbuffer)
+	sub	'0'
+	ld	(nblack),a
+	ld	de,msg_wpegs
+	call	writelncur
+	pop	bc
+	pop	hl
+	call	sedit
+	ld	a,(kbdbuffer)
+	sub	'0'
+	ld	(nwhite),a
+	ld	de,msg_confirm
+	call	writelncur
+	call	get_conf2
+	jp	z,player_score
+	ld	a,(nblack)
+	ld	b,a
+	ld	a,(nwhite)
+	ld	c,a
+	add	a,b
+	cp	POSITIONS + 1
+	jp	nc,1f
+	ld	a,b
+	add	a,a
+	add	a,a
+	add	a,a
+	or	c
+	cp	((POSITIONS - 1) << 3) | 1
+	jp	z,1f
+	push	af
+	call	clr_msg
+	pop	af
+	ret
+1:	ld	hl,msg_errpegs
+	call	get_ack
+	jp	player_score
+valp:	cp	'0'
+	ret	c
+	cp	'0' + POSITIONS + 1
+	ccf
+	ret
+
+	.globl	kbdbuffer
+	.lcomm	kbdbuffer, 2
+	.lcomm	nblack, 1
+	.lcomm	nwhite, 1
+	
+; ==============================================================================
 ; write - display one character
 ; 
 ;   input:  A - character
@@ -566,25 +645,28 @@ write:
 	jp	prtout
 	
 ; ==============================================================================
-; writeln - display zero-terminated string
+; writeln/writelncur - display zero-terminated string
 ; 
-;   input:  (HL) - string
-;           (DE) - destination
+;   input:  (HL) - string (only writeln)
+;           (DE) - string (only writelncur)
+;           (DE) - destination (only writeln)
+;           (cursor) - destination (only writelncur)
 ;           (color) - color mask
 ; 
 ;   uses:   A, H, L
 ; 
 	.text
-	.globl	writeln
+	.globl	writeln, writelncur
 writeln:
 	ex	de,hl
 	ld	(cursor),hl
-1:	ld	a,(de)
+writelncur:
+	ld	a,(de)
 	or	a
 	ret	z
 	call	prtout
 	inc	de
-	jp	1b
+	jp	writelncur
 	
 ; ==============================================================================
 ; clr_msg - clear the notification area
@@ -628,25 +710,26 @@ disp_msg:
 	ret
 
 ; ==============================================================================
-; get_conf - display prompt and wait for confirmation (Y/N)
+; get_conf,getconf_2 - optionally display prompt and wait for confirmation (Y/N)
 ; 
-;   input:  (HL) - prompt
+;   input:  (HL) - prompt (only get_conf)
 ;           (color) - color mask
 ; 
-;   output: Z answer is YES
+;   output: NZ answer is YES
 ; 
 ;   uses:   A, B, D, E, H, L
 ; 
 	.text
-	.globl	get_conf
+	.globl	get_conf, get_conf2
 get_conf:
 	call	disp_msg
-1:	call	inklav_rnd
+get_conf2:
+	call	inklav_rnd
 	cp	KEY_YES
 	jp	z,1f
 	cp	KEY_NO
 	jp	z,2f
-	jp	1b
+	jp	get_conf2
 1:	call	clr_msg
 	or	0xff
 	ret

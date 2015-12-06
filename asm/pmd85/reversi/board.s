@@ -893,7 +893,7 @@ disp_msg:
 ;   input:  (HL) - prompt
 ;           (color) - color mask
 ; 
-;   output: Z answer is YES
+;   output: NZ answer is YES
 ; 
 ;   uses:   A, B, D, E, H, L
 ; 

@@ -23,8 +23,13 @@
 ; ==============================================================================
 ; Constants
 	
-	.equiv	LRPOS, 0xc404
-	.equiv	CRPOS, 0xcb02
+	.equiv	LRPOS, 0xc204
+	.equiv	CRPOS, 0xc902
+	.equiv	DSPOS, 0xd200
+	.equiv	RNDPOS, 0xd207
+	.equiv	RNDSPOS, 0xd20c
+	.equiv	PSCPOS, 0xd78a
+	.equiv	CSCPOS, 0xdb0a
 	
 ; ==============================================================================
 ; Credits
@@ -48,12 +53,16 @@ credits:
 ; ==============================================================================
 ; Labels
 ;
+lbl_desc:
+	db	"Round:   of", CR, CR
+	db	"Player:", CR, VT, VT, VT
+	db	"Computer:", 0
 	
 ; ==============================================================================
 ; Prompts
 ;
 	.data
-	.globl	msg_yguess
+	.globl	msg_yguess, msg_bpegs, msg_wpegs, msg_confirm, msg_errpegs
 msg_hwerr:
 	.asciz	"Hardware error, please press EOL to quit"
 msg_quit:
@@ -63,3 +72,29 @@ msg_new:
 msg_yguess:
 	db	"Enter your guess: 1", OBELUS, '0' + COLORS, ", ", LEFT1, LEFT2
 	db	", ", RIGHT1, RIGHT2, ", DEL, CLR, EOL", 0
+msg_bpegs:
+	.asciz	"Black pegs? "
+msg_wpegs:
+	.asciz	"  White pegs? "
+msg_confirm:
+	.asciz	"  Confirm (Y/N)"
+msg_errpegs:
+	.asciz	"Invalid combination, please press EOL and retry"
+msg_nrnds:
+	db	"Number of rounds (1", OBELUS, "8)? ", 0
+msg_prep:
+	.asciz	"Set up your code and press EOL"
+msg_startg:
+	.asciz	"Computer's code ready, press EOL to proceed"
+msg_out:
+	.asciz	"No more attempts, computer scores 11 points"
+msg_corr:
+	.asciz	"Correct, computer scores "
+msg_corr1:
+	.asciz	"1 point"
+	.irpc	n, "23456789"
+msg_corr\n:
+	.asciz	"\n points"
+	.endr
+msg_corr10:
+	.asciz	"10 points"

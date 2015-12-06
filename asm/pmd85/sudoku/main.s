@@ -23,7 +23,7 @@
 	.include "sudoku.inc"
 
 ; ==============================================================================
-; Langage file inclusion
+; Language file inclusion
 ;
 	.ifdef	en
 	.include "lang-en.inc"

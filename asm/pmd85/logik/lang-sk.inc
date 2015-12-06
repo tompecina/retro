@@ -23,8 +23,13 @@
 ; ==============================================================================
 ; Constants
 	
-	.equiv	LRPOS, 0xc404
-	.equiv	CRPOS, 0xcb00
+	.equiv	LRPOS, 0xc204
+	.equiv	CRPOS, 0xc900
+	.equiv	DSPOS, 0xd200
+	.equiv	RNDPOS, 0xd206
+	.equiv	RNDSPOS, 0xd208
+	.equiv	PSCPOS, 0xd789
+	.equiv	CSCPOS, 0xdb09
 	
 ; ==============================================================================
 ; Credits
@@ -48,12 +53,16 @@ credits:
 ; ==============================================================================
 ; Labels
 ;
+lbl_desc:
+	db	"Kolo:  /", CR, CR
+	db	"Hr", 0xc1, 0xc3, ":", CR, VT, VT, VT
+	db	"Po", 0xc3, 0xc9, "ta", 0xc3, ":", 0
 	
 ; ==============================================================================
 ; Prompts
 ;
 	.data
-	.globl	msg_yguess
+	.globl	msg_yguess, msg_bpegs, msg_wpegs, msg_confirm, msg_errpegs
 msg_hwerr:
 	db	"Vadn", 0xd9, " hardv", 0xd7, "r, pros", 0xc9, "m, stla", 0xc3
 	db	"te EOL", 0
@@ -66,3 +75,37 @@ msg_new:
 msg_yguess:
 	db	"Zadajte kombin", 0xc1, "ciu: 1-", '0' + COLORS
 	db	", ", LEFT1, LEFT2, ", ", RIGHT1, RIGHT2, ", DEL, CLR, EOL", 0
+msg_bpegs:
+	db	0xe3, "iernych? ", 0
+msg_wpegs:
+	.asciz	"  Bielych? "
+msg_confirm:
+	.asciz	"  V poriadku? (A/N)"
+msg_errpegs:
+	db	"Nedovolen", 0xc1, " kombin", 0xc1, "cia, stla", 0xc3
+	db	"te EOL a opravte", 0
+msg_nrnds:
+	db	"Po", 0xc3, "et k", 0xd0, "l (1-8)? ", 0
+msg_prep:
+	db	"Zostavte k", 0xcf, "d a stla", 0xc3, "te EOL", 0
+msg_startg:
+	db	"Po", 0xc3, 0xc9, "ta", 0xc3, " zostavil k", 0xcf
+	db	"d, stla", 0xc3, "te EOL", 0
+msg_out:
+	db	"Pokusy vy", 0xc3, "erpan", 0xd7, ", po", 0xc3, 0xc9, "ta", 0xc3
+	db	" si pripisuje 11 bodov", 0
+msg_corr:
+	db	"Spr", 0xc1, "vne, po", 0xc3, 0xc9, "ta", 0xc3, " si p", 0xd2
+	db	"ipisuje ", 0
+msg_corr1:
+	.asciz	"1 bod"
+	.irpc	n, "234"
+msg_corr\n:
+	.asciz	"\n body"
+	.endr
+	.irpc	n, "56789"
+msg_corr\n:
+	.asciz	"\n bodov"
+	.endr
+msg_corr10:
+	.asciz	"10 bodov"

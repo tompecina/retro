@@ -50,10 +50,13 @@ sedit:	inc	b
 	jp	nz,1f
 	ld	a,(nchar)
 	cp	b
-	jp	c,2b
+	jp	nc,2b
 	ld	(hl),0
 	ld	c,a
-	ret
+	ld	hl,(cursor)
+	dec	hl
+	ld	(cursor),hl
+	jp	hdcur
 1:	cp	KLEFT
 	jp	nz,1f
 3:	ld	a,(nchar)
