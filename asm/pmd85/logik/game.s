@@ -415,7 +415,7 @@ select_code:
 	ret
 	
 ; ==============================================================================
-; init_map - initalize pseudorandom transformation (mapping)
+; rnd_map - populate pseudorandom transformation (mapping)
 ; 
 ;   input:  (seed) - PRNG seed
 ; 
@@ -426,8 +426,8 @@ select_code:
 ;   uses:   all
 ; 
 	.text
-	.globl	init_map
-init_map:
+	.globl	rnd_map
+rnd_map:
 	call	lcg
 	ld	hl,cmap
 	push	hl
@@ -535,5 +535,106 @@ init_map:
 	.lcomm	cmap, 8
 	.lcomm	pmap, 5
 	.lcomm	tperm, 8
+	
+; ==============================================================================
+; trans_code - transform code
+; 
+;   input:  HL - code
+;	    (cmap) - color map
+;	    (pmap) - position map
+; 
+;   output: HL - transformed code
+; 
+;   uses:   all
+; 
+	.text
+	.globl	trans_code
+trans_code:
+	ld	de,cbuff1
+	ld	b,0x07
+	ld	a,l
+	and	b
+	ld	(de),a
+	inc	de
+	ld	a,l
+	rra
+	rra
+	rra
+	and	b
+	ld	(de),a
+	inc	de
+	ld	a,h
+	rra
+	ld	a,l
+	rla
+	rla
+	rla
+	and	b
+	ld	(de),a
+	inc	de
+	ld	a,h
+	rra
+	and	b
+	ld	(de),a
+	inc	de
+	ld	a,h
+	rra
+	rra
+	rra
+	rra
+	and	b
+	ld	(de),a
+	ret
+	ld	hl,cbuff1
+	push	hl
+	ld	de,cmap
+	ld	b,0
+	ld	a,POSITIONS
+1:	push	af
+	ld	c,(hl)
+	push	hl
+	ld	h,d
+	ld	l,e
+	add	hl,bc
+	ld	a,(hl)
+	pop	hl
+	ld	(hl),a
+	inc	hl
+	pop	af
+	dec	a
+	jp	nz,1b
+	pop	bc
+	ld	hl,pmap
+	ld	d,0
+	ld	a,POSITIONS
+1:	push	af
+	ld	e,(hl)
+	inc	hl
+	push	hl
+	ld	hl,cbuff2
+	add	hl,de
+	ld	a,(bc)
+	inc	bc
+	ld	(hl),a
+	pop	hl
+	pop	af
+	dec	a
+	jp	nz,1b
+	ld	de,cbuff2
+	ld	b,POSITIONS
+	ld	l,0
+1:	add	hl,hl
+	add	hl,hl
+	add	hl,hl
+	ld	a,(de)
+	inc	de
+	or	l
+	ld	l,a
+	dec	b
+	jp	nz,1b
+	ret	
+
+	.lcomm	cbuff1, 5
+	.lcomm	cbuff2, 5
 	
 	.end

@@ -1,5 +1,5 @@
 APPL = logik
-OBJ = board.o glyphs.o util.o random.o labels.o game.o \
+OBJ = board.o glyphs.o util.o random.o labels.o game.o tree.o \
 	../adras10.o ../wrchar10.o ../beep.o ../waits.o ../inkey.o \
 	../inklav.o ../erase.o ../prtout.o ../sedit.o ../indcall.o \
 	../debug.o \

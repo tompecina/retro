@@ -53,17 +53,6 @@ main:
 ; initialize
 	di
 	ld	sp,0x7000
-
-
-	call	init_map
-
-	jp	0
-
-
-
-
-
-
 	call	init_btbl
 	call	init_kbd
 	call	set_kmap
