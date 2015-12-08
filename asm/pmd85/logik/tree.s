@@ -25,7 +25,9 @@
 ; ==============================================================================
 ; Constants
 ;
-
+	.equiv	START, 0x80
+	.equiv	STOP, 0x40
+	
 ; ==============================================================================
 ; search_tree - search the tree
 ; 
@@ -54,35 +56,37 @@ search_tree:
 	ld	hl,(tptr)
 	ld	a,(hl)
 	ld	c,a
-	and	0x80
+	and	START
 	jp	nz,3f
-	scf
+1:	scf
 	ret
 3:	ld	a,c
 	and	0x3f
 	cp	b
+	jp	nz,1f
 	inc	hl
-	jp	z,1f
-	ld	a,c
-	and	0x40
-	jp	z,1f
-	or	a		; CY = 0
-	ret
-1:	inc	hl
+	jp	2b
+1:	ld	a,c
+	and	STOP
+	jp	nz,1b
+	ld	d,0
+4:	inc	hl
+	inc	hl
 	inc	hl
 	ld	a,(hl)
 	ld	c,a
-	and	0x80
+	and	START
+	jp	nz,1f
+	ld	a,d
+	or	a
 	jp	z,3b
-	ld	d,1
-	inc	hl
-	inc	hl
-	inc	hl
-	ld	a,c
-	and	0x40
-	jp	z,?
-	dec	c
+2:	ld	a,c
+	and	STOP
 	jp	z,4b
+	dec	d
+	jp	z,4b	
+1:	inc	d
+	jp	2b
 	
 	.lcomm	tptr, 2
 	
@@ -92,6 +96,5 @@ search_tree:
 	.data
 tree:
 	.include "tree.inc"
-	.byte	0		; end mark
 	
 	.end
