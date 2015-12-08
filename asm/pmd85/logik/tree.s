@@ -41,7 +41,8 @@
 	.text
 	.globl	search_tree
 search_tree:
-	cp	0xff
+	ld	b,a
+	inc	a
 	jp	nz,1f
 	ld	hl,tree
 2:	ld	e,(hl)
@@ -52,8 +53,7 @@ search_tree:
 	ex	de,hl
 	or	a		; CY = 0
 	ret
-1:	ld	b,a
-	ld	hl,(tptr)
+1:	ld	hl,(tptr)
 	ld	a,(hl)
 	ld	c,a
 	and	START

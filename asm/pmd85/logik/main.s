@@ -53,6 +53,18 @@ main:
 ; initialize
 	di
 	ld	sp,0x7000
+
+
+	ld	a,0xff
+	call	search_tree
+	ld	a,0
+	call	search_tree
+	ld	a,4
+	call	search_tree
+	
+	jp	0
+	
+
 	call	init_btbl
 	call	init_kbd
 	call	set_kmap
