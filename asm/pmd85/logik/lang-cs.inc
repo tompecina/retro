@@ -46,9 +46,6 @@ credits:
 	.equiv	KEY_NO, 'N'
 	.equiv	KEY_ENTER, KEOL
 
-	.equiv	KEY_NEW, 'N'
-	.equiv	KEY_QUIT, 'K'
-	
 ; ==============================================================================
 ; Labels
 ;
@@ -65,12 +62,6 @@ lbl_desc:
 msg_hwerr:
 	db	"Vadn", 0xd9, " hardware, pros", 0xc9, "m, stiskn", 0xc5
 	db	"te EOL", 0
-msg_quit:
-	db	"Opravdu si p", 0xd2, "ejete program ukon", 0xc3
-	db	"it? (A/N)", 0
-msg_new:
-	db	"Opravdu si p", 0xd2, "ejete za", 0xc3, 0xc9
-	db	" novou hru? (A/N)", 0
 msg_yguess:
 	db	"Zadejte kombinaci: 1-", '0' + COLORS, ", ", LEFT1, LEFT2
 	db	", ", RIGHT1, RIGHT2, ", DEL, CLR, EOL", 0
@@ -85,17 +76,25 @@ msg_errpegs:
 	db	"te EOL a opravte", 0
 msg_nrnds:
 	db	"Po", 0xc3, "et kol (1-8)? ", 0
-msg_prep:
-	db	"Sestavte kod a stiskn", 0xc5, "te EOL", 0
-msg_startg:
+msg_cstart:
 	db	"Po", 0xc3, 0xc9, "ta", 0xc3, " sestavil kod, stiskn", 0xc5
 	db	"te EOL", 0
-msg_out:
+msg_pstart:
+	db	"Sestavte kod a stiskn", 0xc5, "te EOL", 0
+msg_cout:
 	db	"Pokusy vy", 0xc3, "erp", 0xc1, "ny, po", 0xc3, 0xc9, "ta", 0xc3
 	db	" si p", 0xd2, "ipisuje 11 bod", 0xca, 0
-msg_corr:
+msg_pout:
+	db	"Pokusy vy", 0xc3, "erp", 0xc1, "ny, p", 0xd2
+	db	"ipisujete si 11 bod", 0xca, 0
+msg_perr:
+	db	"Chybn", 0xd7, " zad", 0xc1, "n", 0xc9, ", p", 0xd2
+	db	"ipisujete si 0 bod", 0xca, 0
+msg_ccorr:
 	db	"Spr", 0xc1, "vn", 0xc5, "po", 0xc3, 0xc9, "ta", 0xc3
 	db	" si p", 0xd2, "ipisuje ", 0
+msg_pcorr:
+	db	"P", 0xd2, "ipisujete si ", 0
 msg_corr1:
 	.asciz	"1 bod"
 	.irpc	n, "234"
@@ -108,3 +107,6 @@ msg_corr\n:
 	.endr
 msg_corr10:
 	db	"10 bod", 0xca, 0
+msg_again:
+	db	"Dal", 0xd3, 0xc9, " hru? (A/N)", 0
+	

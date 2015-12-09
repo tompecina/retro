@@ -53,18 +53,6 @@ main:
 ; initialize
 	di
 	ld	sp,0x7000
-
-
-	ld	a,0xff
-	call	search_tree
-	ld	a,0
-	call	search_tree
-	ld	a,4
-	call	search_tree
-	
-	jp	0
-	
-
 	call	init_btbl
 	call	init_kbd
 	call	set_kmap
@@ -95,7 +83,7 @@ quit:	call	rel_ct1
 	call	writeln
 
 ; get number of rounds
-	ld	hl,msg_nrnds
+again:	ld	hl,msg_nrnds
 	call	disp_msg
 	ld	hl,inklav_rnd
 	ld	(ikf),hl
@@ -111,7 +99,7 @@ quit:	call	rel_ct1
 	pop	af
 	sub	'0'
 	ld	(rounds),a
-	ld	a,1
+	ld	a,0
 	ld	(round),a
 
 ; display initial score
@@ -121,8 +109,8 @@ quit:	call	rel_ct1
 	call	disp_score
 
 ; display round number
-	ld	a,(round)
-	add	a,'0'
+3:	ld	a,(round)
+	add	a,'1'
 	ld	hl,RNDPOS
 	call	write
 
@@ -131,17 +119,16 @@ quit:	call	rel_ct1
 	ld	ccode,hl
 
 ; initialize attemps
-	xor	a
-	ld	(attempt),a
+	ld	b,0
 	
 ; display starting prompt
-	ld	hl,msg_startg
+	push	bc
+	ld	hl,msg_cstart
 	call	get_ack
+	pop	bc
 	
 ; let player guess
-1:	ld	hl,attempt
-	ld	b,(hl)
-	push	bc
+1:	push	bc
 	call	player_select
 
 ; evaluate guess
@@ -153,25 +140,27 @@ quit:	call	rel_ct1
 	push	af
 	call	draw_pegs
 	pop	af
-	cp	40
-	ld	hl,attempt
+	cp	SUCC
 	jp	z,1f
-	inc	(hl)
-	ld	a,(hl)
+	inc	b
+	ld	a,b
 	cp	ATTEMPTS
 	jp	nz,1b
-	ld	hl,msg_out
+	ld	hl,msg_cout
 	call	get_ack
 	ld	hl,cscore
 	ld	a,(hl)
 	add	a,ATTEMPTS + 1
 	ld	(hl),a
 	jp	2f
-1:	ld	e,(hl)
-	ld	hl,msg_corr
-	call	disp_msg
-	ld	hl,corr
+1:	push	bc
+	ld	e,(hl)
 	ld	d,0
+	push	de
+	ld	hl,msg_ccorr
+	call	disp_msg
+	pop	de
+	ld	hl,corr
 	add	hl,de
 	add	hl,de
 	ld	e,(hl)
@@ -179,19 +168,109 @@ quit:	call	rel_ct1
 	ld	d,(hl)
 	ex	de,hl
 	call	writeln
-	ld	hl,attempt
+	pop	bc
 	ld	a,(cscore)
-	add	a,(hl)
+	add	a,b
 	inc	a
 	ld	(cscore),a
 	
 ; update score
 2:	call	disp_score
 	
+; clear board and display prompt
+	call	draw_board
+	call	rnd_map
+	ld	hl,msg_pstart
+	call	get_ack
 	
-	jp	0
+; initialize variables
+	ld	b,0
+	ld	hl,guesses
+	ld	(pguess),hl
+
+; create guess
+	ld	a,0xff
+4:	push	bc
+	call	get_guess
+	pop	bc
+	jp	nc,1f
+	ld	hl,msg_perr
+	call	get_ack
+	jp	2f
+1:	ex	de,hl
+	ld	hl,(pguess)
+	ld	(hl),e
+	inc	hl
+	ld	(hl),d
+	inc	hl
+	ld	(pguess),hl
+	ex	de,hl
+	push	bc
+	call	trans_code
+	pop	bc
+	push	bc
+	call	disp_guess
+
+; evaluate guess
+	call	player_score
+	pop	bc
+	push	af
+	call	draw_pegs
+	pop	af
+	ld	hl,(pguess)
+	ld	(hl),a
+	inc	hl
+	ld	(pguess),hl
+	cp	SUCC
+	jp	z,1f
+	inc	b
+	ld	c,a
+	ld	a,b
+	cp	ATTEMPTS
+	ld	a,c
+	jp	nz,4b
+	ld	hl,msg_pout
+	call	get_ack
+	ld	hl,pscore
+	ld	a,(hl)
+	add	a,ATTEMPTS + 1
+	ld	(hl),a
+	jp	2f
+1:	ld	hl,pscore
+	ld	a,b
+	add	a,(hl)
+	inc	a
+	ld	(hl),a
+	push	bc
+	ld	hl,msg_pcorr
+	call	disp_msg
+	pop	bc
+	ld	e,b
+	ld	d,0
+	ld	hl,corr
+	add	hl,de
+	add	hl,de
+	ld	e,(hl)
+	inc	hl
+	ld	d,(hl)
+	ex	de,hl
+	call	writeln
+
+; next round
+2:	call	draw_board
+	ld	hl,round
+	inc	(hl)
+	ld	a,(rounds)
+	cp	(hl)
+	jp	nz,3b
+
+; check if player wishes to play again
+	ld	hl,msg_again
+	call	get_conf
+	jp	z,quit
+	jp	again
 	
-	
+; number of rounds validation function
 valr:	cp	'0' + MINROUNDS
 	ret	c
 	cp	'0' + MAXROUNDS + 1
@@ -203,15 +282,16 @@ valr:	cp	'0' + MINROUNDS
 corr:	
 	.irpc	n, "123456789"
 	.word	msg_corr\n
-	.word	msg_corr10
 	.endr
+	.word	msg_corr10
 	
 	.lcomm	rounds, 1
 	.lcomm	round, 1
 	.lcomm	pscore, 1
 	.lcomm	cscore, 1
 	.lcomm	ccode, 2
-	.lcomm	attempt, 1
+	.lcomm	guesses, ATTEMPTS * 3
+	.lcomm	pguess, 2
 	
 ; ==============================================================================
 ; Display score

@@ -25,12 +25,8 @@
 ; ==============================================================================
 ; Constants
 	
-	.globl	COLORS, ATTEMPTS, POSITIONS
 	.equiv	ULC, 0xc216		; upper left corner of the board
 	.equiv	MSGAREA, 0xffc0		; position of the notification area
-	.equiv	ATTEMPTS, 10		; maximum number of attempts
-	.equiv	POSITIONS, 5		; number of positions
-	.equiv	COLORS, 8		; number of colors
 	
 ; ==============================================================================
 ; draw_board - draw board
@@ -286,7 +282,7 @@ draw_peg:
 ;   input:  A - (black_pegs << 3) | white_pegs
 ;           B - line
 ;
-;   uses:   all
+;   uses:   A, C, D, H, L
 ; 
 	.text
 	.globl	draw_pegs
@@ -628,6 +624,39 @@ valp:	cp	'0'
 	.lcomm	kbdbuffer, 2
 	.lcomm	nblack, 1
 	.lcomm	nwhite, 1
+	
+; ==============================================================================
+; disp_guess - display computer's guess
+; 
+;   input:  B - line
+;	    HL - computer's guess
+; 
+;   uses:   all
+; 
+	.text
+	.globl	disp_guess
+disp_guess:
+	ld	c,0
+1:	ld	a,h
+	rra
+	rra
+	rra
+	rra
+	and	0x07
+	inc	a
+	add	hl,hl
+	add	hl,hl
+	add	hl,hl
+	push	hl
+	push	bc
+	call	draw_digit
+	pop	bc
+	pop	hl
+	inc	c
+	ld	a,c
+	cp	POSITIONS
+	jp	nz,1b
+	ret
 	
 ; ==============================================================================
 ; write - display one character

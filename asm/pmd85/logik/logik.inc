@@ -27,3 +27,7 @@
 ; 
 	.equiv	MAXWORD, 0x7fff
 	.equiv	MINWORD, 0x8000
+	.equiv	ATTEMPTS, 10		; maximum number of attempts
+	.equiv	POSITIONS, 5		; number of positions
+	.equiv	COLORS, 8		; number of colors
+	.equiv	SUCC, POSITIONS << 3	; all-blacks score

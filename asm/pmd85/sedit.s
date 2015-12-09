@@ -40,8 +40,7 @@
 ; 
 	.text
 	.globl	sedit
-sedit:	inc	b
-	xor	a
+sedit:	xor	a
 	ld	(nchar),a
 	call	shcur
 2:	call	indcall
@@ -50,7 +49,7 @@ sedit:	inc	b
 	jp	nz,1f
 	ld	a,(nchar)
 	cp	b
-	jp	nc,2b
+	jp	c,2b
 	ld	(hl),0
 	ld	c,a
 	ld	hl,(cursor)

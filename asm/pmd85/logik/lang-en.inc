@@ -47,9 +47,6 @@ credits:
 	.equiv	KEY_NO, 'N'
 	.equiv	KEY_ENTER, KEOL
 
-	.equiv	KEY_NEW, 'N'
-	.equiv	KEY_QUIT, 'Q'
-	
 ; ==============================================================================
 ; Labels
 ;
@@ -65,10 +62,6 @@ lbl_desc:
 	.globl	msg_yguess, msg_bpegs, msg_wpegs, msg_confirm, msg_errpegs
 msg_hwerr:
 	.asciz	"Hardware error, please press EOL to quit"
-msg_quit:
-	.asciz	"Do you really wish to end the program? (Y/N)"
-msg_new:	
-	.asciz	"Do you really wish to start a new game? (Y/N)"
 msg_yguess:
 	db	"Enter your guess: 1", OBELUS, '0' + COLORS, ", ", LEFT1, LEFT2
 	db	", ", RIGHT1, RIGHT2, ", DEL, CLR, EOL", 0
@@ -82,14 +75,20 @@ msg_errpegs:
 	.asciz	"Invalid combination, please press EOL and retry"
 msg_nrnds:
 	db	"Number of rounds (1", OBELUS, "8)? ", 0
-msg_prep:
-	.asciz	"Set up your code and press EOL"
-msg_startg:
+msg_cstart:
 	.asciz	"Computer's code ready, press EOL to proceed"
-msg_out:
+msg_pstart:
+	.asciz	"Set up your code and press EOL"
+msg_cout:
 	.asciz	"No more attempts, computer scores 11 points"
-msg_corr:
+msg_pout:
+	.asciz	"No more attempts, you score 11 points"
+msg_perr:
+	.asciz	"Incompatible entries, you score 0 points"
+msg_ccorr:
 	.asciz	"Correct, computer scores "
+msg_pcorr:
+	.asciz	"You score "
 msg_corr1:
 	.asciz	"1 point"
 	.irpc	n, "23456789"
@@ -98,3 +97,5 @@ msg_corr\n:
 	.endr
 msg_corr10:
 	.asciz	"10 points"
+msg_again:
+	.asciz	"Another game? (Y/N)"

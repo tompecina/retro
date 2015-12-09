@@ -84,7 +84,7 @@ search_tree:
 	and	STOP
 	jp	z,4b
 	dec	d
-	jp	z,4b	
+	jp	4b	
 1:	inc	d
 	jp	2b
 	

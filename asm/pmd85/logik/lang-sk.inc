@@ -47,9 +47,6 @@ credits:
 	.equiv	KEY_NO, 'N'
 	.equiv	KEY_ENTER, KEOL
 	
-	.equiv	KEY_NEW, 'N'
-	.equiv	KEY_QUIT, 'K'
-	
 ; ==============================================================================
 ; Labels
 ;
@@ -66,12 +63,6 @@ lbl_desc:
 msg_hwerr:
 	db	"Vadn", 0xd9, " hardv", 0xd7, "r, pros", 0xc9, "m, stla", 0xc3
 	db	"te EOL", 0
-msg_quit:
-	db	"Naozaj si ", 0xda, "el", 0xc1, "te program ukon", 0xc3
-	db	"i", 0xd4, "? (A/N)", 0
-msg_new:
-	db	"Naozaj si ", 0xda, "el", 0xc1, "te za", 0xc3, "a", 0xd4
-	db	" nov", 0xd5, " hru? (A/N)", 0
 msg_yguess:
 	db	"Zadajte kombin", 0xc1, "ciu: 1-", '0' + COLORS
 	db	", ", LEFT1, LEFT2, ", ", RIGHT1, RIGHT2, ", DEL, CLR, EOL", 0
@@ -86,17 +77,24 @@ msg_errpegs:
 	db	"te EOL a opravte", 0
 msg_nrnds:
 	db	"Po", 0xc3, "et k", 0xd0, "l (1-8)? ", 0
-msg_prep:
-	db	"Zostavte k", 0xcf, "d a stla", 0xc3, "te EOL", 0
-msg_startg:
+msg_cstart:
 	db	"Po", 0xc3, 0xc9, "ta", 0xc3, " zostavil k", 0xcf
 	db	"d, stla", 0xc3, "te EOL", 0
-msg_out:
+msg_pstart:
+	db	"Zostavte k", 0xcf, "d a stla", 0xc3, "te EOL", 0
+msg_cout:
 	db	"Pokusy vy", 0xc3, "erpan", 0xd7, ", po", 0xc3, 0xc9, "ta", 0xc3
 	db	" si pripisuje 11 bodov", 0
-msg_corr:
-	db	"Spr", 0xc1, "vne, po", 0xc3, 0xc9, "ta", 0xc3, " si p", 0xd2
-	db	"ipisuje ", 0
+msg_pout:
+	db	"Pokusy vy", 0xc3, "erpan", 0xd7
+	db	", pripisujete si 11 bodov", 0
+msg_perr:
+	db	"Zl", 0xd7, " zadanie, pripisujete si 0 bodov", 0
+msg_ccorr:
+	db	"Spr", 0xc1, "vne, po", 0xc3, 0xc9, "ta", 0xc3
+	db	" si pripisuje ", 0
+msg_pcorr:
+	db	"Pripisujete si ", 0
 msg_corr1:
 	.asciz	"1 bod"
 	.irpc	n, "234"
@@ -109,3 +107,5 @@ msg_corr\n:
 	.endr
 msg_corr10:
 	.asciz	"10 bodov"
+msg_again:
+	db	0xe4, "al", 0xd3, "iu hru? (A/N)", 0

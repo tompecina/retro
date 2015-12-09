@@ -532,9 +532,9 @@ rnd_map:
 	jp	nz,2b
 	ret
 
-	.lcomm	cmap, 8
-	.lcomm	pmap, 5
-	.lcomm	tperm, 8
+	.lcomm	cmap, COLORS
+	.lcomm	pmap, POSITIONS
+	.lcomm	tperm, COLORS
 	
 ; ==============================================================================
 ; trans_code - transform code
@@ -550,42 +550,23 @@ rnd_map:
 	.text
 	.globl	trans_code
 trans_code:
-	ld	de,cbuff1
-	ld	b,0x07
-	ld	a,l
-	and	b
+	ld	de,cbuff1 + POSITIONS - 1
+	ld	c,POSITIONS
+1:	ld	a,h
+	rra
+	rra
+	rra
+	rra
+	and	0x07
 	ld	(de),a
+	dec	de
+	add	hl,hl
+	add	hl,hl
+	add	hl,hl
+	dec	c
+	jp	nz,1b
 	inc	de
-	ld	a,l
-	rra
-	rra
-	rra
-	and	b
-	ld	(de),a
-	inc	de
-	ld	a,h
-	rra
-	ld	a,l
-	rla
-	rla
-	rla
-	and	b
-	ld	(de),a
-	inc	de
-	ld	a,h
-	rra
-	and	b
-	ld	(de),a
-	inc	de
-	ld	a,h
-	rra
-	rra
-	rra
-	rra
-	and	b
-	ld	(de),a
-	ret
-	ld	hl,cbuff1
+	ex	de,hl
 	push	hl
 	ld	de,cmap
 	ld	b,0
@@ -634,7 +615,22 @@ trans_code:
 	jp	nz,1b
 	ret	
 
-	.lcomm	cbuff1, 5
-	.lcomm	cbuff2, 5
+	.lcomm	cbuff1, POSITIONS
+	.lcomm	cbuff2, POSITIONS
+	
+; ==============================================================================
+; get_guess - get the tree
+; 
+;   input:  A - last score of 0xff if first guess requested
+; 
+;   output: HL - guess
+;	    CY if player entered incompatible scores
+; 
+;   uses:   all
+; 
+	.text
+	.globl	get_guess
+get_guess:
+	jp	search_tree
 	
 	.end
