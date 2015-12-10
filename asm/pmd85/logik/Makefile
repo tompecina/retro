@@ -31,13 +31,13 @@ $(APPL)-cs.bin: main-cs.o $(OBJ)
 $(APPL)-sk.bin: main-sk.o $(OBJ)
 	$(LD) $(LDFLAGS) main-sk.o $(OBJ) -o $@ -Map=$(APPL)-sk.map
 
-main-en.o: main.s $(APPL).inc ../pmd85.inc ../glyphs10.inc lang-en.inc Makefile
+main-en.o: main.s $(APPL).inc tree.inc ../pmd85.inc ../glyphs10.inc lang-en.inc Makefile
 	$(AS) $(ASFLAGS) --defsym en=1 -c $< -o $@ -aglms=main-en.lst
 
-main-cs.o: main.s $(APPL).inc ../pmd85.inc ../glyphs10.inc lang-cs.inc Makefile
+main-cs.o: main.s $(APPL).inc tree.inc ../pmd85.inc ../glyphs10.inc lang-cs.inc Makefile
 	$(AS) $(ASFLAGS) --defsym cs=1 -c $< -o $@ -aglms=main-cs.lst
 
-main-sk.o: main.s $(APPL).inc ../pmd85.inc ../glyphs10.inc lang-sk.inc Makefile
+main-sk.o: main.s $(APPL).inc tree.inc ../pmd85.inc ../glyphs10.inc lang-sk.inc Makefile
 	$(AS) $(ASFLAGS) --defsym sk=1 -c $< -o $@ -aglms=main-sk.lst
 
 %.o: %.s $(APPL).inc ../pmd85.inc ../glyphs10.inc Makefile

@@ -58,7 +58,7 @@ search_tree:
 	ld	c,a
 	and	START
 	jp	nz,3f
-1:	scf
+5:	scf
 	ret
 3:	ld	a,c
 	and	0x3f
@@ -68,7 +68,7 @@ search_tree:
 	jp	2b
 1:	ld	a,c
 	and	STOP
-	jp	nz,1b
+	jp	nz,5b
 	ld	d,0
 4:	inc	hl
 	inc	hl
