@@ -60,6 +60,7 @@ lbl_desc:
 ;
 	.data
 	.globl	msg_yguess, msg_bpegs, msg_wpegs, msg_confirm, msg_errpegs
+	.globl	msg_think
 msg_hwerr:
 	.asciz	"Hardware error, please press EOL to quit"
 msg_yguess:
@@ -99,3 +100,5 @@ msg_corr10:
 	.asciz	"10 points"
 msg_again:
 	.asciz	"Another game? (Y/N)"
+msg_think:
+	.asciz	"Thinking..."

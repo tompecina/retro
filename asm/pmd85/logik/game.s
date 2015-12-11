@@ -25,7 +25,8 @@
 ; ==============================================================================
 ; Constants
 ;
-
+	.equiv	LIMIT, 8
+	
 ; ==============================================================================
 ; init_btbl - initialize the bit count table
 ; 
@@ -622,15 +623,72 @@ trans_code:
 ; get_guess - get the tree
 ; 
 ;   input:  A - last score of 0xff if first guess requested
+;	    B - attempt, 0-based
+;	    (guesses) - all guesses and scores
 ; 
 ;   output: HL - guess
-;	    CY if player entered incompatible scores
+;	    CY if incompatible scores detected
 ; 
 ;   uses:   all
 ; 
 	.text
 	.globl	get_guess
 get_guess:
+	cp	0xff
+	jp	nz,1f
+	ld	hl,nrem
+	ld	(hl),0
 	jp	search_tree
+1:	push	bc
+	call	search_tree
+	pop	bc
+	ret	nc
+	ld	a,(nrem)
+	or	a
+	jp	nz,1f
+	push	bc
+	ld	hl,msg_think
+	call	disp_msg
+	ld	hl,rem
+	ld	(prem),hl
+	ld	de,0
+3:	ld	c,b
+	ld	hl,guesses
+2:	push	de
+	ld	e,(hl)
+	inc	hl
+	ld	d,(hl)
+	inc	hl
+	ld	a,(hl)
+	ex	(sp),hl
+	ex	de,hl
+	push	bc
+	call	check_match
+	pop	bc
+	pop	hl
+	jp	nz,2f
+	dec	c
+	jp	nz,2b
+	ld	hl,(prem)
+	ld	(hl),e
+	inc	hl
+	ld	(hl),d
+	inc	hl
+	ld	(prem),hl
+	ld	hl,nrem
+	inc	(hl)
+2:	inc	de
+	ld	a,d
+	or	a
+	jp	p,3b
+	call	clr_msg
+	pop	bc
+1:	jp	.
+	
+
+	.lcomm	nrem, 1
+	.lcomm	rem, LIMIT * 2
+	.lcomm	prem, 2
+
 	
 	.end

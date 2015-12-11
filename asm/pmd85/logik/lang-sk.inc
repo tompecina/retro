@@ -60,6 +60,7 @@ lbl_desc:
 ;
 	.data
 	.globl	msg_yguess, msg_bpegs, msg_wpegs, msg_confirm, msg_errpegs
+	.globl	msg_think
 msg_hwerr:
 	db	"Vadn", 0xd9, " hardv", 0xd7, "r, pros", 0xc9, "m, stla", 0xc3
 	db	"te EOL", 0
@@ -109,3 +110,5 @@ msg_corr10:
 	.asciz	"10 bodov"
 msg_again:
 	db	0xe4, "al", 0xd3, "iu hru? (A/N)", 0
+msg_think:
+	db	"Rozm", 0xd9, 0xd3, 0xcc, "am...", 0

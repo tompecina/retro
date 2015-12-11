@@ -59,6 +59,7 @@ lbl_desc:
 ;
 	.data
 	.globl	msg_yguess, msg_bpegs, msg_wpegs, msg_confirm, msg_errpegs
+	.globl	msg_think
 msg_hwerr:
 	db	"Vadn", 0xd9, " hardware, pros", 0xc9, "m, stiskn", 0xc5
 	db	"te EOL", 0
@@ -109,4 +110,5 @@ msg_corr10:
 	db	"10 bod", 0xca, 0
 msg_again:
 	db	"Dal", 0xd3, 0xc9, " hru? (A/N)", 0
-	
+msg_think:
+	db	"P", 0xd2, "em", 0xd9, 0xd3, "l", 0xc9, "m...", 0
