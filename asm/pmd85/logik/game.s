@@ -28,60 +28,6 @@
 	.equiv	LIMIT, 8
 	
 ; ==============================================================================
-; init_btbl - initialize the bit count table
-; 
-;   output: (bitcounts) populated
-; 
-;   uses:   A, B, C, H, L
-; 
-	.text
-	.globl	init_btbl
-init_btbl:
-	ld	hl,bitcounts
-	ld	c,0
-3:	ld	b,0
-	ld	a,c
-1:	or	a
-	jp	z,2f
-	rra
-	jp	nc,1b
-	inc	b
-	jp	1b
-2:	ld	(hl),b
-	inc	hl
-	inc	c
-	jp	nz,3b
-	ret
-	
-; ==============================================================================
-; count_bits - count bits in an 8-byte array
-; 
-;   input:  (HL) - array
-; 
-;   output: A - number of bits
-; 
-;   uses:   B, D, E, H, L
-; 
-	.text
-	.globl	count_bits
-count_bits:
-	ld	de,bitcounts
-	ld	b,8
-	xor	a
-1:	push	hl
-	ld	l,(hl)
-	ld	h,0
-	add	hl,de
-	add	a,(hl)
-	pop	hl
-	inc	hl
-	dec	b
-	jp	nz,1b
-	ret
-
-	.lcomm	bitcounts, 256
-	
-; ==============================================================================
 ; Matching macros
 ; 
 	
@@ -651,8 +597,52 @@ get_guess:
 	call	disp_msg
 	ld	hl,rem
 	ld	(prem),hl
+	ld	a,b
+	ld	(att),a
+	ld	a,(guesses + 2)
+	call	sc2gr
+	ld	c,a
 	ld	de,0
-3:	ld	c,b
+	ld	hl,groups
+1:	ld	a,(hl)
+	ld	b,a
+	and	0x03
+	cp	c
+	call	z,3f
+	inc	de
+	ld	a,b
+	rra
+	rra
+	ld	b,a
+	and	0x03
+	cp	c
+	call	z,3f
+	inc	de
+	ld	a,b
+	rra
+	rra
+	ld	b,a
+	and	0x03
+	cp	c
+	call	z,3f
+	inc	de
+	ld	a,b
+	rra
+	rra
+	ld	b,a
+	and	0x03
+	cp	c
+	call	z,3f
+	inc	de
+	ld	a,d
+	or	a
+	jp	m,4f
+	inc	hl
+	jp	1b
+3:	push	bc
+	push	hl
+	ld	hl,att
+	ld	c,(hl)
 	ld	hl,guesses
 2:	push	de
 	ld	e,(hl)
@@ -677,18 +667,17 @@ get_guess:
 	ld	(prem),hl
 	ld	hl,nrem
 	inc	(hl)
-2:	inc	de
-	ld	a,d
-	or	a
-	jp	p,3b
-	call	clr_msg
+2:	pop	hl
 	pop	bc
-1:	jp	.
+	ret
+4:	call	clr_msg
+	pop	bc
+	jp	.
 	
 
 	.lcomm	nrem, 1
 	.lcomm	rem, LIMIT * 2
 	.lcomm	prem, 2
-
+	.lcomm	att, 1
 	
 	.end
