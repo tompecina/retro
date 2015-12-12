@@ -571,6 +571,7 @@ trans_code:
 ;   input:  A - last score of 0xff if first guess requested
 ;	    B - attempt, 0-based
 ;	    (guesses) - all guesses and scores
+;	    (pguess) - pointer to (guesses)
 ; 
 ;   output: HL - guess
 ;	    CY if incompatible scores detected
@@ -591,8 +592,60 @@ get_guess:
 	ret	nc
 	ld	a,(nrem)
 	or	a
-	jp	nz,1f
+	jp	z,1f
+	ld	c,a
 	push	bc
+	ld	hl,(pguess)
+	dec	hl
+	ld	b,(hl)
+	dec	hl
+	ld	d,(hl)
+	dec	hl
+	ld	e,(hl)
+	ld	hl,rem
+	push	hl
+3:	ld	a,(hl)
+	push	hl
+	inc	hl
+	inc	h,(hl)
+	ld	l,a
+	push	bc
+	ld	a,b
+	call	check_match
+	pop	bc
+	pop	hl
+	jp	z,2f
+	ld	(hl),0xff
+2:	inc	hl
+	inc	hl
+	dec	c
+	jp	nz,3b
+	pop	hl
+	ld	d,h
+	ld	e,l
+	pop	bc
+2:	ld	a,(hl)
+	or	a
+	jp	m,3f
+	ld	a,(hl)
+	inc	hl
+	ld	(de),a
+	inc	de
+	ld	a,(hl)
+	inc	hl
+	ld	(de),a
+	inc	de
+	jp	5f
+3:	inc	hl
+	inc	hl
+	push	hl
+	ld	hl,nrem
+	dec	(hl)
+	pop	hl
+5:	dec	c
+	jp	nz,2b
+	jp	4f
+1:	push	bc
 	ld	hl,msg_think
 	call	disp_msg
 	ld	hl,rem

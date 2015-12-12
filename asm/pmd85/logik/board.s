@@ -647,6 +647,10 @@ disp_guess:
 	add	hl,hl
 	add	hl,hl
 	add	hl,hl
+	push	af
+	ld	d,25
+	call	waits
+	pop	af
 	push	hl
 	push	bc
 	call	draw_digit

@@ -284,7 +284,7 @@ corr:
 	.endr
 	.word	msg_corr10
 	
-	.globl	guesses
+	.globl	guesses, pguess
 	.lcomm	rounds, 1
 	.lcomm	round, 1
 	.lcomm	pscore, 1
