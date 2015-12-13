@@ -571,7 +571,6 @@ trans_code:
 ;   input:  A - last score of 0xff if first guess requested
 ;	    B - attempt, 0-based
 ;	    (guesses) - all guesses and scores
-;	    (pguess) - pointer to (guesses)
 ; 
 ;   output: HL - guess
 ;	    CY if incompatible scores detected
@@ -583,119 +582,20 @@ trans_code:
 get_guess:
 	cp	0xff
 	jp	nz,1f
-	ld	hl,nrem
-	ld	(hl),0
+	ld	hl,0
+	ld	(lastcode),hl
 	jp	search_tree
 1:	push	bc
 	call	search_tree
 	pop	bc
 	ret	nc
-	ld	a,(nrem)
-	or	a
-	jp	z,1f
-	ld	c,a
 	push	bc
-	ld	hl,(pguess)
-	dec	hl
-	ld	b,(hl)
-	dec	hl
-	ld	d,(hl)
-	dec	hl
-	ld	e,(hl)
-	ld	hl,rem
-	push	hl
-3:	ld	a,(hl)
-	push	hl
-	inc	hl
-	inc	h,(hl)
-	ld	l,a
-	push	bc
-	ld	a,b
-	call	check_match
-	pop	bc
-	pop	hl
-	jp	z,2f
-	ld	(hl),0xff
-2:	inc	hl
-	inc	hl
-	dec	c
-	jp	nz,3b
-	pop	hl
-	ld	d,h
-	ld	e,l
-	pop	bc
-2:	ld	a,(hl)
-	or	a
-	jp	m,3f
-	ld	a,(hl)
-	inc	hl
-	ld	(de),a
-	inc	de
-	ld	a,(hl)
-	inc	hl
-	ld	(de),a
-	inc	de
-	jp	5f
-3:	inc	hl
-	inc	hl
-	push	hl
-	ld	hl,nrem
-	dec	(hl)
-	pop	hl
-5:	dec	c
-	jp	nz,2b
-	jp	4f
-1:	push	bc
 	ld	hl,msg_think
 	call	disp_msg
-	ld	hl,rem
-	ld	(prem),hl
-	ld	a,b
-	ld	(att),a
-	ld	a,(guesses + 2)
-	call	sc2gr
-	ld	c,a
-	ld	de,0
-	ld	hl,groups
-1:	ld	a,(hl)
-	ld	b,a
-	and	0x03
-	cp	c
-	call	z,3f
-	inc	de
-	ld	a,b
-	rra
-	rra
-	ld	b,a
-	and	0x03
-	cp	c
-	call	z,3f
-	inc	de
-	ld	a,b
-	rra
-	rra
-	ld	b,a
-	and	0x03
-	cp	c
-	call	z,3f
-	inc	de
-	ld	a,b
-	rra
-	rra
-	ld	b,a
-	and	0x03
-	cp	c
-	call	z,3f
-	inc	de
-	ld	a,d
-	or	a
-	jp	m,4f
-	inc	hl
-	jp	1b
-3:	push	bc
-	push	hl
-	ld	hl,att
-	ld	c,(hl)
+	pop	bc
+	ld	hl,(lastcode)
+	ex	de,hl
+3:	ld	c,b
 	ld	hl,guesses
 2:	push	de
 	ld	e,(hl)
@@ -712,25 +612,21 @@ get_guess:
 	jp	nz,2f
 	dec	c
 	jp	nz,2b
-	ld	hl,(prem)
-	ld	(hl),e
-	inc	hl
-	ld	(hl),d
-	inc	hl
-	ld	(prem),hl
-	ld	hl,nrem
-	inc	(hl)
-2:	pop	hl
-	pop	bc
+	ex	de,hl
+	ld	(lastcode),hl
+	push	hl
+	call	clr_msg
+	pop	hl
+	or	a		; CY = 0
 	ret
-4:	call	clr_msg
-	pop	bc
-	jp	.
-	
+2:	inc	de
+	ld	a,d
+	or	a
+	jp	p,3b
+	call	clr_msg
+	scf
+	ret
 
-	.lcomm	nrem, 1
-	.lcomm	rem, LIMIT * 2
-	.lcomm	prem, 2
-	.lcomm	att, 1
+	.lcomm	lastcode, 2
 	
 	.end

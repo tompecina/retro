@@ -84,18 +84,18 @@ msg_pstart:
 	db	"Sestavte kod a stiskn", 0xc5, "te EOL", 0
 msg_cout:
 	db	"Pokusy vy", 0xc3, "erp", 0xc1, "ny, po", 0xc3, 0xc9, "ta", 0xc3
-	db	" si p", 0xd2, "ipisuje 11 bod", 0xca, 0
+	db	" z", 0xc9, "sk", 0xc1, "v", 0xc1, " 11 bod", 0xca, 0
 msg_pout:
-	db	"Pokusy vy", 0xc3, "erp", 0xc1, "ny, p", 0xd2
-	db	"ipisujete si 11 bod", 0xca, 0
+	db	"Pokusy vy", 0xc3, "erp", 0xc1, "ny, z", 0xc9, "sk", 0xc1
+	db	"v", 0xc1, "te 11 bod", 0xca, 0
 msg_perr:
-	db	"Chybn", 0xd7, " zad", 0xc1, "n", 0xc9, ", p", 0xd2
-	db	"ipisujete si 0 bod", 0xca, 0
+	db	"Chybn", 0xd7, " zad", 0xc1, "n", 0xc9, ", z", 0xc9, "sk", 0xc1
+	db	"v", 0xc1, "te 0 bod", 0xca, 0
 msg_ccorr:
 	db	"Spr", 0xc1, "vn", 0xc5, "po", 0xc3, 0xc9, "ta", 0xc3
-	db	" si p", 0xd2, "ipisuje ", 0
+	db	" z", 0xc9, "sk", 0xc1, "v", 0xc1, " ", 0
 msg_pcorr:
-	db	"P", 0xd2, "ipisujete si ", 0
+	db	"Z", 0xc9, "sk", 0xc1, "v", 0xc1, "te ", 0
 msg_corr1:
 	.asciz	"1 bod"
 	.irpc	n, "234"

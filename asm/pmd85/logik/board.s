@@ -25,7 +25,7 @@
 ; ==============================================================================
 ; Constants
 	
-	.equiv	ULC, 0xc216		; upper left corner of the board
+	.equiv	ULC, 0xc2d5		; upper left corner of the board
 	.equiv	MSGAREA, 0xffc0		; position of the notification area
 	
 ; ==============================================================================
@@ -54,6 +54,31 @@ draw_board:
 	ld	a,b
 	cp	ATTEMPTS
 	jp	nz,2b
+	ld	hl,ULC - 513
+	call	2f
+	ld	hl,ULC - 449
+	ld	bc,(0x01 << 8) | 233
+	ld	de,64
+1:	ld	(hl),b
+	add	hl,de
+	dec	c
+	jp	nz,1b
+	ld	hl,ULC - 422
+	ld	bc,(0x02 << 8) | 233
+	ld	de,64
+1:	ld	(hl),b
+	add	hl,de
+	dec	c
+	jp	nz,1b
+	ld	hl,ULC + 14463
+2:	ld	(hl),0x3f
+	inc	hl
+	ld	bc,(0x3f << 8) | 26
+1:	ld	(hl),b
+	inc	hl
+	dec	c
+	jp	nz,1b
+	ld	(hl),0x03
 	ret
 	
 ; ==============================================================================
@@ -647,10 +672,6 @@ disp_guess:
 	add	hl,hl
 	add	hl,hl
 	add	hl,hl
-	push	af
-	ld	d,25
-	call	waits
-	pop	af
 	push	hl
 	push	bc
 	call	draw_digit

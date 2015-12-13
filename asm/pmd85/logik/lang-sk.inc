@@ -85,17 +85,17 @@ msg_pstart:
 	db	"Zostavte k", 0xcf, "d a stla", 0xc3, "te EOL", 0
 msg_cout:
 	db	"Pokusy vy", 0xc3, "erpan", 0xd7, ", po", 0xc3, 0xc9, "ta", 0xc3
-	db	" si pripisuje 11 bodov", 0
+	db	" z", 0xc9, "skava 11 bodov", 0
 msg_pout:
-	db	"Pokusy vy", 0xc3, "erpan", 0xd7
-	db	", pripisujete si 11 bodov", 0
+	db	"Pokusy vy", 0xc3, "erpan", 0xd7, ", z", 0xc9
+	db	"skavate 11 bodov", 0
 msg_perr:
-	db	"Zl", 0xd7, " zadanie, pripisujete si 0 bodov", 0
+	db	"Zl", 0xd7, " zadanie, z", 0xc9, "skavate 0 bodov", 0
 msg_ccorr:
 	db	"Spr", 0xc1, "vne, po", 0xc3, 0xc9, "ta", 0xc3
-	db	" si pripisuje ", 0
+	db	" z", 0xc9, "skava ", 0
 msg_pcorr:
-	db	"Pripisujete si ", 0
+	db	"Z", 0xc9, "skavate ", 0
 msg_corr1:
 	.asciz	"1 bod"
 	.irpc	n, "234"
