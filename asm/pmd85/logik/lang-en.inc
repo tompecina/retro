@@ -87,7 +87,7 @@ msg_pout:
 msg_perr:
 	.asciz	"Incompatible entries, you score 0 points"
 msg_ccorr:
-	.asciz	"Correct, computer scores "
+	.asciz	"Computer scores "
 msg_pcorr:
 	.asciz	"You score "
 msg_corr1:
@@ -102,3 +102,10 @@ msg_again:
 	.asciz	"Another game? (Y/N)"
 msg_think:
 	.asciz	"Thinking..."
+msg_cwin:
+	.asciz	"Computer won. "
+msg_closs:
+	.asciz	"Computer lost. "
+msg_draw:
+	.asciz	"A draw. "
+	

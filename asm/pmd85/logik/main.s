@@ -153,7 +153,7 @@ again:	ld	hl,msg_nrnds
 	ld	(hl),a
 	jp	2f
 1:	push	bc
-	ld	e,(hl)
+	ld	e,b
 	ld	d,0
 	push	de
 	ld	hl,msg_ccorr
@@ -165,8 +165,7 @@ again:	ld	hl,msg_nrnds
 	ld	e,(hl)
 	inc	hl
 	ld	d,(hl)
-	ex	de,hl
-	call	writeln
+	call	writelncur
 	pop	bc
 	ld	a,(cscore)
 	add	a,b
@@ -252,20 +251,33 @@ again:	ld	hl,msg_nrnds
 	ld	e,(hl)
 	inc	hl
 	ld	d,(hl)
-	ex	de,hl
-	call	writeln
+	call	writelncur
+	call	get_ack2
 
 ; next round
-2:	call	draw_board
+2:	call	disp_score
+	call	draw_board
 	ld	hl,round
 	inc	(hl)
 	ld	a,(rounds)
 	cp	(hl)
 	jp	nz,3b
 
-; check if player wishes to play again
-	ld	hl,msg_again
-	call	get_conf
+; display result and check if player wishes to play again
+	ld	a,(pscore)
+	ld	hl,cscore
+	cp	(hl)
+	jp	z,1f
+	jp	c,2f
+	ld	hl,msg_closs
+	jp	3f
+2:	ld	hl,msg_cwin
+	jp	3f
+1:	ld	hl,msg_draw
+3:	call	disp_msg
+	ld	de,msg_again
+	call	writelncur
+	call	get_conf2
 	jp	z,quit
 	jp	again
 	

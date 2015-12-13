@@ -58,18 +58,10 @@ draw_board:
 	call	2f
 	ld	hl,ULC - 449
 	ld	bc,(0x01 << 8) | 233
-	ld	de,64
-1:	ld	(hl),b
-	add	hl,de
-	dec	c
-	jp	nz,1b
+	call	3f
 	ld	hl,ULC - 422
 	ld	bc,(0x02 << 8) | 233
-	ld	de,64
-1:	ld	(hl),b
-	add	hl,de
-	dec	c
-	jp	nz,1b
+	call	3f
 	ld	hl,ULC + 14463
 2:	ld	(hl),0x3f
 	inc	hl
@@ -79,6 +71,12 @@ draw_board:
 	dec	c
 	jp	nz,1b
 	ld	(hl),0x03
+	ret
+3:	ld	de,64
+1:	ld	(hl),b
+	add	hl,de
+	dec	c
+	jp	nz,1b
 	ret
 	
 ; ==============================================================================
@@ -764,7 +762,7 @@ disp_msg:
 	ret
 
 ; ==============================================================================
-; get_conf,getconf_2 - optionally display prompt and wait for confirmation (Y/N)
+; get_conf,get_conf2 - optionally display prompt and wait for confirmation (Y/N)
 ; 
 ;   input:  (HL) - prompt (only get_conf)
 ;           (color) - color mask
@@ -792,20 +790,21 @@ get_conf2:
 	ret
 	
 ; ==============================================================================
-; get_ack - display prompt and wait for acknowledgement (Enter)
+; get_ack,get_ack2 - optionally display prompt and wait for Enter
 ; 
-;   input:  (HL) - prompt
+;   input:  (HL) - prompt (only get_ack)
 ;           (color) - color mask
 ; 
 ;   uses:   A, B, D, E, H, L
 ; 
 	.text
-	.globl	get_ack
+	.globl	get_ack, get_ack2
 get_ack:
 	call	disp_msg
-1:	call	inklav_rnd
+get_ack2:
+	call	inklav_rnd
 	cp	KEY_ENTER
-	jp	nz,1b
+	jp	nz,get_ack2
 	jp	clr_msg
 	
 ; ==============================================================================

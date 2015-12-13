@@ -104,64 +104,6 @@ mul16:
         jp      1b
 
 ; ==============================================================================
-; udiv16_8 - unsigned 16-bit/8-bit division
-; 
-;   input:  HL, C
-; 
-;   output: HL = HL / C
-;           DE = HL % C
-; 
-;   uses:   all
-; 
-	.text
-	.globl	udiv16_8
-udiv16_8:
-        ld      de,0
-	ld      b,16
-1:	add     hl,hl
-        call    rdel
-        jp	z,2f
-        ld      a,e
-        sub     c
-        ld      a,d
-        sbc     a,0
-        jp	m,2f
-        ld      a,l
-        or      1
-        ld      l,a
-        ld      a,e
-        sub     c
-        ld      e,a
-        ld      a,d
-        sbc     a,0
-        ld      d,a
-2:	dec     b
-        jp	nz,1b
-	ret
-	
-; ==============================================================================
-; rdel - rotate DE left
-; 
-;   input:  DE
-; 
-;   output: DE = DE << 1
-;           Z if DE == 0
-; 
-;   uses:   A
-; 
-	.text
-	.globl	rdel
-rdel:
-	ld      a,e
-        rla
-        ld      e,a
-        ld      a,d
-        rla
-        ld      d,a
-        or      e
-        ret
-
-; ==============================================================================
 ; udiv8 - unsigned 8-bit division
 ; 
 ;   input:  E, C

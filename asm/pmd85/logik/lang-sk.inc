@@ -92,8 +92,7 @@ msg_pout:
 msg_perr:
 	db	"Zl", 0xd7, " zadanie, z", 0xc9, "skavate 0 bodov", 0
 msg_ccorr:
-	db	"Spr", 0xc1, "vne, po", 0xc3, 0xc9, "ta", 0xc3
-	db	" z", 0xc9, "skava ", 0
+	db	"Po", 0xc3, 0xc9, "ta", 0xc3, " z", 0xc9, "skava ", 0
 msg_pcorr:
 	db	"Z", 0xc9, "skavate ", 0
 msg_corr1:
@@ -112,3 +111,9 @@ msg_again:
 	db	0xe4, "al", 0xd3, "iu hru? (A/N)", 0
 msg_think:
 	db	"Rozm", 0xd9, 0xd3, 0xcc, "am...", 0
+msg_cwin:
+	db	"Po", 0xc3, 0xc9, "ta", 0xc3, " vyhral. ", 0
+msg_closs:
+	db	"Po", 0xc3, 0xc9, "ta", 0xc3, " prehral. ", 0
+msg_draw:
+	db	"Nerozhodn", 0xd9, " v", 0xd9, "sledok. ", 0

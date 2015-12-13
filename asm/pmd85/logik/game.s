@@ -566,11 +566,11 @@ trans_code:
 	.lcomm	cbuff2, POSITIONS
 	
 ; ==============================================================================
-; get_guess - get the tree
+; get_guess - get the computer's guess
 ; 
 ;   input:  A - last score of 0xff if first guess requested
 ;	    B - attempt, 0-based
-;	    (guesses) - all guesses and scores
+;	    (guesses) - array of guesses and scores
 ; 
 ;   output: HL - guess
 ;	    CY if incompatible scores detected
@@ -603,6 +603,7 @@ get_guess:
 	ld	d,(hl)
 	inc	hl
 	ld	a,(hl)
+	inc	hl
 	ex	(sp),hl
 	ex	de,hl
 	push	bc
