@@ -166,6 +166,7 @@ again:	ld	hl,msg_nrnds
 	inc	hl
 	ld	d,(hl)
 	call	writelncur
+	call	get_ack2
 	pop	bc
 	ld	a,(cscore)
 	add	a,b
