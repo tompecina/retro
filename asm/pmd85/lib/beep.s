@@ -1,4 +1,4 @@
-; main.s
+; beep.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,54 +18,36 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; The game of Sokoban for Tesla PMD 85.
+; Copy of original monitor's beeper routine.
 
-	.include "sokoban.inc"
-
-; ==============================================================================
-; Language file inclusion
-;
-	.ifdef	en
-	.include "lang-en.inc"
-	.endif
-
-	.ifdef	cs
-	.include "lang-cs.inc"
-	.endif
-
-	.ifdef	sk
-	.include "lang-sk.inc"
-	.endif
+	.include "pmd85.inc"
 	
 ; ==============================================================================
-; Constants
-;
-
-; ==============================================================================
-; Main entry point of the program
-;
+; beep,bell - beep according to a pattern
+; 
+;   input:  (beedt) - pattern (for beep)
+;           (HL) - pattern (for bell)
+; 
+;   uses:   A, B, D, H, L
+; 
 	.text
-	.globl	main
-main:
-
-; initialize
-	di
-	ld	sp,0x7000
-	;; call	init_kbd
-	;; call	set_kmap
-	;; call	add_glyphs
-	;; call	add_cust_glyphs
-	call	init_levels
-	call	count_levels
-	ld	(nlevels),hl
-
-	ld	bc,0
-	call	get_level
-
-	;; call	erase
-
-	jp	0
+	.globl	beep, bell
+beep:
+	ld	hl,(beedt)
+bell:
+	call	beclr
+	ld	b,a
+	ld	a,(hl)
+	cp	-1
+	ret	z
+	or	b
+	out	(SYSPIO_PC),A
+	inc	hl
+	ld	d,(hl)
+	call	waits
+	inc	hl
+	jp	bell
 	
-	.lcomm	nlevels, 2
+	.lcomm	beedt, 2
 	
 	.end

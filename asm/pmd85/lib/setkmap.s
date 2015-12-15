@@ -1,4 +1,4 @@
-; main.s
+; inkey.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,54 +18,61 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; The game of Sokoban for Tesla PMD 85.
+; Modify kmap according to the model.
 
-	.include "sokoban.inc"
-
-; ==============================================================================
-; Language file inclusion
-;
-	.ifdef	en
-	.include "lang-en.inc"
-	.endif
-
-	.ifdef	cs
-	.include "lang-cs.inc"
-	.endif
-
-	.ifdef	sk
-	.include "lang-sk.inc"
-	.endif
+	.include "pmd85.inc"
 	
 ; ==============================================================================
-; Constants
-;
-
-; ==============================================================================
-; Main entry point of the program
+; set_kmap - modify keymap for PMD 85-1/2
+; 
+;   uses:   A, H, L
 ;
 	.text
-	.globl	main
-main:
-
-; initialize
-	di
-	ld	sp,0x7000
-	;; call	init_kbd
-	;; call	set_kmap
-	;; call	add_glyphs
-	;; call	add_cust_glyphs
-	call	init_levels
-	call	count_levels
-	ld	(nlevels),hl
-
-	ld	bc,0
-	call	get_level
-
-	;; call	erase
-
-	jp	0
+	.globl	set_kmap
+set_kmap:
+	ld	hl,0x8000
+	ld	a,(hl)
+	cpl
+	ld	(hl),a
+	cp	(hl)
+	jp	nz,1f
+	cpl
+	ld	(hl),a
+	jp	nz,set_kmap2
+1:	cp	0xc3 ^ 0xff
+	jp	nz,set_kmap2
+	inc	hl
+	ld	a,(hl)
+	cp	0x03
+	jp	nz,set_kmap2
+	jp	set_kmap1
 	
-	.lcomm	nlevels, 2
+; ==============================================================================
+; set_kmap1 - modify keymap for PMD 85-1
+; 
+;   uses:   A
+;
+	.text
+	.globl	set_kmap1
+set_kmap1:
+	ld	a,'['
+	ld	(kmp1),a
+	ld	a,']'
+	ld	(kmp2),a
+	ret
+	
+; ==============================================================================
+; set_kmap2 - modify keymap for PMD 85-2
+; 
+;   uses:   A
+;
+	.text
+	.globl	set_kmap2
+set_kmap2:
+	ld	a,']'
+	ld	(kmp1),a
+	ld	a,'['
+	ld	(kmp2),a
+	ret
 	
 	.end

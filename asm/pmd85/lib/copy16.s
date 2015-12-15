@@ -1,4 +1,4 @@
-; main.s
+; copy16.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,54 +18,26 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; The game of Sokoban for Tesla PMD 85.
-
-	.include "sokoban.inc"
-
 ; ==============================================================================
-; Language file inclusion
-;
-	.ifdef	en
-	.include "lang-en.inc"
-	.endif
-
-	.ifdef	cs
-	.include "lang-cs.inc"
-	.endif
-
-	.ifdef	sk
-	.include "lang-sk.inc"
-	.endif
-	
-; ==============================================================================
-; Constants
-;
-
-; ==============================================================================
-; Main entry point of the program
-;
+; copy16 - copy area
+; 
+;   input:  (HL) - source area
+;           (DE) - destination area
+;           BC - number of bytes (1-65536)
+; 
+;   uses:   all
+; 
 	.text
-	.globl	main
-main:
-
-; initialize
-	di
-	ld	sp,0x7000
-	;; call	init_kbd
-	;; call	set_kmap
-	;; call	add_glyphs
-	;; call	add_cust_glyphs
-	call	init_levels
-	call	count_levels
-	ld	(nlevels),hl
-
-	ld	bc,0
-	call	get_level
-
-	;; call	erase
-
-	jp	0
-	
-	.lcomm	nlevels, 2
+	.globl	copy16
+copy16:
+	ld	a,(hl)
+	ld	(de),a
+	inc	hl
+	inc	de
+	dec	bc
+	ld	a,b
+	or	c
+	jp	nz,copy16
+	ret
 	
 	.end

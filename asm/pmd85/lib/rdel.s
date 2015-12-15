@@ -1,4 +1,4 @@
-; main.s
+; rdel.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,54 +18,26 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; The game of Sokoban for Tesla PMD 85.
-
-	.include "sokoban.inc"
-
 ; ==============================================================================
-; Language file inclusion
-;
-	.ifdef	en
-	.include "lang-en.inc"
-	.endif
-
-	.ifdef	cs
-	.include "lang-cs.inc"
-	.endif
-
-	.ifdef	sk
-	.include "lang-sk.inc"
-	.endif
-	
-; ==============================================================================
-; Constants
-;
-
-; ==============================================================================
-; Main entry point of the program
-;
+; rdel - rotate DE left
+; 
+;   input:  DE
+; 
+;   output: DE = DE << 1
+;           Z if DE == 0
+; 
+;   uses:   A
+; 
 	.text
-	.globl	main
-main:
+	.globl	rdel
+rdel:
+	ld      a,e
+        rla
+        ld      e,a
+        ld      a,d
+        rla
+        ld      d,a
+        or      e
+        ret
 
-; initialize
-	di
-	ld	sp,0x7000
-	;; call	init_kbd
-	;; call	set_kmap
-	;; call	add_glyphs
-	;; call	add_cust_glyphs
-	call	init_levels
-	call	count_levels
-	ld	(nlevels),hl
-
-	ld	bc,0
-	call	get_level
-
-	;; call	erase
-
-	jp	0
-	
-	.lcomm	nlevels, 2
-	
 	.end

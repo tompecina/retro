@@ -26,8 +26,7 @@
 ; Heap
 ; 
 	.bss
-	.globl	heap, levels
+	.globl	heap
 heap:
-levels:
 	
 	.end

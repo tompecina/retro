@@ -1,4 +1,4 @@
-; main.s
+; signexde.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,54 +18,23 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; The game of Sokoban for Tesla PMD 85.
-
-	.include "sokoban.inc"
-
 ; ==============================================================================
-; Language file inclusion
-;
-	.ifdef	en
-	.include "lang-en.inc"
-	.endif
-
-	.ifdef	cs
-	.include "lang-cs.inc"
-	.endif
-
-	.ifdef	sk
-	.include "lang-sk.inc"
-	.endif
-	
-; ==============================================================================
-; Constants
-;
-
-; ==============================================================================
-; Main entry point of the program
-;
+; signexde - sign-extend A to DE
+; 
+;   input:  A
+; 
+;   output: HL = A
+; 
+;   uses:   A
+; 
 	.text
-	.globl	main
-main:
+	.globl	signexde
+signexde:
+	ld	e,a
+	rla
+	ld	d,0
+	ret	nc
+	dec	d
+	ret
 
-; initialize
-	di
-	ld	sp,0x7000
-	;; call	init_kbd
-	;; call	set_kmap
-	;; call	add_glyphs
-	;; call	add_cust_glyphs
-	call	init_levels
-	call	count_levels
-	ld	(nlevels),hl
-
-	ld	bc,0
-	call	get_level
-
-	;; call	erase
-
-	jp	0
-	
-	.lcomm	nlevels, 2
-	
 	.end

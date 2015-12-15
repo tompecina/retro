@@ -1,4 +1,4 @@
-; glyphs.s
+; inklav.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,19 +18,28 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Character glyphs.
+; Copy of original monitor's routine.
 
-	.include "sokoban.inc"
+	.include "pmd85.inc"
 	
 ; ==============================================================================
-; Page selectors
-;
-	.equiv	SEL_20, 1
-	.equiv	SEL_40, 1
-	.equiv	SEL_60, 1
-	.equiv	SEL_C0, 1
-	.equiv	SEL_E0, 1
-
-	.include "../glyphs10.inc"
-
+; inklav - wait for key
+; 
+;   output: A - ASCII code of the key
+; 
+;   uses:   -
+; 
+	.text
+	.globl	inklav
+inklav:
+	push	bc
+	push	de
+	push	hl
+1:	call	inkey
+	jp	z,1b
+	pop	hl
+	pop	de
+	pop	bc
+	ret
+	
 	.end

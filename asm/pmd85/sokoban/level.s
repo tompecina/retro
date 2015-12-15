@@ -25,6 +25,7 @@
 ; ==============================================================================
 ; Constants
 ;
+	.equiv	levels, __Hbss
 	
 ; ==============================================================================
 ; init_levels - initialize levels
@@ -34,7 +35,7 @@
 	.text
 	.globl	init_levels
 init_levels:
-	ld	hl,def_levels
+	ld	hl,__Lbss
 	ld	de,levels
 	ld	bc,def_len
 	jp	copy16
@@ -95,9 +96,37 @@ get_level:
 	dec	bc
 	add	hl,de
 	jp	2b
-1:	
+1:	ld	a,COLS
+	sub	(hl)
+	ret	c		; too many columns
+	rra
+	ld	(coff),a
+	ld	a,(hl)
+	inc	hl
+	ld	(cols),a
+	ld	a,ROWS
+	sub	(hl)
+	ret	c		; too many rows
+	rra
+	ld	(roff),a
+	ld	a,(hl)
+	inc	hl
+	ld	(rows),a
+	ld	hl,board
+	ld	bc,ROWS * COLS
+	call	zerofill16
+
+	ld	c,(hl)
+	inc	hl
+	ld	b,(hl)
+	or	a		; CY = 0
+	ret
 	
 	.lcomm	board, ROWS * COLS
+	.lcomm	rows, 1
+	.lcomm	roff, 1
+	.lcomm	cols, 1
+	.lcomm	coff, 1
 	
 ; ==============================================================================
 ; Default levels

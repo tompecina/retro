@@ -1,4 +1,4 @@
-; main.s
+; adras.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,54 +18,54 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; The game of Sokoban for Tesla PMD 85.
+; Copy of original monitor's ADRAS, modified for 10-cell glyphs.
 
-	.include "sokoban.inc"
-
-; ==============================================================================
-; Language file inclusion
-;
-	.ifdef	en
-	.include "lang-en.inc"
-	.endif
-
-	.ifdef	cs
-	.include "lang-cs.inc"
-	.endif
-
-	.ifdef	sk
-	.include "lang-sk.inc"
-	.endif
+	.include "pmd85.inc"
 	
 ; ==============================================================================
-; Constants
-;
-
-; ==============================================================================
-; Main entry point of the program
-;
+; adras - return glyph address
+; 
+;   input:  A - character code
+; 	    (tascii) - table of glyphs
+; 
+;   output: HL - glyph address + 8
+; 
+;   uses:   all
+; 
 	.text
-	.globl	main
-main:
+	.globl	adras
+adras:
+	ld	b,a
+	and	0x1f
+	ld	c,a
+	ld	a,b
+	sub	c
+	rrca
+	rrca
+	rrca
+	rrca
+	ld	l,a
+	ld	h,0
+	ld	b,h
+	ld	a,c
+	add	a,a
+	add	a,a
+	add	a,c
+	ld	c,a
+	ld	de,tascii
+	add	hl,de
+	ld	d,(hl)
+	inc	hl
+	ld	a,(hl)
+	ld	hl,undef_glyph + 10
+	cp	0xff
+	ret	z
+	ld	l,d
+	ld	h,a
+	add	hl,bc
+	add	hl,bc
+	ld	a,h
+	inc	a
+	ret
 
-; initialize
-	di
-	ld	sp,0x7000
-	;; call	init_kbd
-	;; call	set_kmap
-	;; call	add_glyphs
-	;; call	add_cust_glyphs
-	call	init_levels
-	call	count_levels
-	ld	(nlevels),hl
-
-	ld	bc,0
-	call	get_level
-
-	;; call	erase
-
-	jp	0
-	
-	.lcomm	nlevels, 2
-	
 	.end

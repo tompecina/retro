@@ -1,4 +1,4 @@
-; main.s
+; waits.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,54 +18,27 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; The game of Sokoban for Tesla PMD 85.
+; Copy of original monitor's routine.
 
-	.include "sokoban.inc"
-
-; ==============================================================================
-; Language file inclusion
-;
-	.ifdef	en
-	.include "lang-en.inc"
-	.endif
-
-	.ifdef	cs
-	.include "lang-cs.inc"
-	.endif
-
-	.ifdef	sk
-	.include "lang-sk.inc"
-	.endif
+	.include "pmd85.inc"
 	
 ; ==============================================================================
-; Constants
-;
-
-; ==============================================================================
-; Main entry point of the program
-;
+; waits - waiting loop
+; 
+;   input:  A, D - delay (A * 43.5usec + D * 10msec)
+; 
+;   uses:   A, D
+; 
 	.text
-	.globl	main
-main:
-
-; initialize
-	di
-	ld	sp,0x7000
-	;; call	init_kbd
-	;; call	set_kmap
-	;; call	add_glyphs
-	;; call	add_cust_glyphs
-	call	init_levels
-	call	count_levels
-	ld	(nlevels),hl
-
-	ld	bc,0
-	call	get_level
-
-	;; call	erase
-
-	jp	0
-	
-	.lcomm	nlevels, 2
+	.globl	waits
+waits:
+	.rept	4
+	ex	(sp),hl
+	.endr
+	dec	a
+	jp	nz,waits
+	dec	d
+	jp	nz,waits
+	ret
 	
 	.end

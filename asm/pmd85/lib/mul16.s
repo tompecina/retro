@@ -1,4 +1,4 @@
-; main.s
+; mul16.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,54 +18,43 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; The game of Sokoban for Tesla PMD 85.
-
-	.include "sokoban.inc"
-
 ; ==============================================================================
-; Language file inclusion
-;
-	.ifdef	en
-	.include "lang-en.inc"
-	.endif
-
-	.ifdef	cs
-	.include "lang-cs.inc"
-	.endif
-
-	.ifdef	sk
-	.include "lang-sk.inc"
-	.endif
-	
-; ==============================================================================
-; Constants
-;
-
-; ==============================================================================
-; Main entry point of the program
-;
+; mul16 - signed 16-bit multiplication
+; 
+;   input:  HL, DE
+; 
+;   output: HL = HL * DE
+; 
+;   uses:   all
+; 
 	.text
-	.globl	main
-main:
+	.globl	mul16
+mul16:
+	ld      b,h
+        ld      c,l
+        ld      hl,0
+1:	ld      a,c
+        rrca
+        jp	nc,2f
+        add     hl,de
+2:	xor     a
+        ld      a,b
+        rra
+        ld      b,a
+        ld      a,c
+        rra
+        ld      c,a
+        or      b
+        ret	z
+        xor     a
+        ld      a,e
+        rla
+        ld      e,a
+        ld      a,d
+        rla
+        ld      d,a
+        or      e
+        ret	z
+        jp      1b
 
-; initialize
-	di
-	ld	sp,0x7000
-	;; call	init_kbd
-	;; call	set_kmap
-	;; call	add_glyphs
-	;; call	add_cust_glyphs
-	call	init_levels
-	call	count_levels
-	ld	(nlevels),hl
-
-	ld	bc,0
-	call	get_level
-
-	;; call	erase
-
-	jp	0
-	
-	.lcomm	nlevels, 2
-	
 	.end

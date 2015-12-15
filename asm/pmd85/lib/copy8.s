@@ -1,4 +1,4 @@
-; main.s
+; copy8.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,55 +17,25 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-; The game of Sokoban for Tesla PMD 85.
-
-	.include "sokoban.inc"
-
-; ==============================================================================
-; Language file inclusion
-;
-	.ifdef	en
-	.include "lang-en.inc"
-	.endif
-
-	.ifdef	cs
-	.include "lang-cs.inc"
-	.endif
-
-	.ifdef	sk
-	.include "lang-sk.inc"
-	.endif
 	
 ; ==============================================================================
-; Constants
-;
-
-; ==============================================================================
-; Main entry point of the program
-;
+; copy8 - copy area
+; 
+;   input:  (HL) - source area
+;           (DE) - destination area
+;           B - number of bytes (1-256)
+; 
+;   uses:   A, B, D, E, H, L
+; 
 	.text
-	.globl	main
-main:
-
-; initialize
-	di
-	ld	sp,0x7000
-	;; call	init_kbd
-	;; call	set_kmap
-	;; call	add_glyphs
-	;; call	add_cust_glyphs
-	call	init_levels
-	call	count_levels
-	ld	(nlevels),hl
-
-	ld	bc,0
-	call	get_level
-
-	;; call	erase
-
-	jp	0
-	
-	.lcomm	nlevels, 2
+	.globl	copy8
+copy8:
+	ld	a,(hl)
+	ld	(de),a
+	inc	hl
+	inc	de
+	dec	b
+	jp	nz,copy8
+	ret
 	
 	.end

@@ -1,4 +1,4 @@
-; main.s
+; wrchar.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,54 +18,51 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; The game of Sokoban for Tesla PMD 85.
+; Modified WRCHAR, with ADRAS (not available in PMD 85-1) and for 10-cell
+; glyphs.  In addition, this version is interrupt-compatible as it does not
+; use the stack pointer.
 
-	.include "sokoban.inc"
-
-; ==============================================================================
-; Language file inclusion
-;
-	.ifdef	en
-	.include "lang-en.inc"
-	.endif
-
-	.ifdef	cs
-	.include "lang-cs.inc"
-	.endif
-
-	.ifdef	sk
-	.include "lang-sk.inc"
-	.endif
+	.include "pmd85.inc"
 	
 ; ==============================================================================
-; Constants
-;
-
-; ==============================================================================
-; Main entry point of the program
-;
+; wrchar - write character
+; 
+;   input:  A - character code
+; 	    HL - cursor address
+; 	    (color) - color mask
+; 
+;   uses:   A
+; 
 	.text
-	.globl	main
-main:
+	.globl	wrchar
+wrchar:
+	push	bc
+	push	de
+	push	hl
+	call	adras
+	ex	de,hl
+	pop	hl
+	push	hl
+	ld	bc,-128
+	add	hl,bc
+	ld	b,a
+	ld	c,10
+	ld	a,(color)
+	ld	b,a
+1:	dec	de
+	ld	a,(de)
+	xor	b
+	ld	(hl),a
+	push	de
+	ld	de,-64
+	add	hl,de
+	pop	de
+	dec	c
+	jp	nz,1b
+	ld	(hl),b
+	pop	hl
+	pop	de
+	pop	bc
+	ret
 
-; initialize
-	di
-	ld	sp,0x7000
-	;; call	init_kbd
-	;; call	set_kmap
-	;; call	add_glyphs
-	;; call	add_cust_glyphs
-	call	init_levels
-	call	count_levels
-	ld	(nlevels),hl
-
-	ld	bc,0
-	call	get_level
-
-	;; call	erase
-
-	jp	0
-	
-	.lcomm	nlevels, 2
-	
 	.end

@@ -1,4 +1,4 @@
-; main.s
+; crc24.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,55 +17,53 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-; The game of Sokoban for Tesla PMD 85.
-
-	.include "sokoban.inc"
-
-; ==============================================================================
-; Language file inclusion
-;
-	.ifdef	en
-	.include "lang-en.inc"
-	.endif
-
-	.ifdef	cs
-	.include "lang-cs.inc"
-	.endif
-
-	.ifdef	sk
-	.include "lang-sk.inc"
-	.endif
 	
 ; ==============================================================================
-; Constants
-;
-
-; ==============================================================================
-; Main entry point of the program
-;
+; init_crc24 - initialize CRC-24
+; 
+;   output: CHL - initial CRC
+; 
+;   uses:   -
+; 
 	.text
-	.globl	main
-main:
-
-; initialize
-	di
-	ld	sp,0x7000
-	;; call	init_kbd
-	;; call	set_kmap
-	;; call	add_glyphs
-	;; call	add_cust_glyphs
-	call	init_levels
-	call	count_levels
-	ld	(nlevels),hl
-
-	ld	bc,0
-	call	get_level
-
-	;; call	erase
-
-	jp	0
+	.globl	init_crc24
+init_crc24:
+	ld	c,0xb7
+	ld	hl,0x04ce
+	ret
 	
-	.lcomm	nlevels, 2
+; ==============================================================================
+; crc24 - update CRC-24
+; 
+;   input:  CHL - initial CRC
+; 	    A - input byte
+; 
+;   output: CHL - updated CRC
+; 
+;   uses:   A, B
+; 
+	.text
+	.globl	crc24
+crc24:
+	xor	c
+	ld	c,a
+	ld	b,8
+2:	add	hl,hl
+	ld	a,c
+	rla
+	ld	c,a
+	jp	nc,1f
+	ld	a,c
+	xor	0x86
+	ld	c,a
+	ld	a,h
+	xor	0x4c
+	ld	h,a
+	ld	a,l
+	xor	0xfb
+	ld	l,a
+1:	dec	b
+	jp	nz,2b
+	ret
 	
 	.end

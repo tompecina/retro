@@ -1,4 +1,4 @@
-; main.s
+; udiv8.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,54 +18,37 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; The game of Sokoban for Tesla PMD 85.
-
-	.include "sokoban.inc"
-
 ; ==============================================================================
-; Language file inclusion
-;
-	.ifdef	en
-	.include "lang-en.inc"
-	.endif
-
-	.ifdef	cs
-	.include "lang-cs.inc"
-	.endif
-
-	.ifdef	sk
-	.include "lang-sk.inc"
-	.endif
-	
-; ==============================================================================
-; Constants
-;
-
-; ==============================================================================
-; Main entry point of the program
-;
+; udiv8 - unsigned 8-bit division
+; 
+;   input:  E, C
+; 
+;   output: E = E / C
+;           C = E % C
+; 
+;   uses:   A, B, D
+; 
 	.text
-	.globl	main
-main:
+	.globl	udiv8
+udiv8:
+	ld	d,0
+	ld	b,8
+1:	ld	a,e
+	rla
+	ld	e,a
+	ld	a,d
+	rla
+	sub	c
+	jp	nc,2f
+	add	a,c
+2:	ld	d,a
+	dec	b
+	jp	nz,1b
+	ld	c,a
+	ld	a,e
+	rla
+	cpl
+	ld	e,a
+	ret
 
-; initialize
-	di
-	ld	sp,0x7000
-	;; call	init_kbd
-	;; call	set_kmap
-	;; call	add_glyphs
-	;; call	add_cust_glyphs
-	call	init_levels
-	call	count_levels
-	ld	(nlevels),hl
-
-	ld	bc,0
-	call	get_level
-
-	;; call	erase
-
-	jp	0
-	
-	.lcomm	nlevels, 2
-	
 	.end
