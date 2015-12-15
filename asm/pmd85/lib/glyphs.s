@@ -18,31 +18,16 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Character glyphs - full set.
+; Video parameters and glyphs - full set.
 
 ; ==============================================================================
-; add_glyphs - add missing glyphs and reset video parameters
+; init_video - initialize video parameters
 ;
 ;   uses:   H, L
 ;
 	.text
-	.globl	add_glyphs
-add_glyphs:	
-	ld	hl,glyphs20 + 8
-	ld	(tascii + 0x02),hl
-
-	ld	hl,glyphs40 + 8
-	ld	(tascii + 0x04),hl
-
-	ld	hl,glyphs60 + 8
-	ld	(tascii + 0x06),hl
-
-	ld	hl,glyphsC0 + 8
-	ld	(tascii + 0x0c),hl
-
-	ld	hl,glyphsE0 + 8
-	ld	(tascii + 0x0e),hl
-
+	.globl	init_video
+init_video:	
 	xor	a
 	ld	(color),a
 	ld	hl,0x240
@@ -61,6 +46,9 @@ add_glyphs:
 	ld	(iiroll),a
 	ret
 
+; ==============================================================================
+; Video parameters
+;
 	.globl	cursor, color, radsir, vyska, poroll, rsirrad
 	.globl	curroll, enlnw, iiroll
 	.lcomm	cursor, 2
@@ -79,25 +67,13 @@ add_glyphs:
 	.data
 	.globl	tascii
 tascii:
-	.rept	8
 	.word	0xff00
-	.endr
-	
-; ==============================================================================
-; Undefined glyph
-;
-	.data
-	.globl	undef_glyph
-undef_glyph:
-	.byte	0x00	; ......
-	.byte	0x00	; ......
-	.byte	0x00	; ......
-	.byte	0x00	; ......
-	.byte	0x00	; ......
-	.byte	0x00	; ......
-	.byte	0x1c	; ..###.
-	.byte	0x14	; ..#.#.
-	.byte	0x1c	; ..###.
-	.byte	0x00	; ......
+	.word	glyphs20 + 8
+	.word	glyphs40 + 8
+	.word	glyphs60 + 8
+	.word	0xff00
+	.word	0xff00
+	.word	glyphsc0 + 8
+	.word	glyphse0 + 8
 
 	.end
