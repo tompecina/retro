@@ -1,4 +1,4 @@
-; sokoban.inc
+; heap.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,12 +18,16 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; The header file.
+; The heap.
 
-	.include "../pmd85.inc"
+	.include "sokoban.inc"
 	
 ; ==============================================================================
-; Constants
+; heap
 ; 
-	.equiv	ROWS, 20
-	.equiv	COLS, 24
+	.bss
+	.globl	heap, levels
+heap:
+levels:
+	
+	.end
