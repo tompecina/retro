@@ -110,7 +110,7 @@ lcg:
 	ld	(hl),1
 	inc	hl
 	ld	b,15
-	call	zerofill
+	call	zerofill8
 	ld	b,128
 7:	ld	c,16
 	ld	hl,mul2 + 15

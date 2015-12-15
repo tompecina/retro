@@ -72,7 +72,7 @@ get_puzzle:
 1:	pop	hl
 	push	hl
 	ld	b,81
-	call	zerofill
+	call	zerofill8
 	pop	hl
 
 ; decompress puzzle

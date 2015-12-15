@@ -30,7 +30,7 @@
 init_video:	
 	xor	a
 	ld	(color),a
-	ld	hl,0x240
+	ld	hl,0x2c0
 	ld	(radsir),hl
 	ld	a,0xfb
 	ld	(vyska),a
@@ -68,12 +68,12 @@ init_video:
 	.globl	tascii
 tascii:
 	.word	0xff00
-	.word	glyphs20 + 8
-	.word	glyphs40 + 8
-	.word	glyphs60 + 8
+	.word	glyphs20 + 10
+	.word	glyphs40 + 10
+	.word	glyphs60 + 10
 	.word	0xff00
 	.word	0xff00
-	.word	glyphsc0 + 8
-	.word	glyphse0 + 8
+	.word	glyphsC0 + 10
+	.word	glyphsE0 + 10
 
 	.end

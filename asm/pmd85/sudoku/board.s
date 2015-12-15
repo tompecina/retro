@@ -1076,7 +1076,7 @@ get_dups:
 	ex	de,hl
 	ld	b,81
 	push	hl
-	call	zerofill
+	call	zerofill8
 	pop	hl
 	ex	de,hl
 	ld	(tpuzzle),hl

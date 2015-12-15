@@ -669,7 +669,7 @@ all_legal:
 ; zero larray
 	ld	hl,larray
 	ld	b,8
-	call	zerofill
+	call	zerofill8
 
 ; check sfield and return if no empty squares
 	ld	hl,sfield
@@ -874,7 +874,7 @@ one_legal:
 ; zero larray
 	ld	hl,larray
 	ld	b,8
-	call	zerofill
+	call	zerofill8
 	
 ; square to offset and mask
 	pop	bc

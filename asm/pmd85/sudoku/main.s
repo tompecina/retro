@@ -52,7 +52,7 @@ main:
 	ld	sp,0x7000
 	call	init_kbd
 	call	set_kmap
-	call	add_glyphs
+	call	init_video
 	call	add_cust_glyphs
 	call	start_ct1
 	jp	nc,1f

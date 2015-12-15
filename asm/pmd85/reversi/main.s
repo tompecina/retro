@@ -41,6 +41,7 @@
 ; Constants
 ;
 	.equiv	MAXLEVEL, 5	; maximum level
+	.equiv	heap, __Hbss
 	
 ; ==============================================================================
 ; Main entry point of the program
@@ -56,7 +57,7 @@ main:
 	call	init_rvt
 	call	init_kbd
 	call	set_kmap
-	call	add_glyphs
+	call	init_video
 	call	add_cust_glyphs
 	call	erase
 	call	draw_labels

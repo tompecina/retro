@@ -658,10 +658,10 @@ dir_offsets:
 init_pos:
 	ld	hl,black
 	ld	b,8
-	call	zerofill
+	call	zerofill8
 	ld	hl,white
 	ld	b,8
-	call	zerofill
+	call	zerofill8
 	ld	a,0x10
 	ld	(black + 3),a
 	ld	(white + 4),a
