@@ -40,6 +40,31 @@ init_levels:
 	jp	copy16
 	
 ; ==============================================================================
+; count_levels - count levels
+; 
+;   output: HL - number of levels
+; 
+;   uses:   all
+; 
+	.text
+	.globl	count_levels
+count_levels:
+	ld	hl,levels
+	ld	de,0
+1:	ld	c,(hl)
+	inc	hl
+	ld	b,(hl)
+	inc	hl
+	ld	a,b
+	or	c
+	ex	de,hl
+	ret	z
+	ex	de,hl
+	inc	de
+	add	hl,bc
+	jp	1b	
+	
+; ==============================================================================
 ; get_level - decompress level
 ; 
 ;   input:  BC - level number

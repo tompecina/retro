@@ -65,6 +65,28 @@ copy8:
 	ret
 	
 ; ==============================================================================
+; copy16 - copy area
+; 
+;   input:  (HL) - source area
+;           (DE) - destination area
+;           BC - number of bytes (1-65536)
+; 
+;   uses:   all
+; 
+	.text
+	.globl	copy16
+copy16:
+	ld	a,(hl)
+	ld	(de),a
+	inc	hl
+	inc	de
+	dec	bc
+	ld	a,b
+	or	c
+	jp	nz,copy16
+	ret
+	
+; ==============================================================================
 ; mul16 - signed 16-bit multiplication
 ; 
 ;   input:  HL, DE

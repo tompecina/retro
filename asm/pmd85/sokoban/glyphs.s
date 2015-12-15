@@ -1,4 +1,4 @@
-; heap.s
+; glyphs.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,16 +18,19 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; The heap.
+; Character glyphs.
 
-	.include "reversi.inc"
+	.include "sokoban.inc"
 	
 ; ==============================================================================
-; Heap
-; 
-	.bss
-	.globl	heap
-heap:
+; Page selectors
+;
+	.equiv	SEL_20, 1
+	.equiv	SEL_40, 1
+	.equiv	SEL_60, 1
+	.equiv	SEL_C0, 1
+	.equiv	SEL_E0, 1
+
+	.include "../glyphs10.inc"
 
 	.end
-	
