@@ -27,7 +27,6 @@
 ;
 	.globl	MAXLEVEL
 	.equiv	MAXLEVEL, 5	; maximum level
-	.equiv	heap, __Hbss
 	
 ; ==============================================================================
 ; Main entry point of the program
@@ -38,7 +37,7 @@ main:
 
 ; initialize
 	di
-	ld	sp,0x7000
+	ld	sp,initsp
 	call	init_btbl
 	call	init_rvt
 	call	init_kbd

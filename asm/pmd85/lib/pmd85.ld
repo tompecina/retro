@@ -3,6 +3,7 @@ OUTPUT_FORMAT("binary")
 __Ltext = .;
 ENTRY (__Ltext)
 OUTPUT_ARCH("z80")
+initsp = 0x7000;
 SECTIONS
 {
 .text :	{
@@ -21,5 +22,6 @@ SECTIONS
 	*(.bss)
 	*(bss)
 	 __Hbss = .;
+	 heap = .;
 	}
 }

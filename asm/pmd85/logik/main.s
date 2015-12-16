@@ -37,7 +37,7 @@ main:
 
 ; initialize
 	di
-	ld	sp,0x7000
+	ld	sp,initsp
 	call	init_kbd
 	call	set_kmap
 	call	init_video

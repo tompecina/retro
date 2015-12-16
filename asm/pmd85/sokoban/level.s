@@ -119,20 +119,46 @@ get_level:
 	ld	a,(hl)
 	inc	hl
 	ld	(rows),a
+	push	hl
 	ld	hl,board
+	push	hl
+	ld	a,(roff)
+	ld	de,ROWS
+1:	dec	a
+	jp	m,1f
+	add	hl,de
+	jp	1b
+1:	ld	a,(coff)
+	ld	e,a
+	add	hl,de
+	ld	(orig),hl
+	pop	hl
 	ld	bc,ROWS * COLS
 	call	zerofill16
-
+	pop	hl
+	ld	b,0
+again:	call	gbit
+	jp	again
 	ld	c,(hl)
 	inc	hl
 	ld	b,(hl)
 	or	a		; CY = 0
 	ret
+gbit:	dec	b
+	jp	p,1f
+	ld	c,(hl)
+	inc	hl
+1:	ld	a,c
+	rra
+	ld	c,a
+	ret
+	
 	
 	.lcomm	board, ROWS * COLS
 	.lcomm	rows, 1
 	.lcomm	roff, 1
 	.lcomm	cols, 1
 	.lcomm	coff, 1
+	.lcomm	orig, 2
 
 	.end
