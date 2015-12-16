@@ -1,4 +1,4 @@
-; lang-cs.inc
+; lang-cs.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -20,9 +20,12 @@
 
 ; Czech language support.
 
+	.include "logik.inc"
+
 ; ==============================================================================
 ; Constants
-	
+; 
+	.globl	LRPOS, CRPOS, DSPOS, RNDPOS, RNDSPOS, PSCPOS, CSCPOS
 	.equiv	LRPOS, 0xc204
 	.equiv	CRPOS, 0xc900
 	.equiv	DSPOS, 0xd200
@@ -35,6 +38,7 @@
 ; Credits
 ;
 	.data
+	.globl	credits
 credits:
 	db	"Autor: Tom", 0xc1, 0xd3, " Pecina", 0
 
@@ -49,6 +53,8 @@ credits:
 ; ==============================================================================
 ; Labels
 ;
+	.data
+	.globl	lbl_desc
 lbl_desc:
 	db	"Kolo:  /", CR, CR
 	db	"Hr", 0xc1, 0xc3, ":", CR, VT, VT, VT
@@ -58,8 +64,10 @@ lbl_desc:
 ; Prompts
 ;
 	.data
-	.globl	msg_yguess, msg_bpegs, msg_wpegs, msg_confirm, msg_errpegs
-	.globl	msg_think
+	.globl	msg_hwerr, msg_yguess, msg_bpegs, msg_wpegs, msg_confirm
+	.globl	msg_errpegs, msg_nrnds, msg_cstart, msg_pstart, msg_cout
+	.globl	msg_pout, msg_perr, msg_ccorr, msg_pcorr, msg_corr1, msg_corr10
+	.globl	msg_again, msg_think, msg_cwin, msg_closs, msg_draw
 msg_hwerr:
 	db	"Vadn", 0xd9, " hardware, pros", 0xc9, "m, stiskn", 0xc5
 	db	"te EOL", 0
@@ -100,10 +108,12 @@ msg_corr1:
 	.asciz	"1 bod"
 	.irpc	n, "234"
 msg_corr\n:
+	.globl	msg_corr\n
 	.asciz	"\n body"
 	.endr
 	.irpc	n, "56789"
 msg_corr\n:
+	.globl	msg_corr\n
 	db	"\n bod", 0xca, 0
 	.endr
 msg_corr10:
@@ -118,3 +128,6 @@ msg_closs:
 	db	"Po", 0xc3, 0xc9, "ta", 0xc3, " prohr", 0xc1, "l. ", 0
 msg_draw:
 	db	"Nerozhodn", 0xd9, " v", 0xd9, "sledek. ", 0
+
+	.end
+	

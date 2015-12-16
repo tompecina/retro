@@ -1,4 +1,4 @@
-; lang-en.inc
+; lang-en.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -20,9 +20,11 @@
 
 ; English language support.
 
+	.include "sudoku.inc"
+
 ; ==============================================================================
 ; Constants
-	
+; 
 	
 ; ==============================================================================
 ; Control keys
@@ -32,6 +34,7 @@
 	.equiv	KEY_NO, 'N'
 	.equiv	KEY_ENTER, KEOL
 
+	.globl	KEY_NEW, KEY_QUIT
 	.equiv	KEY_NEW, 'N'
 	.equiv	KEY_QUIT, 'Q'
 	
@@ -39,6 +42,7 @@
 ; Labels
 ;
 	.data
+	.globl	lbl_sudoku
 lbl_sudoku:
 	db	"SUDOKU ", ONEDOT, "0", 0
 	
@@ -46,6 +50,8 @@ lbl_sudoku:
 ; Prompts
 ;
 	.data
+	.globl	msg_hwerr, msg_select, msg_start, msg_done, ph_tmr, msg_quit
+	.globl	msg_new, msg_sqerr
 msg_hwerr:
 	.asciz	"Hardware error, please press EOL to quit"
 msg_select:
@@ -62,3 +68,6 @@ msg_new:
 	.asciz	"Do you really wish to start a new puzzle? (Y/N)"
 msg_sqerr:
 	.asciz	"          This square cannot be edited"
+
+	.end
+	

@@ -1,4 +1,4 @@
-; lang-cs.inc
+; lang-cs.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -20,9 +20,12 @@
 
 ; Czech language support.
 
+	.include "reversi.inc"
+
 ; ==============================================================================
 ; Constants
-	
+; 
+	.globl	LRPOS, CRPOS, LEGPOS, BCPOS, WCPOS, BSPOS, WSPOS, LVPOS, SNPOS
 	.equiv	LRPOS, 0xc31b
 	.equiv	CRPOS, 0xca19
 	.equiv	LEGPOS, 0xc700
@@ -37,6 +40,7 @@
 ; Credits
 ;
 	.data
+	.globl	credits
 credits:
 	db	"Autor: Tom", 0xc1, 0xd3, " Pecina", 0
 
@@ -44,6 +48,7 @@ credits:
 ; Legend
 ;
 	.data
+	.globl	legend
 legend:
 	db	"  ", 0xe3, "ERN", 0xf9, " - B" , 0xe9, "L", 0xf9, CR
 	db	"        -", CR, CR
@@ -66,6 +71,7 @@ legend:
 ; On/off strings
 ;
 	.data
+	.globl	off, on
 off:	.asciz	"vyp"
 on:	.asciz	"zap"
 
@@ -77,6 +83,7 @@ on:	.asciz	"zap"
 	.equiv	KEY_NO, 'N'
 	.equiv	KEY_ENTER, KEOL
 
+	.globl	KEY_NEW, KEY_UNDO, KEY_SWITCH, KEY_SOUND, KEY_QUIT
 	.equiv	KEY_NEW, 'N'
 	.equiv	KEY_UNDO, 'V'
 	.equiv	KEY_SWITCH, 'S'
@@ -87,6 +94,8 @@ on:	.asciz	"zap"
 ; Prompts
 ;
 	.data
+	.globl	msg_color, msg_draw, msg_bwin, msg_wwin, msg_quit, msg_new
+	.globl	msg_badmove, msg_ppass, msg_cpass, msg_think
 msg_color:
 	db	"P", 0xd2, "ejete si hr" , 0xc1, "t s ", 0xc3, "ern", 0xd9
 	db	"mi? (A/N)", 0
@@ -113,3 +122,6 @@ msg_cpass:
 	db	"dn", 0xd9, " tah, pokra", 0xc3, "ujte ve h", 0xd2, "e", 0
 msg_think:
 	db	"P", 0xd2, "em", 0xd9, 0xd3, "l", 0xc9, "m...", 0
+
+	.end
+	

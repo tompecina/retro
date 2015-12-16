@@ -1,4 +1,4 @@
-; lang-sk.inc
+; lang-sk.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -20,9 +20,12 @@
 
 ; Slovak language support.
 
+	.include "reversi.inc"
+
 ; ==============================================================================
 ; Constants
-	
+; 
+	.globl	LRPOS, CRPOS, LEGPOS, BCPOS, WCPOS, BSPOS, WSPOS, LVPOS, SNPOS
 	.equiv	LRPOS, 0xc31b
 	.equiv	CRPOS, 0xca19
 	.equiv	LEGPOS, 0xc700
@@ -37,6 +40,7 @@
 ; Credits
 ;
 	.data
+	.globl	credits
 credits:
 	db	"Autor: Tom", 0xc1, 0xd3, " Pecina", 0
 
@@ -44,6 +48,7 @@ credits:
 ; Legend
 ;
 	.data
+	.globl	legend
 legend:
 	db	"  ", 0xe3, "IERNY - BIELY", CR
 	db	"         -", CR, CR
@@ -66,6 +71,7 @@ legend:
 ; On/off strings
 ;
 	.data
+	.globl	off, on
 off:	.asciz	"vyp"
 on:	.asciz	"zap"
 
@@ -77,6 +83,7 @@ on:	.asciz	"zap"
 	.equiv	KEY_NO, 'N'
 	.equiv	KEY_ENTER, KEOL
 	
+	.globl	KEY_NEW, KEY_UNDO, KEY_SWITCH, KEY_SOUND, KEY_QUIT
 	.equiv	KEY_NEW, 'N'
 	.equiv	KEY_UNDO, 'V'
 	.equiv	KEY_SWITCH, 'S'
@@ -87,6 +94,8 @@ on:	.asciz	"zap"
 ; Prompts
 ;
 	.data
+	.globl	msg_color, msg_draw, msg_bwin, msg_wwin, msg_quit, msg_new
+	.globl	msg_badmove, msg_ppass, msg_cpass, msg_think
 msg_color:
 	db	0xfa, "el" , 0xc1, "te si hra", 0xd4, " s ", 0xc3
 	db	"iernymi? (A/N)", 0
@@ -115,3 +124,6 @@ msg_cpass:
 	db	"den ", 0xd4, "ah, pokra", 0xc3, "ujte v hre", 0
 msg_think:
 	db	"Rozm", 0xd9, 0xd3, 0xcc, "am...", 0
+
+	.end
+	

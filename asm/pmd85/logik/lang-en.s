@@ -1,4 +1,4 @@
-; lang-en.inc
+; lang-en.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -20,9 +20,12 @@
 
 ; English language support.
 
+	.include "logik.inc"
+
 ; ==============================================================================
 ; Constants
-	
+; 
+	.globl	LRPOS, CRPOS, DSPOS, RNDPOS, RNDSPOS, PSCPOS, CSCPOS
 	.equiv	LRPOS, 0xc204
 	.equiv	CRPOS, 0xc902
 	.equiv	DSPOS, 0xd200
@@ -35,6 +38,7 @@
 ; Credits
 ;
 	.data
+	.globl	credits
 credits:
 	db	"by Tom", 0xc1, 0xd3, " Pecina", 0
 
@@ -50,6 +54,8 @@ credits:
 ; ==============================================================================
 ; Labels
 ;
+	.data
+	.globl	lbl_desc
 lbl_desc:
 	db	"Round:   of", CR, CR
 	db	"Player:", CR, VT, VT, VT
@@ -59,8 +65,10 @@ lbl_desc:
 ; Prompts
 ;
 	.data
-	.globl	msg_yguess, msg_bpegs, msg_wpegs, msg_confirm, msg_errpegs
-	.globl	msg_think
+	.globl	msg_hwerr, msg_yguess, msg_bpegs, msg_wpegs, msg_confirm
+	.globl	msg_errpegs, msg_nrnds, msg_cstart, msg_pstart, msg_cout
+	.globl	msg_pout, msg_perr, msg_ccorr, msg_pcorr, msg_corr1, msg_corr10
+	.globl	msg_again, msg_think, msg_cwin, msg_closs, msg_draw
 msg_hwerr:
 	.asciz	"Hardware error, please press EOL to quit"
 msg_yguess:
@@ -94,6 +102,7 @@ msg_corr1:
 	.asciz	"1 point"
 	.irpc	n, "23456789"
 msg_corr\n:
+	.globl	msg_corr\n
 	.asciz	"\n points"
 	.endr
 msg_corr10:
@@ -108,4 +117,6 @@ msg_closs:
 	.asciz	"Computer lost. "
 msg_draw:
 	.asciz	"A draw. "
+	
+	.end
 	

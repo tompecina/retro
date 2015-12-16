@@ -24,7 +24,7 @@
 	
 ; ==============================================================================
 ; Constants
-	
+; 
 	.equiv	ULC, 0xc4c6		; upper left corner of the board
 	.equiv	MSGAREA, 0xffc0		; position of the notification area
 	.equiv	MARKCOLOR, 0		; mark color mask

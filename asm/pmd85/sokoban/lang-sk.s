@@ -1,4 +1,4 @@
-; lang-sk.inc
+; lang-sk.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -20,21 +20,17 @@
 
 ; Slovak language support.
 
+	.include "sokoban.inc"
+
 ; ==============================================================================
 ; Constants
-	
-	.equiv	LRPOS, 0xc204
-	.equiv	CRPOS, 0xc900
-	.equiv	DSPOS, 0xd200
-	.equiv	RNDPOS, 0xd206
-	.equiv	RNDSPOS, 0xd208
-	.equiv	PSCPOS, 0xd789
-	.equiv	CSCPOS, 0xdb09
+;
 	
 ; ==============================================================================
 ; Credits
 ;
 	.data
+	.globl	credits
 credits:
 	db	"Autor: Tom", 0xc1, 0xd3, " Pecina", 0
 
@@ -50,51 +46,12 @@ credits:
 ; ==============================================================================
 ; Labels
 ;
-lbl_desc:
-	db	"Kolo:  /", CR, CR
-	db	"Hr", 0xc1, 0xc3, ":", CR, VT, VT, VT
-	db	"Po", 0xc3, 0xc9, "ta", 0xc3, ":", 0
+	.data
 	
 ; ==============================================================================
 ; Prompts
 ;
 	.data
-	.globl	msg_yguess, msg_bpegs, msg_wpegs, msg_confirm, msg_errpegs
-	.globl	msg_think
-msg_hwerr:
-	db	"Vadn", 0xd9, " hardv", 0xd7, "r, pros", 0xc9, "m, stla", 0xc3
-	db	"te EOL", 0
-msg_bpegs:
-	db	0xe3, "iernych? ", 0
-msg_wpegs:
-	.asciz	"  Bielych? "
-msg_confirm:
-	.asciz	"  V poriadku? (A/N)"
-msg_errpegs:
-	db	"Nedovolen", 0xc1, " kombin", 0xc1, "cia, stla", 0xc3
-	db	"te EOL a opravte", 0
-msg_nrnds:
-	db	"Po", 0xc3, "et k", 0xd0, "l (1-8)? ", 0
-msg_cstart:
-	db	"Po", 0xc3, 0xc9, "ta", 0xc3, " zostavil k", 0xcf
-	db	"d, stla", 0xc3, "te EOL", 0
-msg_pstart:
-	db	"Zostavte k", 0xcf, "d a stla", 0xc3, "te EOL", 0
-msg_cout:
-	db	"Pokusy vy", 0xc3, "erpan", 0xd7, ", po", 0xc3, 0xc9, "ta", 0xc3
-	db	" z", 0xc9, "skava 11 bodov", 0
-msg_pout:
-	db	"Pokusy vy", 0xc3, "erpan", 0xd7, ", z", 0xc9
-	db	"skavate 11 bodov", 0
-msg_perr:
-	db	"Zl", 0xd7, " zadanie, z", 0xc9, "skavate 0 bodov", 0
-msg_again:
-	db	0xe4, "al", 0xd3, "iu hru? (A/N)", 0
-msg_think:
-	db	"Rozm", 0xd9, 0xd3, 0xcc, "am...", 0
-msg_cwin:
-	db	"Po", 0xc3, 0xc9, "ta", 0xc3, " vyhral. ", 0
-msg_closs:
-	db	"Po", 0xc3, 0xc9, "ta", 0xc3, " prehral. ", 0
-msg_draw:
-	db	"Nerozhodn", 0xd9, " v", 0xd9, "sledok. ", 0
+
+	.end
+	

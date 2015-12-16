@@ -1,4 +1,4 @@
-; lang-en.inc
+; lang-en.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -20,9 +20,12 @@
 
 ; English language support.
 
+	.include "reversi.inc"
+
 ; ==============================================================================
 ; Constants
-	
+; 
+	.globl	LRPOS, CRPOS, LEGPOS, BCPOS, WCPOS, BSPOS, WSPOS, LVPOS, SNPOS
 	.equiv	LRPOS, 0xc31b
 	.equiv	CRPOS, 0xca1b
 	.equiv	LEGPOS, 0xc700
@@ -37,6 +40,7 @@
 ; Credits
 ;
 	.data
+	.globl	credits
 credits:
 	db	"by Tom", 0xc1, 0xd3, " Pecina", 0
 
@@ -44,6 +48,7 @@ credits:
 ; Legend
 ;
 	.data
+	.globl	legend
 legend:
 	db	"  BLACK - WHITE", CR
 	db	"        -", CR, CR
@@ -66,6 +71,7 @@ legend:
 ; On/off strings
 ;
 	.data
+	.globl	off, on
 off:	.asciz	"off"
 on:	.asciz	"on "
 
@@ -77,6 +83,7 @@ on:	.asciz	"on "
 	.equiv	KEY_NO, 'N'
 	.equiv	KEY_ENTER, KEOL
 
+	.globl	KEY_NEW, KEY_UNDO, KEY_SWITCH, KEY_SOUND, KEY_QUIT
 	.equiv	KEY_NEW, 'N'
 	.equiv	KEY_UNDO, 'U'
 	.equiv	KEY_SWITCH, 'W'
@@ -87,6 +94,8 @@ on:	.asciz	"on "
 ; Prompts
 ;
 	.data
+	.globl	msg_color, msg_draw, msg_bwin, msg_wwin, msg_quit, msg_new
+	.globl	msg_badmove, msg_ppass, msg_cpass, msg_think
 msg_color:
 	.asciz	"Do you wish to play black? (Y/N)"
 msg_draw:
@@ -107,3 +116,6 @@ msg_cpass:
 	.asciz	"The computer has no moves, your turn again"
 msg_think:
 	.asciz	"Thinking..."
+
+	.end
+	

@@ -23,23 +23,9 @@
 	.include "reversi.inc"
 
 ; ==============================================================================
-; Language file inclusion
-;
-	.ifdef	en
-	.include "lang-en.inc"
-	.endif
-
-	.ifdef	cs
-	.include "lang-cs.inc"
-	.endif
-
-	.ifdef	sk
-	.include "lang-sk.inc"
-	.endif
-	
-; ==============================================================================
 ; Constants
 ;
+	.globl	MAXLEVEL
 	.equiv	MAXLEVEL, 5	; maximum level
 	.equiv	heap, __Hbss
 	
