@@ -16,11 +16,11 @@ build: lib$(PLATFORM).a
 lib$(PLATFORM).a: $(OBJ)
 	$(AR) $(ARFLAGS) -r $@ $(OBJ)
 
-%.o: %.s ../pmd85.inc Makefile
+%.o: %.s pmd85.inc Makefile
 	$(AS) $(ASFLAGS) -c $< -o $@ -aglms=$*.lst
 
 clean:
-	rm -f *.o *.map *.lst
+	rm -f *.o lib$(PLATFORM).a *.map *.lst
 
 .SUFFIXES:
 
