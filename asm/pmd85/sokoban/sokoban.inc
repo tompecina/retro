@@ -27,3 +27,7 @@
 ; 
 	.equiv	ROWS, 20
 	.equiv	COLS, 24
+	.equiv	WALL, 0x80
+	.equiv	BOX, 0x02
+	.equiv	GOAL, 0x01
+	

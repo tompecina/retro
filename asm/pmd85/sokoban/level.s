@@ -120,7 +120,15 @@ get_level:
 	inc	hl
 	ld	(rows),a
 	push	hl
+	ld	e,a
+	ld	d,0
+	ld	a,(cols)
+	ld	l,a
+	ld	h,d
+	call	mul16
+	ld	(ctr),hl
 	ld	hl,board
+	push	hl
 	push	hl
 	ld	a,(roff)
 	ld	de,ROWS
@@ -135,30 +143,84 @@ get_level:
 	pop	hl
 	ld	bc,ROWS * COLS
 	call	zerofill16
+	pop	de
 	pop	hl
 	ld	b,0
-again:	call	gbit
-	jp	again
-	ld	c,(hl)
+4:	call	2f
+	push	de
+	ld	d,1
+	jp	nc,3f
+	ld	de,3
+1:	call	2f
+	ld	a,d
+	rla
+	ld	d,a
+	dec	e
+	jp	nz,1b
+	inc	d
+	inc	d
+3:	call	3f
+	ex	(sp),hl
+	ld	e,d
+1:	ld	(hl),a
+	inc	hl
+	dec	d
+	jp	nz,1b
+	push	hl
+	ld	hl,(ctr)
+	ld	a,l
+	sub	e
+	ld	l,a
+	ld	a,h
+	sbc	a,d
+	ld	h,a
+	ld	(ctr),hl
+	or	l
+	pop	de
+	pop	hl
+	jp	nz,4b
+	dec	b
+	jp	p,1f
+	inc	hl
+1:	ld	c,(hl)
 	inc	hl
 	ld	b,(hl)
 	or	a		; CY = 0
 	ret
-gbit:	dec	b
+2:	dec	b
 	jp	p,1f
 	ld	c,(hl)
 	inc	hl
+	ld	b,7
 1:	ld	a,c
-	rra
+	rla
 	ld	c,a
 	ret
+3:	call	2b
+	jp	c,3f
+	call	2b
+	jp	c,1f
+	xor	a
+	ret
+1:	ld	a,WALL
+	ret
+3:	call	2b
+	jp	c,1f
+	ld	a,BOX
+	ret
+1:	call	2b
+	ld	a,GOAL
+	ret	nc
+	or	BOX
+	ret
 	
-	
+	.globl	board
 	.lcomm	board, ROWS * COLS
 	.lcomm	rows, 1
 	.lcomm	roff, 1
 	.lcomm	cols, 1
 	.lcomm	coff, 1
 	.lcomm	orig, 2
+	.lcomm	ctr, 2
 
 	.end
