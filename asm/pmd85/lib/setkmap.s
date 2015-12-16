@@ -56,9 +56,9 @@ set_kmap:
 	.globl	set_kmap1
 set_kmap1:
 	ld	a,'['
-	ld	(kmp1),a
+	ld	(kmap1),a
 	ld	a,']'
-	ld	(kmp2),a
+	ld	(kmap2),a
 	ret
 	
 ; ==============================================================================
@@ -70,9 +70,9 @@ set_kmap1:
 	.globl	set_kmap2
 set_kmap2:
 	ld	a,']'
-	ld	(kmp1),a
+	ld	(kmap1),a
 	ld	a,'['
-	ld	(kmp2),a
+	ld	(kmap2),a
 	ret
 	
 	.end

@@ -26,7 +26,7 @@
 ; keymap - keyboard map
 ; 
 	.data
-	.globl	keymap, kmp1, kmp2
+	.globl	keymap, kmap1, kmap2
 keymap:
 	.byte	0x3b
 	.ascii "QWERTZUIOP@"
@@ -34,7 +34,7 @@ keymap:
 	.byte	KLEFT, KHOME, KRIGHT
 	.byte	0x37
 	.ascii	"ASDFGHJKL;:"
-kmp1:	.byte	'['
+kmap1:	.byte	'['
 	.byte	KLLEFT, KEND, KRRIGHT
 	.byte	0x2f
 	.ascii	" YXCVBNM,./"
@@ -50,7 +50,7 @@ kmp1:	.byte	'['
 	.byte	KSLEFT, KSHOME, KSRIGHT
 	.byte	0x17
 	.ascii	"asdfghjkl+*"
-kmp2:	.byte	']'
+kmap2:	.byte	']'
 	.byte	KSLLEFT, KSEND, KSRRIGHT
 	.byte	0x0f
 	.ascii	" yxcvbnm<>?"
