@@ -475,7 +475,7 @@ player_select:
 	pop	hl
 2:	push	hl
 	push	bc	
-	call	inklav_rnd
+	call	inklav_rnd128
 	push	af
 	call	clr_msg
 	pop	af
@@ -754,19 +754,5 @@ glyphs80:
 	.byte	0x08	; ...#..
 	.byte	0x00	; ......
 	.byte	0x00	; ......
-
-; ==============================================================================
-; errbeep - Error beep
-; 
-;   uses:   A, B, D, H, L
-;
-	.text
-	.globl	errbeep
-errbeep:
-	ld	hl,erbdt
-	jp	bell
-
-	.data
-erbdt:	.byte	2, 8, 0, 8, 2, 8, 0xff
 	
 	.end

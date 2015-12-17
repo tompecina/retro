@@ -23,139 +23,6 @@
 	.include "sudoku.inc"
 
 ; ==============================================================================
-; start_ct1 - start PIT Counter 1, used by PRNG
-; 
-;   output: CY - failure
-; 
-;   uses:   A
-;
-	.text
-	.globl	start_ct1
-start_ct1:
-	ld	a,0x70
-	out	(PIT_CTRL),a
-	xor	a
-	out	(PIT_1),a
-	out	(PIT_1),a
-	in	a,(PIT_1)
-	cp	0xff
-	in	a,(PIT_1)
-	ccf
-	ret	z
-	or	a
-	ret
-	
-; ==============================================================================
-; rel_ct1 - release PIT Counter 1, restore "Silence" mode
-; 
-;   uses:   A
-;
-	.text
-	.globl	rel_ct1
-rel_ct1:
-	ld	a,0x76
-	out	(PIT_CTRL),a
-	ld	a,0x20
-	out	(PIT_1),a
-	xor	a
-	out	(PIT_1),a
-	ret
-	
-; ==============================================================================
-; fixseed - make sure the seed is not 0
-; 
-;   input:  (seed) - current seed
-; 
-;   output: (seed) - new seed
-; 
-;   uses:   A, B, H, L
-;
-	.text
-	.globl	fixseed
-fixseed:
-	ld	hl,seed
-	ld	b,16
-1:	ld	a,(hl)
-	inc	hl
-	or	a
-	ret	nz
-	dec	b
-	jp	nz,1b
-	dec	hl
-	dec	(hl)
-	ret
-
-; ==============================================================================
-; lcg - carry out one LCG iteration
-; 
-;   input:  (seed) - current seed
-; 
-;   output: (seed) - new seed
-; 
-;   uses:   all
-;
-	.text
-	.globl	lcg
-lcg:
-	call	fixseed
-	ld	hl,consta
-	ld	de,mul1
-	ld	b,16
-	call	copy8
-	ld	hl,seed
-	ld	de,mul2
-	ld	b,16
-	call	copy8
-	ld	hl,seed
-	ld	(hl),1
-	inc	hl
-	ld	b,15
-	call	zerofill8
-	ld	b,128
-7:	ld	c,16
-	ld	hl,mul2 + 15
-	or	a
-1:	ld	a,(hl)
-	rra
-	ld	(hl),a
-	dec	hl
-	dec	c
-	jp	nz,1b
-	jp	nc,2f
-	ld	hl,seed
-	ld	de,mul1
-	ld	c,16
-	or	a
-3:	ld	a,(de)
-	adc	a,(hl)
-	ld	(hl),a
-	inc	hl
-	inc	de
-	dec	c
-	jp	nz,3b
-2:	ld	hl,mul1
-	ld	c,16
-	or	a
-4:	ld	a,(hl)
-	rla
-	ld	(hl),a
-	inc	hl
-	dec	c
-	jp	nz,4b
-	dec	b
-	jp	nz,7b
-	ret
-
-	.lcomm	mul1, 16
-	.lcomm	mul2, 16
-	
-	.data
-	.globl	seed
-seed:	.octa	0x89a31454abe0d9453a542d11015f6cb4
-seedp:	.byte	15
-consta:	.octa	47026247687942121848144207491837418733
-
-; ==============================================================================
 ; inklav_rnd - wait for key and modify PRNG seed
 ; 
 ;   output: A - ASCII code of the key
@@ -169,16 +36,16 @@ inklav_rnd:
 	push	af
 	push	hl
 	push	de
-	ld	a,(seedp)
+	ld	a,(seedp128)
 	inc	a
 	cp	16
 	jp	c,1f
 	xor	a
-1:	ld	(seedp),a
+1:	ld	(seedp128),a
 	add	a,a
 	ld	d,0
 	ld	e,a
-	ld	hl,seed
+	ld	hl,seed128
 	add	hl,de
 	in	a,(PIT_1)
 	xor	(hl)
@@ -205,7 +72,7 @@ inklav_rnd:
 	.text
 	.globl	get_rnd_puzzle
 get_rnd_puzzle:
-	ld	a,(seed + 15)
+	ld	a,(seed128 + 15)
 	and	0x7f
 	ld	c,a
 	jp	get_puzzle
@@ -214,7 +81,7 @@ get_rnd_puzzle:
 ; randomize_puzzle - transform puzzle using seed
 ; 
 ;   input:  (HL) - puzzle
-;           (seed) - PRNG value used for the transformation
+;           (seed128) - PRNG value used for the transformation
 ; 
 ;   output: (HL) - transformed puzzle
 ; 
@@ -229,7 +96,7 @@ randomize_puzzle:
 	push	hl
 	ld	hl,tperm1
 	push	hl
-	ld	a,(seed + 5)
+	ld	a,(seed128 + 5)
 	push	af
 	and	0x1f
 	ld	e,a
@@ -244,7 +111,7 @@ randomize_puzzle:
 	and	0x07
 	ld	(hl),a		; 0-7
 	inc	hl
-	ld	a,(seed + 6)
+	ld	a,(seed128 + 6)
 	push	af
 	and	0x0f
 	ld	e,a
@@ -263,7 +130,7 @@ randomize_puzzle:
 	call	udiv8
 	ld	(hl),c		; 0-5
 	inc	hl
-	ld	a,(seed + 7)
+	ld	a,(seed128 + 7)
 	push	af
 	and	0x0f
 	ld	e,a
@@ -278,7 +145,7 @@ randomize_puzzle:
 	and	0x03
 	ld	(hl),a		; 0-3
 	inc	hl
-	ld	a,(seed + 8)
+	ld	a,(seed128 + 8)
 	and	0x0f
 	ld	e,a
 	ld	c,3
@@ -327,7 +194,7 @@ randomize_puzzle:
 	
 	
 ; apply rotation map
-	ld	a,(seed + 9)
+	ld	a,(seed128 + 9)
 	and	0x07
 	ld	l,a
 	ld	h,0
@@ -342,7 +209,7 @@ randomize_puzzle:
 	call	transform
 	
 ; apply band swap map
-	ld	a,(seed + 10)
+	ld	a,(seed128 + 10)
 	and	0x0f
 	ld	e,a
 	ld	c,6
@@ -360,7 +227,7 @@ randomize_puzzle:
 	call	transform
 
 ; apply stack swap map
-	ld	a,(seed + 11)
+	ld	a,(seed128 + 11)
 	rra
 	rra
 	rra
@@ -384,15 +251,15 @@ randomize_puzzle:
 ; apply row and column swap maps
 	ld	hl,rmaps
 	ld	de,cmaps
-	ld	a,(seed + 12)
+	ld	a,(seed128 + 12)
 	call	1f
 	ld	hl,rmaps + (6 * 81)
 	ld	de,cmaps + (6 * 81)
-	ld	a,(seed + 13)
+	ld	a,(seed128 + 13)
 	call	1f
 	ld	hl,rmaps + (12 * 81)
 	ld	de,cmaps + (12 * 81)
-	ld	a,(seed + 14)
+	ld	a,(seed128 + 14)
 	call	1f
 
 ; copy puzzle back to (HL)

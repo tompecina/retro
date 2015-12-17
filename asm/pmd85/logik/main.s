@@ -69,7 +69,7 @@ quit:	call	rel_ct1
 ; get number of rounds
 again:	ld	hl,msg_nrnds
 	call	disp_msg
-	ld	hl,inklav_rnd
+	ld	hl,inklav_rnd128
 	ld	(sel_inklav),hl
 	ld	hl,valr
 	ld	(sel_val),hl

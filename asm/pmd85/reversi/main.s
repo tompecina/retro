@@ -38,7 +38,7 @@ main:
 ; initialize
 	di
 	ld	sp,initsp
-	call	init_btbl
+	call	init_bctbl
 	call	init_rvt
 	call	init_kbd
 	call	set_kmap

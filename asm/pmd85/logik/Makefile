@@ -1,5 +1,5 @@
 APPL = logik
-OBJ = main.o board.o random.o labels.o game.o tree.o
+OBJ = main.o board.o labels.o game.o tree.o
 AS = as-z80
 LD = ld-z80
 BTP = bin2ptp

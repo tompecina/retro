@@ -30,60 +30,6 @@
 	.equiv	CMASK, 0x47
 
 ; ==============================================================================
-; init_btbl - initialize the bit count table
-; 
-;   output: (bitcounts) populated
-; 
-;   uses:   A, B, C, H, L
-; 
-	.text
-	.globl	init_btbl
-init_btbl:
-	ld	hl,bitcounts
-	ld	c,0
-3:	ld	b,0
-	ld	a,c
-1:	or	a
-	jp	z,2f
-	rra
-	jp	nc,1b
-	inc	b
-	jp	1b
-2:	ld	(hl),b
-	inc	hl
-	inc	c
-	jp	nz,3b
-	ret
-	
-; ==============================================================================
-; count_bits - count bits in an 8-byte array
-; 
-;   input:  (HL) - array
-; 
-;   output: A - number of bits
-; 
-;   uses:   B, D, E, H, L
-; 
-	.text
-	.globl	count_bits
-count_bits:
-	ld	de,bitcounts
-	ld	b,8
-	xor	a
-1:	push	hl
-	ld	l,(hl)
-	ld	h,0
-	add	hl,de
-	add	a,(hl)
-	pop	hl
-	inc	hl
-	dec	b
-	jp	nz,1b
-	ret
-
-	.lcomm	bitcounts, 256
-	
-; ==============================================================================
 ; init_rvt - initialize table of row values
 ; 
 ;   output: (rbvt) - initialized table

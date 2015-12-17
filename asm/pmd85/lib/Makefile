@@ -6,7 +6,10 @@ OBJ = erase.o indcall.o sedit.o beep.o bepuk.o beclr.o waits.o inkey.o \
 	rdel.o div16.o hlneg.o deneg.o bcneg.o ucmpbcde.o scmphlde.o \
 	scmpdehl.o signexhl.o signexde.o shrhlb.o crc16.o crc24.o \
 	undef_glyph.o write.o writeln.o redon.o redoff.o add_cust_glyphs.o \
-	clr_msg.o disp_msg.o get_conf.o get_ack.o errbeep.o
+	clr_msg.o disp_msg.o get_conf.o get_ack.o errbeep.o start_ct1.o \
+	rel_ct1.o start_ct2.o read_ct2.o lcg128.o fixseed128.o inklav_rnd128.o \
+	conv_time.o init_bctbl.o count_bits.o init_brtbl.o reflect_byte.o \
+	init_bcbrtbl.o
 AS = as-z80
 AR = ar-z80
 ASFLAGS = -z80

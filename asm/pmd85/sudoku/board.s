@@ -779,39 +779,6 @@ glyphs80:
 	.byte	0x00	; ......
 	
 ; ==============================================================================
-; start_ct2 - start PIT Counter 2, used as timer
-; 
-;   uses:   A
-;
-	.text
-	.globl	start_ct2
-start_ct2:
-	ld	a,0xb0
-	out	(PIT_CTRL),a
-	xor	a
-	out	(PIT_2),a
-	out	(PIT_2),a
-	ret
-	
-; ==============================================================================
-; read_ct2 - read PIT Counter 2 value
-; 
-;   output: HL - counter value
-; 
-;   uses:   A
-;
-	.text
-	.globl	read_ct2
-read_ct2:
-	ld	a,0xd0
-	out	(PIT_CTRL),a
-	in	a,(PIT_2)
-	ld	l,a
-	in	a,(PIT_2)
-	ld	h,a
-	ret
-	
-; ==============================================================================
 ; init_gmap - populate group map
 ; 
 ;   output: (gmap) - populated group map
@@ -909,7 +876,6 @@ init_gmap:
 	.lcomm	gmap, 81 * 20
 	.lcomm	pbeg, 2
 	.lcomm	pend, 2
-
 	
 ; ==============================================================================
 ; Boxes
@@ -1025,72 +991,5 @@ check_puzzle:
 	jp	nz,1b
 	inc	b
 	ret
-	
-; ==============================================================================
-; conv_time - convert time to string
-; 
-;   input:  HL - time in seconds
-;	    (DE) - destination
-; 
-;   output: (DE) updated
-; 
-;   uses:   all
-; 
-	.text
-	.globl	conv_time
-conv_time:
-	ld	a,h
-	or	l
-	jp	nz,1f
-	ld	hl,tmerr
-	ld	b,5
-	jp	copy8
-1:	ld	b,d
-	ld	c,e
-	push	bc
-	ld	c,60
-	call	udiv16_8
-	pop	bc
-	push	de
-	ld	d,0xff
-	push	de
-1:	push	bc
-	ld	c,10
-	call	udiv16_8
-	pop	bc
-	ld	a,h
-	or	l
-	jp	z,1f
-	push	de
-	jp	1b
-1:	ld	a,'0'
-	add	a,e
-	ld	(bc),a
-	inc	bc
-	pop	de
-	inc	d
-	jp	nz,1b
-	ld	a,TIMECOL
-	ld	(bc),a
-	inc	bc
-	pop	hl
-	push	bc
-	ld	c,10
-	call	udiv16_8
-	pop	bc
-	ld	a,l
-	add	a,'0'
-	ld	(bc),a
-	inc	bc
-	ld	a,e
-	add	a,'0'
-	ld	(bc),a
-	inc	bc
-	xor	a
-	ld	(bc),a
-	ret
-	
-	.data
-tmerr:	db	"?", TIMECOL, "??", 0
 	
 	.end

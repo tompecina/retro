@@ -71,7 +71,7 @@ new:	call	erase
 	ld	b,a
 	push	bc
 	call	clr_msg
-	call	lcg
+	call	lcg128
 	pop	bc
 	ld	hl,puzzle
 	push	hl

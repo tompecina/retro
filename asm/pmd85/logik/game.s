@@ -344,9 +344,9 @@ check_match:
 ; ==============================================================================
 ; select_code - select pseudorandom code
 ; 
-;   input:  (seed) - PRNG seed
+;   input:  (seed128) - PRNG seed
 ; 
-;   output: (seed) updated
+;   output: (seed128) updated
 ;	    HL - code
 ; 
 ;   uses:   all
@@ -354,8 +354,8 @@ check_match:
 	.text
 	.globl	select_code
 select_code:
-	call	lcg
-	ld	hl,(seed + 14)
+	call	lcg128
+	ld	hl,(seed128 + 14)
 	ld	a,h
 	and	0x7f
 	ld	h,a
@@ -364,9 +364,9 @@ select_code:
 ; ==============================================================================
 ; rnd_map - populate pseudorandom transformation (mapping)
 ; 
-;   input:  (seed) - PRNG seed
+;   input:  (seed128) - PRNG seed
 ; 
-;   output: (seed) updated
+;   output: (seed128) updated
 ;	    (cmap) - color map
 ;	    (pmap) - position map
 ; 
@@ -375,27 +375,27 @@ select_code:
 	.text
 	.globl	rnd_map
 rnd_map:
-	call	lcg
+	call	lcg128
 	ld	hl,cmap
 	push	hl
-	ld	a,(seed + 15)
+	ld	a,(seed128 + 15)
 	push	af
 	and	0x07
 	ld	(hl),a		; 0-7
 	inc	hl
-	ld	a,(seed + 14)
+	ld	a,(seed128 + 14)
 	ld	e,a
 	ld	c,7
 	call	udiv8
 	ld	(hl),c		; 0-6
 	inc	hl
-	ld	a,(seed + 13)
+	ld	a,(seed128 + 13)
 	ld	e,a
 	ld	c,6
 	call	udiv8
 	ld	(hl),c		; 0-5
 	inc	hl
-	ld	a,(seed + 12)
+	ld	a,(seed128 + 12)
 	ld	e,a
 	ld	c,5
 	call	udiv8
@@ -410,7 +410,7 @@ rnd_map:
 	and	0x03
 	ld	(hl),a		; 0-3
 	inc	hl
-	ld	a,(seed + 11)
+	ld	a,(seed128 + 11)
 	ld	e,a
 	ld	c,3
 	call	udiv8
@@ -427,18 +427,18 @@ rnd_map:
 	call	1f
 	ld	hl,pmap
 	push	hl
-	ld	a,(seed + 10)
+	ld	a,(seed128 + 10)
 	ld	e,a
 	ld	c,5
 	call	udiv8
 	ld	(hl),c		; 0-4
 	inc	hl
-	ld	a,(seed + 9)
+	ld	a,(seed128 + 9)
 	push	af
 	and	0x03
 	ld	(hl),a		; 0-3
 	inc	hl
-	ld	a,(seed + 8)
+	ld	a,(seed128 + 8)
 	ld	e,a
 	ld	c,3
 	call	udiv8
