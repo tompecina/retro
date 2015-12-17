@@ -31,7 +31,8 @@
 	.globl	init_brtbl
 init_brtbl:
 	ld	hl,byterefl
-	ld	c,0
+	ld	b,a
+	ld	c,0x80
 1:	ld	b,0x80
 3:	ld	a,c
 	rla
