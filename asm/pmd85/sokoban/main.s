@@ -36,20 +36,24 @@ main:
 ; initialize
 	di
 	ld	sp,initsp
-	;; call	init_kbd
-	;; call	set_kmap
-	;; call	init_video
-	;; call	add_cust_glyphs
-	call	init_levels
+	call	init_levels	; must be called before using .bss
+	call	init_kbd
+	call	set_kmap
+	call	init_video
+	call	add_cust_glyphs
 	call	count_levels
 	ld	(nlevels),hl
 
-	ld	bc,0
+1:	ld	bc,0
+2:	push	bc
 	call	get_level
-
-	;; call	erase
-
-	jp	0
+	call	nc,draw_board
+	pop	bc
+	inc	bc
+	ld	a,c
+	cp	60
+	jp	nz,2b	
+	jp	1b
 	
 	.lcomm	nlevels, 2
 	

@@ -1,4 +1,4 @@
-; inklav.s
+; disp_msg.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,34 +17,26 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-; Copy of original monitor's routine.
-
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; inklav - wait for key
+; disp_msg - display message in the notification area
 ; 
-;   output: A - ASCII code of the key
+;   input:  (HL) - string
+;           (color) - color mask
 ; 
-;   uses:   -
+;   uses:   all
 ; 
 	.text
-	.globl	inklav
-inklav:
-	push	bc
-	push	de
+	.globl	disp_msg
+disp_msg:
 	push	hl
-1:	call	inkey
-	jp	z,1b
+	call	clr_msg
 	pop	hl
-	pop	de
-	pop	bc
+	ld	de,MSGAREA
+	call	writeln
+	ld	a,1
+	ld	(msg),a
 	ret
 
-	.data
-	.global	sel_inklav
-sel_inklav:
-	.word	inklav
-	
 	.end

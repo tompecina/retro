@@ -47,7 +47,9 @@ main:
 quit:	call	rel_ct1
 	call	erase
 	jp	PMD_MONIT
-1:	call	start_ct2
+1:	ld	hl,inklav_rnd
+	ld	(sel_inklav),hl
+	call	start_ct2
 	call	init_maps
 	call	init_gmap
 new:	call	erase

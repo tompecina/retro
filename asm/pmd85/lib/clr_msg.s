@@ -1,4 +1,4 @@
-; inklav.s
+; clr_msg.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,34 +17,28 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-; Copy of original monitor's routine.
-
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; inklav - wait for key
+; clr_msg - clear the notification area
 ; 
-;   output: A - ASCII code of the key
-; 
-;   uses:   -
+;   uses:   all
 ; 
 	.text
-	.globl	inklav
-inklav:
-	push	bc
-	push	de
-	push	hl
-1:	call	inkey
-	jp	z,1b
-	pop	hl
-	pop	de
-	pop	bc
+	.globl	clr_msg
+clr_msg:
+	ld	a,(msg)
+	or	a
+	ret	z
+	ld	hl,MSGAREA
+	ld	de,MSGAREA + 48 - (64 * 11)
+	ld	b,10
+	call	part_erase
+	xor	a
+	ld	(msg),a
 	ret
 
-	.data
-	.global	sel_inklav
-sel_inklav:
-	.word	inklav
+	.globl	msg
+	.lcomm	msg, 1
 	
 	.end

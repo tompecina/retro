@@ -1,4 +1,4 @@
-; inklav.s
+; redon.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,34 +17,18 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-; Copy of original monitor's routine.
-
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; inklav - wait for key
+; Red LED on
 ; 
-;   output: A - ASCII code of the key
-; 
-;   uses:   -
-; 
+;   uses:   A
+;
 	.text
-	.globl	inklav
-inklav:
-	push	bc
-	push	de
-	push	hl
-1:	call	inkey
-	jp	z,1b
-	pop	hl
-	pop	de
-	pop	bc
+	.globl	redon
+redon:
+	ld	a,0x07
+	out	(SYSPIO_CTRL),a
 	ret
-
-	.data
-	.global	sel_inklav
-sel_inklav:
-	.word	inklav
 	
 	.end

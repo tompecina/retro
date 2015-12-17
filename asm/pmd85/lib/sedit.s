@@ -30,8 +30,8 @@
 ;   	    B - minimum number of characters
 ;   	    C - maximum number of characters
 ;   	    (HL) - buffer (with capacity of at least C + 1)
-;   	    (ikf) - inklav funcion
-;   	    (vf) - validation function (A = char, C = position -> CY if invalid)
+;   	    (sel_inklav) - inklav funcion
+;   	    (sel_val) - validation function (A = char, C = position -> CY if invalid)
 ; 
 ;   output: (HL) - zero-terminated entry
 ;   	    C - number of characters
@@ -43,8 +43,7 @@
 sedit:	xor	a
 	ld	(nchar),a
 	call	shcur
-2:	call	indcall
-	.word	ikf
+2:	indcall	inklav
 	cp	KEOL
 	jp	nz,1f
 	ld	a,(nchar)
@@ -103,8 +102,7 @@ sedit:	xor	a
 	push	bc
 	ld	c,(hl)
 	ld	a,d
-	call	indcall
-	.word	vf
+	indcall	val
 	pop	bc
 	pop	hl
 	jp	c,2b
@@ -126,14 +124,17 @@ shcur:	ld	a,0x7f
 	jp	prtout
 hdcur:	ld	a,' '
 	jp	prtout
-svf:	cp	0x20
+
+	.globl	def_val
+def_val:
+	cp	0x20
 	ret
 
 	.lcomm	nchar, 1
 
 	.data
-	.globl	ikf, vf
-ikf:	.word	inklav
-vf:	.word	svf
+	.globl	sel_val
+sel_val:
+	.word	def_val
 	
 	.end

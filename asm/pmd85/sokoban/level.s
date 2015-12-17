@@ -129,18 +129,6 @@ get_level:
 	ld	(ctr),hl
 	ld	hl,board
 	push	hl
-	push	hl
-	ld	a,(roff)
-	ld	de,ROWS
-1:	dec	a
-	jp	m,1f
-	add	hl,de
-	jp	1b
-1:	ld	a,(coff)
-	ld	e,a
-	add	hl,de
-	ld	(orig),hl
-	pop	hl
 	ld	bc,ROWS * COLS
 	call	zerofill16
 	pop	de
@@ -214,13 +202,12 @@ get_level:
 	or	BOX
 	ret
 	
-	.globl	board
+	.globl	board, rows, cols, roff, coff
 	.lcomm	board, ROWS * COLS
 	.lcomm	rows, 1
-	.lcomm	roff, 1
 	.lcomm	cols, 1
+	.lcomm	roff, 1
 	.lcomm	coff, 1
-	.lcomm	orig, 2
 	.lcomm	ctr, 2
 
 	.end

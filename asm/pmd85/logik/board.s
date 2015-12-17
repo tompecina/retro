@@ -25,6 +25,7 @@
 ; ==============================================================================
 ; Constants
 ; 
+	.globl	MSGAREA
 	.equiv	ULC, 0xc2d5		; upper left corner of the board
 	.equiv	MSGAREA, 0xffc0		; position of the notification area
 	
@@ -333,7 +334,6 @@ draw_pegs:
 	inc	c
 	jp	1b
 	
-	
 ; ==============================================================================
 ; Pegs
 ;
@@ -592,10 +592,8 @@ player_select:
 player_score:
 	ld	hl, msg_bpegs
 	call	disp_msg
-	ld	hl,inklav_rnd
-	ld	(ikf),hl
 	ld	hl,valp
-	ld	(vf),hl
+	ld	(sel_val),hl
 	ld	bc,0x0101
 	ld	hl,kbdbuffer
 	push	hl
@@ -682,147 +680,10 @@ disp_guess:
 	ret
 	
 ; ==============================================================================
-; write - display one character
-; 
-;   input:  A - character
-;           (HL) - destination
-;           (color) - color mask
-; 
-;   uses:   A, H, L
-; 
-	.text
-	.globl	write
-write:
-	ld	(cursor),hl
-	jp	prtout
-	
-; ==============================================================================
-; writeln/writelncur - display zero-terminated string
-; 
-;   input:  (HL) - string (only writeln)
-;           (DE) - string (only writelncur)
-;           (DE) - destination (only writeln)
-;           (cursor) - destination (only writelncur)
-;           (color) - color mask
-; 
-;   uses:   A, H, L
-; 
-	.text
-	.globl	writeln, writelncur
-writeln:
-	ex	de,hl
-	ld	(cursor),hl
-writelncur:
-	ld	a,(de)
-	or	a
-	ret	z
-	call	prtout
-	inc	de
-	jp	writelncur
-	
-; ==============================================================================
-; clr_msg - clear the notification area
-; 
-;   uses:   all
-; 
-	.text
-	.globl	clr_msg
-clr_msg:
-	ld	a,(msg)
-	or	a
-	ret	z
-	ld	hl,MSGAREA
-	ld	de,MSGAREA + 48 - (64 * 11)
-	ld	b,10
-	call	part_erase
-	xor	a
-	ld	(msg),a
-	ret
-
-	.lcomm	msg, 1
-	
-; ==============================================================================
-; disp_msg - display message in the notification area
-; 
-;   input:  (HL) - string
-;           (color) - color mask
-; 
-;   uses:   all
-; 
-	.text
-	.globl	disp_msg
-disp_msg:
-	push	hl
-	call	clr_msg
-	pop	hl
-	ld	de,MSGAREA
-	call	writeln
-	ld	a,1
-	ld	(msg),a
-	ret
-
-; ==============================================================================
-; get_conf,get_conf2 - optionally display prompt and wait for confirmation (Y/N)
-; 
-;   input:  (HL) - prompt (only get_conf)
-;           (color) - color mask
-; 
-;   output: NZ answer is YES
-; 
-;   uses:   A, B, D, E, H, L
-; 
-	.text
-	.globl	get_conf, get_conf2
-get_conf:
-	call	disp_msg
-get_conf2:
-	call	inklav_rnd
-	cp	KEY_YES
-	jp	z,1f
-	cp	KEY_NO
-	jp	z,2f
-	jp	get_conf2
-1:	call	clr_msg
-	or	0xff
-	ret
-2:	call	clr_msg
-	xor	a
-	ret
-	
-; ==============================================================================
-; get_ack,get_ack2 - optionally display prompt and wait for Enter
-; 
-;   input:  (HL) - prompt (only get_ack)
-;           (color) - color mask
-; 
-;   uses:   A, B, D, E, H, L
-; 
-	.text
-	.globl	get_ack, get_ack2
-get_ack:
-	call	disp_msg
-get_ack2:
-	call	inklav_rnd
-	cp	KEY_ENTER
-	jp	nz,get_ack2
-	jp	clr_msg
-	
-; ==============================================================================
-; add_cust_glyphs - add custom glyphs
-;
-;   uses:   H, L
-;
-	.text
-	.globl	add_cust_glyphs
-add_cust_glyphs:	
-	ld	hl,glyphs80 + 10
-	ld	(tascii + 0x08),hl
-	ret
-	
-; ==============================================================================
 ; Custom glyphs
 ;
 	.data
+	.globl	glyphs80
 glyphs80:
 	.globl	OBELUS
 	.equiv	OBELUS, 0x80

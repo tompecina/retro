@@ -563,15 +563,4 @@ stdbeep:
 	.data
 stbdt:	.byte	2, 16, 0xff
 	
-; ==============================================================================
-; Error beep
-;
-	.text
-errbeep:
-	ld	hl,erbdt
-	jp	bell
-
-	.data
-erbdt:	.byte	2, 8, 0, 8, 2, 8, 0xff
-	
 	.end

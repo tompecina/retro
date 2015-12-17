@@ -1,4 +1,4 @@
-; inklav.s
+; add_cust_glyphs.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,34 +17,18 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-; Copy of original monitor's routine.
-
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; inklav - wait for key
-; 
-;   output: A - ASCII code of the key
-; 
-;   uses:   -
-; 
+; add_cust_glyphs - add custom glyphs
+;
+;   uses:   H, L
+;
 	.text
-	.globl	inklav
-inklav:
-	push	bc
-	push	de
-	push	hl
-1:	call	inkey
-	jp	z,1b
-	pop	hl
-	pop	de
-	pop	bc
+	.globl	add_cust_glyphs
+add_cust_glyphs:	
+	ld	hl,glyphs80 + 10
+	ld	(tascii + 0x08),hl
 	ret
-
-	.data
-	.global	sel_inklav
-sel_inklav:
-	.word	inklav
 	
 	.end

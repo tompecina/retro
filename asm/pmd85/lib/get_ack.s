@@ -1,4 +1,4 @@
-; inklav.s
+; get_ack.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,34 +17,25 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-; Copy of original monitor's routine.
-
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; inklav - wait for key
+; get_ack,get_ack2 - optionally display prompt and wait for Enter
 ; 
-;   output: A - ASCII code of the key
+;   input:  (HL) - prompt (only get_ack)
+;           (color) - color mask
 ; 
-;   uses:   -
+;   uses:   A, B, D, E, H, L
 ; 
 	.text
-	.globl	inklav
-inklav:
-	push	bc
-	push	de
-	push	hl
-1:	call	inkey
-	jp	z,1b
-	pop	hl
-	pop	de
-	pop	bc
-	ret
-
-	.data
-	.global	sel_inklav
-sel_inklav:
-	.word	inklav
+	.globl	get_ack, get_ack2
+get_ack:
+	call	disp_msg
+get_ack2:
+	call	indcall
+	.word	sel_inklav
+	cp	KEY_ENTER
+	jp	nz,get_ack2
+	jp	clr_msg
 	
 	.end

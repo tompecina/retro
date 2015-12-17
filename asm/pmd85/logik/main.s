@@ -70,9 +70,9 @@ quit:	call	rel_ct1
 again:	ld	hl,msg_nrnds
 	call	disp_msg
 	ld	hl,inklav_rnd
-	ld	(ikf),hl
+	ld	(sel_inklav),hl
 	ld	hl,valr
-	ld	(vf),hl
+	ld	(sel_val),hl
 	ld	bc,0x0101
 	ld	hl,kbdbuffer
 	call	sedit

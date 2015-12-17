@@ -1,4 +1,4 @@
-; inklav.s
+; get_conf.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,34 +17,34 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-; Copy of original monitor's routine.
-
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; inklav - wait for key
+; get_conf,get_conf2 - optionally display prompt and wait for confirmation (Y/N)
 ; 
-;   output: A - ASCII code of the key
+;   input:  (HL) - prompt (only get_conf)
+;           (color) - color mask
 ; 
-;   uses:   -
+;   output: NZ answer is YES
+; 
+;   uses:   A, B, D, E, H, L
 ; 
 	.text
-	.globl	inklav
-inklav:
-	push	bc
-	push	de
-	push	hl
-1:	call	inkey
-	jp	z,1b
-	pop	hl
-	pop	de
-	pop	bc
+	.globl	get_conf, get_conf2
+get_conf:
+	call	disp_msg
+get_conf2:
+	call	inklav
+	cp	KEY_YES
+	jp	z,1f
+	cp	KEY_NO
+	jp	z,2f
+	jp	get_conf2
+1:	call	clr_msg
+	or	0xff
 	ret
-
-	.data
-	.global	sel_inklav
-sel_inklav:
-	.word	inklav
+2:	call	clr_msg
+	xor	a
+	ret
 	
 	.end
