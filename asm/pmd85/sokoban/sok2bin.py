@@ -25,6 +25,9 @@ from sys import argv, stdin, stdout, stderr
 from getopt import getopt, GetoptError
 from re import search
 
+MAXROWS = 40
+MAXCOLS = 48
+
 def main(argv):
 
     def usage():
@@ -33,7 +36,7 @@ def main(argv):
         print("\nOptions:")
         print("  -?,--help                     show usage information")
         print("  -V, --version                 show version")
-        print("  -o OUTFILE, --output=OUTFILE  output file (required)")
+        print("  -o OUTFILE, --output=OUTFILE  output file")
         print("  -v, --verbose                 verbose output")
 
     def report(*msg):
@@ -75,8 +78,8 @@ def main(argv):
         lines.append("")
         run = False
         for line in lines:
-            line = line.strip()
-            isdata = (line and line[0] in "#B*123456789")
+            line = line.rstrip("\n")
+            isdata = (line and search(r'^\d*[-_ #B*].*\d*[-_ #B*]$', line))
             if isdata and not run:
                 run = True
                 l = []
@@ -117,7 +120,11 @@ def main(argv):
                     rows = len(l)
                     if rows < 3:
                         error("Too few rows")
+                    elif rows > MAXROWS:
+                        error("Too many rows")
                     cols = max(map(len, l))
+                    if cols > MAXCOLS:
+                        error("Too many columns")
                     for i in range(rows):
                         if len(l[i]) < cols:
                             l[i] += " " * (cols - len(l[i]))
@@ -203,12 +210,15 @@ def main(argv):
         elif opt in ['-v', '--verbose']:
             verbose = True
     infiles = args[:]
-    if not outfile:
-        error("No output file")
-    try:
-        fo = open(outfile, "wb")
-    except:
-        error("Error opening file:", outfile)
+    if outfile:
+        report("Writing to file:", outfile)
+        try:
+            fo = open(outfile, "wb")
+        except:
+            error("Error opening file:", outfile)
+    else:
+        report("Writing to standard output")
+        fo = stdout.buffer
     if not infiles:
         report("Processing standard input")
         proc(stdin)
@@ -216,7 +226,7 @@ def main(argv):
         for infile in infiles:
             report("Processing file:", infile)
             try:
-                fi = open(infile)
+                fi = open(infile, errors="ignore")
             except:
                 print("Error opening file:", infile)
                 return 1
