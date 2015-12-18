@@ -42,6 +42,12 @@ credits:
 	.equiv	KEY_NO, 'N'
 	.equiv	KEY_ENTER, KEOL
 
+	.globl	KEY_RESTART, KEY_UNDO, KEY_MENU, KEY_QUIT
+	.equiv	KEY_RESTART, 'R'
+	.equiv	KEY_UNDO, 'U'
+	.equiv	KEY_MENU, 'M'
+	.equiv	KEY_QUIT, 'Q'
+	
 ; ==============================================================================
 ; Labels
 ;
@@ -51,9 +57,15 @@ credits:
 ; Prompts
 ;
 	.data
-	.globl	msg_stat
+	.globl	msg_stat, msg_restart, msg_end, msg_quit
 msg_stat:
 	.asciz	"Level     Moves:      Pushes:"
-	
+msg_restart:
+	.asciz	"Do you really wish to restart the level? (Y/N)"
+msg_end:
+	.asciz	"Do you really wish to return to menu? (Y/N)"
+msg_quit:
+	.asciz	"Do you really wish to end the program? (Y/N)"
+
 	.end
 	

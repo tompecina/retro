@@ -43,6 +43,12 @@ credits:
 	.equiv	KEY_NO, 'N'
 	.equiv	KEY_ENTER, KEOL
 	
+	.globl	KEY_RESTART, KEY_UNDO, KEY_END, KEY_QUIT
+	.equiv	KEY_RESTART, 'R'
+	.equiv	KEY_UNDO, 'V'
+	.equiv	KEY_MENU, 'M'
+	.equiv	KEY_QUIT, 'K'
+	
 ; ==============================================================================
 ; Labels
 ;
@@ -52,7 +58,17 @@ credits:
 ; Prompts
 ;
 	.data
+	.globl	msg_stat, msg_restart, msg_end, msg_quit
+msg_stat:
 	db	0xf5, "rove", 0xce, "     Krokov:      ", 0xf4, "ahov:", 0
+msg_restart:
+	db	"Naozaj si ", 0xda, "el", 0xc1, "te re", 0xd3, "tartova", 0xd4
+	db	" ", 0xd5, "rove", 0xce, "? (A/N)", 0
+msg_end:
+	db	"Naozaj sa chcete vr", 0xc1, "ti", 0xd4, " do menu? (A/N)", 0
+msg_quit:
+	db	"Naozaj si ", 0xda, "el", 0xc1, "te program ukonči", 0xd4
+	db	"? (A/N)", 0
 
 	.end
 	
