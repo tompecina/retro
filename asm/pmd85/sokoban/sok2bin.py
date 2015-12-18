@@ -23,11 +23,14 @@
 
 from sys import argv, stdin, stdout, stderr
 from getopt import getopt, GetoptError
-from re import search
+from re import compile
 
 MAXROWS = 40
 MAXCOLS = 48
-
+RE1 = compile(r'^[-_ #B*\d][-_ #pPbB.+*@$\d()]*[-_ #B*)]$')
+RE2 = compile(r'(\d+)\(([^\d)]+)\)')
+RE3 = compile(r'(\d+)(.)')
+    
 def main(argv):
 
     def usage():
@@ -54,6 +57,7 @@ def main(argv):
         return r
 
     def out(ctr, c):
+        print("ctr:",ctr,"c:",c,file=stderr)
         if ctr == 1:
             r = [0]
         else:
@@ -72,122 +76,116 @@ def main(argv):
         else:
             error("Internal error")
         return r
-            
+
     def proc(fi):
         lines = fi.readlines()
         lines.append("")
         run = False
-        for line in lines:
-            line = line.rstrip("\n")
-            isdata = (line and search(r'^\d*[-_ #B*].*\d*[-_ #B*]$', line))
-            if isdata and not run:
-                run = True
-                l = []
-            if run:
+        for line2 in lines:
+            for line in line2.rstrip("|\n").split('|'):
+                isdata = (line and RE1.search(line))
                 if isdata:
-                    l.append(line)
-                else:
-                    run = False
-                    l = '|'.join(l)
-                    l = l.replace("||", "|")
-                    if l[-1] == '|':
-                        l = l[:-1]
-                    l = l.split('|')
-                    for i in range(len(l)):
-                        ll = l[i]
-                        while True:
-                            m = search(r'(\d+)\(([^\d)]+)\)', ll)
-                            if not m:
-                                break
-                            st = m.start()
-                            en = m.end()
-                            nl = ll[:st]
-                            for j in range(int(m.group(1))):
-                                nl += m.group(2)
-                            nl += ll[en:]
-                            l[i] = ll = nl
-                        while True:
-                            m = search(r'(\d+)(.)', ll)
-                            if not m:
-                                break
-                            st = m.start()
-                            en = m.end()
-                            nl = ll[:st]
-                            for j in range(int(m.group(1))):
-                                nl += m.group(2)
-                            nl += ll[en:]
-                            l[i] = ll = nl
-                    rows = len(l)
-                    if rows < 3:
-                        error("Too few rows")
-                    elif rows > MAXROWS:
-                        error("Too many rows")
-                    cols = max(map(len, l))
-                    if cols > MAXCOLS:
-                        error("Too many columns")
-                    for i in range(rows):
-                        if len(l[i]) < cols:
-                            l[i] += " " * (cols - len(l[i]))
-                    report("Rows: %d, columns: %d" % (rows, cols))
-                    b = []
-                    b.extend(putbyte(cols))
-                    b.extend(putbyte(rows))
-                    l = "".join(l)
-                    ctr = pos = 0
-                    prow = -1
-                    for ch in l:
-                        if ch == '#':
-                            c = '#'
-                        elif ch in "p@":
-                            c = '@'
-                        elif ch in "P+":
-                            c = '+'
-                        elif ch in "b$":
-                            c = '$'
-                        elif ch in "B*":
-                            c = '*'
-                        elif ch == '.':
-                            c = '.'
-                        elif ch in " -_":
-                            c = ' '
-                        else:
-                            error("Syntax error (1)")
-                        if c in '@+':
-                            prow = pos // rows
-                            pcol = pos % rows
-                            if c == '@':
+                    while True:
+                        m = RE2.search(line)
+                        if not m:
+                            break
+                        st = m.start()
+                        en = m.end()
+                        nl = line[:st]
+                        for j in range(int(m.group(1))):
+                            nl += m.group(2)
+                        nl += line[en:]
+                        line = nl
+                    while True:
+                        m = RE3.search(line)
+                        if not m:
+                            break
+                        st = m.start()
+                        en = m.end()
+                        nl = line[:st]
+                        for j in range(int(m.group(1))):
+                            nl += m.group(2)
+                        nl += line[en:]
+                        line = nl
+                    if not run:
+                        run = True
+                        l = []
+                if run:
+                    if isdata:
+                        l.append(line)
+                    else:
+                        run = False
+                        rows = len(l)
+                        if rows < 3:
+                            error("Too few rows")
+                        elif rows > MAXROWS:
+                            error("Too many rows")
+                        cols = max(map(len, l))
+                        if cols > MAXCOLS:
+                            error("Too many columns")
+                        for i in range(rows):
+                            if len(l[i]) < cols:
+                                l[i] += " " * (cols - len(l[i]))
+                        report("Rows: %d, columns: %d" % (rows, cols))
+                        b = []
+                        b.extend(putbyte(cols))
+                        b.extend(putbyte(rows))
+                        l = "".join(l)
+                        ctr = pos = 0
+                        prow = -1
+                        for ch in l:
+                            if ch == '#':
+                                c = '#'
+                            elif ch in "p@":
+                                c = '@'
+                            elif ch in "P+":
+                                c = '+'
+                            elif ch in "b$":
+                                c = '$'
+                            elif ch in "B*":
+                                c = '*'
+                            elif ch == '.':
+                                c = '.'
+                            elif ch in " -_":
                                 c = ' '
                             else:
-                                c = '.'
-                        if ctr and (c == prev):
-                            ctr += 1
-                            if ctr == 9:
-                                b.extend(out(ctr, c))
-                                prev = ctr = 0
-                        else:
-                            if ctr:
-                                b.extend(out(ctr, c))
-                            ctr = 1
-                            prev = c
-                        pos += 1
-                    if pos != (rows * cols):
-                        error("Syntax error (2)")
-                    while len(b) % 8:
-                        b.append(0)
-                    if prow < 0:
-                        error("Syntax error (3)")
-                    b.extend(putbyte(pcol))
-                    b.extend(putbyte(prow))
-                    r = []
-                    for i in range(len(b) // 8):
-                        p = 0
-                        for j in range(8):
-                            p |= b[(i * 8) + j] << (7 - j)
-                        r.append(p)
-                    lr = len(r)
-                    r.insert(0, lr % 0x100)
-                    r.insert(1, lr // 0x100)
-                    fo.write(bytes(r))
+                                error("Syntax error (1)")
+                            if c in '@+':
+                                prow = pos // rows
+                                pcol = pos % rows
+                                if c == '@':
+                                    c = ' '
+                                else:
+                                    c = '.'
+                            if ctr and (c == prev):
+                                ctr += 1
+                                if ctr == 9:
+                                    b.extend(out(ctr, c))
+                                    prev = ctr = 0
+                            else:
+                                if ctr:
+                                    b.extend(out(ctr, c))
+                                ctr = 1
+                                prev = c
+                            pos += 1
+                        if pos != (rows * cols):
+                            error("Syntax error (2)")
+                        while len(b) % 8:
+                            b.append(0)
+                        if prow < 0:
+                            error("Syntax error (3)")
+                        b.extend(putbyte(pcol))
+                        b.extend(putbyte(prow))
+                        r = []
+                        for i in range(len(b) // 8):
+                            p = 0
+                            for j in range(8):
+                                p |= b[(i * 8) + j] << (7 - j)
+                            r.append(p)
+                        lr = len(r)
+                        r.insert(0, lr % 0x100)
+                        r.insert(1, lr // 0x100)
+                        fo.write(bytes(r))
                     
     try:
         opts, args = getopt(argv, '?Vo:v', ['help', 'version', 'output=', 'verbose'])
