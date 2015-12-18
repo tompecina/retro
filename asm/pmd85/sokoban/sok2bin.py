@@ -57,7 +57,7 @@ def main(argv):
         return r
 
     def out(ctr, c):
-        print("ctr:",ctr,"c:",c,file=stderr)
+        report("c:",c,"ctr:",ctr)
         if ctr == 1:
             r = [0]
         else:
@@ -161,13 +161,15 @@ def main(argv):
                                 ctr += 1
                                 if ctr == 9:
                                     b.extend(out(ctr, c))
-                                    prev = ctr = 0
+                                    ctr = 0
                             else:
                                 if ctr:
-                                    b.extend(out(ctr, c))
+                                    b.extend(out(ctr, prev))
                                 ctr = 1
                                 prev = c
                             pos += 1
+                        if ctr:
+                            b.extend(out(ctr, prev))
                         if pos != (rows * cols):
                             error("Syntax error (2)")
                         while len(b) % 8:
