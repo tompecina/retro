@@ -37,8 +37,8 @@
 ;           (cols) - number of columns
 ;           (roff) - row offset
 ;           (coff) - column offset
-;	    (rplayer) - row of player
-;	    (cplayer) - column of player
+;	    (rpusher) - row of pusher
+;	    (cpusher) - column of pusher
 ;
 ;   uses:   all
 ; 
@@ -75,15 +75,15 @@ draw_board:
 	ld	a,(rows)
 	cp	b
 	jp	nz,3b
-	ld	a,(rplayer)
+	ld	a,(rpusher)
 	ld	hl,roff
 	add	a,(hl)
 	ld	b,a
-	ld	a,(cplayer)
+	ld	a,(cpusher)
 	ld	hl,coff
 	add	a,(hl)
 	ld	c,a
-	ld	a,SQ_PLAYER
+	ld	a,SQ_PUSHER
 	jp	draw_square
 2:	cp	WALL
 	jp	nz,1f
@@ -204,7 +204,7 @@ draw_square:
 	.equiv	SQ_BOX, 2
 	.equiv	SQ_BOXONGOAL, 3
 	.equiv	SQ_GOAL, 4
-	.equiv	SQ_PLAYER, 5
+	.equiv	SQ_PUSHER, 5
 	
 	.data
 squareslo:	
@@ -274,7 +274,7 @@ squareslo:
 	.word	0x0000	; ............
 	.word	0x0000	; ............
 	.word	0x0000	; ............
-; 5 - player
+; 5 - pusher
 	.word	0x0330	; ....####....
 	.word	0x0330	; ....####....
 	.word	0x0330	; ....####....
@@ -326,7 +326,7 @@ squareshi:
 	.byte	0x0c	; ..##..
 	.byte	0x00	; ......
 	.byte	0x00	; ......
-; 5 - player
+; 5 - pusher
 	.byte	0x0c	; ..##..
 	.byte	0x0c	; ..##..
 	.byte	0x3f	; ######
@@ -352,6 +352,20 @@ glyphs80:
 	.byte	0x00	; ......
 	.byte	0x08	; ...#..
 	.byte	0x00	; ......
+	.byte	0x00	; ......
+
+	.globl	UPARROW
+	.equiv	UPARROW, 0x81
+	; 81
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x08	; ...#..
+	.byte	0x1c	; ..###.
+	.byte	0x3e	; .#####
+	.byte	0x08	; ...#..
+	.byte	0x08	; ...#..
+	.byte	0x08	; ...#..
+	.byte	0x08	; ...#..
 	.byte	0x00	; ......
 
 	.end

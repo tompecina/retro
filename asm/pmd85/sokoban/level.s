@@ -83,8 +83,8 @@ count_levels:
 ;	    (cols) - number of columns
 ;	    (roff) - row offset
 ;	    (coff) - column offset
-;	    (rplayer) - initial row of player
-;	    (cplayer) - initial column of player
+;	    (rpusher) - initial row of pusher
+;	    (cpusher) - initial column of pusher
 ;	    CY if not found or oversized
 ; 
 ;   uses:   all
@@ -205,9 +205,9 @@ get_level:
 	ld	(hl),0xff	; sentinel
 	ld	a,(de)
 	inc	de
-	ld	(cplayer),a
+	ld	(cpusher),a
 	ld	a,(de)
-	ld	(rplayer),a
+	ld	(rpusher),a
 	or	a		; CY = 0
 	ret
 2:	dec	b
@@ -223,29 +223,29 @@ get_level:
 	jp	c,3f
 	call	2b
 	jp	c,1f
-	xor	a
+	xor	a		; 00
 	ret
-1:	ld	a,WALL
+1:	ld	a,WALL		; 01
 	ret
 3:	call	2b
 	jp	c,1f
-	ld	a,BOX
+	ld	a,BOX		; 10
 	ret
 1:	call	2b
-	ld	a,GOAL
+	ld	a,GOAL		; 110
 	ret	nc
-	or	BOX
+	ld	a,BOX | GOAL	; 111
 	ret
 	
-	.globl	board, size, rows, cols, roff, coff, rplayer, cplayer
+	.globl	board, size, rows, cols, roff, coff, rpusher, cpusher
 	.lcomm	board, (HI_ROWS * HI_COLS) + 1
 	.lcomm	size, 1
 	.lcomm	rows, 1
 	.lcomm	cols, 1
 	.lcomm	roff, 1
 	.lcomm	coff, 1
-	.lcomm	rplayer, 1
-	.lcomm	cplayer, 1
+	.lcomm	rpusher, 1
+	.lcomm	cpusher, 1
 	.lcomm	ctr, 2
 
 	.end
