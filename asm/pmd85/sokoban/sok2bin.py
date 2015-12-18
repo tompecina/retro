@@ -76,7 +76,7 @@ def main(argv):
         run = False
         for line in lines:
             line = line.strip()
-            isdata = (line and line[0] in "#B*")
+            isdata = (line and line[0] in "#B*123456789")
             if isdata and not run:
                 run = True
                 l = []
@@ -92,7 +92,6 @@ def main(argv):
                     l = l.split('|')
                     for i in range(len(l)):
                         ll = l[i]
-                        print("Old",ll)
                         while True:
                             m = search(r'(\d+)\(([^\d)]+)\)', ll)
                             if not m:
@@ -115,7 +114,6 @@ def main(argv):
                                 nl += m.group(2)
                             nl += ll[en:]
                             l[i] = ll = nl
-                            print("New",ll)
                     rows = len(l)
                     if rows < 3:
                         error("Too few rows")
