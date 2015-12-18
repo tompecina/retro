@@ -51,6 +51,8 @@ credits:
 ; Prompts
 ;
 	.data
+	db	0xf5, "rove", 0xce, "     Krok", 0xca, ":      Tah", 0xca
+	db	":", 0
 
 	.end
 	

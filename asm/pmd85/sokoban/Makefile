@@ -1,5 +1,5 @@
 APPL = sokoban
-OBJ = main.o board.o labels.o level.o deflevels.o
+OBJ = main.o board.o labels.o level.o deflevels.o hist.o
 AS = as-z80
 LD = ld-z80
 BTP = bin2ptp

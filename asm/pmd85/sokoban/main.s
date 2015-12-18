@@ -43,6 +43,7 @@ main:
 	call	add_cust_glyphs
 	call	count_levels
 	ld	(nlevels),hl
+	call	init_hist	
 
 1:	ld	bc,0
 2:	push	bc

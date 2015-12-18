@@ -52,6 +52,7 @@ credits:
 ; Prompts
 ;
 	.data
+	db	0xf5, "rove", 0xce, "     Krokov:      ", 0xf4, "ahov:", 0
 
 	.end
 	

@@ -45,12 +45,13 @@ init_levels:
 	ld	a,b
 	or	c
 	jp	nz,1b
-	ret	
+	ret
 	
 ; ==============================================================================
 ; count_levels - count levels
 ; 
-;   output: HL - number of levels
+;   output: DE - number of levels
+;	    HL - next available address
 ; 
 ;   uses:   all
 ; 
@@ -65,9 +66,7 @@ count_levels:
 	inc	hl
 	ld	a,b
 	or	c
-	ex	de,hl
 	ret	z
-	ex	de,hl
 	inc	de
 	add	hl,bc
 	jp	1b	
@@ -78,8 +77,14 @@ count_levels:
 ;   input:  BC - level number
 ; 
 ;   output: (board) - decompressed level
-;	    B - initial row of player
-;	    C - initial column of player
+;	    (size) =0 - no bigger than LO_ROWS x LO_COLS
+;		   =1 - bigger than LO_ROWS x LO_COLS
+;	    (rows) - number of rows
+;	    (cols) - number of columns
+;	    (roff) - row offset
+;	    (coff) - column offset
+;	    (rplayer) - initial row of player
+;	    (cplayer) - initial column of player
 ;	    CY if not found or oversized
 ; 
 ;   uses:   all
@@ -103,23 +108,52 @@ get_level:
 	dec	bc
 	add	hl,de
 	jp	2b
-1:	ld	a,COLS
-	sub	(hl)
+1:	xor	a
+	ld	(size),a
+	ld	a,HI_COLS
+	cp	(hl)
 	ret	c		; too many columns
-	rra
-	ld	(coff),a
-	ld	a,(hl)
-	inc	hl
+	ld	a,LO_COLS
+	cp	(hl)
+	jp	nc,1f
+	ld	a,1
+	ld	(size),a
+1:	ld	a,(hl)
 	ld	(cols),a
-	ld	a,ROWS
-	sub	(hl)
+	inc	hl
+	ld	a,HI_ROWS
+	cp	(hl)
 	ret	c		; too many rows
+	ld	a,LO_ROWS
+	cp	(hl)
+	jp	nc,1f
+	ld	a,1
+	ld	(size),a
+1:	ld	a,(hl)
+	ld	(rows),a
+	inc	hl
+	ld	a,(rows)
+	ld	b,a
+	ld	a,(size)
+	rra
+	ld	a,HI_ROWS
+	jp	c,1f
+	ld	a,LO_ROWS
+1:	sub	b	
 	rra
 	ld	(roff),a
-	ld	a,(hl)
-	inc	hl
-	ld	(rows),a
+	ld	a,(cols)
+	ld	b,a
+	ld	a,(size)
+	rra
+	ld	a,HI_COLS
+	jp	c,1f
+	ld	a,LO_COLS
+1:	sub	b	
+	rra
+	ld	(coff),a
 	push	hl
+	ld	a,(rows)
 	ld	e,a
 	ld	d,0
 	ld	a,(cols)
@@ -129,7 +163,7 @@ get_level:
 	ld	(ctr),hl
 	ld	hl,board
 	push	hl
-	ld	bc,ROWS * COLS
+	ld	bc,HI_ROWS * HI_COLS
 	call	zerofill16
 	pop	de
 	pop	hl
@@ -167,12 +201,13 @@ get_level:
 	pop	de
 	pop	hl
 	jp	nz,4b
-	dec	b
-	jp	p,1f
-	inc	hl
-1:	ld	c,(hl)
-	inc	hl
-	ld	b,(hl)
+	ex	de,hl
+	ld	(hl),0xff	; sentinel
+	ld	a,(de)
+	inc	de
+	ld	(cplayer),a
+	ld	a,(de)
+	ld	(rplayer),a
 	or	a		; CY = 0
 	ret
 2:	dec	b
@@ -202,12 +237,15 @@ get_level:
 	or	BOX
 	ret
 	
-	.globl	board, rows, cols, roff, coff
-	.lcomm	board, ROWS * COLS
+	.globl	board, size, rows, cols, roff, coff, rplayer, cplayer
+	.lcomm	board, (HI_ROWS * HI_COLS) + 1
+	.lcomm	size, 1
 	.lcomm	rows, 1
 	.lcomm	cols, 1
 	.lcomm	roff, 1
 	.lcomm	coff, 1
+	.lcomm	rplayer, 1
+	.lcomm	cplayer, 1
 	.lcomm	ctr, 2
 
 	.end

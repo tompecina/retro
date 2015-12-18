@@ -25,25 +25,24 @@
 ; 
 ;   output: (byterefl) populated
 ; 
-;   uses:   A, B, C, D, H, L
+;   uses:   A, B, C, H, L
 ; 
 	.text
 	.globl	init_brtbl
 init_brtbl:
 	ld	hl,byterefl
+	ld	b,0
+1:	ld	c,0x80
+2:	ld	a,b
+	rlca
 	ld	b,a
-	ld	c,0x80
-1:	ld	b,0x80
-3:	ld	a,c
-	rla
-	ld	a,d
+	ld	a,c
 	rra
-	ld	d,a
-	ld	a,b
-	jp	nc,3b
-	ld	(hl),b
+	ld	c,a
+	jp	nc,2b
+	ld	(hl),c
 	inc	hl
-	inc	c
+	inc	b
 	jp	nz,1b
 	ret
 

@@ -115,7 +115,6 @@ draw_digit:
 	ld	hl,digits
 	add	hl,bc
 	ex	de,hl
-	ld	bc,63
 	ld	a,12
 ddig:	ld	bc,63
 1:	push	af

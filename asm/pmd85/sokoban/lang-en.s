@@ -51,6 +51,9 @@ credits:
 ; Prompts
 ;
 	.data
-
+	.globl	msg_stat
+msg_stat:
+	.asciz	"Level     Moves:      Pushes:"
+	
 	.end
 	

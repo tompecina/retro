@@ -27,7 +27,7 @@
 ; 
 	.globl	MSGAREA
 	.equiv	MSGAREA, 0xffc0		; position of the notification area
-	.equiv	ULC, 0xc000		; upper left corner of the board
+	.equiv	ULC, 0xc400		; upper left corner of the board
 	
 ; ==============================================================================
 ; draw_board - draw board
@@ -37,6 +37,8 @@
 ;           (cols) - number of columns
 ;           (roff) - row offset
 ;           (coff) - column offset
+;	    (rplayer) - row of player
+;	    (cplayer) - column of player
 ;
 ;   uses:   all
 ; 
@@ -73,25 +75,35 @@ draw_board:
 	ld	a,(rows)
 	cp	b
 	jp	nz,3b
-	ret
+	ld	a,(rplayer)
+	ld	hl,roff
+	add	a,(hl)
+	ld	b,a
+	ld	a,(cplayer)
+	ld	hl,coff
+	add	a,(hl)
+	ld	c,a
+	ld	a,SQ_PLAYER
+	jp	draw_square
 2:	cp	WALL
 	jp	nz,1f
-	ld	a,wall
+	ld	a,SQ_WALL
 	ret
 1:	cp	BOX
 	jp	nz,1f
-	ld	a,box
+	ld	a,SQ_BOX
 	ret
 1:	cp	BOX | GOAL
 	jp	nz,1f
-	ld	a,boxongoal
+	ld	a,SQ_BOXONGOAL
 	ret
 1:	cp	GOAL
 	jp	nz,1f
-	ld	a,goal
+	ld	a,SQ_GOAL
 	ret
 1:	xor	a
 	ret
+	
 	
 ; ==============================================================================
 ; draw_square - draw square
@@ -99,6 +111,8 @@ draw_board:
 ;   input:  A - square
 ;           B - row
 ;           C - column
+;	    (size) =0 - no bigger than LO_ROWS x LO_COLS
+;		   =1 - bigger than LO_ROWS x LO_COLS
 ;
 ;   uses:   all
 ; 
@@ -106,6 +120,9 @@ draw_board:
 	.globl	draw_square
 draw_square:
 	push	af
+	ld	a,(size)
+	or	a
+	jp	nz,2f
 	ld	a,b
 	add	a,a
 	add	a,b
@@ -125,10 +142,9 @@ draw_square:
 	add	a,c
 	ld	c,a
 	ld	b,0
-	ld	hl,squares
+	ld	hl,squareslo
 	add	hl,bc
 	ex	de,hl
-	ld	bc,63
 	ld	a,12
 	ld	bc,63
 1:	push	af
@@ -144,12 +160,54 @@ draw_square:
 	dec	a
 	jp	nz,1b
 	ret
+2:	ld	hl,ULC
+	ld	d,b
+	ld	e,0
+	add	hl,de
+	ld	b,e
+	add	hl,bc
+	ld	a,d
+	rra
+	ld	d,a
+	ld	a,e
+	rra
+	ld	e,a
+	add	hl,de
+	ex	de,hl
+	pop	af
+	add	a,a
+	ld	c,a
+	add	a,a
+	add	a,c
+	ld	c,a
+	ld	b,0
+	ld	hl,squareshi
+	add	hl,bc
+	ex	de,hl
+	ld	a,6
+	ld	bc,64
+1:	push	af
+	ld	a,(de)
+	inc	de
+	ld	(hl),a
+	add	hl,bc
+	pop	af
+	dec	a
+	jp	nz,1b
+	ret
 	
 ; ==============================================================================
 ; Squares
 ;
+	.equiv	SQ_BLANK, 0
+	.equiv	SQ_WALL, 1
+	.equiv	SQ_BOX, 2
+	.equiv	SQ_BOXONGOAL, 3
+	.equiv	SQ_GOAL, 4
+	.equiv	SQ_PLAYER, 5
+	
 	.data
-squares:	
+squareslo:	
 
 ; 0 - blank
 	.word	0x0000	; ............
@@ -165,7 +223,6 @@ squares:
 	.word	0x0000	; ............
 	.word	0x0000	; ............
 ; 1 - wall
-	.equiv	wall, 1
 	.word	0x7f7f	; ************
 	.word	0x7f7f	; ************
 	.word	0x7f7f	; ************
@@ -179,7 +236,6 @@ squares:
 	.word	0x7f7f	; ************
 	.word	0x7f7f	; ************
 ; 2 - box
-	.equiv	box, 2
 	.word	0x3f3f	; ############
 	.word	0x3003	; ##........##
 	.word	0x2805	; #.#......#.#
@@ -193,7 +249,6 @@ squares:
 	.word	0x3003	; ##........##
 	.word	0x3f3f	; ############
 ; 3 - box on goal
-	.equiv	boxongoal, 3
 	.word	0x7f7f	; ************
 	.word	0x7043	; **........**
 	.word	0x6845	; *.*......*.*
@@ -207,7 +262,6 @@ squares:
 	.word	0x7043	; **........**
 	.word	0x7f7f	; ************
 ; 4 - goal
-	.equiv	goal, 4
 	.word	0x0000	; ............
 	.word	0x0000	; ............
 	.word	0x0000	; ............
@@ -220,6 +274,65 @@ squares:
 	.word	0x0000	; ............
 	.word	0x0000	; ............
 	.word	0x0000	; ............
+; 5 - player
+	.word	0x0330	; ....####....
+	.word	0x0330	; ....####....
+	.word	0x0330	; ....####....
+	.word	0x0330	; ....####....
+	.word	0x3f3f	; ############
+	.word	0x3f3f	; ############
+	.word	0x3f3f	; ############
+	.word	0x3f3f	; ############
+	.word	0x0330	; ....####....
+	.word	0x0330	; ....####....
+	.word	0x0330	; ....####....
+	.word	0x0330	; ....####....
+
+	.data
+squareshi:	
+
+; 0 - blank
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+; 1 - wall
+	.byte	0x7f	; ******
+	.byte	0x7f	; ******
+	.byte	0x7f	; ******
+	.byte	0x7f	; ******
+	.byte	0x7f	; ******
+	.byte	0x7f	; ******
+; 2 - box
+	.byte	0x3f	; ######
+	.byte	0x21	; #....#
+	.byte	0x2d	; #.##.#
+	.byte	0x2d	; #.##.#
+	.byte	0x21	; #....#
+	.byte	0x3f	; ######
+; 3 - box on goal
+	.byte	0x7f	; ******
+	.byte	0x61	; *....*
+	.byte	0x6d	; *.**.*
+	.byte	0x6d	; *.**.*
+	.byte	0x61	; *....*
+	.byte	0x7f	; ******
+; 4 - goal
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+	.byte	0x0c	; ..##..
+	.byte	0x0c	; ..##..
+	.byte	0x00	; ......
+	.byte	0x00	; ......
+; 5 - player
+	.byte	0x0c	; ..##..
+	.byte	0x0c	; ..##..
+	.byte	0x3f	; ######
+	.byte	0x3f	; ######
+	.byte	0x0c	; ..##..
+	.byte	0x0c	; ..##..
 
 ; ==============================================================================
 ; Custom glyphs
