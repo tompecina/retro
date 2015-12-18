@@ -18,48 +18,9 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Label displaying routines and labels.
+; Labels.
 
 	.include "logik.inc"
-	
-; ==============================================================================
-; draw_label - display label
-; 
-;   input:  (HL) - label data
-;           DE - destination
-;           (color) - color mask
-; 
-;   uses:   all
-; 
-	.text
-	.globl	draw_label
-draw_label:
-	ld	c,(hl)		; C = rows
-	inc	hl
-	ld	b,(hl)		; B = columns
-	inc	hl
-2:	push	bc
-	push	de
-1:	ld	a,(color)
-	xor	(hl)
-	inc	hl
-	ld	(de),a
-	inc	de
-	dec	b
-	jp	nz,1b
-	dec	c
-	jp	z,1f
-	ex	(sp),hl
-	ld	de,64
-	add	hl,de
-	ex	de,hl
-	pop	hl
-	pop	af
-	ld	b,a
-	jp	2b
-1:	pop	hl
-	pop	hl
-	ret
 	
 ; ==============================================================================
 ; Label "LOGIK 1.0"
