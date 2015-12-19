@@ -25,6 +25,10 @@
 ; ==============================================================================
 ; Constants
 ;
+	.globl	LBLPOS, CRPOS, LEGPOS, PRPOS
+	.equiv	LBLPOS, 0xc510
+	.equiv	CRPOS, 0xcc0e
+	.equiv	LEGPOS, 0xd400
 	
 ; ==============================================================================
 ; Credits
@@ -35,6 +39,26 @@ credits:
 	db	"Autor: Tom", 0xc1, 0xd3, " Pecina", 0
 
 ; ==============================================================================
+; Legend
+;
+	.data
+	.globl	legend
+legend:
+	db	"HLAVN", 0xe9, " MENU:", CR, VT, VT, VT
+	db	" H - hr", 0xc1, "t od prvn", 0xc9, " ", 0xd5, "rovn", 0xc5, CR
+	db	" Z - hr", 0xc1, "t od zvolen", 0xd7, " ", 0xd5
+	db	"rovn", 0xc5, CR
+	db	" N - nahr", 0xc1, "t ", 0xd5, "rovn", 0xc5, " z kasety", CR
+	db	" K - konec", CR, CR, VT, VT, VT, VT
+	db	"OVL", 0xe1, "D", 0xe1, "N", 0xe9, " B", 0xe5
+	db	"HEM HRY:", CR, VT, VT, VT
+	db	" ", 0xd3, "ipky - krok/tah", CR
+	db	" shift + ", 0xd3, "ipky - b", 0xc5, "h", CR
+	db	" V - vr", 0xc1, "tit tah", CR
+	db	" R - restartovat ", 0xd5, "rove", 0xce, CR
+	db	" M - n", 0xc1, "vrat do menu", 0
+
+; ==============================================================================
 ; Control keys
 ;
 	.globl	KEY_YES, KEY_NO, KEY_ENTER
@@ -42,11 +66,16 @@ credits:
 	.equiv	KEY_NO, 'N'
 	.equiv	KEY_ENTER, KEOL
 
-	.globl	KEY_RESTART, KEY_UNDO, KEY_END, KEY_QUIT
+	.globl	KEY_PLAY, KEY_SELECT, KEY_LOAD, KEY_QUIT
+	.equiv	KEY_PLAY, 'H'
+	.equiv	KEY_SELECT, 'Z'
+	.equiv	KEY_LOAD, 'N'
+	.equiv	KEY_QUIT, 'K'
+
+	.globl	KEY_RESTART, KEY_UNDO, KEY_MENU
 	.equiv	KEY_RESTART, 'R'
 	.equiv	KEY_UNDO, 'V'
 	.equiv	KEY_MENU, 'M'
-	.equiv	KEY_QUIT, 'K'
 	
 ; ==============================================================================
 ; Labels
@@ -57,7 +86,7 @@ credits:
 ; Prompts
 ;
 	.data
-	.globl	msg_stat, msg_restart, msg_end, msg_quit
+	.globl	msg_stat, msg_restart, msg_end, msg_quit, msg_menu
 msg_stat:
 	db	0xf5, "rove", 0xce, "     Krok", 0xca, ":      Tah", 0xca
 	db	":", 0
@@ -68,6 +97,8 @@ msg_end:
 	db	"Opravdu se chcete vr", 0xc1, "tit do menu? (A/N)", 0
 msg_quit:
 	db	"Opravdu si p", 0xd2, "ejete program ukon", 0xc3, "it? (A/N)", 0
+msg_menu:
+	db	"                Volba? (H/Z/N/K)", 0
 
 	.end
 	

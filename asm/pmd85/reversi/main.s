@@ -49,7 +49,7 @@ main:
 	call	draw_board
 
 	ld	hl,label_reversi
-	ld	de,LRPOS
+	ld	de,LBLPOS
 	call	draw_label
 
 	ld	hl,credits

@@ -25,8 +25,8 @@
 ; ==============================================================================
 ; Constants
 ; 
-	.globl	LRPOS, CRPOS, LEGPOS, BCPOS, WCPOS, BSPOS, WSPOS, LVPOS, SNPOS
-	.equiv	LRPOS, 0xc31b
+	.globl	LBLPOS, CRPOS, LEGPOS, BCPOS, WCPOS, BSPOS, WSPOS, LVPOS, SNPOS
+	.equiv	LBLPOS, 0xc31b
 	.equiv	CRPOS, 0xca1b
 	.equiv	LEGPOS, 0xc700
 	.equiv	BCPOS, 0xc700

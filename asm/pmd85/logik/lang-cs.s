@@ -25,8 +25,8 @@
 ; ==============================================================================
 ; Constants
 ; 
-	.globl	LRPOS, CRPOS, DSPOS, RNDPOS, RNDSPOS, PSCPOS, CSCPOS
-	.equiv	LRPOS, 0xc204
+	.globl	LBLPOS, CRPOS, DSPOS, RNDPOS, RNDSPOS, PSCPOS, CSCPOS
+	.equiv	LBLPOS, 0xc204
 	.equiv	CRPOS, 0xc900
 	.equiv	DSPOS, 0xd200
 	.equiv	RNDPOS, 0xd206

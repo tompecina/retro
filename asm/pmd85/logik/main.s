@@ -53,7 +53,7 @@ quit:	call	rel_ct1
 1:	call	erase
 
 	ld	hl,label_logik
-	ld	de,LRPOS
+	ld	de,LBLPOS
 	call	draw_label
 
 	ld	hl,credits

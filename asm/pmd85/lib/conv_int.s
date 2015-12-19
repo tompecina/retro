@@ -1,4 +1,4 @@
-; inkey.s
+; conv_int.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,49 +17,43 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-; Modify kmap according to the model.
-
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; set_kmap - modify keymap for PMD 85-1/2 or higher
+; conv_int - convert non-negative integer to string
 ; 
-;   uses:   A, H, L
-;
-	.text
-	.globl	set_kmap
-set_kmap:
-	call	dethw1
-	jp	nz,set_kmap2
-	jp	set_kmap1
-	
-; ==============================================================================
-; set_kmap1 - modify keymap for PMD 85-1
+;   input:  HL - value
+;	    (DE) - destination
 ; 
-;   uses:   A
-;
-	.text
-	.globl	set_kmap1
-set_kmap1:
-	ld	a,'['
-	ld	(kmap1),a
-	ld	a,']'
-	ld	(kmap2),a
-	ret
-	
-; ==============================================================================
-; set_kmap2 - modify keymap for PMD 85-2 or higher
+;   output: (DE) updated
 ; 
-;   uses:   A
-;
+;   uses:   all
+; 
 	.text
-	.globl	set_kmap2
-set_kmap2:
-	ld	a,']'
-	ld	(kmap1),a
-	ld	a,'['
-	ld	(kmap2),a
+	.globl	conv_int
+conv_int:
+	ld	b,d
+	ld	c,e
+	ld	d,0xff
+	push	de
+1:	push	bc
+	ld	c,10
+	call	udiv16_8
+	pop	bc
+	ld	a,h
+	or	l
+	jp	z,1f
+	push	de
+	jp	1b
+1:	ld	a,'0'
+	add	a,e
+	ld	(bc),a
+	inc	bc
+	pop	de
+	inc	d
+	jp	nz,1b
+	ld	d,b
+	ld	e,c
 	ret
 	
 	.end

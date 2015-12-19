@@ -36,7 +36,21 @@ main:
 ; initialize
 	di
 	ld	sp,initsp
-	call	init_levels	; must be called before using .bss
+
+
+	ld	hl,0
+1:	push	hl
+	ld	de,0x7000
+	call	conv_int
+	pop	hl
+	inc	hl
+	jp	1b
+
+
+
+
+	
+	call	init_levels	; must be called before using .bss variables
 	call	init_kbd
 	call	set_kmap
 	call	init_video
@@ -44,6 +58,27 @@ main:
 	call	count_levels
 	ld	(nlevels),hl
 	call	init_hist	
+
+	call	erase
+
+	ld	hl,label_sokoban
+	ld	de,LBLPOS
+	call	draw_label
+
+	ld	hl,credits
+	ld	de,CRPOS
+	call	writeln
+
+	ld	hl,legend
+	ld	de,LEGPOS
+	call	writeln
+
+	ld	hl,msg_menu
+	call	disp_msg
+
+	jp	.
+	
+	
 1:	ld	bc,0
 2:	push	bc
 	call	get_level

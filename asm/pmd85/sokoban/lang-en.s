@@ -25,6 +25,10 @@
 ; ==============================================================================
 ; Constants
 ;
+	.globl	LBLPOS, CRPOS, LEGPOS, PRPOS
+	.equiv	LBLPOS, 0xc510
+	.equiv	CRPOS, 0xcc10
+	.equiv	LEGPOS, 0xd400
 	
 ; ==============================================================================
 ; Credits
@@ -35,6 +39,24 @@ credits:
 	db	"by Tom", 0xc1, 0xd3, " Pecina", 0
 
 ; ==============================================================================
+; Legend
+;
+	.data
+	.globl	legend
+legend:
+	db	"MAIN MENU:", CR, VT, VT, VT
+	db	" P - play from first level", CR
+	db	" S - play from selected level", CR
+	db	" L - load levels from cassette", CR
+	db	" Q - quit", CR, CR, VT, VT, VT, VT
+	db	"IN-GAME CONTROLS:", CR, VT, VT, VT
+	db	" arrow keys - move/push", CR
+	db	" shift + arrow keys - run", CR
+	db	" U - undo", CR
+	db	" R - restart level", CR
+	db	" M - return to menu", 0
+
+; ==============================================================================
 ; Control keys
 ;
 	.globl	KEY_YES, KEY_NO, KEY_ENTER
@@ -42,11 +64,16 @@ credits:
 	.equiv	KEY_NO, 'N'
 	.equiv	KEY_ENTER, KEOL
 
-	.globl	KEY_RESTART, KEY_UNDO, KEY_MENU, KEY_QUIT
+	.globl	KEY_PLAY, KEY_SELECT, KEY_LOAD, KEY_QUIT
+	.equiv	KEY_PLAY, 'P'
+	.equiv	KEY_SELECT, 'S'
+	.equiv	KEY_LOAD, 'L'
+	.equiv	KEY_QUIT, 'Q'
+
+	.globl	KEY_RESTART, KEY_UNDO, KEY_MENU
 	.equiv	KEY_RESTART, 'R'
 	.equiv	KEY_UNDO, 'U'
 	.equiv	KEY_MENU, 'M'
-	.equiv	KEY_QUIT, 'Q'
 	
 ; ==============================================================================
 ; Labels
@@ -57,7 +84,7 @@ credits:
 ; Prompts
 ;
 	.data
-	.globl	msg_stat, msg_restart, msg_end, msg_quit
+	.globl	msg_stat, msg_restart, msg_end, msg_quit, msg_menu
 msg_stat:
 	.asciz	"Level     Moves:      Pushes:"
 msg_restart:
@@ -66,6 +93,8 @@ msg_end:
 	.asciz	"Do you really wish to return to menu? (Y/N)"
 msg_quit:
 	.asciz	"Do you really wish to end the program? (Y/N)"
+msg_menu:
+	.asciz	"           Your selection? (P/S/L/Q)"
 
 	.end
 	

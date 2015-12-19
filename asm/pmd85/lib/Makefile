@@ -9,7 +9,7 @@ OBJ = erase.o indcall.o sedit.o beep.o bepuk.o beclr.o waits.o inkey.o \
 	clr_msg.o disp_msg.o get_conf.o get_ack.o errbeep.o start_ct1.o \
 	rel_ct1.o start_ct2.o read_ct2.o lcg128.o fixseed128.o inklav_rnd128.o \
 	conv_time.o init_bctbl.o count_bits.o init_brtbl.o reflect_byte.o \
-	init_bcbrtbl.o draw_label.o
+	init_bcbrtbl.o draw_label.o dethw1.o conv_int.o
 AS = as-z80
 AR = ar-z80
 ASFLAGS = -z80
