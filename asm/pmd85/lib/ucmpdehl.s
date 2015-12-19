@@ -1,4 +1,4 @@
-; conv_int.s
+; ucmpdehl.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,42 +17,23 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-	
+
 ; ==============================================================================
-; conv_int - convert non-negative integer to string
+; ucmpdehl - compare DE and HL (unsigned)
 ; 
-;   input:  HL - value
-;	    (DE) - destination
+;   input:  DE, HL
 ; 
-;   output: (DE) updated
+;   output: F = (HL - DE)
 ; 
-;   uses:   all
+;   uses:   A
 ; 
 	.text
-	.globl	conv_int
-conv_int:
-	ld	b,d
-	ld	c,e
-	ld	d,0xff
-	push	de
-1:	push	bc
-	ld	c,10
-	call	udiv16_8
-	pop	bc
-	ld	a,h
-	or	l
-	jp	z,1f
-	push	de
-	jp	1b
-1:	ld	a,'0'
-	add	a,e
-	ld	(bc),a
-	inc	bc
-	pop	de
-	inc	d
-	jp	nz,1b
-	ld	d,b
-	ld	e,c
-	ret
+	.globl	ucmpdehl
+ucmpdehl:
+        ld      a,l
+        sub     e
+        ld      a,h
+        sbc     a,d
+        ret
 	
 	.end

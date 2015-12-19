@@ -33,6 +33,9 @@
 	.equiv	PIT_2, 0x5e
 	.equiv	PIT_CTRL, 0x5f
 	
+	.equiv	USART_DATA, 0x1e
+	.equiv	USART_CTRL, 0x1f
+	
 ; ==============================================================================
 ; PMD 85 addresses
 ;

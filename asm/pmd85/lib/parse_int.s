@@ -1,4 +1,4 @@
-; conv_int.s
+; parse_int.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -19,40 +19,51 @@
 
 	
 ; ==============================================================================
-; conv_int - convert non-negative integer to string
+; parse_int - parse non-negative integer
 ; 
-;   input:  HL - value
-;	    (DE) - destination
+;   input:  (HL) - zero-terminated input string
 ; 
-;   output: (DE) updated
+;   output: HL - result
+;   	    CY on error
 ; 
 ;   uses:   all
 ; 
 	.text
-	.globl	conv_int
-conv_int:
-	ld	b,d
-	ld	c,e
-	ld	d,0xff
-	push	de
-1:	push	bc
-	ld	c,10
-	call	udiv16_8
-	pop	bc
+	.globl	parse_int
+parse_int:
+	ex	de,hl
+	ld	a,(de)
+	inc	de
+	call	val_digit
+	ret	c
+	ld	hl,0
+1:	ld	(tmp),a
+	add	hl,hl
+	ret	c
+	ld	b,h
+	ld	c,l
+	add	hl,hl
+	ret	c
+	add	hl,hl
+	ret	c
+	add	hl,bc
+	ret	c
+	ld	a,(tmp)
+	sub	'0'
+	add	a,l
+	ld	l,a
 	ld	a,h
-	or	l
-	jp	z,1f
-	push	de
+	adc	a,0
+	ret	c
+	ld	h,a
+	ld	a,(de)
+	inc	de
+	or	a
+	ret	z
+	call	val_digit
+	ret	c
 	jp	1b
-1:	ld	a,'0'
-	add	a,e
-	ld	(bc),a
-	inc	bc
-	pop	de
-	inc	d
-	jp	nz,1b
-	ld	d,b
-	ld	e,c
-	ret
+
+	.lcomm	tmp, 1
 	
 	.end

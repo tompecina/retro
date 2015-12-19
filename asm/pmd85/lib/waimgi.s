@@ -1,4 +1,4 @@
-; conv_int.s
+; waimgi.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,42 +17,19 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+	.include "pmd85.inc"
 	
 ; ==============================================================================
-; conv_int - convert non-negative integer to string
+; waimgi - wait for USART byte received (only PMD 85-1)
 ; 
-;   input:  HL - value
-;	    (DE) - destination
-; 
-;   output: (DE) updated
-; 
-;   uses:   all
+;   uses:   A
 ; 
 	.text
-	.globl	conv_int
-conv_int:
-	ld	b,d
-	ld	c,e
-	ld	d,0xff
-	push	de
-1:	push	bc
-	ld	c,10
-	call	udiv16_8
-	pop	bc
-	ld	a,h
-	or	l
-	jp	z,1f
-	push	de
-	jp	1b
-1:	ld	a,'0'
-	add	a,e
-	ld	(bc),a
-	inc	bc
-	pop	de
-	inc	d
-	jp	nz,1b
-	ld	d,b
-	ld	e,c
+	.globl	waimgi
+waimgi:
+	in	a,(USART_CTRL)
+	and	0x02
+	jp	z,waimgi
 	ret
-	
+
 	.end

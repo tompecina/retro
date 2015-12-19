@@ -1,4 +1,4 @@
-; conv_int.s
+; trload.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,42 +17,61 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+	.include "pmd85.inc"
 	
 ; ==============================================================================
-; conv_int - convert non-negative integer to string
+; trload - load data block from tape recorder
 ; 
-;   input:  HL - value
-;	    (DE) - destination
+;   input:  HL - start address
+;	    DE - number of bytes - 1
 ; 
-;   output: (DE) updated
+;   output: (DE) - data block
+;	    NZ on error or STOP pressed
 ; 
-;   uses:   all
+;   uses:   A, B, D, E
 ; 
 	.text
-	.globl	conv_int
-conv_int:
-	ld	b,d
-	ld	c,e
-	ld	d,0xff
-	push	de
-1:	push	bc
-	ld	c,10
-	call	udiv16_8
-	pop	bc
-	ld	a,h
-	or	l
+	.globl	trload
+trload:
+	push	hl
+	ld	bc,0x00ff
+	ld	a,(hw1)
+	or	a
+	jp	z,3f	
+2:	call	trbyte
+	jp	c,2f
+	inc	c
+	dec	c
 	jp	z,1f
-	push	de
-	jp	1b
-1:	ld	a,'0'
-	add	a,e
-	ld	(bc),a
-	inc	bc
-	pop	de
-	inc	d
-	jp	nz,1b
-	ld	d,b
-	ld	e,c
+	ld	(hl),a
+1:	inc	hl
+	add	a,b
+	ld	b,a
+	ld	a,d
+	or	e
+	dec	de
+	jp	nz,2b
+	call	trbyte
+	xor	b
+2:	pop	hl
+	ret
+3:	call	waimgi
+	in	a,(USART_DATA)
+	dec	c
+	inc	c
+	jp	z,1f
+	ld	(hl),a
+1:	add	a,b
+	ld	b,a
+	inc	hl
+	dec	de
+	ld	a,d
+	cp	0xff
+	jp	3b
+	call	waimgi
+	in	a,(USART_DATA)
+	cp	b
+	pop	hl
 	ret
 	
 	.end

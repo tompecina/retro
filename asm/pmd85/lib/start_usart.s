@@ -1,4 +1,4 @@
-; conv_int.s
+; start_usart.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,42 +17,40 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+	.include "pmd85.inc"
 	
 ; ==============================================================================
-; conv_int - convert non-negative integer to string
+; start_usart,stop_usart - start/stop USART and PIT
 ; 
-;   input:  HL - value
-;	    (DE) - destination
-; 
-;   output: (DE) updated
-; 
-;   uses:   all
+;   uses:   A, H, L
 ; 
 	.text
-	.globl	conv_int
-conv_int:
-	ld	b,d
-	ld	c,e
-	ld	d,0xff
-	push	de
-1:	push	bc
-	ld	c,10
-	call	udiv16_8
-	pop	bc
+	.globl	start_usart, stop_usart
+start_usart:
+	ld	hl,0x06ab
+	jp	1f
+stop_usart:
+	ld	hl,0x0020
+1:	xor	a
+	out	(USART_CTRL),a
+	out	(USART_CTRL),a
+	out	(USART_CTRL),a
+	ld	a,0x40
+	out	(USART_CTRL),a
+	ld	a, 0xed
+	out	(USART_CTRL),a
+	ld	a,(hw1)
+	or	a
+	ld	a,0x23
+	jp	nz,1f
+	ld	a,0x25
+1:	out	(USART_CTRL),a
+	ld	a,0x76
+	out	(PIT_CTRL),a
+	ld	a,l
+	out	(PIT_1),a
 	ld	a,h
-	or	l
-	jp	z,1f
-	push	de
-	jp	1b
-1:	ld	a,'0'
-	add	a,e
-	ld	(bc),a
-	inc	bc
-	pop	de
-	inc	d
-	jp	nz,1b
-	ld	d,b
-	ld	e,c
+	out	(PIT_1),a
 	ret
 	
 	.end

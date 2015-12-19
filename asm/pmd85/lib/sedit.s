@@ -17,9 +17,6 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-; Simple editing.
-
 	.include "pmd85.inc"
 	
 ; ==============================================================================
@@ -40,7 +37,8 @@
 ; 
 	.text
 	.globl	sedit
-sedit:	xor	a
+sedit:
+	xor	a
 	ld	(nchar),a
 	call	shcur
 2:	indcall	inklav
@@ -125,8 +123,8 @@ shcur:	ld	a,0x7f
 hdcur:	ld	a,' '
 	jp	prtout
 
-	.globl	def_val
-def_val:
+	.globl	val_char
+val_char:
 	cp	0x20
 	ret
 
@@ -135,6 +133,6 @@ def_val:
 	.data
 	.globl	sel_val
 sel_val:
-	.word	def_val
+	.word	val_char
 	
 	.end

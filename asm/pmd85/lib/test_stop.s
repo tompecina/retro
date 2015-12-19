@@ -1,4 +1,4 @@
-; conv_int.s
+; test_stop.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,42 +17,23 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+	.include "pmd85.inc"
 	
 ; ==============================================================================
-; conv_int - convert non-negative integer to string
+; test_stop - test STOP key
 ; 
-;   input:  HL - value
-;	    (DE) - destination
+;   output:  Z, A=0x03 if STOP pressed
+;	    NZ, A=0x40 otherwise
 ; 
-;   output: (DE) updated
-; 
-;   uses:   all
+;   uses:   -
 ; 
 	.text
-	.globl	conv_int
-conv_int:
-	ld	b,d
-	ld	c,e
-	ld	d,0xff
-	push	de
-1:	push	bc
-	ld	c,10
-	call	udiv16_8
-	pop	bc
-	ld	a,h
-	or	l
-	jp	z,1f
-	push	de
-	jp	1b
-1:	ld	a,'0'
-	add	a,e
-	ld	(bc),a
-	inc	bc
-	pop	de
-	inc	d
-	jp	nz,1b
-	ld	d,b
-	ld	e,c
+	.globl	test_stop
+test_stop:
+	in	a,(SYSPIO_PB)
+	and	0x40
+	ret	nz
+	ld	a,0x03
 	ret
-	
+
 	.end

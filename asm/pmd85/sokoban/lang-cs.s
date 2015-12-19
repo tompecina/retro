@@ -87,6 +87,7 @@ legend:
 ;
 	.data
 	.globl	msg_stat, msg_restart, msg_end, msg_quit, msg_menu
+	.globl	msg_select1, msg_select2, msg_nolevels
 msg_stat:
 	db	0xf5, "rove", 0xce, "     Krok", 0xca, ":      Tah", 0xca
 	db	":", 0
@@ -99,6 +100,13 @@ msg_quit:
 	db	"Opravdu si p", 0xd2, "ejete program ukon", 0xc3, "it? (A/N)", 0
 msg_menu:
 	db	"                Volba? (H/Z/N/K)", 0
+msg_select1:	
+	db	0xf5, "rove", 0xce, " (1-", 0
+msg_select2:	
+	.asciz	")? "
+msg_nolevels:
+	db	"Nejsou nahr", 0xc1, "ny ", 0xda, 0xc1, "dn", 0xd7, " ", 0xd5
+	db	"rovn", 0xc5, ", stiskn", 0xc5, "te EOL", 0
 
 	.end
 	

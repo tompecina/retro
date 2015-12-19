@@ -49,3 +49,5 @@ KNOWN BUGS AND ESSENTIAL NEW FEATURES
 * Colors on PNG screenshot are not displayed correctly.
 
 * Debugger displays should be updated on closing the Memory window.
+
+* -2 tape recorder routines should not work on -1!

@@ -1,4 +1,4 @@
-; conv_int.s
+; val_digit.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,42 +17,27 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+; Simple editing.
+
+	.include "pmd85.inc"
 	
 ; ==============================================================================
-; conv_int - convert non-negative integer to string
+; val_digit - any digit validation function for sedit
 ; 
-;   input:  HL - value
-;	    (DE) - destination
+;   input:  A - character to be validated
 ; 
-;   output: (DE) updated
+;   output: CY on validation failure
 ; 
-;   uses:   all
+;   uses:   -
 ; 
 	.text
-	.globl	conv_int
-conv_int:
-	ld	b,d
-	ld	c,e
-	ld	d,0xff
-	push	de
-1:	push	bc
-	ld	c,10
-	call	udiv16_8
-	pop	bc
-	ld	a,h
-	or	l
-	jp	z,1f
-	push	de
-	jp	1b
-1:	ld	a,'0'
-	add	a,e
-	ld	(bc),a
-	inc	bc
-	pop	de
-	inc	d
-	jp	nz,1b
-	ld	d,b
-	ld	e,c
+	.globl	val_digit
+val_digit:
+	cp	'0'
+	ret	c
+	cp	'9' + 1
+	ccf
 	ret
 	
 	.end

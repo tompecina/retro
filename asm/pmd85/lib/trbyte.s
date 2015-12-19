@@ -1,4 +1,4 @@
-; conv_int.s
+; trbyte.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,42 +17,52 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+	.include "pmd85.inc"
 	
 ; ==============================================================================
-; conv_int - convert non-negative integer to string
-; 
-;   input:  HL - value
-;	    (DE) - destination
-; 
-;   output: (DE) updated
+; trbyte,trbyte1 - read byte from tape recorder
 ; 
 ;   uses:   all
 ; 
 	.text
-	.globl	conv_int
-conv_int:
-	ld	b,d
-	ld	c,e
-	ld	d,0xff
+	.globl	trbyte, trbyte1
+trbyte1:
+	push	bc
 	push	de
-1:	push	bc
-	ld	c,10
-	call	udiv16_8
-	pop	bc
-	ld	a,h
-	or	l
-	jp	z,1f
+	push	hl
+	jp	2f
+trbyte:
+	push	bc
 	push	de
-	jp	1b
-1:	ld	a,'0'
-	add	a,e
-	ld	(bc),a
-	inc	bc
+	push	hl
+	ld	hl,(lchar)
+1:	ld	c,0x26
+	call	trscan
+	scf
+	jp	z,3f
+	ld	a,c
+	cp	l
+	jp	p,1b
+2:	ld	de,0x007f
+1:	call	trscan2
+	ld	a,c
+	cp	l
+	jp	c,2f
+	call	trscan2
+	.byte	0x26
+2:	inc	d
+	ld	a,d
+	rrca
+	ld	a,e
+	rra
+	ld	e,a
+	jp	c,1b
+3:	pop	hl
 	pop	de
-	inc	d
-	jp	nz,1b
-	ld	d,b
-	ld	e,c
+	pop	bc
 	ret
 	
+	.globl	lchar
+	.lcomm	lchar, 2
+
 	.end

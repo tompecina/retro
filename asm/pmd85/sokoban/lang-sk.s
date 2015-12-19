@@ -85,6 +85,7 @@ legend:
 ;
 	.data
 	.globl	msg_stat, msg_restart, msg_end, msg_quit, msg_menu
+	.globl	msg_select1, msg_select2, msg_nolevels
 msg_stat:
 	db	0xf5, "rove", 0xce, "     Krokov:      ", 0xf4, "ahov:", 0
 msg_restart:
@@ -97,6 +98,13 @@ msg_quit:
 	db	"? (A/N)", 0
 msg_menu:
 	db	"                Vo", 0xcc, "ba? (H/Z/N/K)", 0
+msg_select1:	
+	db	0xf5, "rove", 0xce, " (1-", 0
+msg_select2:	
+	.asciz	")? "
+msg_nolevels:
+	db	"Nie s", 0xd5, " nahran", 0xd7, " ", 0xda, "iadne ", 0xd5
+	db	"rovne, stla", 0xc3, "te EOL", 0
 
 	.end
 	

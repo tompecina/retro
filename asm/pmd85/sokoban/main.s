@@ -36,26 +36,13 @@ main:
 ; initialize
 	di
 	ld	sp,initsp
-
-
-	ld	hl,0
-1:	push	hl
-	ld	de,0x7000
-	call	conv_int
-	pop	hl
-	inc	hl
-	jp	1b
-
-
-
-
-	
 	call	init_levels	; must be called before using .bss variables
 	call	init_kbd
 	call	set_kmap
 	call	init_video
 	call	add_cust_glyphs
 	call	count_levels
+	ex	de,hl
 	ld	(nlevels),hl
 	call	init_hist	
 
@@ -76,6 +63,47 @@ main:
 	ld	hl,msg_menu
 	call	disp_msg
 
+msel:	call	inklav
+	cp	KEY_PLAY
+	jp	nz,1f
+	call	tnlvl
+	ld	de,1
+	jp	2f
+1:	cp	KEY_SELECT
+	jp	nz,1f
+	call	tnlvl
+4:	ld	hl,msg_select1
+	call	disp_msg
+	ld	hl,(nlevels)
+	ld	de,sbuf
+	push	de
+	call	conv_int
+	ex	de,hl
+	ld	(hl),0
+	pop	de
+	call	writelncur
+	ld	de,msg_select2
+	call	writelncur
+	ld	hl,val_digit
+	ld	(sel_val),hl
+	ld	bc,0x0105
+	ld	hl,sbuf
+	call	sedit
+	ld	hl,sbuf
+	call	parse_int
+	ld	a,h
+	or	l
+	jp	nz,3f
+5:	call	errbeep
+	jp	4b
+3:	dec	hl
+	ex	de,hl
+2:	ld	hl,(nlevels)
+	call	ucmpdehl
+	jp	nc,5b
+	
+	
+1:	
 	jp	.
 	
 	
@@ -89,7 +117,18 @@ main:
 	cp	60
 	jp	nz,2b	
 	jp	1b
+
+tnlvl:	ld	hl,(nlevels)
+	ld	a,h
+	or	l
+	ret	nz
+	ld	hl,msg_nolevels
+	call	get_ack
+	pop	hl
+	jp	msel
+	
 	
 	.lcomm	nlevels, 2
+	.lcomm	sbuf, 6
 	
 	.end

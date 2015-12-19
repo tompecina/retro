@@ -85,6 +85,7 @@ legend:
 ;
 	.data
 	.globl	msg_stat, msg_restart, msg_end, msg_quit, msg_menu
+	.globl	msg_select1, msg_select2, msg_nolevels
 msg_stat:
 	.asciz	"Level     Moves:      Pushes:"
 msg_restart:
@@ -95,6 +96,12 @@ msg_quit:
 	.asciz	"Do you really wish to end the program? (Y/N)"
 msg_menu:
 	.asciz	"           Your selection? (P/S/L/Q)"
+msg_select1:	
+	db	"Level (1", OBELUS, 0
+msg_select2:	
+	.asciz	")? "
+msg_nolevels:
+	.asciz	"No levels loaded, press EOL"
 
 	.end
 	
