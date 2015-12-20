@@ -83,9 +83,9 @@ count_levels:
 ;	    (cols) - number of columns
 ;	    (roff) - row offset
 ;	    (coff) - column offset
-;	    (rpusher) - initial row of pusher
-;	    (cpusher) - initial column of pusher
-;	    (ppusher) - initial position of pusher within (board)
+;	    (prow) - initial row of pusher
+;	    (pcol) - initial column of pusher
+;	    (ppos) - initial position of pusher within (board)
 ;	    CY if not found or oversized
 ; 
 ;   uses:   all
@@ -206,10 +206,10 @@ get_level:
 	ld	(hl),0xff	; sentinel
 	ld	a,(de)
 	inc	de
-	ld	(cpusher),a
+	ld	(pcol),a
 	push	af
 	ld	a,(de)
-	ld	(rpusher),a
+	ld	(prow),a
 	ld	b,a
 	ld	a,(cols)
 	ld	c,a
@@ -220,7 +220,7 @@ get_level:
 	add	hl,de
 	ld	de,board
 	add	hl,de
-	ld	(ppusher),hl
+	ld	(ppos),hl
 	or	a		; CY = 0
 	ret
 2:	dec	b
@@ -250,16 +250,16 @@ get_level:
 	ld	a,BOX | GOAL	; 111
 	ret
 	
-	.globl	board, size, rows, cols, roff, coff, rpusher, cpusher, ppusher
+	.globl	board, size, rows, cols, roff, coff, prow, pcol, ppos
 	.lcomm	board, (HI_ROWS * HI_COLS) + 1
 	.lcomm	size, 1
 	.lcomm	rows, 1
 	.lcomm	cols, 1
 	.lcomm	roff, 1
 	.lcomm	coff, 1
-	.lcomm	rpusher, 1
-	.lcomm	cpusher, 1
-	.lcomm	ppusher, 2
+	.lcomm	prow, 1
+	.lcomm	pcol, 1
+	.lcomm	ppos, 2
 	.lcomm	ctr, 2
 
 	.end

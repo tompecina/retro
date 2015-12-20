@@ -37,8 +37,8 @@
 ;           (cols) - number of columns
 ;           (roff) - row offset
 ;           (coff) - column offset
-;	    (rpusher) - row of pusher
-;	    (cpusher) - column of pusher
+;	    (prow) - row of pusher
+;	    (pcol) - column of pusher
 ;
 ;   uses:   all
 ; 
@@ -75,11 +75,11 @@ draw_board:
 	ld	a,(rows)
 	cp	b
 	jp	nz,3b
-	ld	a,(rpusher)
+	ld	a,(prow)
 	ld	hl,roff
 	add	a,(hl)
 	ld	b,a
-	ld	a,(cpusher)
+	ld	a,(pcol)
 	ld	hl,coff
 	add	a,(hl)
 	ld	c,a
@@ -199,6 +199,7 @@ draw_square:
 ; ==============================================================================
 ; Squares
 ;
+	.globl	SQ_BLANK, SQ_WALL, SQ_BOX, SQ_BOXONGOAL, SQ_GOAL, SQ_PUSHER
 	.equiv	SQ_BLANK, 0
 	.equiv	SQ_WALL, 1
 	.equiv	SQ_BOX, 2

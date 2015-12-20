@@ -245,7 +245,46 @@ quit:	call	erase
 
 ; select game option
 gsel:	call	inklav
-	cp	KEY_RESTART
+	cp	KLEFT
+	ld	a,(pcol)
+	or	a
+	jp	z,gsel
+	ld	hl,(ppos)
+	dec	hl
+	ld	a,(hl)
+	and	BOX
+	jp	nz,2f
+	ld	a,(hl)
+	and	WALL
+	jp	nz,gsel
+	ld	(ppos),hl
+	push	hl
+	ld	hl,pcol
+	dec	(hl)
+	ld	c,(hl)
+	ld	a,(coff)
+	add	a,c
+	ld	c,a
+	ld	a,(prow)
+	ld	b,a
+	ld	a,(roff)
+	add	a,b
+	ld	b,a
+	ld	a,SQ_PUSHER
+	push	bc
+	call	draw_square
+	pop	bc
+	pop	hl
+	inc	hl
+	ld	a,GOAL
+	and	(hl)
+	ld	a,SQ_BLANK
+	jp	z,3f
+	ld	a,SQ_GOAL
+3:	inc	c
+	call	draw_square
+2:	jp	gsel		; DEBUG
+1:	cp	KEY_RESTART
 	jp	nz,1f
 	ld	hl,msg_restart
 	call	get_conf
@@ -276,7 +315,7 @@ fail:	ld	hl,msg_fail
 	call	get_ack
 	jp	quit
 
-; display 5-digit integer
+; display 5-digit integer, left-aligned, right-padded with blanks
 wip:	push	de
 	ex	de,hl
 	ld	h,' '
