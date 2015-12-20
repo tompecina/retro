@@ -354,18 +354,24 @@ glyphs80:
 	.byte	0x00	; ......
 	.byte	0x00	; ......
 
-	.globl	UPARROW
-	.equiv	UPARROW, 0x81
-	; 81
-	.byte	0x00	; ......
-	.byte	0x00	; ......
-	.byte	0x08	; ...#..
-	.byte	0x1c	; ..###.
-	.byte	0x3e	; .#####
-	.byte	0x08	; ...#..
-	.byte	0x08	; ...#..
-	.byte	0x08	; ...#..
-	.byte	0x08	; ...#..
-	.byte	0x00	; ......
+; ==============================================================================
+; check_board - check if maze is solved
+; 
+;   input:  (board) - board to be checked
+;
+;   ouotput: Z if solved
+;
+;   uses:   A, H, L
+; 
+	.text
+	.globl	check_board
+check_board:
+	ld	hl,board
+1:	ld	a,(hl)
+	cp	0xff
+	ret	z
+	cp	GOAL
+	ret	nz
+	jp	1b	
 
 	.end

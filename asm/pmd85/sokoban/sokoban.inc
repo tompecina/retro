@@ -25,11 +25,11 @@
 ; ==============================================================================
 ; Constants
 ; 
-	.equiv	LO_ROWS, 20
+	.equiv	LO_ROWS, 19
 	.equiv	LO_COLS, 24
-	.equiv	HI_ROWS, 40
+	.equiv	HI_ROWS, 38
 	.equiv	HI_COLS, 48
-	.equiv	WALL, 0x80
-	.equiv	BOX, 0x02
-	.equiv	GOAL, 0x01
+	.equiv	WALL, 1 << 0
+	.equiv	BOX, 1 << 1
+	.equiv	GOAL, 1 << 2
 	.equiv	STACKSIZE, 64

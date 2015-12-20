@@ -25,7 +25,7 @@ from sys import argv, stdin, stdout, stderr
 from getopt import gnu_getopt, GetoptError
 from re import compile
 
-MAXROWS = 40
+MAXROWS = 38
 MAXCOLS = 48
 RE1 = compile(r'^[-_ #B*\d][-_ #pPbB.+*@$\d()]*[-_ #B*)]$')
 RE2 = compile(r'(\d+)\(([^\d)]+)\)')
@@ -150,8 +150,8 @@ def main(argv):
                             else:
                                 error("Syntax error (1)")
                             if c in '@+':
-                                prow = pos // rows
-                                pcol = pos % rows
+                                prow = pos // cols
+                                pcol = pos % cols
                                 if c == '@':
                                     c = ' '
                                 else:

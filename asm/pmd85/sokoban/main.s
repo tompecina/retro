@@ -47,28 +47,31 @@ main:
 	ld	(nlevels),hl
 	call	init_hist	
 
-	call	erase
-
+; main menu
+menu:	call	erase
 	ld	hl,label_sokoban
 	ld	de,LBLPOS
 	call	draw_label
-
 	ld	hl,credits
 	ld	de,CRPOS
 	call	writeln
-
 	ld	hl,legend
 	ld	de,LEGPOS
 	call	writeln
 
+; select menu option
 msel:	ld	hl,msg_menu
 	call	disp_msg
 	call	inklav
+
+; play first level
 	cp	KEY_PLAY
 	jp	nz,1f
 	call	tnlvl
 	ld	de,0
 	jp	2f
+
+; play selected level
 1:	cp	KEY_SELECT
 	jp	nz,1f
 	call	tnlvl
@@ -106,7 +109,7 @@ msel:	ld	hl,msg_menu
 	ld	c,e
 	ex	de,hl
 	ld	(level),hl
-	ld	hl,0
+play:	ld	hl,0
 	ld	(moves),hl
 	ld	(pushes),hl
 	call	reset_hist
@@ -121,8 +124,9 @@ msel:	ld	hl,msg_menu
 	ld	de,LVPOS
 	call	wip
 	call	dispmp
-	jp	.
-	
+	jp	gsel
+
+; load levels from cassette
 1:	cp	KEY_LOAD
 	jp	nz,1f
 	ld	hl,msg_fileno
@@ -141,7 +145,7 @@ msel:	ld	hl,msg_menu
 	call	disp_msg
 	call	start_usart
 2:	call	headin
-	jp	nc,4b
+	jp	nc,4f
 3:	call	stop_usart
 	jp	msel
 4:	call	clr_msg
@@ -196,7 +200,9 @@ msel:	ld	hl,msg_menu
 	push	hl
 	push	de
 	call	trload
+	push	af
 	call	stop_usart
+	pop	af
 	pop	de
 	pop	hl
 	jp	z,2f
@@ -206,7 +212,7 @@ msel:	ld	hl,msg_menu
 	jp	msel
 2:	add	hl,de
 	inc	hl
-	ld	(hl),0
+	ld	(hl),0		; end-mark
 	inc	hl
 	ld	(hl),0
 	call	count_levels
@@ -226,6 +232,8 @@ msel:	ld	hl,msg_menu
 	call	writelncur
 	call	get_ack2
 	jp	msel
+
+; quit
 1:	cp	KEY_QUIT
 	jp	nz,msel
 	ld	hl,msg_quit
@@ -234,6 +242,26 @@ msel:	ld	hl,msg_menu
 quit:	call	erase
 	jp	PMD_MONIT
 
+
+; select game option
+gsel:	call	inklav
+	cp	KEY_RESTART
+	jp	nz,1f
+	ld	hl,msg_restart
+	call	get_conf
+	jp	z,gsel
+	ld	hl,(level)
+	ld	b,h
+	ld	c,l
+	jp	play
+1:	cp	KEY_MENU
+	jp	nz,gsel
+	ld	hl,msg_end
+	call	get_conf
+	jp	z,gsel
+	jp	menu
+	
+; check if any levels available
 tnlvl:	ld	hl,(nlevels)
 	ld	a,h
 	or	l
@@ -243,10 +271,12 @@ tnlvl:	ld	hl,(nlevels)
 	pop	hl
 	jp	msel
 
+; display failure message and quit
 fail:	ld	hl,msg_fail
 	call	get_ack
 	jp	quit
 
+; display 5-digit integer
 wip:	push	de
 	ex	de,hl
 	ld	h,' '
@@ -263,6 +293,7 @@ wip:	push	de
 	pop	de
 	jp	writeln
 	
+; display number of moves and pushes
 dispmp:	ld	hl,(moves)
 	ld	de,MVPOS
 	call	wip
@@ -270,6 +301,7 @@ dispmp:	ld	hl,(moves)
 	ld	de,PUPOS
 	jp	wip
 	
+; variables
 	.lcomm	nlevels, 2
 	.lcomm	sbuf, 15
 	.lcomm	level, 2
