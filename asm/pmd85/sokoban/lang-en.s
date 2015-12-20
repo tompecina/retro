@@ -80,16 +80,12 @@ legend:
 	.equiv	KEY_MENU, 'M'
 	
 ; ==============================================================================
-; Labels
-;
-	.data
-	
-; ==============================================================================
 ; Prompts
 ;
 	.data
 	.globl	msg_stat, msg_restart, msg_end, msg_quit, msg_menu
-	.globl	msg_select1, msg_select2, msg_nolevels, msg_fail
+	.globl	msg_select1, msg_select2, msg_nolevels, msg_fail, msg_fileno
+	.globl	msg_loading, msg_ftb, msg_sload
 msg_stat:
 	.asciz	"Level:           Moves:            Pushes:"
 msg_restart:
@@ -108,6 +104,14 @@ msg_nolevels:
 	.asciz	"No levels loaded, press EOL"
 msg_fail:
 	.asciz	"Failed to load level, press EOL to exit"
-
+msg_fileno:
+	db	"File number (00", OBELUS, "99)? ", 0
+msg_loading:
+	.asciz	"Loading..."
+msg_ftb:
+	.asciz	"File is too big, cannot be loaded" 
+msg_sload:
+	.asciz	"Number of levels loaded: "
+	
 	.end
 	

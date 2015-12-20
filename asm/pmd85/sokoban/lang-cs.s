@@ -82,16 +82,12 @@ legend:
 	.equiv	KEY_MENU, 'M'
 	
 ; ==============================================================================
-; Labels
-;
-	.data
-	
-; ==============================================================================
 ; Prompts
 ;
 	.data
 	.globl	msg_stat, msg_restart, msg_end, msg_quit, msg_menu
-	.globl	msg_select1, msg_select2, msg_nolevels, msg_fail
+	.globl	msg_select1, msg_select2, msg_nolevels, msg_fail, msg_fileno
+	.globl	msg_loading, msg_ftb, msg_sload
 msg_stat:
 	db	0xf5, "rove", 0xce, ":            Krok", 0xca
 	db	":            Tah", 0xca, ":", 0
@@ -114,6 +110,15 @@ msg_nolevels:
 msg_fail:
 	db	"Nepoda", 0xd, "ilo se zav", 0xd7, "st ", 0xd5, "rove", 0xce
 	db	", stiskn", 0xc5, "te EOL", 0
-
+msg_fileno:
+	db	0xe3, 0xc9, "slo souboru (00-99)? ", 0
+msg_loading:
+	db	"Nahr", 0xc1, "v", 0xc1, "m...", 0
+msg_ftb:
+	db	"Soubor je p", 0xd2, 0xc9, "li", 0xd3, " velk", 0xd9
+	db	", nelze ho na", 0xc3, 0xc9, "st", 0
+msg_sload:
+	db	"Po", 0xc3, "et nahran", 0xd9, "ch ", 0xd5, "rovn", 0xc9, ": ", 0
+	
 	.end
 	

@@ -85,6 +85,7 @@ count_levels:
 ;	    (coff) - column offset
 ;	    (rpusher) - initial row of pusher
 ;	    (cpusher) - initial column of pusher
+;	    (ppusher) - initial position of pusher within (board)
 ;	    CY if not found or oversized
 ; 
 ;   uses:   all
@@ -206,8 +207,20 @@ get_level:
 	ld	a,(de)
 	inc	de
 	ld	(cpusher),a
+	push	af
 	ld	a,(de)
 	ld	(rpusher),a
+	ld	b,a
+	ld	a,(cols)
+	ld	c,a
+	call	umul8
+	pop	af
+	ld	e,a
+	ld	d,0
+	add	hl,de
+	ld	de,board
+	add	hl,de
+	ld	(ppusher),hl
 	or	a		; CY = 0
 	ret
 2:	dec	b
@@ -237,7 +250,7 @@ get_level:
 	ld	a,BOX | GOAL	; 111
 	ret
 	
-	.globl	board, size, rows, cols, roff, coff, rpusher, cpusher
+	.globl	board, size, rows, cols, roff, coff, rpusher, cpusher, ppusher
 	.lcomm	board, (HI_ROWS * HI_COLS) + 1
 	.lcomm	size, 1
 	.lcomm	rows, 1
@@ -246,6 +259,7 @@ get_level:
 	.lcomm	coff, 1
 	.lcomm	rpusher, 1
 	.lcomm	cpusher, 1
+	.lcomm	ppusher, 2
 	.lcomm	ctr, 2
 
 	.end

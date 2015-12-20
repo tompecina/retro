@@ -1,4 +1,4 @@
-; trload.s
+; signexbc.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,61 +17,24 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-	.include "pmd85.inc"
-	
+
 ; ==============================================================================
-; trload - load data block from tape recorder
+; signexbc - sign-extend A to BC
 ; 
-;   input:  HL - start address
-;	    DE - number of bytes - 1
+;   input:  A
 ; 
-;   output: (HL) - data block
-;	    NZ on error or STOP pressed
+;   output: BC = A
 ; 
-;   uses:   A, B, D, E
+;   uses:   A
 ; 
 	.text
-	.globl	trload
-trload:
-	push	hl
-	ld	bc,0x00ff
-	ld	a,(hw1)
-	or	a
-	jp	z,3f	
-2:	call	trbyte
-	jp	c,2f
-	inc	c
-	dec	c
-	jp	z,1f
-	ld	(hl),a
-1:	inc	hl
-	add	a,b
-	ld	b,a
-	ld	a,d
-	or	e
-	dec	de
-	jp	nz,2b
-	call	trbyte
-	cp	b
-2:	pop	hl
+	.globl	signexbc
+signexbc:
+	ld	c,a
+	rla
+	ld	b,0
+	ret	nc
+	dec	b
 	ret
-3:	call	waimgi
-	in	a,(USART_DATA)
-	dec	c
-	inc	c
-	jp	z,1f
-	ld	(hl),a
-1:	add	a,b
-	ld	b,a
-	inc	hl
-	dec	de
-	ld	a,d
-	cp	0xff
-	jp	3b
-	call	waimgi
-	in	a,(USART_DATA)
-	cp	b
-	pop	hl
-	ret
-	
+
 	.end

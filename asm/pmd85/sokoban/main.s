@@ -25,7 +25,8 @@
 ; ==============================================================================
 ; Constants
 ;
-
+	.equiv	MEMLIMIT, 0x400
+	
 ; ==============================================================================
 ; Main entry point of the program
 ;
@@ -60,10 +61,9 @@ main:
 	ld	de,LEGPOS
 	call	writeln
 
-	ld	hl,msg_menu
+msel:	ld	hl,msg_menu
 	call	disp_msg
-
-msel:	call	inklav
+	call	inklav
 	cp	KEY_PLAY
 	jp	nz,1f
 	call	tnlvl
@@ -109,6 +109,7 @@ msel:	call	inklav
 	ld	hl,0
 	ld	(moves),hl
 	ld	(pushes),hl
+	call	reset_hist
 	call	get_level
 	jp	c,fail
 	call	draw_board
@@ -120,8 +121,108 @@ msel:	call	inklav
 	ld	de,LVPOS
 	call	wip
 	call	dispmp
-1:	
-	cp	KEY_QUIT
+	jp	.
+	
+1:	cp	KEY_LOAD
+	jp	nz,1f
+	ld	hl,msg_fileno
+	call	disp_msg
+	ld	hl,val_digit
+	ld	(sel_val),hl
+	ld	bc,0x0202
+	ld	hl,sbuf
+	push	hl
+	call	sedit
+	pop	hl
+	call	parse_int
+	ld	a,l
+	ld	(fileno),a
+	ld	hl,msg_loading
+	call	disp_msg
+2:	call	headin
+	jp	c,msel
+	call	clr_msg
+	ld	a,(trhead)
+	add	a,100
+	ld	h,0
+	ld	l,a
+	ld	de,sbuf
+	push	de
+	call	conv_int
+	ex	de,hl
+	ld	(hl),'/'
+	inc	hl
+	ld	a,(trhead + 1)
+	ld	(hl),a
+	inc	hl
+	ld	(hl),' '
+	inc	hl
+	ex	de,hl
+	ld	hl,trhead + 6
+	ld	b,8
+	call	copy8
+	xor	a
+	ld	(de),a
+	pop	hl
+	inc	hl
+	call	disp_msg
+	ld	hl,trhead
+	ld	a,(fileno)
+	cp	(hl)
+	jp	nz,2b
+	inc	hl
+	ld	a,(hl)
+	cp	'S'
+	jp	nz,2b
+	ld	hl,(trhead + 4)
+	ld	(filesize),hl
+	ld	de,levels
+	add	hl,de
+	ld	de,MEMLIMIT
+	add	hl,de
+	ld	de,initsp
+	call	ucmphlde
+	jp	nc,2f
+	call	errbeep
+	ld	hl,msg_ftb
+	call	get_ack
+	jp	msel
+2:	ld	hl,(filesize)
+	ex	de,hl
+	ld	hl,levels
+	push	hl
+	push	de
+	call	trload
+	pop	de
+	pop	hl
+	jp	z,2f
+	ld	hl,0
+	ld	(nlevels),hl
+	call	errbeep
+	jp	msel
+2:	add	hl,de
+	inc	hl
+	ld	(hl),0
+	inc	hl
+	ld	(hl),0
+	call	count_levels
+	push	de
+	ex	de,hl
+	ld	(nlevels),hl
+	call	init_hist
+	ld	hl,msg_sload
+	call	disp_msg
+	pop	hl
+	ld	de,sbuf
+	push	de
+	call	conv_int
+	xor	a
+	ld	(de),a
+	pop	de
+	call	writelncur
+	call	get_ack2
+	jp	msel
+1:	cp	KEY_QUIT
 	jp	nz,msel
 	ld	hl,msg_quit
 	call	get_conf
@@ -178,9 +279,11 @@ dispmp:	ld	hl,(moves)
 	jp	wip
 	
 	.lcomm	nlevels, 2
-	.lcomm	sbuf, 6
+	.lcomm	sbuf, 15
 	.lcomm	level, 2
 	.lcomm	moves, 2
 	.lcomm	pushes, 2
+	.lcomm	fileno, 1
+	.lcomm	filesize, 2
 	
 	.end

@@ -11,7 +11,7 @@ OBJ = erase.o indcall.o sedit.o beep.o bepuk.o beclr.o waits.o inkey.o \
 	conv_time.o init_bctbl.o count_bits.o init_brtbl.o reflect_byte.o \
 	init_bcbrtbl.o draw_label.o dethw1.o conv_int.o start_usart.o \
 	test_stop.o headin.o trscan.o trbyte.o trload.o waimgi.o val_digit.o \
-	parse_int.o ucmphlde.o ucmpdehl.o
+	parse_int.o ucmphlde.o ucmpdehl.o mul8.o signexbc.o umul8.o
 AS = as-z80
 AR = ar-z80
 ASFLAGS = -z80

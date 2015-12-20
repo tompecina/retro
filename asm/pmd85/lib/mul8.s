@@ -1,4 +1,4 @@
-; trload.s
+; mul8.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,61 +17,46 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-	.include "pmd85.inc"
-	
+
 ; ==============================================================================
-; trload - load data block from tape recorder
+; mul8 - signed 8-bit multiplication
 ; 
-;   input:  HL - start address
-;	    DE - number of bytes - 1
+;   input:  B, C
 ; 
-;   output: (HL) - data block
-;	    NZ on error or STOP pressed
+;   output: HL = B * C
 ; 
-;   uses:   A, B, D, E
+;   uses:   all
 ; 
 	.text
-	.globl	trload
-trload:
-	push	hl
-	ld	bc,0x00ff
-	ld	a,(hw1)
-	or	a
-	jp	z,3f	
-2:	call	trbyte
-	jp	c,2f
-	inc	c
-	dec	c
-	jp	z,1f
-	ld	(hl),a
-1:	inc	hl
-	add	a,b
-	ld	b,a
-	ld	a,d
-	or	e
-	dec	de
-	jp	nz,2b
-	call	trbyte
-	cp	b
-2:	pop	hl
-	ret
-3:	call	waimgi
-	in	a,(USART_DATA)
-	dec	c
-	inc	c
-	jp	z,1f
-	ld	(hl),a
-1:	add	a,b
-	ld	b,a
-	inc	hl
-	dec	de
-	ld	a,d
-	cp	0xff
-	jp	3b
-	call	waimgi
-	in	a,(USART_DATA)
-	cp	b
-	pop	hl
-	ret
-	
+	.globl	mul8
+mul8:
+	ld	a,c
+	call	signexde
+	ld	a,b
+	call	signexbc
+        ld      hl,0
+1:	ld      a,c
+        rrca
+        jp	nc,2f
+        add     hl,de
+2:	xor     a
+        ld      a,b
+        rra
+        ld      b,a
+        ld      a,c
+        rra
+        ld      c,a
+        or      b
+        ret	z
+        xor     a
+        ld      a,e
+        rla
+        ld      e,a
+        ld      a,d
+        rla
+        ld      d,a
+        or      e
+        ret	z
+        jp      1b
+
 	.end

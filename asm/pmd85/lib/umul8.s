@@ -1,4 +1,4 @@
-; trload.s
+; umul8.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,61 +17,32 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-	.include "pmd85.inc"
-	
+
 ; ==============================================================================
-; trload - load data block from tape recorder
+; umul8 - unsigned 8-bit multiplication
 ; 
-;   input:  HL - start address
-;	    DE - number of bytes - 1
+;   input:  B, C
 ; 
-;   output: (HL) - data block
-;	    NZ on error or STOP pressed
+;   output: HL = B * C
 ; 
-;   uses:   A, B, D, E
+;   uses:   all
 ; 
 	.text
-	.globl	trload
-trload:
-	push	hl
-	ld	bc,0x00ff
-	ld	a,(hw1)
+	.globl	umul8
+umul8:
+	ld	hl,0
+	ld	d,h
+	ld	e,b
+2:	ld	a,c
 	or	a
-	jp	z,3f	
-2:	call	trbyte
-	jp	c,2f
-	inc	c
-	dec	c
-	jp	z,1f
-	ld	(hl),a
-1:	inc	hl
-	add	a,b
-	ld	b,a
-	ld	a,d
-	or	e
-	dec	de
-	jp	nz,2b
-	call	trbyte
-	cp	b
-2:	pop	hl
-	ret
-3:	call	waimgi
-	in	a,(USART_DATA)
-	dec	c
-	inc	c
-	jp	z,1f
-	ld	(hl),a
-1:	add	a,b
-	ld	b,a
-	inc	hl
-	dec	de
-	ld	a,d
-	cp	0xff
-	jp	3b
-	call	waimgi
-	in	a,(USART_DATA)
-	cp	b
-	pop	hl
-	ret
+	ret	z
+	rra
+	ld	c,a
+	jp	nc,1f
+	add	hl,de
+1:	ex	de,hl
+	add	hl,hl
+	ex	de,hl
+	jp	2b
 	
 	.end

@@ -22,7 +22,7 @@
 #
 
 from sys import argv, stdin, stdout, stderr
-from getopt import getopt, GetoptError
+from getopt import gnu_getopt, GetoptError
 from re import compile
 
 MAXROWS = 40
@@ -57,7 +57,6 @@ def main(argv):
         return r
 
     def out(ctr, c):
-        report("c:",c,"ctr:",ctr)
         if ctr == 1:
             r = [0]
         else:
@@ -190,7 +189,7 @@ def main(argv):
                         fo.write(bytes(r))
                     
     try:
-        opts, args = getopt(argv, '?Vo:v', ['help', 'version', 'output=', 'verbose'])
+        opts, args = gnu_getopt(argv, '?Vo:v', ['help', 'version', 'output=', 'verbose'])
     except GetoptError:
         usage()
         exit(1)
