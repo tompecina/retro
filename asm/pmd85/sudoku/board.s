@@ -681,7 +681,7 @@ hide_cursor:
 	.text
 	.globl	player_select
 player_select:
-	call	inklav_rnd
+	call	inklav_rnd128
 	push	af
 	call	clr_msg
 	pop	af

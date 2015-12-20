@@ -47,7 +47,7 @@ main:
 quit:	call	rel_ct1
 	call	erase
 	jp	PMD_MONIT
-1:	ld	hl,inklav_rnd
+1:	ld	hl,inklav_rnd128
 	ld	(sel_inklav),hl
 	call	start_ct2
 	call	init_maps
@@ -59,7 +59,7 @@ new:	call	erase
 	call	writeln
 	ld	hl,msg_select
 	call	disp_msg
-2:	call	inklav_rnd
+2:	call	inklav_rnd128
 	cp	'0'
 	jp	c,1f
 	cp	'3' + 1
@@ -145,7 +145,7 @@ loop:	call	player_select
 	call	conv_time
 	ld	hl,msg_done
 	call	disp_msg
-	call	inklav_rnd
+	call	inklav_rnd128
 	jp	new
 1:	cp	KDEL
 	jp	nz,1f
