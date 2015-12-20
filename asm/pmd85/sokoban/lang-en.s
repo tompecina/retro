@@ -25,10 +25,14 @@
 ; ==============================================================================
 ; Constants
 ;
-	.globl	LBLPOS, CRPOS, LEGPOS, PRPOS
+	.globl	LBLPOS, CRPOS, LEGPOS, PRPOS, STPOS, LVPOS, MVPOS, PUPOS
 	.equiv	LBLPOS, 0xc510
 	.equiv	CRPOS, 0xcc10
 	.equiv	LEGPOS, 0xd400
+	.equiv	STPOS, 0xc300
+	.equiv	LVPOS, 0xc307
+	.equiv	MVPOS, 0xc318
+	.equiv	PUPOS, 0xc32b
 	
 ; ==============================================================================
 ; Credits
@@ -85,9 +89,9 @@ legend:
 ;
 	.data
 	.globl	msg_stat, msg_restart, msg_end, msg_quit, msg_menu
-	.globl	msg_select1, msg_select2, msg_nolevels
+	.globl	msg_select1, msg_select2, msg_nolevels, msg_fail
 msg_stat:
-	.asciz	"Level     Moves:      Pushes:"
+	.asciz	"Level:           Moves:            Pushes:"
 msg_restart:
 	.asciz	"Do you really wish to restart the level? (Y/N)"
 msg_end:
@@ -102,6 +106,8 @@ msg_select2:
 	.asciz	")? "
 msg_nolevels:
 	.asciz	"No levels loaded, press EOL"
+msg_fail:
+	.asciz	"Failed to load level, press EOL to exit"
 
 	.end
 	

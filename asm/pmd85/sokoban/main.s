@@ -67,7 +67,7 @@ msel:	call	inklav
 	cp	KEY_PLAY
 	jp	nz,1f
 	call	tnlvl
-	ld	de,1
+	ld	de,0
 	jp	2f
 1:	cp	KEY_SELECT
 	jp	nz,1f
@@ -88,8 +88,9 @@ msel:	call	inklav
 	ld	(sel_val),hl
 	ld	bc,0x0105
 	ld	hl,sbuf
+	push	hl
 	call	sedit
-	ld	hl,sbuf
+	pop	hl
 	call	parse_int
 	ld	a,h
 	or	l
@@ -98,13 +99,35 @@ msel:	call	inklav
 	jp	4b
 3:	dec	hl
 	ex	de,hl
-2:	ld	hl,(nlevels)
-	call	ucmpdehl
+	ld	hl,(nlevels)
+	call	ucmphlde
 	jp	nc,5b
-	
-	
+2:	ld	b,d
+	ld	c,e
+	ex	de,hl
+	ld	(level),hl
+	ld	hl,0
+	ld	(moves),hl
+	ld	(pushes),hl
+	call	get_level
+	jp	c,fail
+	call	draw_board
+	ld	hl,msg_stat
+	ld	de,STPOS
+	call	writeln
+	ld	hl,(level)
+	inc	hl
+	ld	de,LVPOS
+	call	wip
+	call	dispmp
 1:	
-	jp	.
+	cp	KEY_QUIT
+	jp	nz,msel
+	ld	hl,msg_quit
+	call	get_conf
+	jp	z,msel	
+quit:	call	erase
+	jp	PMD_MONIT
 	
 	
 1:	ld	bc,0
@@ -126,9 +149,38 @@ tnlvl:	ld	hl,(nlevels)
 	call	get_ack
 	pop	hl
 	jp	msel
+
+fail:	ld	hl,msg_fail
+	call	get_ack
+	jp	quit
+
+wip:	push	de
+	ex	de,hl
+	ld	h,' '
+	ld	l,h
+	ld	(sbuf),hl
+	ld	(sbuf + 2),hl
+	ld	h,0
+	ld	(sbuf + 4),hl
+	ex	de,hl
+	ld	de,sbuf
+	push	de
+	call	conv_int
+	pop	hl
+	pop	de
+	jp	writeln
 	
+dispmp:	ld	hl,(moves)
+	ld	de,MVPOS
+	call	wip
+	ld	hl,(pushes)
+	ld	de,PUPOS
+	jp	wip
 	
 	.lcomm	nlevels, 2
 	.lcomm	sbuf, 6
+	.lcomm	level, 2
+	.lcomm	moves, 2
+	.lcomm	pushes, 2
 	
 	.end

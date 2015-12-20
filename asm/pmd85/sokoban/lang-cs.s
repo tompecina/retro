@@ -25,10 +25,14 @@
 ; ==============================================================================
 ; Constants
 ;
-	.globl	LBLPOS, CRPOS, LEGPOS, PRPOS
+	.globl	LBLPOS, CRPOS, LEGPOS, PRPOS, STPOS, LVPOS, MVPOS, PUPOS
 	.equiv	LBLPOS, 0xc510
 	.equiv	CRPOS, 0xcc0e
 	.equiv	LEGPOS, 0xd400
+	.equiv	STPOS, 0xc300
+	.equiv	LVPOS, 0xc308
+	.equiv	MVPOS, 0xc31a
+	.equiv	PUPOS, 0xc32b
 	
 ; ==============================================================================
 ; Credits
@@ -87,10 +91,10 @@ legend:
 ;
 	.data
 	.globl	msg_stat, msg_restart, msg_end, msg_quit, msg_menu
-	.globl	msg_select1, msg_select2, msg_nolevels
+	.globl	msg_select1, msg_select2, msg_nolevels, msg_fail
 msg_stat:
-	db	0xf5, "rove", 0xce, "     Krok", 0xca, ":      Tah", 0xca
-	db	":", 0
+	db	0xf5, "rove", 0xce, ":            Krok", 0xca
+	db	":            Tah", 0xca, ":", 0
 msg_restart:
 	db	"Opravdu si p", 0xd2, "ejete restartovat ", 0xd5, "rove", 0xce
 	db	"? (A/N)", 0
@@ -107,6 +111,9 @@ msg_select2:
 msg_nolevels:
 	db	"Nejsou nahr", 0xc1, "ny ", 0xda, 0xc1, "dn", 0xd7, " ", 0xd5
 	db	"rovn", 0xc5, ", stiskn", 0xc5, "te EOL", 0
+msg_fail:
+	db	"Nepoda", 0xd, "ilo se zav", 0xd7, "st ", 0xd5, "rove", 0xce
+	db	", stiskn", 0xc5, "te EOL", 0
 
 	.end
 	
