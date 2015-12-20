@@ -131,7 +131,7 @@ again:	ld	hl,msg_nrnds
 	cp	ATTEMPTS
 	jp	nz,1b
 	ld	hl,msg_cout
-	call	get_ack
+	call	get_any
 	ld	hl,cscore
 	ld	a,(hl)
 	add	a,ATTEMPTS + 1
@@ -151,7 +151,7 @@ again:	ld	hl,msg_nrnds
 	inc	hl
 	ld	d,(hl)
 	call	writelncur
-	call	get_ack2
+	call	inklav_rnd128
 	pop	bc
 	ld	a,(cscore)
 	add	a,b
@@ -179,7 +179,7 @@ again:	ld	hl,msg_nrnds
 	pop	bc
 	jp	nc,1f
 	ld	hl,msg_perr
-	call	get_ack
+	call	get_any
 	jp	2f
 1:	ex	de,hl
 	ld	hl,(pguess)
@@ -214,7 +214,7 @@ again:	ld	hl,msg_nrnds
 	ld	a,c
 	jp	nz,4b
 	ld	hl,msg_pout
-	call	get_ack
+	call	get_any
 	ld	hl,pscore
 	ld	a,(hl)
 	add	a,ATTEMPTS + 1
@@ -238,7 +238,7 @@ again:	ld	hl,msg_nrnds
 	inc	hl
 	ld	d,(hl)
 	call	writelncur
-	call	get_ack2
+	call	inklav_rnd128
 
 ; next round
 2:	call	disp_score

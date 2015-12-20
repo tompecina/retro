@@ -1,4 +1,4 @@
-; get_conf.s
+; get_any.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -20,31 +20,20 @@
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; get_conf,get_conf2 - optionally display prompt and wait for confirmation (Y/N)
+; get_any - display prompt and wait for any key
 ; 
-;   input:  (HL) - prompt (only get_conf)
+;   input:  (HL) - prompt (only get_ack)
 ;           (color) - color mask
 ; 
-;   output: NZ answer is YES
+;   output: A - code of the key
 ; 
-;   uses:   A, B, D, E, H, L
+;   uses:   B, D, E, H, L
 ; 
 	.text
-	.globl	get_conf, get_conf2
-get_conf:
+	.globl	get_any
+get_any:
 	call	disp_msg
-get_conf2:
 	indcall	inklav
-	cp	KEY_YES
-	jp	z,1f
-	cp	KEY_NO
-	jp	z,2f
-	jp	get_conf2
-1:	call	clr_msg
-	or	0xff
-	ret
-2:	call	clr_msg
-	xor	a
 	ret
 	
 	.end

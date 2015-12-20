@@ -32,8 +32,7 @@
 get_ack:
 	call	disp_msg
 get_ack2:
-	call	indcall
-	.word	sel_inklav
+	indcall	inklav
 	cp	KEY_ENTER
 	jp	nz,get_ack2
 	jp	clr_msg

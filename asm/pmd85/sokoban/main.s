@@ -192,7 +192,7 @@ play:	ld	hl,0
 	jp	nc,2f
 	call	errbeep
 	ld	hl,msg_ftb
-	call	get_ack
+	call	get_any
 	jp	3b
 2:	ld	hl,(filesize)
 	ex	de,hl
@@ -230,7 +230,7 @@ play:	ld	hl,0
 	ld	(de),a
 	pop	de
 	call	writelncur
-	call	get_ack2
+	call	inklav
 	jp	msel
 
 ; quit
