@@ -63,7 +63,7 @@ reset_hist:
 ; ==============================================================================
 ; push_move - push move to history
 ; 
-;   input:  A - move (bits 0-3 = move, bits 4-7 = don't care)
+;   input:  A - move (bits 0-2 = move, bits 3-7 = don't care)
 ; 
 ;   uses:   A, B, D, E, H, L
 ; 
@@ -86,6 +86,7 @@ push_move:
 	jp	nz,1f
 	ld	a,(hl)
 	add	a,0x08
+	jp	c,1f
 	ld	(hl),a
 	ret
 1:	call	1f
@@ -119,7 +120,7 @@ push_move:
 ; ==============================================================================
 ; pop_move - pop move from history
 ; 
-;   output: A - move (bits 0-3 = move, bits 4-7 = repeat count - 1)
+;   output: A - move (bits 0-2 = move, bits 3-7 = 0)
 ;	    CY if none available
 ; 
 ;   uses:   B, D, E, H, L
@@ -133,7 +134,13 @@ pop_move:
 	scf
 	ret	z
 	ld	b,(hl)
-	ex	de,hl
+	ld	a,0xf8
+	and	b
+	sub	0x08
+	jp	c,1f
+	ld	(hl),a
+	jp	3f
+1:	ex	de,hl
 	ld	hl,(hfirst)
 	ex	de,hl
 	ld	a,h
@@ -156,8 +163,8 @@ pop_move:
 	ld	hl,(hend)
 1:	dec	hl
 2:	ld	(hlast),hl
-	ld	a,b
-	or	a		; CY = 0
+3:	ld	a,b
+	and	0x07		; CY = 0
 	ret
 	
 ; ==============================================================================

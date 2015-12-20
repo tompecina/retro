@@ -123,7 +123,8 @@ play:	ld	hl,0
 	inc	hl
 	ld	de,LVPOS
 	call	wip
-	call	dispmp
+	call	dispm
+	call	dispp
 	jp	gsel
 
 ; load levels from cassette
@@ -242,48 +243,75 @@ play:	ld	hl,0
 quit:	call	erase
 	jp	PMD_MONIT
 
-
 ; select game option
 gsel:	call	inklav
 	cp	KLEFT
-	ld	a,(pcol)
-	or	a
-	jp	z,gsel
-	ld	hl,(ppos)
-	dec	hl
-	ld	a,(hl)
-	and	BOX
+	jp	nz,1f
+	call	left
+	jp	arrow
+1:	cp	KRIGHT
+	jp	nz,1f
+	call	right
+	jp	arrow
+1:	cp	KHOME
+	jp	nz,1f
+	call	up
+	jp	arrow
+1:	cp	KLLEFT
+	jp	nz,1f
+	call	up
+	jp	arrow
+1:	cp	KEND
+	jp	nz,1f
+	call	down
+	jp	arrow
+1:	cp	KRRIGHT
+	jp	nz,1f
+	call	down
+	jp	arrow
+1:	cp	KSLEFT
+	jp	nz,1f
+	call	left
+	jp	sarrow
+1:	cp	KSRIGHT
+	jp	nz,1f
+	call	right
+	jp	sarrow
+1:	cp	KSHOME
+	jp	nz,1f
+	call	up
+	jp	sarrow
+1:	cp	KSLLEFT
+	jp	nz,1f
+	call	up
+	jp	sarrow
+1:	cp	KSEND
+	jp	nz,1f
+	call	down
+	jp	sarrow
+1:	cp	KSRRIGHT
+	jp	nz,1f
+	call	down
+	jp	sarrow
+1:	cp	KEY_UNDO
+	jp	nz,1f
+	call	pop_move
+	jp	c,gsel
+	ld	h,a
+	and	0x03
 	jp	nz,2f
-	ld	a,(hl)
-	and	WALL
-	jp	nz,gsel
-	ld	(ppos),hl
-	push	hl
-	ld	hl,pcol
-	dec	(hl)
-	ld	c,(hl)
-	ld	a,(coff)
-	add	a,c
-	ld	c,a
-	ld	a,(prow)
-	ld	b,a
-	ld	a,(roff)
-	add	a,b
-	ld	b,a
-	ld	a,SQ_PUSHER
-	push	bc
-	call	draw_square
-	pop	bc
-	pop	hl
-	inc	hl
-	ld	a,GOAL
-	and	(hl)
-	ld	a,SQ_BLANK
-	jp	z,3f
-	ld	a,SQ_GOAL
-3:	inc	c
-	call	draw_square
-2:	jp	gsel		; DEBUG
+	call	left
+	jp	undo
+2:	dec	a
+	jp	nz,2f
+	call	up
+	jp	undo
+2:	dec	a
+	jp	nz,2f
+	call	down
+	jp	undo
+2:	call	right
+	jp	undo
 1:	cp	KEY_RESTART
 	jp	nz,1f
 	ld	hl,msg_restart
@@ -299,6 +327,226 @@ gsel:	call	inklav
 	call	get_conf
 	jp	z,gsel
 	jp	menu
+	
+; unshifted arrow key processing
+arrow:	call	setc
+	call	movec
+	call	checkc
+	jp	z,gsel
+	ld	hl,(cpos)
+	ld	a,(hl)
+	and	WALL
+	jp	nz,gsel
+	ld	a,(hl)
+	and	BOX
+	jp	nz,1f
+	call	dpu
+	call	setp
+	call	rmovec
+	ld	hl,(cpos)
+	ld	a,(hl)
+	and	GOAL
+	jp	nz,2f
+	call	dbl
+	jp	3f
+2:	call	dgo
+3:	call	rc2c
+	call	push_move
+	ld	hl,(moves)
+	inc	hl
+	ld	(moves),hl
+	call	dispm
+	jp	gsel
+1:	call	movec
+	call	checkc
+	jp	z,gsel
+	ld	hl,(cpos)
+	ld	a,(hl)
+	and	WALL
+	jp	nz,gsel
+	ld	a,(hl)
+	and	BOX
+	jp	nz,gsel
+	ld	a,(hl)
+	or	BOX
+	ld	(hl),a
+	and	GOAL
+	jp	nz,2f
+	call	dbo
+	jp	3f
+2:	call	dbg
+3:	call	rmovec
+	ld	hl,(cpos)
+	ld	a,(hl)
+	and	~BOX
+	ld	(hl),a
+	call	dpu
+	call	rmovec
+	ld	hl,(cpos)
+	ld	a,(hl)
+	and	GOAL
+	jp	nz,2f
+	call	dbl
+	jp	3f
+2:	call	dgo
+3:	call	rc2c
+	or	0x04
+	call	push_move
+	ld	hl,(pushes)
+	inc	hl
+	ld	(pushes),hl
+	call	dispp
+	jp	gsel
+		
+; shifted arrow key processing
+sarrow:
+	jp .
+	
+; undo processing
+undo:
+	jp .
+	
+; convert row & column to history code
+rc2c:	ld	a,b
+	xor	c
+	and	0x02
+	ld	h,a
+	rra
+	xor	b
+	and	0x01
+	or	h
+	ret
+	
+; set cursor to pusher
+setc:	ld	a,(prow)
+	ld	(crow),a
+	ld	a,(pcol)
+	ld	(ccol),a
+	ld	hl,(ppos)
+	ld	(cpos),hl
+	ret
+	
+; set pusher to cursor
+setp:	ld	a,(crow)
+	ld	(prow),a
+	ld	a,(ccol)
+	ld	(pcol),a
+	ld	hl,(cpos)
+	ld	(ppos),hl
+	ret
+	
+; move cursor according to offsets
+movec:	ld	a,(crow)
+	add	a,b
+	ld	(crow),a
+	ld	a,(ccol)
+	add	a,c
+	ld	(ccol),a
+	ld	hl,(cpos)
+	add	hl,de
+	ld	(cpos),hl
+	ret
+	
+; move cursor according to offsets, in reverse
+rmovec:	ld	a,(crow)
+	sub	b
+	ld	(crow),a
+	ld	a,(ccol)
+	sub	c
+	ld	(ccol),a
+	ld	hl,(cpos)
+	ld	a,l
+	sub	e
+	ld	l,a
+	ld	a,h
+	sbc	a,d
+	ld	h,a
+	ld	(cpos),hl
+	ret
+	
+; check if cursor is inside board 
+checkc:	ld	a,(rows)
+	ld	h,a
+	ld	a,(crow)
+	cp	0xff
+	ret	z
+	cp	h
+	ret	z
+	ld	a,(cols)
+	ld	h,a
+	ld	a,(ccol)
+	cp	0xff
+	ret	z
+	cp	h
+	ret
+	
+; draw blank at cursor position
+dbl:	xor	a
+	jp	draw
+		
+; draw pusher at cursor position
+dpu:	ld	a,SQ_PUSHER
+	jp	draw
+	
+; draw box at cursor position
+dbo:	ld	a,SQ_BOX
+	jp	draw
+	
+; draw box on goal at cursor position
+dbg:	ld	a,SQ_BOXONGOAL
+	jp	draw
+	
+; draw goal at cursor position
+dgo:	ld	a,SQ_GOAL
+	jp	draw
+	
+; draw square at cursor position
+draw:	push	bc
+	push	de
+	push	af
+	ld	a,(roff)
+	ld	b,a
+	ld	a,(crow)
+	add	a,b
+	ld	b,a
+	ld	a,(coff)
+	ld	c,a
+	ld	a,(ccol)
+	add	a,c
+	ld	c,a
+	pop	af
+	call	draw_square
+	pop	de
+	pop	bc
+	ret
+	
+; left presets
+left:	ld	bc,0x00ff
+	ld	d,c
+	ld	e,c
+	ret
+	
+; right presets
+right:	ld	bc,0x0001
+	ld	d,b
+	ld	e,c
+	ret
+	
+; up presets
+up:	ld	bc,0xff00
+	ld	a,(cols)
+	cpl
+	inc	a
+	ld	e,a
+	ld	d,b
+	ret
+	
+; down presets
+down:	ld	bc,0x0100
+	ld	a,(cols)
+	ld	e,a
+	ld	d,c
+	ret
 	
 ; check if any levels available
 tnlvl:	ld	hl,(nlevels)
@@ -332,11 +580,13 @@ wip:	push	de
 	pop	de
 	jp	writeln
 	
-; display number of moves and pushes
-dispmp:	ld	hl,(moves)
+; display number of moves
+dispm:	ld	hl,(moves)
 	ld	de,MVPOS
-	call	wip
-	ld	hl,(pushes)
+	jp	wip
+	
+; display number of pushes
+dispp:	ld	hl,(pushes)
 	ld	de,PUPOS
 	jp	wip
 	
@@ -348,5 +598,8 @@ dispmp:	ld	hl,(moves)
 	.lcomm	pushes, 2
 	.lcomm	fileno, 1
 	.lcomm	filesize, 2
+	.lcomm	crow, 1
+	.lcomm	ccol, 1
+	.lcomm	cpos, 2
 	
 	.end
