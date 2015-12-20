@@ -63,17 +63,16 @@ menu:	call	erase
 msel:	ld	hl,msg_menu
 	call	disp_msg
 	call	inklav
+	ld	hl,mvect
+	jp	jpvect
 
 ; play first level
-	cp	KEY_PLAY
-	jp	nz,1f
-	call	tnlvl
+kplay:	call	tnlvl
 	ld	de,0
 	jp	2f
 
 ; play selected level
-1:	cp	KEY_SELECT
-	jp	nz,1f
+kselect:
 	call	tnlvl
 4:	ld	hl,msg_select1
 	call	disp_msg
@@ -128,8 +127,7 @@ play:	ld	hl,0
 	jp	gsel
 
 ; load levels from cassette
-1:	cp	KEY_LOAD
-	jp	nz,1f
+kload:	jp	nz,1f
 	ld	hl,msg_fileno
 	call	disp_msg
 	ld	hl,val_digit
@@ -235,66 +233,41 @@ play:	ld	hl,0
 	jp	msel
 
 ; quit
-1:	cp	KEY_QUIT
-	jp	nz,msel
-	ld	hl,msg_quit
+kquit:	ld	hl,msg_quit
 	call	get_conf
 	jp	z,msel	
 quit:	call	erase
 	jp	PMD_MONIT
 
-; select game option
+; select in-game option
 gsel:	call	inklav
-	cp	KLEFT
-	jp	nz,1f
+	ld	hl,gvect
+	jp	jpvect
+kleft:
 	call	left
 	jp	arrow
-1:	cp	KRIGHT
-	jp	nz,1f
+kright:
 	call	right
 	jp	arrow
-1:	cp	KHOME
-	jp	nz,1f
+kup:	
 	call	up
 	jp	arrow
-1:	cp	KLLEFT
-	jp	nz,1f
-	call	up
-	jp	arrow
-1:	cp	KEND
-	jp	nz,1f
+kdown:	
 	call	down
 	jp	arrow
-1:	cp	KRRIGHT
-	jp	nz,1f
-	call	down
-	jp	arrow
-1:	cp	KSLEFT
-	jp	nz,1f
+ksleft:	
 	call	left
 	jp	sarrow
-1:	cp	KSRIGHT
-	jp	nz,1f
+ksright:	
 	call	right
 	jp	sarrow
-1:	cp	KSHOME
-	jp	nz,1f
+ksup:	
 	call	up
 	jp	sarrow
-1:	cp	KSLLEFT
-	jp	nz,1f
-	call	up
-	jp	sarrow
-1:	cp	KSEND
-	jp	nz,1f
+ksdown:	
 	call	down
 	jp	sarrow
-1:	cp	KSRRIGHT
-	jp	nz,1f
-	call	down
-	jp	sarrow
-1:	cp	KEY_UNDO
-	jp	nz,1f
+kundo:	
 	call	pop_move
 	jp	c,gsel
 	ld	h,a
@@ -312,8 +285,7 @@ gsel:	call	inklav
 	jp	undo
 2:	call	right
 	jp	undo
-1:	cp	KEY_RESTART
-	jp	nz,1f
+krestart:	
 	ld	hl,msg_restart
 	call	get_conf
 	jp	z,gsel
@@ -321,8 +293,7 @@ gsel:	call	inklav
 	ld	b,h
 	ld	c,l
 	jp	play
-1:	cp	KEY_MENU
-	jp	nz,gsel
+kmenu:	
 	ld	hl,msg_end
 	call	get_conf
 	jp	z,gsel
@@ -589,6 +560,56 @@ dispm:	ld	hl,(moves)
 dispp:	ld	hl,(pushes)
 	ld	de,PUPOS
 	jp	wip
+	
+; manu vector table
+	.data
+mvect:
+	.byte	KEY_PLAY
+	.word	kplay
+	.byte	KEY_SELECT
+	.word	kselect
+	.byte	KEY_LOAD
+	.word	kload
+	.byte	KEY_QUIT
+	.word	kquit
+	.byte	0
+	.word	msel
+	
+; in-game vector table
+	.data
+gvect:
+	.byte	KLEFT
+	.word	kleft
+	.byte	KRIGHT
+	.word	kright
+	.byte	KHOME
+	.word	kup
+	.byte	KLLEFT
+	.word	kup
+	.byte	KEND
+	.word	kdown
+	.byte	KRRIGHT
+	.word	kdown
+	.byte	KSLEFT
+	.word	ksleft
+	.byte	KSRIGHT
+	.word	ksright
+	.byte	KSHOME
+	.word	ksup
+	.byte	KSLLEFT
+	.word	ksup
+	.byte	KSEND
+	.word	ksdown
+	.byte	KSRRIGHT
+	.word	ksdown
+	.byte	KEY_UNDO
+	.word	kundo
+	.byte	KEY_RESTART
+	.word	krestart
+	.byte	KEY_MENU
+	.word	kmenu
+	.byte	0
+	.word	gsel
 	
 ; variables
 	.lcomm	nlevels, 2
