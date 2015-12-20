@@ -139,9 +139,12 @@ msel:	ld	hl,msg_menu
 	ld	(fileno),a
 	ld	hl,msg_loading
 	call	disp_msg
+	call	start_usart
 2:	call	headin
-	jp	c,msel
-	call	clr_msg
+	jp	nc,4b
+3:	call	stop_usart
+	jp	msel
+4:	call	clr_msg
 	ld	a,(trhead)
 	add	a,100
 	ld	h,0
@@ -186,13 +189,14 @@ msel:	ld	hl,msg_menu
 	call	errbeep
 	ld	hl,msg_ftb
 	call	get_ack
-	jp	msel
+	jp	3b
 2:	ld	hl,(filesize)
 	ex	de,hl
 	ld	hl,levels
 	push	hl
 	push	de
 	call	trload
+	call	stop_usart
 	pop	de
 	pop	hl
 	jp	z,2f
@@ -229,18 +233,6 @@ msel:	ld	hl,msg_menu
 	jp	z,msel	
 quit:	call	erase
 	jp	PMD_MONIT
-	
-	
-1:	ld	bc,0
-2:	push	bc
-	call	get_level
-	call	nc,draw_board
-	pop	bc
-	inc	bc
-	ld	a,c
-	cp	60
-	jp	nz,2b	
-	jp	1b
 
 tnlvl:	ld	hl,(nlevels)
 	ld	a,h
