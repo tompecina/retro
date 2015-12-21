@@ -85,7 +85,7 @@ legend:
 	.data
 	.globl	msg_stat, msg_restart, msg_end, msg_quit, msg_menu
 	.globl	msg_select1, msg_select2, msg_nolevels, msg_fail, msg_fileno
-	.globl	msg_loading, msg_ftb, msg_sload
+	.globl	msg_loading, msg_ftb, msg_sload, msg_next, msg_nomore
 msg_stat:
 	.asciz	"Level:           Moves:            Pushes:"
 msg_restart:
@@ -112,6 +112,10 @@ msg_ftb:
 	.asciz	"File is too big, cannot be loaded" 
 msg_sload:
 	.asciz	"Number of levels loaded: "
+msg_next:
+	.asciz	"Next level? (Y/N)"
+msg_nomore:
+	.asciz	"No more levels, press EOL"
 	
 	.end
 	

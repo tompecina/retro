@@ -369,10 +369,13 @@ glyphs80:
 check_board:
 	ld	hl,board
 1:	ld	a,(hl)
+	inc	hl
 	cp	0xff
 	ret	z
-	cp	GOAL
-	ret	nz
-	jp	1b	
-
+	and	BOX | GOAL
+	sub	GOAL
+	jp	nz,1b
+	dec	a
+	ret
+	
 	.end

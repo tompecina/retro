@@ -85,7 +85,7 @@ legend:
 	.data
 	.globl	msg_stat, msg_restart, msg_end, msg_quit, msg_menu
 	.globl	msg_select1, msg_select2, msg_nolevels, msg_fail, msg_fileno
-	.globl	msg_loading, msg_ftb, msg_sload
+	.globl	msg_loading, msg_ftb, msg_sload, msg_next, msg_nomore
 msg_stat:
 	db	0xf5, "rove", 0xce, ":           Krokov:           ", 0xf4
 	db	"ahov:", 0
@@ -114,9 +114,15 @@ msg_fileno:
 msg_loading:
 	db	"Nahr", 0xc1, "vam...", 0
 msg_ftb:
-	db	"S", 0xd5, "bor je prive", 0xcc, "k", 0xd9, ", nemo", 0xda, "no ho nahra", 0xd4, 0
+	db	"S", 0xd5, "bor je prive", 0xcc, "k", 0xd9, ", nemo", 0xda
+	db	"no ho nahra", 0xd4, 0
 msg_sload:
 	db	"Po", 0xc3, "et nahran", 0xd9, "ch ", 0xd5, "rovn", 0xc9, ": ", 0
+msg_next:
+	db	0xe4, "al", 0xd3, "iu ", 0xd5, "rove", 0xce, "? (A/N)", 0
+msg_nomore:
+	db	0xfa, "iadne ", 0xc4, "al", 0xd3, "ie ", 0xd5
+	db	"rovne, stla", 0xc3, "te EOL", 0
 
 	.end
 	

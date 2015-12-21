@@ -87,7 +87,7 @@ legend:
 	.data
 	.globl	msg_stat, msg_restart, msg_end, msg_quit, msg_menu
 	.globl	msg_select1, msg_select2, msg_nolevels, msg_fail, msg_fileno
-	.globl	msg_loading, msg_ftb, msg_sload
+	.globl	msg_loading, msg_ftb, msg_sload, msg_next, msg_nomore
 msg_stat:
 	db	0xf5, "rove", 0xce, ":            Krok", 0xca
 	db	":            Tah", 0xca, ":", 0
@@ -118,7 +118,13 @@ msg_ftb:
 	db	"Soubor je p", 0xd2, 0xc9, "li", 0xd3, " velk", 0xd9
 	db	", nelze ho na", 0xc3, 0xc9, "st", 0
 msg_sload:
-	db	"Po", 0xc3, "et nahran", 0xd9, "ch ", 0xd5, "rovn", 0xc9, ": ", 0
+	db	"Po", 0xc3, "et nahran", 0xd9, "ch ", 0xd5, "rovn", 0xc9
+	db	": ", 0
+msg_next:
+	db	"Dal", 0xd3, 0xc9, " ", 0xd5, "rove", 0xce, "? (A/N)", 0
+msg_nomore:
+	db	0xfa, 0xc1, "dn", 0xd7, " dal", 0xd3, 0xc9, " ", 0xd5
+	db	"rovn", 0xc5, ", stiskn", 0xc5, "te EOL", 0
 	
 	.end
 	

@@ -122,8 +122,7 @@ play:	ld	hl,0
 	inc	hl
 	ld	de,LVPOS
 	call	wip
-	call	dispm
-	call	dispp
+	call	dispmp
 	jp	gsel
 
 ; load levels from cassette
@@ -289,7 +288,7 @@ krestart:
 	ld	hl,msg_restart
 	call	get_conf
 	jp	z,gsel
-	ld	hl,(level)
+play2:	ld	hl,(level)
 	ld	b,h
 	ld	c,l
 	jp	play
@@ -304,8 +303,7 @@ arrow:	call	setc
 	call	movec
 	call	checkc
 	jp	z,gsel
-	ld	hl,(cpos)
-	ld	a,(hl)
+	call	gbc
 	and	WALL
 	jp	nz,gsel
 	ld	a,(hl)
@@ -314,8 +312,7 @@ arrow:	call	setc
 	call	dpu
 	call	setp
 	call	rmovec
-	ld	hl,(cpos)
-	ld	a,(hl)
+	call	gbc
 	and	GOAL
 	jp	nz,2f
 	call	dbl
@@ -323,20 +320,14 @@ arrow:	call	setc
 2:	call	dgo
 3:	call	rc2c
 	call	push_move
-	ld	hl,(moves)
-	inc	hl
-	ld	(moves),hl
+	call	incm
 	call	dispm
 	jp	gsel
 1:	call	movec
 	call	checkc
 	jp	z,gsel
-	ld	hl,(cpos)
-	ld	a,(hl)
-	and	WALL
-	jp	nz,gsel
-	ld	a,(hl)
-	and	BOX
+	call	gbc
+	and	WALL | BOX
 	jp	nz,gsel
 	ld	a,(hl)
 	or	BOX
@@ -347,14 +338,13 @@ arrow:	call	setc
 	jp	3f
 2:	call	dbg
 3:	call	rmovec
-	ld	hl,(cpos)
-	ld	a,(hl)
+	call	gbc
 	and	~BOX
 	ld	(hl),a
 	call	dpu
+	call	setp
 	call	rmovec
-	ld	hl,(cpos)
-	ld	a,(hl)
+	call	gbc
 	and	GOAL
 	jp	nz,2f
 	call	dbl
@@ -363,11 +353,24 @@ arrow:	call	setc
 3:	call	rc2c
 	or	0x04
 	call	push_move
-	ld	hl,(pushes)
+	call	incmp
+	call	dispmp
+	call	check_board
+	jp	nz,gsel
+	ld	hl,(level)
 	inc	hl
-	ld	(pushes),hl
-	call	dispp
-	jp	gsel
+	ld	(level),hl
+	ex	de,hl
+	ld	hl,(nlevels)
+	call	ucmphlde
+	jp	z,1f
+	ld	hl,msg_next
+	call	get_conf
+	jp	z,menu
+	jp	play2
+1:	ld	hl,msg_nomore
+	call	get_ack
+	jp	menu
 		
 ; shifted arrow key processing
 sarrow:
@@ -376,6 +379,23 @@ sarrow:
 ; undo processing
 undo:
 	jp .
+
+; increment number of moves & pushes
+incmp:	ld	hl,(pushes)
+	inc	hl
+	ld	(pushes),hl
+	; fall through
+	
+; increment number of moves
+incm:	ld	hl,(moves)
+	inc	hl
+	ld	(moves),hl
+	ret
+	
+; get byte at cursor
+gbc:	ld	hl,(cpos)
+	ld	a,(hl)
+	ret
 	
 ; convert row & column to history code
 rc2c:	ld	a,b
@@ -551,14 +571,15 @@ wip:	push	de
 	pop	de
 	jp	writeln
 	
+; display number of moves & pushes
+dispmp:	ld	hl,(pushes)
+	ld	de,PUPOS
+	call	wip
+	; fall through
+	
 ; display number of moves
 dispm:	ld	hl,(moves)
 	ld	de,MVPOS
-	jp	wip
-	
-; display number of pushes
-dispp:	ld	hl,(pushes)
-	ld	de,PUPOS
 	jp	wip
 	
 ; manu vector table
