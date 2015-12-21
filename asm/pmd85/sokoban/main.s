@@ -444,6 +444,7 @@ undo:	ld	a,h
 	call	dpu
 	call	setp
 	call	decmp
+	call	dispmp
 	jp	gsel
 
 ; increment number of moves & pushes
