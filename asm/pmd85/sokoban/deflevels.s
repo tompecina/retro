@@ -30,7 +30,7 @@
 ; Default levels
 ; 
 	.data
-	.global	def_levels, def_levels_end, def_levels_len
+	.globl	def_levels, def_levels_end, def_levels_len
 def_levels:
 
 ; level 01

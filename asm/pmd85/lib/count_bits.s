@@ -44,7 +44,7 @@ count_bits:
 	jp	nz,1b
 	ret
 
-	.global	bitcounts
+	.globl	bitcounts
 	.lcomm	bitcounts, 256
 	
 	.end

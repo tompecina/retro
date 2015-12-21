@@ -43,7 +43,7 @@ inklav:
 	ret
 
 	.data
-	.global	sel_inklav
+	.globl	sel_inklav
 sel_inklav:
 	.word	inklav
 	
