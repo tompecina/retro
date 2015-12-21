@@ -36,12 +36,6 @@
 init_hist:
 	call	count_levels
 	ld	(hbeg),hl
-
-	inc	hl
-	inc	hl
-	ld	(hend),hl
-	ret
-
 	ld	hl,initsp - STACKSIZE
 	ld	(hend),hl
 	ret	
@@ -133,14 +127,14 @@ pop_move:
 	or	l
 	scf
 	ret	z
-	ld	b,(hl)
-	ld	a,0xf8
-	and	b
+	ld	a,(hl)
 	sub	0x08
 	jp	c,1f
 	ld	(hl),a
-	jp	3f
-1:	ex	de,hl
+	and	0x07		; CY = 0
+	ret
+1:	ld	b,a
+	ex	de,hl
 	ld	hl,(hfirst)
 	ex	de,hl
 	ld	a,h
@@ -163,7 +157,7 @@ pop_move:
 	ld	hl,(hend)
 1:	dec	hl
 2:	ld	(hlast),hl
-3:	ld	a,b
+	ld	a,b
 	and	0x07		; CY = 0
 	ret
 	

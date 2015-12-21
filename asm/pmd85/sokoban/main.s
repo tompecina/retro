@@ -404,8 +404,47 @@ sarrow:	call	setc
 	jp	sarrow
 	
 ; undo processing
-undo:
-	jp .
+undo:	ld	a,h
+	and	0x04
+	jp	nz,1f
+	call	setc
+	call	movec
+	call	dpu
+	call	setp
+	call	rmovec
+	call	gbc
+	and	GOAL
+	jp	nz,2f
+	call	dbl
+	jp	3f
+2:	call	dgo
+3:	call	decm
+	call	dispm
+	jp	gsel
+1:	call	setc
+	call	rmovec
+	call	gbc
+	and	~BOX
+	ld	(hl),a
+	and	GOAL
+	jp	nz,2f
+	call	dbl
+	jp	3f
+2:	call	dgo
+3:	call	movec
+	call	gbc
+	or	BOX
+	ld	(hl),a
+	and	GOAL
+	jp	nz,2f
+	call	dbo
+	jp	3f
+2:	call	dbg
+3:	call	movec
+	call	dpu
+	call	setp
+	call	decmp
+	jp	gsel
 
 ; increment number of moves & pushes
 incmp:	ld	hl,(pushes)
@@ -416,6 +455,18 @@ incmp:	ld	hl,(pushes)
 ; increment number of moves
 incm:	ld	hl,(moves)
 	inc	hl
+	ld	(moves),hl
+	ret
+	
+; decrement number of moves & pushes
+decmp:	ld	hl,(pushes)
+	dec	hl
+	ld	(pushes),hl
+	; fall through
+	
+; decrement number of moves
+decm:	ld	hl,(moves)
+	dec	hl
 	ld	(moves),hl
 	ret
 	
@@ -659,9 +710,11 @@ gvect:
 	.byte	0
 	.word	gsel
 	
-; variables
-	.lcomm	nlevels, 2
+; ==============================================================================
+; Variables
+; 
 	.lcomm	sbuf, 15
+	.lcomm	nlevels, 2
 	.lcomm	level, 2
 	.lcomm	moves, 2
 	.lcomm	pushes, 2
