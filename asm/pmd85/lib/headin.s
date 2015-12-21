@@ -22,6 +22,9 @@
 ; ==============================================================================
 ; headin - read sync and header
 ; 
+;   output: (trhead) - header data
+;	    CY on error
+; 
 ;   uses:   all
 ; 
 	.text
@@ -30,6 +33,8 @@ headin:
 	ld	a,(hw1)
 	or	a
 	jp	z,2f
+	
+; version for PMD 85-2 or higher
 	call	beclr
 	ld	d,0x13
 	ld	b,a
@@ -82,13 +87,20 @@ headin:
 	ld	de,0x000d
 	call	trload
 	jp	nz,headin
+	or	a		; CY = 0
 	ret
+	
+; version for PMD 85-1
 2:	ld	l,16
 1:	call	waimgi
 	in	a,(USART_DATA)
 	or	a
-	jp	nz,3f
-	dec	l
+	jp	z,3f
+	call	test_stop
+	jp	nz,2b
+	scf
+	ret
+3:	dec	l
 	jp	nz,1b
 	ld	l,16
 1:	call	waimgi
@@ -101,10 +113,7 @@ headin:
 	ld	de,0x000d
 	call	trload
 	jp	nz,2b
-	ret
-3:	call	test_stop
-	jp	nz,2b
-	or	a
+	or	a		; CY = 0
 	ret
 	
 	.globl	trhead

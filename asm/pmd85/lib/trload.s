@@ -38,6 +38,8 @@ trload:
 	ld	a,(hw1)
 	or	a
 	jp	z,3f	
+	
+; version for PMD 85-2 or higher
 2:	call	trbyte
 	jp	c,2f
 	inc	c
@@ -55,6 +57,8 @@ trload:
 	cp	b
 2:	pop	hl
 	ret
+	
+; version for PMD 85-1
 3:	call	waimgi
 	in	a,(USART_DATA)
 	dec	c
@@ -67,7 +71,7 @@ trload:
 	dec	de
 	ld	a,d
 	cp	0xff
-	jp	3b
+	jp	nz,3b
 	call	waimgi
 	in	a,(USART_DATA)
 	cp	b
