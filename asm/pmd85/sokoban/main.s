@@ -26,6 +26,7 @@
 ; Constants
 ;
 	.equiv	MEMLIMIT, 0x400
+	.equiv	WAITCONST, 3
 	
 ; ==============================================================================
 ; Main entry point of the program
@@ -373,8 +374,34 @@ arrow:	call	setc
 	jp	menu
 		
 ; shifted arrow key processing
-sarrow:
-	jp .
+sarrow:	call	setc
+	call	movec
+	call	checkc
+	jp	z,gsel
+	call	gbc
+	and	WALL | BOX
+	jp	nz,gsel
+	push	bc
+	push	de
+	call	dpu
+	call	setp
+	call	rmovec
+	call	gbc
+	and	GOAL
+	jp	nz,2f
+	call	dbl
+	jp	3f
+2:	call	dgo
+3:	call	rc2c
+	call	push_move
+	call	incm
+	call	dispm
+	ld	d,WAITCONST
+	xor	a
+	call	waits
+	pop	de
+	pop	bc
+	jp	sarrow
 	
 ; undo processing
 undo:
