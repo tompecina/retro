@@ -143,12 +143,12 @@ kload:	jp	nz,1f
 	ld	hl,msg_loading
 	call	disp_msg
 	call	start_usart
-2:	call	headin
+2:	call	trheadin
 	jp	nc,4f
 3:	call	stop_usart
 	jp	msel
 4:	call	clr_msg
-	ld	a,(trhead)
+	ld	a,(numfil)
 	add	a,100
 	ld	h,0
 	ld	l,a
@@ -158,13 +158,13 @@ kload:	jp	nz,1f
 	ex	de,hl
 	ld	(hl),'/'
 	inc	hl
-	ld	a,(trhead + 1)
+	ld	a,(typfil)
 	ld	(hl),a
 	inc	hl
 	ld	(hl),' '
 	inc	hl
 	ex	de,hl
-	ld	hl,trhead + 6
+	ld	hl,lenfil
 	ld	b,8
 	call	copy8
 	xor	a
@@ -172,7 +172,7 @@ kload:	jp	nz,1f
 	pop	hl
 	inc	hl
 	call	disp_msg
-	ld	hl,trhead
+	ld	hl,numfil
 	ld	a,(fileno)
 	cp	(hl)
 	jp	nz,2b
@@ -180,7 +180,7 @@ kload:	jp	nz,1f
 	ld	a,(hl)
 	cp	'S'
 	jp	nz,2b
-	ld	hl,(trhead + 4)
+	ld	hl,(lenfil)
 	ld	(filesize),hl
 	ld	de,levels
 	add	hl,de

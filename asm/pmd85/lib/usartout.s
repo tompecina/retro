@@ -1,4 +1,4 @@
-; waimgi.s
+; usartout.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -20,16 +20,21 @@
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; waimgi - wait for USART byte received (only PMD 85-1)
+; usartout - write byte to tape recorder
 ; 
-;   uses:   A
+;   input:  A - byte
+; 
+;   uses:   -
 ; 
 	.text
-	.globl	waimgi
-waimgi:
-	in	a,(USART_CTRL)
-	and	0x02
-	jp	z,waimgi
+	.globl	usartout
+usartout:
+	push	af
+1:	in	a,(USARTCTRL)
+	rrca
+	jp	nc,1b
+	pop	af
+	out	(USART_DATA),a
 	ret
-
+	
 	.end

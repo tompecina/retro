@@ -1,5 +1,5 @@
 OUTPUT_FORMAT("binary")
-. = 0x000;
+. = 0x0000;
 __Ltext = .;
 ENTRY (__Ltext)
 OUTPUT_ARCH("z80")

@@ -1,4 +1,4 @@
-; headin.s
+; trheadin.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -20,7 +20,7 @@
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; headin - read sync and header
+; trheadin - read sync and header
 ; 
 ;   output: (trhead) - header data
 ;	    CY on error
@@ -28,14 +28,14 @@
 ;   uses:   all
 ; 
 	.text
-	.globl	headin
-headin:
+	.globl	trheadin
+trheadin:
 	ld	a,(hw1)
 	or	a
 	jp	z,2f
 	
 ; version for PMD 85-2 or higher
-	call	beclr
+3:	call	beclr
 	ld	d,0x13
 	ld	b,a
 1:	in	a,(SYSPIO_PB)
@@ -46,7 +46,7 @@ headin:
 	call	trscan2
 	ld	a,c
 	cp	d
-	jp	m,headin
+	jp	m,3b
 	dec	b
 	jp	nz,1b
 	sub	0x04
@@ -69,30 +69,30 @@ headin:
 	ld	(lchar),hl
 	call	trbyte1
 	call	beclr
-1:	jp	c,headin
+1:	jp	c,3b
 	call	trbyte
 	or	a
 	jp	nz,1b
 1:	call	trbyte
-	jp	c,headin
+	jp	c,3b
 	cp	0x55
 	jp	nz,1b
 	ld	d,0x0f
 1:	call	trbyte
 	cp	0x55
-	jp	nz,headin
+	jp	nz,3b
 	dec	d
 	jp	nz,1b
 	ld	hl,trhead
-	ld	de,0x000d
+	ld	de,trheadlen - 1
 	call	trload
-	jp	nz,headin
+	jp	nz,3b
 	or	a		; CY = 0
 	ret
 	
 ; version for PMD 85-1
 2:	ld	l,16
-1:	call	waimgi
+1:	call	trwaimgi
 	in	a,(USART_DATA)
 	or	a
 	jp	z,3f
@@ -103,20 +103,17 @@ headin:
 3:	dec	l
 	jp	nz,1b
 	ld	l,16
-1:	call	waimgi
+1:	call	trwaimgi
 	in	a,(USART_DATA)
 	cp	0x55
 	jp	nz,2b
 	dec	l
 	jp	nz,1b
 	ld	hl,trhead
-	ld	de,0x000d
+	ld	de,trheadlen - 1
 	call	trload
 	jp	nz,2b
 	or	a		; CY = 0
 	ret
-	
-	.globl	trhead
-	.lcomm	trhead, 14
 	
 	.end
