@@ -41,7 +41,7 @@
 scroll:
 	ld	hl,0
 	add	hl,sp
-	ld	(stack),hl
+	ld	(tstack),hl
 	ld	hl,(radsir)
 	ld	bc,0x0c000
 	add	hl,bc
@@ -66,7 +66,7 @@ scroll:
 	add	hl,de
 	dec	a
 	jp	nz,2b
-	ld	hl,(stack)
+	ld	hl,(tstack)
 	ld	sp,hl
 	ld	hl,(poroll)
 	ex	de,hl
@@ -75,6 +75,6 @@ scroll:
 	ld	hl,(curroll)
 	jp	part_erase
 
-	.lcomm	stack, 2
+	.comm	tstack, 2
 	
 	.end

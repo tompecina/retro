@@ -1,4 +1,4 @@
-; wrchar.s
+; boot.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -18,57 +18,22 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Modified WRCHAR, with ADRAS (not available in PMD 85-1) and for 10-cell
-; glyphs.  In addition, this version is interrupt-compatible as it does not
-; use the stack pointer.
+; Boot code for fig-forth.
 
-	.include "pmd85.inc"
+	;; .include "fig-forth.inc"
+
+; ==============================================================================
+; Constants
+;
 	
 ; ==============================================================================
-; wrchar - write character
-; 
-;   input:  A - character code
-; 	    HL - cursor address
-; 	    (color) - color mask
-; 
-;   uses:   A
-; 
+; Main entry point of the program
+;
 	.text
-	.globl	wrchar
-wrchar:
-	push	bc
-	push	de
-	push	hl
-	ex	de,hl
-	ld	hl,0
-	add	hl,sp
-	ld	(tstack),hl
-	ex	de,hl
-	call	adras
-	ex	de,hl
-	pop	hl
-	push	hl
-	ld	bc,-128
-	add	hl,bc
-	ld	c,10
-	ld	a,(color)
-	ld	b,a
-	ld	sp,-64
-1:	dec	de
-	ld	a,(de)
-	xor	b
-	ld	(hl),a
-	add	hl,sp
-	dec	c
-	jp	nz,1b
-	ld	(hl),b
-	ld	hl,(tstack)
-	ld	sp,hl
-	pop	hl
-	pop	de
-	pop	bc
-	ret
-
-	.comm	tstack, 2
-
+	.globl	boot
+boot:
+	jp	ORIG
+	
+	.lcomm	empty, 10
+	
 	.end
