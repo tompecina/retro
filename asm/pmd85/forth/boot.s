@@ -35,6 +35,8 @@ boot:
 	di
 	ld	hl,(ORIG+12H)
 	ld	sp,hl
+	xor	a
+	ld	(kbdbuf),a
 	call	init_kbd
 	call	set_kmap
 	call	init_video
@@ -42,7 +44,7 @@ boot:
 	
 	jp	ORIG
 
-tt1:	db	0xe3, "erny kun", CR, 0
-tt2:	db	0xe3, "erny orel", CR, 0
+	.globl	kbdbuf
+	.lcomm	kbdbuf, 1
 	
 	.end

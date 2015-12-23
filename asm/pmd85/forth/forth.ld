@@ -1,7 +1,7 @@
 OUTPUT_FORMAT("binary")
 . = 0x0000;
 mlim = 0x7000;
-EM = 0x7000 - 0x0100;
+EM = mlim - 0x0100;
 __Lboot = .;
 ENTRY (__Lboot)
 OUTPUT_ARCH("z80")
@@ -33,4 +33,5 @@ forth : {
 	*(bss)
 	 __Hbss = .;
 	 }
+. = mlim;
 }

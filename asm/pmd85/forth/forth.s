@@ -186,7 +186,7 @@
 ;
 ;	MEMORY ALLOCATION
 ;
-	.equiv	EM, 4000H	; TOP OF MEMORY + 1 = LIMIT
+	;; .equiv	EM, 4000H	; TOP OF MEMORY + 1 = LIMIT
 	.equiv	NSCR, 1	; NUMBER OF 1024 BYTE SCREENS
 	.equiv	KBBUF, 128	; DATA BYTES PER DISK BUFFER
 	.equiv	US, 40H	; USER VARIABLES SPACE
@@ -525,7 +525,7 @@ DIGIT:	.word	.+2
 	jp	m,DIGI2
 ;			; THEN VALID NUMERIC OR ALPHA CHR
 DIGI1:	cp	l	; IF < BASE VALUE
-	JP	DIGI2
+	jp	p,DIGI2
 ;			; THEN VALID DIGIT CHR
 	ld	e,a	; (S2) <- (DE) = CONVERTED DIGIT
 	ld	hl,1	; (S1) <- TRUE
@@ -561,7 +561,7 @@ PFIN2:	inc	hl	; (HL) <- ADDR NEXT CHR IN STRING
 PFIN6:	dec	de
 	ld	a,(de)
 	or	a
-	JP	PFIN6	; IF MSB = 1 THEN (DE) = NFA
+	jp	p,PFIN6	; IF MSB = 1 THEN (DE) = NFA
 	ld	e,a	; (DE) <- LENGTH BYTE
 	ld	d,0
 	ld	hl,1	; (HL) <- TRUE
@@ -571,7 +571,7 @@ PFIN3:	jp	c,PFIN5	; IF NOT END OF NF
 PFIN4:	inc	de	; THEN FIND END OF NF
 	ld	a,(de)
 	or	a
-	JP	PFIN4
+	jp	p,PFIN4
 PFIN5:	inc	de	; (DE) <- LFA
 	ex	de,hl
 	ld	e,(hl)	; (DE) <- (LFA)
@@ -3237,7 +3237,8 @@ BLOC1:	.word	FROMR,DROP
 ;
 ;		SERVICE REQUEST
 ;
-IOS:	ld	hl,(1)	; (HL) <- BIOS TABLE ADDR+3
+IOS:	jp	.
+	ld	hl,(1)	; (HL) <- BIOS TABLE ADDR+3
 	add	hl,de	; + SERVICE REQUEST OFFSET
 	jp	(hl)		; EXECUTE REQUEST
 ;	ret FUNCTION PROVIDED BY CP/M
@@ -3460,21 +3461,37 @@ EPRINT:	.word	0	; ENABLE PRINTER VARIABLE
 ;
 ;	BELOW BIOS CALLS USE 'IOS' IN DISK INTERFACE
 ;
-CSTAT:	ld	a,0
-	jp	.
-
-	push	bc	; CONSOLE STATUS
-	ld	de,KCSTAT  ; CHECK IF ANY CHR HAS BEEN TYPED
-	call	IOS
+CSTAT:	push	bc	; CONSOLE STATUS
+	ld	a,(kbdbuf)
+	or	a
+	jp	nz,1f
+	call	inklav
+	jp	z,2f
+	ld	(kbdbuf),a
+1:	ld	a,0xff
+	pop	bc
+	ret
+2:	xor	a
+	ld	(kbdbuf),a
+	;; ld	de,KCSTAT  ; CHECK IF ANY CHR HAS BEEN TYPED
+	;; call	IOS
 	pop	bc	; IF CHR TYPED THEN (A) <- 0FFH
 	ret		; ELSE (A) <- 0
 ;			; CHR IGNORED
 ;
 CIN:	push	bc	; CONSOLE INPUT
-	call	inklav
+	ld	a,(kbdbuf)
+	or	a
+	jp	z,1f
+	ld	b,a
+	xor	a
+	ld	(kbdbuf),a
+	ld	a,b
+	jp	2f
+1:	call	inklav
 	;; ld	de,KCIN	; WAIT FOR CHR TO BE TYPED
 	;; call	IOS	; (A) <- CHR, (MSB) <- 0
-	pop	bc
+2:	pop	bc
 	ret
 ;
 COUT:	push	hl	; CONSOLE OUTPUT
@@ -3485,10 +3502,7 @@ COUT:	push	hl	; CONSOLE OUTPUT
 	pop	hl
 	ret
 ;
-POUT:	ld	a,3
-	jp	.
-
-	ld	de,KPOUT	; PRINTER OUTPUT
+POUT:	ld	de,KPOUT	; PRINTER OUTPUT
 	call	IOS	; WAIT UNTIL READY
 	ret		; THEN OUTPUT (C)
 ;
