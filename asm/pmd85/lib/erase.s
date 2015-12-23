@@ -37,7 +37,7 @@
 	.text
 	.globl	erase, part_erase
 erase:
-	ld	bc, 0x0c280
+	ld	bc, 0x0c300
 	ld	de, 0x0c030
 	ld	hl,(radsir)
 	add	hl,bc

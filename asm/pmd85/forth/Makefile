@@ -1,5 +1,5 @@
-APPL = fig-forth
-OBJ = boot.o fig-forth.o
+APPL = forth
+OBJ = boot.o forth.o
 AS = as-z80
 LD = ld-z80
 BTP = bin2ptp
@@ -10,7 +10,7 @@ LDFLAGS = -L ../lib -T $(APPL).ld
 build: $(APPL).bin $(APPL).hex $(APPL).ptp
 
 $(APPL).ptp: $(APPL).bin
-	$(BTP) -n 0 -m FIGFORTH -o $@ $(APPL).bin
+	$(BTP) -n 0 -m FORTH -o $@ $(APPL).bin
 
 %.hex: %.bin
 	$(OBJCOPY) -I binary -O ihex $< $@
@@ -22,7 +22,7 @@ $(APPL).bin: $(OBJ) ../lib/libpmd85.a $(APPL).ld
 	$(AS) $(ASFLAGS) -c $< -o $@ -aglms=$*.lst
 
 clean:
-	rm -f *.o *.lst $(APPL)*.bin $(APPL)*.hex $(APPL)*.map
+	rm -f *.o *.lst $(APPL)*.bin $(APPL)*.hex $(APPL)*.ptp $(APPL)*.map
 
 .SUFFIXES:
 

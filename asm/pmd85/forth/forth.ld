@@ -3,7 +3,7 @@ OUTPUT_FORMAT("binary")
 mlim = 0x7000;
 EM = 0x7000 - 0x0100;
 __Lboot = .;
-ENTRY (__Ltext)
+ENTRY (__Lboot)
 OUTPUT_ARCH("z80")
 SECTIONS
 {
@@ -12,7 +12,7 @@ boot : {
 	 __Hboot = .;
 	}
 .text : {
-	*(EXCLUDE_FILE(fig-forth.o) .text)
+	*(EXCLUDE_FILE(forth.o) .text)
 	*(text)
 	 __Htext = .;
 	}
@@ -24,7 +24,7 @@ boot : {
 	}
 forth : {
 	 __Lforth = .;
-	fig-forth.o(.text)
+	forth.o(.text)
 	 __Hforth = .;
 	}
 .bss EM : {

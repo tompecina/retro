@@ -38,7 +38,7 @@ init_video:
 	ld	(poroll),hl
 	ld	a,9
 	ld	(rsirrad),a
-	ld	hl,0xfd00
+	ld	hl,0xfcc0
 	ld	(curroll),hl
 	ld	a,0x30
 	ld	(enlnw),a

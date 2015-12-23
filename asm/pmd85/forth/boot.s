@@ -20,7 +20,7 @@
 
 ; Boot code for fig-forth.
 
-	;; .include "fig-forth.inc"
+	.include "forth.inc"
 
 ; ==============================================================================
 ; Constants
@@ -32,8 +32,17 @@
 	.text
 	.globl	boot
 boot:
-	jp	ORIG
+	di
+	ld	hl,(ORIG+12H)
+	ld	sp,hl
+	call	init_kbd
+	call	set_kmap
+	call	init_video
+	call	erase
 	
-	.lcomm	empty, 10
+	jp	ORIG
+
+tt1:	db	0xe3, "erny kun", CR, 0
+tt2:	db	0xe3, "erny orel", CR, 0
 	
 	.end

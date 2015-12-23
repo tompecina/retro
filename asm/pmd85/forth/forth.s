@@ -1,35 +1,4 @@
 	.title	"8080 FIG-FORTH 1.1 VERSION A0 17SEP79"
-
-	
-
-
-
-
-
-
-
-
-	.macro	bt	x
-	.irpc	ch, "\x"
-	.ifeqs	"\ch", "~"
-	.byte	0x22
-	.else
-	.ascii	"\ch"
-	.endif
-	.endr
-	.endm
-
-	bt	"~ABC"
-	
-
-
-
-
-
-
-
-
-
 ;
 ;	FIG-FORTH  RELEASE 1.1  FOR THE 8080 PROCESSOR
 ;
@@ -3501,21 +3470,18 @@ CSTAT:	ld	a,0
 	ret		; ELSE (A) <- 0
 ;			; CHR IGNORED
 ;
-CIN:	ld	a,1
-	jp	.
-
-	push	bc	; CONSOLE INPUT
-	ld	de,KCIN	; WAIT FOR CHR TO BE TYPED
-	call	IOS	; (A) <- CHR, (MSB) <- 0
+CIN:	push	bc	; CONSOLE INPUT
+	call	inklav
+	;; ld	de,KCIN	; WAIT FOR CHR TO BE TYPED
+	;; call	IOS	; (A) <- CHR, (MSB) <- 0
 	pop	bc
 	ret
 ;
-COUT:	ld	a,2
-	jp	.
-
-	push	hl	; CONSOLE OUTPUT
-	ld	de,KCOUT	; WAIT UNTIL READY
-	call	IOS	; THEN OUTPUT (C)
+COUT:	push	hl	; CONSOLE OUTPUT
+	ld	a,c
+	call	prtout
+	;; ld	de,KCOUT	; WAIT UNTIL READY
+	;; call	IOS	; THEN OUTPUT (C)
 	pop	hl
 	ret
 ;
@@ -3526,10 +3492,7 @@ POUT:	ld	a,3
 	call	IOS	; WAIT UNTIL READY
 	ret		; THEN OUTPUT (C)
 ;
-CPOUT:	ld	a,4
-	jp	.
-
-	call	COUT	; OUTPUT (C) TO CONSOLE
+CPOUT:	call	COUT	; OUTPUT (C) TO CONSOLE
 	ex	de,hl
 	ld	hl,EPRINT
 	ld	a,(hl)	; IF (EPRINT) <> 0

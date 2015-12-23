@@ -31,7 +31,7 @@ $(APPL)-sk.bin: $(OBJ) lang-sk.o ../lib/libpmd85.a ../lib/pmd85.ld
 	$(AS) $(ASFLAGS) -c $< -o $@ -aglms=$*.lst
 
 clean:
-	rm -f *.o *.lst $(APPL)*.bin $(APPL)*.hex $(APPL)*.map
+	rm -f *.o *.lst $(APPL)*.bin $(APPL)*.hex $(APPL)*.ptp $(APPL)*.map
 
 .SUFFIXES:
 
