@@ -12,7 +12,8 @@ OBJ = erase.o indcall.o sedit.o beep.o bepuk.o beclr.o waits.o inkey.o \
 	init_bcbrtbl.o draw_label.o dethw1.o conv_int.o start_usart.o \
 	test_stop.o trheadin.o trscan.o trbyte.o trload.o trwaimgi.o val_digit.o \
 	parse_int.o ucmphlde.o ucmpdehl.o mul8.o signexbc.o umul8.o get_any.o \
-	jpvect.o trhead.o trprgout.o trleader.o usartout.o tapeout.o
+	jpvect.o trhead.o trprgout.o trleader.o usartout.o tapeout.o detallram.o \
+	allramon.o allramoff.o rmmtrans.o
 AS = as-z80
 AR = ar-z80
 ASFLAGS = -z80

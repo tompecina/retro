@@ -42,6 +42,14 @@ boot:
 	call	init_video
 	call	erase
 	
+	ld	hl,buf
+	ld	c,64
+	call	dedit
+
+	.lcomm	buf, 65
+
+	jp	0
+
 	jp	ORIG
 
 	.globl	kbdbuf

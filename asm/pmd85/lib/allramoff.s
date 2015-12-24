@@ -1,4 +1,4 @@
-; forth.inc
+; allramoff.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,13 +17,20 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-; The header file.
-
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; Constants
+; allramoff- disable AllRAM mode
 ; 
-	.globl	MSGAREA
-	.equiv	MSGAREA, 0xffc0		; position of the notification area
+;   uses:   A
+;
+	.text
+	.globl	allramoff
+allramoff:
+	ld	a,0x82
+	out	(SYSPIO_CTRL),a
+	ld	a,0x09
+	out	(SYSPIO_CTRL),a
+	ret
+
+	.end

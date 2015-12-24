@@ -33,6 +33,11 @@
 	.equiv	GPIO_PC, 0x4e
 	.equiv	GPIO_CTRL, 0x4f
 
+	.equiv	RMMPIO_PA, 0xf8
+	.equiv	RMMPIO_PB, 0xf9
+	.equiv	RMMPIO_PC, 0xfa
+	.equiv	RMMPIO_CTRL, 0xfb
+
 	.equiv	PIT_0, 0x5c
 	.equiv	PIT_1, 0x5d
 	.equiv	PIT_2, 0x5e

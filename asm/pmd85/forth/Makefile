@@ -18,7 +18,7 @@ $(APPL).ptp: $(APPL).bin
 $(APPL).bin: $(OBJ) ../lib/libpmd85.a $(APPL).ld
 	$(LD) $(LDFLAGS) $(OBJ) -l pmd85 -o $@ -Map=$(APPL).map
 
-%.o: %.s ../lib/pmd85.inc Makefile
+%.o: %.s $(APPL).inc ../lib/pmd85.inc Makefile
 	$(AS) $(ASFLAGS) -c $< -o $@ -aglms=$*.lst
 
 clean:

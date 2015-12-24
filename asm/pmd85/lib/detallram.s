@@ -1,4 +1,4 @@
-; forth.inc
+; detallram.s
 ;
 ; Copyright (C) 2015, Tomáš Pecina <tomas@pecina.cz>
 ;
@@ -17,13 +17,39 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-; The header file.
-
 	.include "pmd85.inc"
 	
 ; ==============================================================================
-; Constants
+; detallram - detect if AllRAM mode available
 ; 
-	.globl	MSGAREA
-	.equiv	MSGAREA, 0xffc0		; position of the notification area
+;   output: Z if PMD 85-1
+;	    NZ if PMD 85-2 or higher
+;	    A =0xff if AllRAM mode is available
+;	      =0 otherwise
+;	    (allram) =0xff if AllRAM mode is available
+;		     =0 otherwise
+;
+;   uses:   H, L
+;
+	.text
+	.globl	detallram
+detallram:
+	ld	hl,0xbfff
+	ld	a,(hl)
+	cpl
+	ld	(hl),a
+	cp	(hl)
+	jp	nz,1f
+	cpl
+	ld	(hl),a
+	ld	a,0xff
+	jp	2f
+1:	xor	a
+2:	ld	(allram),a
+	or	a
+	ret
+
+	.globl	allram
+	.lcomm	allram, 1
+
+	.end

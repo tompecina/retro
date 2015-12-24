@@ -317,6 +317,7 @@ public class PMDMemory
     @Override
     public void notifyChange() {
       allRAMFlag = (queryNode() == 0);
+      log.fine("AllRAM flag set to: " + allRAMFlag);
     }
   }
 
@@ -339,6 +340,7 @@ public class PMDMemory
     @Override
     public void notifyChange() {
       allROMFlag = (queryNode() == 0);
+      log.fine("AllROM flag set to: " + allROMFlag);
     }
   }
 
@@ -384,8 +386,10 @@ public class PMDMemory
 	} else {
 	  if ((address >= 0x8000) && (address < 0xa000)) {
 	    data = rom[(address - 0x8000) & 0x0fff];
-	  } else {
+	  } else if ((address < 0x8000) || (address >= 0xc000)) {
 	    data = ram[address];
+	  } else {
+	    data = 0xff;
 	  }
 	}
 	break;
