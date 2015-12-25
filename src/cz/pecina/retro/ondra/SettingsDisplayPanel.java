@@ -109,7 +109,7 @@ public class SettingsDisplayPanel extends JPanel {
     swatch = new Swatch(14, Color.WHITE);
     customColorSwatchConstraints.gridx = 1;
     customColorSwatchConstraints.gridy = OndraColor.NUMBER_COLOR_MODES;
-    customColorSwatchConstraints.insets = new Insets(2, 0, 0, 0);
+    customColorSwatchConstraints.insets = new Insets(2, 25, 0, 0);
     customColorSwatchConstraints.anchor = GridBagConstraints.LINE_START;
     customColorSwatchConstraints.weightx = 0.0;
     customColorSwatchConstraints.weighty = 0.0;
@@ -121,7 +121,7 @@ public class SettingsDisplayPanel extends JPanel {
       new JButton(Application.getString(this, "settings.display.button"));
     customColorButtonConstraints.gridx = 2;
     customColorButtonConstraints.gridy = OndraColor.NUMBER_COLOR_MODES;
-    customColorButtonConstraints.insets = new Insets(2, 0, 0, 0);
+    customColorButtonConstraints.insets = new Insets(2, 8, 0, 0);
     customColorButtonConstraints.anchor = GridBagConstraints.LINE_START;
     customColorButtonConstraints.weightx = 0.0;
     customColorButtonConstraints.weighty = 0.0;

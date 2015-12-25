@@ -112,10 +112,10 @@ public class SettingsDisplayPanel extends JPanel {
       final GridBagConstraints customColorNumberConstraints =
 	new GridBagConstraints();
       final JLabel customColorLabel =
-	new JLabel(String.format("%d%d:", (i >> 1), (i & 1)));
+	new JLabel(String.format("%d%d------:", (i >> 1), (i & 1)));
       customColorNumberConstraints.gridx = 0;
       customColorNumberConstraints.gridy = PMDColor.NUMBER_COLOR_MODES + i;
-      customColorNumberConstraints.insets = new Insets(2, 0, 0, 0);
+      customColorNumberConstraints.insets = new Insets(8, 30, 0, 0);
       customColorNumberConstraints.anchor = GridBagConstraints.LINE_START;
       customColorNumberConstraints.weightx = 0.0;
       customColorNumberConstraints.weighty = 0.0;
@@ -126,7 +126,7 @@ public class SettingsDisplayPanel extends JPanel {
       swatches[i] = new Swatch(14, Color.WHITE);
       customColorSwatchConstraints.gridx = 1;
       customColorSwatchConstraints.gridy = PMDColor.NUMBER_COLOR_MODES + i;
-      customColorSwatchConstraints.insets = new Insets(2, 0, 0, 0);
+      customColorSwatchConstraints.insets = new Insets(8, 5, 0, 5);
       customColorSwatchConstraints.anchor = GridBagConstraints.LINE_START;
       customColorSwatchConstraints.weightx = 0.0;
       customColorSwatchConstraints.weighty = 0.0;
@@ -138,7 +138,7 @@ public class SettingsDisplayPanel extends JPanel {
 	new JButton(Application.getString(this, "settings.display.button"));
       customColorButtonConstraints.gridx = 2;
       customColorButtonConstraints.gridy = PMDColor.NUMBER_COLOR_MODES + i;
-      customColorButtonConstraints.insets = new Insets(2, 0, 0, 0);
+      customColorButtonConstraints.insets = new Insets(8, 0, 0, 0);
       customColorButtonConstraints.anchor = GridBagConstraints.LINE_START;
       customColorButtonConstraints.weightx = 0.0;
       customColorButtonConstraints.weighty = 0.0;
@@ -151,7 +151,7 @@ public class SettingsDisplayPanel extends JPanel {
 	new JCheckBox(Application.getString(this, "settings.display.checkbox"));
       customColorCheckBoxConstraints.gridx = 3;
       customColorCheckBoxConstraints.gridy = PMDColor.NUMBER_COLOR_MODES + i;
-      customColorCheckBoxConstraints.insets = new Insets(2, 0, 0, 0);
+      customColorCheckBoxConstraints.insets = new Insets(8, 5, 0, 0);
       customColorCheckBoxConstraints.anchor = GridBagConstraints.LINE_START;
       customColorCheckBoxConstraints.weightx = 0.0;
       customColorCheckBoxConstraints.weighty = 0.0;

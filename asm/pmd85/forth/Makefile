@@ -1,28 +1,25 @@
 APPL = forth
-OBJ = boot.o forth.o
+OBJ = forth.o
 AS = as-z80
 LD = ld-z80
-BTP = bin2ptp
-OBJCOPY = objcopy-z80
+CIM = cim
 ASFLAGS = -z80 -I ../lib
 LDFLAGS = -L ../lib -T $(APPL).ld
 
-build: $(APPL).bin $(APPL).hex $(APPL).ptp
+build: $(APPL).com $(APPL).p32
 
-$(APPL).ptp: $(APPL).bin
-	$(BTP) -n 0 -m FORTH -o $@ $(APPL).bin
+$(APPL).p32: $(APPL).com
+	$(CIM) $(APPL).p32 -f
+	$(CIM) $(APPL).p32 -a $(APPL).com
 
-%.hex: %.bin
-	$(OBJCOPY) -I binary -O ihex $< $@
-
-$(APPL).bin: $(OBJ) ../lib/libpmd85.a $(APPL).ld
+$(APPL).com: $(OBJ) ../lib/libpmd85.a $(APPL).ld
 	$(LD) $(LDFLAGS) $(OBJ) -l pmd85 -o $@ -Map=$(APPL).map
 
 %.o: %.s $(APPL).inc ../lib/pmd85.inc Makefile
 	$(AS) $(ASFLAGS) -c $< -o $@ -aglms=$*.lst
 
 clean:
-	rm -f *.o *.lst $(APPL)*.bin $(APPL)*.hex $(APPL)*.ptp $(APPL)*.map
+	rm -f *.o *.lst $(APPL)*.com $(APPL).p32 $(APPL)*.map
 
 .SUFFIXES:
 

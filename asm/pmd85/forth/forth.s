@@ -186,7 +186,7 @@
 ;
 ;	MEMORY ALLOCATION
 ;
-	;; .equiv	EM, 4000H	; TOP OF MEMORY + 1 = LIMIT
+	.equiv	EM, 4000H	; TOP OF MEMORY + 1 = LIMIT
 	.equiv	NSCR, 1	; NUMBER OF 1024 BYTE SCREENS
 	.equiv	KBBUF, 128	; DATA BYTES PER DISK BUFFER
 	.equiv	US, 40H	; USER VARIABLES SPACE
@@ -3237,8 +3237,7 @@ BLOC1:	.word	FROMR,DROP
 ;
 ;		SERVICE REQUEST
 ;
-IOS:	jp	.
-	ld	hl,(1)	; (HL) <- BIOS TABLE ADDR+3
+IOS:	ld	hl,(1)	; (HL) <- BIOS TABLE ADDR+3
 	add	hl,de	; + SERVICE REQUEST OFFSET
 	jp	(hl)		; EXECUTE REQUEST
 ;	ret FUNCTION PROVIDED BY CP/M
@@ -3462,43 +3461,21 @@ EPRINT:	.word	0	; ENABLE PRINTER VARIABLE
 ;	BELOW BIOS CALLS USE 'IOS' IN DISK INTERFACE
 ;
 CSTAT:	push	bc	; CONSOLE STATUS
-	ld	a,(kbdbuf)
-	or	a
-	jp	nz,1f
-	call	inklav
-	jp	z,2f
-	ld	(kbdbuf),a
-1:	ld	a,0xff
-	pop	bc
-	ret
-2:	xor	a
-	ld	(kbdbuf),a
-	;; ld	de,KCSTAT  ; CHECK IF ANY CHR HAS BEEN TYPED
-	;; call	IOS
+	ld	de,KCSTAT  ; CHECK IF ANY CHR HAS BEEN TYPED
+	call	IOS
 	pop	bc	; IF CHR TYPED THEN (A) <- 0FFH
 	ret		; ELSE (A) <- 0
 ;			; CHR IGNORED
 ;
 CIN:	push	bc	; CONSOLE INPUT
-	ld	a,(kbdbuf)
-	or	a
-	jp	z,1f
-	ld	b,a
-	xor	a
-	ld	(kbdbuf),a
-	ld	a,b
-	jp	2f
-1:	call	inklav
-	;; ld	de,KCIN	; WAIT FOR CHR TO BE TYPED
-	;; call	IOS	; (A) <- CHR, (MSB) <- 0
-2:	pop	bc
+	ld	de,KCIN	; WAIT FOR CHR TO BE TYPED
+	call	IOS	; (A) <- CHR, (MSB) <- 0
+	pop	bc
 	ret
 ;
 COUT:	push	hl	; CONSOLE OUTPUT
-	ld	a,c
-	call	prtout
-	;; ld	de,KCOUT	; WAIT UNTIL READY
-	;; call	IOS	; THEN OUTPUT (C)
+	ld	de,KCOUT	; WAIT UNTIL READY
+	call	IOS	; THEN OUTPUT (C)
 	pop	hl
 	ret
 ;
