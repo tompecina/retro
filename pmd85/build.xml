@@ -713,9 +713,26 @@
     <exec executable="${bin.dir}/${prefix}/debug/DebuggerButton.makegraphics"/>
   </target>
 
+  <!-- floppy.FloppyIcon -->
+  <dependset>
+    <srcfileset refid="common.makegraphics"/>
+    <srcfileset dir="${bin.dir}/${prefix}/floppy"
+		includes="FloppyIcon.makegraphics"/>
+    <srcfileset dir="${graphics.dir}/floppy"
+		includes="floppy-red.png"/>
+    <targetfilelist dir="${resources.dir}/${prefix}/floppy/FloppyIcon"
+		    files="floppy-red-1-u-0.png"/>
+  </dependset>
+  <available file="${resources.dir}/${prefix}/floppy/FloppyIcon/floppy-red-1-u-0.png"
+	     property="avail.floppy.FloppyIcon"/>
+  <target name="floppy.FloppyIcon"
+	  unless="avail.floppy.FloppyIcon">
+    <exec executable="${bin.dir}/${prefix}/floppy/FloppyIcon.makegraphics"/>
+  </target>
+
   <!-- graphics -->
   <target name="graphics"
-	  depends="prepare,gui.LED,gui.SSD,gui.SiSD,gui.ESD,gui.SignESD,gui.Digit,gui.CounterResetButton,gui.UniversalButton,gui.Knob,gui.Background,pmd85.Marking,pmd85.ComputerPanel,pmd85.KeyboardPanel,pmd85.KeyboardKey,pmd85.IconButton,pmd85.AboutLogo,pmd85.AboutPhoto,pmd85.AboutLicense,pmd85.ApplicationIcons,trec.TapeRecorderPanel,trec.TapeRecorderButton,trec.VUMeter,debug.DebuggerPanel,debug.DebuggerButton"
+	  depends="prepare,gui.LED,gui.SSD,gui.SiSD,gui.ESD,gui.SignESD,gui.Digit,gui.CounterResetButton,gui.UniversalButton,gui.Knob,gui.Background,pmd85.Marking,pmd85.ComputerPanel,pmd85.KeyboardPanel,pmd85.KeyboardKey,pmd85.IconButton,pmd85.AboutLogo,pmd85.AboutPhoto,pmd85.AboutLicense,pmd85.ApplicationIcons,trec.TapeRecorderPanel,trec.TapeRecorderButton,trec.VUMeter,debug.DebuggerPanel,debug.DebuggerButton,floppy.FloppyIcon"
 	  description="Create bitmaps"
 	  unless="nographics"/>
 

@@ -1,0 +1,15 @@
+#! /bin/bash
+
+source bin/common.makegraphics
+
+pg="-repage 512x256+0+0"
+for s in $seq; do
+    w=$(($s*32))
+    h=$(($s*16))
+    o=0
+    for b in "u" "d"; do
+	convert $opts -crop 512x256+$o+0 $pg $filtertrans $src/floppy-red.png -alpha Set -channel A -evaluate Multiply $trans -resize ${w}x$h $dst/red-$s-$b-0.png
+	convert $opts -crop 512x256+$o+256 $pg $filtertrans $src/floppy-red.png -alpha Set -channel A -evaluate Multiply $trans -resize ${w}x$h $dst/red-$s-$b-1.png
+	o=$(($o+512))
+    done
+done

@@ -125,6 +125,13 @@ public class ComputerPanel extends BackgroundFixedPane {
     log.finer("Computer control panel set up");
   }
 
+
+  cz.pecina.retro.floppy.FloppyIcon floppyA = new cz.pecina.retro.floppy.FloppyIcon();
+  cz.pecina.retro.floppy.FloppyIcon floppyB = new cz.pecina.retro.floppy.FloppyIcon();
+  floppyA.place(this, 280, 50);
+  floppyB.place(this, 280, 150);
+
+  
   /**
    * Sets up keyboard shortcuts.
    */
