@@ -78,7 +78,7 @@ public class Computer implements Runnable {
   private DebuggerFrame debuggerFrame;
 
   // the About frame
-  // private AboutFrame aboutFrame;
+  private AboutFrame aboutFrame;
 
   // the icon layout
   private IconLayout iconLayout;
@@ -132,7 +132,7 @@ public class Computer implements Runnable {
     peripheralsFrame = new PeripheralsFrame(this, computerHardware);
     settingsFrame = new SettingsFrame(this, peripheralsFrame.getPeripherals());
     resetFrame = new ResetFrame(this, computerHardware.getHardware());
-    // aboutFrame = new AboutFrame(this);
+    aboutFrame = new AboutFrame(this);
 
     // find reset and shift keys
     for (KeyboardKey key: computerHardware.getKeyboardHardware()

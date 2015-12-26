@@ -583,7 +583,7 @@
     <srcfileset dir="${bin.dir}/${prefix}/${package}"
 		includes="AboutPhoto.makegraphics"/>
     <srcfileset dir="${graphics.dir}/${package}"
-		includes="pmi.jpg"/>
+		includes="pmd.jpg"/>
     <targetfilelist dir="${resources.dir}/${prefix}/${package}/AboutPhoto"
 		    files="pmd.jpg"/>
   </dependset>
