@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- XML Schema for retro emulators <http://retro.pecina.cz/> -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:annotation>
+    <xs:documentation>
+      XML Schema for SNAPSHOT, version 2.0
+      URL: http://www.pecina.cz/xsd/floppy-2.0.xsd
+      Author: Tomáš Pecina, tomas@pecina.cz
+      License: GNU General Public License
+    </xs:documentation>
+  </xs:annotation>
+  
   <xs:element name="snapshot">
     <xs:complexType>
       <xs:sequence>
