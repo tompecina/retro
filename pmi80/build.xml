@@ -607,9 +607,9 @@
     <srcfileset dir="${graphics.dir}/${package}"
 		includes="icons.png"/>
     <targetfilelist dir="${resources.dir}/${prefix}/${package}/IconButton"
-		    files="wheel-1-d.png"/>
+		    files="wheel-1-u.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/IconButton/wheel-1-d.png"
+  <available file="${resources.dir}/${prefix}/${package}/IconButton/wheel-1-u.png"
 	     property="avail.pmi80.IconButton"/>
   <target name="pmi80.IconButton"
 	  unless="avail.pmi80.IconButton">

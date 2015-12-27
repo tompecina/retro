@@ -551,9 +551,9 @@
     <srcfileset dir="${graphics.dir}/${package}"
 		includes="icons.png"/>
     <targetfilelist dir="${resources.dir}/${prefix}/${package}/IconButton"
-		    files="wheel-1-d.png"/>
+		    files="wheel-1-u.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/${package}/IconButton/wheel-1-d.png"
+  <available file="${resources.dir}/${prefix}/${package}/IconButton/wheel-1-u.png"
 	     property="avail.pmd85.IconButton"/>
   <target name="pmd85.IconButton"
 	  unless="avail.pmd85.IconButton">
@@ -721,9 +721,9 @@
     <srcfileset dir="${graphics.dir}/floppy"
 		includes="floppy-red.png"/>
     <targetfilelist dir="${resources.dir}/${prefix}/floppy/FloppyIcon"
-		    files="floppy-red-1-u-0.png"/>
+		    files="red-1-u-0.png"/>
   </dependset>
-  <available file="${resources.dir}/${prefix}/floppy/FloppyIcon/floppy-red-1-u-0.png"
+  <available file="${resources.dir}/${prefix}/floppy/FloppyIcon/red-1-u-0.png"
 	     property="avail.floppy.FloppyIcon"/>
   <target name="floppy.FloppyIcon"
 	  unless="avail.floppy.FloppyIcon">
@@ -768,6 +768,9 @@
     </copy>
     <copy todir="${build.classes.dir}/${prefix}/debug">
       <fileset dir="${resources.dir}/${prefix}/debug"/>
+    </copy>
+    <copy todir="${build.classes.dir}/${prefix}/floppy">
+      <fileset dir="${resources.dir}/${prefix}/floppy"/>
     </copy>
     <copy todir="${build.classes.dir}/${prefix}/peripherals">
       <fileset dir="${resources.dir}/${prefix}/peripherals"/>

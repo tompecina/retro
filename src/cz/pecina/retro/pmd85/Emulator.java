@@ -35,6 +35,8 @@ import cz.pecina.retro.trec.TapeRecorder;
 
 import cz.pecina.retro.debug.Debugger;
 
+import cz.pecina.retro.floppy.Floppy;
+
 import cz.pecina.retro.peripherals.Peripherals;
 
 import cz.pecina.retro.gui.GUI;
@@ -74,7 +76,8 @@ public class Emulator {
     			   new Memory(),
     			   new TapeRecorder(),
     			   new Debugger(),
-    			   new Peripherals());
+    			   new Peripherals(),
+			   new Floppy());
     GUI.setPixelSize(UserPreferences.getPixelSize());
     log.fine("Application set up");
 

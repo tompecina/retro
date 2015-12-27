@@ -101,7 +101,7 @@ public class LED extends GenericBitmap implements Resizeable {
   // for description see Resizeable
   @Override
   public void redrawOnPixelResize() {
-    log.finest("VariableLED redraw started for: " + type + ", " + color +
+    log.finest("LED redraw started for: " + type + ", " + color +
 	       ", " + state);
     final String template = "gui/LED/" + type + "-" + color +
       "-" + GUI.getPixelSize() + "-%d.png";

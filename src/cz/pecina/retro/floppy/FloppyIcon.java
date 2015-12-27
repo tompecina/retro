@@ -22,15 +22,15 @@ package cz.pecina.retro.floppy;
 
 import java.util.logging.Logger;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import javax.swing.Icon;
 
 import cz.pecina.retro.common.Localized;
 import cz.pecina.retro.common.Application;
 
-import cz.pecina.retro.gui.GenericButton;
+import cz.pecina.retro.gui.GenericBitmap;
+import cz.pecina.retro.gui.GUI;
+import cz.pecina.retro.gui.Resizeable;
+import cz.pecina.retro.gui.IconCache;
 
 /**
  * Floopy disk drive icon, combining a button with a LED.
@@ -47,14 +47,14 @@ public class FloppyIcon extends GenericBitmap implements Resizeable, Localized {
   // color of the icon
   private String color;
 
-  // position of the icon on the control panel
-  private int positionX, positionY;
-
+  // drive letter
+  private char driveLetter;
+  
   // state of the icon
   private boolean pressed;
 
   // state of the LED
-  private boolean state;
+  private int state;
 
   // icon template string
   private String template;
@@ -68,86 +68,113 @@ public class FloppyIcon extends GenericBitmap implements Resizeable, Localized {
   // tool-tip resource
   private String toolTipResource;
 
-  // list of change listeners
-  private final List<ChangeListener> changeListeners = new ArrayList<>();
-
   /**
    * Creates an instance of a floppy disk drive icon.
    *
    * @param color           color of the LED
+   * @param driveLetter     the drive letter
    * @param toolTipResource tool-tip for the icon ({@code null} if none)
    */
-  public IconButton(final String color,
+  public FloppyIcon(final String color,
+		    final char driveLetter,
 		    final String toolTipResource) {
     super();
-    log.fine("New FloppyIcon creation started");
+    log.fine("New FloppyIcon creation started for " + driveLetter + ":");
     assert color != null;
     this.color = color;
-    setToolTip((toolTipResource == null) ?
-	       null :
-	       Application.getString(IconButton.class, toolTipResource));
-    addMouseListener(new FloppyIconMouseListener());
-    assert computer != null;
-    assert id != null;
-    this.computer = computer;
-    this.id = id;
-    this.positionX = positionX;
-    this.positionY = positionY;
+    this.driveLetter = driveLetter;
     this.toolTipResource = toolTipResource;
-  log.fine("New FloppyIcon created");
+    GUI.addResizeable(this);
+    Application.addLocalized(this);
+    redrawOnPixelResize();
+    redrawOnLocaleChange();
+    log.fine("New FloppyIcon created for " + driveLetter + ":");
   }
 
-  // mouse listener
-  private class IconButtonMouseListener extends MouseAdapter {
-    @Override
-    public void mousePressed(final MouseEvent event) {
-      if (pressed) {
-	setPressed(false);
-	frame.tearDown();
-	frame.setVisible(false);
-      } else {
-	setPressed(true);
-	frame.setUp();
-	frame.setLocationRelativeTo(computer.getComputerFrame());
-	frame.setVisible(true);
-	frame.requestFocus();
+  /**
+   * Sets the state of the icon ({@code true} = pressed/down,
+   * {@code false} = not pressed/up).
+   *
+   * @param b state of the icon, {@code true} if pressed (down),
+   *          {@code false} otherwise
+   */
+  public void setPressed(final boolean b) {
+    if (b != pressed) {
+      pressed = b;
+      setIcon(icons[b ? 1 : 0][state]);
+    }
+  }
+
+  /**
+   * The state of the icon.  {@code true} if the icon is pressed
+   * (down), {@code false} otherwise.
+   *
+   * @return state of the icon, {@code true} if pressed (down),
+   *         {@code false} otherwise
+   */
+  public boolean isPressed() {
+    return pressed;
+  }
+
+  /**
+   * Gets the state of the LED.
+   *
+   * @return state of the LED
+   */
+  public int getState() {
+    return state;
+  }
+    
+  /**
+   * Sets the state of the LED.
+   *
+   * @param b new state of the LED
+   */
+  public void setState(final boolean b) {
+    log.finer("Setting icon's LED state to: " + b);
+    setState(b ? 1 : 0);
+  }
+
+  /**
+   * Sets the state of the LED.
+   *
+   * @param n new state of the LED
+   */
+  public void setState(final int n) {
+    log.finer("Setting icon's LED state to: " + n);
+    assert (n == 0) || (n == 1);
+    if (n != state) {
+      state = n;
+      setIcon(icons[pressed ? 1 : 0][state]);
+      log.finer("Icon's LED state changed to: " + n);
+    }
+  }
+
+  // for description see Resizeable
+  @Override
+  public void redrawOnPixelResize() {
+    log.finest("FloppyIcon redraw started for: " + color);
+    final String template = "floppy/FloppyIcon/" + color +
+      "-" + GUI.getPixelSize() + "-%s-%d.png";
+    for (int pressed = 0; pressed < 2; pressed++) {
+      for (int state = 0; state < 2; state++) {
+	icons[pressed][state] =
+	  IconCache.get(String.format(template,
+				      ((pressed == 0) ? "u" : "d"),
+				      state));
       }
     }
-  }
-
-  // close listener
-  private class CloseWindowListener extends WindowAdapter {
-    @Override
-    public void windowClosing(final WindowEvent event) {
-      setPressed(false);
-      frame.tearDown();
-      frame.setVisible(false);
-    }
-  }
-
-  /**
-   * Gets the position of the icon on the control panel (x-coordinate).
-   *
-   * @return position of the icon on the control panel (x-coordinate)
-   */
-  public int getPositionX() {
-    return positionX;
-  }
-
-  /**
-   * Gets the position of the icon on the control panel (y-coordinate).
-   *
-   * @return position of the icon on the control panel (y-coordinate)
-   */
-  public int getPositionY() {
-    return positionY;
+    setIcon(icons[pressed ? 1 : 0][state]);
   }
 
   // for description see Localized
   @Override
   public void redrawOnLocaleChange() {
-    if (toolTipResource != null) {
-      setToolTip(Application.getString(this, toolTipResource));
-    }
+    log.finest("FloppyIcon redraw started for: " + driveLetter + ":");
+    toolTip =
+      (toolTipResource == null) ?
+      null :
+      String.format(Application.getString(FloppyIcon.class, toolTipResource),
+		    driveLetter);
   }
 }
