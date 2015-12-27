@@ -126,8 +126,13 @@ public class ComputerPanel extends BackgroundFixedPane {
 
     cz.pecina.retro.floppy.FloppyIcon floppyA = new cz.pecina.retro.floppy.FloppyIcon("red", 'A', "toolTip.icon");
     cz.pecina.retro.floppy.FloppyIcon floppyB = new cz.pecina.retro.floppy.FloppyIcon("red", 'B', "toolTip.icon");
-    floppyA.place(this, 145, 278);
-    floppyB.place(this, 190, 278);
+    cz.pecina.retro.floppy.FloppyIcon floppyC = new cz.pecina.retro.floppy.FloppyIcon("red", 'C', "toolTip.icon");
+    cz.pecina.retro.floppy.FloppyIcon floppyD = new cz.pecina.retro.floppy.FloppyIcon("red", 'D', "toolTip.icon");
+    floppyA.place(this, 110, 278);
+    floppyA.setPressed(true);
+    floppyB.place(this, 146, 278);
+    floppyC.place(this, 184, 278);
+    floppyD.place(this, 221, 278);
 
 
 

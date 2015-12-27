@@ -176,5 +176,8 @@ public class FloppyIcon extends GenericBitmap implements Resizeable, Localized {
       null :
       String.format(Application.getString(FloppyIcon.class, toolTipResource),
 		    driveLetter);
+    if (toolTip != null) {
+      setToolTipText(toolTip);
+    }
   }
 }
