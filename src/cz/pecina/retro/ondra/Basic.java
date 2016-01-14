@@ -141,7 +141,7 @@ public class Basic {
     /* 0xd6 */ "XOR",
     /* 0xd7 */ ">",
     /* 0xd8 */ "=",
-    /* 0xd9 */ ">",
+    /* 0xd9 */ "<",
     /* 0xda */ "POS",
     /* 0xdb */ "SGN",
     /* 0xdc */ "INT",
