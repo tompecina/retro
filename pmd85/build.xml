@@ -54,9 +54,9 @@
   <property name="build.src.doc.dir"
 	    value="${build.src.dir}/doc"/>
   <property name="javac.source.version"
-	    value="1.8"/>
+	    value="1.9"/>
   <property name="javac.target.version"
-	    value="1.8"/>
+	    value="1.9"/>
   <property name="tests"
 	    value="Test*"/>
   <property name="args"
