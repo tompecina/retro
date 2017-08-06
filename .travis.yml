@@ -6,7 +6,6 @@ sudo: false
 
 jdk:
   - "oraclejdk9"
-  - "openjdk9"
 
 addons:
   apt:

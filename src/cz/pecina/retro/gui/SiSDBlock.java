@@ -91,7 +91,7 @@ public class SiSDBlock {
     if (alpha) {
       state = new String();
     } else {
-      state = new Long(-1);
+      state = Long.valueOf(-1);
     }
     elements = new SiSD[size];
     if (settable) {

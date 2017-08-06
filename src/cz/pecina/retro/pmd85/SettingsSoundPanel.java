@@ -95,10 +95,10 @@ public class SettingsSoundPanel extends JPanel {
     final Hashtable<Integer,JLabel> tapeRecorderVolumeLabelTable =
       new Hashtable<>();
     tapeRecorderVolumeLabelTable.put(
-      new Integer(0),
+      Integer.valueOf(0),
       new JLabel(Application.getString(this, "settings.sound.min")));
     tapeRecorderVolumeLabelTable.put(
-      new Integer(100),
+      Integer.valueOf(100),
       new JLabel(Application.getString(this, "settings.sound.max")));
     tapeRecorderVolume.setLabelTable(tapeRecorderVolumeLabelTable);
     tapeRecorderVolume.setPaintLabels(true);
@@ -151,10 +151,10 @@ public class SettingsSoundPanel extends JPanel {
     speakerVolume.setPaintTicks(true);
     final Hashtable<Integer,JLabel> speakerVolumeLabelTable = new Hashtable<>();
     speakerVolumeLabelTable.put(
-      new Integer(0),
+      Integer.valueOf(0),
       new JLabel(Application.getString(this, "settings.sound.min")));
     speakerVolumeLabelTable.put(
-      new Integer(100),
+      Integer.valueOf(100),
       new JLabel(Application.getString(this, "settings.sound.max")));
     speakerVolume.setLabelTable(speakerVolumeLabelTable);
     speakerVolume.setPaintLabels(true);
