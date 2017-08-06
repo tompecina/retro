@@ -1,0 +1,20 @@
+# .travis.yml
+
+language:
+  - "java"
+
+sudo:
+  - false
+
+jdk:
+  - "oraclejdk8"
+  - "openjdk8"
+
+addons:
+  apt:
+    packages:
+      - "oracle-java8-installer"
+      - "ant-optional"
+
+script:
+  - "ant -f pmd85/build.xml test && ant -f ondra/build.xml test"
