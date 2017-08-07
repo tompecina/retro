@@ -53,10 +53,15 @@
 	    value="${build.dir}/test/src" />
   <property name="build.src.doc.dir"
 	    value="${build.src.dir}/doc"/>
-  <property name="javac.source.version"
-	    value="9"/>
-  <property name="javac.target.version"
-	    value="9"/>
+  <property environment="env"/>
+  <condition property="javac.source.version"
+	     value="${env.JAVAC_SOURCE_VER}" else="1.8">
+    <isset property="env.JAVAC_SOURCE_VER" />
+  </condition>
+  <condition property="javac.target.version"
+	     value="${env.JAVAC_TARGET_VER}" else="1.8">
+    <isset property="env.JAVAC_TARGET_VER" />
+  </condition>
   <property name="tests"
 	    value="Test*"/>
   <property name="args"
