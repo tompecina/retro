@@ -151,7 +151,7 @@ public class SettingsSoundPanel extends JPanel {
     speakerVolume.setPaintTicks(true);
     final Hashtable<Integer,JLabel> speakerVolumeLabelTable = new Hashtable<>();
     speakerVolumeLabelTable.put(
-      new Integer.valueOf(0),
+      Integer.valueOf(0),
       new JLabel(Application.getString(this, "settings.sound.min")));
     speakerVolumeLabelTable.put(
       Integer.valueOf(100),
